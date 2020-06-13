@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name="aurorax",
+setup(name="pyaurorax",
       version="0.0.1",
       description="AuroraX Python library",
       url="http://github.com/ucalgary-aurora/pyaurorax",
