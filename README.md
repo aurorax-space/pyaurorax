@@ -1,2 +1,3 @@
-# pyaurorax
-AuroraX Python library
+# AuroraX Python Library
+
+Currently in development.
