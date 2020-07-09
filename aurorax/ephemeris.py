@@ -6,7 +6,7 @@ import datetime
 
 API_EPHEMERIS_SEARCH_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris/search"
 API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources"
-API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources/{}/ephemeris"
+API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sourcess/{}/ephemeris"
 API_KEY = None
 
 
@@ -76,10 +76,10 @@ def __process_record(data, metadata, source_id):
         ephemeris_record["instrument_type"] = data["instrument_type"]
         
         try:
-            record_epoch = datetime.datetime(data["year"], data["month"], data["day"], data["hour"], data["minute"], 0, tzinfo=pytz.utc)
+            record_epoch = datetime.datetime(data["year"], data["month"], data["day"], data["hour"], data["minute"], 0)
             ephemeris_record["epoch"] = record_epoch.isoformat()
         except Exception as de:
-            print(de)
+            print("Error: " + str(de))
             return -1
         
         if not (data["geo_lat"] >= -90 and data["geo_lat"] <= 90 and data["geo_lon"] >= -180 and data["geo_lon"] <= 180):
@@ -92,23 +92,23 @@ def __process_record(data, metadata, source_id):
         # calculate AACGM coordinates
         if data["geo_lat"] >= 0:
             # northern hemisphere
-            record_nbtrace_location_mag = aacgmv2.convert_latlon(data["location_geo"]["lat"], data["location_geo"]["lon"], 0.0, data["epoch"])
+            record_nbtrace_location = aacgmv2.convert_latlon(data["geo_lat"], data["geo_lon"], 0.0, record_epoch) # geomagnetic coordinate
                     
             # flip the geomagnetic latitude and convert back to geographic coordinates for the south B trace
-            record_sbtrace_location_geo = aacgmv2.convert_latlon(record_nbtrace_location_mag[0] * -1.0, record_nbtrace_location_mag[1], 0.0, data["epoch"], method_code="A2G")
+            record_sbtrace_location = aacgmv2.convert_latlon(record_nbtrace_location[0] * -1.0, record_nbtrace_location[1], 0.0, record_epoch, method_code="A2G")
         else:
             # southern hemisphere
-            record_sbtrace_location_mag = aacgmv2.convert_latlon(data["location_geo"]["lat"], data["location_geo"]["lon"], 0.0, data["epoch"])
+            record_sbtrace_location = aacgmv2.convert_latlon(data["geo_lat"], data["geo_lon"], 0.0, record_epoch) # geomagnetic coordinate
                     
             # flip the geomagnetic latitude and convert back to geographic coordinates for the north B trace
-            record_nbtrace_location_geo = aacgmv2.convert_latlon(record_sbtrace_location_mag[0] * -1.0, record_sbtrace_location_mag[1], 0.0, data["epoch"], method_code="A2G")
+            record_nbtrace_location = aacgmv2.convert_latlon(record_sbtrace_location[0] * -1.0, record_sbtrace_location[1], 0.0, record_epoch, method_code="A2G")
         
-        ephemeris_record["nbtrace"]["lat"] = record_nbtrace_location_mag[0]
-        ephemeris_record["nbtrace"]["lon"] = record_nbtrace_location_mag[1]
-        ephemeris_record["sbtrace"]["lat"] = record_sbtrace_location_mag[0]
-        ephemeris_record["sbtrace"]["lon"] = record_sbtrace_location_mag[1]
+        ephemeris_record["nbtrace"]["lat"] = record_nbtrace_location[0]
+        ephemeris_record["nbtrace"]["lon"] = record_nbtrace_location[1]
+        ephemeris_record["sbtrace"]["lat"] = record_sbtrace_location[0]
+        ephemeris_record["sbtrace"]["lon"] = record_sbtrace_location[1]
     except Exception as e:
-        print(e)
+        print("Error: " + str(e))
         return -1
     
     return ephemeris_record
@@ -125,15 +125,16 @@ def upload(data, metadata=[]):
     for source in ids:
         if source["program"] == data["program"] and source["platform"] == data["platform"] and source["instrument_type"] == data["instrument_type"]:
             source_id = source["identifier"]
+            print("source_id is " + source_id)
             break
     if source_id is None:
         print("No ephemeris source was found to match this program, platform and instrument type. Please check the data parameters and try again.")
         return -1
     
-    record = __process_record(date, metadata, source_id)
+    record = __process_record(data, metadata, source_id)
 
     if record != -1:
-        r = requests.post(API_EPHEMERIS_UPLOAD_URL.format(source_id), headers={"accept": "application/json", "Content-Type": "application/json", "x-aurorax-api-key": API_KEY}, json=ephemeris_record)
+        r = requests.post(API_EPHEMERIS_UPLOAD_URL.format(source_id), headers={"accept": "application/json", "Content-Type": "application/json", "x-aurorax-api-key": API_KEY}, json=record)
         return r
 
 
@@ -152,9 +153,9 @@ def upload_many(data_list, metadata_list):
     all_records = {}
     
     try:
-        for i in data_list:
+        for i in range(len(data_list)):
             for source in ids:
-                if source["program"] == data["program"] and source["platform"] == data["platform"] and source["instrument_type"] == data["instrument_type"]:
+                if source["program"] == data_list[i]["program"] and source["platform"] == data_list[i]["platform"] and source["instrument_type"] == data_list[i]["instrument_type"]:
                     source_id = source["identifier"]
                     break
             if source_id is None:
@@ -165,8 +166,12 @@ def upload_many(data_list, metadata_list):
             metadata = metadata_list[i]
             
             record = __process_record(data, metadata, source_id)
+            
+            if source_id not in all_records:
+                all_records[source_id] = []
+            
             if record != -1:
-                all_records[source_id] = record
+                all_records[source_id].append(record)
             else:
                 print("Error encountered at data list index " + str(i) + ". Try again.")
                 return -1
@@ -177,7 +182,7 @@ def upload_many(data_list, metadata_list):
                 print("Error occurred while sending data to the API for source ID " + str(id) + ".\nAborting.")
                 return r
     except Exception as e:
-        print(e)
+        print("Error: " + str(e))
         return -1
 
 
