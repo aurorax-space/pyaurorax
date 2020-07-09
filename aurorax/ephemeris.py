@@ -26,20 +26,37 @@ def set_api_key(api_key):
     API_KEY = api_key
 
 
-def search(programs=None, platforms=None, instrument_types=None, metadata_filters=None, start_datetime=None, end_datetime=None):
+def search(instrument, start_datetime=None, end_datetime=None):
     """
     Search for ephemeris records
     """
     # check that both start and end datetimes were provided
-    if start_datetime and end_datetime:
-        print("Start and end datetimes are valid")
-    else:
-        print("No start and/or end datetime was specified")
-    # check that at least one filter parameter is provided
-    if not all(p is None for p in [programs, platforms, instrument_types, source_metadata_filters, ephemeris_metadata_filters]):
-        print("At least one parameter was specified")
+    if not isinstance(start_datetime, datetime.datetime) or not isinstance(end_datetime, datetime.datetime) or start_datetime > end_datetime:
+        print("Start and end datetimes are invalid")
+        return -1
+    elif not (isinstance(instrument, GroundInstrument) or isinstance(instrument, SpaceInstrument)):
+        print("Instrument is not a valid GroundInstrument or SpaceInstrument class")
+        return -1
     
-    pass
+    print(instrument.program, instrument.platform, instrument.instrument_type)
+    
+    search_params = {
+        "ephemeris_sources": {
+            "programs": [instrument.program],
+            "platforms": [instrument.platform],
+            "instrument_types": [instrument.instrument_type]
+            },
+            "start": start_datetime.isoformat(),
+            "end": end_datetime.isoformat()
+        }
+    
+    search_result = requests.post(API_EPHEMERIS_SEARCH_URL, headers={"accept": "application/json", "Content-Type": "application/json"}, json=search_params)
+    if search_result.status_code == 200:
+        results = json.loads(search_result.text)
+    else:
+        results = -1
+    
+    return results
     
     
 def __process_record(data, metadata, source_id):
@@ -186,7 +203,7 @@ def upload_many(data_list, metadata_list):
         return -1
 
 
-class Ground:
+class GroundInstrument:
     """
     Ground(program, platform, instrument_type[, id])
     
@@ -201,7 +218,7 @@ class Ground:
         self.id = id
         
 
-class Space:
+class SpaceInstrument:
     """
     Space(program, platform, instrument_type[, id])
     
