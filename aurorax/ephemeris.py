@@ -6,7 +6,7 @@ import datetime
 
 API_EPHEMERIS_SEARCH_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris/search"
 API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources"
-API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sourcess/{}/ephemeris"
+API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources/{}/ephemeris"
 API_KEY = None
 
 
@@ -26,7 +26,7 @@ def set_api_key(api_key):
     API_KEY = api_key
 
 
-def search(instrument, start_datetime=None, end_datetime=None):
+def search_instrument(instrument, start_datetime=None, end_datetime=None):
     """
     Search for ephemeris records
     """
@@ -54,6 +54,101 @@ def search(instrument, start_datetime=None, end_datetime=None):
     if search_result.status_code == 200:
         results = json.loads(search_result.text)
     else:
+        print("An API error occurred. Try Again.")
+        results = -1
+    
+    return results
+    
+
+def search(programs=None, platforms=None, instrument_types=None, metadata_filters=None, start_datetime=None, end_datetime=None):
+    if not isinstance(start_datetime, datetime.datetime) or not isinstance(end_datetime, datetime.datetime) or start_datetime > end_datetime:
+        print("Start and end datetimes are invalid")
+        return -1
+#     elif (programs is None or programs == []) and (platforms is None or platforms == []) and (instrument_types is None or instrument_types == []) or (metadata_filters is None or metadata_filters == []):
+#         print("Must specify at least one filter parameter") 
+    
+    search_params = {
+        "ephemeris_sources": {
+            "programs": [],
+            "platforms": [],
+            "instrument_types": [],
+            "metadata_filters": []
+            },
+            "start": start_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            "end": end_datetime.strftime("%Y-%m-%dT%H:%M:%S")
+        }
+    
+    # check filter parameters for validity
+    for filter in [(programs, "programs"), (platforms, "platforms"), (instrument_types, "instrument_types")]:
+        if isinstance(filter[0], list):
+            for f in filter[0]:
+                if not isinstance(f, str):
+                    print("Invalid type in filter list. Try again.")
+                    return -1
+                else:
+                    search_params["ephemeris_sources"][filter[1]].append(f)
+        elif isinstance(filter, str):
+            search_params["ephemeris_sources"][filter[1]].append(filter[0])
+        elif filter[0] is None:
+            pass
+        else:
+            print("Invalid type in filters list: programs, platforms, and instrument_types must be strings or lists of strings. Try again.")
+            return -1
+        
+    # process each metadata filter
+    if metadata_filters is not None and metadata_filters != []:
+        if isinstance(metadata_filters, str):
+            # split it by operator
+            i = metadata_filters.find("=")
+            if i != -1:
+                key = metadata_filters[:i]
+                value = metadata_filters[i + 1:]
+                
+                # add this filter to the list of metadata filters
+                search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
+                
+                # metadata_filters is empty in search_params
+#                 if len(search_params["ephemeris_sources"]["metadata_filters"]) == 0:
+#                     search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
+#                 elif all(m_filter["key"] != key for m_filter in search_params["ephemeris_sources"]["metadata_filters"]): # metadata_filters is not empty but has another key value pair
+#                     search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
+#                 else: # metadata_filters is not empty and has this key with a different value
+#                     for m_filter in search_params["ephemeris_sources"]["metadata_filters"]:
+#                         if m_filter["key"] == key:
+#                             m_filter["values"].append(value)
+            else:
+                print("Metadata error: '" + metadata_filters + "' key and value could not be found. Try again.")
+                return -1
+            
+        elif isinstance(metadata_filters, list) and all(isinstance(f, str) for f in metadata_filters):
+            for f in metadata_filters:
+                # split it by operator
+                i = f.find("=")
+                if i != -1:
+                    key = f[:i]
+                    value = f[i + 1:]
+                    
+                    # add this filter to the list of metadata filters
+                    search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
+                    
+                    # metadata_filters is empty in search_params
+#                     if len(search_params["ephemeris_sources"]["metadata_filters"]) == 0:
+#                         search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
+#                     elif all(m_filter["key"] != key for m_filter in search_params["ephemeris_sources"]["metadata_filters"]): # metadata_filters is not empty but has another key value pair
+#                         search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
+#                     else: # metadata_filters is not empty and has this key with a different value
+#                         for m_filter in search_params["ephemeris_sources"]["metadata_filters"]:
+#                             if m_filter["key"] == key:
+#                                 m_filter["values"].append(value)
+                else:
+                    print("Metadata error: '" + f + "' key and value could not be found. Try again.")
+                    return -1
+    
+    search_result = requests.post(API_EPHEMERIS_SEARCH_URL, headers={"accept": "application/json", "Content-Type": "application/json"}, json=search_params)
+    if search_result.status_code == 200:
+        results = json.loads(search_result.text)
+    else:
+        print("An API error occurred. Try Again.")
         results = -1
     
     return results
@@ -109,13 +204,13 @@ def __process_record(data, metadata, source_id):
         # calculate AACGM coordinates
         if data["geo_lat"] >= 0:
             # northern hemisphere
-            record_nbtrace_location = aacgmv2.convert_latlon(data["geo_lat"], data["geo_lon"], 0.0, record_epoch) # geomagnetic coordinate
+            record_nbtrace_location = aacgmv2.convert_latlon(data["geo_lat"], data["geo_lon"], 0.0, record_epoch)  # geomagnetic coordinate
                     
             # flip the geomagnetic latitude and convert back to geographic coordinates for the south B trace
             record_sbtrace_location = aacgmv2.convert_latlon(record_nbtrace_location[0] * -1.0, record_nbtrace_location[1], 0.0, record_epoch, method_code="A2G")
         else:
             # southern hemisphere
-            record_sbtrace_location = aacgmv2.convert_latlon(data["geo_lat"], data["geo_lon"], 0.0, record_epoch) # geomagnetic coordinate
+            record_sbtrace_location = aacgmv2.convert_latlon(data["geo_lat"], data["geo_lon"], 0.0, record_epoch)  # geomagnetic coordinate
                     
             # flip the geomagnetic latitude and convert back to geographic coordinates for the north B trace
             record_nbtrace_location = aacgmv2.convert_latlon(record_sbtrace_location[0] * -1.0, record_sbtrace_location[1], 0.0, record_epoch, method_code="A2G")
