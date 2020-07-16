@@ -54,7 +54,7 @@ def search_instrument(instrument, start_datetime=None, end_datetime=None):
     if search_result.status_code == 200:
         results = json.loads(search_result.text)
     else:
-        print("An API error occurred. Try Again.")
+        print("An API error occurred. Status code " + str(search_result.status_code) + ": " + search_result.text)
         results = -1
     
     return results
@@ -64,8 +64,6 @@ def search(programs=None, platforms=None, instrument_types=None, metadata_filter
     if not isinstance(start_datetime, datetime.datetime) or not isinstance(end_datetime, datetime.datetime) or start_datetime > end_datetime:
         print("Start and end datetimes are invalid")
         return -1
-#     elif (programs is None or programs == []) and (platforms is None or platforms == []) and (instrument_types is None or instrument_types == []) or (metadata_filters is None or metadata_filters == []):
-#         print("Must specify at least one filter parameter") 
     
     search_params = {
         "ephemeris_sources": {
@@ -106,16 +104,7 @@ def search(programs=None, platforms=None, instrument_types=None, metadata_filter
                 
                 # add this filter to the list of metadata filters
                 search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-                
-                # metadata_filters is empty in search_params
-#                 if len(search_params["ephemeris_sources"]["metadata_filters"]) == 0:
-#                     search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-#                 elif all(m_filter["key"] != key for m_filter in search_params["ephemeris_sources"]["metadata_filters"]): # metadata_filters is not empty but has another key value pair
-#                     search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-#                 else: # metadata_filters is not empty and has this key with a different value
-#                     for m_filter in search_params["ephemeris_sources"]["metadata_filters"]:
-#                         if m_filter["key"] == key:
-#                             m_filter["values"].append(value)
+
             else:
                 print("Metadata error: '" + metadata_filters + "' key and value could not be found. Try again.")
                 return -1
@@ -130,16 +119,7 @@ def search(programs=None, platforms=None, instrument_types=None, metadata_filter
                     
                     # add this filter to the list of metadata filters
                     search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-                    
-                    # metadata_filters is empty in search_params
-#                     if len(search_params["ephemeris_sources"]["metadata_filters"]) == 0:
-#                         search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-#                     elif all(m_filter["key"] != key for m_filter in search_params["ephemeris_sources"]["metadata_filters"]): # metadata_filters is not empty but has another key value pair
-#                         search_params["ephemeris_sources"]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-#                     else: # metadata_filters is not empty and has this key with a different value
-#                         for m_filter in search_params["ephemeris_sources"]["metadata_filters"]:
-#                             if m_filter["key"] == key:
-#                                 m_filter["values"].append(value)
+
                 else:
                     print("Metadata error: '" + f + "' key and value could not be found. Try again.")
                     return -1
@@ -300,29 +280,27 @@ def upload_many(data_list, metadata_list):
 
 class GroundInstrument:
     """
-    Ground(program, platform, instrument_type[, id])
+    GroundInstrument(program, platform, instrument_type)
     
     Represents a ground-based ephemeris source.
     """
 
-    def __init__(self, program=None, platform=None, instrument_type=None, id=None):
+    def __init__(self, program=None, platform=None, instrument_type=None):
         # add checks for validity
         self.program = program
         self.platform = platform
         self.instrument_type = instrument_type
-        self.id = id
         
 
 class SpaceInstrument:
     """
-    Space(program, platform, instrument_type[, id])
+    SpaceInstrument(program, platform, instrument_type[, id])
     
     Represents a space-based ephemeris source.
     """
 
-    def __init__(self, program=None, platform=None, instrument_type=None, id=None):
+    def __init__(self, program=None, platform=None, instrument_type=None):
         # add checks for validity
         self.program = program
         self.platform = platform
         self.instrument_type = instrument_type
-        self.id = id
