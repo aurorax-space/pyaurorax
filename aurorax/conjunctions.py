@@ -3,113 +3,23 @@ import json
 import requests
 import datetime
 
-"""
-def search(start_datetime, end_datetime, source_list=None, distance=500, conjunction_type="nbtrace"):
-    '''
-    Search for conjunctions between a GroundInstrument and SpaceInstrument.
-    '''
-    API_CONJUNCTION_URL = "http://api.staging.aurorax.space:8080/api/v1/conjunctions/search"
-    
-    # check for valid start and end datetimes
-    if not isinstance(start_datetime, datetime.datetime) or not isinstance(end_datetime, datetime.datetime) or start_datetime > end_datetime:
-        print("Start and end datetimes are invalid")
-        return -1
-    
-    # check for valid conjunction type
-    if conjunction_type not in ["nbtrace", "sbtrace", "both"]:
-        print("Invalid conjunction type specified. Try again.")
-        return -1
-    
-    if not(type(distance) is int or type(distance) is float or distance < 0):
-        print("Invalid distance specified: must enter a positive number. Try again.")
-        return -1
-    
-    # check for valid objects in source list
-    if source_list is None:
-        print("No sources were specified. Try again.")
-        return -1
-    elif all(isinstance(source, GroundInstrument) or isinstance(source, SpaceInstrument) for source in source_list):
-        print("All sources are valid classes.")
-    else:
-        print("Invalid source list. Try again.")
-        return -1
-    
-    conjunction_params = {
-        "source1": {
-            "programs": [source_list[0].program] if source_list[0].program is not None else [],
-            "platforms": [source_list[0].platform] if source_list[0].platform is not None else [],
-            "instrument_types": [source_list[0].instrument_type] if source_list[0].instrument_type is not None else [],
-            "metadata_filters": []
-            },
-        "source2": {
-            "programs": [source_list[1].program] if source_list[0].program is not None else [],
-            "platforms": [source_list[1].platform] if source_list[0].platform  is not None else [],
-            "instrument_types": [source_list[1].instrument_type] if source_list[0].instrument_type  is not None else [],
-            "metadata_filters": []
-            },
-        "start": start_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
-        "end": end_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
-        "conjunction_types": ["nbtrace", "sbtrace"] if conjunction_type == "both" else [conjunction_type],
-        "max_distance": distance,
-        }
-    
-    # process each metadata filter
-    for index in range(len(source_list)):
-        if source_list[index].metadata_filters is not None and source_list[index].metadata_filters != []:
-            if isinstance(source_list[index].metadata_filters, str):
-                # split it by operator
-                i = source_list[index].metadata_filters.find("=")
-                if i != -1:
-                    key = source_list[index].metadata_filters[:i]
-                    value = source_list[index].metadata_filters[i + 1:]
-                    
-                    # add this filter to the list of metadata filters
-                    conjunction_params["e" + str(index + 1)]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-
-                else:
-                    print("Metadata error: '" + source_list[index].metadata_filters + "' key and value could not be found. Try again.")
-                    return -1
-                
-            elif isinstance(source_list[index].metadata_filters, list) and all(isinstance(f, str) for f in source_list[index].metadata_filters):
-                for f in source_list[index].metadata_filters:
-                    # split it by "=" operator
-                    i = f.find("=")
-                    if i != -1:
-                        key = f[:i]
-                        value = f[i + 1:]
-                        
-                        # add this filter to the list of metadata filters
-                        conjunction_params["e" + str(index + 1)]["metadata_filters"].append({"key": key, "operator": "=", "values": [value]})
-
-                    else:
-                        print("Metadata error: '" + f + "' key and value could not be found. Try again.")
-                        return -1
-
-    # print(conjunction_params)
-    
-    search_result = requests.post(API_CONJUNCTION_URL, headers={"accept": "application/json", "Content-Type": "application/json"}, json=conjunction_params)
-    if search_result.status_code == 200:
-        results = json.loads(search_result.text)
-    else:
-        print("An API error occurred. Status code " + str(search_result.status_code) + ": " + search_result.text)
-        results = -1
-    
-    return results
-"""
-
 
 class GroundInstrument:
     """
     GroundInstrument(program, platform, instrument_type, metadata_filters)
     
     Represents a ground-based ephemeris source.
+    
+    :var program: the instrument's program
+    :var platform: the instrument's platform
+    :var instrument_type: the instrument's type
     """
 
     def __init__(self, program=None, platform=None, instrument_type=None, metadata_filters=None):
         self.program = program
         self.platform = platform
         self.instrument_type = instrument_type
-        self.metadata_filters = metadata_filters
+        #self.metadata_filters = metadata_filters
         
 
 class SpaceInstrument:
@@ -117,6 +27,10 @@ class SpaceInstrument:
     SpaceInstrument(program, platform, instrument_type, metadata_filters)
     
     Represents a space-based ephemeris source.
+    
+    :var program: the instrument's program
+    :var platform: the instrument's platform
+    :var instrument_type: the instrument's type
     """
 
     def __init__(self, program=None, platform=None, instrument_type=None, metadata_filters=None):
@@ -129,12 +43,20 @@ class SpaceInstrument:
 class ConjunctionEvent:
     """
     Represents a single conjunction event.
+    
+    :var conjunction_type: ["nbtrace"], ["sbtrace"], or ["nbtrace", "sbtrace"]
+    :var e1_source: dictionary representation of the first ephemeris source in the conjunction
+    :var e2_source: dictionary representation of the second ephemeris source in the conjunction
+    :var start: datetime object representing the start of the conjunction
+    :var end: datetime object representing the end of the conjunction
+    :var min_distance: the minimum distance in kilometers between ephemeris sources in this conjunction event
+    :var max_distance: the maximum distance in kilometers between ephemeris sources in this conjunction event
     """
 
     def __init__(self, conjunction_type=None, e1_source=None, e2_source=None, start=None, end=None, min_distance=None, max_distance=None):
-        self.conjunction_type = conjunction_type,
-        self.e1_source = e1_source  # store this as GroundInstrument/SpaceInstrument object?
-        self.e2_source = e2_source  # store this as GroundInstrument/SpaceInstrument object?
+        self.conjunction_type = conjunction_type 
+        self.e1_source = e1_source  
+        self.e2_source = e2_source  
         
         if type(start) is str:
             self.start = datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
@@ -171,6 +93,12 @@ class ConjunctionEvent:
 class MultiConjunctionEvent:
     """
     Represents a multiple-conjunction event.
+    
+    :var conjunction_type: ["nbtrace"], ["sbtrace"], or ["nbtrace", "sbtrace"]
+    :var start: datetime object representing the start of the conjunction
+    :var end: datetime object representing the end of the conjunction
+    :var distances: a dictionary of space-ground and space-space pairs with numeric values for the distance between the pairs 
+    :var sources: list of dictionary objects, each representing a space or ground instrument
     """
 
     def __init__(self, conjunction_type=None, start=None, end=None, distances=None, sources=None):
@@ -205,6 +133,13 @@ class MultiConjunctionEvent:
 class ConjunctionSearch:
     """
     A class representing the parameters required for a single conjunction search.
+    
+    :var ground_instrument: dictionary representation of the ground instrument in this conjunction search
+    :var space_instrument: dictionary representation of the space instrument in this conjunction search
+    :var start: datetime object representing the start of the search period
+    :var end: datetime object representing the end of the search period
+    :var conjunction_types: one of ["nbtrace"], ["sbtrace"], or ["nbtrace", "sbtrace"]
+    :var max_distance: the maximum distance between instruments for a conjunction. Defaults to 500 km.
     """
 
     def __init__(self):
@@ -328,7 +263,7 @@ class ConjunctionSearch:
         
         if search_result.status_code == 200:
             results_dict = json.loads(search_result.text)["events"]
-            print(str(len(results_dict)) + " conjunction events found")
+            # print(str(len(results_dict)) + " conjunction events found")
             
             self.results = []
             
@@ -420,16 +355,10 @@ class MultiConjunctionSearch:
         """
         Sets the maximum distance between two instruments in this multi-conjunction search.
         
-        :param instrument1: "ground<list_number>" or "space<list_number>" representing the space/ground isntrument's
-        position in the ground_instruments or space_instruments list, e.g. "ground1"
-        :param instrument2: "ground<list_number>" or "space<list_number>" representing the space/ground isntrument's
-            position in the ground_instruments or space_instruments list, e.g. "space1"
-        :param distance: a positive numeric value representing the maximum distance in kilometers between
-            instrument1 and instrument2
+        :param instrument1: "ground<list_number>" or "space<list_number>" representing the space/ground isntrument's position in the ground_instruments or space_instruments list, e.g. "ground1"
+        :param instrument2: "ground<list_number>" or "space<list_number>" representing the space/ground isntrument's position in the ground_instruments or space_instruments list, e.g. "space1"
+        :param distance: a positive numeric value representing the maximum distance in kilometers between instrument1 and instrument2
         """
-        if not distance.isnum():
-            print("Distance must be a positive integer or float. Try again.")
-            return -1
         
         self.max_distances[instrument1 + "-" + instrument2] = distance
     
