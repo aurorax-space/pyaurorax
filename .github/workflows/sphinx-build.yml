@@ -20,12 +20,11 @@ jobs:
                   pip install -r docsource/requirements.txt
             - name: Build .rst files and make HTML
               run: |
+                  git checkout master
                   cd ./docsource
                   pip install -r requirements.txt
                   sphinx-apidoc -o . ../aurorax
                   make github
-            - name: Push docs to the repository
-              run: |
                   git config --global user.email "sohrabi.mar@gmail.com"
                   git config --global user.name "Maryam Sohrabi"
                   git add ./docs ./docsource
