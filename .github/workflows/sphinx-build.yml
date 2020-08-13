@@ -26,7 +26,6 @@ jobs:
                   make github
             - name: Push docs to the repository
               run: |
-                  cd ..
                   git add ./docs ./docsource
                   git commit -m "Auto-generated sphinx documentation"
                   git push
