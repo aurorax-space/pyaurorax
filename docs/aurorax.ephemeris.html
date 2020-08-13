@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>aurorax.ephemeris module &#8212; pyaurorax  documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="aurorax.conjunctions module" href="aurorax.conjunctions.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aurorax.conjunctions.html" title="aurorax.conjunctions module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaurorax  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">aurorax.ephemeris module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-aurorax.ephemeris">
+<span id="aurorax-ephemeris-module"></span><h1>aurorax.ephemeris module<a class="headerlink" href="#module-aurorax.ephemeris" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="aurorax.ephemeris.EphemerisRecord">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.ephemeris.</code><code class="sig-name descname">EphemerisRecord</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platform</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">geo_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">geo_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gsm_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gsm_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nbtrace_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nbtrace_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sbtrace_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sbtrace_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ephemeris_source_identifier</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location_geo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location_gsm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nbtrace</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sbtrace</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an AuroraX ephemeris record.</p>
+<dl class="py method">
+<dt id="aurorax.ephemeris.EphemerisRecord.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisRecord.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the EphemerisRecord as a dictionary in the AuroraX record format.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.ephemeris.EphemerisSearch">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.ephemeris.</code><code class="sig-name descname">EphemerisSearch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">programs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platforms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_filters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for searching ephemeris records.</p>
+<dl class="py method">
+<dt id="aurorax.ephemeris.EphemerisSearch.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisSearch.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the search with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of EphemerisRecord objects matching the search criteria, or an empty list if the search returned no records, or -1 if an error occurred</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.ephemeris.EphemerisSearch.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisSearch.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.ephemeris.EphemerisUpload">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.ephemeris.</code><code class="sig-name descname">EphemerisUpload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisUpload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for uploading ephemeris records.</p>
+<dl class="py method">
+<dt id="aurorax.ephemeris.EphemerisUpload.add_record">
+<code class="sig-name descname">add_record</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisUpload.add_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an EphemerisRecord object to be uploaded.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.ephemeris.EphemerisUpload.clear">
+<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisUpload.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all records from record_list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.ephemeris.EphemerisUpload.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.EphemerisUpload.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends all EphemerisRecord objects in the record_list to the API. A valid api_key variable must be defined.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.ephemeris.GroundInstrument">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.ephemeris.</code><code class="sig-name descname">GroundInstrument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span></em>, <em class="sig-param"><span class="n">platform</span></em>, <em class="sig-param"><span class="n">instrument_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.GroundInstrument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a ground-based ephemeris source.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.ephemeris.SpaceInstrument">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.ephemeris.</code><code class="sig-name descname">SpaceInstrument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span></em>, <em class="sig-param"><span class="n">platform</span></em>, <em class="sig-param"><span class="n">instrument_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.SpaceInstrument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a space-based ephemeris source.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="aurorax.ephemeris.get_ephemeris_sources">
+<code class="sig-prename descclassname">aurorax.ephemeris.</code><code class="sig-name descname">get_ephemeris_sources</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platform</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">source_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">owner</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">format</span><span class="o">=</span><span class="default_value">'basic_info'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.ephemeris.get_ephemeris_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of dictionaries representing all ephemeris sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>program</strong> – program name to filter sources by, optional</p></li>
+<li><p><strong>platform</strong> – platform name to filter sources by, optional</p></li>
+<li><p><strong>instrument_type</strong> – instrument type to filter sources by, optional</p></li>
+<li><p><strong>source_type</strong> – source type to filter sources by (e.g. “heo”), optional</p></li>
+<li><p><strong>owner</strong> – owner ID to filter sources by, optional</p></li>
+<li><p><strong>format</strong> – the format of the ephemeris source returned Available values: “identifier_only”, “basic_info”, “full_record”. Defaults to “basic_info”.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aurorax.conjunctions.html"
+                        title="previous chapter">aurorax.conjunctions module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aurorax.ephemeris.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aurorax.conjunctions.html" title="aurorax.conjunctions module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaurorax  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">aurorax.ephemeris module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Auroral Imaging Group.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.0.
+    </div>
+  </body>
+</html>

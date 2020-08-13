@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>aurorax.conjunctions module &#8212; pyaurorax  documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="aurorax.ephemeris module" href="aurorax.ephemeris.html" />
+    <link rel="prev" title="aurorax" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aurorax.ephemeris.html" title="aurorax.ephemeris module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="aurorax"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaurorax  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">aurorax.conjunctions module</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-aurorax.conjunctions">
+<span id="aurorax-conjunctions-module"></span><h1>aurorax.conjunctions module<a class="headerlink" href="#module-aurorax.conjunctions" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="aurorax.conjunctions.ConjunctionEvent">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.conjunctions.</code><code class="sig-name descname">ConjunctionEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conjunction_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">e1_source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">e2_source</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_distance</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_distance</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.ConjunctionEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a single conjunction event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conjunction_type</strong> – [“nbtrace”], [“sbtrace”], or [“nbtrace”, “sbtrace”]</p></li>
+<li><p><strong>e1_source</strong> – dictionary representation of the first ephemeris source in the conjunction</p></li>
+<li><p><strong>e2_source</strong> – dictionary representation of the second ephemeris source in the conjunction</p></li>
+<li><p><strong>start</strong> – datetime object representing the start of the conjunction</p></li>
+<li><p><strong>end</strong> – datetime object representing the end of the conjunction</p></li>
+<li><p><strong>min_distance</strong> – the minimum distance in kilometers between ephemeris sources in this conjunction event</p></li>
+<li><p><strong>max_distance</strong> – the maximum distance in kilometers between ephemeris sources in this conjunction event</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="aurorax.conjunctions.ConjunctionEvent.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.ConjunctionEvent.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary representation of the conjunction event</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dictionary representation of the conjunction event</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.conjunctions.ConjunctionSearch">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.conjunctions.</code><code class="sig-name descname">ConjunctionSearch</code><a class="headerlink" href="#aurorax.conjunctions.ConjunctionSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing the parameters required for a single conjunction search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ground_instrument</strong> – dictionary representation of the ground instrument in this conjunction search</p></li>
+<li><p><strong>space_instrument</strong> – dictionary representation of the space instrument in this conjunction search</p></li>
+<li><p><strong>start</strong> – datetime object representing the start of the search period</p></li>
+<li><p><strong>end</strong> – datetime object representing the end of the search period</p></li>
+<li><p><strong>conjunction_types</strong> – one of [“nbtrace”], [“sbtrace”], or [“nbtrace”, “sbtrace”]</p></li>
+<li><p><strong>max_distance</strong> – the maximum distance between instruments for a conjunction. Defaults to 500 km.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="aurorax.conjunctions.ConjunctionSearch.add_ground">
+<code class="sig-name descname">add_ground</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">programs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platforms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_filters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.ConjunctionSearch.add_ground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds parameters for a ground instrument to the conjunction search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>programs</strong> – a list of strings representing the ground instrument programs to search</p></li>
+<li><p><strong>platforms</strong> – a list of strings representing the ground instrument platforms to search</p></li>
+<li><p><strong>instrument_types</strong> – a list of strings representing the ground instrument instrument types to search</p></li>
+<li><p><strong>metadata_filters</strong> – a list of dictionaries representing metadata filters for the ground instrument
+in the form {“key”: &lt;key&gt;, “operator”: &lt;operator&gt;, “value”: &lt;value&gt;}</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.ConjunctionSearch.add_space">
+<code class="sig-name descname">add_space</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">programs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platforms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_filters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.ConjunctionSearch.add_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds parameters for a space instrument to the conjunction search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>programs</strong> – a list of strings representing the space instrument programs to search</p></li>
+<li><p><strong>platforms</strong> – a list of strings representing the space instrument platforms to search</p></li>
+<li><p><strong>instrument_types</strong> – a list of strings representing the space instrument instrument types to search</p></li>
+<li><p><strong>metadata_filters</strong> – a list of dictionaries representing metadata filters for the space instrument
+in the form {“key”: &lt;key&gt;, “operator”: &lt;operator&gt;, “value”: &lt;value&gt;}</p></li>
+<li><p><strong>hemisphere</strong> – “northern” or “southern”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.ConjunctionSearch.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.ConjunctionSearch.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the conjunction search and returns the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of ConjunctionEvent objects, an empty list in case of no results, or -1 in case of error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.ConjunctionSearch.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.ConjunctionSearch.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary representation of the conjunction search parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dictionary representation of the conjunction search parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.conjunctions.GroundInstrument">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.conjunctions.</code><code class="sig-name descname">GroundInstrument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span></em>, <em class="sig-param"><span class="n">platform</span></em>, <em class="sig-param"><span class="n">instrument_type</span></em>, <em class="sig-param"><span class="n">metadata_filters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.GroundInstrument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a ground-based ephemeris source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>program</strong> – the instrument’s program</p></li>
+<li><p><strong>platform</strong> – the instrument’s platform</p></li>
+<li><p><strong>instrument_type</strong> – the instrument’s type</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.conjunctions.MultiConjunctionEvent">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.conjunctions.</code><code class="sig-name descname">MultiConjunctionEvent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conjunction_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">distances</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sources</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a multiple-conjunction event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conjunction_type</strong> – [“nbtrace”], [“sbtrace”], or [“nbtrace”, “sbtrace”]</p></li>
+<li><p><strong>start</strong> – datetime object representing the start of the conjunction</p></li>
+<li><p><strong>end</strong> – datetime object representing the end of the conjunction</p></li>
+<li><p><strong>distances</strong> – a dictionary of space-ground and space-space pairs with numeric values for the distance between the pairs</p></li>
+<li><p><strong>sources</strong> – list of dictionary objects, each representing a space or ground instrument</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionEvent.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionEvent.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary representation of the conjunction event</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dictionary representation of the conjunction event</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.conjunctions.</code><code class="sig-name descname">MultiConjunctionSearch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ground_instruments</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">space_instruments</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">conjunction_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_distances</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing the parameters required for a multi-conjunction search.</p>
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch.add_ground">
+<code class="sig-name descname">add_ground</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">programs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platforms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_filters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch.add_ground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds parameters for a ground instrument to the conjunction search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>programs</strong> – a list of strings representing the ground instrument programs to search</p></li>
+<li><p><strong>platforms</strong> – a list of strings representing the ground instrument platforms to search</p></li>
+<li><p><strong>instrument_types</strong> – a list of strings representing the ground instrument instrument types to search</p></li>
+<li><p><strong>metadata_filters</strong> – a list of dictionaries representing metadata filters for the ground instrument
+in the form {“key”: &lt;key&gt;, “operator”: &lt;operator&gt;, “value”: &lt;value&gt;}</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch.add_space">
+<code class="sig-name descname">add_space</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">programs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platforms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_filters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hemisphere</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch.add_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds parameters for a space instrument to the conjunction search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>programs</strong> – a list of strings representing the space instrument programs to search</p></li>
+<li><p><strong>platforms</strong> – a list of strings representing the space instrument platforms to search</p></li>
+<li><p><strong>instrument_types</strong> – a list of strings representing the space instrument instrument types to search</p></li>
+<li><p><strong>metadata_filters</strong> – a list of dictionaries representing metadata filters for the space instrument
+in the form {“key”: &lt;key&gt;, “operator”: &lt;operator&gt;, “value”: &lt;value&gt;}</p></li>
+<li><p><strong>hemisphere</strong> – “northern” or “southern”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the multi-conjunction search and returns the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of MultiConjunctionEvent objects, an empty list in case of no results, or -1 in case of error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch.set_all_max_distances">
+<code class="sig-name descname">set_all_max_distances</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">distance</span><span class="o">=</span><span class="default_value">500</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch.set_all_max_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the maximum distance between all pairs of instruments whose maximum distance has not been explicitly
+set using set_max_distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distance</strong> – a positive numeric value representing the maximum distance between instruments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch.set_max_distance">
+<code class="sig-name descname">set_max_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">instrument1</span></em>, <em class="sig-param"><span class="n">instrument2</span></em>, <em class="sig-param"><span class="n">distance</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch.set_max_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the maximum distance between two instruments in this multi-conjunction search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instrument1</strong> – “ground&lt;list_number&gt;” or “space&lt;list_number&gt;” representing the space/ground isntrument’s position in the ground_instruments or space_instruments list, e.g. “ground1”</p></li>
+<li><p><strong>instrument2</strong> – “ground&lt;list_number&gt;” or “space&lt;list_number&gt;” representing the space/ground isntrument’s position in the ground_instruments or space_instruments list, e.g. “space1”</p></li>
+<li><p><strong>distance</strong> – a positive numeric value representing the maximum distance in kilometers between instrument1 and instrument2</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="aurorax.conjunctions.MultiConjunctionSearch.to_dictionary">
+<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.MultiConjunctionSearch.to_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary representation of the multi-conjunction search parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dictionary representation of the multi-conjunction search parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="aurorax.conjunctions.SpaceInstrument">
+<em class="property">class </em><code class="sig-prename descclassname">aurorax.conjunctions.</code><code class="sig-name descname">SpaceInstrument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span></em>, <em class="sig-param"><span class="n">platform</span></em>, <em class="sig-param"><span class="n">instrument_type</span></em>, <em class="sig-param"><span class="n">metadata_filters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.conjunctions.SpaceInstrument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a space-based ephemeris source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>program</strong> – the instrument’s program</p></li>
+<li><p><strong>platform</strong> – the instrument’s platform</p></li>
+<li><p><strong>instrument_type</strong> – the instrument’s type</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">aurorax</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aurorax.ephemeris.html"
+                        title="next chapter">aurorax.ephemeris module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aurorax.conjunctions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aurorax.ephemeris.html" title="aurorax.ephemeris module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="aurorax"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaurorax  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">aurorax.conjunctions module</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Auroral Imaging Group.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.0.
+    </div>
+  </body>
+</html>
