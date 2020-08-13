@@ -26,6 +26,8 @@ jobs:
                   make github
             - name: Push docs to the repository
               run: |
+                  git config --global user.email "sohrabi.mar@gmail.com"
+                  git config --global user.name "Maryam Sohrabi"
                   git add ./docs ./docsource
                   git commit -m "Auto-generated sphinx documentation"
                   git push
