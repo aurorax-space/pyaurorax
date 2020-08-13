@@ -25,9 +25,9 @@ jobs:
                   pip install -r requirements.txt
                   sphinx-apidoc -o . ../aurorax
                   make github
-                  git config --global user.email "sohrabi.mar@gmail.com"
-                  git config --global user.name "Maryam Sohrabi"
+                  #git config user.email "${{  }}"
+                  #git config user.name "${{ secrets.GITHUB_MAIL }}"
                   cd ..
                   git add ./docs ./docsource
                   git commit -m "Auto-generated sphinx documentation"
-                  git push
+                  git push "https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git"
