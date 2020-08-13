@@ -1,0 +1,15 @@
+name: sphinx-build
+on:
+    push:
+        branches:
+            -master
+            
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - run: |
+                cd docsource
+                pip install -r requirements.txt
+                sphinx-apidoc -o . ../aurorax
+                make github
