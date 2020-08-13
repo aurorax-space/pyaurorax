@@ -9,8 +9,18 @@ jobs:
         name: build-docs
         runs-on: ubuntu-latest
         steps:
-            - run: |
-                cd ./docsource
-                pip install -r requirements.txt
-                sphinx-apidoc -o . ../aurorax
-                make github
+            - uses: actions/checkout@v1
+            - name: Setup Python
+              uses: actions/setup-python@v1
+              with:
+                  python-version: "3.6"
+            - name: Install dependencies
+              run: |
+                  python -m pip --upgrade pip
+                  pip install -r docsource/requirements.txt
+            - name: Build .rst files and make HTML
+              run: |
+                  cd ./docsource
+                  pip install -r requirements.txt
+                  sphinx-apidoc -o . ../aurorax
+                  make github
