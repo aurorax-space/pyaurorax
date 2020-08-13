@@ -2,7 +2,7 @@ name: sphinx-build
 on:
     push:
         branches:
-            -master
+            - master
             
 jobs:
     build:
