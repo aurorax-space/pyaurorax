@@ -1,0 +1,3 @@
+requests
+aacgmv2
+sphinx

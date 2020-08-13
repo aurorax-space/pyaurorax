@@ -1,20 +1,22 @@
 import copy
 import json
-import pytz
 import aacgmv2
 import requests
 import datetime
-
-# API_EPHEMERIS_SEARCH_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris/search"
-# API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources"
-# API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources/{}/ephemeris"
-# API_KEY = None
 
 
 def get_ephemeris_sources(program=None, platform=None, instrument_type=None, source_type=None, owner=None, format="basic_info"):
     """
     Returns a list of dictionaries representing all ephemeris sources.
+    
+    :param program: program name to filter sources by, optional
+    :param platform: platform name to filter sources by, optional
+    :param instrument_type: instrument type to filter sources by, optional
+    :param source_type: source type to filter sources by (e.g. "heo"), optional
+    :param owner: owner ID to filter sources by, optional
+    :param format: the format of the ephemeris source returned Available values: "identifier_only", "basic_info", "full_record". Defaults to "basic_info". 
     """
+    
     API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources"
     filters = {"program": program, "platform": platform, "instrument_type": instrument_type, "source_type": source_type, "owner": owner, "format": format}
     r = requests.get(API_EPHEMERIS_SOURCES_URL, params=filters)
