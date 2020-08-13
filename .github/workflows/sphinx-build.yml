@@ -23,7 +23,7 @@ jobs:
                   git checkout master
                   cd ./docsource
                   pip install -r requirements.txt
-                  sphinx-apidoc -o . ../aurorax
+                  sphinx-apidoc -e -o . ../aurorax
                   make github
                   cd ..
                   git add ./docs ./docsource
