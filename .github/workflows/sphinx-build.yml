@@ -16,7 +16,7 @@ jobs:
                   python-version: "3.6"
             - name: Install dependencies
               run: |
-                  python -m pip --upgrade pip
+                  python -m pip install --upgrade pip
                   pip install -r docsource/requirements.txt
             - name: Build .rst files and make HTML
               run: |
