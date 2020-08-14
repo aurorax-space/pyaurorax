@@ -1,3 +1,4 @@
 requests
 aacgmv2
 sphinx
+sphinx-rtd-theme

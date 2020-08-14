@@ -22,7 +22,6 @@ jobs:
               run: |
                   git checkout master
                   cd ./docsource
-                  pip install -r requirements.txt
                   sphinx-apidoc -e -o . ../aurorax
                   make github
                   cd ..
