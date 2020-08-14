@@ -4,45 +4,9 @@ import requests
 import datetime
 
 
-class GroundInstrument:
-    """
-    GroundInstrument(program, platform, instrument_type, metadata_filters)
-    
-    Represents a ground-based ephemeris source.
-    
-    :var program: the instrument's program
-    :var platform: the instrument's platform
-    :var instrument_type: the instrument's type
-    """
-
-    def __init__(self, program=None, platform=None, instrument_type=None, metadata_filters=None):
-        self.program = program
-        self.platform = platform
-        self.instrument_type = instrument_type
-        #self.metadata_filters = metadata_filters
-        
-
-class SpaceInstrument:
-    """
-    SpaceInstrument(program, platform, instrument_type, metadata_filters)
-    
-    Represents a space-based ephemeris source.
-    
-    :var program: the instrument's program
-    :var platform: the instrument's platform
-    :var instrument_type: the instrument's type
-    """
-
-    def __init__(self, program=None, platform=None, instrument_type=None, metadata_filters=None):
-        self.program = program
-        self.platform = platform
-        self.instrument_type = instrument_type
-        self.metadata_filters = metadata_filters
-
-
 class ConjunctionEvent:
     """
-    Represents a single conjunction event.
+    Represents a conjunction event between two instruments.
     
     :var conjunction_type: ["nbtrace"], ["sbtrace"], or ["nbtrace", "sbtrace"]
     :var e1_source: dictionary representation of the first ephemeris source in the conjunction
@@ -92,13 +56,13 @@ class ConjunctionEvent:
 
 class MultiConjunctionEvent:
     """
-    Represents a multiple-conjunction event.
+    Represents a conjunction event between multiple instruments.
     
     :var conjunction_type: ["nbtrace"], ["sbtrace"], or ["nbtrace", "sbtrace"]
     :var start: datetime object representing the start of the conjunction
     :var end: datetime object representing the end of the conjunction
     :var distances: a dictionary of space-ground and space-space pairs with numeric values for the distance between the pairs 
-    :var sources: list of dictionary objects, each representing a space or ground instrument
+    :var sources: a list of dictionary objects, each representing a space or ground instrument
     """
 
     def __init__(self, conjunction_type=None, start=None, end=None, distances=None, sources=None):
@@ -187,7 +151,7 @@ class ConjunctionSearch:
         :param platforms: a list of strings representing the ground instrument platforms to search
         :param instrument_types: a list of strings representing the ground instrument instrument types to search 
         :param metadata_filters: a list of dictionaries representing metadata filters for the ground instrument
-            in the form {"key": <key>, "operator": <operator>, "value": <value>}
+            in the form {"key": <key>, "operator": <operator>, "value": <value>}. E.g. {"key": "temperature", "operator": "=", "value": 25.0}
         """
         self.ground_instrument = {
             "programs": None,
@@ -217,7 +181,7 @@ class ConjunctionSearch:
         :param platforms: a list of strings representing the space instrument platforms to search
         :param instrument_types: a list of strings representing the space instrument instrument types to search 
         :param metadata_filters: a list of dictionaries representing metadata filters for the space instrument
-            in the form {"key": <key>, "operator": <operator>, "value": <value>}
+            in the form {"key": <key>, "operator": <operator>, "value": <value>}. E.g. {"key": "temperature", "operator": "=", "value": 25.0}
         :param hemisphere: "northern" or "southern"
         """
         self.space_instrument = {
@@ -250,7 +214,7 @@ class ConjunctionSearch:
         dict["start"] = dict["start"].strftime("%Y-%m-%dT%H:%M:%S")
         dict["end"] = dict["end"].strftime("%Y-%m-%dT%H:%M:%S")
         
-        # remove all keys with None values
+        # remove all keys in conjunction_parameters with None values
         for key in list(dict.keys()):
             if dict[key] is None:
                 dict.pop(key)
@@ -263,10 +227,10 @@ class ConjunctionSearch:
         
         if search_result.status_code == 200:
             results_dict = json.loads(search_result.text)["events"]
-            # print(str(len(results_dict)) + " conjunction events found")
             
             self.results = []
             
+            # create ConjunctionEvent object for each result returned
             for r in results_dict:
                 self.results.append(ConjunctionEvent(**r))
                 
@@ -281,6 +245,13 @@ class ConjunctionSearch:
 class MultiConjunctionSearch:
     """
     A class representing the parameters required for a multi-conjunction search.
+    
+    :var ground_instruments: list of dictionaries, each representing a ground instrument in this conjunction search
+    :var space_instruments: list of dictionaries, each representing a space instrument in this conjunction search
+    :var start: datetime object representing the start of the search period
+    :var end: datetime object representing the end of the search period
+    :var conjunction_types: one of ["nbtrace"], ["sbtrace"], or ["nbtrace", "sbtrace"]
+    :var max_distances: a dictionary of space-ground and space-space pairs with numeric values for the distance between the pairs, e.g. {"ground1-space1": 300, "ground1-space2": 400}
     """
 
     def __init__(self, start=None, end=None, ground_instruments=None, space_instruments=None, conjunction_types=None, max_distances=None):
@@ -301,7 +272,7 @@ class MultiConjunctionSearch:
         :param platforms: a list of strings representing the ground instrument platforms to search
         :param instrument_types: a list of strings representing the ground instrument instrument types to search 
         :param metadata_filters: a list of dictionaries representing metadata filters for the ground instrument
-            in the form {"key": <key>, "operator": <operator>, "value": <value>}
+            in the form {"key": <key>, "operator": <operator>, "value": <value>}. E.g. {"key": "temperature", "operator": "=", "value": 25.0}
         """
         instrument = {
             "programs": None,
@@ -329,7 +300,7 @@ class MultiConjunctionSearch:
         :param platforms: a list of strings representing the space instrument platforms to search
         :param instrument_types: a list of strings representing the space instrument instrument types to search 
         :param metadata_filters: a list of dictionaries representing metadata filters for the space instrument
-            in the form {"key": <key>, "operator": <operator>, "value": <value>}
+            in the form {"key": <key>, "operator": <operator>, "value": <value>}. E.g. {"key": "temperature", "operator": "=", "value": 25.0}
         :param hemisphere: "northern" or "southern"
         """
         instrument = {
@@ -365,7 +336,7 @@ class MultiConjunctionSearch:
     def set_all_max_distances(self, distance=500):
         """
         Sets the maximum distance between all pairs of instruments whose maximum distance has not been explicitly
-        set using set_max_distance.
+        set using set_max_distance. This method must be called before execution of the conjunction search.
         
         :param distance: a positive numeric value representing the maximum distance between instruments
         """
