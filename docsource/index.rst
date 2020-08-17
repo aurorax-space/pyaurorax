@@ -7,6 +7,7 @@ aurorax
 
    aurorax.conjunctions
    aurorax.ephemeris
+   aurorax.dataproducts
 
 Indices and tables
 ==================
