@@ -16,7 +16,7 @@ def get_ephemeris_sources(program=None, platform=None, instrument_type=None, sou
     :param owner: owner ID to filter sources by, optional
     :param format: the format of the ephemeris source returned Available values: "identifier_only", "basic_info", "full_record". Defaults to "basic_info". 
     
-    :return: a dictionary of all ephemeris sources
+    :return: a dictionary of all ephemeris sources.
     """
     
     API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources"
