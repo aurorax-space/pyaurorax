@@ -1,5 +1,9 @@
 .PHONY: install
 
+doc-test:
+	cd docsource
+	make github
+
 install:
 	python3 -m pip install .
 
