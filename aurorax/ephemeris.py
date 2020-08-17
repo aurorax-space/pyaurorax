@@ -29,7 +29,7 @@ def get_ephemeris_sources(program=None, platform=None, instrument_type=None, sou
 
 class GroundInstrument:
     """
-    GroundInstrument(program, platform, instrument_type, metadata_filters)
+    GroundInstrument(program, platform, instrument_type)
     
     Represents a ground-based ephemeris source.
     
@@ -46,7 +46,7 @@ class GroundInstrument:
 
 class SpaceInstrument:
     """
-    SpaceInstrument(program, platform, instrument_type, metadata_filters)
+    SpaceInstrument(program, platform, instrument_type)
     
     Represents a space-based ephemeris source.
     
