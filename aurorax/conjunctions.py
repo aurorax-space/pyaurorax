@@ -107,7 +107,7 @@ class ConjunctionSearch:
     """
 
     def __init__(self):
-        self.API_CONJUNCTION_URL = "http://api.staging.aurorax.space:8080/api/v1/conjunctions/search"
+        self.API_CONJUNCTION_URL = "http://api.staging.aurorax.space/api/v1/conjunctions/search"
         
         self.ground_instrument = None
         self.space_instrument = None
@@ -255,7 +255,7 @@ class MultiConjunctionSearch:
     """
 
     def __init__(self, start=None, end=None, ground_instruments=None, space_instruments=None, conjunction_types=None, max_distances=None):
-        self.API_MULTI_CONJUNCTION_URL = "http://api.staging.aurorax.space:8080/api/v1/conjunctions/search-multi"
+        self.API_MULTI_CONJUNCTION_URL = "http://api.staging.aurorax.space/api/v1/conjunctions/search-multi"
         
         self.ground_instruments = [] if ground_instruments is None else ground_instruments
         self.space_instruments = [] if space_instruments is None else space_instruments

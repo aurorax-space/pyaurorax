@@ -19,7 +19,7 @@ def get_ephemeris_sources(program=None, platform=None, instrument_type=None, sou
     :return: a dictionary of all ephemeris sources.
     """
     
-    API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources"
+    API_EPHEMERIS_SOURCES_URL = "http://api.staging.aurorax.space/api/v1/ephemeris-sources"
     filters = {"program": program, "platform": platform, "instrument_type": instrument_type, "source_type": source_type, "owner": owner, "format": format}
     r = requests.get(API_EPHEMERIS_SOURCES_URL, params=filters)
     ephemeris_response = eval(r.text)
@@ -158,7 +158,7 @@ class EphemerisSearch:
     """
 
     def __init__(self, programs=None, platforms=None, instrument_types=None, metadata_filters=None, start=None, end=None):
-        self.API_EPHEMERIS_SEARCH_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris/search"
+        self.API_EPHEMERIS_SEARCH_URL = "http://api.staging.aurorax.space/api/v1/ephemeris/search"
         
         self.start = start
         self.end = end
@@ -220,7 +220,7 @@ class EphemerisUpload:
     """
 
     def __init__(self, api_key=None):
-        self.API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space:8080/api/v1/ephemeris-sources/{}/ephemeris"
+        self.API_EPHEMERIS_UPLOAD_URL = "http://api.staging.aurorax.space/api/v1/ephemeris-sources/{}/ephemeris"
         self.ephemeris_sources = get_ephemeris_sources()
         self.record_list = []
         self.api_key = api_key
