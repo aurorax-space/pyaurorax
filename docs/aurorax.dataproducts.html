@@ -35,8 +35,7 @@
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="aurorax.ephemeris module" href="aurorax.ephemeris.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,11 +81,10 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="aurorax.conjunctions.html">aurorax.conjunctions module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aurorax.ephemeris.html">aurorax.ephemeris module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aurorax.ephemeris.html#testing">Testing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">aurorax.dataproducts module</a></li>
 </ul>
 
             
@@ -152,184 +150,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-aurorax.dataproducts">
-<span id="aurorax-dataproducts-module"></span><h1>aurorax.dataproducts module<a class="headerlink" href="#module-aurorax.dataproducts" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="aurorax.dataproducts.EphemerisRecord">
-<em class="property">class </em><code class="sig-prename descclassname">aurorax.dataproducts.</code><code class="sig-name descname">EphemerisRecord</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platform</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">geo_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">geo_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gsm_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gsm_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nbtrace_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nbtrace_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sbtrace_lat</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sbtrace_lon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ephemeris_source_identifier</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location_geo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location_gsm</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nbtrace</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sbtrace</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisRecord" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Represents an AuroraX ephemeris record.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ephemeris_source_identifier</strong> – ID of the instrument’s Aurorax ephemeris source</p></li>
-<li><p><strong>program</strong> – the instrument’s program</p></li>
-<li><p><strong>platform</strong> – the instrument’s platform</p></li>
-<li><p><strong>instrument_type</strong> – the instrument’s type</p></li>
-<li><p><strong>epoch</strong> – datetime object representing the record’s time of occurrence</p></li>
-<li><p><strong>geo_lat</strong> – the instrument’s geographic latitude. Use with geo_lon, or use location_geo dictionary</p></li>
-<li><p><strong>geo_lon</strong> – the instrument’s geographic longitude. Use with geo_lat, or use location_geo dictionary</p></li>
-<li><p><strong>gsm_lat</strong> – the instrument’s GSM latitude. Use with gsm_lon, or use location_gsm dictionary</p></li>
-<li><p><strong>gsm_lon</strong> – the instrument’s GSM longitude. Use with gsm_lat, or use location_gsm dictionary</p></li>
-<li><p><strong>nbtrace_lat</strong> – the instrument’s north B trace geographic latitude. Use with nbtrace_lon, or use nbtrace dictionary</p></li>
-<li><p><strong>nbtrace_lon</strong> – the instrument’s north B trace geographic longitude. Use with nbtrace_lat, or use nbtrace dictionary</p></li>
-<li><p><strong>sbtrace_lat</strong> – the instrument’s south B trace geographic latitude. Use with sbtrace_lon, or use sbtrace dictionary</p></li>
-<li><p><strong>sbtrace_lon</strong> – the instrument’s south B trace geographic longitude. Use with sbtrace_lat, or use sbtrace dictionary</p></li>
-<li><p><strong>location_geo</strong> – the instrument’s geographic coordinates in a dictionary in the form {“lat: &lt;LATITUDE&gt;, “lon”: &lt;LONGITUDE&gt;}</p></li>
-<li><p><strong>location_gsm</strong> – the instrument’s GSM coordinates in a dictionary in the form {“lat: &lt;LATITUDE&gt;, “lon”: &lt;LONGITUDE&gt;}</p></li>
-<li><p><strong>nbtrace</strong> – the instrument’s north B trace geographic coordinates in a dictionary in the form {“lat: &lt;LATITUDE&gt;, “lon”: &lt;LONGITUDE&gt;}</p></li>
-<li><p><strong>sbtrace</strong> – the instrument’s south B trace coordinates in a dictionary in the form {“lat: &lt;LATITUDE&gt;, “lon”: &lt;LONGITUDE&gt;}</p></li>
-<li><p><strong>metadata</strong> – the instrument’s metadata dictionary</p></li>
-<li><p><strong>record</strong> – the ephemeris record’s fields in AuroraX dictionary format</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="aurorax.dataproducts.EphemerisRecord.to_dictionary">
-<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisRecord.to_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of the EphemerisRecord as a dictionary in the AuroraX record format.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="aurorax.dataproducts.EphemerisSearch">
-<em class="property">class </em><code class="sig-prename descclassname">aurorax.dataproducts.</code><code class="sig-name descname">EphemerisSearch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">programs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platforms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_types</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_filters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisSearch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class for searching ephemeris records.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>start</strong> – a datetime object representing the search window’s start</p></li>
-<li><p><strong>end</strong> – a datetime object representing the seach window’s end</p></li>
-<li><p><strong>programs</strong> – a list of strings representing the programs to search</p></li>
-<li><p><strong>platforms</strong> – a list of strings representing the platforms to search</p></li>
-<li><p><strong>instrument_types</strong> – a list of strings representing the types of instrument to search</p></li>
-<li><p><strong>metadata_filters</strong> – a list of dictionaries representing metadata filters for the ground instrument
-in the form {“key”: &lt;key&gt;, “operator”: &lt;operator&gt;, “value”: &lt;value&gt;}. E.g. {“key”: “temperature”, “operator”: “=”, “value”: 25.0}</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="aurorax.dataproducts.EphemerisSearch.execute">
-<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisSearch.execute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Executes the search with the given parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of EphemerisRecord objects matching the search criteria, or an empty list if the search returned no records, or -1 if an error occurred</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="aurorax.dataproducts.EphemerisSearch.to_dictionary">
-<code class="sig-name descname">to_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisSearch.to_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of the search parameters as a dictionary in the AuroraX ephemeris search format.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="aurorax.dataproducts.EphemerisUpload">
-<em class="property">class </em><code class="sig-prename descclassname">aurorax.dataproducts.</code><code class="sig-name descname">EphemerisUpload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisUpload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class for uploading ephemeris records.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ephemeris_sources</strong> – a list of dictionary objetcs, each representing an AuroraX ephemeris source. Identical to the result of get_ephemeris_sources()</p></li>
-<li><p><strong>record_list</strong> – a list of EphemerisRecord objects to be uploaded</p></li>
-<li><p><strong>api_key</strong> – the user’s unique API key used for uploading ephemeris records to AuroraX. See the API for instructions on generating an API key</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="aurorax.dataproducts.EphemerisUpload.add_record">
-<code class="sig-name descname">add_record</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisUpload.add_record" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an EphemerisRecord object to be uploaded.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>record</strong> – an EphemerisRecord object</p>
-</dd>
-<dt class="field-even">Raise</dt>
-<dd class="field-even"><p>ValueError if the record is not an EphemerisRecord object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="aurorax.dataproducts.EphemerisUpload.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisUpload.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clears all records from record_list.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="aurorax.dataproducts.EphemerisUpload.execute">
-<code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.EphemerisUpload.execute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sends all EphemerisRecord objects in the record_list to the API. A valid api_key variable must be defined.</p>
-<p>The record_list will <em>NOT</em> be cleared after execution of this method. Use the clear() method to clear the record_list.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>1 if all records were successfully uploaded, else returns the HTTP response returned on error</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="aurorax.dataproducts.GroundInstrument">
-<em class="property">class </em><code class="sig-prename descclassname">aurorax.dataproducts.</code><code class="sig-name descname">GroundInstrument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span></em>, <em class="sig-param"><span class="n">platform</span></em>, <em class="sig-param"><span class="n">instrument_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.GroundInstrument" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Represents a ground-based ephemeris source.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>program</strong> – the instrument’s program</p></li>
-<li><p><strong>platform</strong> – the instrument’s platform</p></li>
-<li><p><strong>instrument_type</strong> – the instrument’s type</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="aurorax.dataproducts.SpaceInstrument">
-<em class="property">class </em><code class="sig-prename descclassname">aurorax.dataproducts.</code><code class="sig-name descname">SpaceInstrument</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span></em>, <em class="sig-param"><span class="n">platform</span></em>, <em class="sig-param"><span class="n">instrument_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.SpaceInstrument" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Represents a space-based ephemeris source.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>program</strong> – the instrument’s program</p></li>
-<li><p><strong>platform</strong> – the instrument’s platform</p></li>
-<li><p><strong>instrument_type</strong> – the instrument’s type</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="aurorax.dataproducts.get_ephemeris_sources">
-<code class="sig-prename descclassname">aurorax.dataproducts.</code><code class="sig-name descname">get_ephemeris_sources</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">program</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">platform</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">instrument_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">source_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">owner</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">format</span><span class="o">=</span><span class="default_value">'basic_info'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#aurorax.dataproducts.get_ephemeris_sources" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of dictionaries representing all ephemeris sources.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>program</strong> – program name to filter sources by, optional</p></li>
-<li><p><strong>platform</strong> – platform name to filter sources by, optional</p></li>
-<li><p><strong>instrument_type</strong> – instrument type to filter sources by, optional</p></li>
-<li><p><strong>source_type</strong> – source type to filter sources by (e.g. “heo”), optional</p></li>
-<li><p><strong>owner</strong> – owner ID to filter sources by, optional</p></li>
-<li><p><strong>format</strong> – the format of the ephemeris source returned Available values: “identifier_only”, “basic_info”, “full_record”. Defaults to “basic_info”.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a dictionary of all ephemeris sources.</p>
-</dd>
-</dl>
-</dd></dl>
-
+  <div class="section" id="aurorax-dataproducts-module">
+<h1>aurorax.dataproducts module<a class="headerlink" href="#aurorax-dataproducts-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -337,13 +159,6 @@ in the form {“key”: &lt;key&gt;, “operator”: &lt;operator&gt;, “value�
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="aurorax.ephemeris.html" class="btn btn-neutral float-left" title="aurorax.ephemeris module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
