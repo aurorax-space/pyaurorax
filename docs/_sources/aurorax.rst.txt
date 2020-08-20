@@ -27,8 +27,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-
-   
-Testing
--------
-:ref:`testpage`

@@ -6,7 +6,3 @@ aurorax.ephemeris module
    :undoc-members:
    :show-inheritance:
 
-   
-Testing
-=======
-:ref:`testpage`
