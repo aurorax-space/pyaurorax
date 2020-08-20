@@ -1,5 +1,8 @@
 .PHONY: install
 
+aurorax-test:
+	python3 tests/test_api.py
+
 doc-test:
 	cd docsource
 	make github
