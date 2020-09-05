@@ -1,6 +1,8 @@
 # pyaurorax
 Python library for interacting with the AuroraX API.
 
+![Github Actions Tests](https://github.com/ucalgary-aurora/pyaurorax/workflows/tests/badge.svg)
+
 ## Requirements
 - Python 3.5+
 
