@@ -1,13 +1,19 @@
 # pyaurorax
 Python library for interacting with the AuroraX API.
 
-![Github Actions Tests](https://github.com/ucalgary-aurora/pyaurorax/workflows/tests/badge.svg)
+![Github Actions - Tests](https://github.com/ucalgary-aurora/pyaurorax/workflows/tests/badge.svg)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
+[![PyPI license](https://img.shields.io/pypi/l/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 
 ## Requirements
 - Python 3.5+
 
 ## Installation
 <pre>$ pip install pyaurorax</pre>
+
+## Usage
+<pre>import pyaurorax</pre>
 
 ## Development
 <pre>$ git clone https://github.com/ucalgary-aurora/pyaurorax.git
