@@ -13,7 +13,7 @@ help:
 
 .PHONY: help Makefile
 
-github:
+pages:
 	@make html
 	@cp -a _build/html/. ../docs
 

@@ -1,18 +1,25 @@
-.PHONY: install
-
-aurorax-test:
-	python3 tests/test_api.py
-
-doc-test:
-	cd docsource
-	make github
+.PHONY: install update dev docs clean test
 
 install:
-	python3 -m pip install .
+	poetry install
 
-package:
-	python3 setup.py sdist bdist_wheel
+update upgrade:
+	poetry update
 
-publish:
-	python3 -m twine upload dist/*
+dev:
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+	~/.poetry/bin/poetry self update
+	~/.poetry/bin/poetry completions bash > completions.out
+	sudo cp completions.out /etc/bash_completion.d/poetry.bash-completion
+	rm completions.out
+
+docs:
+	cd docsource && ${MAKE} github
+
+clean:
+	@rm -rf pyaurorax.egg-info build dist
+
+test:
+	flake8 aurorax
+	python tests/test_aurorax.py
 
