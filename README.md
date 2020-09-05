@@ -5,7 +5,7 @@ Python library for interacting with the AuroraX API.
 - Python 3.5+
 
 ## Installation
-<pre>pip install pyaurorax</pre>
+<pre>$ pip install pyaurorax</pre>
 
 ## Development
 <pre>$ git clone https://github.com/ucalgary-aurora/pyaurorax.git
@@ -15,4 +15,4 @@ $ make dev
 $ make install</pre>
 
 ## Testing
-<pre>make test</pre>
+<pre>$ make test</pre>

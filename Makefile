@@ -1,4 +1,4 @@
-.PHONY: install update dev docs clean test
+.PHONY: install update dev clean test
 
 install:
 	poetry install
@@ -12,9 +12,6 @@ dev:
 	~/.poetry/bin/poetry completions bash > completions.out
 	sudo cp completions.out /etc/bash_completion.d/poetry.bash-completion
 	rm completions.out
-
-docs:
-	cd docsource && ${MAKE} github
 
 clean:
 	@rm -rf pyaurorax.egg-info build dist
