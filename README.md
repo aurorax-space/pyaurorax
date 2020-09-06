@@ -13,7 +13,7 @@ Python library for interacting with the AuroraX API.
 <pre>$ pip install pyaurorax</pre>
 
 ## Usage
-<pre>import pyaurorax</pre>
+<pre>import aurorax</pre>
 
 ## Development
 <pre>$ git clone https://github.com/ucalgary-aurora/pyaurorax.git
