@@ -1,8 +1,10 @@
 [tool.poetry]
-name = "aurorax"
-version = "0.1.0"
-description = ""
+name = "pyaurorax"
+version = "0.0.3"
+description = "Python library for interacting with the AuroraX API"
 authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
+maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.5"
