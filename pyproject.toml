@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.0.4"
+version = "0.0.5"
 description = "Python library for interacting with the AuroraX API"
 authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]

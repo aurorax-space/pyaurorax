@@ -5,6 +5,7 @@ Python library for interacting with the AuroraX API.
 [![PyPI version shields.io](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
+[![Downloads](https://pepy.tech/badge/pyaurorax)](https://pepy.tech/project/pyaurorax)
 
 ## Requirements
 - Python 3.5+
