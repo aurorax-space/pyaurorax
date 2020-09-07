@@ -1,11 +1,10 @@
-import requests
+from .api import URL_EPHEMERIS_SOURCES
+from .api import AuroraXRequest
 
-__URL_EPHEMERIS_SOURCES = "http://api.staging.aurorax.space/api/v1/ephemeris-sources"
 
-
-def list_sources(program=None, platform=None, instrument_type=None, source_type=None, owner=None, format="basic_info"):
+def get_sources(program=None, platform=None, instrument_type=None, source_type=None, owner=None, format="basic_info"):
     """
-    Returns a list of dictionaries representing all ephemeris sources.
+    Returns a list of dictionaries representing all ephemeris sources
 
     :param program: program name to filter sources by, optional
     :param platform: platform name to filter sources by, optional
@@ -17,7 +16,7 @@ def list_sources(program=None, platform=None, instrument_type=None, source_type=
 
     :return: a dictionary of all ephemeris sources
     """
-    filters = {
+    params = {
         "program": program,
         "platform": platform,
         "instrument_type": instrument_type,
@@ -25,12 +24,14 @@ def list_sources(program=None, platform=None, instrument_type=None, source_type=
         "owner": owner,
         "format": format
     }
-    r = requests.get(__URL_EPHEMERIS_SOURCES, params=filters)
-    if (r.status_code == 200):
-        return r.json()
-    else:
-        return {}
+    req = AuroraXRequest(URL_EPHEMERIS_SOURCES, params=params)
+    res = req.execute()
+    return res
 
 
 def add_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
+    pass
+
+
+def remove_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
     pass
