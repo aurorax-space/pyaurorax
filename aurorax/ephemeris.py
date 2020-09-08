@@ -1,8 +1,10 @@
 from .api import URL_EPHEMERIS_SOURCES
 from .api import AuroraXRequest
+from typing import List, Dict
 
 
-def get_sources(program=None, platform=None, instrument_type=None, source_type=None, owner=None, format="basic_info"):
+def get_all_sources(program: str = None, platform: str = None, instrument_type: str = None, source_type: str = None,
+                    owner: str = None, format: str = "basic_info") -> List[Dict]:
     """
     Returns a list of dictionaries representing all ephemeris sources
 
@@ -24,9 +26,23 @@ def get_sources(program=None, platform=None, instrument_type=None, source_type=N
         "owner": owner,
         "format": format,
     }
-    req = AuroraXRequest(URL_EPHEMERIS_SOURCES, params=params)
+    url = URL_EPHEMERIS_SOURCES
+    req = AuroraXRequest(url, params=params)
     res = req.execute()
-    return res
+    if (res.status_code != 200):
+        return []
+    else:
+        return res.data
+
+
+def get_source(identifier: int) -> Dict:
+    url = "%s/%d" % (URL_EPHEMERIS_SOURCES, identifier)
+    req = AuroraXRequest(url)
+    res = req.execute()
+    if (res.status_code != 200):
+        return {}
+    else:
+        return res.data
 
 
 def add_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
@@ -34,4 +50,8 @@ def add_source(api_key, program, platform, instrument_type, source_type, metadat
 
 
 def remove_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
+    pass
+
+
+def update_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
     pass

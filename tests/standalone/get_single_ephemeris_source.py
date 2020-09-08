@@ -5,8 +5,8 @@ import pprint
 
 
 def main():
-    sources = aurorax.ephemeris.get_all_sources()
-    pprint.pprint(sources)
+    source = aurorax.ephemeris.get_source(1)
+    pprint.pprint(source)
 
 
 # ----------
