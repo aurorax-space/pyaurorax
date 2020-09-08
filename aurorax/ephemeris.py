@@ -84,3 +84,11 @@ def remove_source(api_key, program, platform, instrument_type, source_type, meta
 
 def update_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
     pass
+
+
+def search(start_dt, end_dt, programs=[], platforms=[], instrument_types=[], metadata_filters=[]):
+    pass
+
+
+def upload():
+    pass
