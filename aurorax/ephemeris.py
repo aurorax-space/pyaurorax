@@ -22,7 +22,7 @@ def get_sources(program=None, platform=None, instrument_type=None, source_type=N
         "instrument_type": instrument_type,
         "source_type": source_type,
         "owner": owner,
-        "format": format
+        "format": format,
     }
     req = AuroraXRequest(URL_EPHEMERIS_SOURCES, params=params)
     res = req.execute()

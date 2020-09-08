@@ -1,7 +1,12 @@
 import requests
 
+# private globals
+__URL_STUB = "http://staging-zaphod-api.aurorax.space"
+
 # public globals
-URL_EPHEMERIS_SOURCES = "http://staging-zaphod-api.aurorax.space/api/v1/ephemeris-sources"
+URL_EPHEMERIS_SOURCES = "%s/api/v1/ephemeris-sources" % (__URL_STUB)
+URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability" % (__URL_STUB)
+URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability" % (__URL_STUB)
 
 
 class AuroraXRequest():
@@ -40,10 +45,31 @@ class AuroraXRequest():
         return res
 
 
+class AuroraXRawRequest(AuroraXRequest):
+
+    # private globals
+    __STANDARD_REQUEST_HEADERS = {
+        "accept": "application/json",
+        "Content-Type": "application/json"
+    }
+
+    def execute(self):
+        # prep request headers
+        request_headers = self.__STANDARD_REQUEST_HEADERS
+        if (self.api_key != ""):
+            request_headers["x-aurorax-api-key": self.api_key]
+
+        # perform request
+        req = requests.request(self.method, self.url, params=self.params, json=self.json)
+
+        # return
+        return req
+
+
 class AuroraXResponse():
 
     # private globals
-    __STR_DATA_LENGTH = 75
+    __STR_DATA_LENGTH = 115
 
     def __init__(self, request, asynchronous=False):
         # init values
@@ -56,7 +82,13 @@ class AuroraXResponse():
         # if synchronous, set response values
         if (self.asynchronous is False):
             self.headers = self.request.headers
-            self.data = self.request.json()
+            if (self.status_code >= 200 and self.status_code < 300):
+                self.data = self.request.json()
+            else:
+                self.data = {
+                    "error": "HTTP error code %d" % (self.status_code),
+                    "response_body": self.request.text,
+                }
 
     # async request method
     # TODO   --> implement once async API version is available
