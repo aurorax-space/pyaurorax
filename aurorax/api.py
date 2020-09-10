@@ -7,6 +7,7 @@ __URL_STUB = "http://staging-zaphod-api.aurorax.space"
 URL_EPHEMERIS_SOURCES = "%s/api/v1/ephemeris-sources" % (__URL_STUB)
 URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability" % (__URL_STUB)
 URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability" % (__URL_STUB)
+URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (__URL_STUB)
 
 
 class AuroraXRequest():

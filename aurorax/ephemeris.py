@@ -29,10 +29,10 @@ def get_all_sources(program: str = None, platform: str = None, instrument_type: 
     }
     req = AuroraXRequest(url, params=params)
     res = req.execute()
-    if (res.status_code != 200):
-        return []
-    else:
+    if (res.status_code == 200):
         return res.data
+    else:
+        return []
 
 
 def get_source(identifier: int, format: str = "basic_info") -> Dict:
@@ -49,10 +49,12 @@ def get_source(identifier: int, format: str = "basic_info") -> Dict:
     params = {"format": format}
     req = AuroraXRequest(url, params=params)
     res = req.execute()
-    if (res.status_code != 200):
-        return {}
-    else:
+    if (res.status_code == 200):
         return res.data
+    else:
+        # 400 --> Missing params
+        # 404 --> Identifier not found
+        return {}
 
 
 def get_source_statistics(identifier: int) -> Dict:
@@ -68,14 +70,30 @@ def get_source_statistics(identifier: int) -> Dict:
     url = "%s/%d/stats" % (URL_EPHEMERIS_SOURCES, identifier)
     req = AuroraXRequest(url)
     res = req.execute()
-    if (res.status_code != 200):
-        return {}
-    else:
+    if (res.status_code == 200):
         return res.data
+    else:
+        # 400 --> Missing params
+        # 404 --> Identifier not found
+        return {}
 
 
 def add_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
-    pass
+    url = URL_EPHEMERIS_SOURCES
+    post_data = {
+        "program": program,
+        "platform": platform,
+        "instrument_type": instrument_type,
+        "source_type": source_type,
+        "metadata_schema": metadata_schema,
+        "maintainers": maintainers,
+    }
+    req = AuroraXRequest(url, api_key=api_key, json=post_data)
+    res = req.execute()
+    if (res.status_code != 200):
+        return []
+    else:
+        return res.data
 
 
 def remove_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
