@@ -19,6 +19,7 @@ pytest = "^5.2"
 mypy = "^0.782"
 pylint = "^2.6.0"
 bandit = "^1.6.2"
+coverage = "^5.2.1"
 
 [build-system]
 requires = ["poetry>=0.12"]

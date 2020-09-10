@@ -28,8 +28,11 @@ test-dev:
 	@echo "Linting ...\n============================="
 	-pylint aurorax
 	@echo "\n\n"
-	@echo "Security analsys ...\n============================="
+	@echo "Security analysis ...\n============================="
 	-bandit -r aurorax
+	@echo "\n\n"
+	@echo "Test coverage ...\n============================="
+	-coverage report
 
 publish:
 	${MAKE} test

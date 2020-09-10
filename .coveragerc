@@ -1,0 +1,6 @@
+[run]
+branch = true
+include = aurorax/*
+omit =
+  tests/*
+
