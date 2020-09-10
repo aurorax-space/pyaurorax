@@ -4,6 +4,3 @@ comment:
 coverage:
   status:
     project: false
-
-codecov:
-  token: secret:MaiOFVoviGpQAFqBN0jFcyuWfTPXUfSZTNVPr0ud36bbXjkbdylJBIkancfl0N9eyGvMRXrIU7GpM6D5K7lU1T351mILvn0f/Lh9x0vUAZI=
