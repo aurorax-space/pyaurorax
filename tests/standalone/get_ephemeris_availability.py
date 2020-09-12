@@ -6,9 +6,11 @@ import pprint
 
 
 def main():
-    availability = aurorax.availability.get_ephemeris(datetime.datetime(
-        2019, 1, 1), datetime.datetime(2019, 1, 5), program="swarm", instrument_type="ssc-web")
-    pprint.pprint(availability.data)
+    availability = aurorax.availability.get_ephemeris(datetime.datetime(2019, 1, 1),
+                                                      datetime.datetime(2019, 1, 5),
+                                                      program="swarm",
+                                                      instrument_type="ssc-web")
+    pprint.pprint(availability)
 
 
 # ----------

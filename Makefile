@@ -9,7 +9,7 @@ install: poetry
 	poetry install
 
 update:
-	python -m pip install --update poetry
+	python -m pip install --upgrade poetry
 	poetry update
 
 clean:

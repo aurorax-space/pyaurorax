@@ -5,7 +5,7 @@ import pprint
 
 
 def main():
-    source = aurorax.ephemeris.get_source_statistics("1")
+    source = aurorax.ephemeris.get_source_using_filters(program="swarm", instrument_type="ssc-web")
     pprint.pprint(source)
 
 

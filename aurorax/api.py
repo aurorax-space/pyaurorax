@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import requests
+from typing import Dict
 
 # private globals
 __URL_STUB = "http://staging-zaphod-api.aurorax.space"
@@ -18,7 +21,7 @@ class AuroraXRequest():
         "Content-Type": "application/json"
     }
 
-    def __init__(self, url, params={}, json={}, method="GET", api_key=""):
+    def __init__(self, url: str, params: Dict = {}, json: Dict = {}, method: str = "GET", api_key: str = "") -> None:
         # set attributes
         self.json = json
         self.params = params
@@ -26,14 +29,14 @@ class AuroraXRequest():
         self.url = url
         self.api_key = api_key
 
-    def execute(self):
+    def execute(self) -> AuroraXResponse:
         # prep request headers
         request_headers = self.__STANDARD_REQUEST_HEADERS
         if (self.api_key != ""):
-            request_headers["x-aurorax-api-key": self.api_key]
+            request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        req = requests.request(self.method, self.url, params=self.params, json=self.json)
+        req = requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
 
         # serialize response into an AuroraXResponse object
         # TODO  --> once async version of API is available
@@ -54,14 +57,14 @@ class AuroraXRawRequest(AuroraXRequest):
         "Content-Type": "application/json"
     }
 
-    def execute(self):
+    def execute(self) -> requests.Request:
         # prep request headers
         request_headers = self.__STANDARD_REQUEST_HEADERS
         if (self.api_key != ""):
-            request_headers["x-aurorax-api-key": self.api_key]
+            request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        req = requests.request(self.method, self.url, params=self.params, json=self.json)
+        req = requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
 
         # return
         return req
@@ -72,7 +75,7 @@ class AuroraXResponse():
     # private globals
     __STR_DATA_LENGTH = 115
 
-    def __init__(self, request, asynchronous=False):
+    def __init__(self, request: AuroraXRequest, asynchronous: bool = False) -> None:
         # init values
         self.headers = {}
         self.request = request
@@ -84,7 +87,10 @@ class AuroraXResponse():
         if (self.asynchronous is False):
             self.headers = self.request.headers
             if (self.status_code >= 200 and self.status_code < 300):
-                self.data = self.request.json()
+                if (self.request.text == ""):
+                    self.data = ""
+                else:
+                    self.data = self.request.json()
             else:
                 self.data = {
                     "error": "HTTP error code %d" % (self.status_code),
@@ -93,10 +99,10 @@ class AuroraXResponse():
 
     # async request method
     # TODO   --> implement once async API version is available
-    def check_for_data(self):
+    def check_for_data(self) -> None:
         pass
 
-    def __str__(self):
+    def __str__(self) -> str:
         # update status if asynchronous
         if (self.asynchronous is True):
             self.check_for_data()
