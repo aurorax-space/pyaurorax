@@ -20,7 +20,8 @@ def main():
 
     # output results
     if (r.status_code == 200):
-        print("Successfully added source")
+        print("Successfully added source\n")
+        pprint.pprint(r.data)
     else:
         print("Error code: %d" % (r.status_code))
         pprint.pprint(r.data)

@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import aurorax
+import pprint
 import os
 
 
@@ -18,18 +19,15 @@ def main():
                                                          platform=platform,
                                                          instrument_type=instrument_type)
     if (len(sources) == 0):
-        sources = aurorax.ephemeris.get_source_using_filters(program=program,
-                                                             platform=platform,
-                                                             instrument_type="test-instrument-type-updated")
-        if (len(sources) == 0):
-            print("No ephemeris source found")
-            return
+        print("No ephemeris source found")
+        return
     identifier = sources[0]["identifier"]
 
-    # remove source
-    r = aurorax.ephemeris.remove_source(api_key, identifier)
+    # update source
+    r = aurorax.ephemeris.update_source(api_key, identifier, instrument_type="test-instrument-type-updated")
     if (r.status_code == 200):
-        print("Successfully removed source")
+        print("Successfully updated source\n")
+        pprint.pprint(r.data)
     else:
         print(r)
 

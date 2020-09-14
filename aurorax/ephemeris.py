@@ -98,7 +98,7 @@ def get_source_statistics(identifier: str) -> Dict:
 
 
 def add_source(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
-               metadata_schema: List = [], maintainers: List = []) -> AuroraXResponse:
+               metadata_schema: List[Dict] = [], maintainers: List = []) -> AuroraXResponse:
     """
     Create a new ephemeris source record
 
@@ -149,8 +149,39 @@ def remove_source(api_key: str, identifier: str) -> AuroraXResponse:
     return res
 
 
-def update_source(api_key, program, platform, instrument_type, source_type, metadata_schema={}, maintainers=[]):
-    pass
+def update_source(api_key: str, identifier: str, program: str = None, platform: str = None,
+                  instrument_type: str = None, source_type: str = None, metadata_schema: List[Dict] = None,
+                  owner: str = None, maintainers: List = None) -> AuroraXResponse:
+    # retrieve ephemeris information for this identifier
+    curr_info = get_source_using_identifier(identifier, format="full_record")
+    if (curr_info == {}):
+        # identifier not found
+        return curr_info
+    import pprint
+    pprint.pprint(curr_info)
+
+    # set new information based on current values and function parameters
+    post_data = {
+        "program": program if program is not None else curr_info["program"],
+        "platform": platform if platform is not None else curr_info["platform"],
+        "instrument_type": instrument_type if instrument_type is not None else curr_info["instrument_type"],
+        "source_type": source_type if source_type is not None else curr_info["source_type"],
+        "metadata_schema": metadata_schema if metadata_schema is not None else curr_info["metadata_schema"],
+        "owner": owner if owner is not None else curr_info["owner"],
+        "maintainers": maintainers if maintainers is not None else curr_info["maintainers"],
+    }
+    pprint.pprint(post_data)
+    return
+
+    # make request
+    url = "%s/%s" % (URL_EPHEMERIS_SOURCES, str(identifier))
+    req = AuroraXRequest(url, method="PUT", api_key=api_key, json=post_data)
+    res = req.execute()
+    if (res.status_code != 200 and res.status_code != 409):
+        res.data = ""
+    elif (res.status_code == 409):
+        res.data = res.request.json()
+    return res
 
 
 def search(start_dt, end_dt, programs=[], platforms=[], instrument_types=[], metadata_filters=[]):
