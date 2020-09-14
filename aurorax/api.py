@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import requests
 from typing import Dict
 
@@ -29,7 +27,7 @@ class AuroraXRequest():
         self.url = url
         self.api_key = api_key
 
-    def execute(self) -> AuroraXResponse:
+    def execute(self) -> "AuroraXResponse":
         # prep request headers
         request_headers = self.__STANDARD_REQUEST_HEADERS
         if (self.api_key != ""):
