@@ -1,17 +1,14 @@
 import requests
-import datetime
 from typing import Dict
 
-# private globals
-__URL_STUB = "http://api.staging.aurorax.space:8080"
-
 # public globals
-URL_EPHEMERIS_SOURCES = "%s/api/v1/ephemeris-sources" % (__URL_STUB)
-URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability" % (__URL_STUB)
-URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability" % (__URL_STUB)
-URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (__URL_STUB)
-URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (__URL_STUB)
-URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (__URL_STUB)
+URL_API_STUB = "http://api.staging.aurorax.space"
+URL_EPHEMERIS_SOURCES = "%s/api/v1/ephemeris-sources" % (URL_API_STUB)
+URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability" % (URL_API_STUB)
+URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability" % (URL_API_STUB)
+URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (URL_API_STUB)
+URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (URL_API_STUB)
+URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (URL_API_STUB)
 
 
 class AuroraXRequest():
@@ -90,52 +87,3 @@ class AuroraXResponse():
                 "error": "HTTP error code %d" % (self.status_code),
                 "response_body": self.request.text,
             }
-
-
-def get_request_status(url: str) -> Dict:
-    # get request status
-    req = AuroraXRequest(url)
-    res = req.execute()
-
-    # set return dict
-    return_dict = {
-        "status_code": res.status_code,
-        "data": {},
-        "request_status": {
-            "completed": False,
-            "data_url": ""
-        }
-    }
-
-    # determine the status of the request
-    if (res.status_code == 200):
-        return_dict["data"] = res.data
-        if (res.data["search_result"]["data_uri"] is not None):
-            return_dict["request_status"]["completed"] = True
-            return_dict["request_status"]["data_url"] = "%s%s" % (__URL_STUB, res.data["search_result"]["data_uri"])
-
-    # return
-    return return_dict
-
-
-def get_request_data(url: str) -> Dict:
-    # make request
-    req = AuroraXRequest(url)
-    res = req.execute()
-
-    # set return dict
-    return_dict = {
-        "status_code": res.status_code,
-        "data": []
-    }
-    if (res.status_code == 200):
-        return_dict["data"] = res.data
-
-    # serialize epochs to datetime objects
-    for i in range(0, len(return_dict["data"])):
-        if ("epoch" in return_dict["data"][i]):
-            return_dict["data"][i]["epoch"] = datetime.datetime.strptime(return_dict["data"][i]["epoch"],
-                                                                         "%Y-%m-%dT%H:%M:%S")
-
-    # return
-    return return_dict

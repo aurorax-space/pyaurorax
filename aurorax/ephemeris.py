@@ -3,12 +3,12 @@ import time
 import humanize
 from typing import List, Dict
 from .api import URL_EPHEMERIS_SOURCES, URL_EPHEMERIS_SEARCH, URL_EPHEMERIS_REQUEST_STATUS
-from .api import AuroraXRequest, AuroraXResponse
-from .api import get_request_status, get_request_data
-
-# globals
-__FIRST_FOLLOWUP_SLEEP_TIME = 0.050  # 50ms
-__STANDARD_POLLING_SLEEP_TIME = 1.0  # 1s
+from .api import AuroraXRequest
+from .requests import get_status as request_get_status
+from .requests import get_data as request_get_data
+from .requests import get_logs as request_get_logs
+from .requests import wait_for_data as request_wait_for_data
+from .requests import STANDARD_POLLING_SLEEP_TIME, FIRST_FOLLOWUP_SLEEP_TIME
 
 
 def get_all_sources(format: str = "basic_info") -> Dict:
@@ -283,7 +283,7 @@ class Search():
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
 
-    def execute(self) -> AuroraXResponse:
+    def execute(self) -> None:
         # send request
         url = URL_EPHEMERIS_SEARCH
         post_data = {
@@ -309,10 +309,10 @@ class Search():
             self.request_id = self.request_url.rsplit("/", 1)[-1]
         self.request = res
 
-    def update_status(self):
-        # get the status
-        url = URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
-        status = get_request_status(url)
+    def update_status(self, status: Dict = None) -> None:
+        # get the status if it isn't passed in
+        if (status is None):
+            status = get_request_status(self.request_id)
 
         # update request status by checking if data URI is set
         if (status["request_status"]["completed"] is True):
@@ -324,18 +324,46 @@ class Search():
         if (status["status_code"] == 200):
             self.logs = status["data"]["logs"]
 
-    def check_for_data(self):
+    def check_for_data(self) -> None:
         self.update_status()
 
-    def get_data(self):
+    def get_data(self) -> None:
+        if (self.data_url == ""):
+            print("No data available, update status first")
+            return
         url = self.data_url
-        data_res = get_request_data(url)
+        data_res = get_request_data(self.request_id, url=url)
         self.data = data_res["data"]
+
+    def wait_for_data(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> None:
+        url = URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
+        self.update_status(request_wait_for_data(url))
+
+
+def get_request_status(request_id: str) -> Dict:
+    url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
+    return request_get_status(url)
+
+
+def get_request_data(request_id: str, url: str = None) -> Dict:
+    if (url is None):
+        url = "%s/data" % (URL_EPHEMERIS_REQUEST_STATUS.format(request_id))
+    return request_get_data(url)
+
+
+def get_request_logs(request_id: str) -> Dict:
+    url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
+    return request_get_logs(url)
+
+
+def wait_for_data(request_id: str) -> Dict:
+    url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
+    return request_wait_for_data(url)
 
 
 def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
            instrument_types: List = [], metadata_filters: List = [], show_progress: bool = False,
-           async_return: bool = False, poll_interval: int = __STANDARD_POLLING_SLEEP_TIME) -> Dict:
+           async_return: bool = False, poll_interval: int = STANDARD_POLLING_SLEEP_TIME) -> Dict:
     """
     Search for ephemeris records
 
@@ -388,7 +416,7 @@ def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms:
     first_followup = True
     while (s.data_available is False):
         if (first_followup is True):
-            time.sleep(__FIRST_FOLLOWUP_SLEEP_TIME)
+            time.sleep(FIRST_FOLLOWUP_SLEEP_TIME)
             first_followup = False
         else:
             time.sleep(poll_interval)

@@ -5,3 +5,4 @@ from aurorax import ephemeris
 from aurorax import conjunctions
 from aurorax import data_products
 from aurorax import availability
+from aurorax import requests
