@@ -23,15 +23,21 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    - name: Install Poetry and dependencies
       run: |
         python -m pip install --upgrade pip
         pip install poetry
         poetry install
-    - name: Lint with flake8
+    - name: Style guide enforcing (flake8)
       run: |
         poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         poetry run flake8 . --count --ignore=W391 --exit-zero --max-complexity=20 --max-line-length=127 --statistics
+    - name: Linting (pylint)
+      run: |
+        poetry run pylint aurorax
+    - name: Security analysis (bandit)
+      run: |
+        poetry run bandit -r aurorax    
     - name: Test with pytest
       run: |
         poetry run pytest

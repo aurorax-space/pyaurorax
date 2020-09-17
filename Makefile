@@ -17,22 +17,18 @@ clean:
 
 test:
 	find . -type f -name '*.py' -exec sed -i -e "s/\r//g" {} \;
-	flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-	flake8 . --count --ignore=W391 --exit-zero --max-complexity=20 --max-line-length=127 --statistics
-	pytest
+	poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+	poetry run flake8 . --count --ignore=W391 --exit-zero --max-complexity=20 --max-line-length=127 --statistics
+	poetry run pylint aurorax
+	poetry run bandit -r aurorax
+	poetry run pytest
 
 test-dev:
 	@echo "Type-checking ...\n============================="
-	-mypy aurorax
-	@echo "\n\n"
-	@echo "Linting ...\n============================="
-	-pylint aurorax
-	@echo "\n\n"
-	@echo "Security analysis ...\n============================="
-	-bandit -r aurorax
+	-poetry run mypy aurorax
 	@echo "\n\n"
 	@echo "Test coverage ...\n============================="
-	-coverage report
+	-poetry run coverage report
 
 publish:
 	${MAKE} test
