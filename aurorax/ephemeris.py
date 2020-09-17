@@ -1,7 +1,14 @@
 import datetime
+import time
+import humanize
 from typing import List, Dict
-from .api import URL_EPHEMERIS_SOURCES, URL_EPHEMERIS_SEARCH
+from .api import URL_EPHEMERIS_SOURCES, URL_EPHEMERIS_SEARCH, URL_EPHEMERIS_REQUEST_STATUS
 from .api import AuroraXRequest, AuroraXResponse
+from .api import get_request_status, get_request_data
+
+# globals
+__FIRST_FOLLOWUP_SLEEP_TIME = 0.050  # 50ms
+__STANDARD_POLLING_SLEEP_TIME = 1.0  # 1s
 
 
 def get_all_sources(format: str = "basic_info") -> Dict:
@@ -11,7 +18,7 @@ def get_all_sources(format: str = "basic_info") -> Dict:
     :param format: the format of the ephemeris source returned Available values: "identifier_only", \
                    "basic_info", "full_record". Default is "basic_info"
 
-    :return: dictionary containing information about all ephemeris sources
+    :return: information about all ephemeris sources
     """
     # make request
     url = URL_EPHEMERIS_SOURCES
@@ -41,7 +48,7 @@ def get_source_using_identifier(identifier: int, format: str = "basic_info") -> 
     :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
                    full_record. Default is basic_info
 
-    :return: dictionary containing information about all ephemeris sources
+    :return: information the specific ephemeris source
     """
     # make request
     url = "%s/%d" % (URL_EPHEMERIS_SOURCES, identifier)
@@ -76,7 +83,7 @@ def get_source_using_filters(program: str = None, platform: str = None, instrume
     :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
                    full_record. Default is basic_info
 
-    :return: dictionary containing information about all ephemeris sources
+    :return: information about the specific ephemeris sources matching the filter criteria
     """
     # make request
     url = "%s" % (URL_EPHEMERIS_SOURCES)
@@ -111,7 +118,7 @@ def get_source_statistics(identifier: int) -> Dict:
 
     :param identifier: ephemeris source identifier
 
-    :return: an AuroraXResponse object with the ephemeris source statistics
+    :return: the ephemeris source statistics
     """
     # make request
     url = "%s/%d/stats" % (URL_EPHEMERIS_SOURCES, identifier)
@@ -143,7 +150,7 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
     :param metadata_schema: metadata schema
     :param maintainers: list of users to give maintainer permissions to
 
-    :return: the returned ephemeris source record details
+    :return: the created ephemeris source record details
     """
     # make request
     url = URL_EPHEMERIS_SOURCES
@@ -177,7 +184,7 @@ def remove_source(api_key: str, identifier: str) -> Dict:
     :param api_key: API key associated with your account
     :param identifier: unique ephemeris source identifier
 
-    :return: an AuroraXResponse object
+    :return: status summary
     """
     # make request
     url = "%s/%s" % (URL_EPHEMERIS_SOURCES, str(identifier))
@@ -190,7 +197,6 @@ def remove_source(api_key: str, identifier: str) -> Dict:
         "data": {},
     }
     if (res.status_code == 409):
-        print(res.request.text)
         return_dict["data"] = res.request.json()
 
     # return
@@ -213,7 +219,7 @@ def update_source(api_key: str, identifier: str, program: str = None, platform: 
     :param owner: owner ID
     :param maintainers: list of users to give maintainer permissions to
 
-    :return: an AuroraXResponse object with the new ephemeris source record details
+    :return: the new ephemeris source record details
     """
     # set new information based on current values and function parameters
     # post_data = {}
@@ -249,12 +255,26 @@ class Search():
 
     def __init__(self, start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
                  instrument_types: List = [], metadata_filters: List = []) -> None:
+        """
+        Create a new Search object
+
+        :param start_dt: start timestamp
+        :param end_dt: end timestamp
+        :param programs: programs to search through
+        :param platforms: platforms to search through
+        :param instrument_types: instrument types to search through
+        :param metadata_filters: metadata keys and values to filter on
+        """
         self.request = None
         self.request_id = ""
         self.request_url = ""
         self.executed = False
         self.data_available = False
+        self.data_url = ""
         self.query = {}
+        self.status = {}
+        self.data = []
+        self.logs = []
 
         self.start_dt = start_dt
         self.end_dt = end_dt
@@ -263,7 +283,7 @@ class Search():
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
 
-    def execute(self):
+    def execute(self) -> AuroraXResponse:
         # send request
         url = URL_EPHEMERIS_SEARCH
         post_data = {
@@ -289,26 +309,33 @@ class Search():
             self.request_id = self.request_url.rsplit("/", 1)[-1]
         self.request = res
 
-        # return response which will have the location URL in the headers
-        return self.request
+    def update_status(self):
+        # get the status
+        url = URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
+        status = get_request_status(url)
 
-    def get_status(self):
-        url = "%s" % ()
-        req = AuroraXRequest(url)
+        # update request status by checking if data URI is set
+        if (status["request_status"]["completed"] is True):
+            self.data_available = True
+            self.data_url = status["request_status"]["data_url"]
 
-    def get_logs(self):
-        pass
+        # set class variable "status" and "logs"
+        self.status = status
+        if (status["status_code"] == 200):
+            self.logs = status["data"]["logs"]
 
-    def check_for_data(self) -> bool:
-        pass
+    def check_for_data(self):
+        self.update_status()
 
-    def get_data(self) -> List:
-        pass
+    def get_data(self):
+        url = self.data_url
+        data_res = get_request_data(url)
+        self.data = data_res["data"]
 
 
 def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
            instrument_types: List = [], metadata_filters: List = [], show_progress: bool = False,
-           async_return: bool = False) -> Dict:
+           async_return: bool = False, poll_interval: int = __STANDARD_POLLING_SLEEP_TIME) -> Dict:
     """
     Search for ephemeris records
 
@@ -320,20 +347,70 @@ def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms:
     :param metadata_filters: metadata keys and values to filter on
     :param show_progress: show the progress of the request using the request log
     :param async_return: return immediately after sending the request, don't wait for data
+    :param poll_interval: seconds to wait between polling calls
 
     :return: an AuroraXResponse object with the retrieved ephemeris data or URL of the data
     """
+    # init return dict
+    return_dict = {
+        "status_code": None,
+        "search_object": None,
+        "data": [],
+    }
+
     # create a Search() object
-    search_obj = Search(start_dt, end_dt, programs, platforms, instrument_types, metadata_filters)
-    print("Request ID: %s" % (str(search_obj.request_id)))
+    s = Search(start_dt, end_dt, programs, platforms, instrument_types, metadata_filters)
+    if (show_progress is True):
+        print("[%s] Search object created" % (datetime.datetime.now()))
 
     # execute the search
+    s.execute()
+    if (show_progress is True):
+        if (s.executed is True):
+            print("[%s] Request submitted" % (datetime.datetime.now()))
+            print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
+            print("[%s] Request details available at: %s" % (datetime.datetime.now(), s.request_url))
+        else:
+            print("[%s] Request failed to submit" % (datetime.datetime.now()))
+            return_dict["status_code"] = s.request.status_code
+            return_dict["search_object"] = s
+            return return_dict
 
-    # set the request URL
+    # check if async return is specified
+    if (async_return is True):
+        return_dict["status_code"] = s.request.status_code
+        return_dict["search_object"] = s
+        if (show_progress is True):
+            print("[%s] Async return specified, returning immediately" % (datetime.datetime.now()))
+        return return_dict
 
     # check the request URL for the status of the request (poll for data)
+    first_followup = True
+    while (s.data_available is False):
+        if (first_followup is True):
+            time.sleep(__FIRST_FOLLOWUP_SLEEP_TIME)
+            first_followup = False
+        else:
+            time.sleep(poll_interval)
+        if (show_progress is True):
+            print("[%s] Checking for data ..." % (datetime.datetime.now()))
+        s.check_for_data()
+
+    # get the data
+    if (show_progress is True):
+        print("[%s] Request has data available, retrieving it ..." % (datetime.datetime.now()))
+    s.get_data()
 
     # return response with the data
+    return_dict["status_code"] = s.request.status_code
+    return_dict["search_object"] = s
+    return_dict["data"] = s.data
+    if (show_progress is True):
+        print("[%s] Retrieved %s of data containing %d records, completed "
+              "search request" % (datetime.datetime.now(),
+                                  humanize.filesize.naturalsize(s.status["data"]["search_result"]["file_size"]),
+                                  s.status["data"]["search_result"]["result_count"]))
+    return return_dict
 
 
 def upload():

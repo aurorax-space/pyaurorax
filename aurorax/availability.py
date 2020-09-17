@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Dict
+from typing import Dict
 from .api import URL_EPHEMERIS_AVAILABILITY, URL_DATA_PRODUCTS_AVAILABILITY
 from .api import AuroraXRequest
 
