@@ -11,7 +11,7 @@ def main():
     # print in a nice table
     headers = ["ID", "Program", "Platform", "Instrument Type", "Source Type"]
     rows = []
-    for source in sources:
+    for source in sources["data"]:
         rows.append([
             int(source["identifier"]),
             source["program"],

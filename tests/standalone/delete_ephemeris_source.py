@@ -28,7 +28,7 @@ def main():
 
     # remove source
     r = aurorax.ephemeris.remove_source(api_key, identifier)
-    if (r.status_code == 200):
+    if (r["status_code"] == 200):
         print("Successfully removed source")
     else:
         print(r)

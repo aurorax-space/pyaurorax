@@ -6,10 +6,9 @@ from .api import AuroraXRequest
 
 def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
                   instrument_type: str = None, source_type: str = None, owner: str = None,
-                  format: str = "basic_info") -> List[Dict]:
+                  format: str = "basic_info") -> Dict:
     """
-    Returns a list of dictionaries representing information about the number of existing
-    ephemeris records
+    Retrieve information about the number of existing ephemeris records
 
     :param start_dt: start date
     :param end_dt: end date
@@ -21,7 +20,7 @@ def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, pla
     :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
                    full_record. Default is basic_info
 
-    :return: a list of of ephemeris availability dictionaries
+    :return: ephemeris availability information
     """
     params = {
         "start": start_dt.strftime("%Y-%m-%d"),
@@ -35,18 +34,18 @@ def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, pla
     }
     req = AuroraXRequest(URL_EPHEMERIS_AVAILABILITY, params=params)
     res = req.execute()
-    if (res.status_code == 200):
-        return res.data
-    else:
-        return []
+    return_dict = {
+        "status_code": res.status_code,
+        "data": res.data
+    }
+    return return_dict
 
 
 def get_data_products(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
                       instrument_type: str = None, source_type: str = None, owner: str = None,
-                      format: str = "basic_info") -> List[Dict]:
+                      format: str = "basic_info") -> Dict:
     """
-    Returns a list of dictionaries representing information about the number of existing
-    data products records
+    Retrieve information about the number of existing data products records
 
     :param start_dt: start date
     :param end_dt: end date
@@ -58,7 +57,7 @@ def get_data_products(start_dt: datetime, end_dt: datetime, program: str = None,
     :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
                    full_record. Default is basic_info
 
-    :return: a list of of data product availability dictionaries
+    :return: data product availability information
     """
     params = {
         "start": start_dt.strftime("%Y-%m-%d"),
@@ -72,7 +71,8 @@ def get_data_products(start_dt: datetime, end_dt: datetime, program: str = None,
     }
     req = AuroraXRequest(URL_DATA_PRODUCTS_AVAILABILITY, params=params)
     res = req.execute()
-    if (res.status_code == 200):
-        return res.data
-    else:
-        return []
+    return_dict = {
+        "status_code": res.status_code,
+        "data": res.data
+    }
+    return return_dict

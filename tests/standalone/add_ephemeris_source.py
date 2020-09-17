@@ -19,12 +19,11 @@ def main():
     r = aurorax.ephemeris.add_source(api_key, program, platform, instrument_type, source_type)
 
     # output results
-    if (r.status_code == 200):
+    if (r["status_code"] == 200):
         print("Successfully added source\n")
-        pprint.pprint(r.data)
     else:
-        print("Error code: %d" % (r.status_code))
-        pprint.pprint(r.data)
+        print("Error adding source\n")
+    pprint.pprint(r)
 
 
 # ----------
