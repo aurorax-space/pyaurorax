@@ -29,7 +29,7 @@ jobs:
         echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info[:3]))")
     - name: Set up Poetry
       run: |
-        python get-poetry.py -y
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -y
         source $HOME/.poetry/env
         poetry config virtualenvs.in-project true
     - name: Set up cache
