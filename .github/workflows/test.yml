@@ -38,6 +38,6 @@ jobs:
     - name: Security analysis (bandit)
       run: |
         poetry run bandit -r aurorax    
-    - name: Test with pytest
+    - name: Run tests (pytest)
       run: |
         poetry run pytest
