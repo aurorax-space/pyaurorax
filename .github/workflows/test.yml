@@ -36,4 +36,5 @@ jobs:
         flake8 . --count --ignore=W391 --exit-zero --max-complexity=20 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
+        pip freeze
         pytest
