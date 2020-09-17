@@ -23,33 +23,15 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Get full python version
-      id: full-python-version
-      run: |
-        echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info[:3]))")
-    - name: Set up Poetry
-      run: |
-        curl -o get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
-        python get-poetry.py -y
-        source $HOME/.poetry/env
-        poetry config virtualenvs.in-project true
-    - name: Set up cache
-      uses: actions/cache@v1
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
-        source $HOME/.poetry/env
+        python -m pip install --upgrade pip
+        pip install poetry flake8 pytest
         poetry install
     - name: Lint with flake8
       run: |
-        source $HOME/.poetry/env
-        poetry show
-        pip show
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --ignore=W391 --exit-zero --max-complexity=20 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        source $HOME/.poetry/env
-        pytest
+        poetry run pytest
