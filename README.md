@@ -1,28 +1,45 @@
-# pyaurorax
-![Github Actions - Tests](https://github.com/ucalgary-aurora/pyaurorax/actions?query=workflow%3Atests)
-[![PyPI version shields.io](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
+# PyAuroraX
+
+[![Github Actions - Tests](https://github.com/ucalgary-aurora/pyaurorax/workflows/tests/badge.svg)](https://github.com/ucalgary-aurora/pyaurorax/actions?query=workflow%3Atests)
+[![PyPI version](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
-[![security: bandit](https://img.shields.io/badge/security-bandit-lightgrey.svg)](https://github.com/PyCQA/bandit)
+[![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
+[![Bandit Security](https://img.shields.io/badge/security-bandit-lightgrey.svg)](https://github.com/PyCQA/bandit)
 
 Python library for interacting with the AuroraX API.
 
-## Requirements
-- Python 3.5+
+## Installing Requests and Supported Versions
 
-## Installation
-<pre>$ pip install pyaurorax</pre>
+Pyurorax is available on PyPI:
+
+```console
+$ python -m pip install pyaurorax
+```
+
+PyAuroraX officially supports Python 3.5+.
 
 ## Usage
-<pre>import aurorax</pre>
+
+```python
+import aurorax
+````
 
 ## Development
-<pre>$ git clone https://github.com/ucalgary-aurora/pyaurorax.git
+
+```console
+$ git clone https://github.com/ucalgary-aurora/pyaurorax.git
 $ cd pyaurorax
-$ make install</pre>
+$ make install
+```
 
 ## Testing
-<pre>$ make test</pre>
+
+```console
+$ make test
+```
 
 ## Additional Testing for Development Environments
-<pre>$ make test-dev</pre>
+
+```console
+$ make test-dev
+```
