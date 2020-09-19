@@ -2,7 +2,7 @@
 #
 # This script will bump the version number to the
 # version specified as a CLI parameter by editing
-# the version number in a few files in the repository 
+# the version number in a few files in the repository
 # automatically.
 
 import argparse
