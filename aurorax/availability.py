@@ -11,16 +11,25 @@ def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, pla
     Retrieve information about the number of existing ephemeris records
 
     :param start_dt: start date
+    :type start_dt: datetime
     :param end_dt: end date
-    :param program: program name to filter sources by
-    :param platform: platform name to filter sources by
-    :param instrument_type: instrument type to filter sources by
-    :param source_type: source type to filter sources by (heo, leo, lunar, or ground)
-    :param owner: owner ID to filter sources by
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
-                   full_record. Default is basic_info
+    :type end_dt: datetime
+    :param program: program name to filter sources by, defaults to None
+    :type program: str, optional
+    :param platform: platform name to filter sources by, defaults to None
+    :type platform: str, optional
+    :param instrument_type: instrument type to filter sources by, defaults to None
+    :type instrument_type: str, optional
+    :param source_type: source type to filter sources by (heo, leo, lunar, or ground), defaults to None
+    :type source_type: str, optional
+    :param owner: owner ID to filter sources by, defaults to None
+    :type owner: str, optional
+    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+                   full_record), defaults to "basic_info"
+    :type format: str, optional
 
     :return: ephemeris availability information
+    :rtype: Dict
     """
     params = {
         "start": start_dt.strftime("%Y-%m-%d"),
@@ -45,19 +54,28 @@ def get_data_products(start_dt: datetime, end_dt: datetime, program: str = None,
                       instrument_type: str = None, source_type: str = None, owner: str = None,
                       format: str = "basic_info") -> Dict:
     """
-    Retrieve information about the number of existing data products records
+    Retrieve information about the number of existing data product records
 
     :param start_dt: start date
+    :type start_dt: datetime
     :param end_dt: end date
-    :param program: program name to filter sources by
-    :param platform: platform name to filter sources by
-    :param instrument_type: instrument type to filter sources by
-    :param source_type: source type to filter sources by (heo, leo, lunar, or ground)
-    :param owner: owner ID to filter sources by
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
-                   full_record. Default is basic_info
+    :type end_dt: datetime
+    :param program: program name to filter sources by, defaults to None
+    :type program: str, optional
+    :param platform: platform name to filter sources by, defaults to None
+    :type platform: str, optional
+    :param instrument_type: instrument type to filter sources by, defaults to None
+    :type instrument_type: str, optional
+    :param source_type: source type to filter sources by (heo, leo, lunar, or ground), defaults to None
+    :type source_type: str, optional
+    :param owner: owner ID to filter sources by, defaults to None
+    :type owner: str, optional
+    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+                   full_record), defaults to "basic_info"
+    :type format: str, optional
 
-    :return: data product availability information
+    :return: ephemeris data product information
+    :rtype: Dict
     """
     params = {
         "start": start_dt.strftime("%Y-%m-%d"),

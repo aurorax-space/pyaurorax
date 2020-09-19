@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 def main():
     # get sources
-    sources = aurorax.ephemeris.get_all_sources()
+    sources = aurorax.get_all_sources()
 
     # print in a nice table
     headers = ["ID", "Program", "Platform", "Instrument Type", "Source Type"]

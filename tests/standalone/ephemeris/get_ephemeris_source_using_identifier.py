@@ -5,8 +5,8 @@ import pprint
 
 
 def main():
-    stats = aurorax.ephemeris.get_source_statistics(10)
-    pprint.pprint(stats)
+    source = aurorax.get_source_using_identifier(10)
+    pprint.pprint(source)
 
 
 # ----------

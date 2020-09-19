@@ -10,6 +10,15 @@ STANDARD_POLLING_SLEEP_TIME = 1.0  # 1s
 
 
 def get_status(request_url: str) -> Dict:
+    """
+    Retrieve the status of a request
+
+    :param request_url: URL of the request information
+    :type request_url: str
+
+    :return: status response
+    :rtype: Dict
+    """
     # get request status
     req = AuroraXRequest(request_url)
     res = req.execute()
@@ -36,6 +45,15 @@ def get_status(request_url: str) -> Dict:
 
 
 def get_data(data_url: str) -> Dict:
+    """
+    Retrieve the data for a request
+
+    :param data_url: URL for the data of a request
+    :type data_url: str
+
+    :return: data response
+    :rtype: Dict
+    """
     # make request
     req = AuroraXRequest(data_url)
     res = req.execute()
@@ -59,6 +77,15 @@ def get_data(data_url: str) -> Dict:
 
 
 def get_logs(request_url: str) -> Dict:
+    """
+    Retrieve the logs for a request
+
+    :param request_url: URL of the request information
+    :type request_url: str
+
+    :return: logs response
+    :rtype: Dict
+    """
     status = get_status(request_url)
     return_dict = {
         "status_code": status["status_code"],
@@ -70,6 +97,17 @@ def get_logs(request_url: str) -> Dict:
 
 
 def wait_for_data(request_url: str, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Dict:
+    """
+    Block and wait for the data to be made available for a request
+
+    :param request_url: URL of the request information
+    :type request_url: str
+    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+    :type poll_interval: float, optional
+
+    :return: status response
+    :rtype: Dict
+    """
     status = get_status(request_url)
     while (status["request_status"]["completed"] is False):
         time.sleep(poll_interval)

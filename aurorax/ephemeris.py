@@ -1,257 +1,101 @@
 import datetime
 import time
 import humanize
+from pprint import pformat
 from typing import List, Dict
-from .api import URL_EPHEMERIS_SOURCES, URL_EPHEMERIS_SEARCH, URL_EPHEMERIS_REQUEST_STATUS
+from .api import URL_EPHEMERIS_SEARCH, URL_EPHEMERIS_REQUEST_STATUS
+from .api import URL_EPHEMERIS_UPLOAD
 from .api import AuroraXRequest
 from .requests import get_status as request_get_status
 from .requests import get_data as request_get_data
 from .requests import get_logs as request_get_logs
 from .requests import wait_for_data as request_wait_for_data
 from .requests import STANDARD_POLLING_SLEEP_TIME, FIRST_FOLLOWUP_SLEEP_TIME
+from .location import Location
 
 
-def get_all_sources(format: str = "basic_info") -> Dict:
+class Ephemeris():
     """
-    Retrieves all ephemeris source records
-
-    :param format: the format of the ephemeris source returned Available values: "identifier_only", \
-                   "basic_info", "full_record". Default is "basic_info"
-
-    :return: information about all ephemeris sources
+    Class representing an AuroraX ephemeris record
     """
-    # make request
-    url = URL_EPHEMERIS_SOURCES
-    params = {
-        "format": format,
-    }
-    req = AuroraXRequest(url, params=params)
-    res = req.execute()
 
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": [],
-    }
-    if (res.status_code == 200):
-        return_dict["data"] = res.data
+    def __init__(self, identifier: int, program: str, platform: str, instrument_type: str,
+                 epoch: datetime, location_geo: Location, location_gsm: Location, nbtrace: Location,
+                 sbtrace: Location, metadata: Dict) -> None:
+        """
+        Constructor
 
-    # return
-    return return_dict
+        :param identifier: ephemeris source ID
+        :type identifier: int
+        :param program: program name
+        :type program: str
+        :param platform: platform name
+        :type platform: str
+        :param instrument_type: instrument type name
+        :type instrument_type: str
+        :param epoch: timestamp for the record in UTC
+        :type epoch: datetime
+        :param location_geo: latitude and longitude in geographic coordinates
+        :type location_geo: Location
+        :param location_gsm: latitude and longitude in GSM coordinates (leave empty for
+                             ephemeris sources with a type of 'ground')
+        :type location_gsm: Location
+        :param nbtrace: north B-trace geomagnetic latitude and longitude
+        :type nbtrace: Location
+        :param sbtrace: south B-trace geomagnetic latitude and longitude
+        :type sbtrace: Location
+        :param metdata: metadata values for this record
+        :type metdata: Dict
+        """
+        self.identifier = identifier
+        self.program = program
+        self.platform = platform
+        self.instrument_type = instrument_type
+        self.epoch = epoch
+        self.location_geo = location_geo
+        self.location_gsm = location_gsm
+        self.nbtrace = nbtrace
+        self.sbtrace = sbtrace
+        self.metadata = metadata
 
+    def to_json_serializable(self) -> Dict:
+        """
+        Convert object to a JSON-serializable object (ie. translate datetime
+        objects to strings)
 
-def get_source_using_identifier(identifier: int, format: str = "basic_info") -> Dict:
-    """
-    Retrieves ephemeris source record matching identifier
+        :return: dictionary JSON-serializable object
+        :rtype: Dict
+        """
+        d = self.__dict__
+        d["epoch"] = d["epoch"].strftime("%Y-%m-%dT%H:%M:00.000Z")
+        d["location_geo"] = d["location_geo"].__dict__
+        d["location_gsm"] = d["location_gsm"].__dict__
+        d["nbtrace"] = d["nbtrace"].__dict__
+        d["sbtrace"] = d["sbtrace"].__dict__
+        return d
 
-    :param identifier: ephemeris source unique identifier
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
-                   full_record. Default is basic_info
+    def __str__(self) -> str:
+        """String method
 
-    :return: information the specific ephemeris source
-    """
-    # make request
-    url = "%s/%d" % (URL_EPHEMERIS_SOURCES, identifier)
-    params = {
-        "format": format
-    }
-    req = AuroraXRequest(url, params=params)
-    res = req.execute()
+        :return: string format
+        :rtype: str
+        """
+        return pformat(self.__dict__)
 
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": {},
-    }
-    if (res.status_code == 200):
-        return_dict["data"] = res.data
+    def __repr__(self) -> str:
+        """
+        Object representation
 
-    # return
-    return return_dict
-
-
-def get_source_using_filters(program: str = None, platform: str = None, instrument_type: str = None,
-                             source_type: str = None, owner: str = None, format: str = "basic_info") -> Dict:
-    """
-    Retrieves all ephemeris source records matching the specified filters
-
-    :param program: program name
-    :param platform: platform name
-    :param instrument_type: instrument type
-    :param source_type: source type (leo, heo, lunar, or ground)
-    :param owner: owner account name
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info, \
-                   full_record. Default is basic_info
-
-    :return: information about the specific ephemeris sources matching the filter criteria
-    """
-    # make request
-    url = "%s" % (URL_EPHEMERIS_SOURCES)
-    params = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "source_type": source_type,
-        "owner": owner,
-        "format": format,
-    }
-    req = AuroraXRequest(url, params=params)
-    res = req.execute()
-
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": [],
-    }
-    if (res.status_code == 200):
-        return_dict["data"] = res.data
-
-    # return
-    return return_dict
-
-
-def get_source_statistics(identifier: int) -> Dict:
-    """
-    Retrieves additional statistics about the specified ephemeris source such as
-    the earliest/latest ephemeris record and the total number of ephemeris records
-    available
-
-    :param identifier: ephemeris source identifier
-
-    :return: the ephemeris source statistics
-    """
-    # make request
-    url = "%s/%d/stats" % (URL_EPHEMERIS_SOURCES, identifier)
-    req = AuroraXRequest(url)
-    res = req.execute()
-
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": {},
-    }
-    if (res.status_code == 200):
-        return_dict["data"] = res.data
-
-    # return
-    return return_dict
-
-
-def add_source(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
-               metadata_schema: List[Dict] = [], maintainers: List = []) -> Dict:
-    """
-    Create a new ephemeris source record
-
-    :param api_key: API key associated with your account
-    :param program: program name
-    :param platform: platform name
-    :param instrument_type: instrument type
-    :param source_type: source type (heo, leo, lunar, ground)
-    :param metadata_schema: metadata schema
-    :param maintainers: list of users to give maintainer permissions to
-
-    :return: the created ephemeris source record details
-    """
-    # make request
-    url = URL_EPHEMERIS_SOURCES
-    post_data = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "source_type": source_type,
-        "metadata_schema": metadata_schema,
-        "maintainers": maintainers,
-    }
-    req = AuroraXRequest(url, method="POST", api_key=api_key, json=post_data)
-    res = req.execute()
-
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": {},
-    }
-    if (res.status_code == 200 or res.status_code == 409):
-        return_dict["data"] = res.request.json()
-
-    # return
-    return return_dict
-
-
-def remove_source(api_key: str, identifier: str) -> Dict:
-    """
-    Remove an ephemeris source record
-
-    :param api_key: API key associated with your account
-    :param identifier: unique ephemeris source identifier
-
-    :return: status summary
-    """
-    # make request
-    url = "%s/%s" % (URL_EPHEMERIS_SOURCES, str(identifier))
-    req = AuroraXRequest(url, method="DELETE", api_key=api_key)
-    res = req.execute()
-
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": {},
-    }
-    if (res.status_code == 409):
-        return_dict["data"] = res.request.json()
-
-    # return
-    return return_dict
-
-
-def update_source(api_key: str, identifier: str, program: str = None, platform: str = None,
-                  instrument_type: str = None, source_type: str = None, metadata_schema: List[Dict] = None,
-                  owner: str = None, maintainers: List = None) -> Dict:
-    """
-    Create a new ephemeris source record
-
-    :param api_key: API key associated with your account
-    :param identifier: ephemeris source identifier
-    :param program: program name
-    :param platform: platform name
-    :param instrument_type: instrument type
-    :param source_type: source type (heo, leo, lunar, ground)
-    :param metadata_schema: metadata schema
-    :param owner: owner ID
-    :param maintainers: list of users to give maintainer permissions to
-
-    :return: the new ephemeris source record details
-    """
-    # set new information based on current values and function parameters
-    # post_data = {}
-    # if (program is not None):
-    #     post_data["program"] = program
-    # if (platform is not None):
-    #     post_data["platform"] = platform
-    # if (instrument_type is not None):
-    #     post_data["instrument_type"] = instrument_type
-    # if (source_type is not None):
-    #     post_data["source_type"] = source_type
-    # if (metadata_schema is not None):
-    #     post_data["metadata_schema"] = metadata_schema
-    # if (owner is not None):
-    #     post_data["owner"] = owner
-    # if (maintainers is not None):
-    #     post_data["maintainers"] = maintainers
-
-    # # make request
-    # url = "%s/%s" % (URL_EPHEMERIS_SOURCES, str(identifier))
-    # print(url)
-    # req = AuroraXRequest(url, method="PUT", api_key=api_key, json=post_data)
-    # res = req.execute()
-    # if (res.status_code != 200 and res.status_code != 409):
-    #     res.data = ""
-    # elif (res.status_code == 409):
-    #     res.data = res.request.json()
-    # return res
-    pass
+        :return: object representation
+        :rtype: str
+        """
+        return self.__str__()
 
 
 class Search():
+    """
+    Class representing an AuroraX ephemeris search
+    """
 
     def __init__(self, start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
                  instrument_types: List = [], metadata_filters: List = []) -> None:
@@ -259,11 +103,17 @@ class Search():
         Create a new Search object
 
         :param start_dt: start timestamp
+        :type start_dt: datetime
         :param end_dt: end timestamp
-        :param programs: programs to search through
-        :param platforms: platforms to search through
-        :param instrument_types: instrument types to search through
-        :param metadata_filters: metadata keys and values to filter on
+        :type end_dt: datetime
+        :param programs: programs to search through, defaults to []
+        :type programs: List, optional
+        :param platforms: platforms to search through, defaults to []
+        :type platforms: List, optional
+        :param instrument_types: instrument types to search through, defaults to []
+        :type instrument_types: List, optional
+        :param metadata_filters: metadata keys and values to filter on, defaults to []
+        :type metadata_filters: List, optional
         """
         self.request = None
         self.request_id = ""
@@ -284,6 +134,9 @@ class Search():
         self.metadata_filters = metadata_filters
 
     def execute(self) -> None:
+        """
+        Initiate ephemeris search request
+        """
         # send request
         url = URL_EPHEMERIS_SEARCH
         post_data = {
@@ -310,6 +163,12 @@ class Search():
         self.request = res
 
     def update_status(self, status: Dict = None) -> None:
+        """
+        Update the status of this ephemeris search request
+
+        :param status: retrieved status (include to avoid requesting it from the API again), defaults to None
+        :type status: Dict, optional
+        """
         # get the status if it isn't passed in
         if (status is None):
             status = get_request_status(self.request_id)
@@ -325,9 +184,15 @@ class Search():
             self.logs = status["data"]["logs"]
 
     def check_for_data(self) -> None:
+        """
+        Check to see if data is available for this ephemeris search request
+        """
         self.update_status()
 
     def get_data(self) -> None:
+        """
+        Retrieve the data available for this ephemeris search request
+        """
         if (self.data_url == ""):
             print("No data available, update status first")
             return
@@ -336,48 +201,103 @@ class Search():
         self.data = data_res["data"]
 
     def wait_for_data(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> None:
+        """
+        Block and wait for the request to complete and data is available for retrieval
+
+        :param poll_interval: time in seconds to wait between polling
+                              attempts, defaults to STANDARD_POLLING_SLEEP_TIME
+        :type poll_interval: float, optional
+        """
         url = URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
         self.update_status(request_wait_for_data(url))
 
 
 def get_request_status(request_id: str) -> Dict:
+    """
+    Retrieve the request status for a given ephemeris search request ID
+
+    :param request_id: ephemeris search request ID
+    :type request_id: str
+
+    :return: status response
+    :rtype: Dict
+    """
     url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
     return request_get_status(url)
 
 
 def get_request_data(request_id: str, url: str = None) -> Dict:
+    """
+    Retrieve the request data for a given ephemeris search request ID
+
+    :param request_id: ephemeris search request ID
+    :type request_id: str
+    :param url: request data URL, optional (derived if not specified)
+    :type url: str, optional
+
+    :return: data response
+    :rtype: Dict
+    """
     if (url is None):
         url = "%s/data" % (URL_EPHEMERIS_REQUEST_STATUS.format(request_id))
     return request_get_data(url)
 
 
 def get_request_logs(request_id: str) -> Dict:
+    """
+    Retrieve the request logs for a given ephemeris search request ID
+
+    :param request_id: ephemeris search request ID
+    :type request_id: str
+
+    :return: logs response
+    :rtype: Dict
+    """
     url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
     return request_get_logs(url)
 
 
 def wait_for_data(request_id: str) -> Dict:
+    """
+    Block and wait for the data to be made available for a given ephemeris search request ID
+
+    :param request_id: ephemeris search request ID
+    :type request_id: str
+
+    :return: status response
+    :rtype: Dict
+    """
     url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
     return request_wait_for_data(url)
 
 
 def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
            instrument_types: List = [], metadata_filters: List = [], show_progress: bool = False,
-           async_return: bool = False, poll_interval: int = STANDARD_POLLING_SLEEP_TIME) -> Dict:
+           async_return: bool = False, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Dict:
     """
     Search for ephemeris records
 
     :param start_dt: start timestamp
+    :type start_dt: datetime
     :param end_dt: end timestamp
-    :param programs: programs to search through
-    :param platforms: platforms to search through
-    :param instrument_types: instrument types to search through
-    :param metadata_filters: metadata keys and values to filter on
-    :param show_progress: show the progress of the request using the request log
-    :param async_return: return immediately after sending the request, don't wait for data
-    :param poll_interval: seconds to wait between polling calls
+    :type end_dt: datetime
+    :param programs: programs to search through, defaults to []
+    :type programs: List, optional
+    :param platforms: platforms to search through, defaults to []
+    :type platforms: List, optional
+    :param instrument_types: instrument types to search through, defaults to []
+    :type instrument_types: List, optional
+    :param metadata_filters: metadata keys and values to filter on, defaults to []
+    :type metadata_filters: List, optional
+    :param show_progress: show the progress of the request using the request log, defaults to False
+    :type show_progress: bool, optional
+    :param async_return: return immediately after sending the request, don't wait for data, defaults to False
+    :type async_return: bool, optional
+    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+    :type poll_interval: float, optional
 
-    :return: an AuroraXResponse object with the retrieved ephemeris data or URL of the data
+    :return: ephemeris data response; or request response if "async_return" is True
+    :rtype: Dict
     """
     # init return dict
     return_dict = {
@@ -441,5 +361,36 @@ def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms:
     return return_dict
 
 
-def upload():
-    pass
+def upload(api_key: str, identifier: int, records: List["Ephemeris"]) -> Dict:
+    """
+    Upload ephemeris records to AuroraX
+
+    :param api_key: AuroraX API key
+    :type api_key: str
+    :param identifier: ephemeris source ID
+    :type identifier: int
+    :param records: Ephemeris records to upload
+    :type records: List[Ephemeris]
+
+    :return: upload response
+    :rtype: Dict
+    """
+    # translate each ephemeris record to a request-friendly dict (ie. convert datetimes to strings)
+    for i, record in enumerate(records):
+        records[i] = records[i].to_request_format()
+
+    # make request
+    url = URL_EPHEMERIS_UPLOAD.format(identifier)
+    req = AuroraXRequest(url, method="POST", json=records, api_key=api_key)
+    res = req.execute()
+
+    # set dict to return
+    return_dict = {
+        "status_code": res.status_code,
+        "data": {},
+    }
+    if (res.status_code == 400):
+        return_dict["data"] = res.data
+
+    # return
+    return return_dict

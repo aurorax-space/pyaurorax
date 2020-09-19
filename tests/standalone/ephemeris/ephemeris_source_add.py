@@ -16,7 +16,7 @@ def main():
     source_type = "ground"
 
     # make request
-    r = aurorax.ephemeris.add_source(api_key, program, platform, instrument_type, source_type)
+    r = aurorax.add_source(api_key, program, platform, instrument_type, source_type)
 
     # output results
     if (r["status_code"] == 200):
