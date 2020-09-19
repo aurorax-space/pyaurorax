@@ -8,23 +8,27 @@
 
 Python library for interacting with the AuroraX API.
 
-## Installing Requests and Supported Versions
+## Installing PyAuroraX
 
-Pyurorax is available on PyPI:
+PyAuroraX is available on PyPI:
 
 ```console
 $ python -m pip install pyaurorax
 ```
+
+## Supported Python Versions
 
 PyAuroraX officially supports Python 3.5+.
 
 ## Usage
 
 ```python
-import aurorax
+>>> import aurorax
 ````
 
 ## Development
+
+Clone the repository and install dependencies using Poetry.
 
 ```console
 $ git clone https://github.com/ucalgary-aurora/pyaurorax.git
@@ -36,10 +40,17 @@ $ make install
 
 ```console
 $ make test
+[ or do each test separately ]
+$ make test-flake8
+$ make test-pylint
+$ make test-bandit
+$ make test-pytest
 ```
 
 ## Additional Testing for Development Environments
 
+To run additional tests that are not integrated into the CI pipeline, run the following:
+
 ```console
-$ make test-dev
+$ make test-additional
 ```
