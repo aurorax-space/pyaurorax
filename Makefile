@@ -1,4 +1,4 @@
-.PHONY: install update test test-dev clean publish
+.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean publish
 
 all:
 
@@ -8,22 +8,29 @@ poetry:
 install: poetry
 	poetry install
 
-update:
+update upgrade:
 	python -m pip install --upgrade poetry
 	poetry update
 
 clean:
 	@rm -rf pyaurorax.egg-info build dist
 
-test:
-	find . -type f -name '*.py' -exec sed -i -e "s/\r//g" {} \;
+test: test-flake8 test-pylint test-bandit test-pytest
+
+test-flake8 flake8:
 	poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-	poetry run flake8 . --count --ignore=W391 --exit-zero --max-complexity=20 --max-line-length=127 --statistics
+	poetry run flake8 . --count --ignore=W391 --max-complexity=20 --max-line-length=127 --statistics
+	
+test-pylint pylint:
 	poetry run pylint aurorax
+
+test-bandit bandit:
 	poetry run bandit -r aurorax
+
+test-pytest pytest:
 	poetry run pytest
 
-test-dev:
+test-additional:
 	@echo "Type-checking ...\n============================="
 	-poetry run mypy aurorax
 	@echo "\n\n"
