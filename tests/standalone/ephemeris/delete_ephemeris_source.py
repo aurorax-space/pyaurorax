@@ -14,20 +14,20 @@ def main():
     instrument_type = "test-instrument-type"
 
     # get source record to pull out the identifier
-    sources = aurorax.get_source_using_filters(program=program,
-                                               platform=platform,
-                                               instrument_type=instrument_type)
+    sources = aurorax.sources.get_source_using_filters(program=program,
+                                                       platform=platform,
+                                                       instrument_type=instrument_type)
     if (len(sources["data"]) == 0):
-        sources = aurorax.get_source_using_filters(program=program,
-                                                   platform=platform,
-                                                   instrument_type="test-instrument-type-updated")
+        sources = aurorax.sources.get_source_using_filters(program=program,
+                                                           platform=platform,
+                                                           instrument_type="test-instrument-type-updated")
         if (len(sources["data"]) == 0):
             print("No ephemeris source found")
             return
-    identifier = sources[0]["identifier"]
+    identifier = sources["data"][0]["identifier"]
 
     # remove source
-    r = aurorax.remove_source(api_key, identifier)
+    r = aurorax.sources.remove_source(api_key, identifier)
     if (r["status_code"] == 200):
         print("Successfully removed source")
     else:

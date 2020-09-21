@@ -145,7 +145,8 @@ def get_source_statistics(identifier: int) -> Dict:
 
 
 def add_source(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
-               metadata_schema: List[Dict] = [], maintainers: List = []) -> Dict:
+               ephemeris_metadata_schema: List[Dict] = [], data_products_metadata_schema: List[Dict] = [],
+               maintainers: List = [], identifier: int = None) -> Dict:
     """
     Create a new ephemeris source record
 
@@ -159,10 +160,14 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
     :type instrument_type: str
     :param source_type: source type (heo, leo, lunar, ground)
     :type source_type: str
-    :param metadata_schema: metadata schema, defaults to []
-    :type metadata_schema: List[Dict], optional
+    :param ephemeris_metadata_schema: metadata schema, defaults to []
+    :type ephemeris_metadata_schema: List[Dict], optional
+    :param data_products_metadata_schema: metadata schema, defaults to []
+    :type data_products_metadata_schema: List[Dict], optional
     :param maintainers: list of users to give maintainer permissions to, defaults to []
     :type maintainers: List, optional
+    :param identifier: ephemeris source ID, defaults to None
+    :type identifier: int, optional
 
     :return: the created ephemeris source record details
     :rtype: Dict
@@ -174,9 +179,12 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
         "platform": platform,
         "instrument_type": instrument_type,
         "source_type": source_type,
-        "metadata_schema": metadata_schema,
+        "ephemeris_metadata_schema": ephemeris_metadata_schema,
+        "data_product_metadata_schema": data_products_metadata_schema,
         "maintainers": maintainers,
     }
+    if (identifier is not None):
+        post_data["identifier"] = identifier
     req = AuroraXRequest(url, method="POST", api_key=api_key, json=post_data)
     res = req.execute()
 
@@ -222,8 +230,9 @@ def remove_source(api_key: str, identifier: int) -> Dict:
 
 
 def update_source(api_key: str, identifier: int, program: str = None, platform: str = None,
-                  instrument_type: str = None, source_type: str = None, metadata_schema: List[Dict] = None,
-                  owner: str = None, maintainers: List = None) -> Dict:
+                  instrument_type: str = None, source_type: str = None, ephemeris_metadata_schema: List[Dict] = [],
+                  data_products_metadata_schema: List[Dict] = [], owner: str = None,
+                  maintainers: List = None) -> Dict:
     """
     Create a new ephemeris source record
 
@@ -237,8 +246,10 @@ def update_source(api_key: str, identifier: int, program: str = None, platform: 
     :type instrument_type: str
     :param source_type: source type (heo, leo, lunar, ground)
     :type source_type: str
-    :param metadata_schema: metadata schema, defaults to None
-    :type metadata_schema: List[Dict], optional
+    :param ephemeris_metadata_schema: metadata schema, defaults to []
+    :type ephemeris_metadata_schema: List[Dict], optional
+    :param data_products_metadata_schema: metadata schema, defaults to []
+    :type data_products_metadata_schema: List[Dict], optional
     :param maintainers: list of users to give maintainer permissions to, defaults to None
     :type maintainers: List, optional
 
@@ -255,8 +266,10 @@ def update_source(api_key: str, identifier: int, program: str = None, platform: 
     #     post_data["instrument_type"] = instrument_type
     # if (source_type is not None):
     #     post_data["source_type"] = source_type
-    # if (metadata_schema is not None):
-    #     post_data["metadata_schema"] = metadata_schema
+    # if (ephemeris_metadata_schema is not None):
+    #     post_data["ephemeris_metadata_schema"] = ephemeris_metadata_schema
+    # if (data_products_metadata_schema is not None):
+    #     post_data["data_products_metadata_schema"] = data_products_metadata_schema
     # if (owner is not None):
     #     post_data["owner"] = owner
     # if (maintainers is not None):

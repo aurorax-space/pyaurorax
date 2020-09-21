@@ -1,7 +1,7 @@
 import datetime
 import time
 import humanize
-from pprint import pformat
+import pprint
 from typing import List, Dict
 from .api import URL_EPHEMERIS_SEARCH, URL_EPHEMERIS_REQUEST_STATUS
 from .api import URL_EPHEMERIS_UPLOAD
@@ -12,6 +12,7 @@ from .requests import get_logs as request_get_logs
 from .requests import wait_for_data as request_wait_for_data
 from .requests import STANDARD_POLLING_SLEEP_TIME, FIRST_FOLLOWUP_SLEEP_TIME
 from .location import Location
+from .metadata import get_ephemeris_schema
 
 
 class Ephemeris():
@@ -72,6 +73,9 @@ class Ephemeris():
         d["location_gsm"] = d["location_gsm"].__dict__
         d["nbtrace"] = d["nbtrace"].__dict__
         d["sbtrace"] = d["sbtrace"].__dict__
+        for key, value in self.metadata.items():
+            if (type(value) is datetime.datetime or type(value) is datetime.date):
+                self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
         return d
 
     def __str__(self) -> str:
@@ -80,7 +84,7 @@ class Ephemeris():
         :return: string format
         :rtype: str
         """
-        return pformat(self.__dict__)
+        return self.__repr__()
 
     def __repr__(self) -> str:
         """
@@ -89,7 +93,7 @@ class Ephemeris():
         :return: object representation
         :rtype: str
         """
-        return self.__str__()
+        return pprint.pformat(self.__dict__)
 
 
 class Search():
@@ -132,6 +136,23 @@ class Search():
         self.platforms = platforms
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
+
+    def __str__(self) -> str:
+        """String method
+
+        :return: string format
+        :rtype: str
+        """
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        """
+        Object representation
+
+        :return: object representation
+        :rtype: str
+        """
+        return pprint.pformat(self.__dict__)
 
     def execute(self) -> None:
         """
@@ -212,6 +233,19 @@ class Search():
         self.update_status(request_wait_for_data(url))
 
 
+def get_metadata_schema(identifier: int) -> List:
+    """
+    Get ephemeris metadata schema for a specified ephemeris source identifier
+
+    :param identifier: ephemeris source ID
+    :type identifier: int
+
+    :return: metadata schema
+    :rtype: List
+    """
+    return get_ephemeris_schema(identifier)
+
+
 def get_request_status(request_id: str) -> Dict:
     """
     Retrieve the request status for a given ephemeris search request ID
@@ -269,6 +303,40 @@ def wait_for_data(request_id: str) -> Dict:
     """
     url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
     return request_wait_for_data(url)
+
+
+def search_async(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
+                 instrument_types: List = [], metadata_filters: List = [],
+                 show_progress: bool = False) -> Dict:
+    """
+    Submit a request for an ephemeris search
+
+    :param start_dt: start timestamp
+    :type start_dt: datetime
+    :param end_dt: end timestamp
+    :type end_dt: datetime
+    :param programs: programs to search through, defaults to []
+    :type programs: List, optional
+    :param platforms: platforms to search through, defaults to []
+    :type platforms: List, optional
+    :param instrument_types: instrument types to search through, defaults to []
+    :type instrument_types: List, optional
+    :param metadata_filters: metadata keys and values to filter on, defaults to []
+    :type metadata_filters: List, optional
+    :param show_progress: show the progress of the request using the request log, defaults to False
+    :type show_progress: bool, optional
+
+    :return: request response
+    :rtype: Dict
+    """
+    return search(start_dt,
+                  end_dt,
+                  programs=programs,
+                  platforms=platforms,
+                  instrument_types=instrument_types,
+                  metadata_filters=metadata_filters,
+                  show_progress=show_progress,
+                  async_return=True)
 
 
 def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
@@ -377,7 +445,7 @@ def upload(api_key: str, identifier: int, records: List["Ephemeris"]) -> Dict:
     """
     # translate each ephemeris record to a request-friendly dict (ie. convert datetimes to strings)
     for i, record in enumerate(records):
-        records[i] = records[i].to_request_format()
+        records[i] = records[i].to_json_serializable()
 
     # make request
     url = URL_EPHEMERIS_UPLOAD.format(identifier)

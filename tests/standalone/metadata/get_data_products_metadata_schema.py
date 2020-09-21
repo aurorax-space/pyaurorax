@@ -5,8 +5,11 @@ import pprint
 
 
 def main():
-    source = aurorax.get_source_using_identifier(10, format="full_record")
-    pprint.pprint(source)
+    # create object
+    schema = aurorax.metadata.get_data_products_schema(3)
+
+    # print
+    pprint.pprint(schema)
 
 
 # ----------

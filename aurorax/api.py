@@ -1,4 +1,5 @@
 import requests
+import pprint
 from typing import Dict
 
 # public globals
@@ -66,6 +67,12 @@ class AuroraXRequest():
         # return
         return res
 
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return pprint.pformat(self.__dict__)
+
 
 class AuroraXRawRequest(AuroraXRequest):
     """
@@ -96,6 +103,23 @@ class AuroraXRawRequest(AuroraXRequest):
 
         # return
         return req
+
+    def __str__(self) -> str:
+        """String method
+
+        :return: string format
+        :rtype: str
+        """
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        """
+        Object representation
+
+        :return: object representation
+        :rtype: str
+        """
+        return pprint.pformat(self.__dict__)
 
 
 class AuroraXResponse():
@@ -129,3 +153,23 @@ class AuroraXResponse():
                 "error": "HTTP error code %d" % (self.status_code),
                 "response_body": self.request.text,
             }
+
+    def __str__(self) -> str:
+        """String method
+
+        :return: string format
+        :rtype: str
+        """
+        dict = self.__dict__
+        if (dict["data"] is not None):
+            dict["data"] = "..."
+        return pprint.pformat(dict)
+
+    def __repr__(self) -> str:
+        """
+        Object representation
+
+        :return: object representation
+        :rtype: str
+        """
+        return "<AuroraXResponse [%d]>" % (self.status_code)
