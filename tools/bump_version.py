@@ -22,9 +22,9 @@ def main():
     print()
 
     # bump version test
-    print("Updating tests/test_version.py file ...")
-    src_filename = "%s/../tests/test_version.py" % (os.path.dirname(os.path.realpath(__file__)))
-    dst_filename = "%s/../tests/test_version.py.bak" % (os.path.dirname(os.path.realpath(__file__)))
+    print("Updating tests/test_suite/test_version.py file ...")
+    src_filename = "%s/../tests/test_suite/test_version.py" % (os.path.dirname(os.path.realpath(__file__)))
+    dst_filename = "%s/../tests/test_suite/test_version.py.bak" % (os.path.dirname(os.path.realpath(__file__)))
     try:
         # open files for read/write
         shutil.copyfile(src_filename, dst_filename)
