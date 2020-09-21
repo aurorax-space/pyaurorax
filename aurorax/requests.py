@@ -1,15 +1,14 @@
-import datetime
-import time
-from typing import Dict
-from .api import AuroraXRequest
-from .api import URL_API_STUB
+import aurorax as _aurorax
+import datetime as _datetime
+import time as _time
+from typing import Dict as _Dict
 
 # globals
 FIRST_FOLLOWUP_SLEEP_TIME = 0.050  # 50ms
 STANDARD_POLLING_SLEEP_TIME = 1.0  # 1s
 
 
-def get_status(request_url: str) -> Dict:
+def get_status(request_url: str) -> _Dict:
     """
     Retrieve the status of a request
 
@@ -20,7 +19,7 @@ def get_status(request_url: str) -> Dict:
     :rtype: Dict
     """
     # get request status
-    req = AuroraXRequest(request_url)
+    req = _aurorax.AuroraXRequest(request_url)
     res = req.execute()
 
     # set return dict
@@ -38,13 +37,14 @@ def get_status(request_url: str) -> Dict:
         return_dict["data"] = res.data
         if (res.data["search_result"]["data_uri"] is not None):
             return_dict["request_status"]["completed"] = True
-            return_dict["request_status"]["data_url"] = "%s%s" % (URL_API_STUB, res.data["search_result"]["data_uri"])
+            return_dict["request_status"]["data_url"] = "%s%s" % (_aurorax.api.URL_API_STUB,
+                                                                  res.data["search_result"]["data_uri"])
 
     # return
     return return_dict
 
 
-def get_data(data_url: str) -> Dict:
+def get_data(data_url: str) -> _Dict:
     """
     Retrieve the data for a request
 
@@ -55,7 +55,7 @@ def get_data(data_url: str) -> Dict:
     :rtype: Dict
     """
     # make request
-    req = AuroraXRequest(data_url)
+    req = _aurorax.AuroraXRequest(data_url)
     res = req.execute()
 
     # set return dict
@@ -69,14 +69,14 @@ def get_data(data_url: str) -> Dict:
     # serialize epochs to datetime objects
     for i in range(0, len(return_dict["data"])):
         if ("epoch" in return_dict["data"][i]):
-            return_dict["data"][i]["epoch"] = datetime.datetime.strptime(return_dict["data"][i]["epoch"],
-                                                                         "%Y-%m-%dT%H:%M:%S")
+            return_dict["data"][i]["epoch"] = _datetime.datetime.strptime(return_dict["data"][i]["epoch"],
+                                                                          "%Y-%m-%dT%H:%M:%S")
 
     # return
     return return_dict
 
 
-def get_logs(request_url: str) -> Dict:
+def get_logs(request_url: str) -> _Dict:
     """
     Retrieve the logs for a request
 
@@ -96,7 +96,7 @@ def get_logs(request_url: str) -> Dict:
     return return_dict
 
 
-def wait_for_data(request_url: str, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Dict:
+def wait_for_data(request_url: str, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> _Dict:
     """
     Block and wait for the data to be made available for a request
 
@@ -110,6 +110,6 @@ def wait_for_data(request_url: str, poll_interval: float = STANDARD_POLLING_SLEE
     """
     status = get_status(request_url)
     while (status["request_status"]["completed"] is False):
-        time.sleep(poll_interval)
+        _time.sleep(poll_interval)
         status = get_status(request_url)
     return status

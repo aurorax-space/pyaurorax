@@ -1,18 +1,12 @@
-import datetime
-import time
-import humanize
-import pprint
-from typing import List, Dict
-from .api import URL_EPHEMERIS_SEARCH, URL_EPHEMERIS_REQUEST_STATUS
-from .api import URL_EPHEMERIS_UPLOAD
-from .api import AuroraXRequest
-from .requests import get_status as request_get_status
-from .requests import get_data as request_get_data
-from .requests import get_logs as request_get_logs
-from .requests import wait_for_data as request_wait_for_data
-from .requests import STANDARD_POLLING_SLEEP_TIME, FIRST_FOLLOWUP_SLEEP_TIME
-from .location import Location
-from .metadata import get_ephemeris_schema
+import aurorax as _aurorax
+import datetime as _datetime
+import time as _time
+import humanize as _humanize
+import pprint as _pprint
+from typing import List as _List
+from typing import Dict as _Dict
+from .location import Location as _Location
+from .requests import STANDARD_POLLING_SLEEP_TIME as _STANDARD_POLLING_SLEEP_TIME
 
 
 class Ephemeris():
@@ -21,8 +15,8 @@ class Ephemeris():
     """
 
     def __init__(self, identifier: int, program: str, platform: str, instrument_type: str,
-                 epoch: datetime, location_geo: Location, location_gsm: Location, nbtrace: Location,
-                 sbtrace: Location, metadata: Dict) -> None:
+                 epoch: _datetime, location_geo: _Location, location_gsm: _Location,
+                 nbtrace: _Location, sbtrace: _Location, metadata: _Dict) -> None:
         """
         Constructor
 
@@ -59,7 +53,7 @@ class Ephemeris():
         self.sbtrace = sbtrace
         self.metadata = metadata
 
-    def to_json_serializable(self) -> Dict:
+    def to_json_serializable(self) -> _Dict:
         """
         Convert object to a JSON-serializable object (ie. translate datetime
         objects to strings)
@@ -74,7 +68,7 @@ class Ephemeris():
         d["nbtrace"] = d["nbtrace"].__dict__
         d["sbtrace"] = d["sbtrace"].__dict__
         for key, value in self.metadata.items():
-            if (type(value) is datetime.datetime or type(value) is datetime.date):
+            if (type(value) is _datetime.datetime or type(value) is _datetime.date):
                 self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
         return d
 
@@ -93,7 +87,7 @@ class Ephemeris():
         :return: object representation
         :rtype: str
         """
-        return pprint.pformat(self.__dict__)
+        return _pprint.pformat(self.__dict__)
 
 
 class Search():
@@ -101,8 +95,8 @@ class Search():
     Class representing an AuroraX ephemeris search
     """
 
-    def __init__(self, start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
-                 instrument_types: List = [], metadata_filters: List = []) -> None:
+    def __init__(self, start_dt: _datetime, end_dt: _datetime, programs: _List = [], platforms: _List = [],
+                 instrument_types: _List = [], metadata_filters: _List = []) -> None:
         """
         Create a new Search object
 
@@ -152,14 +146,14 @@ class Search():
         :return: object representation
         :rtype: str
         """
-        return pprint.pformat(self.__dict__)
+        return _pprint.pformat(self.__dict__)
 
     def execute(self) -> None:
         """
         Initiate ephemeris search request
         """
         # send request
-        url = URL_EPHEMERIS_SEARCH
+        url = _aurorax.api.URL_EPHEMERIS_SEARCH
         post_data = {
             "ephemeris_sources": {
                 "programs": self.programs,
@@ -171,7 +165,7 @@ class Search():
             "end": self.end_dt.strftime("%Y-%m-%dT%H:%M:%S"),
         }
         self.query = post_data
-        req = AuroraXRequest(url, method="POST", json=post_data)
+        req = _aurorax.AuroraXRequest(url, method="POST", json=post_data)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -183,7 +177,7 @@ class Search():
             self.request_id = self.request_url.rsplit("/", 1)[-1]
         self.request = res
 
-    def update_status(self, status: Dict = None) -> None:
+    def update_status(self, status: _Dict = None) -> None:
         """
         Update the status of this ephemeris search request
 
@@ -221,7 +215,7 @@ class Search():
         data_res = get_request_data(self.request_id, url=url)
         self.data = data_res["data"]
 
-    def wait_for_data(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> None:
+    def wait_for_data(self, poll_interval: float = _STANDARD_POLLING_SLEEP_TIME) -> None:
         """
         Block and wait for the request to complete and data is available for retrieval
 
@@ -229,11 +223,11 @@ class Search():
                               attempts, defaults to STANDARD_POLLING_SLEEP_TIME
         :type poll_interval: float, optional
         """
-        url = URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
-        self.update_status(request_wait_for_data(url))
+        url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
+        self.update_status(_aurorax.requests.request_wait_for_data(url))
 
 
-def get_metadata_schema(identifier: int) -> List:
+def get_metadata_schema(identifier: int) -> _List:
     """
     Get ephemeris metadata schema for a specified ephemeris source identifier
 
@@ -243,10 +237,10 @@ def get_metadata_schema(identifier: int) -> List:
     :return: metadata schema
     :rtype: List
     """
-    return get_ephemeris_schema(identifier)
+    return _aurorax.metadata.get_ephemeris_schema(identifier)
 
 
-def get_request_status(request_id: str) -> Dict:
+def get_request_status(request_id: str) -> _Dict:
     """
     Retrieve the request status for a given ephemeris search request ID
 
@@ -256,11 +250,11 @@ def get_request_status(request_id: str) -> Dict:
     :return: status response
     :rtype: Dict
     """
-    url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return request_get_status(url)
+    url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
+    return _aurorax.requests.request_get_status(url)
 
 
-def get_request_data(request_id: str, url: str = None) -> Dict:
+def get_request_data(request_id: str, url: str = None) -> _Dict:
     """
     Retrieve the request data for a given ephemeris search request ID
 
@@ -273,11 +267,11 @@ def get_request_data(request_id: str, url: str = None) -> Dict:
     :rtype: Dict
     """
     if (url is None):
-        url = "%s/data" % (URL_EPHEMERIS_REQUEST_STATUS.format(request_id))
-    return request_get_data(url)
+        url = "%s/data" % (_aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id))
+    return _aurorax.requests.request_get_data(url)
 
 
-def get_request_logs(request_id: str) -> Dict:
+def get_request_logs(request_id: str) -> _Dict:
     """
     Retrieve the request logs for a given ephemeris search request ID
 
@@ -287,11 +281,11 @@ def get_request_logs(request_id: str) -> Dict:
     :return: logs response
     :rtype: Dict
     """
-    url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return request_get_logs(url)
+    url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
+    return _aurorax.requests.request_get_logs(url)
 
 
-def wait_for_data(request_id: str) -> Dict:
+def wait_for_data(request_id: str) -> _Dict:
     """
     Block and wait for the data to be made available for a given ephemeris search request ID
 
@@ -301,13 +295,13 @@ def wait_for_data(request_id: str) -> Dict:
     :return: status response
     :rtype: Dict
     """
-    url = URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return request_wait_for_data(url)
+    url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
+    return _aurorax.requests.request_wait_for_data(url)
 
 
-def search_async(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
-                 instrument_types: List = [], metadata_filters: List = [],
-                 show_progress: bool = False) -> Dict:
+def search_async(start_dt: _datetime, end_dt: _datetime, programs: _List = [], platforms: _List = [],
+                 instrument_types: _List = [], metadata_filters: _List = [],
+                 show_progress: bool = False) -> _Dict:
     """
     Submit a request for an ephemeris search
 
@@ -339,9 +333,9 @@ def search_async(start_dt: datetime, end_dt: datetime, programs: List = [], plat
                   async_return=True)
 
 
-def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms: List = [],
-           instrument_types: List = [], metadata_filters: List = [], show_progress: bool = False,
-           async_return: bool = False, poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Dict:
+def search(start_dt: _datetime, end_dt: _datetime, programs: _List = [], platforms: _List = [],
+           instrument_types: _List = [], metadata_filters: _List = [], show_progress: bool = False,
+           async_return: bool = False, poll_interval: float = _STANDARD_POLLING_SLEEP_TIME) -> _Dict:
     """
     Search for ephemeris records
 
@@ -377,17 +371,17 @@ def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms:
     # create a Search() object
     s = Search(start_dt, end_dt, programs, platforms, instrument_types, metadata_filters)
     if (show_progress is True):
-        print("[%s] Search object created" % (datetime.datetime.now()))
+        print("[%s] Search object created" % (_datetime.datetime.now()))
 
     # execute the search
     s.execute()
     if (show_progress is True):
         if (s.executed is True):
-            print("[%s] Request submitted" % (datetime.datetime.now()))
-            print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
-            print("[%s] Request details available at: %s" % (datetime.datetime.now(), s.request_url))
+            print("[%s] Request submitted" % (_datetime.datetime.now()))
+            print("[%s] Request ID: %s" % (_datetime.datetime.now(), s.request_id))
+            print("[%s] Request details available at: %s" % (_datetime.datetime.now(), s.request_url))
         else:
-            print("[%s] Request failed to submit" % (datetime.datetime.now()))
+            print("[%s] Request failed to submit" % (_datetime.datetime.now()))
             return_dict["status_code"] = s.request.status_code
             return_dict["search_object"] = s
             return return_dict
@@ -397,24 +391,24 @@ def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms:
         return_dict["status_code"] = s.request.status_code
         return_dict["search_object"] = s
         if (show_progress is True):
-            print("[%s] Async return specified, returning immediately" % (datetime.datetime.now()))
+            print("[%s] Async return specified, returning immediately" % (_datetime.datetime.now()))
         return return_dict
 
     # check the request URL for the status of the request (poll for data)
     first_followup = True
     while (s.data_available is False):
         if (first_followup is True):
-            time.sleep(FIRST_FOLLOWUP_SLEEP_TIME)
+            _time.sleep(_aurorax.requests.FIRST_FOLLOWUP_SLEEP_TIME)
             first_followup = False
         else:
-            time.sleep(poll_interval)
+            _time.sleep(poll_interval)
         if (show_progress is True):
-            print("[%s] Checking for data ..." % (datetime.datetime.now()))
+            print("[%s] Checking for data ..." % (_datetime.datetime.now()))
         s.check_for_data()
 
     # get the data
     if (show_progress is True):
-        print("[%s] Request has data available, retrieving it ..." % (datetime.datetime.now()))
+        print("[%s] Request has data available, retrieving it ..." % (_datetime.datetime.now()))
     s.get_data()
 
     # return response with the data
@@ -423,13 +417,13 @@ def search(start_dt: datetime, end_dt: datetime, programs: List = [], platforms:
     return_dict["data"] = s.data
     if (show_progress is True):
         print("[%s] Retrieved %s of data containing %d records, completed "
-              "search request" % (datetime.datetime.now(),
-                                  humanize.filesize.naturalsize(s.status["data"]["search_result"]["file_size"]),
+              "search request" % (_datetime.datetime.now(),
+                                  _humanize.filesize.naturalsize(s.status["data"]["search_result"]["file_size"]),
                                   s.status["data"]["search_result"]["result_count"]))
     return return_dict
 
 
-def upload(api_key: str, identifier: int, records: List["Ephemeris"]) -> Dict:
+def upload(api_key: str, identifier: int, records: _List["Ephemeris"]) -> _Dict:
     """
     Upload ephemeris records to AuroraX
 
@@ -448,8 +442,8 @@ def upload(api_key: str, identifier: int, records: List["Ephemeris"]) -> Dict:
         records[i] = records[i].to_json_serializable()
 
     # make request
-    url = URL_EPHEMERIS_UPLOAD.format(identifier)
-    req = AuroraXRequest(url, method="POST", json=records, api_key=api_key)
+    url = _aurorax.api.URL_EPHEMERIS_UPLOAD.format(identifier)
+    req = _aurorax.AuroraXRequest(url, method="POST", json=records, api_key=api_key)
     res = req.execute()
 
     # set dict to return

@@ -1,9 +1,9 @@
-from typing import List, Dict
-from .api import URL_EPHEMERIS_SOURCES
-from .api import AuroraXRequest
+import aurorax as _aurorax
+from typing import List as _List
+from typing import Dict as _Dict
 
 
-def get_all_sources(format: str = "basic_info") -> Dict:
+def get_all_sources(format: str = "basic_info") -> _Dict:
     """
     Retrieves all ephemeris source records
 
@@ -15,11 +15,11 @@ def get_all_sources(format: str = "basic_info") -> Dict:
     :rtype: Dict
     """
     # make request
-    url = URL_EPHEMERIS_SOURCES
+    url = _aurorax.api.URL_EPHEMERIS_SOURCES
     params = {
         "format": format,
     }
-    req = AuroraXRequest(url, params=params)
+    req = _aurorax.AuroraXRequest(url, params=params)
     res = req.execute()
 
     # set dict to return
@@ -34,7 +34,7 @@ def get_all_sources(format: str = "basic_info") -> Dict:
     return return_dict
 
 
-def get_source_using_identifier(identifier: int, format: str = "basic_info") -> Dict:
+def get_source_using_identifier(identifier: int, format: str = "basic_info") -> _Dict:
     """
     Retrieves ephemeris source record matching identifier
 
@@ -49,11 +49,11 @@ def get_source_using_identifier(identifier: int, format: str = "basic_info") -> 
     :rtype: Dict
     """
     # make request
-    url = "%s/%d" % (URL_EPHEMERIS_SOURCES, identifier)
+    url = "%s/%d" % (_aurorax.api.URL_EPHEMERIS_SOURCES, identifier)
     params = {
         "format": format
     }
-    req = AuroraXRequest(url, params=params)
+    req = _aurorax.AuroraXRequest(url, params=params)
     res = req.execute()
 
     # set dict to return
@@ -69,7 +69,7 @@ def get_source_using_identifier(identifier: int, format: str = "basic_info") -> 
 
 
 def get_source_using_filters(program: str = None, platform: str = None, instrument_type: str = None,
-                             source_type: str = None, owner: str = None, format: str = "basic_info") -> Dict:
+                             source_type: str = None, owner: str = None, format: str = "basic_info") -> _Dict:
     """
     Retrieves all ephemeris source records matching the specified filters
 
@@ -91,7 +91,7 @@ def get_source_using_filters(program: str = None, platform: str = None, instrume
     :rtype: Dict
     """
     # make request
-    url = "%s" % (URL_EPHEMERIS_SOURCES)
+    url = "%s" % (_aurorax.api.URL_EPHEMERIS_SOURCES)
     params = {
         "program": program,
         "platform": platform,
@@ -100,7 +100,7 @@ def get_source_using_filters(program: str = None, platform: str = None, instrume
         "owner": owner,
         "format": format,
     }
-    req = AuroraXRequest(url, params=params)
+    req = _aurorax.AuroraXRequest(url, params=params)
     res = req.execute()
 
     # set dict to return
@@ -115,7 +115,7 @@ def get_source_using_filters(program: str = None, platform: str = None, instrume
     return return_dict
 
 
-def get_source_statistics(identifier: int) -> Dict:
+def get_source_statistics(identifier: int) -> _Dict:
     """
     Retrieves additional statistics about the specified ephemeris source such as
     the earliest/latest ephemeris record and the total number of ephemeris records
@@ -128,8 +128,8 @@ def get_source_statistics(identifier: int) -> Dict:
     :rtype: Dict
     """
     # make request
-    url = "%s/%d/stats" % (URL_EPHEMERIS_SOURCES, identifier)
-    req = AuroraXRequest(url)
+    url = "%s/%d/stats" % (_aurorax.api.URL_EPHEMERIS_SOURCES, identifier)
+    req = _aurorax.AuroraXRequest(url)
     res = req.execute()
 
     # set dict to return
@@ -145,8 +145,8 @@ def get_source_statistics(identifier: int) -> Dict:
 
 
 def add_source(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
-               ephemeris_metadata_schema: List[Dict] = [], data_products_metadata_schema: List[Dict] = [],
-               maintainers: List = [], identifier: int = None) -> Dict:
+               ephemeris_metadata_schema: _List[_Dict] = [], data_products_metadata_schema: _List[_Dict] = [],
+               maintainers: _List = [], identifier: int = None) -> _Dict:
     """
     Create a new ephemeris source record
 
@@ -173,7 +173,7 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
     :rtype: Dict
     """
     # make request
-    url = URL_EPHEMERIS_SOURCES
+    url = _aurorax.api.URL_EPHEMERIS_SOURCES
     post_data = {
         "program": program,
         "platform": platform,
@@ -185,7 +185,7 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
     }
     if (identifier is not None):
         post_data["identifier"] = identifier
-    req = AuroraXRequest(url, method="POST", api_key=api_key, json=post_data)
+    req = _aurorax.AuroraXRequest(url, method="POST", api_key=api_key, json=post_data)
     res = req.execute()
 
     # set dict to return
@@ -200,7 +200,7 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
     return return_dict
 
 
-def remove_source(api_key: str, identifier: int) -> Dict:
+def remove_source(api_key: str, identifier: int) -> _Dict:
     """
     Remove an ephemeris source record
 
@@ -213,8 +213,8 @@ def remove_source(api_key: str, identifier: int) -> Dict:
     :rtype: Dict
     """
     # make request
-    url = "%s/%s" % (URL_EPHEMERIS_SOURCES, str(identifier))
-    req = AuroraXRequest(url, method="DELETE", api_key=api_key)
+    url = "%s/%s" % (_aurorax.api.URL_EPHEMERIS_SOURCES, str(identifier))
+    req = _aurorax.AuroraXRequest(url, method="DELETE", api_key=api_key)
     res = req.execute()
 
     # set dict to return
@@ -230,9 +230,9 @@ def remove_source(api_key: str, identifier: int) -> Dict:
 
 
 def update_source(api_key: str, identifier: int, program: str = None, platform: str = None,
-                  instrument_type: str = None, source_type: str = None, ephemeris_metadata_schema: List[Dict] = [],
-                  data_products_metadata_schema: List[Dict] = [], owner: str = None,
-                  maintainers: List = None) -> Dict:
+                  instrument_type: str = None, source_type: str = None, ephemeris_metadata_schema: _List[_Dict] = [],
+                  data_products_metadata_schema: _List[_Dict] = [], owner: str = None,
+                  maintainers: _List = None) -> _Dict:
     """
     Create a new ephemeris source record
 

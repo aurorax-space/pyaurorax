@@ -1,12 +1,11 @@
-import datetime
-from typing import Dict
-from .api import URL_EPHEMERIS_AVAILABILITY, URL_DATA_PRODUCTS_AVAILABILITY
-from .api import AuroraXRequest
+import aurorax as _aurorax
+import datetime as _datetime
+from typing import Dict as _Dict
 
 
-def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
+def get_ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
                   instrument_type: str = None, source_type: str = None, owner: str = None,
-                  format: str = "basic_info") -> Dict:
+                  format: str = "basic_info") -> _Dict:
     """
     Retrieve information about the number of existing ephemeris records
 
@@ -41,7 +40,7 @@ def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, pla
         "owner": owner,
         "format": format,
     }
-    req = AuroraXRequest(URL_EPHEMERIS_AVAILABILITY, params=params)
+    req = _aurorax.AuroraXRequest(_aurorax.api.URL_EPHEMERIS_AVAILABILITY, params=params)
     res = req.execute()
     return_dict = {
         "status_code": res.status_code,
@@ -50,9 +49,9 @@ def get_ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, pla
     return return_dict
 
 
-def get_data_products(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
+def get_data_products(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
                       instrument_type: str = None, source_type: str = None, owner: str = None,
-                      format: str = "basic_info") -> Dict:
+                      format: str = "basic_info") -> _Dict:
     """
     Retrieve information about the number of existing data product records
 
@@ -87,7 +86,7 @@ def get_data_products(start_dt: datetime, end_dt: datetime, program: str = None,
         "owner": owner,
         "format": format,
     }
-    req = AuroraXRequest(URL_DATA_PRODUCTS_AVAILABILITY, params=params)
+    req = _aurorax.AuroraXRequest(_aurorax.api.URL_DATA_PRODUCTS_AVAILABILITY, params=params)
     res = req.execute()
     return_dict = {
         "status_code": res.status_code,

@@ -1,12 +1,12 @@
-import requests
-import pprint
-from typing import Dict
+import requests as _requests
+import pprint as _pprint
+from typing import Dict as _Dict
 
 # public globals
 URL_API_STUB = "http://api.staging.aurorax.space"
 URL_EPHEMERIS_SOURCES = "%s/api/v1/ephemeris-sources" % (URL_API_STUB)
-URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability" % (URL_API_STUB)
-URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability" % (URL_API_STUB)
+URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (URL_API_STUB)
+URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (URL_API_STUB)
 URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (URL_API_STUB)
 URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (URL_API_STUB)
 URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (URL_API_STUB)
@@ -23,7 +23,7 @@ class AuroraXRequest():
         "Content-Type": "application/json"
     }
 
-    def __init__(self, url: str, params: Dict = {}, json: Dict = {}, method: str = "GET", api_key: str = "") -> None:
+    def __init__(self, url: str, params: _Dict = {}, json: _Dict = {}, method: str = "GET", api_key: str = "") -> None:
         """
         AuroraXRequest constructor
 
@@ -58,7 +58,7 @@ class AuroraXRequest():
             request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        req = requests.request(
+        req = _requests.request(
             self.method, self.url, params=self.params, json=self.json, headers=request_headers)
 
         # create response object
@@ -71,7 +71,7 @@ class AuroraXRequest():
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return pprint.pformat(self.__dict__)
+        return _pprint.pformat(self.__dict__)
 
 
 class AuroraXRawRequest(AuroraXRequest):
@@ -85,7 +85,7 @@ class AuroraXRawRequest(AuroraXRequest):
         "Content-Type": "application/json"
     }
 
-    def execute(self) -> requests.Request:
+    def execute(self) -> _requests.Request:
         """
         Initiate ephemeris search request
 
@@ -98,7 +98,7 @@ class AuroraXRawRequest(AuroraXRequest):
             request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        req = requests.request(
+        req = _requests.request(
             self.method, self.url, params=self.params, json=self.json, headers=request_headers)
 
         # return
@@ -119,7 +119,7 @@ class AuroraXRawRequest(AuroraXRequest):
         :return: object representation
         :rtype: str
         """
-        return pprint.pformat(self.__dict__)
+        return _pprint.pformat(self.__dict__)
 
 
 class AuroraXResponse():
@@ -163,7 +163,7 @@ class AuroraXResponse():
         dict = self.__dict__
         if (dict["data"] is not None):
             dict["data"] = "..."
-        return pprint.pformat(dict)
+        return _pprint.pformat(dict)
 
     def __repr__(self) -> str:
         """
