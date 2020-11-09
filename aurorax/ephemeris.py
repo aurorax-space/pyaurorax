@@ -461,7 +461,8 @@ def upload(api_key: str, identifier: int, records: _List["Ephemeris"]) -> _Dict:
     return return_dict
 
 
-def delete(api_key: str, identifier: int, program: str, platform: str, instrument_type: str, start_dt: _datetime, end_dt: _datetime) -> _Dict:
+def delete(api_key: str, identifier: int, program: str, platform: str, instrument_type: str,
+           start_dt: _datetime, end_dt: _datetime) -> _Dict:
     """
     Delete ephemeris data from AuroraX
 

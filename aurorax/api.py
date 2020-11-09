@@ -189,7 +189,7 @@ class AuroraXResponse():
 
 def set_url_stub(stub: str) -> None:
     """
-    Change the URL stub for the API. For example if you want to migrate 
+    Change the URL stub for the API. For example if you want to migrate
     data from one endpointt to another.
 
     :param stub: URL stub (ie. http://api.staging.aurorax.space)

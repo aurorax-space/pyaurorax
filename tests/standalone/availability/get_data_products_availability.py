@@ -1,0 +1,17 @@
+import aurorax
+import datetime
+import pprint
+
+
+def main():
+    availability = aurorax.availability.data_products(datetime.datetime(2019, 1, 1),
+                                                      datetime.datetime(2019, 1, 5),
+                                                      program="swarm",
+                                                      platform="swarma",
+                                                      instrument_type="ssc-web")
+    pprint.pprint(availability)
+
+
+# ----------
+if (__name__ == "__main__"):
+    main()
