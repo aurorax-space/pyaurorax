@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import aurorax
 import pprint
 import os

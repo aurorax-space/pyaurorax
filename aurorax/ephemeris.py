@@ -20,7 +20,7 @@ class Ephemeris():
         """
         Constructor
 
-        :param identifier: ephemeris source ID
+        :param identifier: data source ID
         :type identifier: int
         :param program: program name
         :type program: str
@@ -33,7 +33,7 @@ class Ephemeris():
         :param location_geo: latitude and longitude in geographic coordinates
         :type location_geo: Location
         :param location_gsm: latitude and longitude in GSM coordinates (leave empty for
-                             ephemeris sources with a type of 'ground')
+                             data sources with a type of 'ground')
         :type location_gsm: Location
         :param nbtrace: north B-trace geomagnetic latitude and longitude
         :type nbtrace: Location
@@ -158,7 +158,7 @@ class Search():
         # send request
         url = _aurorax.api.URL_EPHEMERIS_SEARCH
         post_data = {
-            "ephemeris_sources": {
+            "data_sources": {
                 "programs": self.programs,
                 "platforms": self.platforms,
                 "instrument_types": self.instrument_types,
@@ -232,9 +232,9 @@ class Search():
 
 def get_metadata_schema(identifier: int) -> _List:
     """
-    Get ephemeris metadata schema for a specified ephemeris source identifier
+    Get ephemeris metadata schema for a specified data source identifier
 
-    :param identifier: ephemeris source ID
+    :param identifier: data source ID
     :type identifier: int
 
     :return: metadata schema
@@ -432,7 +432,7 @@ def upload(api_key: str, identifier: int, records: _List["Ephemeris"]) -> _Dict:
 
     :param api_key: AuroraX API key
     :type api_key: str
-    :param identifier: ephemeris source ID
+    :param identifier: data source ID
     :type identifier: int
     :param records: Ephemeris records to upload
     :type records: List[Ephemeris]
@@ -468,7 +468,7 @@ def delete(api_key: str, identifier: int, program: str, platform: str, instrumen
 
     :param api_key: AuroraX API key
     :type api_key: str
-    :param identifier: ephemeris source ID
+    :param identifier: data source ID
     :type identifier: int
     :param program: program name
     :type program: str

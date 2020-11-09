@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import aurorax
 import os
 import datetime
@@ -25,9 +23,9 @@ def main():
     sbtrace = aurorax.Location(7.89, 101.23)
 
     # get the ephemeris source ID
-    source = aurorax.sources.get_source_using_filters(program=[program],
-                                                      platform=[platform],
-                                                      instrument_type=[instrument_type])
+    source = aurorax.sources.get_using_filters(program=[program],
+                                               platform=[platform],
+                                               instrument_type=[instrument_type])
     identifier = source["data"][0]["identifier"]
 
     # create Ephemeris object

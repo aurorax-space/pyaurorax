@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import aurorax
 import datetime
 import time
@@ -8,23 +6,26 @@ import pprint
 
 def main():
     # start search
+    print("Executing request ...")
     s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2020, 1, 1, 1, 0, 0),
+                                 datetime.datetime(2020, 1, 1, 0, 59, 59),
                                  programs=["swarm"],
                                  platforms=["swarma"],
                                  instrument_types=["ssc-web"])
     s.execute()
 
-    # sleep briefly
-    time.sleep(1.0)
-
-    # update status
-    s.update_status()
+    # if the request isn't done, wait continuously
+    print("Waiting for request to complete ...")
+    status = aurorax.ephemeris.get_request_status(s.request_id)
+    while (status["request_status"]["completed"] is False):
+        time.sleep(1)
+        status = aurorax.ephemeris.get_request_status(s.request_id)
 
     # get request data
     data = aurorax.ephemeris.get_request_data(s.request_id)
 
     # print data
+    print("Found %s records" % (len(data["data"])))
     pprint.pprint(data["data"][0:2])
     print("...")
 

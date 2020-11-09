@@ -37,7 +37,7 @@ def get_status(request_url: str) -> _Dict:
         return_dict["data"] = res.data
         if (res.data["search_result"]["data_uri"] is not None):
             return_dict["request_status"]["completed"] = True
-            return_dict["request_status"]["data_url"] = "%s%s" % (_aurorax.api.URL_API_STUB,
+            return_dict["request_status"]["data_url"] = "%s%s" % (_aurorax.api._URL_API_STUB,
                                                                   res.data["search_result"]["data_uri"])
 
     # return

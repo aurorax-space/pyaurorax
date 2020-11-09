@@ -9,9 +9,9 @@ _URL_API_STUB = "http://api.staging.aurorax.space"
 URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
 URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
 URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
-URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
-URL_EPHEMERIS_DELETE = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
-URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
+URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
+URL_EPHEMERIS_DELETE = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
+URL_EPHEMERIS_SEARCH = "%s/api/v1/data/search" % (_URL_API_STUB)
 URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)
 
 
@@ -208,7 +208,7 @@ def set_url_stub(stub: str) -> None:
     URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
     URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
     URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
-    URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
-    URL_EPHEMERIS_DELETE = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
-    URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
+    URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
+    URL_EPHEMERIS_DELETE = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
+    URL_EPHEMERIS_SEARCH = "%s/api/v1/data/search" % (_URL_API_STUB)
     URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)
