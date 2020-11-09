@@ -1,11 +1,9 @@
-#! /usr/bin/env python
-
 import aurorax
 import pprint
 
 
 def main():
-    stats = aurorax.get_source_statistics(10)
+    stats = aurorax.sources.get_stats(10)
     pprint.pprint(stats)
 
 

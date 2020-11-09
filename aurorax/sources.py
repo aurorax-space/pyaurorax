@@ -5,17 +5,17 @@ from typing import Dict as _Dict
 
 def list(format: str = "basic_info") -> _Dict:
     """
-    Retrieves all ephemeris source records
+    Retrieves all data source records
 
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+    :param format: the format of the data source returned (identifier_only, basic_info,
                    full_record), defaults to "basic_info"
     :type format: str, optional
 
-    :return: information about all ephemeris sources
+    :return: information about all data sources
     :rtype: Dict
     """
     # make request
-    url = _aurorax.api.URL_EPHEMERIS_SOURCES
+    url = _aurorax.api.URL_DATA_SOURCES
     params = {
         "format": format,
     }
@@ -36,20 +36,20 @@ def list(format: str = "basic_info") -> _Dict:
 
 def get_using_identifier(identifier: int, format: str = "basic_info") -> _Dict:
     """
-    Retrieves ephemeris source record matching identifier
+    Retrieves data source record matching identifier
 
-    :param identifier: ephemeris source unique identifier
+    :param identifier: data source unique identifier
     :type identifier: int
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+    :param format: the format of the data source returned (identifier_only, basic_info,
                    full_record), defaults to "basic_info"
     :type format: str, optional
 
 
-    :return: information the specific ephemeris source
+    :return: information the specific data source
     :rtype: Dict
     """
     # make request
-    url = "%s/%d" % (_aurorax.api.URL_EPHEMERIS_SOURCES, identifier)
+    url = "%s/%d" % (_aurorax.api.URL_DATA_SOURCES, identifier)
     params = {
         "format": format
     }
@@ -68,10 +68,10 @@ def get_using_identifier(identifier: int, format: str = "basic_info") -> _Dict:
     return return_dict
 
 
-def get_using_values(program: str = None, platform: str = None, instrument_type: str = None, source_type: str = None,
-                     owner: str = None, format: str = "basic_info") -> _Dict:
+def get_using_filters(program: str = None, platform: str = None, instrument_type: str = None, source_type: str = None,
+                      owner: str = None, format: str = "basic_info") -> _Dict:
     """
-    Retrieves all ephemeris source records matching the specified filters
+    Retrieves all data source records matching the specified filters
 
     :param program: program name, defaults to None
     :type program: str, optional
@@ -83,15 +83,15 @@ def get_using_values(program: str = None, platform: str = None, instrument_type:
     :type source_type: str, optional
     :param owner: owner account name, defaults to None
     :type owner: str, optional
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+    :param format: the format of the data source returned (identifier_only, basic_info,
                    full_record), defaults to "basic_info"
     :type format: str, optional
 
-    :return: information about the specific ephemeris sources matching the filter criteria
+    :return: information about the specific data sources matching the filter criteria
     :rtype: Dict
     """
     # make request
-    url = "%s" % (_aurorax.api.URL_EPHEMERIS_SOURCES)
+    url = "%s" % (_aurorax.api.URL_DATA_SOURCES)
     params = {
         "program": program,
         "platform": platform,
@@ -115,20 +115,20 @@ def get_using_values(program: str = None, platform: str = None, instrument_type:
     return return_dict
 
 
-def ge_statistics(identifier: int) -> _Dict:
+def get_stats(identifier: int) -> _Dict:
     """
-    Retrieves additional statistics about the specified ephemeris source such as
-    the earliest/latest ephemeris record and the total number of ephemeris records
+    Retrieves additional statistics about the specified data source such as
+    the earliest/latest data record and the total number of data records
     available
 
-    :param identifier: ephemeris source identifier
+    :param identifier: data source identifier
     :type identifier: int
 
-    :return: the ephemeris source statistics
+    :return: the data source statistics
     :rtype: Dict
     """
     # make request
-    url = "%s/%d/stats" % (_aurorax.api.URL_EPHEMERIS_SOURCES, identifier)
+    url = "%s/%d/stats" % (_aurorax.api.URL_DATA_SOURCES, identifier)
     req = _aurorax.AuroraXRequest(url)
     res = req.execute()
 
@@ -166,14 +166,14 @@ def add(api_key: str, program: str, platform: str, instrument_type: str, source_
     :type data_products_metadata_schema: List[Dict], optional
     :param maintainers: list of users to give maintainer permissions to, defaults to []
     :type maintainers: List, optional
-    :param identifier: ephemeris source ID, defaults to None
+    :param identifier: data source ID, defaults to None
     :type identifier: int, optional
 
-    :return: the created ephemeris source record details
+    :return: the created data source record details
     :rtype: Dict
     """
     # make request
-    url = _aurorax.api.URL_EPHEMERIS_SOURCES
+    url = _aurorax.api.URL_DATA_SOURCES
     post_data = {
         "program": program,
         "platform": platform,
@@ -206,14 +206,14 @@ def delete(api_key: str, identifier: int) -> _Dict:
 
     :param api_key: API key associated with your account
     :type api_key: str
-    :param identifier: unique ephemeris source identifier
+    :param identifier: unique data source identifier
     :type identifier: int
 
     :return: status summary
     :rtype: Dict
     """
     # make request
-    url = "%s/%s" % (_aurorax.api.URL_EPHEMERIS_SOURCES, str(identifier))
+    url = "%s/%s" % (_aurorax.api.URL_DATA_SOURCES, str(identifier))
     req = _aurorax.AuroraXRequest(url, method="DELETE", api_key=api_key)
     res = req.execute()
 
@@ -253,7 +253,7 @@ def update(api_key: str, identifier: int, program: str = None, platform: str = N
     :param maintainers: list of users to give maintainer permissions to, defaults to None
     :type maintainers: List, optional
 
-    :return: the new ephemeris source record details
+    :return: the new data source record details
     :rtype: Dict
     """
     # set new information based on current values and function parameters
@@ -276,7 +276,7 @@ def update(api_key: str, identifier: int, program: str = None, platform: str = N
     #     post_data["maintainers"] = maintainers
 
     # # make request
-    # url = "%s/%s" % (URL_EPHEMERIS_SOURCES, str(identifier))
+    # url = "%s/%s" % (URL_DATA_SOURCES, str(identifier))
     # print(url)
     # req = AuroraXRequest(url, method="PUT", api_key=api_key, json=post_data)
     # res = req.execute()

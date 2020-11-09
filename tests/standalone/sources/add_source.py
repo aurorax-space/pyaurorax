@@ -15,7 +15,7 @@ def main():
     platform = "test-platform"
     instrument_type = "test-instrument-type"
     source_type = "ground"
-    ephemeris_metadata_schema = [
+    metadata_schema_ephemeris = [
         {
             "field_name": "test_meta1",
             "description": "testing metadata field 1",
@@ -29,7 +29,7 @@ def main():
             "allowed_values": [],
         }
     ]
-    data_products_metadata_schema = [
+    metadata_schema_data_products = [
         {
             "field_name": "test_meta1",
             "description": "testing metadata field 1",
@@ -45,14 +45,14 @@ def main():
     ]
 
     # make request
-    r = aurorax.sources.add_source(api_key,
-                                   program,
-                                   platform,
-                                   instrument_type,
-                                   source_type,
-                                   ephemeris_metadata_schema=ephemeris_metadata_schema,
-                                   data_products_metadata_schema=data_products_metadata_schema,
-                                   identifier=identifier)
+    r = aurorax.sources.add(api_key,
+                            program,
+                            platform,
+                            instrument_type,
+                            source_type,
+                            ephemeris_metadata_schema=metadata_schema_ephemeris,
+                            data_products_metadata_schema=metadata_schema_data_products,
+                            identifier=identifier)
 
     # output results
     if (r["status_code"] == 200):

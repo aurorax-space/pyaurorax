@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import aurorax
 from tabulate import tabulate
 

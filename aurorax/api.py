@@ -6,7 +6,7 @@ from requests import RequestException as _RequestException
 
 # public globals
 _URL_API_STUB = "http://api.staging.aurorax.space"
-URL_EPHEMERIS_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
+URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
 URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
 URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
 URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
@@ -62,7 +62,6 @@ class AuroraXRequest():
 
         # perform request
         try:
-            print(self.url)
             req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
         except _RequestException as e:
             raise _aurorax.exceptions.AuroraXRequestsException(e)
@@ -197,7 +196,7 @@ def set_url_stub(stub: str) -> None:
     :type stub: str
     """
     global _URL_API_STUB
-    global URL_EPHEMERIS_SOURCES
+    global URL_DATA_SOURCES
     global URL_EPHEMERIS_AVAILABILITY
     global URL_DATA_PRODUCTS_AVAILABILITY
     global URL_EPHEMERIS_UPLOAD
@@ -206,7 +205,7 @@ def set_url_stub(stub: str) -> None:
     global URL_EPHEMERIS_REQUEST_STATUS
 
     _URL_API_STUB = stub
-    URL_EPHEMERIS_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
+    URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
     URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
     URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
     URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
