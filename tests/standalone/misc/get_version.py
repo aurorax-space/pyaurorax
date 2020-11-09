@@ -1,9 +1,8 @@
-#! /usr/bin/env python
-
 import aurorax
 
 
 def main():
+    # get version information
     print("AuroraX Version: %s" % (aurorax.__version__))
 
 
