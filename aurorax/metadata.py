@@ -37,7 +37,7 @@ def get_ephemeris_schema(identifier: int) -> _List:
     :return: metadata schema
     :rtype: List
     """
-    source_info = _aurorax.sources.get_source_using_identifier(identifier, format="full_record")
+    source_info = _aurorax.sources.get_using_identifier(identifier, format="full_record")
     if ("ephemeris_metadata_schema" in source_info["data"]):
         return source_info["data"]["ephemeris_metadata_schema"]
     else:
@@ -54,7 +54,7 @@ def get_data_products_schema(identifier: int) -> _List:
     :return: metadata schema
     :rtype: List
     """
-    source_info = _aurorax.sources.get_source_using_identifier(identifier, format="full_record")
+    source_info = _aurorax.sources.get_using_identifier(identifier, format="full_record")
     if ("data_products_metadata_schema" in source_info["data"]):
         return source_info["data"]["data_products_metadata_schema"]
     else:

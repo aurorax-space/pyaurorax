@@ -4,6 +4,7 @@ import pprint
 
 
 def main():
+    # get availability
     availability = aurorax.availability.ephemeris(datetime.datetime(2019, 1, 1),
                                                   datetime.datetime(2019, 1, 5),
                                                   program="swarm",

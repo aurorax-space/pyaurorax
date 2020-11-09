@@ -1,11 +1,9 @@
-#! /usr/bin/env python
-
 import aurorax
 
 
 def main():
     # get schema
-    source = aurorax.get_source_using_filters(program="swarm", platform="swarma", instrument_type="ssc-web")
+    source = aurorax.sources.get_using_filters(program="swarm", platform="swarma", instrument_type="ssc-web")
     schema = aurorax.metadata.get_ephemeris_schema(source["data"][0]["identifier"])
 
     # create an example metadata dictionary

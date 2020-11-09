@@ -3,7 +3,7 @@ import pprint
 
 
 def main():
-    # create object
+    # create location object
     loc = aurorax.Location(51.049999, -114.066666)
 
     # print

@@ -3,6 +3,7 @@ import pprint
 
 
 def main():
+    # get statistics
     stats = aurorax.sources.get_stats(10)
     pprint.pprint(stats)
 
