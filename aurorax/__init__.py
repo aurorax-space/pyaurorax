@@ -1,7 +1,13 @@
-__version__ = "0.0.5"
+__version__ = "0.1.1"
 
+# classes to be found at the top level
 from .api import AuroraXRequest, AuroraXRawRequest, AuroraXResponse
 from .location import Location
+
+# pull in exceptions
+from aurorax import exceptions
+
+# pull in core modules
 from aurorax import api
 from aurorax import ephemeris
 from aurorax import conjunctions

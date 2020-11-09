@@ -64,7 +64,7 @@ def get_data(data_url: str) -> _Dict:
         "data": []
     }
     if (res.status_code == 200):
-        return_dict["data"] = res.data
+        return_dict["data"] = res.data["result"]
 
     # serialize epochs to datetime objects
     for i in range(0, len(return_dict["data"])):

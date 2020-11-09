@@ -3,9 +3,9 @@ import datetime as _datetime
 from typing import Dict as _Dict
 
 
-def get_ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
-                  instrument_type: str = None, source_type: str = None, owner: str = None,
-                  format: str = "basic_info") -> _Dict:
+def ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
+              instrument_type: str = None, source_type: str = None, owner: str = None,
+              format: str = "basic_info") -> _Dict:
     """
     Retrieve information about the number of existing ephemeris records
 
@@ -49,9 +49,9 @@ def get_ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, p
     return return_dict
 
 
-def get_data_products(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
-                      instrument_type: str = None, source_type: str = None, owner: str = None,
-                      format: str = "basic_info") -> _Dict:
+def data_products(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
+                  instrument_type: str = None, source_type: str = None, owner: str = None,
+                  format: str = "basic_info") -> _Dict:
     """
     Retrieve information about the number of existing data product records
 

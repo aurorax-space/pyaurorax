@@ -1,15 +1,18 @@
+import aurorax as _aurorax
 import requests as _requests
 import pprint as _pprint
 from typing import Dict as _Dict
+from requests import RequestException as _RequestException
 
 # public globals
-URL_API_STUB = "http://api.staging.aurorax.space"
-URL_EPHEMERIS_SOURCES = "%s/api/v1/ephemeris-sources" % (URL_API_STUB)
-URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (URL_API_STUB)
-URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (URL_API_STUB)
-URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (URL_API_STUB)
-URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (URL_API_STUB)
-URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (URL_API_STUB)
+_URL_API_STUB = "http://api.staging.aurorax.space"
+URL_EPHEMERIS_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
+URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
+URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
+URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
+URL_EPHEMERIS_DELETE = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
+URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
+URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)
 
 
 class AuroraXRequest():
@@ -58,11 +61,19 @@ class AuroraXRequest():
             request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        req = _requests.request(
-            self.method, self.url, params=self.params, json=self.json, headers=request_headers)
+        try:
+            print(self.url)
+            req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
+        except _RequestException as e:
+            raise _aurorax.exceptions.AuroraXRequestsException(e)
+        except Exception as e:
+            raise _aurorax.exceptions.AuroraXUnspecifiedException(e)
 
         # create response object
-        res = AuroraXResponse(req)
+        try:
+            res = AuroraXResponse(req)
+        except Exception as e:
+            raise _aurorax.exceptions.AuroraXUnspecifiedException(e)
 
         # return
         return res
@@ -98,8 +109,10 @@ class AuroraXRawRequest(AuroraXRequest):
             request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        req = _requests.request(
-            self.method, self.url, params=self.params, json=self.json, headers=request_headers)
+        try:
+            req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
+        except _RequestException as e:
+            raise _aurorax.exceptions.AuroraXRequestsException(e)
 
         # return
         return req
@@ -173,3 +186,30 @@ class AuroraXResponse():
         :rtype: str
         """
         return "<AuroraXResponse [%d]>" % (self.status_code)
+
+
+def set_url_stub(stub: str) -> None:
+    """
+    Change the URL stub for the API. For example if you want to migrate 
+    data from one endpointt to another.
+
+    :param stub: URL stub (ie. http://api.staging.aurorax.space)
+    :type stub: str
+    """
+    global _URL_API_STUB
+    global URL_EPHEMERIS_SOURCES
+    global URL_EPHEMERIS_AVAILABILITY
+    global URL_DATA_PRODUCTS_AVAILABILITY
+    global URL_EPHEMERIS_UPLOAD
+    global URL_EPHEMERIS_DELETE
+    global URL_EPHEMERIS_SEARCH
+    global URL_EPHEMERIS_REQUEST_STATUS
+
+    _URL_API_STUB = stub
+    URL_EPHEMERIS_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
+    URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
+    URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
+    URL_EPHEMERIS_UPLOAD = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
+    URL_EPHEMERIS_DELETE = "%s/api/v1/ephemeris-sources/{}/ephemeris" % (_URL_API_STUB)
+    URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
+    URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)

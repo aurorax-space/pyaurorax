@@ -3,7 +3,7 @@ from typing import List as _List
 from typing import Dict as _Dict
 
 
-def get_all_sources(format: str = "basic_info") -> _Dict:
+def list(format: str = "basic_info") -> _Dict:
     """
     Retrieves all ephemeris source records
 
@@ -34,7 +34,7 @@ def get_all_sources(format: str = "basic_info") -> _Dict:
     return return_dict
 
 
-def get_source_using_identifier(identifier: int, format: str = "basic_info") -> _Dict:
+def get_using_identifier(identifier: int, format: str = "basic_info") -> _Dict:
     """
     Retrieves ephemeris source record matching identifier
 
@@ -68,8 +68,8 @@ def get_source_using_identifier(identifier: int, format: str = "basic_info") -> 
     return return_dict
 
 
-def get_source_using_filters(program: str = None, platform: str = None, instrument_type: str = None,
-                             source_type: str = None, owner: str = None, format: str = "basic_info") -> _Dict:
+def get_using_values(program: str = None, platform: str = None, instrument_type: str = None, source_type: str = None,
+                     owner: str = None, format: str = "basic_info") -> _Dict:
     """
     Retrieves all ephemeris source records matching the specified filters
 
@@ -115,7 +115,7 @@ def get_source_using_filters(program: str = None, platform: str = None, instrume
     return return_dict
 
 
-def get_source_statistics(identifier: int) -> _Dict:
+def ge_statistics(identifier: int) -> _Dict:
     """
     Retrieves additional statistics about the specified ephemeris source such as
     the earliest/latest ephemeris record and the total number of ephemeris records
@@ -144,11 +144,11 @@ def get_source_statistics(identifier: int) -> _Dict:
     return return_dict
 
 
-def add_source(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
-               ephemeris_metadata_schema: _List[_Dict] = [], data_products_metadata_schema: _List[_Dict] = [],
-               maintainers: _List = [], identifier: int = None) -> _Dict:
+def add(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
+        ephemeris_metadata_schema: _List[_Dict] = [], data_products_metadata_schema: _List[_Dict] = [],
+        maintainers: _List = [], identifier: int = None) -> _Dict:
     """
-    Create a new ephemeris source record
+    Create a new data source record
 
     :param api_key: API key associated with your account
     :type api_key: str
@@ -200,9 +200,9 @@ def add_source(api_key: str, program: str, platform: str, instrument_type: str, 
     return return_dict
 
 
-def remove_source(api_key: str, identifier: int) -> _Dict:
+def delete(api_key: str, identifier: int) -> _Dict:
     """
-    Remove an ephemeris source record
+    Remove a data source record
 
     :param api_key: API key associated with your account
     :type api_key: str
@@ -229,12 +229,12 @@ def remove_source(api_key: str, identifier: int) -> _Dict:
     return return_dict
 
 
-def update_source(api_key: str, identifier: int, program: str = None, platform: str = None,
-                  instrument_type: str = None, source_type: str = None, ephemeris_metadata_schema: _List[_Dict] = [],
-                  data_products_metadata_schema: _List[_Dict] = [], owner: str = None,
-                  maintainers: _List = None) -> _Dict:
+def update(api_key: str, identifier: int, program: str = None, platform: str = None,
+           instrument_type: str = None, source_type: str = None, ephemeris_metadata_schema: _List[_Dict] = [],
+           data_products_metadata_schema: _List[_Dict] = [], owner: str = None,
+           maintainers: _List = None) -> _Dict:
     """
-    Create a new ephemeris source record
+    Update a data source record
 
     :param api_key: API key associated with your account
     :type api_key: str

@@ -6,8 +6,8 @@ import pprint
 
 
 def main():
-    s = aurorax.ephemeris.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2020, 1, 15, 0, 0, 0),
+    s = aurorax.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                 datetime.datetime(2019, 1, 1, 23, 59, 59),
                                  programs=["swarm"],
                                  platforms=["swarma"],
                                  instrument_types=["ssc-web"],

@@ -67,9 +67,12 @@ class Ephemeris():
         d["location_gsm"] = d["location_gsm"].__dict__
         d["nbtrace"] = d["nbtrace"].__dict__
         d["sbtrace"] = d["sbtrace"].__dict__
-        for key, value in self.metadata.items():
-            if (type(value) is _datetime.datetime or type(value) is _datetime.date):
-                self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
+        if (type(self.metadata) is dict):
+            for key, value in self.metadata.items():
+                if (type(value) is _datetime.datetime or type(value) is _datetime.date):
+                    self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
+        if (type(self.metadata) is list):
+            self.metadata = {}
         return d
 
     def __str__(self) -> str:
@@ -224,7 +227,7 @@ class Search():
         :type poll_interval: float, optional
         """
         url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
-        self.update_status(_aurorax.requests.request_wait_for_data(url))
+        self.update_status(_aurorax.requests.wait_for_data(url))
 
 
 def get_metadata_schema(identifier: int) -> _List:
@@ -251,7 +254,7 @@ def get_request_status(request_id: str) -> _Dict:
     :rtype: Dict
     """
     url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return _aurorax.requests.request_get_status(url)
+    return _aurorax.requests.get_status(url)
 
 
 def get_request_data(request_id: str, url: str = None) -> _Dict:
@@ -268,7 +271,7 @@ def get_request_data(request_id: str, url: str = None) -> _Dict:
     """
     if (url is None):
         url = "%s/data" % (_aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id))
-    return _aurorax.requests.request_get_data(url)
+    return _aurorax.requests.get_data(url)
 
 
 def get_request_logs(request_id: str) -> _Dict:
@@ -282,7 +285,7 @@ def get_request_logs(request_id: str) -> _Dict:
     :rtype: Dict
     """
     url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return _aurorax.requests.request_get_logs(url)
+    return _aurorax.requests.get_logs(url)
 
 
 def wait_for_data(request_id: str) -> _Dict:
@@ -296,7 +299,7 @@ def wait_for_data(request_id: str) -> _Dict:
     :rtype: Dict
     """
     url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return _aurorax.requests.request_wait_for_data(url)
+    return _aurorax.requests.wait_for_data(url)
 
 
 def search_async(start_dt: _datetime, end_dt: _datetime, programs: _List = [], platforms: _List = [],
@@ -452,6 +455,54 @@ def upload(api_key: str, identifier: int, records: _List["Ephemeris"]) -> _Dict:
         "data": {},
     }
     if (res.status_code == 400):
+        return_dict["data"] = res.data
+
+    # return
+    return return_dict
+
+
+def delete(api_key: str, identifier: int, program: str, platform: str, instrument_type: str, start_dt: _datetime, end_dt: _datetime) -> _Dict:
+    """
+    Delete ephemeris data from AuroraX
+
+    :param api_key: AuroraX API key
+    :type api_key: str
+    :param identifier: ephemeris source ID
+    :type identifier: int
+    :param program: program name
+    :type program: str
+    :param platform: platform name
+    :type platform: str
+    :param instrument_type: instrument type name
+    :type instrument_type: str
+    :param start_dt: start time of records to delete
+    :type start_dt: datetime
+    :param end_dt: end time of records to delete
+    :type end_dt: datetime
+
+    :return: delete response
+    :rtype: Dict
+    """
+    # set post data
+    post_data = {
+        "program": program,
+        "platform": platform,
+        "instrument_type": instrument_type,
+        "start": start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
+        "end": end_dt.strftime("%Y-%m-%dT%H:%M:%S")
+    }
+
+    # make request
+    url = _aurorax.api.URL_EPHEMERIS_DELETE.format(identifier)
+    req = _aurorax.AuroraXRequest(url, method="DELETE", json=post_data, api_key=api_key)
+    res = req.execute()
+
+    # set dict to return
+    return_dict = {
+        "status_code": res.status_code,
+        "data": {},
+    }
+    if (res.status_code != 200):
         return_dict["data"] = res.data
 
     # return
