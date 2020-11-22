@@ -145,8 +145,9 @@ def get_stats(identifier: int) -> _Dict:
 
 
 def add(api_key: str, program: str, platform: str, instrument_type: str, source_type: str,
-        ephemeris_metadata_schema: _List[_Dict] = [], data_products_metadata_schema: _List[_Dict] = [],
-        maintainers: _List = [], identifier: int = None) -> _Dict:
+        display_name: str, ephemeris_metadata_schema: _List[_Dict] = [],
+        data_products_metadata_schema: _List[_Dict] = [], maintainers: _List = [],
+        identifier: int = None) -> _Dict:
     """
     Create a new data source record
 
@@ -160,6 +161,8 @@ def add(api_key: str, program: str, platform: str, instrument_type: str, source_
     :type instrument_type: str
     :param source_type: source type (heo, leo, lunar, ground)
     :type source_type: str
+    :param display_name: a more user-friendly display name
+    :type display_name: str
     :param ephemeris_metadata_schema: metadata schema, defaults to []
     :type ephemeris_metadata_schema: List[Dict], optional
     :param data_products_metadata_schema: metadata schema, defaults to []
@@ -179,6 +182,7 @@ def add(api_key: str, program: str, platform: str, instrument_type: str, source_
         "platform": platform,
         "instrument_type": instrument_type,
         "source_type": source_type,
+        "display_name": display_name,
         "ephemeris_metadata_schema": ephemeris_metadata_schema,
         "data_product_metadata_schema": data_products_metadata_schema,
         "maintainers": maintainers,

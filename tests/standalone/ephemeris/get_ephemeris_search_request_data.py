@@ -25,7 +25,7 @@ def main():
     data = aurorax.ephemeris.get_request_data(s.request_id)
 
     # print data
-    print("Found %s records" % (len(data["data"])))
+    print("\nFound %s records" % (len(data["data"])))
     pprint.pprint(data["data"][0:2])
     print("...")
 

@@ -26,6 +26,7 @@ def main():
     r.get_data()
 
     # print data
+    print()
     pprint.pprint(r.data[0:2])
     print("...")
 

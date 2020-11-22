@@ -1,8 +1,6 @@
-import aurorax as _aurorax
 import requests as _requests
 import pprint as _pprint
 from typing import Dict as _Dict
-from requests import RequestException as _RequestException
 
 # public globals
 _URL_API_STUB = "http://api.staging.aurorax.space"
@@ -11,7 +9,7 @@ URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB
 URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
 URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
 URL_EPHEMERIS_DELETE = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
-URL_EPHEMERIS_SEARCH = "%s/api/v1/data/search" % (_URL_API_STUB)
+URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
 URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)
 
 
@@ -61,18 +59,10 @@ class AuroraXRequest():
             request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        try:
-            req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
-        except _RequestException as e:
-            raise _aurorax.exceptions.AuroraXRequestsException(e)
-        except Exception as e:
-            raise _aurorax.exceptions.AuroraXUnspecifiedException(e)
+        req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
 
         # create response object
-        try:
-            res = AuroraXResponse(req)
-        except Exception as e:
-            raise _aurorax.exceptions.AuroraXUnspecifiedException(e)
+        res = AuroraXResponse(req)
 
         # return
         return res
@@ -108,10 +98,7 @@ class AuroraXRawRequest(AuroraXRequest):
             request_headers["x-aurorax-api-key"] = self.api_key
 
         # perform request
-        try:
-            req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
-        except _RequestException as e:
-            raise _aurorax.exceptions.AuroraXRequestsException(e)
+        req = _requests.request(self.method, self.url, params=self.params, json=self.json, headers=request_headers)
 
         # return
         return req
@@ -210,5 +197,5 @@ def set_url_stub(stub: str) -> None:
     URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
     URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
     URL_EPHEMERIS_DELETE = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
-    URL_EPHEMERIS_SEARCH = "%s/api/v1/data/search" % (_URL_API_STUB)
+    URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
     URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)

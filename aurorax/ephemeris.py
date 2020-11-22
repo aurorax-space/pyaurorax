@@ -162,8 +162,8 @@ class Search():
                 "programs": self.programs,
                 "platforms": self.platforms,
                 "instrument_types": self.instrument_types,
+                "ephemeris_metadata_filters": self.metadata_filters,
             },
-            "metadata_filters": self.metadata_filters,
             "start": self.start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end_dt.strftime("%Y-%m-%dT%H:%M:%S"),
         }
@@ -218,7 +218,7 @@ class Search():
         data_res = get_request_data(self.request_id, url=url)
         self.data = data_res["data"]
 
-    def wait_for_data(self, poll_interval: float = _STANDARD_POLLING_SLEEP_TIME) -> None:
+    def wait(self, poll_interval: float = _STANDARD_POLLING_SLEEP_TIME) -> None:
         """
         Block and wait for the request to complete and data is available for retrieval
 
@@ -367,7 +367,6 @@ def search(start_dt: _datetime, end_dt: _datetime, programs: _List = [], platfor
     # init return dict
     return_dict = {
         "status_code": None,
-        "search_object": None,
         "data": [],
     }
 
@@ -455,55 +454,6 @@ def upload(api_key: str, identifier: int, records: _List["Ephemeris"]) -> _Dict:
         "data": {},
     }
     if (res.status_code == 400):
-        return_dict["data"] = res.data
-
-    # return
-    return return_dict
-
-
-def delete(api_key: str, identifier: int, program: str, platform: str, instrument_type: str,
-           start_dt: _datetime, end_dt: _datetime) -> _Dict:
-    """
-    Delete ephemeris data from AuroraX
-
-    :param api_key: AuroraX API key
-    :type api_key: str
-    :param identifier: data source ID
-    :type identifier: int
-    :param program: program name
-    :type program: str
-    :param platform: platform name
-    :type platform: str
-    :param instrument_type: instrument type name
-    :type instrument_type: str
-    :param start_dt: start time of records to delete
-    :type start_dt: datetime
-    :param end_dt: end time of records to delete
-    :type end_dt: datetime
-
-    :return: delete response
-    :rtype: Dict
-    """
-    # set post data
-    post_data = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "start": start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
-        "end": end_dt.strftime("%Y-%m-%dT%H:%M:%S")
-    }
-
-    # make request
-    url = _aurorax.api.URL_EPHEMERIS_DELETE.format(identifier)
-    req = _aurorax.AuroraXRequest(url, method="DELETE", json=post_data, api_key=api_key)
-    res = req.execute()
-
-    # set dict to return
-    return_dict = {
-        "status_code": res.status_code,
-        "data": {},
-    }
-    if (res.status_code != 200):
         return_dict["data"] = res.data
 
     # return

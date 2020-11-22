@@ -4,7 +4,7 @@ import pprint
 
 def main():
     # create location object
-    loc = aurorax.Location(51.049999, -114.066666)
+    loc = aurorax.Location(51.0447, -114.0719)
 
     # print
     print("__str__:\n----------")

@@ -26,6 +26,7 @@ def main():
     logs = aurorax.ephemeris.get_request_logs(s.request_id)
 
     # print logs
+    print()
     pprint.pprint(logs)
 
 

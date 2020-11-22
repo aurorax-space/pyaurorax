@@ -7,7 +7,7 @@ def main():
     sources = aurorax.sources.list()
 
     # print in a nice table
-    headers = ["ID", "Program", "Platform", "Instrument Type", "Source Type"]
+    headers = ["ID", "Program", "Platform", "Instrument Type", "Source Type", "Display Name"]
     rows = []
     for source in sources["data"]:
         rows.append([
@@ -16,6 +16,7 @@ def main():
             source["platform"],
             source["instrument_type"],
             source["source_type"],
+            source["display_name"],
         ])
     rows = sorted(rows, key=lambda i: (i[1], i[3], i[2]))
     print(tabulate(rows, headers=headers, tablefmt="presto"))

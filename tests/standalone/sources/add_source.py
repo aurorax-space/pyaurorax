@@ -13,6 +13,7 @@ def main():
     platform = "test-platform"
     instrument_type = "test-instrument-type"
     source_type = "ground"
+    display_name = "Test Instrument"
     metadata_schema_ephemeris = [
         {
             "field_name": "test_meta1",
@@ -48,6 +49,7 @@ def main():
                             platform,
                             instrument_type,
                             source_type,
+                            display_name,
                             ephemeris_metadata_schema=metadata_schema_ephemeris,
                             data_products_metadata_schema=metadata_schema_data_products,
                             identifier=identifier)

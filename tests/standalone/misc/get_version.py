@@ -3,7 +3,7 @@ import aurorax
 
 def main():
     # get version information
-    print("AuroraX Version: %s" % (aurorax.__version__))
+    print("PyAuroraX version: %s" % (aurorax.__version__))
 
 
 # -------------
