@@ -1,4 +1,4 @@
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 # classes to be found at the top level
 from .api import AuroraXRequest, AuroraXRawRequest, AuroraXResponse

@@ -62,17 +62,30 @@ class Ephemeris():
         :rtype: Dict
         """
         d = self.__dict__
-        d["epoch"] = d["epoch"].strftime("%Y-%m-%dT%H:%M:00.000Z")
-        d["location_geo"] = d["location_geo"].__dict__
-        d["location_gsm"] = d["location_gsm"].__dict__
-        d["nbtrace"] = d["nbtrace"].__dict__
-        d["sbtrace"] = d["sbtrace"].__dict__
+
+        # format epoch as str
+        if (type(d["epoch"]) is _datetime.datetime):
+            d["epoch"] = d["epoch"].strftime("%Y-%m-%dT%H:%M:00.000Z")
+
+        # format location
+        if (type(d["location_geo"]) is _Location):
+            d["location_geo"] = d["location_geo"].__dict__
+        if (type(d["location_gsm"]) is _Location):
+            d["location_gsm"] = d["location_gsm"].__dict__
+        if (type(d["nbtrace"]) is _Location):
+            d["nbtrace"] = d["nbtrace"].__dict__
+        if (type(d["sbtrace"]) is _Location):
+            d["sbtrace"] = d["sbtrace"].__dict__
+
+        # format metadata
         if (type(self.metadata) is dict):
             for key, value in self.metadata.items():
                 if (type(value) is _datetime.datetime or type(value) is _datetime.date):
                     self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
         if (type(self.metadata) is list):
             self.metadata = {}
+
+        # return
         return d
 
     def __str__(self) -> str:
@@ -439,9 +452,10 @@ def upload(api_key: str, identifier: int, records: _List["Ephemeris"]) -> _Dict:
     :return: upload response
     :rtype: Dict
     """
-    # translate each ephemeris record to a request-friendly dict (ie. convert datetimes to strings)
+    # translate each ephemeris record to a request-friendly dict (ie. convert datetimes to strings, etc.)
     for i, record in enumerate(records):
-        records[i] = records[i].to_json_serializable()
+        if (type(records[i]) is Ephemeris):
+            records[i] = records[i].to_json_serializable()
 
     # make request
     url = _aurorax.api.URL_EPHEMERIS_UPLOAD.format(identifier)
