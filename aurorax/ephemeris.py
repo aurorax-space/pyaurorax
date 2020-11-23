@@ -240,7 +240,7 @@ class Search():
         :type poll_interval: float, optional
         """
         url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
-        self.update_status(_aurorax.requests.wait_for_data(url))
+        self.update_status(_aurorax.requests.wait_for_data(url, poll_interval=poll_interval))
 
 
 def get_metadata_schema(identifier: int) -> _List:
@@ -301,18 +301,21 @@ def get_request_logs(request_id: str) -> _Dict:
     return _aurorax.requests.get_logs(url)
 
 
-def wait_for_data(request_id: str) -> _Dict:
+def wait_for_data(request_id: str, poll_interval: float = _STANDARD_POLLING_SLEEP_TIME) -> _Dict:
     """
     Block and wait for the data to be made available for a given ephemeris search request ID
 
     :param request_id: ephemeris search request ID
     :type request_id: str
+    :param poll_interval: time in seconds to wait between polling
+                          attempts, defaults to STANDARD_POLLING_SLEEP_TIME
+    :type poll_interval: float, optional
 
     :return: status response
     :rtype: Dict
     """
     url = _aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(request_id)
-    return _aurorax.requests.wait_for_data(url)
+    return _aurorax.requests.wait_for_data(url, poll_interval=poll_interval)
 
 
 def search_async(start_dt: _datetime, end_dt: _datetime, programs: _List = [], platforms: _List = [],

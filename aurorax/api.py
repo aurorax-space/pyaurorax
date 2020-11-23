@@ -6,11 +6,13 @@ from typing import Dict as _Dict
 _URL_API_STUB = "http://api.staging.aurorax.space"
 URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
 URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
-URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
 URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
-URL_EPHEMERIS_DELETE = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
 URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
 URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)
+URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
+URL_DATA_PRODUCTS_UPLOAD = "%s/api/v1/data-sources/{}/data_products" % (_URL_API_STUB)
+URL_DATA_PRODUCTS_SEARCH = "%s/api/v1/data_products/search" % (_URL_API_STUB)
+URL_DATA_PRODUCTS_REQUEST_STATUS = "%s/api/v1/data_products/requests/{}" % (_URL_API_STUB)
 
 
 class AuroraXRequest():
@@ -185,17 +187,21 @@ def set_url_stub(stub: str) -> None:
     global _URL_API_STUB
     global URL_DATA_SOURCES
     global URL_EPHEMERIS_AVAILABILITY
-    global URL_DATA_PRODUCTS_AVAILABILITY
     global URL_EPHEMERIS_UPLOAD
-    global URL_EPHEMERIS_DELETE
     global URL_EPHEMERIS_SEARCH
     global URL_EPHEMERIS_REQUEST_STATUS
+    global URL_DATA_PRODUCTS_AVAILABILITY
+    global URL_DATA_PRODUCTS_UPLOAD
+    global URL_DATA_PRODUCTS_SEARCH
+    global URL_DATA_PRODUCTS_REQUEST_STATUS
 
     _URL_API_STUB = stub
     URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
     URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
-    URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
     URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
-    URL_EPHEMERIS_DELETE = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
     URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (_URL_API_STUB)
     URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (_URL_API_STUB)
+    URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (_URL_API_STUB)
+    URL_DATA_PRODUCTS_UPLOAD = "%s/api/v1/data-sources/{}/data_products" % (_URL_API_STUB)
+    URL_DATA_PRODUCTS_SEARCH = "%s/api/v1/data_products/search" % (_URL_API_STUB)
+    URL_DATA_PRODUCTS_REQUEST_STATUS = "%s/api/v1/data_products/requests/{}" % (_URL_API_STUB)
