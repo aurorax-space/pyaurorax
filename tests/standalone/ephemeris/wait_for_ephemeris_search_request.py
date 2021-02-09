@@ -10,7 +10,7 @@ def main():
                                  datetime.datetime(2020, 1, 2, 23, 59, 59),
                                  programs=["swarm"],
                                  platforms=["swarma"],
-                                 instrument_types=["ssc-web"])
+                                 instrument_types=["footprint"])
     r.execute()
 
     # wait for data

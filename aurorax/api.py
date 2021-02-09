@@ -3,7 +3,7 @@ import pprint as _pprint
 from typing import Dict as _Dict
 
 # public globals
-_URL_API_STUB = "http://api.aurorax.space"
+_URL_API_STUB = "https://api.aurorax.space"
 URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
 URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
 URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
@@ -181,7 +181,7 @@ def set_url_stub(stub: str) -> None:
     Change the URL stub for the API. For example if you want to migrate
     data from one endpointt to another.
 
-    :param stub: URL stub (ie. http://api.staging.aurorax.space)
+    :param stub: URL stub (ie. https://api.staging.aurorax.space)
     :type stub: str
     """
     global _URL_API_STUB

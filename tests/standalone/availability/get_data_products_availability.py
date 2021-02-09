@@ -5,11 +5,11 @@ import pprint
 
 def main():
     # set parameters
-    start_date = datetime.datetime(2019, 1, 1)
-    end_date = datetime.date(2019, 1, 10)
-    program = "swarm"
-    platform = "swarma"
-    instrument_type = "ssc-web"
+    start_date = datetime.datetime(2020, 1, 1)
+    end_date = datetime.date(2020, 1, 10)
+    program = "themis-asi"
+    platform = "gillam"
+    instrument_type = "panchromatic ASI"
     print("Retrieving data products availability with the parameters:")
     print("  Start Date:\t\t%s" % (start_date.strftime("%Y-%m-%d")))
     print("  End Date:\t\t%s" % (end_date.strftime("%Y-%m-%d")))

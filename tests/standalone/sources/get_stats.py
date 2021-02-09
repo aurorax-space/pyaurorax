@@ -6,7 +6,7 @@ def main():
     # set parameters
     program = "themis"
     platform = "themise"
-    instrument_type = "ssc-web"
+    instrument_type = "footprint"
     print("Retrieving statistics with the parameters:")
     print("  Program:\t\t%s" % (program))
     print("  Platform:\t\t%s" % (platform))

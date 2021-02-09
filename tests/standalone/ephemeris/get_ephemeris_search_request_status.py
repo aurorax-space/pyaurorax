@@ -11,7 +11,7 @@ def main():
                                  datetime.datetime(2020, 1, 1, 5, 59, 59),
                                  programs=["swarm"],
                                  platforms=["swarma"],
-                                 instrument_types=["ssc-web"])
+                                 instrument_types=["footprint"])
     s.execute()
 
     # get status

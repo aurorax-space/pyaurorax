@@ -8,7 +8,7 @@ def main():
                                  datetime.datetime(2020, 1, 10, 0, 0, 0),
                                  programs=["swarm"],
                                  platforms=["swarma"],
-                                 instrument_types=["ssc-web"])
+                                 instrument_types=["footprint"])
     print(s)
 
 

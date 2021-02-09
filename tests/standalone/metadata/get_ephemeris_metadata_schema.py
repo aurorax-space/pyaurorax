@@ -6,7 +6,7 @@ def main():
     # set parameters
     program = "swarm"
     platform = "swarma"
-    instrument_type = "ssc-web"
+    instrument_type = "footprint"
     print("Retrieving ephemeris metadata schema with the parameters:")
     print("  Program:\t\t%s" % (program))
     print("  Platform:\t\t%s" % (platform))
