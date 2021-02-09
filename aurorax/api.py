@@ -3,7 +3,7 @@ import pprint as _pprint
 from typing import Dict as _Dict
 
 # public globals
-_URL_API_STUB = "http://api.staging.aurorax.space"
+_URL_API_STUB = "http://api.aurorax.space"
 URL_DATA_SOURCES = "%s/api/v1/data-sources" % (_URL_API_STUB)
 URL_EPHEMERIS_AVAILABILITY = "%s/api/v1/availability/ephemeris" % (_URL_API_STUB)
 URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (_URL_API_STUB)
