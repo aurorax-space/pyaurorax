@@ -128,7 +128,7 @@ class AuroraXRequest(BaseModel):
                 break
 
         # check if authorization worked
-        if (req.status_code == 403):
+        if (req.status_code == 401):
             raise aurorax.AuroraXUnauthorizedException("%s" % (req.json()["detail"]))
 
         # check if we only want to do limited evaluation
