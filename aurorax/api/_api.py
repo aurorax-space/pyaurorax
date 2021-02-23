@@ -15,7 +15,7 @@ REQUEST_HEADERS = {
 API_KEY_HEADER_NAME = "x-aurorax-api-key"
 
 # endpoint URLs
-URL_API_STUB = "https://api.aurorax.space"
+URL_API_STUB = "https://api.staging.aurorax.space"
 URL_DATA_SOURCES = "%s/api/v1/data-sources" % (URL_API_STUB)
 URL_STATS = "%s/api/v1/stats" % (URL_API_STUB)
 URL_EPHEMERIS_VAILABILITY = "%s/api/v1/availability/ephemeris" % (URL_API_STUB)
