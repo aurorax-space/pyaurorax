@@ -6,6 +6,7 @@ import os
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
+    aurorax.authenticate(api_key)
 
     # set values
     identifier = 400
@@ -44,8 +45,7 @@ def main():
     ]
 
     # make request
-    r = aurorax.sources.add(api_key,
-                            program,
+    r = aurorax.sources.add(program,
                             platform,
                             instrument_type,
                             source_type,
@@ -55,10 +55,7 @@ def main():
                             identifier=identifier)
 
     # output results
-    if (r["status_code"] == 200):
-        print("Successfully added source\n")
-    else:
-        print("Error adding source\n")
+    print("Successfully added source\n")
     pprint.pprint(r)
 
 

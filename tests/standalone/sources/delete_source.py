@@ -5,6 +5,7 @@ import os
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
+    aurorax.authenticate(api_key)
 
     # set values
     program = "test-program"
@@ -15,21 +16,18 @@ def main():
     sources = aurorax.sources.get_using_filters(program=program,
                                                 platform=platform,
                                                 instrument_type=instrument_type)
-    if (len(sources["data"]) == 0):
+    if (len(sources) == 0):
         sources = aurorax.sources.get_using_filters(program=program,
                                                     platform=platform,
                                                     instrument_type="test-instrument-type-updated")
-        if (len(sources["data"]) == 0):
+        if (len(sources) == 0):
             print("No data source found")
             return
-    identifier = sources["data"][0]["identifier"]
+    identifier = sources[0]["identifier"]
 
     # remove source
-    r = aurorax.sources.delete(api_key, identifier)
-    if (r["status_code"] == 200):
-        print("Successfully removed data source")
-    else:
-        print(r)
+    aurorax.sources.delete(identifier)
+    print("Successfully removed data source")
 
 
 # ----------

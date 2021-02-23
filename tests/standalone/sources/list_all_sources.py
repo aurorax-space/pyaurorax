@@ -9,7 +9,7 @@ def main():
     # print in a nice table
     headers = ["ID", "Program", "Platform", "Instrument Type", "Source Type", "Display Name"]
     rows = []
-    for source in sources["data"]:
+    for source in sources:
         rows.append([
             int(source["identifier"]),
             source["program"],

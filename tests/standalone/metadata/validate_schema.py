@@ -4,7 +4,7 @@ import aurorax
 def main():
     # get schema
     source = aurorax.sources.get_using_filters(program="swarm", platform="swarma", instrument_type="footprint")
-    schema = aurorax.metadata.get_ephemeris_schema(source["data"][0]["identifier"])
+    schema = aurorax.metadata.get_ephemeris_schema(source[0]["identifier"])
 
     # create an example metadata dictionary
     metadata = {

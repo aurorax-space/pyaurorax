@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.3.1"
+version = "0.4.0"
 description = "Python library for interacting with the AuroraX API"
 authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
@@ -10,18 +10,18 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.5"
-flake8 = "^3.8.3"
-requests = "^2.24.0"
-humanize = "^2.6.0"
+python = "^3.6.1"
+requests = "^2.25.1"
+flake8 = "^3.8.4"
+pydantic = "^1.7.3"
+humanize = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-mypy = "^0.782"
-pylint = "^2.6.0"
-bandit = "^1.6.2"
-coverage = "^5.2.1"
+pytest = "^6.2.1"
 tabulate = "^0.8.7"
+mypy = "^0.790"
+pylint = "^2.6.0"
+bandit = "^1.7.0"
 autopep8 = "^1.5.4"
 
 [build-system]

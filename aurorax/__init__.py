@@ -1,20 +1,31 @@
-__version__ = "0.3.1"
+__version__ = "0.4.0"
 
-# classes to be found at the top level
-from .api import AuroraXRequest, AuroraXRawRequest, AuroraXResponse
-from .location import Location
+# pull in top level functions
+from .api import AuroraXRequest
+from .api import authenticate
+from .api import get_api_key
 
-# pull in exceptions
+# pull in exceptions at top level
+from .exceptions import AuroraXException
+from .exceptions import AuroraXNotFoundException
+from .exceptions import AuroraXMaxRetriesException
+from .exceptions import AuroraXDatabaseException
+from .exceptions import AuroraXDuplicateException
+from .exceptions import AuroraXUnexpectedContentTypeException
+from .exceptions import AuroraXValidationException
+from .exceptions import AuroraXBadParametersException
+from .exceptions import AuroraXUnauthorizedException
+from .exceptions import AuroraXConflictException
+from .exceptions import AuroraXUploadException
+
+# pull in models
+from .models import Location
+
+# pull in modules
 from aurorax import exceptions
-
-# pull in core modules
 from aurorax import api
-from aurorax import ephemeris
-from aurorax import conjunctions
-from aurorax import data_products
-from aurorax import availability
-from aurorax import requests
 from aurorax import sources
-from aurorax import location
 from aurorax import metadata
-from aurorax import util
+from aurorax import availability
+from aurorax import ephemeris
+from aurorax import requests

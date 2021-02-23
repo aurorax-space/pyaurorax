@@ -8,7 +8,7 @@ def main():
     # start search
     print("Executing request ...")
     s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2020, 1, 1, 0, 59, 59),
+                                 datetime.datetime(2020, 1, 1, 23, 59, 59),
                                  programs=["swarm"],
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
@@ -16,17 +16,17 @@ def main():
 
     # if the request isn't done, wait continuously
     print("Waiting for request to complete ...")
-    status = aurorax.ephemeris.get_request_status(s.request_id)
-    while (status["request_status"]["completed"] is False):
+    s.update_status()
+    while (s.completed is False):
         time.sleep(1)
-        status = aurorax.ephemeris.get_request_status(s.request_id)
+        s.update_status()
 
     # get request data
-    data = aurorax.ephemeris.get_request_data(s.request_id)
+    s.get_data()
 
     # print data
-    print("\nFound %s records" % (len(data["data"])))
-    pprint.pprint(data["data"][0:2])
+    print("\nFound %d records" % (len(s.data)))
+    pprint.pprint(s.data[0:2])
     print("...")
 
 

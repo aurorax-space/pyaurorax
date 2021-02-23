@@ -18,7 +18,7 @@ def main():
                                                     instrument_type=instrument_type)
 
     # get schema
-    schema = aurorax.metadata.get_ephemeris_schema(data_source["data"][0]["identifier"])
+    schema = aurorax.metadata.get_ephemeris_schema(data_source[0]["identifier"])
     pprint.pprint(schema)
 
 

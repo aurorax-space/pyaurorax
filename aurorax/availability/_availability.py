@@ -1,11 +1,11 @@
-import aurorax as _aurorax
-import datetime as _datetime
-from typing import Dict as _Dict
+import aurorax
+import datetime
+from typing import Dict
 
 
-def ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
+def ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
               instrument_type: str = None, source_type: str = None, owner: str = None,
-              format: str = "basic_info") -> _Dict:
+              format: str = "basic_info") -> Dict:
     """
     Retrieve information about the number of existing ephemeris records
 
@@ -30,6 +30,7 @@ def ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, platf
     :return: ephemeris availability information
     :rtype: Dict
     """
+    # set parameters
     params = {
         "start": start_dt.strftime("%Y-%m-%d"),
         "end": end_dt.strftime("%Y-%m-%d"),
@@ -40,18 +41,18 @@ def ephemeris(start_dt: _datetime, end_dt: _datetime, program: str = None, platf
         "owner": owner,
         "format": format,
     }
-    req = _aurorax.AuroraXRequest(_aurorax.api.URL_EPHEMERIS_AVAILABILITY, params=params)
+
+    # do request
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.URL_EPHEMERIS_VAILABILITY, params=params)
     res = req.execute()
-    return_dict = {
-        "status_code": res.status_code,
-        "data": res.data
-    }
-    return return_dict
+
+    # return
+    return res.data
 
 
-def data_products(start_dt: _datetime, end_dt: _datetime, program: str = None, platform: str = None,
+def data_products(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
                   instrument_type: str = None, source_type: str = None, owner: str = None,
-                  format: str = "basic_info") -> _Dict:
+                  format: str = "basic_info") -> Dict:
     """
     Retrieve information about the number of existing data product records
 
@@ -76,6 +77,7 @@ def data_products(start_dt: _datetime, end_dt: _datetime, program: str = None, p
     :return: ephemeris data product information
     :rtype: Dict
     """
+    # set parameters
     params = {
         "start": start_dt.strftime("%Y-%m-%d"),
         "end": end_dt.strftime("%Y-%m-%d"),
@@ -86,10 +88,10 @@ def data_products(start_dt: _datetime, end_dt: _datetime, program: str = None, p
         "owner": owner,
         "format": format,
     }
-    req = _aurorax.AuroraXRequest(_aurorax.api.URL_DATA_PRODUCTS_AVAILABILITY, params=params)
+
+    # do request
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.URL_DATA_PRODUCTS_AVAILABILITY, params=params)
     res = req.execute()
-    return_dict = {
-        "status_code": res.status_code,
-        "data": res.data
-    }
-    return return_dict
+
+    # return
+    return res.data
