@@ -102,6 +102,33 @@ def get_using_identifier(identifier: int, format: Optional[str] = "basic_info") 
     return res.data
 
 
+def get_stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
+    """
+    Retrieve statistics for a data source
+
+    :param identifier: data source identifier
+    :type identifier: int
+    :param format: record format, defaults to "basic_info"
+    :type format: Optional[str], optional
+
+    :raises aurorax.AuroraXMaxRetriesException: max retry error
+    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+
+    :return: stats info
+    :rtype: Dict
+    """
+    # make request
+    params = {
+        "format": format,
+    }
+    url = "%s/%d/stats" % (aurorax.api.URL_DATA_SOURCES, identifier)
+    req = aurorax.AuroraXRequest(method="get", url=url, params=params)
+    res = req.execute()
+
+    # return
+    return res.data
+
+
 def add(program: str, platform: str, instrument_type: str, source_type: str,
         display_name: str, ephemeris_metadata_schema: List[Dict] = [],
         data_products_metadata_schema: List[Dict] = [], maintainers: List = [],

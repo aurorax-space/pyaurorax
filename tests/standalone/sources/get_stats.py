@@ -18,7 +18,7 @@ def main():
                                                     instrument_type=instrument_type)
 
     # get statistics
-    stats = aurorax.ephemeris.stats(data_source[0]["identifier"])
+    stats = aurorax.sources.get_stats(data_source[0]["identifier"])
     pprint.pprint(stats)
 
 

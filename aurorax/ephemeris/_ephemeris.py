@@ -2,7 +2,7 @@ import datetime
 import pprint
 import aurorax
 from pydantic import BaseModel
-from typing import Dict, List, Optional
+from typing import Dict, List
 from aurorax import Location
 
 
@@ -91,33 +91,6 @@ class Ephemeris(BaseModel):
         :rtype: str
         """
         return pprint.pformat(self.__dict__)
-
-
-def stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
-    """
-    Retrieve statistics about ephemeris records for a data source
-
-    :param identifier: data source identifier
-    :type identifier: int
-    :param format: record format, defaults to "basic_info"
-    :type format: Optional[str], optional
-
-    :raises aurorax.AuroraXMaxRetriesException: max retry error
-    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
-
-    :return: stats info
-    :rtype: Dict
-    """
-    # make request
-    params = {
-        "format": format,
-    }
-    url = "%s/%d/stats" % (aurorax.api.URL_DATA_SOURCES, identifier)
-    req = aurorax.AuroraXRequest(method="get", url=url, params=params)
-    res = req.execute()
-
-    # return
-    return res.data
 
 
 def upload(identifier: int, records: List["Ephemeris"]) -> int:
