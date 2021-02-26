@@ -18,13 +18,13 @@ $ python -m pip install pyaurorax
 
 ## Supported Python Versions
 
-PyAuroraX officially supports Python 3.5+.
+PyAuroraX officially supports Python 3.6+.
 
 ## Usage
 
 ```python
 >>> import aurorax
-````
+```
 
 ## Development
 
