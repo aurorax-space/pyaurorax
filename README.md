@@ -4,7 +4,6 @@
 [![PyPI version](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
-[![Bandit Security](https://img.shields.io/badge/security-bandit-lightgrey.svg)](https://github.com/PyCQA/bandit)
 
 Python library for interacting with the AuroraX API.
 
