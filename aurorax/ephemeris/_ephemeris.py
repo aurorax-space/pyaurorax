@@ -47,6 +47,7 @@ class Ephemeris(BaseModel):
         """
         Convert object to a JSON-serializable object (ie. translate datetime
         objects to strings)
+
         :return: dictionary JSON-serializable object
         :rtype: Dict
         """
@@ -78,7 +79,9 @@ class Ephemeris(BaseModel):
         return d
 
     def __str__(self) -> str:
-        """String method
+        """
+        String method
+
         :return: string format
         :rtype: str
         """
@@ -87,6 +90,7 @@ class Ephemeris(BaseModel):
     def __repr__(self) -> str:
         """
         Object representation
+
         :return: object representation
         :rtype: str
         """
@@ -115,7 +119,7 @@ def upload(identifier: int, records: List["Ephemeris"]) -> int:
             records[i] = records[i].to_json_serializable()
 
     # make request
-    url = aurorax.api.URL_EPHEMERIS_UPLOAD.format(identifier)
+    url = aurorax.api.urls.ephemeris_upload_url.format(identifier)
     req = aurorax.AuroraXRequest(method="post", url=url, body=records, null_response=True)
     res = req.execute()
 

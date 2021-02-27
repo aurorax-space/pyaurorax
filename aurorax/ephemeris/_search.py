@@ -52,7 +52,9 @@ class Search():
         self.metadata_filters = metadata_filters
 
     def __str__(self) -> str:
-        """String method
+        """
+        String method
+
         :return: string format
         :rtype: str
         """
@@ -61,6 +63,7 @@ class Search():
     def __repr__(self) -> str:
         """
         Object representation
+
         :return: object representation
         :rtype: str
         """
@@ -71,7 +74,7 @@ class Search():
         Initiate ephemeris search request
         """
         # set up request
-        url = aurorax.api.URL_EPHEMERIS_SEARCH
+        url = aurorax.api.urls.ephemeris_search_url
         post_data = {
             "data_sources": {
                 "programs": self.programs,
@@ -111,7 +114,7 @@ class Search():
         # update request status by checking if data URI is set
         if (status["search_result"]["data_uri"] is not None):
             self.completed = True
-            self.data_url = "%s%s" % (aurorax.api.URL_API_STUB, status["search_result"]["data_uri"])
+            self.data_url = "%s%s" % (aurorax.api.urls.base_url, status["search_result"]["data_uri"])
 
         # set class variable "status" and "logs"
         self.status = status
@@ -144,7 +147,7 @@ class Search():
         :param verbose: output poll times, defaults to False
         :type verbose: bool, optional
         """
-        url = aurorax.api.URL_EPHEMERIS_REQUEST_STATUS.format(self.request_id)
+        url = aurorax.api.urls.ephemeris_request_url.format(self.request_id)
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
 
 
@@ -229,7 +232,7 @@ def search(start_dt: datetime,
     # wait for data
     if (verbose is True):
         print("[%s] Waiting for data ..." % (datetime.datetime.now()))
-    s.wait(verbose=verbose)
+    s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # get the data
     if (verbose is True):

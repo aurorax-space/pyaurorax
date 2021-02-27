@@ -3,8 +3,13 @@ import datetime
 from typing import Dict
 
 
-def ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
-              instrument_type: str = None, source_type: str = None, owner: str = None,
+def ephemeris(start_dt: datetime,
+              end_dt: datetime,
+              program: str = None,
+              platform: str = None,
+              instrument_type: str = None,
+              source_type: str = None,
+              owner: str = None,
               format: str = "basic_info") -> Dict:
     """
     Retrieve information about the number of existing ephemeris records
@@ -43,15 +48,20 @@ def ephemeris(start_dt: datetime, end_dt: datetime, program: str = None, platfor
     }
 
     # do request
-    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.URL_EPHEMERIS_VAILABILITY, params=params)
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.ephemeris_availability_url, params=params)
     res = req.execute()
 
     # return
     return res.data
 
 
-def data_products(start_dt: datetime, end_dt: datetime, program: str = None, platform: str = None,
-                  instrument_type: str = None, source_type: str = None, owner: str = None,
+def data_products(start_dt: datetime,
+                  end_dt: datetime,
+                  program: str = None,
+                  platform: str = None,
+                  instrument_type: str = None,
+                  source_type: str = None,
+                  owner: str = None,
                   format: str = "basic_info") -> Dict:
     """
     Retrieve information about the number of existing data product records
@@ -90,7 +100,7 @@ def data_products(start_dt: datetime, end_dt: datetime, program: str = None, pla
     }
 
     # do request
-    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.URL_DATA_PRODUCTS_AVAILABILITY, params=params)
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.data_products_availability_url, params=params)
     res = req.execute()
 
     # return

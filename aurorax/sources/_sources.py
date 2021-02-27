@@ -17,7 +17,7 @@ def list(order: Optional[str] = "identifier") -> List:
     :rtype: List
     """
     # make request
-    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.URL_DATA_SOURCES)
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.data_sources_url)
     res = req.execute()
 
     # order results
@@ -27,9 +27,12 @@ def list(order: Optional[str] = "identifier") -> List:
     return res.data
 
 
-def get_using_filters(program: Optional[str] = None, platform: Optional[str] = None,
-                      instrument_type: Optional[str] = None, source_type: Optional[str] = None,
-                      owner: Optional[str] = None, format: Optional[str] = "basic_info",
+def get_using_filters(program: Optional[str] = None,
+                      platform: Optional[str] = None,
+                      instrument_type: Optional[str] = None,
+                      source_type: Optional[str] = None,
+                      owner: Optional[str] = None,
+                      format: Optional[str] = "basic_info",
                       order: Optional[str] = "identifier",) -> List:
     """
     Retrieve all data source records matching a filter
@@ -65,7 +68,7 @@ def get_using_filters(program: Optional[str] = None, platform: Optional[str] = N
         "owner": owner,
         "format": format,
     }
-    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.URL_DATA_SOURCES, params=params)
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.data_sources_url, params=params)
     res = req.execute()
 
     # order results
@@ -94,7 +97,7 @@ def get_using_identifier(identifier: int, format: Optional[str] = "basic_info") 
     params = {
         "format": format,
     }
-    url = "%s/%d" % (aurorax.api.URL_DATA_SOURCES, identifier)
+    url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
     req = aurorax.AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
 
@@ -121,7 +124,7 @@ def get_stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
     params = {
         "format": format,
     }
-    url = "%s/%d/stats" % (aurorax.api.URL_DATA_SOURCES, identifier)
+    url = "%s/%d/stats" % (aurorax.api.urls.data_sources_url, identifier)
     req = aurorax.AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
 
@@ -129,9 +132,14 @@ def get_stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
     return res.data
 
 
-def add(program: str, platform: str, instrument_type: str, source_type: str,
-        display_name: str, ephemeris_metadata_schema: List[Dict] = [],
-        data_products_metadata_schema: List[Dict] = [], maintainers: List = [],
+def add(program: str,
+        platform: str,
+        instrument_type: str,
+        source_type: str,
+        display_name: str,
+        ephemeris_metadata_schema: List[Dict] = [],
+        data_products_metadata_schema: List[Dict] = [],
+        maintainers: List = [],
         identifier: int = None) -> Dict:
     """
     Add new data source to AuroraX
@@ -177,7 +185,7 @@ def add(program: str, platform: str, instrument_type: str, source_type: str,
     }
     if (identifier is not None):
         request_data["identifier"] = identifier
-    req = aurorax.AuroraXRequest(method="post", url=aurorax.api.URL_DATA_SOURCES, body=request_data)
+    req = aurorax.AuroraXRequest(method="post", url=aurorax.api.urls.data_sources_url, body=request_data)
     res = req.execute()
 
     # evaluate response
@@ -204,7 +212,7 @@ def delete(identifier: int) -> int:
     :rtype: int
     """
     # do request
-    url = "%s/%d" % (aurorax.api.URL_DATA_SOURCES, identifier)
+    url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
     req = aurorax.AuroraXRequest(method="delete", url=url, null_response=True)
     res = req.execute()
 

@@ -4,11 +4,26 @@ from ._api import authenticate
 from ._api import DEFAULT_RETRIES
 from ._api import REQUEST_HEADERS
 from ._api import API_KEY_HEADER_NAME
-from ._api import URL_API_STUB
-from ._api import URL_DATA_SOURCES
-from ._api import URL_STATS
-from ._api import URL_EPHEMERIS_VAILABILITY
-from ._api import URL_DATA_PRODUCTS_AVAILABILITY
-from ._api import URL_EPHEMERIS_UPLOAD
-from ._api import URL_EPHEMERIS_SEARCH
-from ._api import URL_EPHEMERIS_REQUEST_STATUS
+
+from ._urls import DEFAULT_URL_BASE
+from ._urls import URLs
+
+# create instance of URLs that will be used throughout the application
+urls = URLs()
+
+
+def set_base_url(url: str) -> None:
+    """
+    Change the base URL for the API (ie. change to the staging system or local server)
+
+    :param url: new base url (ie. 'https://api.staging.aurorax.space')
+    :type url: str
+    """
+    urls.base_url = url
+
+
+def reset_base_url() -> None:
+    """
+    Set the base URL for the API back to the default
+    """
+    urls.base_url = DEFAULT_URL_BASE

@@ -14,16 +14,6 @@ REQUEST_HEADERS = {
 }
 API_KEY_HEADER_NAME = "x-aurorax-api-key"
 
-# endpoint URLs
-URL_API_STUB = "https://api.aurorax.space"
-URL_DATA_SOURCES = "%s/api/v1/data-sources" % (URL_API_STUB)
-URL_STATS = "%s/api/v1/stats" % (URL_API_STUB)
-URL_EPHEMERIS_VAILABILITY = "%s/api/v1/availability/ephemeris" % (URL_API_STUB)
-URL_DATA_PRODUCTS_AVAILABILITY = "%s/api/v1/availability/data_products" % (URL_API_STUB)
-URL_EPHEMERIS_UPLOAD = "%s/api/v1/data-sources/{}/ephemeris" % (URL_API_STUB)
-URL_EPHEMERIS_SEARCH = "%s/api/v1/ephemeris/search" % (URL_API_STUB)
-URL_EPHEMERIS_REQUEST_STATUS = "%s/api/v1/ephemeris/requests/{}" % (URL_API_STUB)
-
 # private dynamic globals
 __api_key = ""
 
@@ -33,7 +23,8 @@ def get_api_key():
 
 
 def authenticate(api_key: str) -> int:
-    """Set authentication values for use with subsequent queries
+    """
+    Set authentication values for use with subsequent queries
 
     :param api_key: api key
     :type api_key: str
