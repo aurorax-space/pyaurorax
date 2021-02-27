@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.4.8"
+version = "0.4.9"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
 homepage = "https://github.com/ucalgary-aurora/pyaurorax"
