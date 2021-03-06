@@ -18,6 +18,7 @@ requests = "^2.25.1"
 flake8 = "^3.8.4"
 pydantic = "^1.7.3"
 humanize = "^3.2.0"
+aacgmv2 = "^2.6.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.1"

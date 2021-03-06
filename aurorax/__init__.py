@@ -29,3 +29,4 @@ from aurorax import metadata
 from aurorax import availability
 from aurorax import ephemeris
 from aurorax import requests
+from aurorax import util
