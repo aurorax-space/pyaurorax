@@ -6,10 +6,10 @@ import os
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
+    aurorax.api.set_base_url("https://api.staging.aurorax.space")
     aurorax.authenticate(api_key)
 
     # set values
-    identifier = 400
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument-type"
@@ -51,8 +51,7 @@ def main():
                             source_type,
                             display_name,
                             ephemeris_metadata_schema=metadata_schema_ephemeris,
-                            data_products_metadata_schema=metadata_schema_data_products,
-                            identifier=identifier)
+                            data_products_metadata_schema=metadata_schema_data_products)
 
     # output results
     print("Successfully added source\n")
