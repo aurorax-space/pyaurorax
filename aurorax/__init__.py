@@ -1,4 +1,4 @@
-__version__ = "0.4.11"
+__version__ = "0.4.12"
 
 # pull in top level functions
 from .api import AuroraXRequest

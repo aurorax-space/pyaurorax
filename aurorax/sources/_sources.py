@@ -27,6 +27,48 @@ def list(order: Optional[str] = "identifier") -> List:
     return res.data
 
 
+def get(program: str,
+        platform: str,
+        instrument_type: str,
+        format: Optional[str] = "basic_info") -> Dict:
+    """
+    Retrieve a specific data source record
+
+    :param program: program
+    :type program: str
+    :param platform: program
+    :type platform: str
+    :param instrument_type: program
+    :type instrument_type: str
+    :param format: record format, defaults to "basic_info"
+    :type format: Optional[str], optional
+
+    :raises aurorax.AuroraXMaxRetriesException: max retry error
+    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+
+    :return: data source
+    :rtype: Dict
+    """
+    # make request
+    params = {
+        "program": program,
+        "platform": platform,
+        "instrument_type": instrument_type,
+        "format": format,
+    }
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.data_sources_url, params=params)
+    res = req.execute()
+
+    # set results to the first thing
+    if (len(res.data) == 1):
+        res.data = res.data[0]
+    else:
+        res.data = {}
+
+    # return
+    return res.data
+
+
 def get_using_filters(program: Optional[str] = None,
                       platform: Optional[str] = None,
                       instrument_type: Optional[str] = None,
