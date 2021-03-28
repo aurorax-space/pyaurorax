@@ -266,3 +266,73 @@ def delete(identifier: int) -> int:
 
     # return
     return res.data
+
+
+def update(identifier: int,
+           program: Optional[str] = None,
+           platform: Optional[str] = None,
+           instrument_type: Optional[str] = None,
+           source_type: Optional[str] = None,
+           display_name: Optional[str] = None,
+           new_identifier: Optional[int] = None,
+           ephemeris_metadata_schema: Optional[List[Dict]] = None,
+           data_products_metadata_schema: Optional[List[Dict]] = None,
+           metadata: Optional[Dict] = None) -> Dict:
+    """
+    Update a data source in AuroraX
+
+    :param identifier: data source identifier
+    :type identifier: int
+    :param program: new program name, defaults to None
+    :type program: Optional[str], optional
+    :param platform: new platform name, defaults to None
+    :type platform: Optional[str], optional
+    :param instrument_type: new instrument type, defaults to None
+    :type instrument_type: Optional[str], optional
+    :param source_type: new source type (heo, leo, lunar, ground), defaults to None
+    :type source_type: Optional[str], optional
+    :param display_name: new user-friendly display name, defaults to None
+    :type display_name: Optional[str], optional
+    :param ephemeris_metadata_schema: new metadata schema, defaults to []
+    :type ephemeris_metadata_schema: List[Dict], optional
+    :param data_products_metadata_schema: new metadata schema, defaults to []
+    :type data_products_metadata_schema: List[Dict], optional
+    :param metadata: new metadata, defaults to None
+    :type metadata: Optional[Dict], optional
+
+    :raises aurorax.AuroraXMaxRetriesException: max retry error
+    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+
+    :return: updated data source
+    :rtype: Dict
+    """
+    # set URL
+    url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
+
+    # set request data
+    request_data = {
+        "identifier": identifier
+    }
+    if (program is not None):
+        request_data["program"] = program
+    if (platform is not None):
+        request_data["platform"] = platform
+    if (instrument_type is not None):
+        request_data["instrument_type"] = instrument_type
+    if (source_type is not None):
+        request_data["source_type"] = source_type
+    if (display_name is not None):
+        request_data["display_name"] = display_name
+    if (ephemeris_metadata_schema is not None):
+        request_data["ephemeris_metadata_schema"] = ephemeris_metadata_schema
+    if (data_products_metadata_schema is not None):
+        request_data["data_products_metadata_schema"] = data_products_metadata_schema
+    if (metadata is not None):
+        request_data["metadata"] = metadata
+
+    # make request
+    req = aurorax.AuroraXRequest(method="put", url=url, body=request_data)
+    res = req.execute()
+
+    # return
+    return res.data

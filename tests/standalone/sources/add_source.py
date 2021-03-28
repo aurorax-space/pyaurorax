@@ -6,13 +6,14 @@ import os
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
+    aurorax.api.set_base_url("https://api.staging.aurorax.space")
     aurorax.authenticate(api_key)
 
     # set values
     identifier = 400
     program = "test-program"
     platform = "test-platform"
-    instrument_type = "test-instrument-type"
+    instrument_type = "test-instrument"
     source_type = "ground"
     display_name = "Test Instrument"
     metadata_schema_ephemeris = [
