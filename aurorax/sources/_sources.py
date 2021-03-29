@@ -274,7 +274,6 @@ def update(identifier: int,
            instrument_type: Optional[str] = None,
            source_type: Optional[str] = None,
            display_name: Optional[str] = None,
-           new_identifier: Optional[int] = None,
            ephemeris_metadata_schema: Optional[List[Dict]] = None,
            data_products_metadata_schema: Optional[List[Dict]] = None,
            metadata: Optional[Dict] = None) -> Dict:
@@ -302,36 +301,39 @@ def update(identifier: int,
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+    :raises aurorax.AuroraXNotFoundException: data source not found
 
     :return: updated data source
     :rtype: Dict
     """
+    # get the data source first
+    ds = get_using_identifier(identifier)
+    if (ds == {}):
+        raise aurorax.AuroraXNotFoundException("data source not found")
+
     # set URL
     url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
 
-    # set request data
-    request_data = {
-        "identifier": identifier
-    }
+    # replace data source values with ones passed into this function
     if (program is not None):
-        request_data["program"] = program
+        ds["program"] = program
     if (platform is not None):
-        request_data["platform"] = platform
+        ds["platform"] = platform
     if (instrument_type is not None):
-        request_data["instrument_type"] = instrument_type
+        ds["instrument_type"] = instrument_type
     if (source_type is not None):
-        request_data["source_type"] = source_type
+        ds["source_type"] = source_type
     if (display_name is not None):
-        request_data["display_name"] = display_name
+        ds["display_name"] = display_name
     if (ephemeris_metadata_schema is not None):
-        request_data["ephemeris_metadata_schema"] = ephemeris_metadata_schema
+        ds["ephemeris_metadata_schema"] = ephemeris_metadata_schema
     if (data_products_metadata_schema is not None):
-        request_data["data_products_metadata_schema"] = data_products_metadata_schema
+        ds["data_products_metadata_schema"] = data_products_metadata_schema
     if (metadata is not None):
-        request_data["metadata"] = metadata
+        ds["metadata"] = metadata
 
     # make request
-    req = aurorax.AuroraXRequest(method="put", url=url, body=request_data)
+    req = aurorax.AuroraXRequest(method="put", url=url, body=ds)
     res = req.execute()
 
     # return
