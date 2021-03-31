@@ -180,7 +180,7 @@ def add(program: str,
         source_type: str,
         display_name: str,
         ephemeris_metadata_schema: List[Dict] = [],
-        data_products_metadata_schema: List[Dict] = [],
+        data_product_metadata_schema: List[Dict] = [],
         maintainers: List = [],
         identifier: int = None) -> Dict:
     """
@@ -198,8 +198,8 @@ def add(program: str,
     :type display_name: str
     :param ephemeris_metadata_schema: metadata schema, defaults to []
     :type ephemeris_metadata_schema: List[Dict], optional
-    :param data_products_metadata_schema: metadata schema, defaults to []
-    :type data_products_metadata_schema: List[Dict], optional
+    :param data_product_metadata_schema: metadata schema, defaults to []
+    :type data_product_metadata_schema: List[Dict], optional
     :param maintainers: list of users to give maintainer permissions to, defaults to []
     :type maintainers: List, optional
     :param identifier: data source ID, defaults to None
@@ -222,7 +222,7 @@ def add(program: str,
         "source_type": source_type,
         "display_name": display_name,
         "ephemeris_metadata_schema": ephemeris_metadata_schema,
-        "data_product_metadata_schema": data_products_metadata_schema,
+        "data_product_metadata_schema": data_product_metadata_schema,
         "maintainers": maintainers,
     }
     if (identifier is not None):
@@ -275,7 +275,7 @@ def update(identifier: int,
            source_type: Optional[str] = None,
            display_name: Optional[str] = None,
            ephemeris_metadata_schema: Optional[List[Dict]] = None,
-           data_products_metadata_schema: Optional[List[Dict]] = None,
+           data_product_metadata_schema: Optional[List[Dict]] = None,
            metadata: Optional[Dict] = None) -> Dict:
     """
     Update a data source in AuroraX
@@ -294,8 +294,8 @@ def update(identifier: int,
     :type display_name: Optional[str], optional
     :param ephemeris_metadata_schema: new metadata schema, defaults to []
     :type ephemeris_metadata_schema: List[Dict], optional
-    :param data_products_metadata_schema: new metadata schema, defaults to []
-    :type data_products_metadata_schema: List[Dict], optional
+    :param data_product_metadata_schema: new metadata schema, defaults to []
+    :type data_product_metadata_schema: List[Dict], optional
     :param metadata: new metadata, defaults to None
     :type metadata: Optional[Dict], optional
 
@@ -327,8 +327,8 @@ def update(identifier: int,
         ds["display_name"] = display_name
     if (ephemeris_metadata_schema is not None):
         ds["ephemeris_metadata_schema"] = ephemeris_metadata_schema
-    if (data_products_metadata_schema is not None):
-        ds["data_products_metadata_schema"] = data_products_metadata_schema
+    if (data_product_metadata_schema is not None):
+        ds["data_product_metadata_schema"] = data_product_metadata_schema
     if (metadata is not None):
         ds["metadata"] = metadata
 

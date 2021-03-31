@@ -52,7 +52,7 @@ def main():
                             source_type,
                             display_name,
                             ephemeris_metadata_schema=metadata_schema_ephemeris,
-                            data_products_metadata_schema=metadata_schema_data_products,
+                            data_product_metadata_schema=metadata_schema_data_products,
                             identifier=identifier)
 
     # output results

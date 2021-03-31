@@ -54,7 +54,7 @@ def get_data_products_schema(identifier: int) -> List:
     :rtype: List
     """
     source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
-    if ("data_products_metadata_schema" in source_info):
-        return source_info["data_products_metadata_schema"]
+    if ("data_product_metadata_schema" in source_info):
+        return source_info["data_product_metadata_schema"]
     else:
         return []

@@ -46,7 +46,7 @@ def main():
                                         source_type=source_type,
                                         display_name=display_name,
                                         ephemeris_metadata_schema=metadata_schema_ephemeris,
-                                        data_products_metadata_schema=metadata_schema_data_products)
+                                        data_product_metadata_schema=metadata_schema_data_products)
 
     # output results
     print("Successfully updated source\n")
