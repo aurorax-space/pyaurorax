@@ -147,7 +147,9 @@ def get_using_identifier(identifier: int, format: Optional[str] = "basic_info") 
     return res.data
 
 
-def get_stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
+def get_stats(identifier: int,
+              format: Optional[str] = "basic_info",
+              slow_method: Optional[bool] = False) -> Dict:
     """
     Retrieve statistics for a data source
 
@@ -155,6 +157,8 @@ def get_stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
     :type identifier: int
     :param format: record format, defaults to "basic_info"
     :type format: Optional[str], optional
+    :param slow_method: use slow method which gets most up-to-date stats info, defaults to "False"
+    :type slow_method: Optional[bool], optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
@@ -165,6 +169,7 @@ def get_stats(identifier: int, format: Optional[str] = "basic_info") -> Dict:
     # make request
     params = {
         "format": format,
+        "slow_method": slow_method,
     }
     url = "%s/%d/stats" % (aurorax.api.urls.data_sources_url, identifier)
     req = aurorax.AuroraXRequest(method="get", url=url, params=params)

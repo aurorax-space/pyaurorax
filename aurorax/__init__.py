@@ -1,4 +1,4 @@
-__version__ = "0.4.15"
+__version__ = "0.5.0"
 
 # pull in top level functions
 from .api import AuroraXRequest
@@ -28,5 +28,6 @@ from aurorax import sources
 from aurorax import metadata
 from aurorax import availability
 from aurorax import ephemeris
+from aurorax import data_products
 from aurorax import requests
 from aurorax import util
