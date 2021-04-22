@@ -143,8 +143,12 @@ class AuroraXRequest(BaseModel):
 
         # check for server error
         if (req.status_code == 500):
-            raise aurorax.AuroraXException("%s (%s)" % (req.json()["error_message"],
-                                                        req.status_code))
+            response_json = req.json()
+            if ("error_message" in response_json):
+                raise aurorax.AuroraXException("%s (%s)" % (response_json["error_message"],
+                                                            req.status_code))
+            else:
+                raise aurorax.AuroraXException(response_json)
 
         # create reponse object
         res = AuroraXResponse(request=req, data=response_data, status_code=req.status_code)

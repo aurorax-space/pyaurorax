@@ -5,6 +5,9 @@ import pprint
 
 
 def main():
+    # set to staging
+    aurorax.api.set_base_url("https://api.staging.aurorax.space")
+
     # start search
     print("Executing search ...")
     s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),

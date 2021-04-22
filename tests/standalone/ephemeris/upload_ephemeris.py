@@ -9,6 +9,9 @@ def main():
     api_key = os.environ["AURORAX_API_KEY"]
     aurorax.authenticate(api_key)
 
+    # set to staging
+    aurorax.api.set_base_url("https://api.staging.aurorax.space")
+
     # set values
     program = "test-program"
     platform = "test-platform"
