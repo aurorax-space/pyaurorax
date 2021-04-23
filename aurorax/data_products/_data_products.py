@@ -62,6 +62,9 @@ class DataProduct(BaseModel):
         if (type(self.metadata) is list):
             self.metadata = {}
 
+        # remove identifier
+        del d["identifier"]
+
         # return
         return d
 
