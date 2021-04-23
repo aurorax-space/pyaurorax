@@ -74,6 +74,9 @@ class Ephemeris(BaseModel):
                     self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
         if (type(self.metadata) is list):
             self.metadata = {}
+        
+        # remove identifier
+        del d["identifier"]
 
         # return
         return d
