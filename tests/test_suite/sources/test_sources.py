@@ -157,4 +157,4 @@ def test_delete_source():
     # remove source
     result = aurorax.sources.delete(identifier)
 
-    assert result is None
+    assert result == 0
