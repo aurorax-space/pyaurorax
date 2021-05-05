@@ -243,7 +243,7 @@ def add(program: str,
     return res.data
 
 
-def delete(identifier: int) -> int:
+def delete(identifier: int):
     """
     Delete a data source
 
@@ -254,9 +254,6 @@ def delete(identifier: int) -> int:
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
     :raises aurorax.AuroraXNotFoundException: data source not found
     :raises aurorax.AuroraXConflictException: conflict of some type
-
-    :return: 0 on success
-    :rtype: int
     """
     # do request
     url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
