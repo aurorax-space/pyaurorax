@@ -80,7 +80,7 @@ class Search():
                 "programs": self.programs,
                 "platforms": self.platforms,
                 "instrument_types": self.instrument_types,
-                "data product_metadata_filters": self.metadata_filters,
+                "data_product_metadata_filters": self.metadata_filters,
             },
             "start": self.start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end_dt.strftime("%Y-%m-%dT%H:%M:%S"),
