@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from typing import Union
 
 
@@ -14,6 +14,12 @@ class Location(BaseModel):
     """
     lat: Union[float, None]
     lon: Union[float, None]
+
+    @validator("lon")
+    def both_must_be_none_or_number(cls, v, values):
+        if (v and not values["lat"]) or (values["lat"] and not v):
+            raise ValueError("lat and lon must both be numbers or both be None")
+        return v
 
     def __str__(self) -> str:
         """
