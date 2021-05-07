@@ -1,9 +1,7 @@
 import aurorax
+import os
 
-
-api_key = "ff179c25-962f-4cc8-b77d-bf16768c0991:c2c008f9-c50f-445c-a459-982606e0b1b1"
 aurorax.api.set_base_url("https://api.staging.aurorax.space")
-aurorax.authenticate(api_key)
 
 def test_get_single_source():
     source = aurorax.sources.get("swarm", "swarma", "footprint", format="basic_info")
@@ -44,6 +42,8 @@ def test_list_sources():
 
 
 def test_add_source():
+    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+
     # set values
     identifier = 400
     program = "test-program"
@@ -94,6 +94,8 @@ def test_add_source():
 
 
 def test_update_source():
+    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+
     # set values
     program = "test-program-updated"
     platform = "test-platform-updated"
@@ -137,6 +139,8 @@ def test_update_source():
 
 
 def test_delete_source():
+    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+    
     # set values
     program = "test-program-updated"
     platform = "test-platform-updated"

@@ -1,12 +1,11 @@
-import time
 import aurorax
 import datetime
+import os
+import time
 
 MAX_WAIT_TIME = 30
 
-api_key = "ff179c25-962f-4cc8-b77d-bf16768c0991:c2c008f9-c50f-445c-a459-982606e0b1b1"
 aurorax.api.set_base_url("https://api.staging.aurorax.space")
-aurorax.authenticate(api_key)
 
 def test_create_ephemeris_object():
     # set values
@@ -128,6 +127,8 @@ def test_search_ephemeris_status():
 
 
 def test_upload_ephemeris():
+    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+
     # set values
     program = "test-program"
     platform = "test-platform"
@@ -181,6 +182,8 @@ def test_upload_ephemeris():
 
 
 def test_delete_ephemeris():
+    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+    
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument-type"
