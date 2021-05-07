@@ -1,8 +1,8 @@
+import time
 import aurorax
-from aurorax.ephemeris._ephemeris import Ephemeris
-from aurorax.ephemeris._search import Search
 import datetime
 
+MAX_WAIT_TIME = 30
 
 api_key = "ff179c25-962f-4cc8-b77d-bf16768c0991:c2c008f9-c50f-445c-a459-982606e0b1b1"
 aurorax.api.set_base_url("https://api.staging.aurorax.space")
@@ -21,10 +21,8 @@ def test_create_ephemeris_object():
     metadata = {}
 
     # get identifier
-    data_source = aurorax.sources.get_using_filters(program=program,
-                                                    platform=platform,
-                                                    instrument_type=instrument_type)
-    identifier = data_source[0]["identifier"]
+    data_source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
+    identifier = data_source["identifier"]
 
     # create Ephemeris object
     e = aurorax.ephemeris.Ephemeris(identifier=identifier,
@@ -38,7 +36,7 @@ def test_create_ephemeris_object():
                                     sbtrace=sbtrace,
                                     metadata=metadata)
 
-    assert type(e) is Ephemeris and e.instrument_type == "test-instrument-type"
+    assert type(e) is aurorax.ephemeris.Ephemeris and e.instrument_type == "test-instrument-type"
 
 
 def test_create_ephemeris_search_object():
@@ -48,7 +46,7 @@ def test_create_ephemeris_search_object():
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
 
-    assert type(s) is Search and s.end_dt ==  datetime.datetime(2020, 1, 10, 0, 0, 0)
+    assert type(s) is aurorax.ephemeris.Search and s.end_dt ==  datetime.datetime(2020, 1, 10, 0, 0, 0)
 
 
 def test_search_ephemeris_synchronous():
@@ -68,7 +66,65 @@ def test_search_ephemeris_asynchronous():
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
 
-    assert type(s) is Search
+    s.execute()
+    s.update_status()
+    tries = 0
+    while not s.completed and tries < MAX_WAIT_TIME:
+        time.sleep(1)
+        s.update_status()
+        tries += 1
+
+    if tries == MAX_WAIT_TIME:
+        # search is taking too long to complete
+        assert False
+
+    s.get_data()
+
+    assert len(s.data) > 0 and "data_source" in s.data[0]
+
+
+def test_search_ephemeris_logs():
+    s = aurorax.ephemeris.Search(datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                 datetime.datetime(2019, 1, 1, 0, 59, 59),
+                                 programs=["swarm"],
+                                 platforms=["swarma"],
+                                 instrument_types=["footprint"])
+
+    s.execute()
+    s.update_status()
+    tries = 0
+    while not s.completed and tries < MAX_WAIT_TIME:
+        time.sleep(1)
+        s.update_status()
+        tries += 1
+
+    if tries == MAX_WAIT_TIME:
+        # search is taking too long to complete
+        assert False
+
+    assert len(s.logs) > 0
+
+
+def test_search_ephemeris_status():
+    s = aurorax.ephemeris.Search(datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                 datetime.datetime(2019, 1, 1, 0, 59, 59),
+                                 programs=["swarm"],
+                                 platforms=["swarma"],
+                                 instrument_types=["footprint"])
+
+    s.execute()
+    s.update_status()
+    tries = 0
+    while not s.completed and tries < MAX_WAIT_TIME:
+        time.sleep(1)
+        s.update_status()
+        tries += 1
+
+    if tries == MAX_WAIT_TIME:
+        # search is taking too long to complete
+        assert False
+
+    assert s.completed
 
 
 def test_upload_ephemeris():
@@ -87,10 +143,8 @@ def test_upload_ephemeris():
     sbtrace = aurorax.Location(lat=7.89, lon=101.23)
 
     # get the ephemeris source ID
-    source = aurorax.sources.get_using_filters(program=[program],
-                                               platform=[platform],
-                                               instrument_type=[instrument_type])
-    identifier = source[0]["identifier"]
+    source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
+    identifier = source["identifier"]
 
     # create Ephemeris object
     e = aurorax.ephemeris.Ephemeris(identifier=identifier,
@@ -123,7 +177,6 @@ def test_upload_ephemeris():
     s.check_for_data()
     s.get_data()
     
-
     assert result == 0 and len(s.data) > 0
 
 
@@ -133,7 +186,7 @@ def test_delete_ephemeris():
     instrument_type = "test-instrument-type"
     start_dt = datetime.datetime(2020, 1, 1, 0, 0)
     end_dt = datetime.datetime(2020, 1, 10, 0, 0, 0)
-    source = aurorax.sources.get_using_filters(program=program, platform=platform, instrument_type=instrument_type, format="identifier_only")
+    source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
 
     if len(source) != 1:
         assert False
@@ -158,7 +211,7 @@ def test_delete_ephemeris():
         "start": start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
         "end": end_dt.strftime("%Y-%m-%dT%H:%M:%S")
     }
-    delete_req = aurorax.AuroraXRequest(method="delete", url=aurorax.api.urls.ephemeris_upload_url.format(source[0]["identifier"]), body=params)
+    delete_req = aurorax.AuroraXRequest(method="delete", url=aurorax.api.urls.ephemeris_upload_url.format(source["identifier"]), body=params)
 
     try:
         delete_req.execute()
