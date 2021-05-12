@@ -151,7 +151,7 @@ def test_upload_data_product():
     records.append(e)
 
     # upload record
-    result = aurorax.data_products.upload(identifier, records=records)
+    result = aurorax.data_products.upload(identifier, records=records, validate_source=True)
 
     s = aurorax.data_products.Search(datetime.datetime(2020, 1, 2, 0, 0, 0),
                                      datetime.datetime(2020, 1, 2, 23, 59, 59),

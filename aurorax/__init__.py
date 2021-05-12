@@ -9,7 +9,6 @@ from .api import get_api_key
 from .exceptions import AuroraXException
 from .exceptions import AuroraXNotFoundException
 from .exceptions import AuroraXMaxRetriesException
-from .exceptions import AuroraXDatabaseException
 from .exceptions import AuroraXDuplicateException
 from .exceptions import AuroraXUnexpectedContentTypeException
 from .exceptions import AuroraXValidationException

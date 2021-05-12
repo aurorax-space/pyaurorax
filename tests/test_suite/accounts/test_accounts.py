@@ -13,12 +13,3 @@ def test_get_all_accounts():
     res = req.execute()
     
     assert type(res.data) is list and len(res.data) > 0
-
-
-def test_bad_api_key():
-    with pytest.raises(AuroraXUnauthorizedException):
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING")[:-1])
-
-        req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.base_url + ACCOUNTS_URL)
-            
-        res = req.execute()

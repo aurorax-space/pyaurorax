@@ -55,7 +55,7 @@ def test_search_ephemeris_synchronous():
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
 
-    assert len(s.data) > 0 and "data_source" in s.data[0]
+    assert type(s.data) is list and "data_source" in s.data[0]
 
 
 def test_search_ephemeris_asynchronous():
@@ -79,7 +79,7 @@ def test_search_ephemeris_asynchronous():
 
     s.get_data()
 
-    assert len(s.data) > 0 and "data_source" in s.data[0]
+    assert type(s.data) is list and "data_source" in s.data[0]
 
 
 def test_search_ephemeris_logs():
@@ -164,7 +164,7 @@ def test_upload_ephemeris():
     records.append(e)
 
     # upload record
-    result = aurorax.ephemeris.upload(identifier, records=records)
+    result = aurorax.ephemeris.upload(identifier, validate_source=True, records=records)
 
     # retrieve uploaded record
     s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),

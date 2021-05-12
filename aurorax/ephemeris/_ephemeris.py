@@ -2,7 +2,7 @@ import datetime
 import pprint
 import aurorax
 from pydantic import BaseModel
-from typing import Dict, List
+from typing import Dict, List, Optional
 from aurorax import Location
 
 
@@ -99,8 +99,23 @@ class Ephemeris(BaseModel):
         """
         return pprint.pformat(self.__dict__)
 
+def __validate_data_source(records: List["Ephemeris"]) -> Optional[Ephemeris]:
+        # get all current sources
+        sources = {source["identifier"]: source for source in aurorax.sources.list()}
 
-def upload(identifier: int, records: List["Ephemeris"]) -> int:
+        for record in records:
+            # check the identifier, program name, platform name, and instrument type
+            try:
+                reference = sources[record.identifier]
+            except KeyError:
+                raise aurorax.AuroraXValidationException("Data source with unique identifier {} could not be found.".format(record.identifier))
+
+            if not (record.program == reference["program"] and record.platform == reference["platform"] and record.instrument_type == reference["instrument_type"]):
+                return record
+
+        return None
+
+def upload(identifier: int, records: List["Ephemeris"], validate_source: bool = False) -> int:
     """
     Upload ephemeris records to AuroraX
 
@@ -108,14 +123,23 @@ def upload(identifier: int, records: List["Ephemeris"]) -> int:
     :type identifier: int
     :param records: Ephemeris records to upload
     :type records: List[Ephemeris]
+    :param validate_source: Set to True to validate all records before uploading. This will 
+    :type validate_source: bool, optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected content error
     :raises aurorax.AuroraXUploadException: upload error
+    :raises aurorax.AuroraXValidationException: data source validation error
 
     :return: 0 for success, raises exception on error
     :rtype: int
     """
+    # validate record sources if the flag is set
+    if validate_source:
+        validation_error = __validate_data_source(records)
+        if validation_error:
+            raise aurorax.AuroraXValidationException("Unable to validate data source found in record: {}".format(validation_error))
+    
     # translate each ephemeris record to a request-friendly dict (ie. convert datetimes to strings, etc.)
     for i, _ in enumerate(records):
         if (type(records[i]) is Ephemeris):

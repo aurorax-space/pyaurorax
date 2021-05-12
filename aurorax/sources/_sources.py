@@ -2,7 +2,7 @@ import aurorax
 from typing import List, Dict, Optional
 
 
-def list(order: Optional[str] = "identifier") -> List:
+def list(order: Optional[str] = "identifier", format: Optional[str] = "basic_info") -> List:
     """
     Retrieve all data source records
 
@@ -16,8 +16,11 @@ def list(order: Optional[str] = "identifier") -> List:
     :return: all data sources
     :rtype: List
     """
+    params = {
+        format: format
+    }
     # make request
-    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.data_sources_url)
+    req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.data_sources_url, params=params if format else None)
     res = req.execute()
 
     # order results
@@ -45,6 +48,7 @@ def get(program: str,
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+    :raises aurorax.AuroraXNotFoundException: source not found
 
     :return: data source
     :rtype: Dict
@@ -63,7 +67,7 @@ def get(program: str,
     if (len(res.data) == 1):
         res.data = res.data[0]
     else:
-        res.data = {}
+        raise aurorax.AuroraXNotFoundException("data source not found")
 
     # return
     return res.data
@@ -264,7 +268,9 @@ def delete(identifier: int) -> int:
     res = req.execute()
 
     # evaluate response
-    if (res.status_code == 404):
+    if (res.status_code == 400):
+        raise aurorax.AuroraXBadParametersException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+    elif (res.status_code == 404):
         raise aurorax.AuroraXNotFoundException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 409):
         raise aurorax.AuroraXConflictException("%s - %s" % (res.data["error_code"], res.data["error_message"]))

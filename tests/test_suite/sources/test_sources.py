@@ -99,7 +99,7 @@ def test_update_source():
     # set values
     program = "test-program-updated"
     platform = "test-platform-updated"
-    instrument_type = "test-instrument-type-updated"
+    instrument_type = "test-instrument-updated"
     source_type = "leo"
     display_name = "Test Instrument Updated"
     metadata_schema_ephemeris = [
@@ -144,18 +144,14 @@ def test_delete_source():
     # set values
     program = "test-program-updated"
     platform = "test-platform-updated"
-    instrument_type = "test-instrument-type-updated"
+    instrument_type = "test-instrument-updated"
 
     # get source record to pull out the identifier
     sources = aurorax.sources.get_using_filters(program=program,
                                                 platform=platform,
                                                 instrument_type=instrument_type)
     if (len(sources) == 0):
-        sources = aurorax.sources.get_using_filters(program=program,
-                                                    platform=platform,
-                                                    instrument_type="test-instrument-type-updated")
-        if (len(sources) == 0):
-            assert False
+        assert False
     identifier = sources[0]["identifier"]
 
     # remove source
