@@ -116,10 +116,6 @@ def test_AuroraXValidationException_data_product():
         aurorax.data_products.upload(identifier, records=records, validate_source=True)
 
 
-# def test_AuroraXBadParametersException():
-#     assert False
-
-
 def test_AuroraXUnauthorizedException():
     with pytest.raises(AuroraXUnauthorizedException):
         aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING")[:-1])
@@ -152,11 +148,10 @@ def test_AuroraXConflictException():
         source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
         identifier = source["identifier"]
 
-        # create Ephemeris object
         e = aurorax.ephemeris.Ephemeris(identifier=identifier,
-                                        program=program,
-                                        platform=platform,
-                                        instrument_type=instrument_type,
+                                        program=program, 
+                                        platform=platform, 
+                                        instrument_type=instrument_type, 
                                         epoch=epoch,
                                         location_geo=location_geo,
                                         location_gsm=location_gsm,
@@ -165,56 +160,11 @@ def test_AuroraXConflictException():
                                         metadata=metadata)
 
         # set records array
-        records = []
-        records.append(e)
+        records = [e]
 
         # upload record
         aurorax.ephemeris.upload(identifier, records=records)
-        time.sleep(2)
+        time.sleep(10)
 
         # try deleting the test instrument
         aurorax.sources.delete(identifier)
-
-
-# not sure how to test this because the API only returns 202
-# def test_AuroraXUploadException():
-#     # this is raised for status code 400 which also includes duplicate records
-#     with pytest.raises(AuroraXUploadException):
-#         aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
-#         # set values
-#         program = "test-program"
-#         platform = "test-platform"
-#         instrument_type = "test-instrument-type"
-#         metadata = {
-#             "test_meta1": "testing1",
-#             "test_meta2": "testing2",
-#         }
-#         epoch = datetime.datetime(2020, 1, 1, 0, 4)
-#         location_geo = aurorax.Location(lat=51.049999, lon=-114.066666)
-#         location_gsm = aurorax.Location(lat=150.25, lon=-10.75)
-#         nbtrace = aurorax.Location(lat=1.23, lon=45.6)
-#         sbtrace = aurorax.Location(lat=7.89, lon=101.23)
-
-#         # get the ephemeris source ID
-#         source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
-#         identifier = source["identifier"]
-    
-#         # create Ephemeris object
-#         e = aurorax.ephemeris.Ephemeris(identifier=15000,
-#                                         program="wrong-program", 
-#                                         platform="wrong-platform", 
-#                                         instrument_type=instrument_type, 
-#                                         epoch=epoch,
-#                                         location_geo=location_geo,
-#                                         location_gsm=location_gsm,
-#                                         nbtrace=nbtrace,
-#                                         sbtrace=sbtrace,
-#                                         metadata=metadata)
-
-#         # set records array
-#         records = []
-#         records.append(e)
-
-#         # upload record
-#         aurorax.ephemeris.upload(identifier, records=records)

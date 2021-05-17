@@ -235,4 +235,3 @@ def test_delete_ephemeris():
                                  instrument_types=[instrument_type])
 
     assert len(s.data) == 0
-
