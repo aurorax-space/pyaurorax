@@ -147,3 +147,49 @@ def upload(identifier: int, records: List["DataProduct"], validate_source: bool 
 
     # return
     return 0
+
+
+def delete(identifier: int, program: str, platform: str, instrument_type: str, urls: List[str]) -> int:
+    """
+    Delete a range of data product records. This method is asynchronous.
+
+    :param identifier: data source identifier
+    :type identifier: int
+    :param program: program name
+    :type program: str
+    :param platform: platform name
+    :type platform: str
+    :param instrument_type: instrument type
+    :type instrument_type: str
+    :param urls: URLs of data products to delete
+    :type urls: List[str]
+
+    :raises aurorax.AuroraXMaxRetriesException: max retry error
+    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+    :raises aurorax.AuroraXBadParametersException: invalid or missing parameters
+    :raises aurorax.AuroraXNotFoundException: source not found
+    :raises aurorax.AuroraXUnauthorizedException: invalid API key for this operation
+
+    :return: 0 on success
+    :rtype: int
+    """
+    # do request
+    url = aurorax.api.urls.data_products_upload_url.format(identifier)
+    params = {
+        "program": program,
+        "platform": platform,
+        "instrument_type": instrument_type,
+        "urls": urls
+    }
+    delete_req = aurorax.AuroraXRequest(method="delete", url=url, body=params, null_response=True)
+    res = delete_req.execute()
+
+    # evaluate response
+    if (res.status_code == 400):
+        raise aurorax.AuroraXBadParametersException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+    elif (res.status_code == 404):
+        raise aurorax.AuroraXNotFoundException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+
+    # return
+    return 0
+    

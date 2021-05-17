@@ -50,7 +50,7 @@ def test_search_data_products_synchronous():
                                      programs=["auroramax"],
                                      verbose=True)
 
-    assert len(s.data) > 0 and "data_source" in s.data[0]
+    assert type(s.data) is list and "data_source" in s.data[0]
 
 
 def test_search_data_products_asynchronous():
@@ -115,7 +115,7 @@ def test_search_data_products_status():
     assert s.completed
 
 
-def test_upload_data_product():
+def test_upload_data_products():
     aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
 
     # set values
@@ -128,7 +128,7 @@ def test_upload_data_product():
         "test_meta2": "testing2",
     }
     data_product_type = "keogram"
-    start_dt = datetime.datetime(2020, 1, 2, 0, 0, 0)
+    start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end_dt = start_dt.replace(hour=23, minute=59, second=59)
 
     # get the data source ID
@@ -136,7 +136,7 @@ def test_upload_data_product():
     identifier = ds["identifier"]
 
     # create DataProducts object
-    e = aurorax.data_products.DataProduct(identifier=identifier,
+    dp = aurorax.data_products.DataProduct(identifier=identifier,
                                           program=program,
                                           platform=platform,
                                           instrument_type=instrument_type,
@@ -146,9 +146,21 @@ def test_upload_data_product():
                                           end=end_dt,
                                           metadata=metadata)
 
+    start_dt2 = datetime.datetime(2020, 1, 2, 0, 0, 0)
+    end_dt2 = start_dt2.replace(hour=23, minute=59, second=59)
+    url2 = "test2.jpg"
+    dp2 = aurorax.data_products.DataProduct(identifier=identifier,
+                                          program=program,
+                                          platform=platform,
+                                          instrument_type=instrument_type,
+                                          data_product_type=data_product_type,
+                                          url=url2,
+                                          start=start_dt2,
+                                          end=end_dt2,
+                                          metadata=metadata)
+
     # set records array
-    records = []
-    records.append(e)
+    records = [dp, dp2]
 
     # upload record
     result = aurorax.data_products.upload(identifier, records=records, validate_source=True)
@@ -196,20 +208,9 @@ def test_delete_data_products():
     for dp in s.data:
         urls.append(dp["url"])
 
-    params = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "urls": urls
-    }
+    aurorax.data_products.delete(source["identifier"], program, platform, instrument_type, urls)
 
-    delete_req = aurorax.AuroraXRequest(method="delete", url=aurorax.api.urls.data_products_upload_url.format(source["identifier"]), body=params)
-
-    try:
-        delete_req.execute()
-    except KeyError as err:
-        # this is here because the API does not return a "Content-Type" header
-        pass
+    time.sleep(5)
 
     # search data products again to see if they were deleted
     s = aurorax.data_products.search(start_dt,

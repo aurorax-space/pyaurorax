@@ -137,7 +137,7 @@ def test_upload_ephemeris():
         "test_meta1": "testing1",
         "test_meta2": "testing2",
     }
-    epoch = datetime.datetime(2020, 1, 1, 1, 2)
+    epoch = datetime.datetime(2020, 1, 1, 0, 0)
     location_geo = aurorax.Location(lat=51.049999, lon=-114.066666)
     location_gsm = aurorax.Location(lat=150.25, lon=-10.75)
     nbtrace = aurorax.Location(lat=1.23, lon=45.6)
@@ -159,16 +159,27 @@ def test_upload_ephemeris():
                                     sbtrace=sbtrace,
                                     metadata=metadata)
 
+    epoch2 = datetime.datetime(2020, 1, 1, 0, 1)
+    e2 = aurorax.ephemeris.Ephemeris(identifier=identifier,
+                                    program=program,
+                                    platform=platform,
+                                    instrument_type=instrument_type,
+                                    epoch=epoch2,
+                                    location_geo=location_geo,
+                                    location_gsm=location_gsm,
+                                    nbtrace=nbtrace,
+                                    sbtrace=sbtrace,
+                                    metadata=metadata)
+
     # set records array
-    records = []
-    records.append(e)
+    records = [e, e2]
 
     # upload record
     result = aurorax.ephemeris.upload(identifier, validate_source=True, records=records)
 
     # retrieve uploaded record
     s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2020, 1, 5, 0, 0, 0),
+                                 datetime.datetime(2020, 1, 1, 23, 59, 59),
                                  programs=["test-program"],
                                  platforms=["test-platform"],
                                  instrument_types=["test-instrument-type"])
@@ -188,7 +199,7 @@ def test_delete_ephemeris():
     platform = "test-platform"
     instrument_type = "test-instrument-type"
     start_dt = datetime.datetime(2020, 1, 1, 0, 0)
-    end_dt = datetime.datetime(2020, 1, 10, 0, 0, 0)
+    end_dt = datetime.datetime(2020, 1, 1, 0, 4)
     source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
 
     if len(source) != 1:
@@ -207,20 +218,14 @@ def test_delete_ephemeris():
     else:
         print(f"{len(s.data)} records found to be deleted")
 
-    params = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "start": start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
-        "end": end_dt.strftime("%Y-%m-%dT%H:%M:%S")
-    }
-    delete_req = aurorax.AuroraXRequest(method="delete", url=aurorax.api.urls.ephemeris_upload_url.format(source["identifier"]), body=params)
+    aurorax.ephemeris.delete(source["identifier"], 
+                                program, 
+                                platform, 
+                                instrument_type, 
+                                start_dt, 
+                                end_dt)
 
-    try:
-        delete_req.execute()
-    except KeyError as err:
-        # this is here because the API does not return a "Content-Type" header
-        pass
+    time.sleep(5)
 
     # search ephemeris again to see if they were deleted
     s = aurorax.ephemeris.search(start_dt,
