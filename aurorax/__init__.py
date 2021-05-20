@@ -28,5 +28,6 @@ from aurorax import metadata
 from aurorax import availability
 from aurorax import ephemeris
 from aurorax import data_products
+from aurorax import conjunctions
 from aurorax import requests
 from aurorax import util

@@ -46,9 +46,9 @@ def test_add_source():
 
     # set values
     identifier = 400
-    program = "test-program"
-    platform = "test-platform"
-    instrument_type = "test-instrument"
+    program = "test-program-new"
+    platform = "test-platform-new"
+    instrument_type = "test-instrument-new"
     source_type = "ground"
     display_name = "Test Instrument"
     metadata_schema_ephemeris = [
@@ -120,7 +120,7 @@ def test_update_source():
     ]
 
     # get the identifier
-    ds = aurorax.sources.get("test-program", "test-platform", "test-instrument")
+    ds = aurorax.sources.get("test-program-new", "test-platform-new", "test-instrument-new")
     if (ds == {}):
         print("Could not find test-instrument, make sure you've added it already")
         return 1
