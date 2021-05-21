@@ -4,7 +4,7 @@ import humanize
 import aurorax
 from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
 import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 DEFAULT_CONJUNCTION_DISTANCE = 300
 
@@ -15,11 +15,27 @@ class Search():
 
     def __init__(self, start: datetime.datetime, end: datetime.datetime, 
                 ground: List[Dict], space: List[str], conjunction_types: List[str] = ["nbtrace"],
-                max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE):
+                max_distances: Dict[str, float] = None, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE):
         """
         Create a new conjunction Search object
 
-        
+        :param start: start timestamp
+        :type start: datetime.datetime
+        :param end: end timestamp
+        :type end: datetime.datetime
+        :param ground: List of ground instrument search parameters
+        :type ground: List[Dict]
+        :param space: List of one or more space instrument search parameters
+        :type space: List[Dict]
+        :param conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        :type conjunction_types: List[str], optional
+        :param max_distances: dictionary of ground-space and space-space maximum distances for conjunctions. default_distance will be used for any ground-space and space-space maximum distances not specified.
+        :type max_distances: Dict[str, float], optional
+        :param default_distance: default maximum distance in kilometers for conjunction. Used when max distance is not specified for any ground-space and space-space instrument pairs.
+        :type default_distance: float, optional
+
+        :return: Search object
+        :rtype: Search
         """
         self.request = None
         self.request_id = ""
@@ -37,9 +53,8 @@ class Search():
         self.ground = ground
         self.space = space
         self.conjunction_types = conjunction_types
-        self.max_distances = max_distances
+        self.max_distances = max_distances if max_distances else {}
         self.default_distance = default_distance
-        
 
     def __str__(self):
         """
@@ -68,14 +83,12 @@ class Search():
             for s in range(1, space_sources_len+1):
                 if f"ground{g}-space{s}" not in self.max_distances and f"space{s}-ground{g}" not in self.max_distances:
                     self.max_distances[f"ground{g}-space{s}"] = self.default_distance
-                    print(f"Setting ground{g}-space{s}")
 
         # check for space-space distances
         for s in range(1, space_sources_len+1):
             for s2 in range(s+1, space_sources_len+1):
                 if s != s2 and f"space{s}-space{s2}" not in self.max_distances and f"space{s2}-space{s}" not in self.max_distances:
                     self.max_distances[f"space{s}-space{s2}"] = self.default_distance
-                    print(f"Setting space{s}-space{s2}")
 
     def execute(self):
         """
@@ -164,7 +177,7 @@ def search_async(start: datetime.datetime, end: datetime.datetime,
     :type start: datetime.datetime
     :param end: end timestamp
     :type end: datetime.datetime
-    :param ground: List of one or more ground instrument search parameters
+    :param ground: List of ground instrument search parameters
     :type ground: List[Dict]
     :param space: List of one or more space instrument search parameters
     :type space: List[Dict]
@@ -178,9 +191,9 @@ def search_async(start: datetime.datetime, end: datetime.datetime,
     :return: Search object
     :rtype: Search
     """
-    s = aurorax.conjunctions.Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types, max_distances=max_distances, default_distance=default_distance)
-
+    s = Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types, max_distances=max_distances, default_distance=default_distance)
     s.execute()
+
     return s
 
 def search(start: datetime.datetime, end: datetime.datetime, 
@@ -194,7 +207,7 @@ def search(start: datetime.datetime, end: datetime.datetime,
     :type start: datetime.datetime
     :param end: end timestamp
     :type end: datetime.datetime
-    :param ground: List of one or more ground instrument search parameters
+    :param ground: List of ground instrument search parameters
     :type ground: List[Dict]
     :param space: List of one or more space instrument search parameters
     :type space: List[Dict]

@@ -1,6 +1,7 @@
 import aurorax
 import datetime
 
+aurorax.api.set_base_url("https://api.staging.aurorax.space")
 
 def test_search_conjunctions_asynchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -14,7 +15,6 @@ def test_search_conjunctions_asynchronous():
     distance = 100
 
     s = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
-    s.execute()
     s.wait()
     s.get_data()
 
@@ -40,21 +40,132 @@ def test_search_multi_conjunctions_synchronous():
     s = aurorax.conjunctions.search(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance, verbose=True)
 
     assert type(s.data) is list and len(s.data) > 0
+    return
 
 def test_create_conjunction_object():
-    assert False
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 6, 59, 59)
+    ground_params = [{
+        "programs": ["themis-asi"]
+    }]
+    space_params = [{
+        "programs": ["swarm"]
+    }]
+    distance = 200
+
+    c = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
+    c.wait()
+    c.get_data()
+    if len(c.data) == 0:
+        assert False
+
+    try:
+        c_obj = aurorax.conjunctions.Conjunction(**c.data[0])
+    except:
+        assert False
+
+    assert type(c_obj) is aurorax.conjunctions.Conjunction
 
 def test_search_conjunctions_with_metadata_filters():
-    assert False
+    start = datetime.datetime(2019, 2, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 2, 2, 23, 59, 59)
+    ground_params = [{
+        "programs": ["themis-asi"],
+        "ephemeris_metadata_filters": [
+            {
+                "key": "ml_cloud_v1",
+                "operator": "=",
+                "values": [
+                    "not classified as cloud"
+                ]
+            }
+        ]
+    }]
+    space_params = [{
+        "programs": ["swarm"],
+        "ephemeris_metadata_filters": [
+            {
+                "key": "nbtrace_region",
+                "operator": "=",
+                "values": [
+                    "north polar cap"
+                ]
+            }
+        ]
+    }]
 
-def test_search_conjunctions_with_hemispheres():
-    assert False
+    s = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params, space=space_params, default_distance=300)
+    s.wait()
+    s.get_data()
+
+    assert len(s.data) > 0
+
+def test_search_conjunctions_space_only_with_hemispheres():
+    start = datetime.datetime(2019, 2, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 2, 1, 23, 59, 59)
+    space_params = [
+        {
+            "programs": ["swarm"],
+            "hemisphere": ["southern"]
+        },
+        {
+            "programs": ["themis"],
+            "hemisphere": ["northern"]
+        }
+    ]
+
+    s = aurorax.conjunctions.search_async(start=start, end=end, ground=[], space=space_params)
+    s.wait()
+    s.get_data()
+
+    assert len(s.data) > 0
 
 def test_search_conjunctions_with_max_distances():
-    assert False
+    start = datetime.datetime(2019, 2, 5, 0, 0, 0)
+    end = datetime.datetime(2019, 2, 5, 23, 59, 59)
+    ground_params = [
+        {
+            "programs": ["themis-asi"]
+        }
+    ]
+    space_params = [
+        {
+            "programs": ["swarm"]
+        },
+        {
+            "programs": ["themis"]
+        }
+    ]
+    distances = {
+        "ground1-space1": 200,
+        "space1-space2": 500
+    }
 
-def test_search_conjunctions_space_only():
-    assert False
+    s = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params, space=space_params, max_distances=distances)
+    s.wait()
+    s.get_data()
+
+    query_distance_keys = s.query["max_distances"].keys()
+    distances_set = ["ground1-space1", "ground1-space2", "space1-space2"]
+    g1s1_distance_set = s.query["max_distances"]["ground1-space1"] == distances["ground1-space1"]
+    s1s2_distance_set = s.query["max_distances"]["space1-space2"] == distances["space1-space2"]
+
+    assert all(x in query_distance_keys for x in distances_set) and g1s1_distance_set and s1s2_distance_set and len(s.data) > 0
 
 def test_search_conjunctions_with_conjunction_types():
-    assert False
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 23, 59, 59)
+    ground_params = [{
+        "programs": ["themis-asi"]
+    }]
+    space_params = [{
+        "programs": ["swarm"]
+    }]
+    conjunction_type = ["sbtrace"]
+    distance = 100
+
+    s = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance, conjunction_types=conjunction_type)
+    s.wait()
+    s.get_data()
+
+    assert type(s.data) is list and len(s.data) > 0 and s.data[0]["conjunction_type"] == "sbtrace"
