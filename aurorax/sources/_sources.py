@@ -1,5 +1,40 @@
 import aurorax
+import pprint
+from pydantic import BaseModel, validator
 from typing import List, Dict, Optional
+
+class DataSource(BaseModel):
+    """
+    Data source data type
+
+    """
+    identifier: int
+    program: str
+    platform: str
+    instrument_type: str
+    source_type: Optional[str]
+    display_name: Optional[str]
+    ephemeris_metadata_schema: Optional[List]
+    data_product_metadata_schema: Optional[List]
+
+
+    def __str__(self) -> str:
+        """
+        String method
+
+        :return: string format
+        :rtype: str
+        """
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        """
+        Object representation
+
+        :return: object representation
+        :rtype: str
+        """
+        return pprint.pformat(self.__dict__)
 
 
 def list(order: Optional[str] = "identifier", format: Optional[str] = "basic_info") -> List:

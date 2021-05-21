@@ -2,6 +2,7 @@ import pprint
 
 import humanize
 import aurorax
+from aurorax.conjunctions import Conjunction
 from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
 import datetime
 from typing import Dict, List
@@ -45,7 +46,7 @@ class Search():
         self.data_url = ""
         self.query = {}
         self.status = {}
-        self.data = []
+        self.data: List[Conjunction] = []
         self.logs = []
 
         self.start = start
@@ -153,7 +154,8 @@ class Search():
             return
 
         url = self.data_url
-        self.data = aurorax.requests.get_data(url)
+        raw_data = aurorax.requests.get_data(url)
+        self.data = [Conjunction(**c) for c in raw_data]
 
     def wait(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """

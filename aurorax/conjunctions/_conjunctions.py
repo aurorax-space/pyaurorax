@@ -1,9 +1,10 @@
 import pprint
 from pydantic.class_validators import validator
 import aurorax
+from aurorax.sources import DataSource
 import datetime
 from pydantic import BaseModel
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 
 class Conjunction(BaseModel):
@@ -34,7 +35,7 @@ class Conjunction(BaseModel):
     conjunction_type: str
     start: datetime.datetime 
     end: datetime.datetime
-    data_sources: List[Dict] #TODO: change this to DataSource type
+    data_sources: List[DataSource]
     min_distance: float
     max_distance: float
     events: List[Dict]

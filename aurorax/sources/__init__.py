@@ -1,3 +1,4 @@
+from ._sources import DataSource
 from ._sources import list
 from ._sources import get
 from ._sources import get_using_filters

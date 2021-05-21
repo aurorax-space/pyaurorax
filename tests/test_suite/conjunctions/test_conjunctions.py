@@ -1,3 +1,4 @@
+from aurorax.conjunctions import Conjunction
 import aurorax
 import datetime
 
@@ -15,10 +16,11 @@ def test_search_conjunctions_asynchronous():
     distance = 100
 
     s = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
+    
     s.wait()
     s.get_data()
 
-    assert type(s.data) is list and len(s.data) > 0
+    assert len(s.data) > 0
 
 def test_search_multi_conjunctions_synchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -39,8 +41,7 @@ def test_search_multi_conjunctions_synchronous():
 
     s = aurorax.conjunctions.search(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance, verbose=True)
 
-    assert type(s.data) is list and len(s.data) > 0
-    return
+    assert len(s.data) > 0
 
 def test_create_conjunction_object():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -59,12 +60,7 @@ def test_create_conjunction_object():
     if len(c.data) == 0:
         assert False
 
-    try:
-        c_obj = aurorax.conjunctions.Conjunction(**c.data[0])
-    except:
-        assert False
-
-    assert type(c_obj) is aurorax.conjunctions.Conjunction
+    assert type(c.data[0]) is aurorax.conjunctions.Conjunction
 
 def test_search_conjunctions_with_metadata_filters():
     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
@@ -168,4 +164,4 @@ def test_search_conjunctions_with_conjunction_types():
     s.wait()
     s.get_data()
 
-    assert type(s.data) is list and len(s.data) > 0 and s.data[0]["conjunction_type"] == "sbtrace"
+    assert len(s.data) > 0 and s.data[0].conjunction_type == "sbtrace"
