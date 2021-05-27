@@ -1,21 +1,24 @@
 import aurorax
 import pprint
-from pydantic import BaseModel, validator
-from typing import List, Dict, Optional
+from pydantic import BaseModel
+from typing import List, Dict
 
 class DataSource(BaseModel):
     """
     Data source data type
 
     """
-    identifier: int
+    identifier: int = None
     program: str
     platform: str
     instrument_type: str
-    source_type: Optional[str]
-    display_name: Optional[str]
-    ephemeris_metadata_schema: Optional[List]
-    data_product_metadata_schema: Optional[List]
+    source_type: str = None
+    display_name: str = None
+    metadata: str = None
+    owner: str = None
+    maintainers: List[str] = []
+    ephemeris_metadata_schema: List[Dict] = []
+    data_product_metadata_schema: List[Dict] = []
 
 
     def __str__(self) -> str:
@@ -36,20 +39,21 @@ class DataSource(BaseModel):
         """
         return pprint.pformat(self.__dict__)
 
-
-def list(order: Optional[str] = "identifier", format: Optional[str] = "basic_info") -> List:
+def list(order: str = "identifier", format: str = "basic_info") -> List[DataSource]:
     """
     Retrieve all data source records
 
     :param order: value to order results by (identifier, program, platform,
                   instrument_type, display_name, owner), defaults to "identifier"
-    :type format: Optional[str], optional
+    :type order: str, optional
+    :param format: record format, defaults to "basic_info"
+    :type format: str, optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
 
     :return: all data sources
-    :rtype: List
+    :rtype: List[aurorax.sources.DataSource]
     """
     params = {
         format: format
@@ -62,13 +66,12 @@ def list(order: Optional[str] = "identifier", format: Optional[str] = "basic_inf
     res.data = sorted(res.data, key=lambda x: x[order])
 
     # return
-    return res.data
-
+    return [DataSource(**source) for source in res.data]
 
 def get(program: str,
         platform: str,
         instrument_type: str,
-        format: Optional[str] = "basic_info") -> Dict:
+        format: str = "basic_info") -> DataSource:
     """
     Retrieve a specific data source record
 
@@ -79,14 +82,14 @@ def get(program: str,
     :param instrument_type: program
     :type instrument_type: str
     :param format: record format, defaults to "basic_info"
-    :type format: Optional[str], optional
+    :type format: str, optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
     :raises aurorax.AuroraXNotFoundException: source not found
 
     :return: data source
-    :rtype: Dict
+    :rtype: aurorax.sources.DataSource
     """
     # make request
     params = {
@@ -101,44 +104,42 @@ def get(program: str,
     # set results to the first thing
     if (len(res.data) == 1):
         res.data = res.data[0]
+        return DataSource(**res.data)
     else:
         raise aurorax.AuroraXNotFoundException("data source not found")
 
-    # return
-    return res.data
 
-
-def get_using_filters(program: Optional[str] = None,
-                      platform: Optional[str] = None,
-                      instrument_type: Optional[str] = None,
-                      source_type: Optional[str] = None,
-                      owner: Optional[str] = None,
-                      format: Optional[str] = "basic_info",
-                      order: Optional[str] = "identifier",) -> List:
+def get_using_filters(program: str = None,
+                      platform: str = None,
+                      instrument_type: str = None,
+                      source_type: str = None,
+                      owner: str = None,
+                      format: str = "basic_info",
+                      order: str = "identifier",) -> List[DataSource]:
     """
     Retrieve all data source records matching a filter
 
     :param program: program, defaults to None
-    :type program: Optional[str], optional
+    :type program: str, optional
     :param platform: program, defaults to None
-    :type platform: Optional[str], optional
+    :type platform: str, optional
     :param instrument_type: program, defaults to None
-    :type instrument_type: Optional[str], optional
+    :type instrument_type: str, optional
     :param source_type: program, defaults to None
-    :type source_type: Optional[str], optional
+    :type source_type: str, optional
     :param owner: program, defaults to None
-    :type owner: Optional[str], optional
+    :type owner: str, optional
     :param format: record format, defaults to "basic_info"
-    :type format: Optional[str], optional
+    :type format: str, optional
     :param order: value to order results by (identifier, program, platform,
                   instrument_type, display_name, owner), defaults to "identifier"
-    :type order: Optional[str], optional
+    :type order: str, optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
 
     :return: matching data sources
-    :rtype: List
+    :rtype: List[aurorax.sources.DataSource]
     """
     # make request
     params = {
@@ -156,23 +157,26 @@ def get_using_filters(program: Optional[str] = None,
     res.data = sorted(res.data, key=lambda x: x[order])
 
     # return
-    return res.data
+    try:
+        return [DataSource(**ds) for ds in res.data]
+    except:
+        return []
 
 
-def get_using_identifier(identifier: int, format: Optional[str] = "basic_info") -> Dict:
+def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSource:
     """
-    Retrieve all data source records matching a filter
+    Retrieve data source records matching an identifier
 
     :param identifier: data source identifier
     :type identifier: int
     :param format: record format, defaults to "basic_info"
-    :type format: Optional[str], optional
+    :type format: str, optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
 
-    :return: matching data sources
-    :rtype: List
+    :return: matching data source
+    :rtype: aurorax.sources.DataSource
     """
     # make request
     params = {
@@ -183,21 +187,24 @@ def get_using_identifier(identifier: int, format: Optional[str] = "basic_info") 
     res = req.execute()
 
     # return
-    return res.data
+    try:
+        return DataSource(**res.data)
+    except:
+        raise aurorax.AuroraXNotFoundException("Data source not found. Check that the identifier is correct.")
 
 
 def get_stats(identifier: int,
-              format: Optional[str] = "basic_info",
-              slow: Optional[bool] = False) -> Dict:
+              format: str = "basic_info",
+              slow: bool = False) -> Dict:
     """
     Retrieve statistics for a data source
 
     :param identifier: data source identifier
     :type identifier: int
     :param format: record format, defaults to "basic_info"
-    :type format: Optional[str], optional
+    :type format: str, optional
     :param slow: use slow method which gets most up-to-date stats info, defaults to "False"
-    :type slow: Optional[bool], optional
+    :type slow: bool, optional
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
@@ -218,59 +225,35 @@ def get_stats(identifier: int,
     return res.data
 
 
-def add(program: str,
-        platform: str,
-        instrument_type: str,
-        source_type: str,
-        display_name: str,
-        ephemeris_metadata_schema: List[Dict] = [],
-        data_product_metadata_schema: List[Dict] = [],
-        maintainers: List = [],
-        identifier: int = None) -> Dict:
+def add(data_source: DataSource) -> DataSource:
     """
     Add new data source to AuroraX
 
-    :param program: program name
-    :type program: str
-    :param platform: platform name
-    :type platform: str
-    :param instrument_type: instrument type
-    :type instrument_type: str
-    :param source_type: source type (heo, leo, lunar, ground)
-    :type source_type: str
-    :param display_name: a more user-friendly display name
-    :type display_name: str
-    :param ephemeris_metadata_schema: metadata schema, defaults to []
-    :type ephemeris_metadata_schema: List[Dict], optional
-    :param data_product_metadata_schema: metadata schema, defaults to []
-    :type data_product_metadata_schema: List[Dict], optional
-    :param maintainers: list of users to give maintainer permissions to, defaults to []
-    :type maintainers: List, optional
-    :param identifier: data source ID, defaults to None
-    :type identifier: int, optional
-    :return: the created data source record details
-    :rtype: Dict
+    :param data_source: DataSource object to add
+    :type data_source: aurorax.sources.DataSource
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
     :raises aurorax.AuroraXDuplicateException: duplicate data source, already exists
 
     :return: created data source
-    :rtype: Dict
+    :rtype: aurorax.sources.DataSource
     """
+
     # do request
+    # TODO: Check if the 500 error from putting in None values is fixed after the next API update
     request_data = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "source_type": source_type,
-        "display_name": display_name,
-        "ephemeris_metadata_schema": ephemeris_metadata_schema,
-        "data_product_metadata_schema": data_product_metadata_schema,
-        "maintainers": maintainers,
+        "program": data_source.program,
+        "platform": data_source.platform,
+        "instrument_type": data_source.instrument_type,
+        "source_type": data_source.source_type,
+        "display_name": data_source.display_name,
+        "ephemeris_metadata_schema": data_source.ephemeris_metadata_schema, # if data_source.ephemeris_metadata_schema is not None else [],
+        "data_product_metadata_schema": data_source.data_product_metadata_schema, # if data_source.data_product_metadata_schema is not None else [],
+        "maintainers": data_source.maintainers, # if data_source.maintainers is not None else [],
     }
-    if (identifier is not None):
-        request_data["identifier"] = identifier
+    if (data_source.identifier is not None):
+        request_data["identifier"] = data_source.identifier
     req = aurorax.AuroraXRequest(method="post", url=aurorax.api.urls.data_sources_url, body=request_data)
     res = req.execute()
 
@@ -279,7 +262,10 @@ def add(program: str,
         raise aurorax.AuroraXDuplicateException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
-    return res.data
+    try:
+        return DataSource(**res.data)
+    except:
+        raise aurorax.AuroraXException("Could not create data source.")
 
 
 def delete(identifier: int) -> int:
@@ -294,7 +280,7 @@ def delete(identifier: int) -> int:
     :raises aurorax.AuroraXNotFoundException: data source not found
     :raises aurorax.AuroraXConflictException: conflict of some type
 
-    :return: 0 on success
+    :return: 1 on success
     :rtype: int
     """
     # do request
@@ -311,76 +297,39 @@ def delete(identifier: int) -> int:
         raise aurorax.AuroraXConflictException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
-    return 0
+    return 1
 
 
-def update(identifier: int,
-           program: Optional[str] = None,
-           platform: Optional[str] = None,
-           instrument_type: Optional[str] = None,
-           source_type: Optional[str] = None,
-           display_name: Optional[str] = None,
-           ephemeris_metadata_schema: Optional[List[Dict]] = None,
-           data_product_metadata_schema: Optional[List[Dict]] = None,
-           metadata: Optional[Dict] = None) -> Dict:
+def update(data_source: DataSource) -> DataSource:
     """
-    Update a data source in AuroraX
+    Update a data source in AuroraX. This operation will fully replace the data source with the data_source argument passed in.
+    Please make sure data_source is complete. Refer to examples for usage.
 
-    :param identifier: data source identifier
-    :type identifier: int
-    :param program: new program name, defaults to None
-    :type program: Optional[str], optional
-    :param platform: new platform name, defaults to None
-    :type platform: Optional[str], optional
-    :param instrument_type: new instrument type, defaults to None
-    :type instrument_type: Optional[str], optional
-    :param source_type: new source type (heo, leo, lunar, ground), defaults to None
-    :type source_type: Optional[str], optional
-    :param display_name: new user-friendly display name, defaults to None
-    :type display_name: Optional[str], optional
-    :param ephemeris_metadata_schema: new metadata schema, defaults to []
-    :type ephemeris_metadata_schema: List[Dict], optional
-    :param data_product_metadata_schema: new metadata schema, defaults to []
-    :type data_product_metadata_schema: List[Dict], optional
-    :param metadata: new metadata, defaults to None
-    :type metadata: Optional[Dict], optional
+    :param data_source: full record of data source to be updated
+    :type data_source: aurorax.sources.DataSource
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
     :raises aurorax.AuroraXNotFoundException: data source not found
+    :raises aurorax. AuroraXBadParametersException: missing parameters
 
     :return: updated data source
-    :rtype: Dict
+    :rtype: aurorax.sources.DataSource
     """
-    # get the data source first
-    ds = get_using_identifier(identifier)
-    if (ds == {}):
-        raise aurorax.AuroraXNotFoundException("data source not found")
+    # TODO: Check for not-None schema fields too?
+    if not (data_source.identifier and data_source.source_type and data_source.display_name):
+        raise aurorax.AuroraXBadParametersException("One or more required data source fields are missing. Update was not performed.")
 
     # set URL
-    url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
+    url = f"{aurorax.api.urls.data_sources_url}/{data_source.identifier}"
 
-    # replace data source values with ones passed into this function
-    if (program is not None):
-        ds["program"] = program
-    if (platform is not None):
-        ds["platform"] = platform
-    if (instrument_type is not None):
-        ds["instrument_type"] = instrument_type
-    if (source_type is not None):
-        ds["source_type"] = source_type
-    if (display_name is not None):
-        ds["display_name"] = display_name
-    if (ephemeris_metadata_schema is not None):
-        ds["ephemeris_metadata_schema"] = ephemeris_metadata_schema
-    if (data_product_metadata_schema is not None):
-        ds["data_product_metadata_schema"] = data_product_metadata_schema
-    if (metadata is not None):
-        ds["metadata"] = metadata
-
-    # make request
-    req = aurorax.AuroraXRequest(method="put", url=url, body=ds)
-    res = req.execute()
+    # make request to update the data source passed in
+    req = aurorax.AuroraXRequest(method="put", url=url, body=data_source)
+    req.execute()
 
     # return
-    return res.data
+    try:
+        return aurorax.sources.get(data_source.program, data_source.platform, data_source.instrument_type, "full_record")
+
+    except:
+        raise aurorax.AuroraXException("Could not update data source.")

@@ -1,3 +1,4 @@
+from aurorax.ephemeris import Ephemeris
 import aurorax
 import datetime
 import os
@@ -20,14 +21,10 @@ def test_create_ephemeris_object():
     metadata = {}
 
     # get identifier
-    data_source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
-    identifier = data_source["identifier"]
+    data_source = aurorax.sources.get(program, platform, instrument_type)
 
     # create Ephemeris object
-    e = aurorax.ephemeris.Ephemeris(identifier=identifier,
-                                    program=program,
-                                    platform=platform,
-                                    instrument_type=instrument_type,
+    e = aurorax.ephemeris.Ephemeris(data_source=data_source,
                                     epoch=epoch,
                                     location_geo=location_geo,
                                     location_gsm=location_gsm,
@@ -35,7 +32,7 @@ def test_create_ephemeris_object():
                                     sbtrace=sbtrace,
                                     metadata=metadata)
 
-    assert type(e) is aurorax.ephemeris.Ephemeris and e.instrument_type == "test-instrument-type"
+    assert type(e) is aurorax.ephemeris.Ephemeris and e.data_source.instrument_type == "test-instrument-type"
 
 
 def test_create_ephemeris_search_object():
@@ -45,8 +42,7 @@ def test_create_ephemeris_search_object():
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
 
-    assert type(s) is aurorax.ephemeris.Search and s.end_dt ==  datetime.datetime(2020, 1, 10, 0, 0, 0)
-
+    assert type(s) is aurorax.ephemeris.Search and s.end ==  datetime.datetime(2020, 1, 10, 0, 0, 0)
 
 def test_search_ephemeris_synchronous():
     s = aurorax.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -55,8 +51,7 @@ def test_search_ephemeris_synchronous():
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
 
-    assert type(s.data) is list and "data_source" in s.data[0]
-
+    assert type(s.data) is list and type(s.data[0]) is Ephemeris
 
 def test_search_ephemeris_asynchronous():
     s = aurorax.ephemeris.search_async(datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -79,8 +74,7 @@ def test_search_ephemeris_asynchronous():
 
     s.get_data()
 
-    assert type(s.data) is list and "data_source" in s.data[0]
-
+    assert type(s.data) is list and type(s.data[0]) is Ephemeris
 
 def test_search_ephemeris_logs():
     s = aurorax.ephemeris.Search(datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -103,7 +97,6 @@ def test_search_ephemeris_logs():
 
     assert len(s.logs) > 0
 
-
 def test_search_ephemeris_status():
     s = aurorax.ephemeris.Search(datetime.datetime(2019, 1, 1, 0, 0, 0),
                                  datetime.datetime(2019, 1, 1, 0, 59, 59),
@@ -125,7 +118,6 @@ def test_search_ephemeris_status():
 
     assert s.completed
 
-
 def test_upload_ephemeris():
     aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
 
@@ -144,14 +136,10 @@ def test_upload_ephemeris():
     sbtrace = aurorax.Location(lat=7.89, lon=101.23)
 
     # get the ephemeris source ID
-    source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
-    identifier = source["identifier"]
+    source = aurorax.sources.get(program, platform, instrument_type)
 
     # create Ephemeris object
-    e = aurorax.ephemeris.Ephemeris(identifier=identifier,
-                                    program=program,
-                                    platform=platform,
-                                    instrument_type=instrument_type,
+    e = aurorax.ephemeris.Ephemeris(data_source=source,
                                     epoch=epoch,
                                     location_geo=location_geo,
                                     location_gsm=location_gsm,
@@ -160,22 +148,23 @@ def test_upload_ephemeris():
                                     metadata=metadata)
 
     epoch2 = datetime.datetime(2020, 1, 1, 0, 1)
-    e2 = aurorax.ephemeris.Ephemeris(identifier=identifier,
-                                    program=program,
-                                    platform=platform,
-                                    instrument_type=instrument_type,
+    metadata2 = {
+        "test_meta1": "testing12",
+        "test_meta2": "testing22",
+    }
+    e2 = aurorax.ephemeris.Ephemeris(data_source=source,
                                     epoch=epoch2,
                                     location_geo=location_geo,
                                     location_gsm=location_gsm,
                                     nbtrace=nbtrace,
                                     sbtrace=sbtrace,
-                                    metadata=metadata)
+                                    metadata=metadata2)
 
     # set records array
     records = [e, e2]
 
     # upload record
-    result = aurorax.ephemeris.upload(identifier, validate_source=True, records=records)
+    result = aurorax.ephemeris.upload(source.identifier, records, True)
 
     # retrieve uploaded record
     s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
@@ -189,8 +178,7 @@ def test_upload_ephemeris():
     s.check_for_data()
     s.get_data()
     
-    assert result == 0 and len(s.data) > 0
-
+    assert result == 1 and len(s.data) > 0
 
 def test_delete_ephemeris():
     aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
@@ -198,16 +186,16 @@ def test_delete_ephemeris():
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument-type"
-    start_dt = datetime.datetime(2020, 1, 1, 0, 0)
-    end_dt = datetime.datetime(2020, 1, 1, 0, 4)
-    source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
+    start = datetime.datetime(2020, 1, 1, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 0, 2)
+    source = aurorax.sources.get(program, platform, instrument_type)
 
-    if len(source) != 1:
+    if not source:
         assert False
 
     # do synchronous search for existing records
-    s = aurorax.ephemeris.search(start_dt,
-                                 end_dt,
+    s = aurorax.ephemeris.search(start,
+                                 end,
                                  programs=[program],
                                  platforms=[platform],
                                  instrument_types=[instrument_type])
@@ -218,18 +206,13 @@ def test_delete_ephemeris():
     else:
         print(f"{len(s.data)} records found to be deleted")
 
-    aurorax.ephemeris.delete(source["identifier"], 
-                                program, 
-                                platform, 
-                                instrument_type, 
-                                start_dt, 
-                                end_dt)
+    aurorax.ephemeris.delete(source, start, end)
 
     time.sleep(5)
 
     # search ephemeris again to see if they were deleted
-    s = aurorax.ephemeris.search(start_dt,
-                                 end_dt,
+    s = aurorax.ephemeris.search(start,
+                                 end,
                                  programs=[program],
                                  platforms=[platform],
                                  instrument_types=[instrument_type])

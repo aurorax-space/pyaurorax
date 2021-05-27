@@ -3,8 +3,8 @@ import datetime
 from typing import Dict
 
 
-def ephemeris(start_dt: datetime,
-              end_dt: datetime,
+def ephemeris(start: datetime.date,
+              end: datetime.date,
               program: str = None,
               platform: str = None,
               instrument_type: str = None,
@@ -14,10 +14,10 @@ def ephemeris(start_dt: datetime,
     """
     Retrieve information about the number of existing ephemeris records
 
-    :param start_dt: start date
-    :type start_dt: datetime
-    :param end_dt: end date
-    :type end_dt: datetime
+    :param start: start date
+    :type start: datetime
+    :param end: end date
+    :type end: datetime
     :param program: program name to filter sources by, defaults to None
     :type program: str, optional
     :param platform: platform name to filter sources by, defaults to None
@@ -37,8 +37,8 @@ def ephemeris(start_dt: datetime,
     """
     # set parameters
     params = {
-        "start": start_dt.strftime("%Y-%m-%d"),
-        "end": end_dt.strftime("%Y-%m-%d"),
+        "start": start.strftime("%Y-%m-%d"),
+        "end": end.strftime("%Y-%m-%d"),
         "program": program,
         "platform": platform,
         "instrument_type": instrument_type,
@@ -54,9 +54,8 @@ def ephemeris(start_dt: datetime,
     # return
     return res.data
 
-
-def data_products(start_dt: datetime,
-                  end_dt: datetime,
+def data_products(start: datetime,
+                  end: datetime,
                   program: str = None,
                   platform: str = None,
                   instrument_type: str = None,
@@ -66,10 +65,10 @@ def data_products(start_dt: datetime,
     """
     Retrieve information about the number of existing data product records
 
-    :param start_dt: start date
-    :type start_dt: datetime
-    :param end_dt: end date
-    :type end_dt: datetime
+    :param start: start date
+    :type start: datetime
+    :param end: end date
+    :type end: datetime
     :param program: program name to filter sources by, defaults to None
     :type program: str, optional
     :param platform: platform name to filter sources by, defaults to None
@@ -89,8 +88,8 @@ def data_products(start_dt: datetime,
     """
     # set parameters
     params = {
-        "start": start_dt.strftime("%Y-%m-%d"),
-        "end": end_dt.strftime("%Y-%m-%d"),
+        "start": start.strftime("%Y-%m-%d"),
+        "end": end.strftime("%Y-%m-%d"),
         "program": program,
         "platform": platform,
         "instrument_type": instrument_type,

@@ -1,23 +1,17 @@
 import datetime
 import pprint
 import aurorax
+from aurorax.sources import DataSource
 from pydantic import BaseModel
 from typing import Dict, List, Optional
 from aurorax import Location
-
 
 class Ephemeris(BaseModel):
     """
     Ephemeris data type
 
-    :param identifier: data source ID
-    :type identifier: int
-    :param program: program name
-    :type program: str
-    :param platform: platform name
-    :type platform: str
-    :param instrument_type: instrument type name
-    :type instrument_type: str
+    :param data_source: data source that the ephemeris record is associated with
+    :type data_source: aurorax.sources.DataSource
     :param epoch: timestamp for the record in UTC
     :type epoch: datetime.datetime
     :param location_geo: latitude and longitude in geographic coordinates
@@ -32,10 +26,7 @@ class Ephemeris(BaseModel):
     :param metdata: metadata values for this record
     :type metdata: Dict
     """
-    identifier: int
-    program: str
-    platform: str
-    instrument_type: str
+    data_source: DataSource
     epoch: datetime.datetime
     location_geo: Location
     location_gsm: Location
@@ -75,8 +66,11 @@ class Ephemeris(BaseModel):
         if (type(self.metadata) is list):
             self.metadata = {}
 
-        # remove identifier
-        del d["identifier"]
+        # format data source fields for query 
+        d["program"] = self.data_source.program
+        d["platform"] = self.data_source.platform
+        d["instrument_type"] = self.data_source.instrument_type
+        del d["data_source"]
 
         # return
         return d
@@ -99,23 +93,27 @@ class Ephemeris(BaseModel):
         """
         return pprint.pformat(self.__dict__)
 
-def __validate_data_source(records: List["Ephemeris"]) -> Optional[Ephemeris]:
+def __validate_data_source(identifier: int, records: List[Ephemeris]) -> Optional[Ephemeris]:
         # get all current sources
-        sources = {source["identifier"]: source for source in aurorax.sources.list()}
+        sources = {source.identifier: source for source in aurorax.sources.list()}
+        if identifier not in sources.keys():
+            raise aurorax.AuroraXValidationException(f"Data source with unique identifier {identifier} could not be found.")
 
         for record in records:
             # check the identifier, program name, platform name, and instrument type
             try:
-                reference = sources[record.identifier]
+                reference = sources[record.data_source.identifier]
             except KeyError:
-                raise aurorax.AuroraXValidationException("Data source with unique identifier {} could not be found.".format(record.identifier))
+                raise aurorax.AuroraXValidationException(f"Data source with unique identifier {record.data_source.identifier} could not be found.")
 
-            if not (record.program == reference["program"] and record.platform == reference["platform"] and record.instrument_type == reference["instrument_type"]):
+            if not (record.data_source.program == reference.program and 
+                    record.data_source.platform == reference.platform and 
+                    record.data_source.instrument_type == reference.instrument_type):
                 return record
 
         return None
 
-def upload(identifier: int, records: List["Ephemeris"], validate_source: bool = False) -> int:
+def upload(identifier: int, records: List[Ephemeris], validate_source: bool = False) -> int:
     """
     Upload ephemeris records to AuroraX
 
@@ -131,12 +129,12 @@ def upload(identifier: int, records: List["Ephemeris"], validate_source: bool = 
     :raises aurorax.AuroraXUploadException: upload error
     :raises aurorax.AuroraXValidationException: data source validation error
 
-    :return: 0 for success, raises exception on error
+    :return: 1 for success, raises exception on error
     :rtype: int
     """
     # validate record sources if the flag is set
     if validate_source:
-        validation_error = __validate_data_source(records)
+        validation_error = __validate_data_source(identifier, records)
         if validation_error:
             raise aurorax.AuroraXValidationException("Unable to validate data source found in record: {}".format(validation_error))
     
@@ -155,21 +153,16 @@ def upload(identifier: int, records: List["Ephemeris"], validate_source: bool = 
         raise aurorax.AuroraXUploadException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 202):
         print("Status code 202, stream accepted")
+    
     # return
-    return 0
+    return 1
 
-def delete(identifier: int, program: str, platform: str, instrument_type: str, start: datetime.datetime, end: datetime.datetime) -> int:
+def delete(data_source: DataSource, start: datetime.datetime, end: datetime.datetime) -> int:
     """
     Delete a range of ephemeris records. This method is asynchronous.
 
-    :param identifier: data source identifier
-    :type identifier: int
-    :param program: program name
-    :type program: str
-    :param platform: platform name
-    :type platform: str
-    :param instrument_type: instrument type
-    :type instrument_type: str
+    :param data_source: data source that the ephemeris record is associated with. Identifier, program, platform, and instrument_type are required.
+    :type data_source: aurorax.sources.DataSource
     :param start: start datetime of deletion range
     :type start: datetime.datetime
     :param end: end datetime of deletion range
@@ -181,15 +174,18 @@ def delete(identifier: int, program: str, platform: str, instrument_type: str, s
     :raises aurorax.AuroraXNotFoundException: source not found
     :raises aurorax.AuroraXUnauthorizedException: invalid API key for this operation
 
-    :return: 0 on success
+    :return: 1 on success
     :rtype: int
     """
+    if not data_source.identifier:
+        raise aurorax.AuroraXBadParametersException("Data source identifier is missing. Delete operation was not performed.")
+
     # do request
-    url = aurorax.api.urls.ephemeris_upload_url.format(identifier)
+    url = aurorax.api.urls.ephemeris_upload_url.format(data_source.identifier)
     params = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
+        "program": data_source.program,
+        "platform": data_source.platform,
+        "instrument_type": data_source.instrument_type,
         "start": start.strftime("%Y-%m-%dT%H:%M:%S"),
         "end": end.strftime("%Y-%m-%dT%H:%M:%S")
     }
@@ -203,5 +199,5 @@ def delete(identifier: int, program: str, platform: str, instrument_type: str, s
         raise aurorax.AuroraXNotFoundException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
-    return 0
+    return 1
     
