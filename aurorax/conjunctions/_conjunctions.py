@@ -1,6 +1,4 @@
 import pprint
-from pydantic.class_validators import validator
-import aurorax
 from aurorax.sources import DataSource
 import datetime
 from pydantic import BaseModel
@@ -21,7 +19,7 @@ class Conjunction(BaseModel):
     :type end: datetime.datetime
 
     :param data_sources: data sources in conjunction
-    :type data_sources: List[Dict]
+    :type data_sources: List[aurorax.sources.DataSource]
 
     :param min_distance: minimum distance of conjunction event(s)
     :type min_distance: float

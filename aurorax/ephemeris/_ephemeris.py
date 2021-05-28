@@ -23,8 +23,8 @@ class Ephemeris(BaseModel):
     :type nbtrace: Location
     :param sbtrace: south B-trace geomagnetic latitude and longitude
     :type sbtrace: Location
-    :param metdata: metadata values for this record
-    :type metdata: Dict
+    :param metadata: metadata values for this record
+    :type metadata: Dict
     """
     data_source: DataSource
     epoch: datetime.datetime
@@ -177,8 +177,8 @@ def delete(data_source: DataSource, start: datetime.datetime, end: datetime.date
     :return: 1 on success
     :rtype: int
     """
-    if not data_source.identifier:
-        raise aurorax.AuroraXBadParametersException("Data source identifier is missing. Delete operation was not performed.")
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
+        raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
 
     # do request
     url = aurorax.api.urls.ephemeris_upload_url.format(data_source.identifier)
@@ -194,6 +194,8 @@ def delete(data_source: DataSource, start: datetime.datetime, end: datetime.date
 
     # evaluate response
     if (res.status_code == 400):
+        if type(res.data) is list:
+            raise aurorax.AuroraXBadParametersException("%s - %s" % (res.status_code, res.data[0]["message"]))  
         raise aurorax.AuroraXBadParametersException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 404):
         raise aurorax.AuroraXNotFoundException("%s - %s" % (res.data["error_code"], res.data["error_message"]))

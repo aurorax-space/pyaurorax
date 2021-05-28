@@ -23,15 +23,11 @@ def test_AuroraXDuplicateException():
         
         if not existing_source:
             assert False
+
+        existing_source.identifier = None
         
         # make request
-        aurorax.sources.add(existing_source["program"],
-                                existing_source["platform"],
-                                existing_source["instrument_type"],
-                                existing_source["source_type"],
-                                existing_source["display_name"],
-                                ephemeris_metadata_schema=existing_source["ephemeris_metadata_schema"],
-                                data_product_metadata_schema=existing_source["data_product_metadata_schema"])
+        aurorax.sources.add(existing_source)
 
 
 def test_AuroraXValidationException_ephemeris():
@@ -53,14 +49,11 @@ def test_AuroraXValidationException_ephemeris():
         sbtrace = aurorax.Location(lat=7.89, lon=101.23)
 
         # get the ephemeris source ID
-        source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
-        identifier = source["identifier"]
+        source = aurorax.sources.get(program, platform, instrument_type, format="basic_info")
+        source.instrument_type = "wrong-type"
 
         # create Ephemeris object
-        e = aurorax.ephemeris.Ephemeris(identifier=105,
-                                        program=program, 
-                                        platform="wrong-platform", 
-                                        instrument_type=instrument_type,
+        e = aurorax.ephemeris.Ephemeris(data_source=source,
                                         epoch=epoch,
                                         location_geo=location_geo,
                                         location_gsm=location_gsm,
@@ -73,7 +66,7 @@ def test_AuroraXValidationException_ephemeris():
         records.append(e)
 
         # upload record
-        aurorax.ephemeris.upload(identifier, records=records, validate_source=True)
+        aurorax.ephemeris.upload(source.identifier, records, True)
 
 
 def test_AuroraXValidationException_data_product():
@@ -94,14 +87,11 @@ def test_AuroraXValidationException_data_product():
         end_dt = start_dt.replace(hour=23, minute=59, second=59)
 
         # get the data source ID
-        ds = aurorax.sources.get(program, platform, instrument_type)
-        identifier = ds["identifier"]
+        source = aurorax.sources.get(program, platform, instrument_type)
+        source.instrument_type = "wrong-instrument"
 
         # create DataProducts object
-        e = aurorax.data_products.DataProduct(identifier=identifier,
-                                            program=program,
-                                            platform=platform,
-                                            instrument_type="random-string",
+        e = aurorax.data_products.DataProduct(data_source=source,
                                             data_product_type=data_product_type,
                                             url=url,
                                             start=start_dt,
@@ -113,7 +103,7 @@ def test_AuroraXValidationException_data_product():
         records.append(e)
 
         # upload record
-        aurorax.data_products.upload(identifier, records=records, validate_source=True)
+        aurorax.data_products.upload(source.identifier, records, True)
 
 
 def test_AuroraXUnauthorizedException():
@@ -145,13 +135,9 @@ def test_AuroraXConflictException():
         sbtrace = aurorax.Location(lat=7.89, lon=101.23)
 
         # get the ephemeris source ID
-        source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
-        identifier = source["identifier"]
+        source = aurorax.sources.get(program, platform, instrument_type)
 
-        e = aurorax.ephemeris.Ephemeris(identifier=identifier,
-                                        program=program, 
-                                        platform=platform, 
-                                        instrument_type=instrument_type, 
+        e = aurorax.ephemeris.Ephemeris(data_source=source,
                                         epoch=epoch,
                                         location_geo=location_geo,
                                         location_gsm=location_gsm,
@@ -163,8 +149,8 @@ def test_AuroraXConflictException():
         records = [e]
 
         # upload record
-        aurorax.ephemeris.upload(identifier, records=records)
+        aurorax.ephemeris.upload(source.identifier, records=records)
         time.sleep(10)
 
         # try deleting the test instrument
-        aurorax.sources.delete(identifier)
+        aurorax.sources.delete(source.identifier)

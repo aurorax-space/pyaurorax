@@ -25,14 +25,14 @@ class Search():
         :type start: datetime
         :param end: end timestamp
         :type end: datetime
-        :param programs: programs to search through, defaults to []
-        :type programs: List, optional
-        :param platforms: platforms to search through, defaults to []
-        :type platforms: List, optional
-        :param instrument_types: instrument types to search through, defaults to []
-        :type instrument_types: List, optional
-        :param metadata_filters: metadata keys and values to filter on, defaults to []
-        :type metadata_filters: List, optional
+        :param programs: programs to search through, defaults to None
+        :type programs: List[str], optional
+        :param platforms: platforms to search through, defaults to None
+        :type platforms: List[str], optional
+        :param instrument_types: instrument types to search through, defaults to None
+        :type instrument_types: List[str], optional
+        :param metadata_filters: metadata keys and values to filter on, defaults to None
+        :type metadata_filters: List[Dict], optional
         """
         self.request = None
         self.request_id = ""
@@ -47,10 +47,10 @@ class Search():
 
         self.start = start
         self.end = end
-        self.programs = programs if programs is not None else []
-        self.platforms = platforms if platforms is not None else []
-        self.instrument_types = instrument_types if instrument_types is not None else []
-        self.metadata_filters = metadata_filters if metadata_filters is not None else []
+        self.programs = programs #[] if not programs else programs
+        self.platforms = platforms #[] if not platforms else platforms
+        self.instrument_types = instrument_types #[] if not instrument_types else instrument_types
+        self.metadata_filters = metadata_filters #[] if not metadata_filters else metadata_filters
 
     def __str__(self) -> str:
         """
@@ -78,10 +78,10 @@ class Search():
         url = aurorax.api.urls.ephemeris_search_url
         post_data = {
             "data_sources": {
-                "programs": self.programs,
-                "platforms": self.platforms,
-                "instrument_types": self.instrument_types,
-                "ephemeris_metadata_filters": self.metadata_filters,
+                "programs": [] if not self.programs else self.programs,
+                "platforms": [] if not self.platforms else self.platforms,
+                "instrument_types": [] if not self.instrument_types else self.instrument_types,
+                "ephemeris_metadata_filters": [] if not self.metadata_filters else self.metadata_filters,
             },
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),

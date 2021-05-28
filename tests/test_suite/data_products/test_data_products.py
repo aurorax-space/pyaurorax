@@ -1,3 +1,4 @@
+from aurorax.data_products import DataProduct
 import aurorax
 import datetime
 import os
@@ -20,20 +21,16 @@ def test_create_data_product_object():
 
     # get identifier
     data_source = aurorax.sources.get(program, platform, instrument_type)
-    identifier = data_source["identifier"]
 
     # create DataProduct object
-    d = aurorax.data_products.DataProduct(identifier=identifier,
-                                          program=program,
-                                          platform=platform,
-                                          instrument_type=instrument_type,
+    d = aurorax.data_products.DataProduct(data_source=data_source,
                                           data_product_type=data_product_type,
                                           url=url,
                                           start=start_dt,
                                           end=end_dt,
                                           metadata=metadata)
 
-    assert type(d) is aurorax.data_products.DataProduct and d.instrument_type == "test-instrument-type"
+    assert type(d) is DataProduct and d.data_source.instrument_type == "test-instrument-type"
 
 
 def test_create_data_products_search_object():
@@ -41,24 +38,23 @@ def test_create_data_products_search_object():
                                      datetime.datetime(2020, 1, 1, 23, 59, 59),
                                      programs=["auroramax"])
     
-    assert type(s) is aurorax.data_products.Search and s.end_dt ==  datetime.datetime(2020, 1, 1, 23, 59, 59)
+    assert type(s) is aurorax.data_products.Search and s.end ==  datetime.datetime(2020, 1, 1, 23, 59, 59)
 
 
 def test_search_data_products_synchronous():
     s = aurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                     datetime.datetime(2020, 1, 1, 23, 59, 59),
+                                     datetime.datetime(2020, 1, 2, 23, 59, 59),
                                      programs=["auroramax"],
                                      verbose=True)
 
-    assert type(s.data) is list and "data_source" in s.data[0]
+    assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
 def test_search_data_products_asynchronous():
-    s = aurorax.data_products.search_async(datetime.datetime(2019, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2019, 1, 1, 0, 59, 59),
-                                 programs=["swarm"])
+    s = aurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                 datetime.datetime(2020, 1, 2, 23, 59, 59),
+                                 programs=["auroramax"])
 
-    s.execute()
     s.update_status()
     tries = 0
     while not s.completed and tries < MAX_WAIT_TIME:
@@ -72,7 +68,7 @@ def test_search_data_products_asynchronous():
 
     s.get_data()
 
-    assert s.data_url
+    assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
 def test_search_data_products_logs():
@@ -133,13 +129,9 @@ def test_upload_data_products():
 
     # get the data source ID
     ds = aurorax.sources.get(program, platform, instrument_type)
-    identifier = ds["identifier"]
 
     # create DataProducts object
-    dp = aurorax.data_products.DataProduct(identifier=identifier,
-                                          program=program,
-                                          platform=platform,
-                                          instrument_type=instrument_type,
+    dp = aurorax.data_products.DataProduct(data_source=ds,
                                           data_product_type=data_product_type,
                                           url=url,
                                           start=start_dt,
@@ -149,10 +141,7 @@ def test_upload_data_products():
     start_dt2 = datetime.datetime(2020, 1, 2, 0, 0, 0)
     end_dt2 = start_dt2.replace(hour=23, minute=59, second=59)
     url2 = "test2.jpg"
-    dp2 = aurorax.data_products.DataProduct(identifier=identifier,
-                                          program=program,
-                                          platform=platform,
-                                          instrument_type=instrument_type,
+    dp2 = aurorax.data_products.DataProduct(data_source=ds,
                                           data_product_type=data_product_type,
                                           url=url2,
                                           start=start_dt2,
@@ -163,7 +152,7 @@ def test_upload_data_products():
     records = [dp, dp2]
 
     # upload record
-    result = aurorax.data_products.upload(identifier, records=records, validate_source=True)
+    result = aurorax.data_products.upload(ds.identifier, records, True)
 
     s = aurorax.data_products.Search(datetime.datetime(2020, 1, 2, 0, 0, 0),
                                      datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -174,7 +163,7 @@ def test_upload_data_products():
     s.check_for_data()
     s.get_data()
 
-    assert result == 0 and len(s.data) > 0
+    assert result == 1 and len(s.data) > 0
 
 
 def test_delete_data_products():
@@ -185,10 +174,7 @@ def test_delete_data_products():
     instrument_type = "test-instrument-type"
     start_dt = datetime.datetime(2020, 1, 1, 0, 0)
     end_dt = datetime.datetime(2020, 1, 10, 0, 0, 0)
-    source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
-
-    if len(source) != 1:
-        assert False
+    source = aurorax.sources.get(program, platform, instrument_type)
 
     # do synchronous search for existing records
     s = aurorax.data_products.search(start_dt,
@@ -198,7 +184,7 @@ def test_delete_data_products():
                                  instrument_types=[instrument_type])
 
     if len(s.data) == 0:
-        print("No data products records exist to delete")
+        print("No data product records exist to delete")
         assert False
     else:
         print(f"{len(s.data)} records found to be deleted")
@@ -206,9 +192,9 @@ def test_delete_data_products():
     urls = []
     # get URLs to delete
     for dp in s.data:
-        urls.append(dp["url"])
+        urls.append(dp.url)
 
-    aurorax.data_products.delete(source["identifier"], program, platform, instrument_type, urls)
+    aurorax.data_products.delete(source, urls)
 
     time.sleep(5)
 

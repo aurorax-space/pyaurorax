@@ -4,7 +4,7 @@ import datetime
 # are we going to enforce schema validation at the API level?
 def test_validate_schema():
     source = aurorax.sources.get_using_filters(program="swarm", platform="swarma", instrument_type="footprint")
-    schema = aurorax.metadata.get_ephemeris_schema(source[0]["identifier"])
+    schema = aurorax.metadata.get_ephemeris_schema(source[0].identifier)
 
     # create an example metadata dictionary
     metadata = {
@@ -27,10 +27,10 @@ def test_get_ephemeris_metadata_schema():
     instrument_type = "footprint"
 
     # get idendifier
-    data_source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
+    data_source = aurorax.sources.get(program, platform, instrument_type, "identifier_only")
 
     # get schema
-    schema = aurorax.metadata.get_ephemeris_schema(data_source["identifier"])
+    schema = aurorax.metadata.get_ephemeris_schema(data_source.identifier)
 
     assert type(schema) is list
 
@@ -45,6 +45,6 @@ def test_get_data_product_metadata_schema():
     data_source = aurorax.sources.get(program, platform, instrument_type, format="identifier_only")
 
     # get schema
-    schema = aurorax.metadata.get_data_products_schema(data_source["identifier"])
+    schema = aurorax.metadata.get_data_products_schema(data_source.identifier)
 
     assert type(schema) is list

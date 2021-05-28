@@ -7,11 +7,33 @@ class DataSource(BaseModel):
     """
     Data source data type
 
+    :param identifier: data source ID, defaults to None
+    :type identifier: int
+    :param program: data source program name, defaults to None
+    :type program: str
+    :param platform: data source platform name, defaults to None
+    :type platform: str
+    :param instrument_type: data source instrument type, defaults to None
+    :type instrument_type: str
+    :param source_type: data source type, defaults to None
+    :type source_type: str
+    :param display_name: data source display name, defaults to None
+    :type display_name: str
+    :param metadata: data source metadata, defaults to None
+    :type metadata: str
+    :param owner: data source owner's email address, defaults to None
+    :type owner: str
+    :param maintainers: list of maintainer email addresses, defaults to []
+    :type maintainers: List[str]
+    :param ephemeris_metadata_schema: data source ephemeris metadata schema, defaults to []
+    :type ephemeris_metadata_schema: List[Dict]
+    :param data_product_metadata_schema: data source data product metadata schema, defaults to []
+    :type data_product_metadata_schema: List[Dict]
     """
     identifier: int = None
-    program: str
-    platform: str
-    instrument_type: str
+    program: str = None
+    platform: str = None
+    instrument_type: str = None
     source_type: str = None
     display_name: str = None
     metadata: str = None
@@ -104,6 +126,10 @@ def get(program: str,
     # set results to the first thing
     if (len(res.data) == 1):
         res.data = res.data[0]
+
+        # if format == "identifier_only":
+        #     return res.data["identifier"]
+
         return DataSource(**res.data)
     else:
         raise aurorax.AuroraXNotFoundException("data source not found")
@@ -241,19 +267,21 @@ def add(data_source: DataSource) -> DataSource:
     """
 
     # do request
-    # TODO: Check if the 500 error from putting in None values is fixed after the next API update
+    # TODO: Check again after fix for null schema values
     request_data = {
         "program": data_source.program,
         "platform": data_source.platform,
         "instrument_type": data_source.instrument_type,
         "source_type": data_source.source_type,
         "display_name": data_source.display_name,
-        "ephemeris_metadata_schema": data_source.ephemeris_metadata_schema, # if data_source.ephemeris_metadata_schema is not None else [],
-        "data_product_metadata_schema": data_source.data_product_metadata_schema, # if data_source.data_product_metadata_schema is not None else [],
-        "maintainers": data_source.maintainers, # if data_source.maintainers is not None else [],
+        "ephemeris_metadata_schema": data_source.ephemeris_metadata_schema,
+        "data_product_metadata_schema": data_source.data_product_metadata_schema,
+        "maintainers": data_source.maintainers,
     }
+
     if (data_source.identifier is not None):
         request_data["identifier"] = data_source.identifier
+
     req = aurorax.AuroraXRequest(method="post", url=aurorax.api.urls.data_sources_url, body=request_data)
     res = req.execute()
 
@@ -317,8 +345,8 @@ def update(data_source: DataSource) -> DataSource:
     :rtype: aurorax.sources.DataSource
     """
     # TODO: Check for not-None schema fields too?
-    if not (data_source.identifier and data_source.source_type and data_source.display_name):
-        raise aurorax.AuroraXBadParametersException("One or more required data source fields are missing. Update was not performed.")
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type, data_source.source_type, data_source.display_name]):
+        raise aurorax.AuroraXBadParametersException("One or more required data source fields are missing. Update operation aborted.")
 
     # set URL
     url = f"{aurorax.api.urls.data_sources_url}/{data_source.identifier}"
@@ -330,6 +358,5 @@ def update(data_source: DataSource) -> DataSource:
     # return
     try:
         return aurorax.sources.get(data_source.program, data_source.platform, data_source.instrument_type, "full_record")
-
     except:
         raise aurorax.AuroraXException("Could not update data source.")

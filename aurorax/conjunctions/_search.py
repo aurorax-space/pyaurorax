@@ -1,5 +1,4 @@
 import pprint
-
 import humanize
 import aurorax
 from aurorax.conjunctions import Conjunction
@@ -15,7 +14,7 @@ class Search():
     """
 
     def __init__(self, start: datetime.datetime, end: datetime.datetime, 
-                ground: List[Dict], space: List[str], conjunction_types: List[str] = ["nbtrace"],
+                ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
                 max_distances: Dict[str, float] = None, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE):
         """
         Create a new conjunction Search object
