@@ -11,6 +11,7 @@ def pytest_addoption(parser):
 def env(request):
     return request.config.getoption("--env")
 
+
 @pytest.fixture(scope="session", autouse=True)
 def set_env_api_key(env):
     if env == "staging":
