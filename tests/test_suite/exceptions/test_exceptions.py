@@ -6,7 +6,6 @@ import pytest
 import time
 
 ACCOUNTS_URL = "/api/v1/accounts"
-aurorax.api.set_base_url("https://api.staging.aurorax.space")
 
 def test_AuroraXNotFoundException():
     # test finding a source that doesn't exist
@@ -17,8 +16,6 @@ def test_AuroraXNotFoundException():
 def test_AuroraXDuplicateException():
     # test making duplicate data source
     with pytest.raises(AuroraXDuplicateException):
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
         existing_source = aurorax.sources.get("test-program", "test-platform", "test-instrument-type", "full_record")
         
         if not existing_source:
@@ -32,8 +29,6 @@ def test_AuroraXDuplicateException():
 
 def test_AuroraXValidationException_ephemeris():
     with pytest.raises(AuroraXValidationException):
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
         # set values
         program = "test-program"
         platform = "test-platform"
@@ -71,8 +66,6 @@ def test_AuroraXValidationException_ephemeris():
 
 def test_AuroraXValidationException_data_product():
     with pytest.raises(AuroraXValidationException):
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
         # set values
         program = "test-program"
         platform = "test-platform"
@@ -106,10 +99,17 @@ def test_AuroraXValidationException_data_product():
         aurorax.data_products.upload(source.identifier, records, True)
 
 
-def test_AuroraXUnauthorizedException():
-    with pytest.raises(AuroraXUnauthorizedException):
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING")[:-1])
+@pytest.fixture(scope="function")
+def set_bad_api_key():
+    api_key = aurorax.api.get_api_key()
+    aurorax.api.authenticate(api_key[:-1])
+    yield
 
+    aurorax.api.authenticate(api_key)
+
+
+def test_AuroraXUnauthorizedException(set_bad_api_key):
+    with pytest.raises(AuroraXUnauthorizedException):
         req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.base_url + ACCOUNTS_URL)
         
         req.execute()
@@ -118,8 +118,6 @@ def test_AuroraXUnauthorizedException():
 def test_AuroraXConflictException():
     with pytest.raises(AuroraXConflictException):
         # add a record for the test instrument, then try deleting the instrument
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
         # set values
         program = "test-program"
         platform = "test-platform"

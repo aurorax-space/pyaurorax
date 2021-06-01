@@ -2,8 +2,6 @@ from aurorax.conjunctions import Conjunction
 import aurorax
 import datetime
 
-aurorax.api.set_base_url("https://api.staging.aurorax.space")
-
 def test_search_conjunctions_asynchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 6, 59, 59)
@@ -20,7 +18,7 @@ def test_search_conjunctions_asynchronous():
     s.wait()
     s.get_data()
 
-    assert len(s.data) > 0
+    assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 def test_search_multi_conjunctions_synchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -41,7 +39,7 @@ def test_search_multi_conjunctions_synchronous():
 
     s = aurorax.conjunctions.search(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance, verbose=True)
 
-    assert len(s.data) > 0
+    assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 def test_create_conjunction_object():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -60,7 +58,7 @@ def test_create_conjunction_object():
     if len(c.data) == 0:
         assert False
 
-    assert type(c.data[0]) is aurorax.conjunctions.Conjunction
+    assert type(c.data[0]) is Conjunction
 
 def test_search_conjunctions_with_metadata_filters():
     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
@@ -94,7 +92,7 @@ def test_search_conjunctions_with_metadata_filters():
     s.wait()
     s.get_data()
 
-    assert len(s.data) > 0
+    assert len(s.data) > 0  and type(s.data[0]) is Conjunction
 
 def test_search_conjunctions_space_only_with_hemispheres():
     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
@@ -114,7 +112,7 @@ def test_search_conjunctions_space_only_with_hemispheres():
     s.wait()
     s.get_data()
 
-    assert len(s.data) > 0
+    assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 def test_search_conjunctions_with_max_distances():
     start = datetime.datetime(2019, 2, 5, 0, 0, 0)

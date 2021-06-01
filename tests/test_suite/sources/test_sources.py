@@ -2,8 +2,6 @@ import aurorax
 from aurorax.sources import DataSource
 import os
 
-aurorax.api.set_base_url("https://api.staging.aurorax.space")
-
 def test_get_single_source():
     source = aurorax.sources.get("swarm", "swarma", "footprint", format="basic_info")
 
@@ -44,8 +42,6 @@ def test_list_sources():
 
 
 def test_add_source():
-    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
     # set values
     identifier = 400
     program = "test-program-new"
@@ -93,8 +89,6 @@ def test_add_source():
 
 
 def test_update_source():
-    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
     # get the identifier
     try:
         ds = aurorax.sources.get("test-program-new", "test-platform-new", "test-instrument-new", format="full_record")
@@ -112,8 +106,6 @@ def test_update_source():
 
 
 def test_delete_source():
-    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-    
     # set values
     program = "test-program-updated"
     platform = "test-platform-updated"

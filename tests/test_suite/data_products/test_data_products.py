@@ -6,8 +6,6 @@ import time
 
 MAX_WAIT_TIME = 30
 
-aurorax.api.set_base_url("https://api.staging.aurorax.space")
-
 def test_create_data_product_object():
     # set values
     program = "test-program"
@@ -112,8 +110,6 @@ def test_search_data_products_status():
 
 
 def test_upload_data_products():
-    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
     # set values
     program = "test-program"
     platform = "test-platform"
@@ -167,8 +163,6 @@ def test_upload_data_products():
 
 
 def test_delete_data_products():
-    aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
-
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument-type"
