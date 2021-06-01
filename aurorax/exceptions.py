@@ -21,10 +21,6 @@ class AuroraXValidationException(AuroraXException):
     pass
 
 
-class AuroraXDatabaseException(AuroraXException):
-    pass
-
-
 class AuroraXUnexpectedContentTypeException(AuroraXException):
     pass
 

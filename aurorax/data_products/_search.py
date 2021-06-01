@@ -1,8 +1,9 @@
 import datetime
 import pprint
 import aurorax
+from aurorax.data_products import DataProduct
 import humanize
-from typing import Dict, List, Optional
+from typing import Dict, List
 from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
 
 
@@ -11,27 +12,28 @@ class Search():
     Class representing an AuroraX data products search
     """
 
-    def __init__(self, start_dt: datetime,
-                 end_dt: datetime,
-                 programs: Optional[List] = [],
-                 platforms: Optional[List] = [],
-                 instrument_types: Optional[List] = [],
-                 metadata_filters: Optional[List] = []) -> None:
+    def __init__(self, 
+                 start: datetime.datetime,
+                 end: datetime.datetime,
+                 programs: List[str] = None,
+                 platforms: List[str] = None,
+                 instrument_types: List[str] = None,
+                 metadata_filters: List[Dict] = None) -> None:
         """
         Create a new Search object
 
-        :param start_dt: start timestamp
-        :type start_dt: datetime
-        :param end_dt: end timestamp
-        :type end_dt: datetime
-        :param programs: programs to search through, defaults to []
-        :type programs: List, optional
-        :param platforms: platforms to search through, defaults to []
-        :type platforms: List, optional
-        :param instrument_types: instrument types to search through, defaults to []
-        :type instrument_types: List, optional
-        :param metadata_filters: metadata keys and values to filter on, defaults to []
-        :type metadata_filters: List, optional
+        :param start: start timestamp
+        :type start: datetime.datetime
+        :param end: end timestamp
+        :type end: datetime.datetime
+        :param programs: programs to search through, defaults to None
+        :type programs: List[str], optional
+        :param platforms: platforms to search through, defaults to None
+        :type platforms: List[str], optional
+        :param instrument_types: instrument types to search through, defaults to None
+        :type instrument_types: List[str], optional
+        :param metadata_filters: metadata keys and values to filter on, defaults to None
+        :type metadata_filters: List[Dict], optional
         """
         self.request = None
         self.request_id = ""
@@ -41,11 +43,11 @@ class Search():
         self.data_url = ""
         self.query = {}
         self.status = {}
-        self.data = []
+        self.data: List[DataProduct] = []
         self.logs = []
 
-        self.start_dt = start_dt
-        self.end_dt = end_dt
+        self.start = start
+        self.end = end
         self.programs = programs
         self.platforms = platforms
         self.instrument_types = instrument_types
@@ -77,13 +79,13 @@ class Search():
         url = aurorax.api.urls.data_products_search_url
         post_data = {
             "data_sources": {
-                "programs": self.programs,
-                "platforms": self.platforms,
-                "instrument_types": self.instrument_types,
-                "data product_metadata_filters": self.metadata_filters,
+                "programs": [] if not self.programs else self.programs,
+                "platforms": [] if not self.platforms else self.platforms,
+                "instrument_types": [] if not self.instrument_types else self.instrument_types,
+                "data_product_metadata_filters": [] if not self.metadata_filters else self.metadata_filters,
             },
-            "start": self.start_dt.strftime("%Y-%m-%dT%H:%M:%S"),
-            "end": self.end_dt.strftime("%Y-%m-%dT%H:%M:%S"),
+            "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
+            "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
         }
         self.query = post_data
 
@@ -133,9 +135,11 @@ class Search():
         if (self.completed is False):
             print("No data available, update status first")
             return
+            
         url = self.data_url
-        data_res = aurorax.requests.get_data(url)
-        self.data = data_res
+        raw_data = aurorax.requests.get_data(url)
+
+        self.data = [DataProduct(**dp) for dp in raw_data]
 
     def wait(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
@@ -151,33 +155,33 @@ class Search():
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
 
 
-def search_async(start_dt: datetime,
-                 end_dt: datetime,
-                 programs: List = [],
-                 platforms: List = [],
-                 instrument_types: List = [],
-                 metadata_filters: List = []) -> Search:
+def search_async(start: datetime.datetime,
+                 end: datetime.datetime,
+                 programs: List[str] = None,
+                 platforms: List[str] = None,
+                 instrument_types: List[str] = None,
+                 metadata_filters: List[Dict] = None) -> Search:
     """
     Submit a request for an data products search, return asynchronously
 
-    :param start_dt: start timestamp
-    :type start_dt: datetime
-    :param end_dt: end timestamp
-    :type end_dt: datetime
-    :param programs: programs to search through, defaults to []
-    :type programs: List, optional
-    :param platforms: platforms to search through, defaults to []
-    :type platforms: List, optional
-    :param instrument_types: instrument types to search through, defaults to []
-    :type instrument_types: List, optional
-    :param metadata_filters: metadata keys and values to filter on, defaults to []
-    :type metadata_filters: List, optional
+    :param start: start timestamp
+    :type start: datetime.datetime
+    :param end: end timestamp
+    :type end: datetime.datetime
+    :param programs: programs to search through, defaults to None
+    :type programs: List[str], optional
+    :param platforms: platforms to search through, defaults to None
+    :type platforms: List[str], optional
+    :param instrument_types: instrument types to search through, defaults to None
+    :type instrument_types: List[str], optional
+    :param metadata_filters: metadata keys and values to filter on, defaults to None
+    :type metadata_filters: List[str], optional
 
     :return: Search object
     :rtype: Search
     """
-    s = aurorax.data_products.Search(start_dt,
-                                     end_dt,
+    s = aurorax.data_products.Search(start,
+                                     end,
                                      programs=programs,
                                      platforms=platforms,
                                      instrument_types=instrument_types,
@@ -186,29 +190,29 @@ def search_async(start_dt: datetime,
     return s
 
 
-def search(start_dt: datetime,
-           end_dt: datetime,
-           programs: List = [],
-           platforms: List = [],
-           instrument_types: List = [],
-           metadata_filters: List = [],
+def search(start: datetime,
+           end: datetime,
+           programs: List[str] = None,
+           platforms: List[str] = None,
+           instrument_types: List[str] = None,
+           metadata_filters: List[Dict] = None,
            verbose: bool = False,
            poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Search:
     """
     Search for data products records
 
-    :param start_dt: start timestamp
-    :type start_dt: datetime
-    :param end_dt: end timestamp
-    :type end_dt: datetime
-    :param programs: programs to search through, defaults to []
-    :type programs: List, optional
-    :param platforms: platforms to search through, defaults to []
-    :type platforms: List, optional
-    :param instrument_types: instrument types to search through, defaults to []
-    :type instrument_types: List, optional
-    :param metadata_filters: metadata keys and values to filter on, defaults to []
-    :type metadata_filters: List, optional
+    :param start: start timestamp
+    :type start: datetime
+    :param end: end timestamp
+    :type end: datetime
+    :param programs: programs to search through, defaults to None
+    :type programs: List[str], optional
+    :param platforms: platforms to search through, defaults to None
+    :type platforms: List[str], optional
+    :param instrument_types: instrument types to search through, defaults to None
+    :type instrument_types: List[str], optional
+    :param metadata_filters: metadata keys and values to filter on, defaults to None
+    :type metadata_filters: List[Dict], optional
     :param verbose: show the progress of the request using the request log, defaults to False
     :type verbose: bool, optional
     :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
@@ -218,7 +222,7 @@ def search(start_dt: datetime,
     :rtype: Search
     """
     # create a Search() object
-    s = Search(start_dt, end_dt, programs, platforms, instrument_types, metadata_filters)
+    s = Search(start, end, programs, platforms, instrument_types, metadata_filters)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 

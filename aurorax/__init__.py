@@ -1,4 +1,4 @@
-__version__ = "0.5.3"
+__version__ = "0.6.0"
 
 # pull in top level functions
 from .api import AuroraXRequest
@@ -9,7 +9,6 @@ from .api import get_api_key
 from .exceptions import AuroraXException
 from .exceptions import AuroraXNotFoundException
 from .exceptions import AuroraXMaxRetriesException
-from .exceptions import AuroraXDatabaseException
 from .exceptions import AuroraXDuplicateException
 from .exceptions import AuroraXUnexpectedContentTypeException
 from .exceptions import AuroraXValidationException
@@ -29,5 +28,6 @@ from aurorax import metadata
 from aurorax import availability
 from aurorax import ephemeris
 from aurorax import data_products
+from aurorax import conjunctions
 from aurorax import requests
 from aurorax import util
