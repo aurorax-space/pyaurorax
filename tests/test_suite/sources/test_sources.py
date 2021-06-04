@@ -3,20 +3,20 @@ from aurorax.sources import DataSource
 import os
 
 def test_get_single_source():
-    source = aurorax.sources.get("swarm", "swarma", "footprint", format="basic_info")
+    source = aurorax.sources.get("swarm", "swarma", "footprint", format="full_record")
 
     assert type(source) is DataSource
 
 
 def test_get_source_by_filter():
-    source = aurorax.sources.get_using_filters(program="swarm", instrument_type="footprint", format="basic_info")
+    source = aurorax.sources.get_using_filters(program="swarm", instrument_type="footprint", format="full_record")
     
     assert type(source) is list and len(source) > 0
 
 
 def test_get_source_by_id():
-    source = aurorax.sources.get("swarm", "swarma", "footprint", format="basic_info")
-    source_using_id = aurorax.sources.get_using_identifier(source.identifier, format="basic_info")
+    source = aurorax.sources.get("swarm", "swarma", "footprint", format="identifier_only")
+    source_using_id = aurorax.sources.get_using_identifier(source.identifier, format="full_record")
 
     assert type(source_using_id) is DataSource
 
@@ -98,6 +98,9 @@ def test_update_source():
     ds.program = "test-program-updated"
     ds.platform = "test-platform-updated"
     ds.instrument_type = "test-instrument-updated"
+    ds.metadata = {
+        "test-metadata-key": "test-metadata-value"
+    }
 
     # update the data source
     updated_ds = aurorax.sources.update(ds)

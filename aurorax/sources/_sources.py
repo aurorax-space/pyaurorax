@@ -36,7 +36,7 @@ class DataSource(BaseModel):
     instrument_type: str = None
     source_type: str = None
     display_name: str = None
-    metadata: str = None
+    metadata: Dict = {}
     owner: str = None
     maintainers: List[str] = []
     ephemeris_metadata_schema: List[Dict] = []
@@ -276,7 +276,7 @@ def add(data_source: DataSource) -> DataSource:
         "display_name": data_source.display_name,
         "ephemeris_metadata_schema": data_source.ephemeris_metadata_schema,
         "data_product_metadata_schema": data_source.data_product_metadata_schema,
-        "maintainers": data_source.maintainers,
+        "metadata": data_source.metadata
     }
 
     if (data_source.identifier is not None):
