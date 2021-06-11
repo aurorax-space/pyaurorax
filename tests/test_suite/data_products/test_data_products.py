@@ -43,7 +43,7 @@ def test_search_data_products_synchronous():
     s = aurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                      datetime.datetime(2020, 1, 2, 23, 59, 59),
                                      programs=["auroramax"],
-                                     verbose=True)
+                                     verbose=False)
 
     assert type(s.data) is list and type(s.data[0]) is DataProduct
 

@@ -37,7 +37,7 @@ def test_search_multi_conjunctions_synchronous():
     }]
     distance = 300
 
-    s = aurorax.conjunctions.search(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance, verbose=True)
+    s = aurorax.conjunctions.search(start=start, end=end, ground=ground_params, space=space_params, default_distance=distance, verbose=False)
 
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
