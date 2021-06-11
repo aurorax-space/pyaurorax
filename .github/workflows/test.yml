@@ -41,3 +41,5 @@ jobs:
     - name: Run tests (pytest)
       run: |
         poetry run pytest -s
+      env: 
+        AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
