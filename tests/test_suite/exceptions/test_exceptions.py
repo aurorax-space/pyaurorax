@@ -16,7 +16,7 @@ def test_AuroraXNotFoundException():
 def test_AuroraXDuplicateException():
     # test making duplicate data source
     with pytest.raises(AuroraXDuplicateException):
-        existing_source = aurorax.sources.get("test-program", "test-platform", "test-instrument-type", "full_record")
+        existing_source = aurorax.sources.get("test-program", "test-platform", "pytest", "full_record")
         
         if not existing_source:
             assert False
@@ -32,7 +32,7 @@ def test_AuroraXValidationException_ephemeris():
         # set values
         program = "test-program"
         platform = "test-platform"
-        instrument_type = "test-instrument-type"
+        instrument_type = "pytest"
         metadata = {
             "test_meta1": "testing1",
             "test_meta2": "testing2",
@@ -69,7 +69,7 @@ def test_AuroraXValidationException_data_product():
         # set values
         program = "test-program"
         platform = "test-platform"
-        instrument_type = "test-instrument-type"
+        instrument_type = "pytest"
         url = "test.jpg"
         metadata = {
             "test_meta1": "testing1",
@@ -121,7 +121,7 @@ def test_AuroraXConflictException():
         # set values
         program = "test-program"
         platform = "test-platform"
-        instrument_type = "test-instrument-type"
+        instrument_type = "pytest"
         metadata = {
             "test_meta1": "testing1",
             "test_meta2": "testing2",

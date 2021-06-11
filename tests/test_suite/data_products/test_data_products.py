@@ -113,7 +113,7 @@ def test_upload_data_products():
     # set values
     program = "test-program"
     platform = "test-platform"
-    instrument_type = "test-instrument-type"
+    instrument_type = "pytest"
     url = "test.jpg"
     metadata = {
         "test_meta1": "testing1",
@@ -165,7 +165,7 @@ def test_upload_data_products():
 def test_delete_data_products():
     program = "test-program"
     platform = "test-platform"
-    instrument_type = "test-instrument-type"
+    instrument_type = "pytest"
     start_dt = datetime.datetime(2020, 1, 1, 0, 0)
     end_dt = datetime.datetime(2020, 1, 10, 0, 0, 0)
     source = aurorax.sources.get(program, platform, instrument_type)
