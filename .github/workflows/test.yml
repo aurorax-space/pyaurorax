@@ -40,4 +40,4 @@ jobs:
         poetry run bandit -r aurorax    
     - name: Run tests (pytest)
       run: |
-        poetry run pytest
+        poetry run pytest -s
