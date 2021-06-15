@@ -1,7 +1,42 @@
 import aurorax
 import datetime
-from typing import Dict
+from typing import Dict, List
+import pprint
+from pydantic import BaseModel
 
+
+class AvailabilityResult(BaseModel):
+    """
+    Availability result data type
+
+    :param data_source: data source that the ephemeris record is associated with
+    :type data_source: aurorax.sources.DataSource
+    :param available_data_products: data product availability dictionary of date keys "YYYY-MM-DD"
+    :param available_data_products: Dict
+    :type available_ephemeris: ephemeris availability dictionary of date keys "YYYY-MM-DD"
+    :param available_ephemeris: Dict
+    """
+    data_source: aurorax.sources.DataSource
+    available_date_products: Dict = None
+    available_ephemeris: Dict = None
+
+    def __str__(self) -> str:
+        """
+        String method
+
+        :return: string format
+        :rtype: str
+        """
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        """
+        Object representation
+
+        :return: object representation
+        :rtype: str
+        """
+        return pprint.pformat(self.__dict__)
 
 def ephemeris(start: datetime.date,
               end: datetime.date,
@@ -10,7 +45,7 @@ def ephemeris(start: datetime.date,
               instrument_type: str = None,
               source_type: str = None,
               owner: str = None,
-              format: str = "basic_info") -> Dict:
+              format: str = "basic_info") -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing ephemeris records
 
@@ -32,8 +67,8 @@ def ephemeris(start: datetime.date,
                    full_record), defaults to "basic_info"
     :type format: str, optional
 
-    :return: ephemeris availability information
-    :rtype: Dict
+    :return: list of ephemeris availability results
+    :rtype: List[aurorax.availability.AvailabilityResult]
     """
     # set parameters
     params = {
@@ -52,7 +87,7 @@ def ephemeris(start: datetime.date,
     res = req.execute()
 
     # return
-    return res.data
+    return [AvailabilityResult(**av) for av in res.data]
 
 def data_products(start: datetime,
                   end: datetime,
@@ -61,7 +96,7 @@ def data_products(start: datetime,
                   instrument_type: str = None,
                   source_type: str = None,
                   owner: str = None,
-                  format: str = "basic_info") -> Dict:
+                  format: str = "basic_info") -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing data product records
 
@@ -83,8 +118,8 @@ def data_products(start: datetime,
                    full_record), defaults to "basic_info"
     :type format: str, optional
 
-    :return: ephemeris data product information
-    :rtype: Dict
+    :return: list of data product availability results
+    :rtype: List[aurorax.availability.AvailabilityResult]
     """
     # set parameters
     params = {
@@ -103,4 +138,4 @@ def data_products(start: datetime,
     res = req.execute()
 
     # return
-    return res.data
+    return [AvailabilityResult(**av) for av in res.data]

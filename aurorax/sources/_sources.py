@@ -267,7 +267,6 @@ def add(data_source: DataSource) -> DataSource:
     """
 
     # do request
-    # TODO: Check again after fix for null schema values
     request_data = {
         "program": data_source.program,
         "platform": data_source.platform,
@@ -344,7 +343,6 @@ def update(data_source: DataSource) -> DataSource:
     :return: updated data source
     :rtype: aurorax.sources.DataSource
     """
-    # TODO: Check for not-None schema fields too?
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type, data_source.source_type, data_source.display_name]):
         raise aurorax.AuroraXBadParametersException("One or more required data source fields are missing. Update operation aborted.")
 

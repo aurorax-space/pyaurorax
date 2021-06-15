@@ -120,7 +120,7 @@ def test_upload_ephemeris():
     # set values
     program = "test-program"
     platform = "test-platform"
-    instrument_type = "test-instrument-type"
+    instrument_type = "pytest"
     metadata = {
         "test_meta1": "testing1",
         "test_meta2": "testing2",
@@ -167,7 +167,7 @@ def test_upload_ephemeris():
                                  datetime.datetime(2020, 1, 1, 23, 59, 59),
                                  programs=["test-program"],
                                  platforms=["test-platform"],
-                                 instrument_types=["test-instrument-type"])
+                                 instrument_types=["pytest"])
 
     s.execute()
     s.wait()
@@ -179,7 +179,7 @@ def test_upload_ephemeris():
 def test_delete_ephemeris():
     program = "test-program"
     platform = "test-platform"
-    instrument_type = "test-instrument-type"
+    instrument_type = "pytest"
     start = datetime.datetime(2020, 1, 1, 0, 0)
     end = datetime.datetime(2020, 1, 1, 0, 2)
     source = aurorax.sources.get(program, platform, instrument_type)

@@ -15,9 +15,13 @@ def env(request):
 @pytest.fixture(scope="session", autouse=True)
 def set_env_api_key(env):
     if env == "staging":
+        print("\n\nTest environment: STAGING")
         aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+        if aurorax.get_api_key() == "":
+            print("API key not found")
         aurorax.api.set_base_url("https://api.staging.aurorax.space")
     elif env == "production":
+        print("\n\nTest environment: PRODUCTION")
         aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_PRODUCTION"))
         aurorax.api.set_base_url("https://api.aurorax.space")
     else:

@@ -35,7 +35,6 @@ def test_get_request_status():
 
     # get status
     status = aurorax.requests.get_status(r.request_url)
-    print(status)
 
     assert status
 
