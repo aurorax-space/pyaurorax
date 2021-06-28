@@ -146,11 +146,55 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
     # return
     return 1
 
+
+def delete_daterange(data_source: DataSource, start: datetime.datetime, end: datetime.datetime, data_product_types: List[str] = None) -> int:
+    """
+    Deletes data products associated with a data source in the date range provided. This method is asynchronous.
+
+    :param data_source: data source associated with the data product records. Identifier, program, platform, and instrument_type are required.
+    :type data_source: aurorax.sources.DataSource
+    :param start: beginning of datetime range to delete records for, inclusive.
+    :type start: datetime.datetime
+    :param end: end of datetime range to delete records for, inclusive.
+    :type end: datetime.datetime
+    :param data_product_types: specific types of data product to delete, e.g. ["keogram", "movie"]. If omitted, all data product types will be deleted.
+    :type data_product_types: List[str], optional
+
+    :raises aurorax.AuroraXMaxRetriesException: max retry error
+    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+    :raises aurorax.AuroraXBadParametersException: invalid or missing parameters
+    :raises aurorax.AuroraXNotFoundException: source not found
+    :raises aurorax.AuroraXUnauthorizedException: invalid API key for this operation
+
+    :return: 1 on success
+    :rtype: int
+    """
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
+        raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
+
+    # do request to get all data products between start and end datetimes
+    s = aurorax.data_products.search(start=start, 
+                                 end=end, 
+                                 programs=[data_source.program], 
+                                 platforms=[data_source.platform],
+                                 instrument_types=[data_source.instrument_type],
+                                 data_product_type_filters=[] if not data_product_types else data_product_types)
+
+    # collect URLs from search result
+    urls = []
+    for dp in s.data:
+        urls.append(dp.url)
+    
+    # do delete request
+    return delete(data_source, urls)
+
+
+
 def delete(data_source: DataSource, urls: List[str]) -> int:
     """
     Delete a range of data product records. This method is asynchronous.
 
-    :param data_source: data source that the ephemeris record is associated with. Identifier, program, platform, and instrument_type are required.
+    :param data_source: data source associated with the data product records. Identifier, program, platform, and instrument_type are required.
     :type data_source: aurorax.sources.DataSource
     :param urls: URLs of data products to delete
     :type urls: List[str]
