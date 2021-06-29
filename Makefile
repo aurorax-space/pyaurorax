@@ -30,6 +30,12 @@ test-bandit bandit:
 test-pytest pytest:
 	poetry run pytest
 
+test-pytest-read:
+	poetry run pytest -k "not add and not upload and not update and not delete"
+
+test-pytest-create-update-delete:
+	poetry run pytest -k "add or upload or update or delete"
+
 test-additional:
 	@echo "Type-checking ...\n============================="
 	-poetry run mypy aurorax

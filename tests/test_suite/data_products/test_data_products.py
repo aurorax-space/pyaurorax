@@ -43,6 +43,7 @@ def test_search_data_products_synchronous():
     s = aurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                      datetime.datetime(2020, 1, 2, 23, 59, 59),
                                      programs=["auroramax"],
+                                     data_product_type_filters=["keogram"],
                                      verbose=False)
 
     assert type(s.data) is list and type(s.data[0]) is DataProduct
@@ -200,3 +201,73 @@ def test_delete_data_products():
                                  instrument_types=[instrument_type])
 
     assert len(s.data) == 0
+
+
+def test_delete_data_products_daterange():
+    program = "test-program"
+    platform = "test-platform"
+    instrument_type = "pytest"
+    start_dt = datetime.datetime(2021, 6, 27, 0, 0)
+    end_dt = datetime.datetime(2021, 6, 29, 0, 0, 0)
+    source = aurorax.sources.get(program, platform, instrument_type)
+
+    # create DataProducts objects
+    dp1 = aurorax.data_products.DataProduct(data_source=source,
+                                          data_product_type="keogram",
+                                          url="datrange-url-1.bmp",
+                                          start=datetime.datetime(2021, 6, 27, 1, 0, 0),
+                                          end=datetime.datetime(2021, 6, 27, 1, 59, 59),
+                                          metadata=[])
+
+    dp2 = aurorax.data_products.DataProduct(data_source=source,
+                                          data_product_type="keogram",
+                                          url="datrange-url-2.bmp",
+                                          start=datetime.datetime(2021, 6, 28, 2, 0, 0),
+                                          end=datetime.datetime(2021, 6, 28, 2, 59, 59),
+                                          metadata=[])
+
+    dp3 = aurorax.data_products.DataProduct(data_source=source,
+                                          data_product_type="movie",
+                                          url="datrange-url-3.bmp",
+                                          start=datetime.datetime(2021, 6, 27, 1, 0, 0),
+                                          end=datetime.datetime(2021, 6, 27, 1, 59, 59),
+                                          metadata=[])
+
+    dp4 = aurorax.data_products.DataProduct(data_source=source,
+                                          data_product_type="movie",
+                                          url="datrange-url-4.bmp",
+                                          start=datetime.datetime(2021, 6, 28, 2, 0, 0),
+                                          end=datetime.datetime(2021, 6, 28, 2, 59, 59),
+                                          metadata=[])
+
+    # set records array
+    records = [dp1, dp2, dp3, dp4]
+
+    aurorax.data_products.upload(source.identifier, records)
+
+    time.sleep(5)
+
+    aurorax.data_products.delete_daterange(source, start_dt, end_dt, ["keogram"])
+
+    time.sleep(5)
+
+    # search data products again to see if they were deleted
+    s1 = aurorax.data_products.search(start_dt,
+                                 end_dt,
+                                 programs=[program],
+                                 platforms=[platform],
+                                 instrument_types=[instrument_type],
+                                 data_product_type_filters=["keogram"])
+
+    aurorax.data_products.delete_daterange(source, start_dt, end_dt, ["movie"])
+
+    time.sleep(5)
+
+    s2 = aurorax.data_products.search(start_dt, 
+                                 end_dt,
+                                 programs=[program],
+                                 platforms=[platform],
+                                 instrument_types=[instrument_type],
+                                 data_product_type_filters=["movie"])
+
+    assert len(s1.data) == 0 and len(s2.data) == 0

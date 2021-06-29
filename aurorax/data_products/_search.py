@@ -18,7 +18,8 @@ class Search():
                  programs: List[str] = None,
                  platforms: List[str] = None,
                  instrument_types: List[str] = None,
-                 metadata_filters: List[Dict] = None) -> None:
+                 metadata_filters: List[Dict] = None,
+                 data_product_type_filters: List[str] = None) -> None:
         """
         Create a new Search object
 
@@ -34,6 +35,8 @@ class Search():
         :type instrument_types: List[str], optional
         :param metadata_filters: metadata keys and values to filter on, defaults to None
         :type metadata_filters: List[Dict], optional
+        :param data_product_type_filters: data product types to filter on e.g. "keogram", defaults to None
+        :type data_product_type_filters: List[str], optional
         """
         self.request = None
         self.request_id = ""
@@ -52,6 +55,7 @@ class Search():
         self.platforms = platforms
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
+        self.data_product_type_filters = data_product_type_filters
 
     def __str__(self) -> str:
         """
@@ -86,6 +90,7 @@ class Search():
             },
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
+            "data_product_type_filters": [] if not self.data_product_type_filters else self.data_product_type_filters,
         }
         self.query = post_data
 
@@ -160,9 +165,10 @@ def search_async(start: datetime.datetime,
                  programs: List[str] = None,
                  platforms: List[str] = None,
                  instrument_types: List[str] = None,
-                 metadata_filters: List[Dict] = None) -> Search:
+                 metadata_filters: List[Dict] = None,
+                 data_product_type_filters: List[str] = None) -> Search:
     """
-    Submit a request for an data products search, return asynchronously
+    Submit a request for an data products search, return asynchronously.
 
     :param start: start timestamp
     :type start: datetime.datetime
@@ -176,6 +182,8 @@ def search_async(start: datetime.datetime,
     :type instrument_types: List[str], optional
     :param metadata_filters: metadata keys and values to filter on, defaults to None
     :type metadata_filters: List[str], optional
+    :param data_product_type_filters: data product types to filter on e.g. "keogram", defaults to None
+    :type data_product_type_filters: List[str], optional
 
     :return: Search object
     :rtype: Search
@@ -196,10 +204,11 @@ def search(start: datetime,
            platforms: List[str] = None,
            instrument_types: List[str] = None,
            metadata_filters: List[Dict] = None,
+           data_product_type_filters: List[str] = None,
            verbose: bool = False,
            poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Search:
     """
-    Search for data products records
+    Search for data products records synchronously.
 
     :param start: start timestamp
     :type start: datetime
@@ -213,6 +222,8 @@ def search(start: datetime,
     :type instrument_types: List[str], optional
     :param metadata_filters: metadata keys and values to filter on, defaults to None
     :type metadata_filters: List[Dict], optional
+    :param data_product_type_filters: data product types to filter on e.g. "keogram", defaults to None
+    :type data_product_type_filters: List[str], optional
     :param verbose: show the progress of the request using the request log, defaults to False
     :type verbose: bool, optional
     :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
@@ -222,7 +233,7 @@ def search(start: datetime,
     :rtype: Search
     """
     # create a Search() object
-    s = Search(start, end, programs, platforms, instrument_types, metadata_filters)
+    s = Search(start, end, programs, platforms, instrument_types, metadata_filters, data_product_type_filters)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 
