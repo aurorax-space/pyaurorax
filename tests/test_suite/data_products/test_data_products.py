@@ -265,7 +265,7 @@ def test_delete_data_products_daterange():
                                       instrument_types=[instrument_type],
                                       data_product_type_filters=["keogram"])
 
-    aurorax.data_products.delete_daterange(source, start_dt, end_dt, ["movie"])
+    aurorax.data_products.delete_daterange(source, start_dt, end_dt)
 
     time.sleep(5)
 
