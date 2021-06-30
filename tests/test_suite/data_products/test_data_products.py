@@ -10,7 +10,7 @@ def test_create_data_product_object():
     # set values
     program = "test-program"
     platform = "test-platform"
-    instrument_type = "test-instrument-type"
+    instrument_type = "pytest"
     start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end_dt = start_dt.replace(hour=23, minute=59, second=59)
     data_product_type = "keogram"
