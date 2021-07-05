@@ -1,7 +1,6 @@
 import aurorax
 from aurorax.exceptions import *
 import datetime
-import os
 import pytest
 import time
 
