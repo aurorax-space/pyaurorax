@@ -193,7 +193,8 @@ def search_async(start: datetime.datetime,
                                      programs=programs,
                                      platforms=platforms,
                                      instrument_types=instrument_types,
-                                     metadata_filters=metadata_filters)
+                                     metadata_filters=metadata_filters,
+                                     data_product_type_filters=data_product_type_filters)
     s.execute()
     return s
 

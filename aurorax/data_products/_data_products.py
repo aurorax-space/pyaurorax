@@ -1,3 +1,4 @@
+from aurorax.exceptions import AuroraXException
 import datetime
 import pprint
 import aurorax
@@ -147,7 +148,7 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
     return 1
 
 
-def delete_daterange(data_source: DataSource, start: datetime.datetime, end: datetime.datetime, data_product_types: List[str] = None) -> int:
+def delete_daterange(data_source: DataSource, start: datetime.datetime, end: datetime.datetime, data_product_types: List[str] = None, metadata_filters: List[Dict] = None) -> int:
     """
     Deletes data products associated with a data source in the date range provided. This method is asynchronous.
 
@@ -173,12 +174,16 @@ def delete_daterange(data_source: DataSource, start: datetime.datetime, end: dat
         raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
 
     # do request to get all data products between start and end datetimes
-    s = aurorax.data_products.search(start=start, 
-                                 end=end, 
-                                 programs=[data_source.program], 
-                                 platforms=[data_source.platform],
-                                 instrument_types=[data_source.instrument_type],
-                                 data_product_type_filters=[] if not data_product_types else data_product_types)
+    try:
+        s = aurorax.data_products.search(start=start, 
+                                        end=end, 
+                                        programs=[data_source.program], 
+                                        platforms=[data_source.platform],
+                                        instrument_types=[data_source.instrument_type],
+                                        metadata_filters=[] if not metadata_filters else metadata_filters,
+                                        data_product_type_filters=[] if not data_product_types else data_product_types)
+    except Exception as e:
+        raise AuroraXException(e)
 
     # collect URLs from search result
     urls = []
@@ -192,7 +197,7 @@ def delete_daterange(data_source: DataSource, start: datetime.datetime, end: dat
 
 def delete(data_source: DataSource, urls: List[str]) -> int:
     """
-    Delete a range of data product records. This method is asynchronous.
+    Delete data products by URL. This method is asynchronous.
 
     :param data_source: data source associated with the data product records. Identifier, program, platform, and instrument_type are required.
     :type data_source: aurorax.sources.DataSource

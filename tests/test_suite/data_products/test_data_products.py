@@ -217,7 +217,9 @@ def test_delete_data_products_daterange():
                                           url="datrange-url-1.bmp",
                                           start=datetime.datetime(2021, 6, 27, 1, 0, 0),
                                           end=datetime.datetime(2021, 6, 27, 1, 59, 59),
-                                          metadata=[])
+                                          metadata={
+                                              "keogram_type": "test"
+                                          })
 
     dp2 = aurorax.data_products.DataProduct(data_source=source,
                                           data_product_type="keogram",
@@ -247,27 +249,30 @@ def test_delete_data_products_daterange():
 
     time.sleep(5)
 
-    aurorax.data_products.delete_daterange(source, start_dt, end_dt, ["keogram"])
+    aurorax.data_products.delete_daterange(data_source=source,
+                                           start=start_dt,
+                                           end=end_dt,
+                                           data_product_types=["keogram"],
+                                           metadata_filters=[{"key": "keogram_type", "values": ["test"], "operator": "="}])
 
     time.sleep(5)
 
     # search data products again to see if they were deleted
     s1 = aurorax.data_products.search(start_dt,
-                                 end_dt,
-                                 programs=[program],
-                                 platforms=[platform],
-                                 instrument_types=[instrument_type],
-                                 data_product_type_filters=["keogram"])
+                                      end_dt,
+                                      programs=[program],
+                                      platforms=[platform],
+                                      instrument_types=[instrument_type],
+                                      data_product_type_filters=["keogram"])
 
-    aurorax.data_products.delete_daterange(source, start_dt, end_dt, ["movie"])
+    aurorax.data_products.delete_daterange(source, start_dt, end_dt)
 
     time.sleep(5)
 
     s2 = aurorax.data_products.search(start_dt, 
-                                 end_dt,
-                                 programs=[program],
-                                 platforms=[platform],
-                                 instrument_types=[instrument_type],
-                                 data_product_type_filters=["movie"])
+                                      end_dt,
+                                      programs=[program],
+                                      platforms=[platform],
+                                      instrument_types=[instrument_type])
 
-    assert len(s1.data) == 0 and len(s2.data) == 0
+    assert len(s1.data) == 1 and len(s2.data) == 0
