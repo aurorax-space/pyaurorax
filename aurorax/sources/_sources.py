@@ -36,11 +36,11 @@ class DataSource(BaseModel):
     instrument_type: str = None
     source_type: str = None
     display_name: str = None
-    metadata: Dict = {}
+    metadata: Dict = None
     owner: str = None
-    maintainers: List[str] = []
-    ephemeris_metadata_schema: List[Dict] = []
-    data_product_metadata_schema: List[Dict] = []
+    maintainers: List[str] = None
+    ephemeris_metadata_schema: List[Dict] = None
+    data_product_metadata_schema: List[Dict] = None
 
 
     def __str__(self) -> str:
@@ -356,5 +356,38 @@ def update(data_source: DataSource) -> DataSource:
     # return
     try:
         return aurorax.sources.get(data_source.program, data_source.platform, data_source.instrument_type, "full_record")
+    except:
+        raise aurorax.AuroraXException("Could not update data source.")
+
+
+def partial_update(data_source: DataSource) -> DataSource:
+    """
+    Partially update a data source in AuroraX. Omitted fields are ignored in the update. Refer to examples for usage.
+
+    :param data_source: data source to be partially updated. Identifier is required. Any other supplied fields will be used to 
+                        update the AuroraX record.
+    :type data_source: aurorax.sources.DataSource
+
+    :raises aurorax.AuroraXMaxRetriesException: max retry error
+    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
+    :raises aurorax.AuroraXNotFoundException: data source not found
+    :raises aurorax. AuroraXBadParametersException: missing parameters
+
+    :return: updated data source
+    :rtype: aurorax.sources.DataSource
+    """
+    if not data_source.identifier:
+        raise aurorax.AuroraXBadParametersException("Required DataSource.identifier field is missing. Update operation aborted.")
+
+    # set URL
+    url = f"{aurorax.api.urls.data_sources_url}/{data_source.identifier}"
+
+    # make request to update the data source passed in
+    req = aurorax.AuroraXRequest(method="patch", url=url, body=data_source)
+    req.execute()
+
+    # return
+    try:
+        return aurorax.sources.get_using_identifier(data_source.identifier, "full_record")
     except:
         raise aurorax.AuroraXException("Could not update data source.")
