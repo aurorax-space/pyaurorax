@@ -17,7 +17,7 @@ class AvailabilityResult(BaseModel):
     :param available_ephemeris: Dict
     """
     data_source: aurorax.sources.DataSource
-    available_date_products: Dict = None
+    available_data_products: Dict = None
     available_ephemeris: Dict = None
 
     def __str__(self) -> str:

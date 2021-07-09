@@ -1,6 +1,5 @@
 import aurorax
 from aurorax.sources import DataSource
-import os
 
 def test_get_single_source():
     source = aurorax.sources.get("swarm", "swarma", "footprint", format="full_record")
@@ -44,7 +43,7 @@ def test_list_sources():
 def test_add_source():
     # set values
     identifier = 400
-    program = "test-program-new"
+    program = "test-program"
     platform = "test-platform-new"
     instrument_type = "test-instrument-new"
     source_type = "ground"
@@ -91,11 +90,10 @@ def test_add_source():
 def test_update_source():
     # get the identifier
     try:
-        ds = aurorax.sources.get("test-program-new", "test-platform-new", "test-instrument-new", format="full_record")
+        ds = aurorax.sources.get("test-program", "test-platform-new", "test-instrument-new", format="full_record")
     except:
         assert False
 
-    ds.program = "test-program-updated"
     ds.platform = "test-platform-updated"
     ds.instrument_type = "test-instrument-updated"
     ds.metadata = {
@@ -105,14 +103,27 @@ def test_update_source():
     # update the data source
     updated_ds = aurorax.sources.update(ds)
 
-    assert updated_ds.program == "test-program-updated"
+    assert updated_ds.platform == "test-platform-updated" and updated_ds.instrument_type == "test-instrument-updated" and "test-metadata-key" in updated_ds.metadata.keys()
+
+
+def test_update_source_partial():
+    # get the identifier
+    try:
+        ds = aurorax.sources.get("test-program", "test-platform-updated", "test-instrument-updated", format="full_record")
+    except:
+        assert False
+
+    # partially update the data source
+    updated_ds = aurorax.sources.partial_update(identifier=ds.identifier, instrument_type="test-instrument-updated-partial", metadata={}, ephemeris_metadata_schema=[])
+
+    assert updated_ds.instrument_type == "test-instrument-updated-partial" and updated_ds.metadata == {} and updated_ds.ephemeris_metadata_schema == []
 
 
 def test_delete_source():
     # set values
-    program = "test-program-updated"
+    program = "test-program"
     platform = "test-platform-updated"
-    instrument_type = "test-instrument-updated"
+    instrument_type = "test-instrument-updated-partial"
 
     # get source record to pull out the identifier
     sources = aurorax.sources.get_using_filters(program=program,

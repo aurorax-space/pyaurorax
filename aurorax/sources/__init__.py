@@ -7,3 +7,4 @@ from ._sources import get_stats
 from ._sources import add
 from ._sources import delete
 from ._sources import update
+from ._sources import partial_update
