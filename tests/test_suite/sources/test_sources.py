@@ -1,6 +1,5 @@
 import aurorax
 from aurorax.sources import DataSource
-import os
 
 def test_get_single_source():
     source = aurorax.sources.get("swarm", "swarma", "footprint", format="full_record")

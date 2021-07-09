@@ -1,4 +1,3 @@
-from aurorax.exceptions import AuroraXException
 import aurorax
 import pprint
 from pydantic import BaseModel
