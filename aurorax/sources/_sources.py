@@ -1,3 +1,4 @@
+from aurorax.exceptions import AuroraXException
 import aurorax
 import pprint
 from pydantic import BaseModel
@@ -360,13 +361,42 @@ def update(data_source: DataSource) -> DataSource:
         raise aurorax.AuroraXException("Could not update data source.")
 
 
-def partial_update(data_source: DataSource) -> DataSource:
+def partial_update(identifier: int,
+                   program: str = None,
+                   platform: str = None,
+                   instrument_type: str = None,
+                   source_type: str = None,
+                   display_name: str = None,
+                   metadata: Dict = None,
+                   owner: str = None,
+                   maintainers: List[str] = None,
+                   ephemeris_metadata_schema: List[Dict] = None,
+                   data_product_metadata_schema: List[Dict] = None) -> DataSource:
     """
     Partially update a data source in AuroraX. Omitted fields are ignored in the update. Refer to examples for usage.
 
-    :param data_source: data source to be partially updated. Identifier is required. Any other supplied fields will be used to 
-                        update the AuroraX record.
-    :type data_source: aurorax.sources.DataSource
+    :param identifier: data source ID
+    :type identifier: int
+    :param program: data source program name, optional
+    :type program: str
+    :param platform: data source platform name, optional
+    :type platform: str
+    :param instrument_type: data source instrument type, optional
+    :type instrument_type: str
+    :param source_type: data source type, optional
+    :type source_type: str
+    :param display_name: data source display name, optional
+    :type display_name: str
+    :param metadata: data source metadata, optional
+    :type metadata: str
+    :param owner: data source owner's email address, optional
+    :type owner: str
+    :param maintainers: list of maintainer email addresses, optional
+    :type maintainers: List[str]
+    :param ephemeris_metadata_schema: data source ephemeris metadata schema, optional
+    :type ephemeris_metadata_schema: List[Dict]
+    :param data_product_metadata_schema: data source data product metadata schema, optional
+    :type data_product_metadata_schema: List[Dict]
 
     :raises aurorax.AuroraXMaxRetriesException: max retry error
     :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
@@ -376,18 +406,31 @@ def partial_update(data_source: DataSource) -> DataSource:
     :return: updated data source
     :rtype: aurorax.sources.DataSource
     """
-    if not data_source.identifier:
-        raise aurorax.AuroraXBadParametersException("Required DataSource.identifier field is missing. Update operation aborted.")
+    if not identifier:
+        raise aurorax.AuroraXBadParametersException("Required identifier field is missing. Update operation aborted.")
+
+    # create a DataSource
+    ds = DataSource(identifier=identifier,
+                    program=program,
+                    platform=platform,
+                    instrument_type=instrument_type,
+                    source_type=source_type,
+                    display_name=display_name,
+                    metadata=metadata,
+                    owner=owner,
+                    maintainers=maintainers,
+                    ephemeris_metadata_schema=ephemeris_metadata_schema,
+                    data_product_metadata_schema=data_product_metadata_schema)
 
     # set URL
-    url = f"{aurorax.api.urls.data_sources_url}/{data_source.identifier}"
+    url = f"{aurorax.api.urls.data_sources_url}/{ds.identifier}"
 
     # make request to update the data source passed in
-    req = aurorax.AuroraXRequest(method="patch", url=url, body=data_source)
+    req = aurorax.AuroraXRequest(method="patch", url=url, body=ds)
     req.execute()
 
     # return
     try:
-        return aurorax.sources.get_using_identifier(data_source.identifier, "full_record")
+        return aurorax.sources.get_using_identifier(ds.identifier, "full_record")
     except:
         raise aurorax.AuroraXException("Could not update data source.")
