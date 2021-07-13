@@ -151,8 +151,6 @@ def upload(identifier: int, records: List[Ephemeris], validate_source: bool = Fa
     # evaluate response
     if (res.status_code == 400):
         raise aurorax.AuroraXUploadException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
-    elif (res.status_code == 202):
-        print("Status code 202, stream accepted")
     
     # return
     return 1
