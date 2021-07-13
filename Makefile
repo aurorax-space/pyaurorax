@@ -1,4 +1,4 @@
-.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean publish
+.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean docs docs-generate docs-serve publish
 
 all:
 
@@ -43,6 +43,15 @@ test-additional:
 	@echo "Test coverage ...\n============================="
 	-poetry run coverage report
 
+docs:
+	python3 -m pip install mkdocs mkdocs-material pdoc3
+
+docs-generate: 
+	pdoc --html --force --output-dir docs aurorax
+
+docs-serve:
+	mkdocs serve
+	
 publish:
 	${MAKE} test
 	poetry build

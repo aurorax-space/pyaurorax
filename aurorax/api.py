@@ -4,7 +4,10 @@ import pprint
 import json
 from typing import Optional, Dict, Any, List, Union
 from pydantic import BaseModel
-from .._internal.util import json_converter
+from ._internal.util import json_converter
+
+# endpoint URLs
+DEFAULT_URL_BASE = "https://api.aurorax.space"
 
 # reqest globals
 DEFAULT_RETRIES = 2
@@ -14,8 +17,12 @@ REQUEST_HEADERS = {
 }
 API_KEY_HEADER_NAME = "x-aurorax-api-key"
 
+
+
+
 # private dynamic globals
 __api_key = ""
+
 
 
 def get_api_key():
@@ -161,3 +168,119 @@ class AuroraXRequest(BaseModel):
 
     def __repr__(self) -> str:
         return pprint.pformat(self.__dict__)
+
+class URLs:
+    __DEFAULT_URL_DATA_SOURCES = "/api/v1/data-sources"
+    __DEFAULT_URL_STATS = "/api/v1/stats"
+    __DEFAULT_URL_EPHEMERIS_AVAILABILITY = "/api/v1/availability/ephemeris"
+    __DEFAULT_URL_EPHEMERIS_UPLOAD = "/api/v1/data-sources/{}/ephemeris"
+    __DEFAULT_URL_EPHEMERIS_SEARCH = "/api/v1/ephemeris/search"
+    __DEFAULT_URL_EPHEMERIS_REQUEST = "/api/v1/ephemeris/requests/{}"
+    __DEFAULT_URL_DATA_PRODUCTS_AVAILABILITY = "/api/v1/availability/data_products"
+    __DEFAULT_URL_DATA_PRODUCTS_UPLOAD = "/api/v1/data-sources/{}/data_products"
+    __DEFAULT_URL_DATA_PRODUCTS_SEARCH = "/api/v1/data_products/search"
+    __DEFAULT_URL_DATA_PRODUCTS_REQUEST = "/api/v1/data_products/requests/{}"
+    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search-multi"
+    __DEFAULT_URL_CONJUNCTION_REQUEST = "/api/v1/conjunctions/requests/{}"
+
+    def __init__(self, base_url: str = DEFAULT_URL_BASE) -> None:
+        self.__base = base_url
+        self.__data_sources = self.__DEFAULT_URL_DATA_SOURCES
+        self.__stats = self.__DEFAULT_URL_STATS
+        self.__ephemeris_availability = self.__DEFAULT_URL_EPHEMERIS_AVAILABILITY
+        self.__ephemeris_search = self.__DEFAULT_URL_EPHEMERIS_SEARCH
+        self.__ephemeris_upload = self.__DEFAULT_URL_EPHEMERIS_UPLOAD
+        self.__ephemeris_request = self.__DEFAULT_URL_EPHEMERIS_REQUEST
+        self.__data_products_availability = self.__DEFAULT_URL_DATA_PRODUCTS_AVAILABILITY
+        self.__data_products_search = self.__DEFAULT_URL_DATA_PRODUCTS_SEARCH
+        self.__data_products_upload = self.__DEFAULT_URL_DATA_PRODUCTS_UPLOAD
+        self.__data_products_request = self.__DEFAULT_URL_DATA_PRODUCTS_REQUEST
+        self.__conjunction_search = self.__DEFAULT_URL_CONJUNCTION_SEARCH
+        self.__conjunction_request = self.__DEFAULT_URL_CONJUNCTION_REQUEST
+
+    @property
+    def base_url(self) -> str:
+        return self.__base
+
+    @base_url.setter
+    def base_url(self, value: str) -> None:
+        self.__base = value
+
+    # data sources
+    # -------------------
+    @property
+    def data_sources_url(self) -> str:
+        return "%s%s" % (self.__base, self.__data_sources)
+
+    @property
+    def stats_url(self) -> str:
+        return "%s%s" % (self.__base, self.__stats)
+
+    # availability
+    # -------------------
+    @property
+    def ephemeris_availability_url(self) -> str:
+        return "%s%s" % (self.__base, self.__ephemeris_availability)
+
+    @property
+    def data_products_availability_url(self) -> str:
+        return "%s%s" % (self.__base, self.__data_products_availability)
+
+    # ephemeris
+    # -------------------
+    @property
+    def ephemeris_search_url(self) -> str:
+        return "%s%s" % (self.__base, self.__ephemeris_search)
+
+    @property
+    def ephemeris_upload_url(self) -> str:
+        return "%s%s" % (self.__base, self.__ephemeris_upload)
+
+    @property
+    def ephemeris_request_url(self) -> str:
+        return "%s%s" % (self.__base, self.__ephemeris_request)
+
+    # data products
+    # -------------------
+    @property
+    def data_products_search_url(self) -> str:
+        return "%s%s" % (self.__base, self.__data_products_search)
+
+    @property
+    def data_products_upload_url(self) -> str:
+        return "%s%s" % (self.__base, self.__data_products_upload)
+
+    @property
+    def data_products_request_url(self) -> str:
+        return "%s%s" % (self.__base, self.__data_products_request)
+
+    # conjunctions
+    # -------------------
+    @property
+    def conjunction_search_url(self) -> str:
+        return f"{self.__base}{self.__conjunction_search}"
+
+    @property
+    def conjunction_request_url(self) -> str:
+        return f"{self.__base}{self.__conjunction_request}"
+
+
+# create instance of URLs that will be used throughout the application
+urls = URLs()
+
+
+def set_base_url(url: str) -> None:
+    """
+    Change the base URL for the API (ie. change to the staging system or local server)
+
+    :param url: new base url (ie. 'https://api.staging.aurorax.space')
+    :type url: str
+    """
+    urls.base_url = url
+
+
+def reset_base_url() -> None:
+    """
+    Set the base URL for the API back to the default
+    """
+    urls.base_url = DEFAULT_URL_BASE
