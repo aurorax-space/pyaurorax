@@ -1,5 +1,5 @@
 import aurorax
-from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
+#from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
 import datetime
 import humanize
 import pprint
@@ -16,7 +16,7 @@ class Ephemeris(BaseModel):
         epoch: datetime.datetime timestamp for the record in UTC
         location_geo: aurorax.Location object with latitude and longitude in geographic coordinates
         location_gsm: aurorax.Location object with latitude and longitude in GSM coordinates (leave empty for
-                         data sources with a type of 'ground')
+            data sources with a type of 'ground')
         nbtrace: aurorax.Location object with north B-trace geomagnetic latitude and longitude
         sbtrace: aurorax.Location object with south B-trace geomagnetic latitude and longitude
         metadata: dictionary containing metadata values for this record
@@ -36,7 +36,7 @@ class Ephemeris(BaseModel):
         objects to strings)
 
         Returns:
-        Dictionary JSON-serializable object
+            Dictionary JSON-serializable object
         
         """
         d = self.__dict__
@@ -236,7 +236,7 @@ class Search():
 
         self.data = [Ephemeris(**e) for e in raw_data]
 
-    def wait(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
+    def wait(self, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
         Block and wait for the request to complete and data is available for retrieval
 
@@ -249,8 +249,8 @@ class Search():
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
 
 
-def search_async(start: datetime,
-                 end: datetime,
+def search_async(start: datetime.datetime,
+                 end: datetime.datetime,
                  programs: List[str] = None,
                  platforms: List[str] = None,
                  instrument_types: List[str] = None,
@@ -275,7 +275,7 @@ def search_async(start: datetime,
             }
 
     Returns:
-    aurorax.ephemeris.Search object
+        aurorax.ephemeris.Search object
 
     """
     s = aurorax.ephemeris.Search(start=start,
@@ -288,14 +288,14 @@ def search_async(start: datetime,
     return s
 
 
-def search(start: datetime,
-           end: datetime,
+def search(start: datetime.datetime,
+           end: datetime.datetime,
            programs: List[str] = None,
            platforms: List[str] = None,
            instrument_types: List[str] = None,
            metadata_filters: List[Dict] = None,
            verbose: bool = False,
-           poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Search:
+           poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> Search:
     """
     Search for ephemeris records
 
@@ -318,7 +318,7 @@ def search(start: datetime,
         poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
     Returns:
-    aurorax.ephemeris.Search object
+        aurorax.ephemeris.Search object
 
     """
     # create a Search() object
@@ -382,7 +382,7 @@ def upload(identifier: int, records: List[Ephemeris], validate_source: bool = Fa
         validate_source: boolean, set to True to validate all records before uploading
 
     Returns:
-    1 for success, raises exception on error
+        1 for success, raises exception on error
 
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -425,7 +425,7 @@ def delete(data_source: aurorax.sources.DataSource, start: datetime.datetime, en
         end: datetime.datetime end of datetime range to delete records for, inclusive.
 
     Returns:
-    1 on success
+        1 on success
 
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error

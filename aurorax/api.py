@@ -34,7 +34,7 @@ def authenticate(api_key: str) -> int:
         api_key: AuroraX API key string
 
     Returns:
-    0
+        0
 
     """
 
@@ -93,7 +93,7 @@ class AuroraXRequest(BaseModel):
                 the retry mechanism, defaults to False
 
         Returns:
-        An AuroraXResponse object
+            An AuroraXResponse object
 
         Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error

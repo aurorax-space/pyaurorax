@@ -113,9 +113,19 @@ class Search():
             }
         default_distance: default maximum distance in kilometers for conjunction. 
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
+        request: aurorax.AuroraXResponse object returned when the search is executed
+        request_id: unique AuroraX string ID assigned to the request
+        request_url: unique AuroraX URL string assigned to the request
+        executed: boolean, gets set to True when the search is executed
+        completed: boolean, gets set to True when the search is checked to be finished
+        data_url: URL string where data is accessed
+        query: dictionary of values sent for the search query
+        status: dictionary of status updates
+        data: list of aurorax.conjunctions.Conjunction objects returned
+        logs: list of logging messages from the API
 
         Returns:
-        aurorax.conjunctions.Search object
+            aurorax.conjunctions.Search object
 
     &#34;&#34;&#34;
 
@@ -254,9 +264,13 @@ class Search():
         url = aurorax.api.urls.conjunction_request_url.format(self.request_id)
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
 
-def search_async(start: datetime.datetime, end: datetime.datetime, 
-                ground: List[Dict], space: List[Dict], conjunction_types: List[str] = [&#34;nbtrace&#34;],
-                max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -&gt; Search:
+def search_async(start: datetime.datetime,
+                 end: datetime.datetime, 
+                 ground: List[Dict], 
+                 space: List[Dict], 
+                 conjunction_types: List[str] = [&#34;nbtrace&#34;],
+                 max_distances: Dict[str, float] = {}, 
+                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -&gt; Search:
     &#34;&#34;&#34;
     Submit a request for a conjunctions search, return asynchronously.
 
@@ -295,7 +309,7 @@ def search_async(start: datetime.datetime, end: datetime.datetime,
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
 
     Returns:
-    aurorax.conjunctions.Search object
+        aurorax.conjunctions.Search object
     &#34;&#34;&#34;
     s = Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types, max_distances=max_distances, default_distance=default_distance)
     s.execute()
@@ -349,7 +363,7 @@ def search(start: datetime.datetime, end: datetime.datetime,
             to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
     Returns:
-    aurorax.conjunctions.Search object
+        aurorax.conjunctions.Search object
 
     &#34;&#34;&#34;
     # create a Search object
@@ -440,8 +454,8 @@ log, defaults to False</dd>
 <dd>seconds to wait between polling calls, defaults
 to aurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
 </dl>
-<p>Returns:
-aurorax.conjunctions.Search object</p></div>
+<h2 id="returns">Returns</h2>
+<p>aurorax.conjunctions.Search object</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -493,7 +507,7 @@ aurorax.conjunctions.Search object</p></div>
             to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
     Returns:
-    aurorax.conjunctions.Search object
+        aurorax.conjunctions.Search object
 
     &#34;&#34;&#34;
     # create a Search object
@@ -570,15 +584,19 @@ e.g. distances = {
 <dd>default maximum distance in kilometers for conjunction.
 Used when max distance is not specified for any ground-space and space-space instrument pairs.</dd>
 </dl>
-<p>Returns:
-aurorax.conjunctions.Search object</p></div>
+<h2 id="returns">Returns</h2>
+<p>aurorax.conjunctions.Search object</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def search_async(start: datetime.datetime, end: datetime.datetime, 
-                ground: List[Dict], space: List[Dict], conjunction_types: List[str] = [&#34;nbtrace&#34;],
-                max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -&gt; Search:
+<pre><code class="python">def search_async(start: datetime.datetime,
+                 end: datetime.datetime, 
+                 ground: List[Dict], 
+                 space: List[Dict], 
+                 conjunction_types: List[str] = [&#34;nbtrace&#34;],
+                 max_distances: Dict[str, float] = {}, 
+                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -&gt; Search:
     &#34;&#34;&#34;
     Submit a request for a conjunctions search, return asynchronously.
 
@@ -617,7 +635,7 @@ aurorax.conjunctions.Search object</p></div>
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
 
     Returns:
-    aurorax.conjunctions.Search object
+        aurorax.conjunctions.Search object
     &#34;&#34;&#34;
     s = Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types, max_distances=max_distances, default_distance=default_distance)
     s.execute()
@@ -783,6 +801,26 @@ e.g. distances = {
 <dt><strong><code>default_distance</code></strong></dt>
 <dd>default maximum distance in kilometers for conjunction.
 Used when max distance is not specified for any ground-space and space-space instrument pairs.</dd>
+<dt><strong><code>request</code></strong></dt>
+<dd>aurorax.AuroraXResponse object returned when the search is executed</dd>
+<dt><strong><code>request_id</code></strong></dt>
+<dd>unique AuroraX string ID assigned to the request</dd>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>unique AuroraX URL string assigned to the request</dd>
+<dt><strong><code>executed</code></strong></dt>
+<dd>boolean, gets set to True when the search is executed</dd>
+<dt><strong><code>completed</code></strong></dt>
+<dd>boolean, gets set to True when the search is checked to be finished</dd>
+<dt><strong><code>data_url</code></strong></dt>
+<dd>URL string where data is accessed</dd>
+<dt><strong><code>query</code></strong></dt>
+<dd>dictionary of values sent for the search query</dd>
+<dt><strong><code>status</code></strong></dt>
+<dd>dictionary of status updates</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>list of aurorax.conjunctions.Conjunction objects returned</dd>
+<dt><strong><code>logs</code></strong></dt>
+<dd>list of logging messages from the API</dd>
 </dl>
 <p>Returns:
 aurorax.conjunctions.Search object</p></div>
@@ -827,9 +865,19 @@ aurorax.conjunctions.Search object</p></div>
             }
         default_distance: default maximum distance in kilometers for conjunction. 
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
+        request: aurorax.AuroraXResponse object returned when the search is executed
+        request_id: unique AuroraX string ID assigned to the request
+        request_url: unique AuroraX URL string assigned to the request
+        executed: boolean, gets set to True when the search is executed
+        completed: boolean, gets set to True when the search is checked to be finished
+        data_url: URL string where data is accessed
+        query: dictionary of values sent for the search query
+        status: dictionary of status updates
+        data: list of aurorax.conjunctions.Conjunction objects returned
+        logs: list of logging messages from the API
 
         Returns:
-        aurorax.conjunctions.Search object
+            aurorax.conjunctions.Search object
 
     &#34;&#34;&#34;
 

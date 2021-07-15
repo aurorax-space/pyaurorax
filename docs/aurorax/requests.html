@@ -40,11 +40,12 @@ def get_status(request_url: str) -&gt; Dict:
     &#34;&#34;&#34;
     Retrieve the status of a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
+    Attributes:
+        request_url: URL of the request information
 
-    :return: status response
-    :rtype: Dict
+    Returns:
+        Status dictionary for the request
+
     &#34;&#34;&#34;
     # do request
     req = aurorax.AuroraXRequest(method=&#34;get&#34;, url=request_url)
@@ -58,11 +59,12 @@ def get_data(data_url: str) -&gt; List:
     &#34;&#34;&#34;
     Retrieve the data for a request
 
-    :param data_url: URL for the data of a request
-    :type data_url: str
+    Attributes:
+        data_url: URL for the data of a request
 
-    :return: data response
-    :rtype: List
+    Returns:
+        List of JSON data objects in the response
+
     &#34;&#34;&#34;
     # do request
     req = aurorax.AuroraXRequest(method=&#34;get&#34;, url=data_url)
@@ -97,11 +99,12 @@ def get_logs(request_url: str) -&gt; List:
     &#34;&#34;&#34;
     Retrieve the logs for a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
+    Attributes:
+        request_url: URL of the request information
 
-    :return: logs response
-    :rtype: List
+    Returns:
+        List of logged messages for the request
+
     &#34;&#34;&#34;
     # get status
     status = get_status(request_url)
@@ -118,15 +121,14 @@ def wait_for_data(request_url: str,
     &#34;&#34;&#34;
     Block and wait for the data to be made available for a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
-    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-    :type poll_interval: float, optional
-    :param verbose: output poll times, defaults to False
-    :type verbose: bool, optional
+    Attributes:
+        request_url: URL of the request information
+        poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times, defaults to False
 
-    :return: status response
-    :rtype: Dict
+    Returns:
+        Status dictionary for the request
+    
     &#34;&#34;&#34;
     status = get_status(request_url)
     while (status[&#34;search_result&#34;][&#34;data_uri&#34;] is None):
@@ -151,10 +153,13 @@ def wait_for_data(request_url: str,
 </code></dt>
 <dd>
 <div class="desc"><p>Retrieve the data for a request</p>
-<p>:param data_url: URL for the data of a request
-:type data_url: str</p>
-<p>:return: data response
-:rtype: List</p></div>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>data_url</code></strong></dt>
+<dd>URL for the data of a request</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List of JSON data objects in the response</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -163,11 +168,12 @@ def wait_for_data(request_url: str,
     &#34;&#34;&#34;
     Retrieve the data for a request
 
-    :param data_url: URL for the data of a request
-    :type data_url: str
+    Attributes:
+        data_url: URL for the data of a request
 
-    :return: data response
-    :rtype: List
+    Returns:
+        List of JSON data objects in the response
+
     &#34;&#34;&#34;
     # do request
     req = aurorax.AuroraXRequest(method=&#34;get&#34;, url=data_url)
@@ -203,10 +209,13 @@ def wait_for_data(request_url: str,
 </code></dt>
 <dd>
 <div class="desc"><p>Retrieve the logs for a request</p>
-<p>:param request_url: URL of the request information
-:type request_url: str</p>
-<p>:return: logs response
-:rtype: List</p></div>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>URL of the request information</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List of logged messages for the request</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -215,11 +224,12 @@ def wait_for_data(request_url: str,
     &#34;&#34;&#34;
     Retrieve the logs for a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
+    Attributes:
+        request_url: URL of the request information
 
-    :return: logs response
-    :rtype: List
+    Returns:
+        List of logged messages for the request
+
     &#34;&#34;&#34;
     # get status
     status = get_status(request_url)
@@ -235,10 +245,13 @@ def wait_for_data(request_url: str,
 </code></dt>
 <dd>
 <div class="desc"><p>Retrieve the status of a request</p>
-<p>:param request_url: URL of the request information
-:type request_url: str</p>
-<p>:return: status response
-:rtype: Dict</p></div>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>URL of the request information</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Status dictionary for the request</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -247,11 +260,12 @@ def wait_for_data(request_url: str,
     &#34;&#34;&#34;
     Retrieve the status of a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
+    Attributes:
+        request_url: URL of the request information
 
-    :return: status response
-    :rtype: Dict
+    Returns:
+        Status dictionary for the request
+
     &#34;&#34;&#34;
     # do request
     req = aurorax.AuroraXRequest(method=&#34;get&#34;, url=request_url)
@@ -266,14 +280,17 @@ def wait_for_data(request_url: str,
 </code></dt>
 <dd>
 <div class="desc"><p>Block and wait for the data to be made available for a request</p>
-<p>:param request_url: URL of the request information
-:type request_url: str
-:param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-:type poll_interval: float, optional
-:param verbose: output poll times, defaults to False
-:type verbose: bool, optional</p>
-<p>:return: status response
-:rtype: Dict</p></div>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>URL of the request information</dd>
+<dt><strong><code>poll_interval</code></strong></dt>
+<dd>seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME</dd>
+<dt><strong><code>verbose</code></strong></dt>
+<dd>output poll times, defaults to False</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Status dictionary for the request</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -284,15 +301,14 @@ def wait_for_data(request_url: str,
     &#34;&#34;&#34;
     Block and wait for the data to be made available for a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
-    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-    :type poll_interval: float, optional
-    :param verbose: output poll times, defaults to False
-    :type verbose: bool, optional
+    Attributes:
+        request_url: URL of the request information
+        poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times, defaults to False
 
-    :return: status response
-    :rtype: Dict
+    Returns:
+        Status dictionary for the request
+    
     &#34;&#34;&#34;
     status = get_status(request_url)
     while (status[&#34;search_result&#34;][&#34;data_uri&#34;] is None):

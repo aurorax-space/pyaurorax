@@ -62,7 +62,7 @@ def authenticate(api_key: str) -&gt; int:
         api_key: AuroraX API key string
 
     Returns:
-    0
+        0
 
     &#34;&#34;&#34;
 
@@ -121,7 +121,7 @@ class AuroraXRequest(BaseModel):
                 the retry mechanism, defaults to False
 
         Returns:
-        An AuroraXResponse object
+            An AuroraXResponse object
 
         Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -332,8 +332,8 @@ def reset_base_url() -&gt; None:
 <dt><strong><code>api_key</code></strong></dt>
 <dd>AuroraX API key string</dd>
 </dl>
-<p>Returns:
-0</p></div>
+<h2 id="returns">Returns</h2>
+<p>0</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -346,7 +346,7 @@ def reset_base_url() -&gt; None:
         api_key: AuroraX API key string
 
     Returns:
-    0
+        0
 
     &#34;&#34;&#34;
 
@@ -463,7 +463,7 @@ def reset_base_url() -&gt; None:
                 the retry mechanism, defaults to False
 
         Returns:
-        An AuroraXResponse object
+            An AuroraXResponse object
 
         Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -550,7 +550,7 @@ def reset_base_url() -&gt; None:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="aurorax.api.AuroraXRequest.headers"><code class="name">var <span class="ident">headers</span> : Union[Dict, NoneType]</code></dt>
+<dt id="aurorax.api.AuroraXRequest.headers"><code class="name">var <span class="ident">headers</span> : Optional[Dict]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -558,11 +558,11 @@ def reset_base_url() -&gt; None:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="aurorax.api.AuroraXRequest.null_response"><code class="name">var <span class="ident">null_response</span> : Union[bool, NoneType]</code></dt>
+<dt id="aurorax.api.AuroraXRequest.null_response"><code class="name">var <span class="ident">null_response</span> : Optional[bool]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="aurorax.api.AuroraXRequest.params"><code class="name">var <span class="ident">params</span> : Union[Dict, NoneType]</code></dt>
+<dt id="aurorax.api.AuroraXRequest.params"><code class="name">var <span class="ident">params</span> : Optional[Dict]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -584,9 +584,9 @@ def reset_base_url() -&gt; None:
 <dd>set this to True if you don't want to evaluate the response outside of
 the retry mechanism, defaults to False</dd>
 </dl>
-<p>Returns:
-An AuroraXResponse object</p>
-<p>Raises:
+<h2 id="returns">Returns</h2>
+<p>An AuroraXResponse object
+Raises:
 aurorax.exceptions.AuroraXMaxRetriesException: max retry error
 aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error</p></div>
 <details class="source">
@@ -601,7 +601,7 @@ aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content err
             the retry mechanism, defaults to False
 
     Returns:
-    An AuroraXResponse object
+        An AuroraXResponse object
 
     Raises:
     aurorax.exceptions.AuroraXMaxRetriesException: max retry error

@@ -32,13 +32,13 @@ from typing import Union
 
 class Location(BaseModel):
     &#34;&#34;&#34;
-    Class representing an AuroraX locations (ie. geographic coordinates,
+    Class representing an AuroraX location (ie. geographic coordinates,
     GSM coordinates, northern/southern magnetic footprints)
 
-    :param lat: latitude
-    :type lat: float
-    :param lon: longitude
-    :type lon: float
+    Attributes:
+        lat: latitude
+        lon: longitude
+
     &#34;&#34;&#34;
     lat: Union[float, None]
     lon: Union[float, None]
@@ -82,12 +82,15 @@ class Location(BaseModel):
 <span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class representing an AuroraX locations (ie. geographic coordinates,
+<div class="desc"><p>Class representing an AuroraX location (ie. geographic coordinates,
 GSM coordinates, northern/southern magnetic footprints)</p>
-<p>:param lat: latitude
-:type lat: float
-:param lon: longitude
-:type lon: float</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>lat</code></strong></dt>
+<dd>latitude</dd>
+<dt><strong><code>lon</code></strong></dt>
+<dd>longitude</dd>
+</dl>
 <p>Create a new model by parsing and validating input data from keyword arguments.</p>
 <p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <details class="source">
@@ -96,13 +99,13 @@ GSM coordinates, northern/southern magnetic footprints)</p>
 </summary>
 <pre><code class="python">class Location(BaseModel):
     &#34;&#34;&#34;
-    Class representing an AuroraX locations (ie. geographic coordinates,
+    Class representing an AuroraX location (ie. geographic coordinates,
     GSM coordinates, northern/southern magnetic footprints)
 
-    :param lat: latitude
-    :type lat: float
-    :param lon: longitude
-    :type lon: float
+    Attributes:
+        lat: latitude
+        lon: longitude
+
     &#34;&#34;&#34;
     lat: Union[float, None]
     lon: Union[float, None]
@@ -138,11 +141,11 @@ GSM coordinates, northern/southern magnetic footprints)</p>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="aurorax.models.Location.lat"><code class="name">var <span class="ident">lat</span> : Union[float, NoneType]</code></dt>
+<dt id="aurorax.models.Location.lat"><code class="name">var <span class="ident">lat</span> : Optional[float]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="aurorax.models.Location.lon"><code class="name">var <span class="ident">lon</span> : Union[float, NoneType]</code></dt>
+<dt id="aurorax.models.Location.lon"><code class="name">var <span class="ident">lon</span> : Optional[float]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>

@@ -97,7 +97,7 @@ class Search():
         logs: list of logging messages from the API
 
         Returns:
-        aurorax.conjunctions.Search object
+            aurorax.conjunctions.Search object
 
     """
 
@@ -281,7 +281,7 @@ def search_async(start: datetime.datetime,
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
 
     Returns:
-    aurorax.conjunctions.Search object
+        aurorax.conjunctions.Search object
     """
     s = Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types, max_distances=max_distances, default_distance=default_distance)
     s.execute()
@@ -335,7 +335,7 @@ def search(start: datetime.datetime, end: datetime.datetime,
             to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
     Returns:
-    aurorax.conjunctions.Search object
+        aurorax.conjunctions.Search object
 
     """
     # create a Search object

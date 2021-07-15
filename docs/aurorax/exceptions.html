@@ -38,38 +38,65 @@
 
 
 class AuroraXNotFoundException(AuroraXException):
+    &#34;&#34;&#34;
+    The AuroraX record was not found.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXDuplicateException(AuroraXException):
+    &#34;&#34;&#34;
+    A duplicate record already exists.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXValidationException(AuroraXException):
+    &#34;&#34;&#34;
+    Validation of data failed.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXUnexpectedContentTypeException(AuroraXException):
+    &#34;&#34;&#34;
+    The API responded with an unexpected content type.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXMaxRetriesException(AuroraXException):
+    &#34;&#34;&#34;
+    The maximum number of retries for the request has been reached.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXBadParametersException(AuroraXException):
+    &#34;&#34;&#34;
+    Bad parameters were given in the request.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXUnauthorizedException(AuroraXException):
+    &#34;&#34;&#34;
+    A privileged operation was attempted without authorization.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXConflictException(AuroraXException):
+    &#34;&#34;&#34;
+    A conflict occurred while modifying records.
+    &#34;&#34;&#34;
     pass
 
 
 class AuroraXUploadException(AuroraXException):
+    &#34;&#34;&#34;
+    Error occurred during upload operation.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 </section>
@@ -87,12 +114,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>Bad parameters were given in the request.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXBadParametersException(AuroraXException):
+    &#34;&#34;&#34;
+    Bad parameters were given in the request.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -107,12 +137,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>A conflict occurred while modifying records.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXConflictException(AuroraXException):
+    &#34;&#34;&#34;
+    A conflict occurred while modifying records.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -127,12 +160,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>A duplicate record already exists.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXDuplicateException(AuroraXException):
+    &#34;&#34;&#34;
+    A duplicate record already exists.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -185,12 +221,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>The maximum number of retries for the request has been reached.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXMaxRetriesException(AuroraXException):
+    &#34;&#34;&#34;
+    The maximum number of retries for the request has been reached.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -205,12 +244,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>The AuroraX record was not found.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXNotFoundException(AuroraXException):
+    &#34;&#34;&#34;
+    The AuroraX record was not found.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -225,12 +267,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>A privileged operation was attempted without authorization.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXUnauthorizedException(AuroraXException):
+    &#34;&#34;&#34;
+    A privileged operation was attempted without authorization.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -245,12 +290,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>The API responded with an unexpected content type.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXUnexpectedContentTypeException(AuroraXException):
+    &#34;&#34;&#34;
+    The API responded with an unexpected content type.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -265,12 +313,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>Error occurred during upload operation.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXUploadException(AuroraXException):
+    &#34;&#34;&#34;
+    Error occurred during upload operation.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -285,12 +336,15 @@ class AuroraXUploadException(AuroraXException):
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"><p>Validation of data failed.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class AuroraXValidationException(AuroraXException):
+    &#34;&#34;&#34;
+    Validation of data failed.
+    &#34;&#34;&#34;
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>

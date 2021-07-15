@@ -16,7 +16,7 @@ def get_status(request_url: str) -> Dict:
         request_url: URL of the request information
 
     Returns:
-    Status dictionary for the request
+        Status dictionary for the request
 
     """
     # do request
@@ -35,7 +35,7 @@ def get_data(data_url: str) -> List:
         data_url: URL for the data of a request
 
     Returns:
-    List of JSON data objects in the response
+        List of JSON data objects in the response
 
     """
     # do request
@@ -75,7 +75,7 @@ def get_logs(request_url: str) -> List:
         request_url: URL of the request information
 
     Returns:
-    List of logged messages for the request
+        List of logged messages for the request
 
     """
     # get status
@@ -99,7 +99,7 @@ def wait_for_data(request_url: str,
         verbose: output poll times, defaults to False
 
     Returns:
-    Status dictionary for the request
+        Status dictionary for the request
     
     """
     status = get_status(request_url)

@@ -30,7 +30,7 @@ class DataProduct(BaseModel):
         objects to strings)
 
         Returns:
-        Dictionary JSON-serializable object
+            Dictionary JSON-serializable object
 
         """
         d = self.__dict__
@@ -63,7 +63,7 @@ class DataProduct(BaseModel):
         String method
 
         Returns:
-        string format
+            string format
 
         """
         return self.__repr__()
@@ -73,7 +73,7 @@ class DataProduct(BaseModel):
         Object representation
 
         Returns:
-        object representation
+            object representation
 
         """
         return pprint.pformat(self.__dict__)
@@ -109,7 +109,7 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
         validate_source: boolean, set to True to validate all records before uploading
 
     Returns:
-    1 for success, raises exception on error
+        1 for success, raises exception on error
 
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -158,7 +158,7 @@ def delete_daterange(data_source: aurorax.sources.DataSource, start: datetime.da
             If omitted, all data product types will be deleted.
 
     Returns:
-    1 on success
+        1 on success
 
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -202,7 +202,7 @@ def delete(data_source: aurorax.sources.DataSource, urls: List[str]) -> int:
         urls: list of URL strings associated with the data products being deleted
 
     Returns:
-    1 on success
+        1 on success
 
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -446,7 +446,7 @@ def search_async(start: datetime.datetime,
             }
     
     Returns:
-    aurorax.data_products.Search object
+        aurorax.data_products.Search object
 
     """
     s = aurorax.data_products.Search(start,
@@ -460,8 +460,8 @@ def search_async(start: datetime.datetime,
     return s
 
 
-def search(start: datetime,
-           end: datetime,
+def search(start: datetime.datetime,
+           end: datetime.datetime,
            programs: List[str] = None,
            platforms: List[str] = None,
            instrument_types: List[str] = None,
@@ -500,7 +500,7 @@ def search(start: datetime,
         poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
     Returns:
-    aurorax.data_products.Search object
+        aurorax.data_products.Search object
 
     """
     # create a Search() object

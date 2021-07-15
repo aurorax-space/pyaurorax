@@ -60,7 +60,7 @@ def ephemeris(start: datetime.date,
                    full_record), defaults to "basic_info"
 
     Returns:
-    A list of aurorax.availability.AvailabilityResult objects
+        A list of aurorax.availability.AvailabilityResult objects
 
     """
     # set parameters
@@ -105,7 +105,7 @@ def data_products(start: datetime,
                    full_record), defaults to "basic_info"
 
     Returns:
-    A list of aurorax.availability.AvailabilityResult objects
+        A list of aurorax.availability.AvailabilityResult objects
 
     """
     # set parameters

@@ -38,7 +38,7 @@ def ground_geo_to_nbtrace(geo_location: Location, timestamp: datetime.datetime) 
         dt: datetime.datetime object representing the timestamp
 
     Returns:
-    North B-trace location as an aurorax.Location object
+        North B-trace location as an aurorax.Location object
 
     """
     # check if location is in northern hemisphere
@@ -60,7 +60,7 @@ def ground_geo_to_sbtrace(geo_location: Location, timestamp: datetime.datetime) 
         dt: datetime.datetime object representing the timestamp
 
     Returns:
-    South B-trace location as an aurorax.Location object
+        South B-trace location as an aurorax.Location object
 
     """
     # check if location is in southern hemisphere

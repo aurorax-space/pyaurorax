@@ -14,7 +14,7 @@ def validate(schema: List[Dict], record: Dict, quiet: bool = False) -> bool:
         record: metadata record dictionary to validate
 
     Returns:
-    True if the metadata record is valid
+        True if the metadata record is valid
     """
     # check keys
     schema_keys = sorted([i["field_name"] for i in schema])
@@ -34,7 +34,7 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
         identifier: ephemeris source ID
 
     Returns:
-    Metadata schema associated with the record
+        Metadata schema associated with the record
 
     """
     source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
@@ -52,7 +52,7 @@ def get_data_products_schema(identifier: int) -> List[Dict]:
         identifier: ephemeris source ID
 
     Returns:
-    Metadata schema associated with the record
+        Metadata schema associated with the record
     
     """
     source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
