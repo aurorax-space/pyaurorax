@@ -43,7 +43,7 @@ test-additional:
 	@echo "Test coverage ...\n============================="
 	-poetry run coverage report
 
-docs:
+docs-install:
 	python3 -m pip install mkdocs mkdocs-material pdoc3
 
 docs-generate: 
