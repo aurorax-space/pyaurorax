@@ -8,13 +8,13 @@ def validate(schema: List[Dict], record: Dict, quiet: bool = False) -> bool:
     that the key names match and there aren't fewer or more keys
     than expected.
 
-    :param schema: metadata schema to validate against
-    :type schema: List[Dict]
-    :param record: metadata record to validate
-    :type record: Dict
+    Attributes:
+        schema: list of dictionaries representing the metadata schema to 
+            validate against
+        record: metadata record dictionary to validate
 
-    :return: metadata record is valid
-    :rtype: bool
+    Returns:
+        True if the metadata record is valid
     """
     # check keys
     schema_keys = sorted([i["field_name"] for i in schema])
@@ -30,11 +30,12 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
     """
     Retrieve the metadata schema for an ephemeris record
 
-    :param identifier: ephemeris source ID
-    :type identifier: int
+    Attributes:
+        identifier: ephemeris source ID
 
-    :return: metadata schema
-    :rtype: List[Dict]
+    Returns:
+        Metadata schema associated with the record
+
     """
     source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
     if source_info.ephemeris_metadata_schema:
@@ -47,11 +48,12 @@ def get_data_products_schema(identifier: int) -> List[Dict]:
     """
     Retrieve the metadata schema for a data products record
 
-    :param identifier: ephemeris source ID
-    :type identifier: int
+    Attributes:
+        identifier: ephemeris source ID
 
-    :return: metadata schema
-    :rtype: List[Dict]
+    Returns:
+        Metadata schema associated with the record
+    
     """
     source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
     if source_info.data_product_metadata_schema:

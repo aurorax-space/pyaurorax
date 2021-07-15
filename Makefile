@@ -47,11 +47,17 @@ docs:
 	python3 -m pip install mkdocs mkdocs-material pdoc3
 
 docs-generate: 
-	pdoc --html --force --output-dir docs aurorax
+	pdoc --html --force --output-dir docs aurorax --config 'lunr_search={"fuzziness": 1}'
+
+docs-build:
+	mkdocs build
 
 docs-serve:
 	mkdocs serve
-	
+
+docs-deploy:
+	mkdocs gh-deploy	
+
 publish:
 	${MAKE} test
 	poetry build

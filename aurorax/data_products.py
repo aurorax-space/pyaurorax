@@ -1,30 +1,23 @@
-from aurorax.exceptions import AuroraXException
-import datetime
-import pprint
 import aurorax
+import datetime
 import humanize
-from aurorax.sources import DataSource
+import pprint
 from pydantic import BaseModel
 from typing import Dict, List, Optional
-from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
 
 class DataProduct(BaseModel):
     """
     DataProduct data type
 
-    :param data_source: data source that the ephemeris record is associated with
-    :type data_source: aurorax.sources.DataSource
-    :param data_product_type: data product type (keogram, movie, summary_plot)
-    :param start: starting timestamp for the record in UTC
-    :type start: datetime.datetime
-    :param end: ending timestamp for the record in UTC
-    :type end: datetime.datetime
-    :param url: URL location of data product
-    :type url: str
-    :param metdata: metadata values for this record
-    :type metdata: Dict
+    Attributes:
+        data_source: aurorax.sources.DataSource source that the ephemeris record is associated with
+        data_product_type: data product type ("keogram", "movie", "summary_plot")
+        start: starting datetime.datetime timestamp for the record in UTC
+        end: ending datetime.datetime timestamp for the record in UTC
+        url: URL location string of data product
+        metdata: metadata dictionary for this record
     """
-    data_source: DataSource
+    data_source: aurorax.sources.DataSource
     data_product_type: str
     start: datetime.datetime
     end: datetime.datetime
@@ -36,8 +29,9 @@ class DataProduct(BaseModel):
         Convert object to a JSON-serializable object (ie. translate datetime
         objects to strings)
 
-        :return: dictionary JSON-serializable object
-        :rtype: Dict
+        Returns:
+            Dictionary JSON-serializable object
+
         """
         d = self.__dict__
 
@@ -68,8 +62,9 @@ class DataProduct(BaseModel):
         """
         String method
 
-        :return: string format
-        :rtype: str
+        Returns:
+            string format
+
         """
         return self.__repr__()
 
@@ -77,8 +72,9 @@ class DataProduct(BaseModel):
         """
         Object representation
 
-        :return: object representation
-        :rtype: str
+        Returns:
+            object representation
+
         """
         return pprint.pformat(self.__dict__)
 
@@ -107,21 +103,20 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
     """
     Upload data product records to AuroraX
 
-    :param identifier: data source ID
-    :type identifier: int
-    :param records: data product records to upload
-    :type records: List[DataProduct]
-    :param validate_source: Set to True to validate all records before uploading
-    :type validate_source: bool, optional
+    Attributes:
+        identifier: AuroraX data source ID int
+        records: list of aurorax.data_products.DataProduct records to upload
+        validate_source: boolean, set to True to validate all records before uploading
 
-    :raises aurorax.AuroraXMaxRetriesException: max retry error
-    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected content error
-    :raises aurorax.AuroraXUploadException: upload error
-    :raises aurorax.AuroraXValidationException: data source validation error
+    Returns:
+        1 for success, raises exception on error
 
+    Raises:
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+        aurorax.exceptions.AuroraXUploadException: upload error
+        aurorax.exceptions.AuroraXValidationException: data source validation error
 
-    :return: 1 for success, raises exception on error
-    :rtype: int
     """
     # validate record sources if the flag is set
     if validate_source:
@@ -150,27 +145,27 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
     return 1
 
 
-def delete_daterange(data_source: DataSource, start: datetime.datetime, end: datetime.datetime, data_product_types: List[str] = None, metadata_filters: List[Dict] = None) -> int:
+def delete_daterange(data_source: aurorax.sources.DataSource, start: datetime.datetime, end: datetime.datetime, data_product_types: List[str] = None, metadata_filters: List[Dict] = None) -> int:
     """
     Deletes data products associated with a data source in the date range provided. This method is asynchronous.
 
-    :param data_source: data source associated with the data product records. Identifier, program, platform, and instrument_type are required.
-    :type data_source: aurorax.sources.DataSource
-    :param start: beginning of datetime range to delete records for, inclusive.
-    :type start: datetime.datetime
-    :param end: end of datetime range to delete records for, inclusive.
-    :type end: datetime.datetime
-    :param data_product_types: specific types of data product to delete, e.g. ["keogram", "movie"]. If omitted, all data product types will be deleted.
-    :type data_product_types: List[str], optional
+    Attributes:
+        data_source: aurorax.sources.DataSource source associated with the data product records. 
+            Identifier, program, platform, and instrument_type are required.
+        start: datetime.datetime beginning of range to delete records for, inclusive.
+        end: datetime.datetime end of datetime range to delete records for, inclusive.
+        data_product_types: specific types of data product to delete, e.g. ["keogram", "movie"]. 
+            If omitted, all data product types will be deleted.
 
-    :raises aurorax.AuroraXMaxRetriesException: max retry error
-    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
-    :raises aurorax.AuroraXBadParametersException: invalid or missing parameters
-    :raises aurorax.AuroraXNotFoundException: source not found
-    :raises aurorax.AuroraXUnauthorizedException: invalid API key for this operation
+    Returns:
+        1 on success
 
-    :return: 1 on success
-    :rtype: int
+    Raises:
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+        aurorax.exceptions.AuroraXNotFoundException: source not found
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+
     """
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
         raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
@@ -185,7 +180,7 @@ def delete_daterange(data_source: DataSource, start: datetime.datetime, end: dat
                                         metadata_filters=[] if not metadata_filters else metadata_filters,
                                         data_product_type_filters=[] if not data_product_types else data_product_types)
     except Exception as e:
-        raise AuroraXException(e)
+        raise aurorax.AuroraXException(e)
 
     # collect URLs from search result
     urls = []
@@ -197,23 +192,24 @@ def delete_daterange(data_source: DataSource, start: datetime.datetime, end: dat
 
 
 
-def delete(data_source: DataSource, urls: List[str]) -> int:
+def delete(data_source: aurorax.sources.DataSource, urls: List[str]) -> int:
     """
     Delete data products by URL. This method is asynchronous.
 
-    :param data_source: data source associated with the data product records. Identifier, program, platform, and instrument_type are required.
-    :type data_source: aurorax.sources.DataSource
-    :param urls: URLs of data products to delete
-    :type urls: List[str]
+    Attributes:
+        data_source: aurorax.sources.DataSource source associated with the data product records. 
+            Identifier, program, platform, and instrument_type are required.
+        urls: list of URL strings associated with the data products being deleted
 
-    :raises aurorax.AuroraXMaxRetriesException: max retry error
-    :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected error
-    :raises aurorax.AuroraXBadParametersException: invalid or missing parameters
-    :raises aurorax.AuroraXNotFoundException: source not found
-    :raises aurorax.AuroraXUnauthorizedException: invalid API key for this operation
+    Returns:
+        1 on success
 
-    :return: 1 on success
-    :rtype: int
+    Raises:
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+        aurorax.exceptions.AuroraXNotFoundException: source not found
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+
     """
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
         raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
@@ -244,6 +240,40 @@ def delete(data_source: DataSource, urls: List[str]) -> int:
 class Search():
     """
     Class representing an AuroraX data products search
+
+    start: start datetime.datetime timestamp of the search
+    end: end datetime.datetime timestamp of the search
+    programs: list of program names to search
+    platforms: list of platform names to search
+    instrument_types: list of instrument types to search
+    metadata_filters: list of dictionaries describing metadata keys and 
+        values to filter on, defaults to None.
+        e.g. {
+            "key": "string",
+            "operator": "=",
+            "values": [
+                "string"
+            ]
+        }
+    data_product_type_filters: list of dictionaries describing data product 
+        types to filter on e.g. "keogram", defaults to None.
+        e.g. {
+            "key": "string",
+            "operator": "=",
+            "values": [
+                "string"
+            ]
+        }
+    request: aurorax.AuroraXResponse object returned when the search is executed
+    request_id: unique AuroraX string ID assigned to the request
+    request_url: unique AuroraX URL string assigned to the request
+    executed: boolean, gets set to True when the search is executed
+    completed: boolean, gets set to True when the search is checked to be finished
+    data_url: URL string where data is accessed
+    query: dictionary of values sent for the search query
+    status: dictionary of status updates
+    data: list of aurorax.data_products.DataProduct objects returned
+    logs: list of logging messages from the API
     """
 
     def __init__(self, 
@@ -257,20 +287,6 @@ class Search():
         """
         Create a new Search object
 
-        :param start: start timestamp
-        :type start: datetime.datetime
-        :param end: end timestamp
-        :type end: datetime.datetime
-        :param programs: programs to search through, defaults to None
-        :type programs: List[str], optional
-        :param platforms: platforms to search through, defaults to None
-        :type platforms: List[str], optional
-        :param instrument_types: instrument types to search through, defaults to None
-        :type instrument_types: List[str], optional
-        :param metadata_filters: metadata keys and values to filter on, defaults to None
-        :type metadata_filters: List[Dict], optional
-        :param data_product_type_filters: data product types to filter on e.g. "keogram", defaults to None
-        :type data_product_type_filters: List[str], optional
         """
         self.request = None
         self.request_id = ""
@@ -345,8 +361,9 @@ class Search():
         """
         Update the status of this data products search request
 
-        :param status: retrieved status (include to avoid requesting it from the API again), defaults to None
-        :type status: Dict, optional
+        Attributes:
+            status: retrieved status dictionary (include to avoid requesting it from the API again), defaults to None
+
         """
         # get the status if it isn't passed in
         if (status is None):
@@ -380,15 +397,14 @@ class Search():
 
         self.data = [DataProduct(**dp) for dp in raw_data]
 
-    def wait(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
+    def wait(self, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
         Block and wait for the request to complete and data is available for retrieval
 
-        :param poll_interval: time in seconds to wait between polling
-                              attempts, defaults to STANDARD_POLLING_SLEEP_TIME
-        :type poll_interval: float, optional
-        :param verbose: output poll times, defaults to False
-        :type verbose: bool, optional
+        Attributes:
+            poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
+            verbose: output poll times, defaults to False
+
         """
         url = aurorax.api.urls.data_products_request_url.format(self.request_id)
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
@@ -402,25 +418,36 @@ def search_async(start: datetime.datetime,
                  metadata_filters: List[Dict] = None,
                  data_product_type_filters: List[str] = None) -> Search:
     """
-    Submit a request for an data products search, return asynchronously.
+    Submit a request for a data products search, return asynchronously.
 
-    :param start: start timestamp
-    :type start: datetime.datetime
-    :param end: end timestamp
-    :type end: datetime.datetime
-    :param programs: programs to search through, defaults to None
-    :type programs: List[str], optional
-    :param platforms: platforms to search through, defaults to None
-    :type platforms: List[str], optional
-    :param instrument_types: instrument types to search through, defaults to None
-    :type instrument_types: List[str], optional
-    :param metadata_filters: metadata keys and values to filter on, defaults to None
-    :type metadata_filters: List[str], optional
-    :param data_product_type_filters: data product types to filter on e.g. "keogram", defaults to None
-    :type data_product_type_filters: List[str], optional
+    Attributes:
+        start: start datetime.datetime timestamp of the search
+        end: end datetime.datetime timestamp of the search
+        programs: list of programs to search through, defaults to None
+        platforms: list of platforms to search through, defaults to None
+        instrument_types: list of instrument types to search through, defaults to None
+        metadata_filters: list of dictionaries describing metadata keys and 
+            values to filter on, defaults to None.
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        data_product_type_filters: list of dictionaries describing data product 
+            types to filter on e.g. "keogram", defaults to None.
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+    
+    Returns:
+        aurorax.data_products.Search object
 
-    :return: Search object
-    :rtype: Search
     """
     s = aurorax.data_products.Search(start,
                                      end,
@@ -433,39 +460,48 @@ def search_async(start: datetime.datetime,
     return s
 
 
-def search(start: datetime,
-           end: datetime,
+def search(start: datetime.datetime,
+           end: datetime.datetime,
            programs: List[str] = None,
            platforms: List[str] = None,
            instrument_types: List[str] = None,
            metadata_filters: List[Dict] = None,
            data_product_type_filters: List[str] = None,
            verbose: bool = False,
-           poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Search:
+           poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> Search:
     """
-    Search for data products records synchronously.
+    Search for data product records and block until results are returned.
 
-    :param start: start timestamp
-    :type start: datetime
-    :param end: end timestamp
-    :type end: datetime
-    :param programs: programs to search through, defaults to None
-    :type programs: List[str], optional
-    :param platforms: platforms to search through, defaults to None
-    :type platforms: List[str], optional
-    :param instrument_types: instrument types to search through, defaults to None
-    :type instrument_types: List[str], optional
-    :param metadata_filters: metadata keys and values to filter on, defaults to None
-    :type metadata_filters: List[Dict], optional
-    :param data_product_type_filters: data product types to filter on e.g. "keogram", defaults to None
-    :type data_product_type_filters: List[str], optional
-    :param verbose: show the progress of the request using the request log, defaults to False
-    :type verbose: bool, optional
-    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-    :type poll_interval: float, optional
+    Attributes:
+        start: start datetime.datetime timestamp of the search
+        end: end datetime.datetime timestamp of the search
+        programs: list of programs to search through, defaults to None
+        platforms: list of platforms to search through, defaults to None
+        instrument_types: list of instrument types to search through, defaults to None
+        metadata_filters: list of dictionaries describing metadata keys and 
+            values to filter on, defaults to None.
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        data_product_type_filters: list of dictionaries describing data product 
+            types to filter on e.g. "keogram", defaults to None.
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        verbose: output poll times, defaults to False
+        poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
-    :return: Search object
-    :rtype: Search
+    Returns:
+        aurorax.data_products.Search object
+
     """
     # create a Search() object
     s = Search(start, end, programs, platforms, instrument_types, metadata_filters, data_product_type_filters)
