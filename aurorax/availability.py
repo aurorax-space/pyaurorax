@@ -1,20 +1,19 @@
 import aurorax
 import datetime
-from typing import Dict, List
 import pprint
 from pydantic import BaseModel
+from typing import Dict, List
 
 
 class AvailabilityResult(BaseModel):
     """
-    Availability result data type
+    Availability result data type.
 
-    :param data_source: data source that the ephemeris record is associated with
-    :type data_source: aurorax.sources.DataSource
-    :param available_data_products: data product availability dictionary of date keys "YYYY-MM-DD"
-    :param available_data_products: Dict
-    :type available_ephemeris: ephemeris availability dictionary of date keys "YYYY-MM-DD"
-    :param available_ephemeris: Dict
+    Attributes:
+        data_source: aurorax.sources.DataSource object that the ephemeris record is associated with
+        available_data_products: data product availability dictionary of shape {"YYYY-MM-DD": <# of records>}
+        available_ephemeris: ephemeris availability dictionary of shape {"YYYY-MM-DD": <# of records>}
+
     """
     data_source: aurorax.sources.DataSource
     available_data_products: Dict = None
@@ -47,28 +46,22 @@ def ephemeris(start: datetime.date,
               owner: str = None,
               format: str = "basic_info") -> List[AvailabilityResult]:
     """
-    Retrieve information about the number of existing ephemeris records
+    Retrieve information about the number of existing ephemeris records.
 
-    :param start: start date
-    :type start: datetime
-    :param end: end date
-    :type end: datetime
-    :param program: program name to filter sources by, defaults to None
-    :type program: str, optional
-    :param platform: platform name to filter sources by, defaults to None
-    :type platform: str, optional
-    :param instrument_type: instrument type to filter sources by, defaults to None
-    :type instrument_type: str, optional
-    :param source_type: source type to filter sources by (heo, leo, lunar, or ground), defaults to None
-    :type source_type: str, optional
-    :param owner: owner ID to filter sources by, defaults to None
-    :type owner: str, optional
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+    Attributes:
+        start: start datetime.date
+        end: end datetime.date
+        program: program string name to filter sources by, defaults to None
+        platform: platform string name to filter sources by, defaults to None
+        instrument_type: instrument type string to filter sources by, defaults to None
+        source_type: source type string to filter sources by (heo, leo, lunar, or ground), defaults to None
+        owner: owner email address string to filter sources by, defaults to None
+        format: the format of the data sources returned (identifier_only, basic_info,
                    full_record), defaults to "basic_info"
-    :type format: str, optional
 
-    :return: list of ephemeris availability results
-    :rtype: List[aurorax.availability.AvailabilityResult]
+    Returns:
+    A list of aurorax.availability.AvailabilityResult objects
+
     """
     # set parameters
     params = {
@@ -100,26 +93,20 @@ def data_products(start: datetime,
     """
     Retrieve information about the number of existing data product records
 
-    :param start: start date
-    :type start: datetime
-    :param end: end date
-    :type end: datetime
-    :param program: program name to filter sources by, defaults to None
-    :type program: str, optional
-    :param platform: platform name to filter sources by, defaults to None
-    :type platform: str, optional
-    :param instrument_type: instrument type to filter sources by, defaults to None
-    :type instrument_type: str, optional
-    :param source_type: source type to filter sources by (heo, leo, lunar, or ground), defaults to None
-    :type source_type: str, optional
-    :param owner: owner ID to filter sources by, defaults to None
-    :type owner: str, optional
-    :param format: the format of the ephemeris source returned (identifier_only, basic_info,
+    Attributes:
+        start: start datetime.date
+        end: end datetime.date
+        program: program string name to filter sources by, defaults to None
+        platform: platform string name to filter sources by, defaults to None
+        instrument_type: instrument type string to filter sources by, defaults to None
+        source_type: source type string to filter sources by (heo, leo, lunar, or ground), defaults to None
+        owner: owner email address string to filter sources by, defaults to None
+        format: the format of the data sources returned (identifier_only, basic_info,
                    full_record), defaults to "basic_info"
-    :type format: str, optional
 
-    :return: list of data product availability results
-    :rtype: List[aurorax.availability.AvailabilityResult]
+    Returns:
+    A list of aurorax.availability.AvailabilityResult objects
+
     """
     # set parameters
     params = {

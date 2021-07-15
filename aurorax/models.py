@@ -4,13 +4,13 @@ from typing import Union
 
 class Location(BaseModel):
     """
-    Class representing an AuroraX locations (ie. geographic coordinates,
+    Class representing an AuroraX location (ie. geographic coordinates,
     GSM coordinates, northern/southern magnetic footprints)
 
-    :param lat: latitude
-    :type lat: float
-    :param lon: longitude
-    :type lon: float
+    Attributes:
+        lat: latitude
+        lon: longitude
+
     """
     lat: Union[float, None]
     lon: Union[float, None]

@@ -12,11 +12,12 @@ def get_status(request_url: str) -> Dict:
     """
     Retrieve the status of a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
+    Attributes:
+        request_url: URL of the request information
 
-    :return: status response
-    :rtype: Dict
+    Returns:
+    Status dictionary for the request
+
     """
     # do request
     req = aurorax.AuroraXRequest(method="get", url=request_url)
@@ -30,11 +31,12 @@ def get_data(data_url: str) -> List:
     """
     Retrieve the data for a request
 
-    :param data_url: URL for the data of a request
-    :type data_url: str
+    Attributes:
+        data_url: URL for the data of a request
 
-    :return: data response
-    :rtype: List
+    Returns:
+    List of JSON data objects in the response
+
     """
     # do request
     req = aurorax.AuroraXRequest(method="get", url=data_url)
@@ -69,11 +71,12 @@ def get_logs(request_url: str) -> List:
     """
     Retrieve the logs for a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
+    Attributes:
+        request_url: URL of the request information
 
-    :return: logs response
-    :rtype: List
+    Returns:
+    List of logged messages for the request
+
     """
     # get status
     status = get_status(request_url)
@@ -90,15 +93,14 @@ def wait_for_data(request_url: str,
     """
     Block and wait for the data to be made available for a request
 
-    :param request_url: URL of the request information
-    :type request_url: str
-    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-    :type poll_interval: float, optional
-    :param verbose: output poll times, defaults to False
-    :type verbose: bool, optional
+    Attributes:
+        request_url: URL of the request information
+        poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times, defaults to False
 
-    :return: status response
-    :rtype: Dict
+    Returns:
+    Status dictionary for the request
+    
     """
     status = get_status(request_url)
     while (status["search_result"]["data_uri"] is None):

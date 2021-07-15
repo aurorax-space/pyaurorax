@@ -1,9 +1,9 @@
-import requests
 import aurorax
-import pprint
 import json
-from typing import Optional, Dict, Any, List, Union
+import pprint
 from pydantic import BaseModel
+import requests
+from typing import Optional, Dict, Any, List, Union
 from ._internal.util import json_converter
 
 # endpoint URLs
@@ -16,9 +16,6 @@ REQUEST_HEADERS = {
     "Content-Type": "application/json"
 }
 API_KEY_HEADER_NAME = "x-aurorax-api-key"
-
-
-
 
 # private dynamic globals
 __api_key = ""
@@ -33,11 +30,12 @@ def authenticate(api_key: str) -> int:
     """
     Set authentication values for use with subsequent queries
 
-    :param api_key: api key
-    :type api_key: str
+    Attributes:
+        api_key: AuroraX API key string
 
-    :return: 0
-    :rtype: int
+    Returns:
+    0
+
     """
 
     # set the global variable
@@ -90,15 +88,17 @@ class AuroraXRequest(BaseModel):
     def execute(self, limited_evaluation: bool = False) -> AuroraXResponse:
         """Execute an AuroraX request
 
-        :param limited_evaluation: set true if you don't want to evaluate the response outside of
-                                   the retry mechanism, defaults to False
-        :type limited_evaluation: bool, optional
+        Attributes:
+            limited_evaluation: set this to True if you don't want to evaluate the response outside of
+                the retry mechanism, defaults to False
 
-        :raises aurorax.AuroraXMaxRetriesException: max retry error
-        :raises aurorax.AuroraXUnexpectedContentTypeException: unexpected content error
+        Returns:
+        An AuroraXResponse object
 
-        :return: response
-        :rtype: AuroraXResponse
+        Raises:
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+
         """
         # sanitize data
         body_santized = json.dumps(self.body, default=json_converter)
@@ -273,8 +273,9 @@ def set_base_url(url: str) -> None:
     """
     Change the base URL for the API (ie. change to the staging system or local server)
 
-    :param url: new base url (ie. 'https://api.staging.aurorax.space')
-    :type url: str
+    Attributes:
+        url: new base url string (ie. 'https://api.staging.aurorax.space')
+    
     """
     urls.base_url = url
 

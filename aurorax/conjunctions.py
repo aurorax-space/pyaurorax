@@ -1,41 +1,30 @@
-import pprint
 import aurorax
-from aurorax.sources import DataSource
 import datetime
 import humanize
+import pprint
 from pydantic import BaseModel
 from typing import Dict, List
-from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
+
+DEFAULT_CONJUNCTION_DISTANCE = 300
 
 class Conjunction(BaseModel):
     """
-    Conjunction data type
+    Conjunction data type.
     
-    :param conjunction_type: conjunction type "nbtrace" or "sbtrace"
-    :type conjunction_type: str
+    Attributes:
+        conjunction_type: conjunction type "nbtrace" or "sbtrace"
+        start: start datetime.datetime of conjunction event(s)
+        end: end datetime.datetime of conjunction event(s)
+        data_sources: aurorax.sources.DataSource sources in the conjunction
+        min_distance: minimum kilometre distance of conjunction event(s), float
+        max_distance: maximum kilometre distance of conjunction event(s), float
+        events: list of dictionaries containing details of individual conjunction events
 
-    :param start: start time of conjunction event(s)
-    :type start: datetime.datetime
-
-    :param end: end time of conjunction event(s)
-    :type end: datetime.datetime
-
-    :param data_sources: data sources in conjunction
-    :type data_sources: List[aurorax.sources.DataSource]
-
-    :param min_distance: minimum distance of conjunction event(s)
-    :type min_distance: float
-
-    :param max_distance: maximum distance of conjunction event(s)
-    :type max_distance: float
-
-    :param events: details of individual conjunction events
-    :type events: List[DIct]
     """
     conjunction_type: str
     start: datetime.datetime 
     end: datetime.datetime
-    data_sources: List[DataSource]
+    data_sources: List[aurorax.sources.DataSource]
     min_distance: float
     max_distance: float
     events: List[Dict]
@@ -59,38 +48,63 @@ class Conjunction(BaseModel):
         return pprint.pformat(self.__dict__)
 
 
-
-DEFAULT_CONJUNCTION_DISTANCE = 300
-
 class Search():
     """
     Class representing an AuroraX conjunctions search
+
+    Attributes:
+        start: start datetime.datetime timestamp of the search
+        end: end datetime.datetime timestamp of the search
+        ground: List of ground instrument search parameters. See examples for usage.
+            e.g. [
+                {
+                    "programs": ["themis-asi"],
+                    "platforms": ["gillam", "rabbit lake"],
+                    "instrument_types": ["RGB"]
+                }
+            ]
+        space: List of one or more space instrument search parameters. See examples for usage.
+            e.g. [
+                {
+                    "programs": ["themis-asi", "swarm"],
+                    "platforms": ["themisa", "swarma"],
+                    "instrument_types": ["footprint"]
+                }
+            ]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum distances for conjunctions. 
+            default_distance will be used for any ground-space and space-space maximum distances not specified.
+            See examples for usage.
+            e.g. distances = {
+                "ground1-ground2": None,
+                "ground1-space1": 500,
+                "ground1-space2": 500,
+                "ground2-space1": 500,
+                "ground2-space2": 500,
+                "space1-space2": None
+            }
+        default_distance: default maximum distance in kilometers for conjunction. 
+            Used when max distance is not specified for any ground-space and space-space instrument pairs.
+        request: aurorax.AuroraXResponse object returned when the search is executed
+        request_id: unique AuroraX string ID assigned to the request
+        request_url: unique AuroraX URL string assigned to the request
+        executed: boolean, gets set to True when the search is executed
+        completed: boolean, gets set to True when the search is checked to be finished
+        data_url: URL string where data is accessed
+        query: dictionary of values sent for the search query
+        status: dictionary of status updates
+        data: list of aurorax.conjunctions.Conjunction objects returned
+        logs: list of logging messages from the API
+
+        Returns:
+        aurorax.conjunctions.Search object
+
     """
 
     def __init__(self, start: datetime.datetime, end: datetime.datetime, 
                 ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
                 max_distances: Dict[str, float] = None, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE):
-        """
-        Create a new conjunction Search object
 
-        :param start: start timestamp
-        :type start: datetime.datetime
-        :param end: end timestamp
-        :type end: datetime.datetime
-        :param ground: List of ground instrument search parameters
-        :type ground: List[Dict]
-        :param space: List of one or more space instrument search parameters
-        :type space: List[Dict]
-        :param conjunction_types: list of conjunction types, defaults to ["nbtrace"]
-        :type conjunction_types: List[str], optional
-        :param max_distances: dictionary of ground-space and space-space maximum distances for conjunctions. default_distance will be used for any ground-space and space-space maximum distances not specified.
-        :type max_distances: Dict[str, float], optional
-        :param default_distance: default maximum distance in kilometers for conjunction. Used when max distance is not specified for any ground-space and space-space instrument pairs.
-        :type default_distance: float, optional
-
-        :return: Search object
-        :rtype: Search
-        """
         self.request = None
         self.request_id = ""
         self.request_url = ""
@@ -179,8 +193,8 @@ class Search():
         """
         Update the status of this conjunctions search
 
-        :param status: retrieved status (include to avoid requestinf it from the API again), defaults to None
-        :type status: Dict, optional
+        Attributes:
+            status: retrieved status dictionary (include to avoid requestinf it from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if status is None:
@@ -210,41 +224,64 @@ class Search():
         raw_data = aurorax.requests.get_data(url)
         self.data = [Conjunction(**c) for c in raw_data]
 
-    def wait(self, poll_interval: float = STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
+    def wait(self, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
         Block and wait until the request is complete and data is available for retrieval
 
-        :param poll_interval: time in seconds to wait between polling attempts, defaults to STANDARD_POLLING_SLEEP_TIME
-        :type poll_interval: float, optional
-        :param verbose: output poll times, defaults to False
-        :type verbose: bool, optional
+        Attributes:
+            poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
+            verbose: output poll times, defaults to False
+
         """
         url = aurorax.api.urls.conjunction_request_url.format(self.request_id)
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
 
-def search_async(start: datetime.datetime, end: datetime.datetime, 
-                ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
-                max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -> Search:
+def search_async(start: datetime.datetime,
+                 end: datetime.datetime, 
+                 ground: List[Dict], 
+                 space: List[Dict], 
+                 conjunction_types: List[str] = ["nbtrace"],
+                 max_distances: Dict[str, float] = {}, 
+                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -> Search:
     """
-    Submit a request for a conjunctions search, return asynchronously
+    Submit a request for a conjunctions search, return asynchronously.
 
-    :param start: start timestamp
-    :type start: datetime.datetime
-    :param end: end timestamp
-    :type end: datetime.datetime
-    :param ground: List of ground instrument search parameters
-    :type ground: List[Dict]
-    :param space: List of one or more space instrument search parameters
-    :type space: List[Dict]
-    :param conjunction_types: list of conjunction types, defaults to ["nbtrace"]
-    :type conjunction_types: List[str], optional
-    :param max_distances: dictionary of ground-space and space-space maximum distances for conjunctions. default_distance will be used for any ground-space and space-space maximum distances not specified.
-    :type max_distances: Dict[str, float], optional
-    :param default_distance: default maximum distance in kilometers for conjunction. Used when max distance is not specified for any ground-space and space-space instrument pairs.
-    :type default_distance: float, optional
+    Attributes:
+        start: start datetime.datetime timestamp of the search
+        end: end datetime.datetime timestamp of the search
+        ground: List of ground instrument search parameters. See examples for usage.
+            e.g. [
+                {
+                    "programs": ["themis-asi"],
+                    "platforms": ["gillam", "rabbit lake"],
+                    "instrument_types": ["RGB"]
+                }
+            ]
+        space: List of one or more space instrument search parameters. See examples for usage.
+            e.g. [
+                {
+                    "programs": ["themis-asi", "swarm"],
+                    "platforms": ["themisa", "swarma"],
+                    "instrument_types": ["footprint"]
+                }
+            ]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum distances for conjunctions. 
+            default_distance will be used for any ground-space and space-space maximum distances not specified.
+            See examples for usage.
+            e.g. distances = {
+                "ground1-ground2": None,
+                "ground1-space1": 500,
+                "ground1-space2": 500,
+                "ground2-space1": 500,
+                "ground2-space2": 500,
+                "space1-space2": None
+            }
+        default_distance: default maximum distance in kilometers for conjunction. 
+            Used when max distance is not specified for any ground-space and space-space instrument pairs.
 
-    :return: Search object
-    :rtype: Search
+    Returns:
+    aurorax.conjunctions.Search object
     """
     s = Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types, max_distances=max_distances, default_distance=default_distance)
     s.execute()
@@ -254,31 +291,52 @@ def search_async(start: datetime.datetime, end: datetime.datetime,
 def search(start: datetime.datetime, end: datetime.datetime, 
             ground: List[Dict], space: List[str], conjunction_types: List[str] = ["nbtrace"],
             max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE, verbose: bool = False,
-            poll_interval: float = STANDARD_POLLING_SLEEP_TIME) -> Search:
+            poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> Search:
     """
-    Search for conjunctions 
+    Search for conjunctions and block until results are returned.
 
-    :param start: start timestamp
-    :type start: datetime.datetime
-    :param end: end timestamp
-    :type end: datetime.datetime
-    :param ground: List of ground instrument search parameters
-    :type ground: List[Dict]
-    :param space: List of one or more space instrument search parameters
-    :type space: List[Dict]
-    :param conjunction_types: list of conjunction types, defaults to ["nbtrace"]
-    :type conjunction_types: List[str], optional
-    :param max_distances: dictionary of ground-space and space-space maximum distances for conjunctions. default_distance will be used for any ground-space and space-space maximum distances not specified.
-    :type max_distances: Dict[str, float], optional
-    :param default_distance: default maximum distance in kilometers for conjunction. Used when max distance is not specified for any ground-space and space-space instrument pairs.
-    :type default_distance: float, optional
-    :param verbose: show the progress of the request using the request log, defaults to False
-    :type verbose: bool, optional
-    :param poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-    :type poll_interval: float, optional
+    Attributes:
+        start: start datetime.datetime timestamp of the search
+        end: end datetime.datetime timestamp of the search
+        ground: List of ground instrument search parameters. See examples for usage.
+            e.g. [
+                {
+                    "programs": ["themis-asi"],
+                    "platforms": ["gillam", "rabbit lake"],
+                    "instrument_types": ["RGB"]
+                }
+            ]
+        space: List of one or more space instrument search parameters. See examples for usage.
+            e.g. [
+                {
+                    "programs": ["themis-asi", "swarm"],
+                    "platforms": ["themisa", "swarma"],
+                    "instrument_types": ["footprint"]
+                }
+            ]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum distances for conjunctions. 
+            default_distance will be used for any ground-space and space-space maximum distances not specified.
+            See examples for usage.
+            e.g. distances = {
+                "ground1-ground2": None,
+                "ground1-space1": 500,
+                "ground1-space2": 500,
+                "ground2-space1": 500,
+                "ground2-space2": 500,
+                "space1-space2": None
+            }
+        default_distance: default maximum distance in kilometers for conjunction. 
+            Used when max distance is not specified for any ground-space and 
+            space-space instrument pairs.
+        verbose: boolean to show the progress of the request using the request 
+            log, defaults to False
+        poll_interval: seconds to wait between polling calls, defaults 
+            to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
 
-    :return: Search object
-    :rtype: Search
+    Returns:
+    aurorax.conjunctions.Search object
+
     """
     # create a Search object
     s = Search(start, end, ground, space, conjunction_types, max_distances, default_distance)
