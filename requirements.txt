@@ -1,0 +1,4 @@
+aacgmv2
+humanize
+pydantic
+requests

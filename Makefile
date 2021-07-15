@@ -56,7 +56,7 @@ docs-serve:
 	mkdocs serve
 
 docs-deploy:
-	mkdocs gh-deploy	
+	mkdocs gh-deploy --force
 
 publish:
 	${MAKE} test
