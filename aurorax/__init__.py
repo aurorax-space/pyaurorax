@@ -1,4 +1,4 @@
-__version__ = "0.6.3"
+__version__ = "0.6.4"
 
 # pull in top level functions
 from .api import AuroraXRequest
@@ -21,6 +21,7 @@ from .exceptions import AuroraXUploadException
 from .models import Location
 
 # pull in modules
+from aurorax import requests
 from aurorax import exceptions
 from aurorax import api
 from aurorax import sources
@@ -29,5 +30,4 @@ from aurorax import availability
 from aurorax import ephemeris
 from aurorax import data_products
 from aurorax import conjunctions
-from aurorax import requests
 from aurorax import util

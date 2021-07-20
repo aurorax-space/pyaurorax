@@ -31,15 +31,15 @@ def __calculate_btrace(geo_location, dt):
 
 def ground_geo_to_nbtrace(geo_location: Location, timestamp: datetime.datetime) -> Location:
     """
-    Convert geographic location to North B-Trace geographic location
+    Convert geographic location to North B-Trace geographic location.
 
-    :param geo_location: geographic location
-    :type geo_location: Location
-    :param dt: timestamp
-    :type dt: datetime.datetime
+    Attributes:
+        geo_location: aurorax.Location object representing the geographic location
+        dt: datetime.datetime object representing the timestamp
 
-    :return: north B-trace location
-    :rtype: Location
+    Returns:
+        North B-trace location as an aurorax.Location object
+
     """
     # check if location is in northern hemisphere
     if (geo_location.lat >= 0):
@@ -53,15 +53,15 @@ def ground_geo_to_nbtrace(geo_location: Location, timestamp: datetime.datetime) 
 
 def ground_geo_to_sbtrace(geo_location: Location, timestamp: datetime.datetime) -> Location:
     """
-    Convert geographic location to South B-Trace geographic location
+    Convert geographic location to South B-Trace geographic location.
 
-    :param geo_location: geographic location
-    :type geo_location: Location
-    :param dt: timestamp
-    :type dt: datetime.datetime
+    Attributes:
+        geo_location: aurorax.Location object representing the geographic location
+        dt: datetime.datetime object representing the timestamp
 
-    :return: south B-trace location
-    :rtype: Location
+    Returns:
+        South B-trace location as an aurorax.Location object
+
     """
     # check if location is in southern hemisphere
     if (geo_location.lat < 0):

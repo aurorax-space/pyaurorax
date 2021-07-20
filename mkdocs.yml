@@ -1,0 +1,15 @@
+site_name: PyAuroraX Documentation
+site_url: https://example.com/
+nav:
+  - Home: index.md
+  - About: about.md
+  - API reference: aurorax/index.html
+theme:
+  name: material
+  logo: img/logo.svg
+  favicon: img/logo.svg
+  palette:
+    primary:
+      black
+    accent:
+      teal
