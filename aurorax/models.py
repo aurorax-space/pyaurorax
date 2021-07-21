@@ -1,3 +1,6 @@
+"""
+This module contains the Location class.
+"""
 from pydantic import BaseModel, validator
 from typing import Union
 

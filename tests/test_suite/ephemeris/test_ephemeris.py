@@ -212,3 +212,15 @@ def test_delete_ephemeris():
                                  instrument_types=[instrument_type])
 
     assert len(s.data) == 0
+
+def test_cancel_ephemeris_search():
+    start_dt = datetime.datetime(2018, 1, 1)
+    end_dt = datetime.datetime(2021, 12, 31, 23, 59, 59)
+    programs = ["themis"]
+
+    s = aurorax.ephemeris.Search(start=start_dt, end=end_dt, programs=programs)
+    s.execute()
+    
+    result = s.cancel(wait=True)
+    
+    assert result == 1

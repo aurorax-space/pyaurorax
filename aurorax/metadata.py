@@ -1,3 +1,7 @@
+"""
+AuroraX metadata schemas describe the intended structure of metadata stored in 
+ephemeris and data product records.
+"""
 import aurorax
 from typing import Dict, List
 

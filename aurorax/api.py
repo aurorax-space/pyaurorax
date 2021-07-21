@@ -1,3 +1,6 @@
+"""
+The API module contains classes and methods used throughout PyAuroraX for API interaction.
+"""
 import aurorax
 import json
 import pprint
@@ -96,8 +99,9 @@ class AuroraXRequest(BaseModel):
             An AuroraXResponse object
 
         Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+            aurorax.exceptions.AuroraXMaxRetriesException: max retry error
+            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
 
         """
         # sanitize data
@@ -143,7 +147,7 @@ class AuroraXRequest(BaseModel):
                 raise aurorax.AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
                                                                                  req.status_code))
         else:
-            if (req.status_code != 200 and req.status_code != 201 and req.status_code != 202):
+            if (req.status_code != 200 and req.status_code != 201 and req.status_code != 202 and req.status_code != 204):
                 response_data = req.json()
             else:
                 response_data = None

@@ -1,3 +1,6 @@
+"""
+AuroraX data sources are unique instruments that produce ephemeris or data product records.
+"""
 import aurorax
 import pprint
 from pydantic import BaseModel

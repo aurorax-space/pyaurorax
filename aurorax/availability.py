@@ -1,3 +1,7 @@
+"""
+The availability module provides the means to quickly determine the availability of 
+desired ephemeris or data product records in AuroraX.
+"""
 import aurorax
 import datetime
 import pprint
