@@ -49,9 +49,10 @@ def test_get_request_data():
     r.execute()
 
     # sleep briefly
-    time.sleep(1.0)
+    time.sleep(5)
 
     # wait for data
+    print("request URL: " + r.request_url)
     status = aurorax.requests.get_status(r.request_url)
     r.update_status(status=status)
 
