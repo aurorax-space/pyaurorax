@@ -31,7 +31,7 @@ def test_get_request_status():
     r.execute()
 
     # sleep briefly
-    time.sleep(1.0)
+    r.wait()
 
     # get status
     status = aurorax.requests.get_status(r.request_url)
@@ -52,9 +52,9 @@ def test_get_request_data():
     time.sleep(5)
 
     # wait for data
-    print("request URL: " + r.request_url)
     status = aurorax.requests.get_status(r.request_url)
     r.update_status(status=status)
+    r.wait()
 
     # get data
     data_res = aurorax.requests.get_data(r.data_url)
