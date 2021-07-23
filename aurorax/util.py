@@ -1,6 +1,9 @@
-import datetime
-from aurorax import Location
+"""
+Utility methods for converting geographic locations to North/South B trace coordinates. 
+"""
 import aacgmv2
+from aurorax import Location
+import datetime
 
 
 def __calculate_btrace(geo_location, dt):

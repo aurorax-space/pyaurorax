@@ -1,9 +1,12 @@
-site_name: PyAuroraX Documentation
+site_name: AuroraX Documentation
 site_url: https://example.com/
 nav:
-  - Home: index.md
-  - About: about.md
-  - API reference: aurorax/index.html
+  - Home: 'index.md'
+  - About: 'about.md'
+  - PyAuroraX:
+    - About: 'aurorax/aurorax.md'
+    - API reference: 'aurorax/index.html'
+
 theme:
   name: material
   logo: img/logo.svg

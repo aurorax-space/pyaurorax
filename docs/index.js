@@ -10,18 +10,18 @@ URLS=[
 "aurorax/models.html",
 "aurorax/requests.html",
 "aurorax/sources.html",
-"aurorax/util/index.html"
+"aurorax/util.html"
 ];
 INDEX=[
 {
 "ref":"aurorax",
 "url":0,
-"doc":""
+"doc":"PyAuroraX package."
 },
 {
 "ref":"aurorax.api",
 "url":1,
-"doc":""
+"doc":"The API module contains classes and methods used throughout PyAuroraX for API interaction."
 },
 {
 "ref":"aurorax.api.get_api_key",
@@ -93,7 +93,7 @@ INDEX=[
 {
 "ref":"aurorax.api.AuroraXRequest.execute",
 "url":1,
-"doc":"Execute an AuroraX request Attributes: limited_evaluation: set this to True if you don't want to evaluate the response outside of the retry mechanism, defaults to False Returns: An AuroraXResponse object Raises: aurorax.exceptions.AuroraXMaxRetriesException: max retry error aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error",
+"doc":"Execute an AuroraX request Attributes: limited_evaluation: set this to True if you don't want to evaluate the response outside of the retry mechanism, defaults to False Returns: An AuroraXResponse object Raises: aurorax.exceptions.AuroraXMaxRetriesException: max retry error aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation",
 "func":1
 },
 {
@@ -181,7 +181,7 @@ INDEX=[
 {
 "ref":"aurorax.availability",
 "url":2,
-"doc":""
+"doc":"The availability module provides the means to quickly determine the availability of desired ephemeris or data product records in AuroraX."
 },
 {
 "ref":"aurorax.availability.AvailabilityResult",
@@ -218,7 +218,7 @@ INDEX=[
 {
 "ref":"aurorax.conjunctions",
 "url":3,
-"doc":""
+"doc":"AuroraX provides a conjunction module for finding conjunction events between ground and space instruments, and between space instruments."
 },
 {
 "ref":"aurorax.conjunctions.Conjunction",
@@ -296,6 +296,12 @@ INDEX=[
 "func":1
 },
 {
+"ref":"aurorax.conjunctions.Search.cancel",
+"url":3,
+"doc":"Cancel the conjunction search request at the API. This method returns asynchronously by default. Attributes: wait: set to True to block until the cancellation request has been completed. This may take several minutes. verbose: when wait=True, output poll times, defaults to False poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME Returns: 1 on success Raises: aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation",
+"func":1
+},
+{
 "ref":"aurorax.conjunctions.search_async",
 "url":3,
 "doc":"Submit a request for a conjunctions search, return asynchronously. Attributes: start: start datetime.datetime timestamp of the search end: end datetime.datetime timestamp of the search ground: List of ground instrument search parameters. See examples for usage. e.g. [ { \"programs\": [\"themis-asi\"], \"platforms\": [\"gillam\", \"rabbit lake\"], \"instrument_types\": [\"RGB\"] } ] space: List of one or more space instrument search parameters. See examples for usage. e.g. [ { \"programs\": [\"themis-asi\", \"swarm\"], \"platforms\": [\"themisa\", \"swarma\"], \"instrument_types\": [\"footprint\"] } ] conjunction_types: list of conjunction types, defaults to [\"nbtrace\"] max_distances: dictionary of Dict[str, float] ground-space and space-space maximum distances for conjunctions. default_distance will be used for any ground-space and space-space maximum distances not specified. See examples for usage. e.g. distances = { \"ground1-ground2\": None, \"ground1-space1\": 500, \"ground1-space2\": 500, \"ground2-space1\": 500, \"ground2-space2\": 500, \"space1-space2\": None } default_distance: default maximum distance in kilometers for conjunction. Used when max distance is not specified for any ground-space and space-space instrument pairs. Returns: aurorax.conjunctions.Search object",
@@ -310,7 +316,7 @@ INDEX=[
 {
 "ref":"aurorax.data_products",
 "url":4,
-"doc":""
+"doc":"AuroraX holds records for various types of data products produced by ground and space instruments. The most common type of data product is the keogram."
 },
 {
 "ref":"aurorax.data_products.DataProduct",
@@ -407,6 +413,12 @@ INDEX=[
 "func":1
 },
 {
+"ref":"aurorax.data_products.Search.cancel",
+"url":4,
+"doc":"Cancel the data product search request at the API. This method returns asynchronously by default. Attributes: wait: set to True to block until the cancellation request has been completed. This may take several minutes. verbose: when wait=True, output poll times, defaults to False poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME Returns: 1 on success Raises: aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation",
+"func":1
+},
+{
 "ref":"aurorax.data_products.search_async",
 "url":4,
 "doc":"Submit a request for a data products search, return asynchronously. Attributes: start: start datetime.datetime timestamp of the search end: end datetime.datetime timestamp of the search programs: list of programs to search through, defaults to None platforms: list of platforms to search through, defaults to None instrument_types: list of instrument types to search through, defaults to None metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None. e.g. { \"key\": \"string\", \"operator\": \"=\", \"values\": [ \"string\" ] } data_product_type_filters: list of dictionaries describing data product types to filter on e.g. \"keogram\", defaults to None. e.g. { \"key\": \"string\", \"operator\": \"=\", \"values\": [ \"string\" ] } Returns: aurorax.data_products.Search object",
@@ -421,7 +433,7 @@ INDEX=[
 {
 "ref":"aurorax.ephemeris",
 "url":5,
-"doc":""
+"doc":"AuroraX holds ephemeris records for ground and space instruments in operation."
 },
 {
 "ref":"aurorax.ephemeris.Ephemeris",
@@ -505,6 +517,12 @@ INDEX=[
 "func":1
 },
 {
+"ref":"aurorax.ephemeris.Search.cancel",
+"url":5,
+"doc":"Cancel the ephemeris search request at the API. This method returns asynchronously by default. Attributes: wait: set to True to block until the cancellation request has been completed. This may take several minutes. verbose: when wait=True, output poll times, defaults to False poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME Returns: 1 on success Raises: aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation",
+"func":1
+},
+{
 "ref":"aurorax.ephemeris.search_async",
 "url":5,
 "doc":"Submit a request for an ephemeris search, return asynchronously Attributes: start: start datetime.datetime timestamp of the search end: end datetime.datetime timestamp of the search programs: list of programs to search through, defaults to None platforms: list of platforms to search through, defaults to None instrument_types: list of instrument types to search through, defaults to None metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None. e.g. { \"key\": \"string\", \"operator\": \"=\", \"values\": [ \"string\" ] } Returns: aurorax.ephemeris.Search object",
@@ -531,7 +549,7 @@ INDEX=[
 {
 "ref":"aurorax.exceptions",
 "url":6,
-"doc":""
+"doc":"The exceptions module contains descriptive exceptions unique to AuroraX."
 },
 {
 "ref":"aurorax.exceptions.AuroraXException",
@@ -586,7 +604,7 @@ INDEX=[
 {
 "ref":"aurorax.metadata",
 "url":7,
-"doc":""
+"doc":"AuroraX metadata schemas describe the intended structure of metadata stored in ephemeris and data product records."
 },
 {
 "ref":"aurorax.metadata.validate",
@@ -609,7 +627,7 @@ INDEX=[
 {
 "ref":"aurorax.models",
 "url":8,
-"doc":""
+"doc":"This module contains the Location class."
 },
 {
 "ref":"aurorax.models.Location",
@@ -635,7 +653,7 @@ INDEX=[
 {
 "ref":"aurorax.requests",
 "url":9,
-"doc":""
+"doc":"The requests module contains methods for retrieving data from an AuroraX request."
 },
 {
 "ref":"aurorax.requests.get_status",
@@ -662,9 +680,15 @@ INDEX=[
 "func":1
 },
 {
+"ref":"aurorax.requests.cancel",
+"url":9,
+"doc":"Cancel the request at the given URL. This operation is asynchronous by default unless the wait param is set to True. Attributes: request_url: URL string of the request to be canceled wait: set to True to block until the cancellation request has been completed. This may take several minutes. verbose: when wait=True, output poll times, defaults to False poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME Returns: 1 on success Raises: aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation",
+"func":1
+},
+{
 "ref":"aurorax.sources",
 "url":10,
-"doc":""
+"doc":"AuroraX data sources are unique instruments that produce ephemeris or data product records."
 },
 {
 "ref":"aurorax.sources.DataSource",
@@ -783,6 +807,18 @@ INDEX=[
 {
 "ref":"aurorax.util",
 "url":11,
-"doc":""
+"doc":"Utility methods for converting geographic locations to North/South B trace coordinates."
+},
+{
+"ref":"aurorax.util.ground_geo_to_nbtrace",
+"url":11,
+"doc":"Convert geographic location to North B-Trace geographic location. Attributes: geo_location: aurorax.Location object representing the geographic location dt: datetime.datetime object representing the timestamp Returns: North B-trace location as an aurorax.Location object",
+"func":1
+},
+{
+"ref":"aurorax.util.ground_geo_to_sbtrace",
+"url":11,
+"doc":"Convert geographic location to South B-Trace geographic location. Attributes: geo_location: aurorax.Location object representing the geographic location dt: datetime.datetime object representing the timestamp Returns: South B-trace location as an aurorax.Location object",
+"func":1
 }
 ]

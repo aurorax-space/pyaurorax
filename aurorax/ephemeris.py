@@ -1,5 +1,7 @@
+"""
+AuroraX holds ephemeris records for ground and space instruments in operation.
+"""
 import aurorax
-#from aurorax.requests import STANDARD_POLLING_SLEEP_TIME
 import datetime
 import humanize
 import pprint
@@ -247,6 +249,26 @@ class Search():
         """
         url = aurorax.api.urls.ephemeris_request_url.format(self.request_id)
         self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
+
+    def cancel(self, wait: bool = False, verbose: bool = False, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+        """
+        Cancel the ephemeris search request at the API. This method returns asynchronously by default.
+
+        Attributes:
+            wait: set to True to block until the cancellation request has been completed. This may take several minutes.
+            verbose: when wait=True, output poll times, defaults to False
+            poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+
+        Returns:
+            1 on success
+
+        Raises:
+            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+
+        """
+        url = aurorax.api.urls.ephemeris_request_url.format(self.request_id)
+        return aurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)
 
 
 def search_async(start: datetime.datetime,

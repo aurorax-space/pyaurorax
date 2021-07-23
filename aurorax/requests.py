@@ -1,3 +1,6 @@
+"""
+The requests module contains methods for retrieving data from an AuroraX request.
+"""
 import aurorax
 import datetime
 import time
@@ -111,3 +114,44 @@ def wait_for_data(request_url: str,
     if (verbose is True):
         print("[%s] Data is now available" % (datetime.datetime.now()))
     return status
+
+
+def cancel(request_url: str, 
+           wait: bool = False, 
+           poll_interval: float = STANDARD_POLLING_SLEEP_TIME,
+           verbose: bool = False) -> int:
+    """
+    Cancel the request at the given URL. This operation is asynchronous by default unless the wait param is set to True.
+
+    Attributes:
+        request_url: URL string of the request to be canceled
+        wait: set to True to block until the cancellation request has been completed. This may take several minutes.
+        verbose: when wait=True, output poll times, defaults to False
+        poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+
+    Returns:
+        1 on success
+
+    Raises:
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+    
+    """
+
+    # do request
+    req = aurorax.AuroraXRequest(method="delete", url=request_url, null_response=True)
+    req.execute()
+
+    if not wait:
+        return 1
+
+    status = get_status(request_url)
+    while (status["search_result"]["data_uri"] is None and status["search_result"]["error_condition"] is False):
+        time.sleep(poll_interval)
+        if (verbose is True):
+            print("[%s] Checking for cancellation status ..." % (datetime.datetime.now()))
+        status = get_status(request_url)
+    if (verbose is True):
+        print("[%s] The request has been cancelled" % (datetime.datetime.now()))
+    
+    return 1

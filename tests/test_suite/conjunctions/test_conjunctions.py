@@ -163,3 +163,22 @@ def test_search_conjunctions_with_conjunction_types():
     s.get_data()
 
     assert len(s.data) > 0 and s.data[0].conjunction_type == "sbtrace"
+ 
+def test_cancel_conjunction_search():
+    start = datetime.datetime(2019, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 12, 31, 23, 59, 59)
+    ground_params = [{
+        "programs": ["themis-asi"]
+    }]
+    space_params = [{
+        "programs": ["swarm"]
+    }]
+    conjunction_type = ["sbtrace"]
+    distance = 100
+
+    s = aurorax.conjunctions.Search(start, end, ground_params, space_params, conjunction_type, default_distance=distance)
+    s.execute()
+
+    result = s.cancel(wait=True)
+
+    assert result == 1
