@@ -5,7 +5,7 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 
-PyAuroraX is a Python library for interacting with the AuroraX API. Information about AuroraX can be found [here](https://aurorax.space){:target="_blank"} and all documentation for PyAuroraX can be found [here](https://docs.aurorax.space){:target="_blank"}.
+PyAuroraX is a Python library for interacting with the AuroraX API. Information about AuroraX can be found <a href="https://aurorax.space" target="_blank">here</a> and all documentation for PyAuroraX can be found <a href="https://docs.aurorax.space" target="_blank">here</a>.
 
 ## Installing PyAuroraX
 
@@ -17,7 +17,7 @@ $ python -m pip install pyaurorax
 
 ## Usage
 
-Check out the [documentation](https://docs.aurorax.space){:target="_blank"} for more information and examples.
+Check out the <a href="https://docs.aurorax.space" target="_blank">documentation</a> for more information and examples.
 
 ```python
 >>> import aurorax
@@ -29,7 +29,7 @@ Check out the [documentation](https://docs.aurorax.space){:target="_blank"} for 
 
 Clone the repository and install dependencies using Poetry.
 
-Note: if you have issues with Poetry installation, consult their documentation [here](https://python-poetry.org/docs/#installation){:target="_blank"}.
+Note: if you have issues with Poetry installation, consult their documentation <a href="https://python-poetry.org/docs/#installation" target="_blank">here</a>.
 
 ```console
 $ git clone https://github.com/ucalgary-aurora/pyaurorax.git
