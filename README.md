@@ -5,21 +5,19 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 
-Python library for interacting with the AuroraX API.
+PyAuroraX is a Python library for interacting with the AuroraX API. Information about AuroraX can be found [here](https://aurorax.space) and all documentation for PyAuroraX can be found [here](https://docs.aurorax.space).
 
 ## Installing PyAuroraX
 
-PyAuroraX is available on PyPI:
+PyAuroraX is available on PyPI and officially supports Python 3.6+.
 
 ```console
 $ python -m pip install pyaurorax
 ```
 
-## Supported Python Versions
-
-PyAuroraX officially supports Python 3.6+.
-
 ## Usage
+
+Check out the [documentation](https://docs.aurorax.space) for more information and examples.
 
 ```python
 >>> import aurorax
@@ -27,12 +25,30 @@ PyAuroraX officially supports Python 3.6+.
 
 ## Development
 
+### Editing core codebase locally
+
 Clone the repository and install dependencies using Poetry.
+
+Note: if you have issues with Poetry installation, consult their documentation [here](https://python-poetry.org/docs/#installation).
 
 ```console
 $ git clone https://github.com/ucalgary-aurora/pyaurorax.git
 $ cd pyaurorax
 $ make install
+```
+
+### Editing documentation
+
+Installation:
+```console
+$ git clone https://github.com/ucalgary-aurora/pyaurorax.git
+$ cd pyaurorax
+$ make docs-install
+```
+
+Serving a local version for editing:
+```console
+$ make docs-serve
 ```
 
 ## Testing
@@ -45,8 +61,6 @@ $ make test-pylint
 $ make test-bandit
 $ make test-pytest
 ```
-
-## Additional Testing for Development Environments
 
 To run additional tests that are not integrated into the CI pipeline, run the following:
 

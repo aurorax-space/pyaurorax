@@ -1,5 +1,7 @@
-.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean docs docs-generate docs-serve publish
+.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean docs-install docs-upgrade docs-generate docs-serve publish
 
+# General install targets
+#--------------------------------
 all:
 
 poetry:
@@ -15,6 +17,9 @@ update upgrade:
 clean:
 	@rm -rf pyaurorax.egg-info build dist
 
+
+# Testing targets
+#--------------------------------
 test: test-flake8 test-pylint test-bandit test-pytest
 
 test-flake8 flake8:
@@ -43,8 +48,14 @@ test-additional:
 	@echo "Test coverage ...\n============================="
 	-poetry run coverage report
 
+
+# Documentation targets
+#--------------------------------
 docs-install:
-	python3 -m pip install mkdocs mkdocs-material pdoc3
+	python3 -m pip install -r requirements_docs.txt
+
+docs-upgrade docs-update:
+	python3 -m pip install --upgrade -r requirements_docs.txt
 
 docs-generate: 
 	pdoc --html --force --output-dir docs aurorax --config 'lunr_search={"fuzziness": 1}'
@@ -58,6 +69,9 @@ docs-serve:
 docs-deploy:
 	mkdocs gh-deploy --force
 
+
+# Publishing a new version
+#--------------------------------
 publish:
 	${MAKE} test
 	poetry build
