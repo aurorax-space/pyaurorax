@@ -5,9 +5,12 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 
-PyAuroraX is a Python library for interacting with the AuroraX API. Information about AuroraX can be found [here](https://aurorax.space) and all documentation for PyAuroraX can be found [here](https://docs.aurorax.space).
+PyAuroraX is a Python library for interacting with the AuroraX API.
 
-## Installing PyAuroraX
+* [Website] https://aurorax.space
+* [Documentation] https://docs.aurorax.space
+
+## Installation
 
 PyAuroraX is available on PyPI and officially supports Python 3.6+.
 
