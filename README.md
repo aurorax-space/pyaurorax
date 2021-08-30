@@ -7,8 +7,8 @@
 
 PyAuroraX is a Python library for interacting with the AuroraX API.
 
-* [Website] https://aurorax.space
-* [Documentation] https://docs.aurorax.space
+* [Website](https://aurorax.space)
+* [Documentation](https://docs.aurorax.space)
 
 ## Installation
 
