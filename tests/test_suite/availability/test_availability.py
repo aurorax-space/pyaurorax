@@ -1,6 +1,6 @@
-from typing import List
 import aurorax
 import datetime
+
 
 def test_availability():
 
@@ -17,4 +17,5 @@ def test_availability():
                                                   platform=platform,
                                                   instrument_type=instrument_type)
 
-    assert type(availability) is list and len(availability) > 0 and type(availability[0]) is aurorax.availability.AvailabilityResult and availability[0].data_source.program == "swarm"
+    assert type(availability) is list and len(availability) > 0 and type(
+        availability[0]) is aurorax.availability.AvailabilityResult and availability[0].data_source.program == "swarm"

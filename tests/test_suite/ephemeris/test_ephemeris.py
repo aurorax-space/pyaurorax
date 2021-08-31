@@ -1,10 +1,10 @@
 from aurorax.ephemeris import Ephemeris
 import aurorax
 import datetime
-import os
 import time
 
 MAX_WAIT_TIME = 30
+
 
 def test_create_ephemeris_object():
     # set values
@@ -30,7 +30,8 @@ def test_create_ephemeris_object():
                                     sbtrace=sbtrace,
                                     metadata=metadata)
 
-    assert type(e) is aurorax.ephemeris.Ephemeris and e.data_source.instrument_type == "test-instrument-type"
+    assert type(
+        e) is aurorax.ephemeris.Ephemeris and e.data_source.instrument_type == "test-instrument-type"
 
 
 def test_create_ephemeris_search_object():
@@ -40,7 +41,9 @@ def test_create_ephemeris_search_object():
                                  platforms=["swarma"],
                                  instrument_types=["footprint"])
 
-    assert type(s) is aurorax.ephemeris.Search and s.end ==  datetime.datetime(2020, 1, 10, 0, 0, 0)
+    assert type(s) is aurorax.ephemeris.Search and s.end == datetime.datetime(
+        2020, 1, 10, 0, 0, 0)
+
 
 def test_search_ephemeris_synchronous():
     s = aurorax.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -51,12 +54,14 @@ def test_search_ephemeris_synchronous():
 
     assert type(s.data) is list and type(s.data[0]) is Ephemeris
 
+
 def test_search_ephemeris_asynchronous():
     s = aurorax.ephemeris.search_async(datetime.datetime(2019, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2019, 1, 1, 0, 59, 59),
-                                 programs=["swarm"],
-                                 platforms=["swarma"],
-                                 instrument_types=["footprint"])
+                                       datetime.datetime(
+                                           2019, 1, 1, 0, 59, 59),
+                                       programs=["swarm"],
+                                       platforms=["swarma"],
+                                       instrument_types=["footprint"])
 
     s.execute()
     s.update_status()
@@ -73,6 +78,7 @@ def test_search_ephemeris_asynchronous():
     s.get_data()
 
     assert type(s.data) is list and type(s.data[0]) is Ephemeris
+
 
 def test_search_ephemeris_logs():
     s = aurorax.ephemeris.Search(datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -95,6 +101,7 @@ def test_search_ephemeris_logs():
 
     assert len(s.logs) > 0
 
+
 def test_search_ephemeris_status():
     s = aurorax.ephemeris.Search(datetime.datetime(2019, 1, 1, 0, 0, 0),
                                  datetime.datetime(2019, 1, 1, 0, 59, 59),
@@ -115,6 +122,7 @@ def test_search_ephemeris_status():
         assert False
 
     assert s.completed
+
 
 def test_upload_ephemeris():
     # set values
@@ -149,12 +157,12 @@ def test_upload_ephemeris():
         "test_meta2": "testing22",
     }
     e2 = aurorax.ephemeris.Ephemeris(data_source=source,
-                                    epoch=epoch2,
-                                    location_geo=location_geo,
-                                    location_gsm=location_gsm,
-                                    nbtrace=nbtrace,
-                                    sbtrace=sbtrace,
-                                    metadata=metadata2)
+                                     epoch=epoch2,
+                                     location_geo=location_geo,
+                                     location_gsm=location_gsm,
+                                     nbtrace=nbtrace,
+                                     sbtrace=sbtrace,
+                                     metadata=metadata2)
 
     # set records array
     records = [e, e2]
@@ -173,8 +181,9 @@ def test_upload_ephemeris():
     s.wait()
     s.check_for_data()
     s.get_data()
-    
+
     assert result == 1 and len(s.data) > 0
+
 
 def test_delete_ephemeris():
     program = "test-program"
@@ -213,6 +222,7 @@ def test_delete_ephemeris():
 
     assert len(s.data) == 0
 
+
 def test_cancel_ephemeris_search():
     start_dt = datetime.datetime(2018, 1, 1)
     end_dt = datetime.datetime(2021, 12, 31, 23, 59, 59)
@@ -220,7 +230,7 @@ def test_cancel_ephemeris_search():
 
     s = aurorax.ephemeris.Search(start=start_dt, end=end_dt, programs=programs)
     s.execute()
-    
+
     result = s.cancel(wait=True)
-    
+
     assert result == 1

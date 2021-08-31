@@ -16,4 +16,4 @@ def test_create_empty_location_object():
 
 def test_create_invalid_location_object():
     with pytest.raises(ValueError):
-        loc = aurorax.Location(lat=51, lon=None)
+        aurorax.Location(lat=51, lon=None)
