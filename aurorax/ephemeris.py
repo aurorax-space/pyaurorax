@@ -11,17 +11,17 @@ from typing import Dict, List, Optional
 
 class Ephemeris(BaseModel):
     """
-    Ephemeris data type
+    Ephemeris data type.
 
     Attributes:
-        data_source: aurorax.sources.DataSource source that the ephemeris record is associated with
-        epoch: datetime.datetime timestamp for the record in UTC
-        location_geo: aurorax.Location object with latitude and longitude in geographic coordinates
+        data_source: aurorax.sources.DataSource source that the ephemeris record is associated with.
+        epoch: datetime.datetime timestamp for the record in UTC.
+        location_geo: aurorax.Location object with latitude and longitude in geographic coordinates.
         location_gsm: aurorax.Location object with latitude and longitude in GSM coordinates (leave empty for
-            data sources with a type of 'ground')
-        nbtrace: aurorax.Location object with north B-trace geomagnetic latitude and longitude
-        sbtrace: aurorax.Location object with south B-trace geomagnetic latitude and longitude
-        metadata: dictionary containing metadata values for this record
+            data sources with a type of 'ground').
+        nbtrace: aurorax.Location object with north B-trace geomagnetic latitude and longitude.
+        sbtrace: aurorax.Location object with south B-trace geomagnetic latitude and longitude.
+        metadata: dictionary containing metadata values for this record.
 
     """
     data_source: aurorax.sources.DataSource
@@ -34,12 +34,11 @@ class Ephemeris(BaseModel):
 
     def to_json_serializable(self) -> Dict:
         """
-        Convert object to a JSON-serializable object (ie. translate datetime
-        objects to strings)
+        Convert object to a JSON-serializable object (ie. translate datetime objects to strings).
 
         Returns:
-            Dictionary JSON-serializable object
-        
+            Dictionary JSON-serializable object.
+
         """
         d = self.__dict__
 
@@ -61,11 +60,12 @@ class Ephemeris(BaseModel):
         if (type(self.metadata) is dict):
             for key, value in self.metadata.items():
                 if (type(value) is datetime.datetime or type(value) is datetime.date):
-                    self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
+                    self.metadata[key] = self.metadata[key].strftime(
+                        "%Y-%m-%dT%H:%M:%S.%f")
         if (type(self.metadata) is list):
             self.metadata = {}
 
-        # format data source fields for query 
+        # format data source fields for query
         d["program"] = self.data_source.program
         d["platform"] = self.data_source.platform
         d["instrument_type"] = self.data_source.instrument_type
@@ -76,33 +76,35 @@ class Ephemeris(BaseModel):
 
     def __str__(self) -> str:
         """
-        String method
+        String method.
 
-        :return: string format
-        :rtype: str
+        Returns:
+            String format of Ephemeris.
+
         """
         return self.__repr__()
 
     def __repr__(self) -> str:
         """
-        Object representation
+        Object representation.
 
-        :return: object representation
-        :rtype: str
+        Returns:
+            Object representation of Ephemeris.
+
         """
         return pprint.pformat(self.__dict__)
 
+
 class Search():
     """
-    Class representing an AuroraX ephemeris search
+    Class representing an AuroraX ephemeris search.
 
-    start: start datetime.datetime timestamp of the search
-    end: end datetime.datetime timestamp of the search
-    programs: list of program names to search
-    platforms: list of platform names to search
-    instrument_types: list of instrument types to search
-    metadata_filters: list of dictionaries describing metadata keys and 
-        values to filter on, defaults to None.
+    start: start datetime.datetime timestamp of the search.
+    end: end datetime.datetime timestamp of the search.
+    programs: list of program names to search.
+    platforms: list of platform names to search.
+    instrument_types: list of instrument types to search.
+    metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None.
         e.g. {
             "key": "string",
             "operator": "=",
@@ -110,16 +112,16 @@ class Search():
                 "string"
             ]
         }
-    request: aurorax.AuroraXResponse object returned when the search is executed
-    request_id: unique AuroraX string ID assigned to the request
-    request_url: unique AuroraX URL string assigned to the request
-    executed: boolean, gets set to True when the search is executed
-    completed: boolean, gets set to True when the search is checked to be finished
-    data_url: URL string where data is accessed
-    query: dictionary of values sent for the search query
-    status: dictionary of status updates
-    data: list of aurorax.ephemeris.Ephemeris objects returned
-    logs: list of logging messages from the API
+    request: aurorax.AuroraXResponse object returned when the search is executed.
+    request_id: unique AuroraX string ID assigned to the request.
+    request_url: unique AuroraX URL string assigned to the request.
+    executed: boolean, gets set to True when the search is executed.
+    completed: boolean, gets set to True when the search is checked to be finished.
+    data_url: URL string where data is accessed.
+    query: dictionary of values sent for the search query.
+    status: dictionary of status updates.
+    data: list of aurorax.ephemeris.Ephemeris objects returned.
+    logs: list of logging messages from the API.
     """
 
     def __init__(self,
@@ -130,7 +132,7 @@ class Search():
                  instrument_types: List[str] = None,
                  metadata_filters: List[Dict] = None) -> None:
         """
-        Create a new Search object
+        Create a new Search object.
 
         """
         self.request = None
@@ -153,25 +155,27 @@ class Search():
 
     def __str__(self) -> str:
         """
-        String method
+        String method.
 
-        :return: string format
-        :rtype: str
+        Returns:
+            String format of Ephemeris Search object.
+
         """
         return self.__repr__()
 
     def __repr__(self) -> str:
         """
-        Object representation
+        Object representation.
 
-        :return: object representation
-        :rtype: str
+        Returns:
+            Object representation of Ephemeris Search object.
+
         """
         return pprint.pformat(self.__dict__)
 
     def execute(self) -> None:
         """
-        Initiate ephemeris search request
+        Initiate ephemeris search request.
         """
         # set up request
         url = aurorax.api.urls.ephemeris_search_url
@@ -188,7 +192,8 @@ class Search():
         self.query = post_data
 
         # do request
-        req = aurorax.AuroraXRequest(method="post", url=url, body=post_data, null_response=True)
+        req = aurorax.AuroraXRequest(
+            method="post", url=url, body=post_data, null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -202,10 +207,10 @@ class Search():
 
     def update_status(self, status: Dict = None) -> None:
         """
-        Update the status of this ephemeris search request
+        Update the status of this ephemeris search request.
 
         Attributes:
-            status: retrieved status dictionary (include to avoid requesting it from the API again), defaults to None
+            status: retrieved status dictionary (include to avoid requesting it from the API again), defaults to None.
         """
         # get the status if it isn't passed in
         if (status is None):
@@ -214,7 +219,8 @@ class Search():
         # update request status by checking if data URI is set
         if (status["search_result"]["data_uri"] is not None):
             self.completed = True
-            self.data_url = "%s%s" % (aurorax.api.urls.base_url, status["search_result"]["data_uri"])
+            self.data_url = "%s%s" % (
+                aurorax.api.urls.base_url, status["search_result"]["data_uri"])
 
         # set class variable "status" and "logs"
         self.status = status
@@ -222,13 +228,13 @@ class Search():
 
     def check_for_data(self) -> None:
         """
-        Check to see if data is available for this ephemeris search request
+        Check to see if data is available for this ephemeris search request.
         """
         self.update_status()
 
     def get_data(self) -> None:
         """
-        Retrieve the data available for this ephemeris search request
+        Retrieve the data available for this ephemeris search request.
         """
         if (self.completed is False):
             print("No data available, update status first")
@@ -240,31 +246,34 @@ class Search():
 
     def wait(self, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
-        Block and wait for the request to complete and data is available for retrieval
+        Block and wait for the request to complete and data is available for retrieval.
 
         Attributes:
-            poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times, defaults to False
+            poll_interval: time in seconds to wait between polling attempts,
+                defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME.
+            verbose: output poll times, defaults to False.
 
         """
         url = aurorax.api.urls.ephemeris_request_url.format(self.request_id)
-        self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
+        self.update_status(aurorax.requests.wait_for_data(
+            url, poll_interval=poll_interval, verbose=verbose))
 
-    def cancel(self, wait: bool = False, verbose: bool = False, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+    def cancel(self, wait: bool = False, verbose: bool = False,
+               poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
         Cancel the ephemeris search request at the API. This method returns asynchronously by default.
 
         Attributes:
             wait: set to True to block until the cancellation request has been completed. This may take several minutes.
-            verbose: when wait=True, output poll times, defaults to False
-            poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+            verbose: when wait=True, output poll times, defaults to False.
+            poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
         Returns:
-            1 on success
+            1 on success.
 
         Raises:
-            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
         """
         url = aurorax.api.urls.ephemeris_request_url.format(self.request_id)
@@ -278,16 +287,15 @@ def search_async(start: datetime.datetime,
                  instrument_types: List[str] = None,
                  metadata_filters: List[Dict] = None) -> Search:
     """
-    Submit a request for an ephemeris search, return asynchronously
+    Submit a request for an ephemeris search, return asynchronously.
 
     Attributes:
-        start: start datetime.datetime timestamp of the search
-        end: end datetime.datetime timestamp of the search
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and 
-            values to filter on, defaults to None.
+        start: start datetime.datetime timestamp of the search.
+        end: end datetime.datetime timestamp of the search.
+        programs: list of programs to search through, defaults to None.
+        platforms: list of platforms to search through, defaults to None.
+        instrument_types: list of instrument types to search through, defaults to None.
+        metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None.
             e.g. {
                 "key": "string",
                 "operator": "=",
@@ -297,7 +305,7 @@ def search_async(start: datetime.datetime,
             }
 
     Returns:
-        aurorax.ephemeris.Search object
+        An aurorax.ephemeris.Search object.
 
     """
     s = aurorax.ephemeris.Search(start=start,
@@ -319,16 +327,15 @@ def search(start: datetime.datetime,
            verbose: bool = False,
            poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> Search:
     """
-    Search for ephemeris records
+    Search for ephemeris records.
 
     Attributes:
-        start: start datetime.datetime timestamp of the search
-        end: end datetime.datetime timestamp of the search
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and 
-            values to filter on, defaults to None.
+        start: start datetime.datetime timestamp of the search.
+        end: end datetime.datetime timestamp of the search.
+        programs: list of programs to search through, defaults to None.
+        platforms: list of platforms to search through, defaults to None.
+        instrument_types: list of instrument types to search through, defaults to None.
+        metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None.
             e.g. {
                 "key": "string",
                 "operator": "=",
@@ -336,15 +343,17 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
-        verbose: output poll times, defaults to False
-        poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times, defaults to False.
+        poll_interval: time in seconds to wait between polling attempts,
+            defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME.
 
     Returns:
-        aurorax.ephemeris.Search object
+        An aurorax.ephemeris.Search object.
 
     """
     # create a Search() object
-    s = Search(start=start, end=end, programs=programs, platforms=platforms, instrument_types=instrument_types, metadata_filters=metadata_filters)
+    s = Search(start=start, end=end, programs=programs, platforms=platforms,
+               instrument_types=instrument_types, metadata_filters=metadata_filters)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 
@@ -353,7 +362,8 @@ def search(start: datetime.datetime,
     if (verbose is True):
         print("[%s] Request submitted" % (datetime.datetime.now()))
         print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
-        print("[%s] Request details available at: %s" % (datetime.datetime.now(), s.request_url))
+        print("[%s] Request details available at: %s" %
+              (datetime.datetime.now(), s.request_url))
 
     # wait for data
     if (verbose is True):
@@ -378,47 +388,51 @@ def __validate_data_source(identifier: int, records: List[Ephemeris]) -> Optiona
     # get all current sources
     sources = {source.identifier: source for source in aurorax.sources.list()}
     if identifier not in sources.keys():
-        raise aurorax.AuroraXValidationException(f"Data source with unique identifier {identifier} could not be found.")
+        raise aurorax.AuroraXValidationException(
+            f"Data source with unique identifier {identifier} could not be found.")
 
     for record in records:
         # check the identifier, program name, platform name, and instrument type
         try:
             reference = sources[record.data_source.identifier]
         except KeyError:
-            raise aurorax.AuroraXValidationException(f"Data source with unique identifier {record.data_source.identifier} could not be found.")
+            raise aurorax.AuroraXValidationException(
+                f"Data source with unique identifier {record.data_source.identifier} could not be found.")
 
-        if not (record.data_source.program == reference.program and 
-                record.data_source.platform == reference.platform and 
-                record.data_source.instrument_type == reference.instrument_type):
+        if not (record.data_source.program == reference.program
+                and record.data_source.platform == reference.platform
+                and record.data_source.instrument_type == reference.instrument_type):
             return record
 
     return None
 
+
 def upload(identifier: int, records: List[Ephemeris], validate_source: bool = False) -> int:
     """
-    Upload ephemeris records to AuroraX
+    Upload ephemeris records to AuroraX.
 
     Attributes:
-        identifier: AuroraX data source ID int
-        records: list of aurorax.ephemeris.Ephemeris records to upload
-        validate_source: boolean, set to True to validate all records before uploading
+        identifier: AuroraX data source ID int.
+        records: list of aurorax.ephemeris.Ephemeris records to upload.
+        validate_source: boolean, set to True to validate all records before uploading.
 
     Returns:
-        1 for success, raises exception on error
+        1 for success, raises exception on error.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
-        aurorax.exceptions.AuroraXUploadException: upload error
-        aurorax.exceptions.AuroraXValidationException: data source validation error
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
+        aurorax.exceptions.AuroraXUploadException: upload error.
+        aurorax.exceptions.AuroraXValidationException: data source validation error.
 
     """
     # validate record sources if the flag is set
     if validate_source:
         validation_error = __validate_data_source(identifier, records)
         if validation_error:
-            raise aurorax.AuroraXValidationException("Unable to validate data source found in record: {}".format(validation_error))
-    
+            raise aurorax.AuroraXValidationException(
+                "Unable to validate data source found in record: {}".format(validation_error))
+
     # translate each ephemeris record to a request-friendly dict (ie. convert datetimes to strings, etc.)
     for i, _ in enumerate(records):
         if (type(records[i]) is Ephemeris):
@@ -426,38 +440,42 @@ def upload(identifier: int, records: List[Ephemeris], validate_source: bool = Fa
 
     # make request
     url = aurorax.api.urls.ephemeris_upload_url.format(identifier)
-    req = aurorax.AuroraXRequest(method="post", url=url, body=records, null_response=True)
+    req = aurorax.AuroraXRequest(
+        method="post", url=url, body=records, null_response=True)
     res = req.execute()
 
     # evaluate response
     if (res.status_code == 400):
-        raise aurorax.AuroraXUploadException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
-    
+        raise aurorax.AuroraXUploadException(
+            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
+
     # return
     return 1
+
 
 def delete(data_source: aurorax.sources.DataSource, start: datetime.datetime, end: datetime.datetime) -> int:
     """
     Delete a range of ephemeris records. This method is asynchronous.
 
     Attributes:
-        data_source: aurorax.sources.DataSource source associated with the data product records. 
+        data_source: aurorax.sources.DataSource source associated with the data product records.
             Identifier, program, platform, and instrument_type are required.
         start: datetime.datetime beginning of range to delete records for, inclusive.
         end: datetime.datetime end of datetime range to delete records for, inclusive.
 
     Returns:
-        1 on success
+        1 on success.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-        aurorax.exceptions.AuroraXNotFoundException: source not found
-        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        aurorax.exceptions.AuroraXNotFoundException: source not found.
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
     """
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
-        raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
+        raise aurorax.AuroraXBadParametersException(
+            "One or more required data source parameters are missing. Delete operation aborted.")
 
     # do request
     url = aurorax.api.urls.ephemeris_upload_url.format(data_source.identifier)
@@ -468,17 +486,20 @@ def delete(data_source: aurorax.sources.DataSource, start: datetime.datetime, en
         "start": start.strftime("%Y-%m-%dT%H:%M:%S"),
         "end": end.strftime("%Y-%m-%dT%H:%M:%S")
     }
-    delete_req = aurorax.AuroraXRequest(method="delete", url=url, body=params, null_response=True)
+    delete_req = aurorax.AuroraXRequest(
+        method="delete", url=url, body=params, null_response=True)
     res = delete_req.execute()
 
     # evaluate response
     if (res.status_code == 400):
         if type(res.data) is list:
-            raise aurorax.AuroraXBadParametersException("%s - %s" % (res.status_code, res.data[0]["message"]))  
-        raise aurorax.AuroraXBadParametersException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+            raise aurorax.AuroraXBadParametersException(
+                "%s - %s" % (res.status_code, res.data[0]["message"]))
+        raise aurorax.AuroraXBadParametersException(
+            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 404):
-        raise aurorax.AuroraXNotFoundException("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+        raise aurorax.AuroraXNotFoundException(
+            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
     return 1
-    

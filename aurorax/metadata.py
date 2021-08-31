@@ -1,5 +1,5 @@
 """
-AuroraX metadata schemas describe the intended structure of metadata stored in 
+AuroraX metadata schemas describe the intended structure of metadata stored in
 ephemeris and data product records.
 """
 import aurorax
@@ -8,17 +8,15 @@ from typing import Dict, List
 
 def validate(schema: List[Dict], record: Dict, quiet: bool = False) -> bool:
     """
-    Validate the metadata record against a schema. This checks
-    that the key names match and there aren't fewer or more keys
-    than expected.
+    Validate the metadata record against a schema. This checks that the key names match and there aren't
+    fewer or more keys than expected.
 
     Attributes:
-        schema: list of dictionaries representing the metadata schema to 
-            validate against
-        record: metadata record dictionary to validate
+        schema: list of dictionaries representing the metadata schema to validate against.
+        record: metadata record dictionary to validate.
 
     Returns:
-        True if the metadata record is valid
+        True if the metadata record is valid.
     """
     # check keys
     schema_keys = sorted([i["field_name"] for i in schema])
@@ -32,16 +30,17 @@ def validate(schema: List[Dict], record: Dict, quiet: bool = False) -> bool:
 
 def get_ephemeris_schema(identifier: int) -> List[Dict]:
     """
-    Retrieve the metadata schema for an ephemeris record
+    Retrieve the metadata schema for an ephemeris record.
 
     Attributes:
-        identifier: ephemeris source ID
+        identifier: ephemeris source ID.
 
     Returns:
-        Metadata schema associated with the record
+        Metadata schema associated with the record.
 
     """
-    source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
+    source_info = aurorax.sources.get_using_identifier(
+        identifier, format="full_record")
     if source_info.ephemeris_metadata_schema:
         return source_info.ephemeris_metadata_schema
     else:
@@ -50,16 +49,17 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
 
 def get_data_products_schema(identifier: int) -> List[Dict]:
     """
-    Retrieve the metadata schema for a data products record
+    Retrieve the metadata schema for a data products record.
 
     Attributes:
-        identifier: ephemeris source ID
+        identifier: ephemeris source ID.
 
     Returns:
-        Metadata schema associated with the record
-    
+        Metadata schema associated with the record.
+
     """
-    source_info = aurorax.sources.get_using_identifier(identifier, format="full_record")
+    source_info = aurorax.sources.get_using_identifier(
+        identifier, format="full_record")
     if source_info.data_product_metadata_schema:
         return source_info.data_product_metadata_schema
     else:

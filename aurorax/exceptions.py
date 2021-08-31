@@ -1,6 +1,8 @@
 """
 The exceptions module contains descriptive exceptions unique to AuroraX.
 """
+
+
 class AuroraXException(Exception):
 
     def __init__(self, *args, **kwargs):
