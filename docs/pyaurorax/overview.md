@@ -6,5 +6,3 @@
 [![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 
 PyAuroraX is a Python 3.6+ library designed to help users interact with the AuroraX API easily and intuitively.
-
-[Learn more about AuroraX](/about/), browse tutorials, or dive into the [API reference](/aurorax).

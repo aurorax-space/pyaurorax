@@ -58,7 +58,7 @@ docs-upgrade docs-update:
 	python3 -m pip install --upgrade -r requirements_docs.txt
 
 docs-generate: 
-	pdoc --html --force --output-dir docs aurorax --config 'lunr_search={"fuzziness": 1}'
+	pdoc --html --force --output-dir docs/pyaurorax aurorax --config 'lunr_search={"fuzziness": 1}'
 
 docs-build:
 	mkdocs build

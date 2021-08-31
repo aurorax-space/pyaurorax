@@ -3,6 +3,7 @@
 site_name: AuroraX Documentation
 site_url: https://docs.aurorax.space
 repo_url: https://github.com/ucalgary-aurora/pyaurorax
+edit_uri: edit/main/docs/
 
 
 # theme settings
@@ -19,6 +20,7 @@ theme:
     - navigation.tracking
     - navigation.top
 markdown_extensions:
+  - meta
   - toc:
       permalink: true
       toc_depth: 3
@@ -29,10 +31,12 @@ extra:
     provider: google
     property: G-284760515
   social:
-    - icon: fontawesome/brands/github-alt
-      link: https://github.com/ucalgary-aurora/pyaurorax
     - icon: fontawesome/solid/globe
       link: https://aurorax.space
+      name: AuroraX website
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/ucalgary-aurora/pyaurorax
+      name: Source code on Github
 extra_css:
   - stylesheets/extra.css
 
@@ -41,7 +45,35 @@ extra_css:
 # ------------------
 nav:
   - Home: index.md
-  - About: about.md
+  - About the Data: 
+    - Overview: about_the_data/overview.md
+    - Data Categories: about_the_data/categories.md
+    - Instrument-specific Data Descriptions: about_the_data/descriptions.md
+    - Data Availability and Information: about_the_data/availability_and_info.md
+    - Data Policy: about_the_data/policy.md
+    - Data Contributors: about_the_data/contributors.md
+    - Data Standards: about_the_data/standards.md
+  - Machine Learning:
+    - Overview: ml/overview.md
+    - How models are used in AuroraX: ml/using_models.md
+    - Models:
+      - UCalgary Cloud: ml/models/ucalgary_cloud.md
+      - UCalgary APA: ml/models/ucalgary_apa.md
+      - Clausen OATH: ml/models/clausen_oath.md
   - PyAuroraX:
-      - Overview: aurorax/aurorax.md
-      - API reference: aurorax/index.html
+      - Overview: pyaurorax/overview.md
+      - Installation: pyaurorax/installation.md
+      - Basic Usage: pyaurorax/basic_usage.md
+      - Advanced Usage:
+        - Authentication: pyaurorax/advanced_usage/authentication.md
+        - Triple conjunction searches: pyaurorax/advanced_usage/triple_conjunctions.md
+        - Searches with metadata filters: pyaurorax/advanced_usage/searches_with_metadata_filters.md
+        - Uploading data: pyaurorax/advanced_usage/uploading.md
+      - API reference: pyaurorax/aurorax/index.html
+  - IDL AuroraX:
+    - Overview: idl_aurorax/overview.md
+  - RESTful API:
+    - Overview: api/overview.md
+    - Basic Usage: api/basic_usage.md
+    - Advanced Usage: api/advanced_usage.md
+    - Authentication Strategy: api/authentication_strategy.md
