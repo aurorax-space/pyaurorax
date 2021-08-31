@@ -1,18 +1,47 @@
+# top level
+# ------------------
 site_name: AuroraX Documentation
-site_url: https://example.com/
-nav:
-  - Home: 'index.md'
-  - About: 'about.md'
-  - PyAuroraX:
-    - About: 'aurorax/aurorax.md'
-    - API reference: 'aurorax/index.html'
+site_url: https://docs.aurorax.space
+repo_url: https://github.com/ucalgary-aurora/pyaurorax
 
+
+# theme settings
+# ------------------
 theme:
   name: material
   logo: img/logo.svg
   favicon: img/logo.svg
   palette:
-    primary:
-      black
-    accent:
-      teal
+    primary: black
+    accent: teal
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+markdown_extensions:
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - markdown.extensions.codehilite:
+      guess_lang: false
+extra:
+  analytics:
+    provider: google
+    property: G-284760515
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: https://github.com/ucalgary-aurora/pyaurorax
+    - icon: fontawesome/solid/globe
+      link: https://aurorax.space
+extra_css:
+  - stylesheets/extra.css
+
+
+# navigation
+# ------------------
+nav:
+  - Home: index.md
+  - About: about.md
+  - PyAuroraX:
+      - Overview: aurorax/aurorax.md
+      - API reference: aurorax/index.html

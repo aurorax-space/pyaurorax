@@ -1,7 +1,7 @@
 .PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean docs-install docs-upgrade docs-generate docs-serve publish
 
 # General install targets
-#--------------------------------
+# --------------------------------
 all:
 
 poetry:
@@ -19,7 +19,7 @@ clean:
 
 
 # Testing targets
-#--------------------------------
+# --------------------------------
 test: test-flake8 test-pylint test-bandit test-pytest
 
 test-flake8 flake8:
@@ -50,7 +50,7 @@ test-additional:
 
 
 # Documentation targets
-#--------------------------------
+# --------------------------------
 docs-install:
 	python3 -m pip install -r requirements_docs.txt
 
@@ -71,7 +71,7 @@ docs-deploy:
 
 
 # Publishing a new version
-#--------------------------------
+# --------------------------------
 publish:
 	${MAKE} test
 	poetry build
