@@ -5,8 +5,8 @@ import aurorax
 import datetime
 import humanize
 import pprint
-from pydantic import BaseModel
-from typing import Dict, List, Optional
+from pydantic import BaseModel, validator
+from typing import Dict, List, Optional, Union
 
 
 class Ephemeris(BaseModel):
@@ -27,10 +27,10 @@ class Ephemeris(BaseModel):
     data_source: aurorax.sources.DataSource
     epoch: datetime.datetime
     location_geo: aurorax.Location
-    location_gsm: aurorax.Location
+    location_gsm: aurorax.Location = aurorax.Location(lat=None, lon=None)
     nbtrace: aurorax.Location
     sbtrace: aurorax.Location
-    metadata: Dict
+    metadata: Dict = None
 
     def to_json_serializable(self) -> Dict:
         """
@@ -98,6 +98,9 @@ class Ephemeris(BaseModel):
 class Search():
     """
     Class representing an AuroraX ephemeris search.
+
+    At least one search criteria from programs, platforms, instrument_types, or metadata_filters
+    must be specified.
 
     start: start datetime.datetime timestamp of the search.
     end: end datetime.datetime timestamp of the search.
@@ -176,7 +179,16 @@ class Search():
     def execute(self) -> None:
         """
         Initiate ephemeris search request.
+
+        Raises:
+            aurorax.exceptions.AuroraXBadParametersException: missing parameters.
+
         """
+        # check for at least one filter criteria
+        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+            raise aurorax.AuroraXBadParametersException(
+                "At least one filter criteria parameter besides Start and End must be specified.")
+
         # set up request
         url = aurorax.api.urls.ephemeris_search_url
         post_data = {
@@ -289,6 +301,9 @@ def search_async(start: datetime.datetime,
     """
     Submit a request for an ephemeris search, return asynchronously.
 
+    At least one search criteria from programs, platforms, instrument_types, or metadata_filters
+    must be specified.
+
     Attributes:
         start: start datetime.datetime timestamp of the search.
         end: end datetime.datetime timestamp of the search.
@@ -306,6 +321,9 @@ def search_async(start: datetime.datetime,
 
     Returns:
         An aurorax.ephemeris.Search object.
+
+    Raises:
+        aurorax.exceptions.AuroraXBadParametersException: missing parameters.
 
     """
     s = aurorax.ephemeris.Search(start=start,
@@ -329,6 +347,9 @@ def search(start: datetime.datetime,
     """
     Search for ephemeris records.
 
+    At least one search criteria from programs, platforms, instrument_types, or metadata_filters
+    must be specified.
+
     Attributes:
         start: start datetime.datetime timestamp of the search.
         end: end datetime.datetime timestamp of the search.
@@ -349,6 +370,9 @@ def search(start: datetime.datetime,
 
     Returns:
         An aurorax.ephemeris.Search object.
+
+    Raises:
+        aurorax.exceptions.AuroraXBadParametersException: missing parameters
 
     """
     # create a Search() object
@@ -471,6 +495,7 @@ def delete(data_source: aurorax.sources.DataSource, start: datetime.datetime, en
         aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
         aurorax.exceptions.AuroraXNotFoundException: source not found.
         aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
+        aurorax.exceptions.AuroraXBadParametersException: missing parameters.
 
     """
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):

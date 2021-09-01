@@ -13,7 +13,6 @@ def test_create_ephemeris_object():
     instrument_type = "test-instrument-type"
     epoch = datetime.datetime(2020, 1, 1, 0, 0)
     location_geo = aurorax.Location(lat=51.049999, lon=-114.066666)
-    location_gsm = aurorax.Location(lat=150.25, lon=-10.75)
     nbtrace = aurorax.Location(lat=1.23, lon=45.6)
     sbtrace = aurorax.Location(lat=7.89, lon=101.23)
     metadata = {}
@@ -25,7 +24,6 @@ def test_create_ephemeris_object():
     e = aurorax.ephemeris.Ephemeris(data_source=data_source,
                                     epoch=epoch,
                                     location_geo=location_geo,
-                                    location_gsm=location_gsm,
                                     nbtrace=nbtrace,
                                     sbtrace=sbtrace,
                                     metadata=metadata)
