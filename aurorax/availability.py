@@ -51,7 +51,8 @@ def ephemeris(start: datetime.date,
               instrument_type: str = None,
               source_type: str = None,
               owner: str = None,
-              format: str = "basic_info") -> List[AvailabilityResult]:
+              format: str = "basic_info",
+              slow: bool = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing ephemeris records.
 
@@ -65,6 +66,7 @@ def ephemeris(start: datetime.date,
         owner: owner email address string to filter sources by, defaults to None.
         format: the format of the data sources returned (identifier_only, basic_info,
             full_record), defaults to "basic_info".
+        slow: query the data directly (slower) for more accurate results, defaults to false.
 
     Returns:
         A list of aurorax.availability.AvailabilityResult objects.
@@ -80,6 +82,7 @@ def ephemeris(start: datetime.date,
         "source_type": source_type,
         "owner": owner,
         "format": format,
+        "slow": slow,
     }
 
     # do request
@@ -98,7 +101,8 @@ def data_products(start: datetime,
                   instrument_type: str = None,
                   source_type: str = None,
                   owner: str = None,
-                  format: str = "basic_info") -> List[AvailabilityResult]:
+                  format: str = "basic_info",
+                  slow: bool = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing data product records.
 
@@ -112,6 +116,7 @@ def data_products(start: datetime,
         owner: owner email address string to filter sources by, defaults to None.
         format: the format of the data sources returned (identifier_only, basic_info,
             full_record), defaults to "basic_info".
+        slow: query the data directly (slower) for more accurate results, defaults to false.
 
     Returns:
         A list of aurorax.availability.AvailabilityResult objects.
@@ -127,6 +132,7 @@ def data_products(start: datetime,
         "source_type": source_type,
         "owner": owner,
         "format": format,
+        "slow": slow,
     }
 
     # do request
