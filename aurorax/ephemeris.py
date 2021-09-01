@@ -5,8 +5,8 @@ import aurorax
 import datetime
 import humanize
 import pprint
-from pydantic import BaseModel, validator
-from typing import Dict, List, Optional, Union
+from pydantic import BaseModel
+from typing import Dict, List, Optional
 
 
 class Ephemeris(BaseModel):
