@@ -281,6 +281,13 @@ def set_base_url(url: str) -> None:
     urls.base_url = url
 
 
+def get_base_url() -> str:
+    """
+    Returns the current base URL for the API.
+    """
+    return urls.base_url
+
+
 def reset_base_url() -> None:
     """
     Set the base URL for the API back to the default.
