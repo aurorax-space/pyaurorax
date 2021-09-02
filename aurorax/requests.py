@@ -13,13 +13,13 @@ STANDARD_POLLING_SLEEP_TIME = 1.0  # 1s
 
 def get_status(request_url: str) -> Dict:
     """
-    Retrieve the status of a request
+    Retrieve the status of a request.
 
     Attributes:
-        request_url: URL of the request information
+        request_url: URL of the request information.
 
     Returns:
-        Status dictionary for the request
+        Status dictionary for the request.
 
     """
     # do request
@@ -32,13 +32,13 @@ def get_status(request_url: str) -> Dict:
 
 def get_data(data_url: str) -> List:
     """
-    Retrieve the data for a request
+    Retrieve the data for a request.
 
     Attributes:
-        data_url: URL for the data of a request
+        data_url: URL for the data of a request.
 
     Returns:
-        List of JSON data objects in the response
+        List of JSON data objects in the response.
 
     """
     # do request
@@ -72,13 +72,13 @@ def get_data(data_url: str) -> List:
 
 def get_logs(request_url: str) -> List:
     """
-    Retrieve the logs for a request
+    Retrieve the logs for a request.
 
     Attributes:
-        request_url: URL of the request information
+        request_url: URL of the request information.
 
     Returns:
-        List of logged messages for the request
+        List of logged messages for the request.
 
     """
     # get status
@@ -94,16 +94,16 @@ def wait_for_data(request_url: str,
                   poll_interval: float = STANDARD_POLLING_SLEEP_TIME,
                   verbose: bool = False) -> Dict:
     """
-    Block and wait for the data to be made available for a request
+    Block and wait for the data to be made available for a request.
 
     Attributes:
-        request_url: URL of the request information
-        poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
-        verbose: output poll times, defaults to False
+        request_url: URL of the request information.
+        poll_interval: seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        verbose: output poll times, defaults to False.
 
     Returns:
-        Status dictionary for the request
-    
+        Status dictionary for the request.
+
     """
     status = get_status(request_url)
     while (status["search_result"]["data_uri"] is None):
@@ -116,30 +116,31 @@ def wait_for_data(request_url: str,
     return status
 
 
-def cancel(request_url: str, 
-           wait: bool = False, 
+def cancel(request_url: str,
+           wait: bool = False,
            poll_interval: float = STANDARD_POLLING_SLEEP_TIME,
            verbose: bool = False) -> int:
     """
     Cancel the request at the given URL. This operation is asynchronous by default unless the wait param is set to True.
 
     Attributes:
-        request_url: URL string of the request to be canceled
+        request_url: URL string of the request to be canceled.
         wait: set to True to block until the cancellation request has been completed. This may take several minutes.
-        verbose: when wait=True, output poll times, defaults to False
-        poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+        verbose: when wait=True, output poll times, defaults to False.
+        poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
     Returns:
-        1 on success
+        1 on success.
 
     Raises:
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
-    
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
+
     """
 
     # do request
-    req = aurorax.AuroraXRequest(method="delete", url=request_url, null_response=True)
+    req = aurorax.AuroraXRequest(
+        method="delete", url=request_url, null_response=True)
     req.execute()
 
     if not wait:
@@ -149,9 +150,11 @@ def cancel(request_url: str,
     while (status["search_result"]["data_uri"] is None and status["search_result"]["error_condition"] is False):
         time.sleep(poll_interval)
         if (verbose is True):
-            print("[%s] Checking for cancellation status ..." % (datetime.datetime.now()))
+            print("[%s] Checking for cancellation status ..." %
+                  (datetime.datetime.now()))
         status = get_status(request_url)
     if (verbose is True):
-        print("[%s] The request has been cancelled" % (datetime.datetime.now()))
-    
+        print("[%s] The request has been cancelled" %
+              (datetime.datetime.now()))
+
     return 1

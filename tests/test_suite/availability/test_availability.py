@@ -1,8 +1,8 @@
-from typing import List
 import aurorax
 import datetime
 
-def test_availability():
+
+def test_ephemeris_availability():
 
     start_date = datetime.datetime(2019, 1, 1)
     end_date = datetime.date(2019, 1, 2)
@@ -15,6 +15,26 @@ def test_availability():
                                                   end_date,
                                                   program=program,
                                                   platform=platform,
-                                                  instrument_type=instrument_type)
+                                                  instrument_type=instrument_type,
+                                                  slow=False)
 
-    assert type(availability) is list and len(availability) > 0 and type(availability[0]) is aurorax.availability.AvailabilityResult and availability[0].data_source.program == "swarm"
+    assert type(availability) is list and len(availability) > 0 and type(
+        availability[0]) is aurorax.availability.AvailabilityResult and availability[0].data_source.program == "swarm"
+
+
+def test_data_product_availability():
+
+    start_date = datetime.datetime(2019, 1, 1)
+    end_date = datetime.date(2019, 1, 2)
+    program = "trex"
+    instrument_type = "RGB ASI"
+
+    # get availability
+    availability = aurorax.availability.data_products(start_date,
+                                                      end_date,
+                                                      program=program,
+                                                      instrument_type=instrument_type,
+                                                      slow=True)
+
+    assert type(availability) is list and len(availability) > 0 and type(
+        availability[0]) is aurorax.availability.AvailabilityResult and availability[0].data_source.program == "trex"

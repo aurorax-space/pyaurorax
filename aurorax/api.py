@@ -24,29 +24,22 @@ API_KEY_HEADER_NAME = "x-aurorax-api-key"
 __api_key = ""
 
 
-
 def get_api_key():
     return __api_key
 
 
-def authenticate(api_key: str) -> int:
+def authenticate(api_key: str) -> None:
     """
-    Set authentication values for use with subsequent queries
+    Set authentication values for use with subsequent queries.
 
     Attributes:
-        api_key: AuroraX API key string
-
-    Returns:
-        0
+        api_key: AuroraX API key string.
 
     """
 
     # set the global variable
     global __api_key
     __api_key = api_key
-
-    # return
-    return 0
 
 
 class AuroraXResponse(BaseModel):
@@ -89,19 +82,20 @@ class AuroraXRequest(BaseModel):
         return all_headers
 
     def execute(self, limited_evaluation: bool = False) -> AuroraXResponse:
-        """Execute an AuroraX request
+        """
+        Execute an AuroraX request.
 
         Attributes:
             limited_evaluation: set this to True if you don't want to evaluate the response outside of
-                the retry mechanism, defaults to False
+                the retry mechanism, defaults to False.
 
         Returns:
-            An AuroraXResponse object
+            An AuroraXResponse object.
 
         Raises:
-            aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
-            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+            aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
+            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
         """
         # sanitize data
@@ -136,7 +130,8 @@ class AuroraXRequest(BaseModel):
 
         # check if we only want to do limited evaluation
         if (limited_evaluation is True):
-            res = AuroraXResponse(request=req, data=None, status_code=req.status_code)
+            res = AuroraXResponse(request=req, data=None,
+                                  status_code=req.status_code)
             return res
 
         # check content type
@@ -162,7 +157,8 @@ class AuroraXRequest(BaseModel):
                 raise aurorax.AuroraXException(response_json)
 
         # create reponse object
-        res = AuroraXResponse(request=req, data=response_data, status_code=req.status_code)
+        res = AuroraXResponse(
+            request=req, data=response_data, status_code=req.status_code)
 
         # return
         return res
@@ -172,6 +168,7 @@ class AuroraXRequest(BaseModel):
 
     def __repr__(self) -> str:
         return pprint.pformat(self.__dict__)
+
 
 class URLs:
     __DEFAULT_URL_DATA_SOURCES = "/api/v1/data-sources"
@@ -275,17 +272,24 @@ urls = URLs()
 
 def set_base_url(url: str) -> None:
     """
-    Change the base URL for the API (ie. change to the staging system or local server)
+    Change the base URL for the API (ie. change to the staging system or local server).
 
     Attributes:
-        url: new base url string (ie. 'https://api.staging.aurorax.space')
-    
+        url: new base url string (ie. 'https://api.staging.aurorax.space').
+
     """
     urls.base_url = url
 
 
+def get_base_url() -> str:
+    """
+    Returns the current base URL for the API.
+    """
+    return urls.base_url
+
+
 def reset_base_url() -> None:
     """
-    Set the base URL for the API back to the default
+    Set the base URL for the API back to the default.
     """
     urls.base_url = DEFAULT_URL_BASE

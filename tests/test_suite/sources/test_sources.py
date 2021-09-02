@@ -1,21 +1,26 @@
 import aurorax
 from aurorax.sources import DataSource
 
+
 def test_get_single_source():
-    source = aurorax.sources.get("swarm", "swarma", "footprint", format="full_record")
+    source = aurorax.sources.get(
+        "swarm", "swarma", "footprint", format="full_record")
 
     assert type(source) is DataSource
 
 
 def test_get_source_by_filter():
-    source = aurorax.sources.get_using_filters(program="swarm", instrument_type="footprint", format="full_record")
-    
+    source = aurorax.sources.get_using_filters(
+        program="swarm", instrument_type="footprint", format="full_record")
+
     assert type(source) is list and len(source) > 0
 
 
 def test_get_source_by_id():
-    source = aurorax.sources.get("swarm", "swarma", "footprint", format="identifier_only")
-    source_using_id = aurorax.sources.get_using_identifier(source.identifier, format="full_record")
+    source = aurorax.sources.get(
+        "swarm", "swarma", "footprint", format="identifier_only")
+    source_using_id = aurorax.sources.get_using_identifier(
+        source.identifier, format="full_record")
 
     assert type(source_using_id) is DataSource
 
@@ -78,8 +83,10 @@ def test_add_source():
     ]
 
     # make request
-    source = aurorax.sources.DataSource(identifier=identifier, program=program, platform=platform, instrument_type=instrument_type,
-                                        source_type=source_type, display_name=display_name, ephemeris_metadata_schema=metadata_schema_ephemeris,
+    source = aurorax.sources.DataSource(identifier=identifier, program=program, platform=platform,
+                                        instrument_type=instrument_type,
+                                        source_type=source_type, display_name=display_name,
+                                        ephemeris_metadata_schema=metadata_schema_ephemeris,
                                         data_product_metadata_schema=metadata_schema_data_products)
 
     r = aurorax.sources.add(source)
@@ -90,8 +97,9 @@ def test_add_source():
 def test_update_source():
     # get the identifier
     try:
-        ds = aurorax.sources.get("test-program", "test-platform-new", "test-instrument-new", format="full_record")
-    except:
+        ds = aurorax.sources.get(
+            "test-program", "test-platform-new", "test-instrument-new", format="full_record")
+    except Exception:
         assert False
 
     ds.platform = "test-platform-updated"
@@ -103,20 +111,25 @@ def test_update_source():
     # update the data source
     updated_ds = aurorax.sources.update(ds)
 
-    assert updated_ds.platform == "test-platform-updated" and updated_ds.instrument_type == "test-instrument-updated" and "test-metadata-key" in updated_ds.metadata.keys()
+    assert (updated_ds.platform == "test-platform-updated"
+            and updated_ds.instrument_type == "test-instrument-updated"
+            and "test-metadata-key" in updated_ds.metadata.keys())
 
 
 def test_update_source_partial():
     # get the identifier
     try:
-        ds = aurorax.sources.get("test-program", "test-platform-updated", "test-instrument-updated", format="full_record")
-    except:
+        ds = aurorax.sources.get("test-program", "test-platform-updated",
+                                 "test-instrument-updated", format="full_record")
+    except Exception:
         assert False
 
     # partially update the data source
-    updated_ds = aurorax.sources.partial_update(identifier=ds.identifier, instrument_type="test-instrument-updated-partial", metadata={}, ephemeris_metadata_schema=[])
+    updated_ds = aurorax.sources.partial_update(
+        identifier=ds.identifier, instrument_type="test-instrument-updated-partial", metadata={}, ephemeris_metadata_schema=[])
 
-    assert updated_ds.instrument_type == "test-instrument-updated-partial" and updated_ds.metadata == {} and updated_ds.ephemeris_metadata_schema == []
+    assert updated_ds.instrument_type == "test-instrument-updated-partial" and updated_ds.metadata == {
+    } and updated_ds.ephemeris_metadata_schema == []
 
 
 def test_delete_source():

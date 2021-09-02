@@ -10,17 +10,18 @@ import pprint
 from pydantic import BaseModel
 from typing import Dict, List, Optional
 
+
 class DataProduct(BaseModel):
     """
-    DataProduct data type
+    DataProduct data type.
 
     Attributes:
-        data_source: aurorax.sources.DataSource source that the ephemeris record is associated with
-        data_product_type: data product type ("keogram", "movie", "summary_plot")
-        start: starting datetime.datetime timestamp for the record in UTC
-        end: ending datetime.datetime timestamp for the record in UTC
-        url: URL location string of data product
-        metdata: metadata dictionary for this record
+        data_source: aurorax.sources.DataSource source that the ephemeris record is associated with.
+        data_product_type: data product type ("keogram", "movie", "summary_plot").
+        start: starting datetime.datetime timestamp for the record in UTC.
+        end: ending datetime.datetime timestamp for the record in UTC.
+        url: URL location string of data product.
+        metdata: metadata dictionary for this record.
     """
     data_source: aurorax.sources.DataSource
     data_product_type: str
@@ -31,11 +32,10 @@ class DataProduct(BaseModel):
 
     def to_json_serializable(self) -> Dict:
         """
-        Convert object to a JSON-serializable object (ie. translate datetime
-        objects to strings)
+        Convert object to a JSON-serializable object (ie. translate datetime objects to strings).
 
         Returns:
-            Dictionary JSON-serializable object
+            Dictionary JSON-serializable object.
 
         """
         d = self.__dict__
@@ -50,11 +50,12 @@ class DataProduct(BaseModel):
         if (type(self.metadata) is dict):
             for key, value in self.metadata.items():
                 if (type(value) is datetime.datetime or type(value) is datetime.date):
-                    self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
+                    self.metadata[key] = self.metadata[key].strftime(
+                        "%Y-%m-%dT%H:%M:%S.%f")
         if (type(self.metadata) is list):
             self.metadata = {}
 
-        # format data source fields for query 
+        # format data source fields for query
         d["program"] = self.data_source.program
         d["platform"] = self.data_source.platform
         d["instrument_type"] = self.data_source.instrument_type
@@ -65,70 +66,74 @@ class DataProduct(BaseModel):
 
     def __str__(self) -> str:
         """
-        String method
+        String method.
 
         Returns:
-            string format
+            String format of DataProduct object.
 
         """
         return self.__repr__()
 
     def __repr__(self) -> str:
         """
-        Object representation
+        Object representation.
 
         Returns:
-            object representation
+            Object representation of DataProduct object.
 
         """
         return pprint.pformat(self.__dict__)
 
+
 def __validate_data_source(identifier: int, records: List[DataProduct]) -> Optional[DataProduct]:
-        # get all current sources
-        sources = {source.identifier: source for source in aurorax.sources.list()}
-        if identifier not in sources.keys():
-            raise aurorax.AuroraXValidationException(f"Data source with unique identifier {identifier} could not be found.")
+    # get all current sources
+    sources = {source.identifier: source for source in aurorax.sources.list()}
+    if identifier not in sources.keys():
+        raise aurorax.AuroraXValidationException(
+            f"Data source with unique identifier {identifier} could not be found.")
 
-        for record in records:
-            # check the identifier, program name, platform name, and instrument type
-            try:
-                reference = sources[record.data_source.identifier]
-            except KeyError:
-                raise aurorax.AuroraXValidationException(f"Data source with unique identifier {record.data_source.identifier} could not be found.")
+    for record in records:
+        # check the identifier, program name, platform name, and instrument type
+        try:
+            reference = sources[record.data_source.identifier]
+        except KeyError:
+            raise aurorax.AuroraXValidationException(
+                f"Data source with unique identifier {record.data_source.identifier} could not be found.")
 
-            if not (record.data_source.program == reference.program and 
-                    record.data_source.platform == reference.platform and 
-                    record.data_source.instrument_type == reference.instrument_type):
-                return record
+        if not (record.data_source.program == reference.program
+                and record.data_source.platform == reference.platform
+                and record.data_source.instrument_type == reference.instrument_type):
+            return record
 
-        return None
+    return None
 
 
 def upload(identifier: int, records: List[DataProduct], validate_source: bool = False) -> int:
     """
-    Upload data product records to AuroraX
+    Upload data product records to AuroraX.
 
     Attributes:
-        identifier: AuroraX data source ID int
-        records: list of aurorax.data_products.DataProduct records to upload
-        validate_source: boolean, set to True to validate all records before uploading
+        identifier: AuroraX data source ID int.
+        records: list of aurorax.data_products.DataProduct records to upload.
+        validate_source: boolean, set to True to validate all records before uploading.
 
     Returns:
-        1 for success, raises exception on error
+        1 for success, raises exception on error.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
-        aurorax.exceptions.AuroraXUploadException: upload error
-        aurorax.exceptions.AuroraXValidationException: data source validation error
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
+        aurorax.exceptions.AuroraXUploadException: upload error.
+        aurorax.exceptions.AuroraXValidationException: data source validation error.
 
     """
     # validate record sources if the flag is set
     if validate_source:
         validation_error = __validate_data_source(identifier, records)
         if validation_error:
-            raise aurorax.AuroraXValidationException(f"Unable to validate data source found in record: {validation_error}")
- 
+            raise aurorax.AuroraXValidationException(
+                f"Unable to validate data source found in record: {validation_error}")
+
     # translate each data product record to a request-friendly dict (ie. convert datetimes to strings, etc.)
     for i, _ in enumerate(records):
         if (type(records[i]) is DataProduct):
@@ -136,54 +141,61 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
 
     # make request
     url = aurorax.api.urls.data_products_upload_url.format(identifier)
-    req = aurorax.AuroraXRequest(method="post", url=url, body=records, null_response=True)
+    req = aurorax.AuroraXRequest(
+        method="post", url=url, body=records, null_response=True)
     res = req.execute()
 
     # evaluate response
     if (res.status_code == 400):
         if type(res.data) is list:
-            raise aurorax.AuroraXUploadException("%s - %s" % (res.status_code, res.data[0]["error_message"]))
+            raise aurorax.AuroraXUploadException(
+                "%s - %s" % (res.status_code, res.data[0]["error_message"]))
 
-        raise aurorax.AuroraXUploadException("%s - %s" % (res.status_code, res.data["error_message"]))
+        raise aurorax.AuroraXUploadException(
+            "%s - %s" % (res.status_code, res.data["error_message"]))
 
     # return
     return 1
 
 
-def delete_daterange(data_source: aurorax.sources.DataSource, start: datetime.datetime, end: datetime.datetime, data_product_types: List[str] = None, metadata_filters: List[Dict] = None) -> int:
+def delete_daterange(data_source: aurorax.sources.DataSource, start: datetime.datetime,
+                     end: datetime.datetime, data_product_types: List[str] = None,
+                     metadata_filters: List[Dict] = None) -> int:
     """
     Deletes data products associated with a data source in the date range provided. This method is asynchronous.
 
     Attributes:
-        data_source: aurorax.sources.DataSource source associated with the data product records. 
+        data_source: aurorax.sources.DataSource source associated with the data product records.
             Identifier, program, platform, and instrument_type are required.
         start: datetime.datetime beginning of range to delete records for, inclusive.
         end: datetime.datetime end of datetime range to delete records for, inclusive.
-        data_product_types: specific types of data product to delete, e.g. ["keogram", "movie"]. 
+        data_product_types: specific types of data product to delete, e.g. ["keogram", "movie"].
             If omitted, all data product types will be deleted.
 
     Returns:
-        1 on success
+        1 on success.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-        aurorax.exceptions.AuroraXNotFoundException: source not found
-        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        aurorax.exceptions.AuroraXNotFoundException: source not found.
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
     """
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
-        raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
+        raise aurorax.AuroraXBadParametersException(
+            "One or more required data source parameters are missing. Delete operation aborted.")
 
     # do request to get all data products between start and end datetimes
     try:
-        s = aurorax.data_products.search(start=start, 
-                                        end=end, 
-                                        programs=[data_source.program], 
-                                        platforms=[data_source.platform],
-                                        instrument_types=[data_source.instrument_type],
-                                        metadata_filters=[] if not metadata_filters else metadata_filters,
-                                        data_product_type_filters=[] if not data_product_types else data_product_types)
+        s = aurorax.data_products.search(start=start,
+                                         end=end,
+                                         programs=[data_source.program],
+                                         platforms=[data_source.platform],
+                                         instrument_types=[
+                                             data_source.instrument_type],
+                                         metadata_filters=[] if not metadata_filters else metadata_filters,
+                                         data_product_type_filters=[] if not data_product_types else data_product_types)
     except Exception as e:
         raise aurorax.AuroraXException(e)
 
@@ -191,10 +203,9 @@ def delete_daterange(data_source: aurorax.sources.DataSource, start: datetime.da
     urls = []
     for dp in s.data:
         urls.append(dp.url)
-    
+
     # do delete request
     return delete(data_source, urls)
-
 
 
 def delete(data_source: aurorax.sources.DataSource, urls: List[str]) -> int:
@@ -202,57 +213,62 @@ def delete(data_source: aurorax.sources.DataSource, urls: List[str]) -> int:
     Delete data products by URL. This method is asynchronous.
 
     Attributes:
-        data_source: aurorax.sources.DataSource source associated with the data product records. 
+        data_source: aurorax.sources.DataSource source associated with the data product records.
             Identifier, program, platform, and instrument_type are required.
-        urls: list of URL strings associated with the data products being deleted
+        urls: list of URL strings associated with the data products being deleted.
 
     Returns:
-        1 on success
+        1 on success.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-        aurorax.exceptions.AuroraXNotFoundException: source not found
-        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        aurorax.exceptions.AuroraXNotFoundException: source not found.
+        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
     """
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
-        raise aurorax.AuroraXBadParametersException("One or more required data source parameters are missing. Delete operation aborted.")
+        raise aurorax.AuroraXBadParametersException(
+            "One or more required data source parameters are missing. Delete operation aborted.")
 
     # do request
-    url = aurorax.api.urls.data_products_upload_url.format(data_source.identifier)
+    url = aurorax.api.urls.data_products_upload_url.format(
+        data_source.identifier)
     params = {
         "program": data_source.program,
         "platform": data_source.platform,
         "instrument_type": data_source.instrument_type,
         "urls": urls
     }
-    delete_req = aurorax.AuroraXRequest(method="delete", url=url, body=params, null_response=True)
+    delete_req = aurorax.AuroraXRequest(
+        method="delete", url=url, body=params, null_response=True)
     res = delete_req.execute()
 
     # evaluate response
     if (res.status_code == 400):
         if type(res.data) is list:
-            raise aurorax.AuroraXBadParametersException("%s - %s" % (res.status_code, res.data[0]["message"]))  
-        raise aurorax.AuroraXBadParametersException("%s - %s" % (res.status_code, res.data["message"]))
+            raise aurorax.AuroraXBadParametersException(
+                "%s - %s" % (res.status_code, res.data[0]["message"]))
+        raise aurorax.AuroraXBadParametersException(
+            "%s - %s" % (res.status_code, res.data["message"]))
     elif (res.status_code == 404):
-        raise aurorax.AuroraXNotFoundException("%s - %s" % (res.status_code, res.data["message"]))
+        raise aurorax.AuroraXNotFoundException(
+            "%s - %s" % (res.status_code, res.data["message"]))
 
     # return
     return 1
-    
+
 
 class Search():
     """
-    Class representing an AuroraX data products search
+    Class representing an AuroraX data products search.
 
-    start: start datetime.datetime timestamp of the search
-    end: end datetime.datetime timestamp of the search
-    programs: list of program names to search
-    platforms: list of platform names to search
-    instrument_types: list of instrument types to search
-    metadata_filters: list of dictionaries describing metadata keys and 
-        values to filter on, defaults to None.
+    start: start datetime.datetime timestamp of the search.
+    end: end datetime.datetime timestamp of the search.
+    programs: list of program names to search.
+    platforms: list of platform names to search.
+    instrument_types: list of instrument types to search.
+    metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None.
         e.g. {
             "key": "string",
             "operator": "=",
@@ -260,8 +276,8 @@ class Search():
                 "string"
             ]
         }
-    data_product_type_filters: list of dictionaries describing data product 
-        types to filter on e.g. "keogram", defaults to None.
+    data_product_type_filters: list of dictionaries describing data product  types to filter on e.g. "keogram",
+        defaults to None.
         e.g. {
             "key": "string",
             "operator": "=",
@@ -269,19 +285,19 @@ class Search():
                 "string"
             ]
         }
-    request: aurorax.AuroraXResponse object returned when the search is executed
-    request_id: unique AuroraX string ID assigned to the request
-    request_url: unique AuroraX URL string assigned to the request
-    executed: boolean, gets set to True when the search is executed
-    completed: boolean, gets set to True when the search is checked to be finished
-    data_url: URL string where data is accessed
-    query: dictionary of values sent for the search query
-    status: dictionary of status updates
-    data: list of aurorax.data_products.DataProduct objects returned
-    logs: list of logging messages from the API
+    request: aurorax.AuroraXResponse object returned when the search is executed.
+    request_id: unique AuroraX string ID assigned to the request.
+    request_url: unique AuroraX URL string assigned to the request.
+    executed: boolean, gets set to True when the search is executed.
+    completed: boolean, gets set to True when the search is checked to be finished.
+    data_url: URL string where data is accessed.
+    query: dictionary of values sent for the search query.
+    status: dictionary of status updates.
+    data: list of aurorax.data_products.DataProduct objects returned.
+    logs: list of logging messages from the API.
     """
 
-    def __init__(self, 
+    def __init__(self,
                  start: datetime.datetime,
                  end: datetime.datetime,
                  programs: List[str] = None,
@@ -290,7 +306,7 @@ class Search():
                  metadata_filters: List[Dict] = None,
                  data_product_type_filters: List[str] = None) -> None:
         """
-        Create a new Search object
+        Create a new Search object.
 
         """
         self.request = None
@@ -314,25 +330,27 @@ class Search():
 
     def __str__(self) -> str:
         """
-        String method
+        String method.
 
-        :return: string format
-        :rtype: str
+        Returns:
+            String format of DataProduct Search object.
+
         """
         return self.__repr__()
 
     def __repr__(self) -> str:
         """
-        Object representation
+        Object representation.
 
-        :return: object representation
-        :rtype: str
+        Returns:
+            Object representation of DataProduct Search object.
+
         """
         return pprint.pformat(self.__dict__)
 
     def execute(self) -> None:
         """
-        Initiate data products search request
+        Initiate data products search request.
         """
         # set up request
         url = aurorax.api.urls.data_products_search_url
@@ -350,7 +368,8 @@ class Search():
         self.query = post_data
 
         # do request
-        req = aurorax.AuroraXRequest(method="post", url=url, body=post_data, null_response=True)
+        req = aurorax.AuroraXRequest(
+            method="post", url=url, body=post_data, null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -364,10 +383,10 @@ class Search():
 
     def update_status(self, status: Dict = None) -> None:
         """
-        Update the status of this data products search request
+        Update the status of this data products search request.
 
         Attributes:
-            status: retrieved status dictionary (include to avoid requesting it from the API again), defaults to None
+            status: retrieved status dictionary (include to avoid requesting it from the API again), defaults to None.
 
         """
         # get the status if it isn't passed in
@@ -377,7 +396,8 @@ class Search():
         # update request status by checking if data URI is set
         if (status["search_result"]["data_uri"] is not None):
             self.completed = True
-            self.data_url = "%s%s" % (aurorax.api.urls.base_url, status["search_result"]["data_uri"])
+            self.data_url = "%s%s" % (
+                aurorax.api.urls.base_url, status["search_result"]["data_uri"])
 
         # set class variable "status" and "logs"
         self.status = status
@@ -385,18 +405,18 @@ class Search():
 
     def check_for_data(self) -> None:
         """
-        Check to see if data is available for this data products search request
+        Check to see if data is available for this data products search request.
         """
         self.update_status()
 
     def get_data(self) -> None:
         """
-        Retrieve the data available for this data products search request
+        Retrieve the data available for this data products search request.
         """
         if (self.completed is False):
             print("No data available, update status first")
             return
-            
+
         url = self.data_url
         raw_data = aurorax.requests.get_data(url)
 
@@ -404,34 +424,39 @@ class Search():
 
     def wait(self, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
-        Block and wait for the request to complete and data is available for retrieval
+        Block and wait for the request to complete and data is available for retrieval.
 
         Attributes:
-            poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times, defaults to False
+            poll_interval: time in seconds to wait between polling attempts,
+                defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME.
+            verbose: output poll times, defaults to False.
 
         """
-        url = aurorax.api.urls.data_products_request_url.format(self.request_id)
-        self.update_status(aurorax.requests.wait_for_data(url, poll_interval=poll_interval, verbose=verbose))
+        url = aurorax.api.urls.data_products_request_url.format(
+            self.request_id)
+        self.update_status(aurorax.requests.wait_for_data(
+            url, poll_interval=poll_interval, verbose=verbose))
 
-    def cancel(self, wait: bool = False, verbose: bool = False, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+    def cancel(self, wait: bool = False, verbose: bool = False,
+               poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
         Cancel the data product search request at the API. This method returns asynchronously by default.
 
         Attributes:
             wait: set to True to block until the cancellation request has been completed. This may take several minutes.
-            verbose: when wait=True, output poll times, defaults to False
-            poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+            verbose: when wait=True, output poll times, defaults to False.
+            poll_interval: when wait=True, seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
         Returns:
-            1 on success
+            1 on success.
 
         Raises:
-            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
         """
-        url = aurorax.api.urls.data_products_request_url.format(self.request_id)
+        url = aurorax.api.urls.data_products_request_url.format(
+            self.request_id)
         return aurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)
 
 
@@ -446,13 +471,12 @@ def search_async(start: datetime.datetime,
     Submit a request for a data products search, return asynchronously.
 
     Attributes:
-        start: start datetime.datetime timestamp of the search
-        end: end datetime.datetime timestamp of the search
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and 
-            values to filter on, defaults to None.
+        start: start datetime.datetime timestamp of the search.
+        end: end datetime.datetime timestamp of the search.
+        programs: list of programs to search through, defaults to None.
+        platforms: list of platforms to search through, defaults to None.
+        instrument_types: list of instrument types to search through, defaults to None.
+        metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None.
             e.g. {
                 "key": "string",
                 "operator": "=",
@@ -460,8 +484,8 @@ def search_async(start: datetime.datetime,
                     "string"
                 ]
             }
-        data_product_type_filters: list of dictionaries describing data product 
-            types to filter on e.g. "keogram", defaults to None.
+        data_product_type_filters: list of dictionaries describing data product  types to filter on e.g. "keogram",
+            defaults to None.
             e.g. {
                 "key": "string",
                 "operator": "=",
@@ -469,9 +493,9 @@ def search_async(start: datetime.datetime,
                     "string"
                 ]
             }
-    
+
     Returns:
-        aurorax.data_products.Search object
+        An aurorax.data_products.Search object.
 
     """
     s = aurorax.data_products.Search(start,
@@ -498,13 +522,12 @@ def search(start: datetime.datetime,
     Search for data product records and block until results are returned.
 
     Attributes:
-        start: start datetime.datetime timestamp of the search
-        end: end datetime.datetime timestamp of the search
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and 
-            values to filter on, defaults to None.
+        start: start datetime.datetime timestamp of the search.
+        end: end datetime.datetime timestamp of the search.
+        programs: list of programs to search through, defaults to None.
+        platforms: list of platforms to search through, defaults to None.
+        instrument_types: list of instrument types to search through, defaults to None.
+        metadata_filters: list of dictionaries describing metadata keys and values to filter on, defaults to None.
             e.g. {
                 "key": "string",
                 "operator": "=",
@@ -512,8 +535,8 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
-        data_product_type_filters: list of dictionaries describing data product 
-            types to filter on e.g. "keogram", defaults to None.
+        data_product_type_filters: list of dictionaries describing data product types to filter on e.g. "keogram",
+            defaults to None.
             e.g. {
                 "key": "string",
                 "operator": "=",
@@ -521,15 +544,17 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
-        verbose: output poll times, defaults to False
-        poll_interval: time in seconds to wait between polling attempts, defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times, defaults to False.
+        poll_interval: time in seconds to wait between polling attempts,
+            defaults to aurorax.requests.STANDARD_POLLING_SLEEP_TIME.
 
     Returns:
-        aurorax.data_products.Search object
+        An aurorax.data_products.Search object.
 
     """
     # create a Search() object
-    s = Search(start, end, programs, platforms, instrument_types, metadata_filters, data_product_type_filters)
+    s = Search(start, end, programs, platforms, instrument_types,
+               metadata_filters, data_product_type_filters)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 
@@ -538,7 +563,8 @@ def search(start: datetime.datetime,
     if (verbose is True):
         print("[%s] Request submitted" % (datetime.datetime.now()))
         print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
-        print("[%s] Request details available at: %s" % (datetime.datetime.now(), s.request_url))
+        print("[%s] Request details available at: %s" %
+              (datetime.datetime.now(), s.request_url))
 
     # wait for data
     if (verbose is True):

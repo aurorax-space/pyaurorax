@@ -1,27 +1,31 @@
 import aurorax
-from aurorax.exceptions import *
+from aurorax.exceptions import (AuroraXConflictException, AuroraXDuplicateException,
+                                AuroraXNotFoundException, AuroraXUnauthorizedException, AuroraXValidationException)
 import datetime
 import pytest
 import time
 
 ACCOUNTS_URL = "/api/v1/accounts"
 
+
 def test_AuroraXNotFoundException():
     # test finding a source that doesn't exist
     with pytest.raises(AuroraXNotFoundException):
-        aurorax.sources.get("does-not-exist", "does-not-exist", "does-not-exist")
+        aurorax.sources.get(
+            "does-not-exist", "does-not-exist", "does-not-exist")
 
 
 def test_AuroraXDuplicateException():
     # test making duplicate data source
     with pytest.raises(AuroraXDuplicateException):
-        existing_source = aurorax.sources.get("test-program", "test-platform", "pytest", "full_record")
-        
+        existing_source = aurorax.sources.get(
+            "test-program", "test-platform", "pytest", "full_record")
+
         if not existing_source:
             assert False
 
         existing_source.identifier = None
-        
+
         # make request
         aurorax.sources.add(existing_source)
 
@@ -43,7 +47,8 @@ def test_AuroraXValidationException_ephemeris():
         sbtrace = aurorax.Location(lat=7.89, lon=101.23)
 
         # get the ephemeris source ID
-        source = aurorax.sources.get(program, platform, instrument_type, format="basic_info")
+        source = aurorax.sources.get(
+            program, platform, instrument_type, format="basic_info")
         source.instrument_type = "wrong-type"
 
         # create Ephemeris object
@@ -84,11 +89,11 @@ def test_AuroraXValidationException_data_product():
 
         # create DataProducts object
         e = aurorax.data_products.DataProduct(data_source=source,
-                                            data_product_type=data_product_type,
-                                            url=url,
-                                            start=start_dt,
-                                            end=end_dt,
-                                            metadata=metadata)
+                                              data_product_type=data_product_type,
+                                              url=url,
+                                              start=start_dt,
+                                              end=end_dt,
+                                              metadata=metadata)
 
         # set records array
         records = []
@@ -109,8 +114,9 @@ def set_bad_api_key():
 
 def test_AuroraXUnauthorizedException(set_bad_api_key):
     with pytest.raises(AuroraXUnauthorizedException):
-        req = aurorax.AuroraXRequest(method="get", url=aurorax.api.urls.base_url + ACCOUNTS_URL)
-        
+        req = aurorax.AuroraXRequest(
+            method="get", url=aurorax.api.urls.base_url + ACCOUNTS_URL)
+
         req.execute()
 
 
