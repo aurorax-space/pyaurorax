@@ -10,3 +10,5 @@ AuroraX aims to be the world's first and foremost data platform for auroral scie
 AuroraX will significantly lower the barrier of entry to the global network of auroral data, and provide the foundation for efficiency and inter-operability of existing auroral instrument networks and data streams. Use of cutting-edge web frameworks, enhanced metadata, and discovery tools we aim to allow for rapid access and utilization of auroral data by the space physics and citizen science communities. Enabled by key international partnerships and Canada's leading role in auroral instrumentation, AuroraX hopes to fundamentally change the data landscape for auroral science.
 
 This website provides details about the data used in AuroraX, the API, client libraries such as PyAuroraX, and more.
+
+![Space weather](/img/nasa_space_weather.jpg)
