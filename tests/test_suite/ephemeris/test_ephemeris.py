@@ -202,8 +202,18 @@ def test_delete_ephemeris():
                                  instrument_types=[instrument_type])
 
     if len(s.data) == 0:
-        print("No ephemeris records exist to delete")
-        assert False
+        print("No ephemeris records exist to delete. Waiting 10s to try again...")
+        time.sleep(10)
+        # repeat search
+        # do synchronous search for existing records
+        s = aurorax.ephemeris.search(start,
+                                     end,
+                                     programs=[program],
+                                     platforms=[platform],
+                                     instrument_types=[instrument_type])
+
+        if len(s.data) == 0:
+            assert False
     else:
         print(f"{len(s.data)} records found to be deleted")
 
