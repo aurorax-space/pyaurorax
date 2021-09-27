@@ -25,6 +25,12 @@ __api_key = ""
 
 
 def get_api_key():
+    """
+    Returns the currently set API key for the module.
+
+    Returns:
+        Current API key string.
+    """
     return __api_key
 
 
@@ -75,7 +81,7 @@ class AuroraXRequest(BaseModel):
 
         # add api key
         api_key = get_api_key()
-        if (api_key is not None):
+        if api_key:
             all_headers[API_KEY_HEADER_NAME] = api_key
 
         # return
