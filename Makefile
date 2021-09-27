@@ -43,21 +43,6 @@ test-additional:
 	@echo "Test coverage ...\n============================="
 	-poetry run coverage report
 
-docs-install:
-	python3 -m pip install mkdocs mkdocs-material pdoc3
-
-docs-generate: 
-	pdoc --html --force --output-dir docs aurorax --config 'lunr_search={"fuzziness": 1}'
-
-docs-build:
-	mkdocs build
-
-docs-serve:
-	mkdocs serve
-
-docs-deploy:
-	mkdocs gh-deploy --force
-
 publish:
 	${MAKE} test
 	poetry build
