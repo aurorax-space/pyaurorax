@@ -330,7 +330,7 @@ def search_async(start: datetime.datetime,
 
 
 def search(start: datetime.datetime, end: datetime.datetime,
-           ground: List[Dict], space: List[str], conjunction_types: List[str] = ["nbtrace"],
+           ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
            max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE, verbose: bool = False,
            poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> Search:
     """

@@ -75,7 +75,7 @@ class AuroraXRequest(BaseModel):
 
         # add api key
         api_key = get_api_key()
-        if (api_key is not None):
+        if api_key:
             all_headers[API_KEY_HEADER_NAME] = api_key
 
         # return
