@@ -25,6 +25,12 @@ __api_key = ""
 
 
 def get_api_key():
+    """
+    Returns the currently set API key for the module.
+
+    Returns:
+        Current API key string.
+    """
     return __api_key
 
 
