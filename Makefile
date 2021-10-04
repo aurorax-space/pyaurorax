@@ -1,4 +1,4 @@
-.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean docs docs-generate docs-serve publish
+.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean publish
 
 all:
 
