@@ -1,5 +1,5 @@
 import aurorax
-from aurorax.sources import DataSource
+from aurorax.sources import DataSource, DataSourceStatistics
 
 
 def test_get_single_source():
@@ -34,9 +34,9 @@ def test_get_source_stats():
                                                     platform=platform,
                                                     instrument_type=instrument_type)
 
-    stats = aurorax.sources.get_stats(data_source[0].identifier)
+    stats = aurorax.sources.get_stats(data_source[0].identifier, "full_record")
 
-    assert type(stats) is dict
+    assert type(stats) is DataSourceStatistics
 
 
 def test_list_sources():

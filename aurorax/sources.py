@@ -2,6 +2,7 @@
 AuroraX data sources are unique instruments that produce ephemeris or data product records.
 """
 import aurorax
+import datetime
 import pprint
 from pydantic import BaseModel
 from typing import List, Dict
@@ -39,6 +40,48 @@ class DataSource(BaseModel):
     maintainers: List[str] = None
     ephemeris_metadata_schema: List[Dict] = None
     data_product_metadata_schema: List[Dict] = None
+
+    def __str__(self) -> str:
+        """
+        String method.
+
+        Returns:
+            String format of DataSource object.
+
+        """
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        """
+        Object representation.
+
+        Returns:
+            Object representation of DataSource object.
+
+        """
+        return pprint.pformat(self.__dict__)
+
+
+class DataSourceStatistics(BaseModel):
+    """
+    Data type for data source statistics.
+
+    Attributes:
+        data_source: the data source the statistics are associated with
+        earliest_ephemeris_loaded: datetime.datetime of the earliest ephemeris record
+        latest_ephemeris_loaded: datetime.datetime of the latest ephemeris record
+        ephemeris_count: total number of ephemeris records for this data source
+        earliest_data_product_loaded: datetime.datetime of the earliest data_product record
+        latest_data_product_loaded: datetime.datetime of the latest data product record
+        data_product_count: total number of ephemeris records for this data source
+    """
+    data_source: DataSource
+    earliest_ephemeris_loaded: datetime.datetime = None
+    latest_ephemeris_loaded: datetime.datetime = None
+    ephemeris_count: int
+    earliest_data_product_loaded: datetime.datetime = None
+    latest_data_product_loaded: datetime.datetime = None
+    data_product_count: int
 
     def __str__(self) -> str:
         """
@@ -233,6 +276,7 @@ def get_stats(identifier: int,
 
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        aurorax.exceptions.AuroraXNotFoundException: data source not found.
         aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
 
     """
@@ -245,8 +289,12 @@ def get_stats(identifier: int,
     req = aurorax.AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
 
+    if (res.status_code == 404):
+        raise aurorax.AuroraXNotFoundException(
+            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
+
     # return
-    return res.data
+    return DataSourceStatistics(**res.data)
 
 
 def add(data_source: DataSource) -> DataSource:
