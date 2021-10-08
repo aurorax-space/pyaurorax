@@ -24,7 +24,7 @@ API_KEY_HEADER_NAME = "x-aurorax-api-key"
 __api_key = ""
 
 
-def get_api_key():
+def get_api_key() -> str:
     """
     Returns the currently set API key for the module.
 
