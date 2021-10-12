@@ -1,6 +1,7 @@
 from aurorax.conjunctions import Conjunction
 import aurorax
 import datetime
+import pytest
 
 
 def test_search_conjunctions_asynchronous():
@@ -199,3 +200,109 @@ def test_cancel_conjunction_search():
     result = s.cancel(wait=True)
 
     assert result == 1
+
+
+def test_too_many_criteria_blocks():
+    with pytest.raises(aurorax.exceptions.AuroraXBadParametersException):
+        start = datetime.datetime(2019, 1, 1, 0, 0, 0)
+        end = datetime.datetime(2019, 1, 31, 23, 59, 59)
+        ground_params = [
+            {
+                "programs": ["themis-asi"]
+            },
+            {
+                "programs": ["auroramax"]
+            },
+            {
+                "platforms": ["gillam", "yellowknife"]
+            },
+            {
+                "instrument_types": ["DSLR"]
+            },
+            {
+                "instrument_types": ["RGB ASI"]
+            },
+            {
+                "programs": ["trex"]
+            },
+
+        ]
+        space_params = [
+            {
+                "programs": ["swarm"]
+            },
+            {
+                "programs": ["themis"]
+            },
+            {
+                "platforms": ["swarma"]
+            },
+            {
+                "instrument_types": ["instrument"]
+            },
+            {
+                "programs": ["rbsp"]
+            },
+        ]
+
+        s = aurorax.conjunctions.search(
+            start=start, end=end, ground=ground_params, space=space_params)
+        s.execute()
+
+
+def test_epoch_search_precision():
+    start = datetime.datetime(2008, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2008, 1, 31, 23, 59, 59)
+    ground_params = [
+        {
+            "programs": [
+                "themis-asi"
+            ],
+            "instrument_types": [
+                "panchromatic ASI"
+            ],
+            "ephemeris_metadata_filters": [
+                {
+                    "key": "calgary_apa_ml_v1",
+                    "operator": "in",
+                    "values": [
+                        "classified as APA"
+                    ]
+                },
+                {
+                    "key": "calgary_apa_ml_v1_confidence",
+                    "operator": ">=",
+                    "values": [
+                        "95"
+                    ]
+                }
+            ]
+        }
+    ]
+    space_params = [
+        {
+            "programs": [
+                "themis"
+            ],
+            "instrument_types": [
+                "footprint"
+            ]
+        }
+    ]
+    distance = 500
+
+    s1 = aurorax.conjunctions.search(start=start,
+                                     end=end,
+                                     ground=ground_params,
+                                     space=space_params,
+                                     default_distance=distance,
+                                     epoch_search_precision=30)
+
+    s2 = aurorax.conjunctions.search(start=start,
+                                     end=end,
+                                     ground=ground_params,
+                                     space=space_params,
+                                     default_distance=distance,
+                                     epoch_search_precision=60)
+
+    assert len(s1.data) != len(s2.data)

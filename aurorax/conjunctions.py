@@ -7,7 +7,7 @@ import datetime
 import humanize
 import pprint
 from pydantic import BaseModel
-from typing import Dict, List
+from typing import Dict, List, Literal, Union
 
 DEFAULT_CONJUNCTION_DISTANCE = 300
 
@@ -92,6 +92,8 @@ class Search():
             }
         default_distance: default maximum distance in kilometers for conjunction.
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
+        epoch_search_precision: the time precision to which conjunctions are calculated. Can be 30 or 60 
+            seconds. Defaults to 60 seconds.
         request: aurorax.AuroraXResponse object returned when the search is executed.
         request_id: unique AuroraX string ID assigned to the request.
         request_url: unique AuroraX URL string assigned to the request.
@@ -110,7 +112,8 @@ class Search():
 
     def __init__(self, start: datetime.datetime, end: datetime.datetime,
                  ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
-                 max_distances: Dict[str, float] = None, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE):
+                 max_distances: Dict[str, float] = None, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
+                 epoch_search_precision: int = 60):
 
         self.request = None
         self.request_id = ""
@@ -130,6 +133,7 @@ class Search():
         self.conjunction_types = conjunction_types
         self.max_distances = max_distances if max_distances else {}
         self.default_distance = default_distance
+        self.epoch_search_precision = epoch_search_precision
 
     def __str__(self):
         """
@@ -169,10 +173,27 @@ class Search():
                         and f"space{s2}-space{s}" not in self.max_distances):
                     self.max_distances[f"space{s}-space{s2}"] = self.default_distance
 
+    def _check_num_criteria_blocks(self):
+        ground_criteria_len = len(self.ground)
+        space_criteria_len = len(self.space)
+
+        if ground_criteria_len + space_criteria_len > 10:
+            raise aurorax.exceptions.AuroraXBadParametersException(
+                "Number of ground + space criteria blocks exceeds 10. Please use a smaller search criteria."
+            )
+
+        return
+
     def execute(self):
         """
         Initiate conjunction search request.
+
+        Raises:
+            aurorax.exceptions.AuroraXBadParametersException: too many criteria blocks.
         """
+        # check number of criteria blocks
+        self._check_num_criteria_blocks()
+
         # set up request
         url = aurorax.api.urls.conjunction_search_url
         self._set_max_distances()
@@ -182,7 +203,8 @@ class Search():
             "ground": self.ground,
             "space": self.space,
             "conjunction_types": self.conjunction_types,
-            "max_distances": self.max_distances
+            "max_distances": self.max_distances,
+            "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
         }
         self.query = post_data
 
@@ -281,7 +303,8 @@ def search_async(start: datetime.datetime,
                  space: List[Dict],
                  conjunction_types: List[str] = ["nbtrace"],
                  max_distances: Dict[str, float] = {},
-                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE) -> Search:
+                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
+                 epoch_search_precision: int = 60) -> Search:
     """
     Submit a request for a conjunctions search, return asynchronously.
 
@@ -318,21 +341,29 @@ def search_async(start: datetime.datetime,
             }
         default_distance: default maximum distance in kilometers for conjunction.
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
+        epoch_search_precision: the time precision to which conjunctions are calculated. Can be 30 or 60 
+            seconds. Defaults to 60 seconds.
 
     Returns:
         An aurorax.conjunctions.Search object.
     """
     s = Search(start=start, end=end, ground=ground, space=space, conjunction_types=conjunction_types,
-               max_distances=max_distances, default_distance=default_distance)
+               max_distances=max_distances, default_distance=default_distance, epoch_search_precision=epoch_search_precision)
     s.execute()
 
     return s
 
 
-def search(start: datetime.datetime, end: datetime.datetime,
-           ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
-           max_distances: Dict[str, float] = {}, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE, verbose: bool = False,
-           poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> Search:
+def search(start: datetime.datetime,
+           end: datetime.datetime,
+           ground: List[Dict],
+           space: List[Dict],
+           conjunction_types: List[str] = ["nbtrace"],
+           max_distances: Dict[str, float] = {},
+           default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
+           verbose: bool = False,
+           poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           epoch_search_precision: int = 60) -> Search:
     """
     Search for conjunctions and block until results are returned.
 
@@ -378,7 +409,7 @@ def search(start: datetime.datetime, end: datetime.datetime,
     """
     # create a Search object
     s = Search(start, end, ground, space, conjunction_types,
-               max_distances, default_distance)
+               max_distances, default_distance, epoch_search_precision)
     if verbose:
         print(f"[{datetime.datetime.now()}] Search object created")
 
