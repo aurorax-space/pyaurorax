@@ -20,8 +20,8 @@ class AvailabilityResult(BaseModel):
 
     """
     data_source: aurorax.sources.DataSource
-    available_data_products: Dict = None
-    available_ephemeris: Dict = None
+    available_data_products: Dict[str, int] = None
+    available_ephemeris: Dict[str, int] = None
 
     def __str__(self) -> str:
         """
