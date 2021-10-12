@@ -92,7 +92,7 @@ class Search():
             }
         default_distance: default maximum distance in kilometers for conjunction.
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
-        epoch_search_precision: the time precision to which conjunctions are calculated. Can be 30 or 60 
+        epoch_search_precision: the time precision to which conjunctions are calculated. Can be 30 or 60
             seconds. Defaults to 60 seconds.
         request: aurorax.AuroraXResponse object returned when the search is executed.
         request_id: unique AuroraX string ID assigned to the request.
@@ -341,7 +341,7 @@ def search_async(start: datetime.datetime,
             }
         default_distance: default maximum distance in kilometers for conjunction.
             Used when max distance is not specified for any ground-space and space-space instrument pairs.
-        epoch_search_precision: the time precision to which conjunctions are calculated. Can be 30 or 60 
+        epoch_search_precision: the time precision to which conjunctions are calculated. Can be 30 or 60
             seconds. Defaults to 60 seconds.
 
     Returns:
