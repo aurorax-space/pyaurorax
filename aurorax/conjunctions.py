@@ -7,7 +7,7 @@ import datetime
 import humanize
 import pprint
 from pydantic import BaseModel
-from typing import Dict, List, Literal, Union
+from typing import Dict, List
 
 DEFAULT_CONJUNCTION_DISTANCE = 300
 
