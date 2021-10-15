@@ -100,6 +100,7 @@ class AuroraXRequest(BaseModel):
 
         Raises:
             aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+            aurorax.exceptions.AuroraXNotFoundException: requested resource was not found.
             aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
             aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
@@ -133,6 +134,10 @@ class AuroraXRequest(BaseModel):
         if (req.status_code == 401):
             raise aurorax.AuroraXUnauthorizedException("%s %s" % (req.status_code,
                                                                   req.json()["error_message"]))
+
+        if (req.status_code == 404):
+            raise aurorax.AuroraXNotFoundException("%s %s" % (req.status_code,
+                                                              req.json()["error_message"]))
 
         # check if we only want to do limited evaluation
         if (limited_evaluation is True):

@@ -1,5 +1,7 @@
 import aurorax
+from aurorax.exceptions import AuroraXNotFoundException
 from aurorax.sources import DataSource, DataSourceStatistics
+import pytest
 
 
 def test_get_single_source():
@@ -23,6 +25,23 @@ def test_get_source_by_id():
         source.identifier, format="full_record")
 
     assert type(source_using_id) is DataSource
+
+
+def test_get_source_not_found():
+    with pytest.raises(AuroraXNotFoundException):
+        aurorax.sources.get("space", "physics", "footprint")
+
+
+def test_get_source_using_filters_not_found():
+    sources = aurorax.sources.get_using_filters(
+        "space", "physics", "footprint")
+
+    assert len(sources) == 0
+
+
+def test_get_source_using_identifier_not_found():
+    with pytest.raises(AuroraXNotFoundException):
+        aurorax.sources.get_using_identifier(12345678)
 
 
 def test_get_source_stats():

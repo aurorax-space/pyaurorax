@@ -223,7 +223,7 @@ def delete(data_source: aurorax.sources.DataSource, urls: List[str]) -> int:
     Raises:
         aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
         aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXNotFoundException: source not found.
+        aurorax.exceptions.AuroraXBadParametersException: invalid parameters entered.
         aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
     """
@@ -250,9 +250,6 @@ def delete(data_source: aurorax.sources.DataSource, urls: List[str]) -> int:
             raise aurorax.AuroraXBadParametersException(
                 "%s - %s" % (res.status_code, res.data[0]["message"]))
         raise aurorax.AuroraXBadParametersException(
-            "%s - %s" % (res.status_code, res.data["message"]))
-    elif (res.status_code == 404):
-        raise aurorax.AuroraXNotFoundException(
             "%s - %s" % (res.status_code, res.data["message"]))
 
     # return
