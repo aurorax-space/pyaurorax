@@ -222,9 +222,9 @@ def get_using_filters(program: str = None,
     res.data = sorted(res.data, key=lambda x: x[order])
 
     # return
-    try:
+    if len(res.data):
         return [DataSource(**ds) for ds in res.data]
-    except Exception:
+    else:
         return []
 
 
@@ -253,11 +253,7 @@ def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSou
     res = req.execute()
 
     # return
-    try:
-        return DataSource(**res.data)
-    except Exception:
-        raise aurorax.AuroraXNotFoundException(
-            "Data source not found. Check that the identifier is correct.")
+    return DataSource(**res.data)
 
 
 def get_stats(identifier: int,
@@ -288,10 +284,6 @@ def get_stats(identifier: int,
     url = "%s/%d/stats" % (aurorax.api.urls.data_sources_url, identifier)
     req = aurorax.AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
-
-    if (res.status_code == 404):
-        raise aurorax.AuroraXNotFoundException(
-            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
     return DataSourceStatistics(**res.data)
@@ -370,9 +362,6 @@ def delete(identifier: int) -> int:
     # evaluate response
     if (res.status_code == 400):
         raise aurorax.AuroraXBadParametersException(
-            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
-    elif (res.status_code == 404):
-        raise aurorax.AuroraXNotFoundException(
             "%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 409):
         raise aurorax.AuroraXConflictException(

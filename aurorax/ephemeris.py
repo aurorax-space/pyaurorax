@@ -522,9 +522,6 @@ def delete(data_source: aurorax.sources.DataSource, start: datetime.datetime, en
                 "%s - %s" % (res.status_code, res.data[0]["message"]))
         raise aurorax.AuroraXBadParametersException(
             "%s - %s" % (res.data["error_code"], res.data["error_message"]))
-    elif (res.status_code == 404):
-        raise aurorax.AuroraXNotFoundException(
-            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
     return 1
