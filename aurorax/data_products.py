@@ -400,18 +400,23 @@ class Search():
         self.status = status
         self.logs = status["logs"]
 
-    def check_for_data(self) -> None:
+    def check_for_data(self) -> bool:
         """
         Check to see if data is available for this data products search request.
+
+        Returns:
+            True if data is available, else False.
         """
         self.update_status()
+
+        return self.completed
 
     def get_data(self) -> None:
         """
         Retrieve the data available for this data products search request.
         """
         if (self.completed is False):
-            print("No data available, update status first")
+            print("No data available, update status or check for data first")
             return
 
         url = self.data_url

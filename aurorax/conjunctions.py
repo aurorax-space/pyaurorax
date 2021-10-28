@@ -228,7 +228,7 @@ class Search():
         Update the status of this conjunctions search.
 
         Attributes:
-            status: retrieved status dictionary (include to avoid requestinf it from the API again), defaults to None.
+            status: retrieved status dictionary (include to avoid requesting it from the API again), defaults to None.
         """
         # get the status if it isn't passed in
         if status is None:
@@ -243,18 +243,23 @@ class Search():
         self.status = status
         self.logs = status["logs"]
 
-    def check_for_data(self) -> None:
+    def check_for_data(self) -> bool:
         """
         Check to see if data is available for this conjunctions search request.
+
+        Returns:
+            True if data is available, else False.
         """
         self.update_status()
+
+        return self.completed
 
     def get_data(self) -> None:
         """
         Retrieve the data available for this conjunctions search request.
         """
         if not self.completed:
-            print("No data available, update status first")
+            print("No data available, update status or check for data first")
             return
 
         url = self.data_url
