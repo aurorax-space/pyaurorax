@@ -182,17 +182,17 @@ class AuroraXRequest(BaseModel):
 
 
 class URLs:
-    __DEFAULT_URL_DATA_SOURCES = "/api/v1/data-sources"
+    __DEFAULT_URL_DATA_SOURCES = "/api/v1/data_sources"
     __DEFAULT_URL_STATS = "/api/v1/stats"
     __DEFAULT_URL_EPHEMERIS_AVAILABILITY = "/api/v1/availability/ephemeris"
-    __DEFAULT_URL_EPHEMERIS_UPLOAD = "/api/v1/data-sources/{}/ephemeris"
+    __DEFAULT_URL_EPHEMERIS_UPLOAD = "/api/v1/data_sources/{}/ephemeris"
     __DEFAULT_URL_EPHEMERIS_SEARCH = "/api/v1/ephemeris/search"
     __DEFAULT_URL_EPHEMERIS_REQUEST = "/api/v1/ephemeris/requests/{}"
     __DEFAULT_URL_DATA_PRODUCTS_AVAILABILITY = "/api/v1/availability/data_products"
-    __DEFAULT_URL_DATA_PRODUCTS_UPLOAD = "/api/v1/data-sources/{}/data_products"
+    __DEFAULT_URL_DATA_PRODUCTS_UPLOAD = "/api/v1/data_sources/{}/data_products"
     __DEFAULT_URL_DATA_PRODUCTS_SEARCH = "/api/v1/data_products/search"
     __DEFAULT_URL_DATA_PRODUCTS_REQUEST = "/api/v1/data_products/requests/{}"
-    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search-multi"
+    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search_multi"
     __DEFAULT_URL_CONJUNCTION_REQUEST = "/api/v1/conjunctions/requests/{}"
 
     def __init__(self, base_url: str = DEFAULT_URL_BASE) -> None:
