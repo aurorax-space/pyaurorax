@@ -30,8 +30,11 @@ test-bandit bandit:
 test-pytest pytest:
 	poetry run pytest
 
+test-pytest-unauthorized-access:
+	poetry run pytest -k "test_AuroraXUnauthorizedException"
+
 test-pytest-read:
-	poetry run pytest -k "not add and not upload and not update and not delete"
+	poetry run pytest -k "not test_AuroraXUnauthorizedException and not add and not upload and not update and not delete"
 
 test-pytest-create-update-delete:
 	poetry run pytest -k "add or upload or update or delete"
