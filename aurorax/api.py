@@ -192,7 +192,7 @@ class URLs:
     __DEFAULT_URL_DATA_PRODUCTS_UPLOAD = "/api/v1/data_sources/{}/data_products"
     __DEFAULT_URL_DATA_PRODUCTS_SEARCH = "/api/v1/data_products/search"
     __DEFAULT_URL_DATA_PRODUCTS_REQUEST = "/api/v1/data_products/requests/{}"
-    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search_multi"
+    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search"
     __DEFAULT_URL_CONJUNCTION_REQUEST = "/api/v1/conjunctions/requests/{}"
 
     def __init__(self, base_url: str = DEFAULT_URL_BASE) -> None:

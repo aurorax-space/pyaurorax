@@ -22,7 +22,7 @@ Basic usage:
 > import aurorax
 ```
 """
-__version__ = "0.6.10"
+__version__ = "0.6.11"
 
 # pull in top level functions
 from .api import AuroraXRequest
