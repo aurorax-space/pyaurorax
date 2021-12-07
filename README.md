@@ -7,6 +7,8 @@
 
 Python library for interacting with the AuroraX API.
 
+Documentation can be found at https://docs.aurorax.space/python_libraries/pyaurorax/overview
+
 ## Installing PyAuroraX
 
 PyAuroraX is available on PyPI:
