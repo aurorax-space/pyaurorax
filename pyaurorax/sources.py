@@ -1,7 +1,7 @@
 """
 AuroraX data sources are unique instruments that produce ephemeris or data product records.
 """
-import aurorax
+import pyaurorax
 import datetime
 import pprint
 from pydantic import BaseModel
@@ -124,8 +124,8 @@ def list(order: str = "identifier", format: str = "basic_info") -> List[DataSour
         format: format
     }
     # make request
-    req = aurorax.AuroraXRequest(
-        method="get", url=aurorax.api.urls.data_sources_url, params=params if format else None)
+    req = pyaurorax.AuroraXRequest(
+        method="get", url=pyaurorax.api.urls.data_sources_url, params=params if format else None)
     res = req.execute()
 
     # order results
@@ -164,8 +164,8 @@ def get(program: str,
         "instrument_type": instrument_type,
         "format": format,
     }
-    req = aurorax.AuroraXRequest(
-        method="get", url=aurorax.api.urls.data_sources_url, params=params)
+    req = pyaurorax.AuroraXRequest(
+        method="get", url=pyaurorax.api.urls.data_sources_url, params=params)
     res = req.execute()
 
     # set results to the first thing
@@ -174,7 +174,7 @@ def get(program: str,
 
         return DataSource(**res.data)
     else:
-        raise aurorax.AuroraXNotFoundException("Data source not found")
+        raise pyaurorax.AuroraXNotFoundException("Data source not found")
 
 
 def get_using_filters(program: str = None,
@@ -214,8 +214,8 @@ def get_using_filters(program: str = None,
         "owner": owner,
         "format": format,
     }
-    req = aurorax.AuroraXRequest(
-        method="get", url=aurorax.api.urls.data_sources_url, params=params)
+    req = pyaurorax.AuroraXRequest(
+        method="get", url=pyaurorax.api.urls.data_sources_url, params=params)
     res = req.execute()
 
     # order results
@@ -248,8 +248,8 @@ def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSou
     params = {
         "format": format,
     }
-    url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
-    req = aurorax.AuroraXRequest(method="get", url=url, params=params)
+    url = "%s/%d" % (pyaurorax.api.urls.data_sources_url, identifier)
+    req = pyaurorax.AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
 
     # return
@@ -281,8 +281,8 @@ def get_stats(identifier: int,
         "format": format,
         "slow": slow,
     }
-    url = "%s/%d/stats" % (aurorax.api.urls.data_sources_url, identifier)
-    req = aurorax.AuroraXRequest(method="get", url=url, params=params)
+    url = "%s/%d/stats" % (pyaurorax.api.urls.data_sources_url, identifier)
+    req = pyaurorax.AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
 
     # return
@@ -321,20 +321,20 @@ def add(data_source: DataSource) -> DataSource:
     if (data_source.identifier is not None):
         request_data["identifier"] = data_source.identifier
 
-    req = aurorax.AuroraXRequest(
-        method="post", url=aurorax.api.urls.data_sources_url, body=request_data)
+    req = pyaurorax.AuroraXRequest(
+        method="post", url=pyaurorax.api.urls.data_sources_url, body=request_data)
     res = req.execute()
 
     # evaluate response
     if (res.status_code == 409):
-        raise aurorax.AuroraXDuplicateException(
+        raise pyaurorax.AuroraXDuplicateException(
             "%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
     try:
         return DataSource(**res.data)
     except Exception:
-        raise aurorax.AuroraXException("Could not create data source.")
+        raise pyaurorax.AuroraXException("Could not create data source.")
 
 
 def delete(identifier: int) -> int:
@@ -355,16 +355,17 @@ def delete(identifier: int) -> int:
 
     """
     # do request
-    url = "%s/%d" % (aurorax.api.urls.data_sources_url, identifier)
-    req = aurorax.AuroraXRequest(method="delete", url=url, null_response=True)
+    url = "%s/%d" % (pyaurorax.api.urls.data_sources_url, identifier)
+    req = pyaurorax.AuroraXRequest(
+        method="delete", url=url, null_response=True)
     res = req.execute()
 
     # evaluate response
     if (res.status_code == 400):
-        raise aurorax.AuroraXBadParametersException(
+        raise pyaurorax.AuroraXBadParametersException(
             "%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 409):
-        raise aurorax.AuroraXConflictException(
+        raise pyaurorax.AuroraXConflictException(
             "%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
@@ -393,21 +394,21 @@ def update(data_source: DataSource) -> DataSource:
     """
     if not all([data_source.identifier, data_source.program, data_source.platform,
                 data_source.instrument_type, data_source.source_type, data_source.display_name]):
-        raise aurorax.AuroraXBadParametersException(
+        raise pyaurorax.AuroraXBadParametersException(
             "One or more required data source fields are missing. Update operation aborted.")
 
     # set URL
-    url = f"{aurorax.api.urls.data_sources_url}/{data_source.identifier}"
+    url = f"{pyaurorax.api.urls.data_sources_url}/{data_source.identifier}"
 
     # make request to update the data source passed in
-    req = aurorax.AuroraXRequest(method="put", url=url, body=data_source)
+    req = pyaurorax.AuroraXRequest(method="put", url=url, body=data_source)
     req.execute()
 
     # return
     try:
-        return aurorax.sources.get(data_source.program, data_source.platform, data_source.instrument_type, "full_record")
+        return pyaurorax.sources.get(data_source.program, data_source.platform, data_source.instrument_type, "full_record")
     except Exception:
-        raise aurorax.AuroraXException("Could not update data source.")
+        raise pyaurorax.AuroraXException("Could not update data source.")
 
 
 def partial_update(identifier: int,
@@ -453,7 +454,7 @@ def partial_update(identifier: int,
 
     """
     if not identifier:
-        raise aurorax.AuroraXBadParametersException(
+        raise pyaurorax.AuroraXBadParametersException(
             "Required identifier field is missing. Update operation aborted.")
 
     # create a DataSource
@@ -470,14 +471,14 @@ def partial_update(identifier: int,
                     data_product_metadata_schema=data_product_metadata_schema)
 
     # set URL
-    url = f"{aurorax.api.urls.data_sources_url}/{ds.identifier}"
+    url = f"{pyaurorax.api.urls.data_sources_url}/{ds.identifier}"
 
     # make request to update the data source passed in
-    req = aurorax.AuroraXRequest(method="patch", url=url, body=ds)
+    req = pyaurorax.AuroraXRequest(method="patch", url=url, body=ds)
     req.execute()
 
     # return
     try:
-        return aurorax.sources.get_using_identifier(ds.identifier, "full_record")
+        return pyaurorax.sources.get_using_identifier(ds.identifier, "full_record")
     except Exception:
-        raise aurorax.AuroraXException("Could not update data source.")
+        raise pyaurorax.AuroraXException("Could not update data source.")

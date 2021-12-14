@@ -2,7 +2,7 @@
 AuroraX provides a conjunction module for finding conjunction events between ground and space instruments,
 and between space instruments.
 """
-import aurorax
+import pyaurorax
 import datetime
 import humanize
 import pprint
@@ -29,7 +29,7 @@ class Conjunction(BaseModel):
     conjunction_type: str
     start: datetime.datetime
     end: datetime.datetime
-    data_sources: List[aurorax.sources.DataSource]
+    data_sources: List[pyaurorax.sources.DataSource]
     min_distance: float
     max_distance: float
     events: List[Dict]
@@ -113,7 +113,7 @@ class Search():
     def __init__(self, start: datetime.datetime, end: datetime.datetime,
                  ground: List[Dict], space: List[Dict], conjunction_types: List[str] = ["nbtrace"],
                  max_distances: Dict[str, float] = None, default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
-                 epoch_search_precision: int = 60):
+                 epoch_search_precision: int = 60, response_format: Dict = None):
 
         self.request = None
         self.request_id = ""
@@ -134,6 +134,7 @@ class Search():
         self.max_distances = max_distances if max_distances else {}
         self.default_distance = default_distance
         self.epoch_search_precision = epoch_search_precision
+        self.response_format = response_format
 
     def __str__(self):
         """
@@ -178,7 +179,7 @@ class Search():
         space_criteria_len = len(self.space)
 
         if ground_criteria_len + space_criteria_len > 10:
-            raise aurorax.exceptions.AuroraXBadParametersException(
+            raise pyaurorax.exceptions.AuroraXBadParametersException(
                 "Number of ground + space criteria blocks exceeds 10. Please use a smaller search criteria."
             )
 
@@ -195,7 +196,7 @@ class Search():
         self._check_num_criteria_blocks()
 
         # set up request
-        url = aurorax.api.urls.conjunction_search_url
+        url = pyaurorax.api.urls.conjunction_search_url
         self._set_max_distances()
         post_data = {
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -209,7 +210,7 @@ class Search():
         self.query = post_data
 
         # do request
-        req = aurorax.AuroraXRequest(
+        req = pyaurorax.AuroraXRequest(
             method="post", url=url, body=post_data, null_response=True)
         res = req.execute()
 
@@ -232,12 +233,12 @@ class Search():
         """
         # get the status if it isn't passed in
         if status is None:
-            status = aurorax.requests.get_status(self.request_url)
+            status = pyaurorax.requests.get_status(self.request_url)
 
         # update request status by checking if data URI is set
         if status["search_result"]["data_uri"] is not None:
             self.completed = True
-            self.data_url = f'{aurorax.api.urls.base_url}{status["search_result"]["data_uri"]}'
+            self.data_url = f'{pyaurorax.api.urls.base_url}{status["search_result"]["data_uri"]}'
 
         # set class variable "status" and "logs"
         self.status = status
@@ -263,10 +264,10 @@ class Search():
             return
 
         url = self.data_url
-        raw_data = aurorax.requests.get_data(url)
+        raw_data = pyaurorax.requests.get_data(url)
         self.data = [Conjunction(**c) for c in raw_data]
 
-    def wait(self, poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
+    def wait(self, poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
         Block and wait until the request is complete and data is available for retrieval.
 
@@ -276,12 +277,13 @@ class Search():
             verbose: output poll times, defaults to False.
 
         """
-        url = aurorax.api.urls.conjunction_request_url.format(self.request_id)
-        self.update_status(aurorax.requests.wait_for_data(
+        url = pyaurorax.api.urls.conjunction_request_url.format(
+            self.request_id)
+        self.update_status(pyaurorax.requests.wait_for_data(
             url, poll_interval=poll_interval, verbose=verbose))
 
     def cancel(self, wait: bool = False, verbose: bool = False,
-               poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+               poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
         Cancel the conjunction search request at the API. This method returns asynchronously by default.
 
@@ -298,8 +300,9 @@ class Search():
             aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
         """
-        url = aurorax.api.urls.conjunction_request_url.format(self.request_id)
-        return aurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)
+        url = pyaurorax.api.urls.conjunction_request_url.format(
+            self.request_id)
+        return pyaurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)
 
 
 def search_async(start: datetime.datetime,
@@ -367,7 +370,7 @@ def search(start: datetime.datetime,
            max_distances: Dict[str, float] = {},
            default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
            verbose: bool = False,
-           poll_interval: float = aurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            epoch_search_precision: int = 60) -> Search:
     """
     Search for conjunctions and block until results are returned.

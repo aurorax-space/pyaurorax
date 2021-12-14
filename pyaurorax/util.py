@@ -2,7 +2,7 @@
 Utility methods for converting geographic locations to North/South B trace coordinates.
 """
 import aacgmv2
-from aurorax import Location
+from pyaurorax import Location
 import datetime
 
 

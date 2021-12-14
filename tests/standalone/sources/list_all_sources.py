@@ -1,13 +1,14 @@
-import aurorax
+import pyaurorax
 from tabulate import tabulate
 
 
 def main():
     # get sources
-    sources = aurorax.sources.list()
+    sources = pyaurorax.sources.list()
 
     # print in a nice table
-    headers = ["ID", "Program", "Platform", "Instrument Type", "Source Type", "Display Name"]
+    headers = ["ID", "Program", "Platform",
+               "Instrument Type", "Source Type", "Display Name"]
     rows = []
     for source in sources:
         rows.append([

@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import pprint
 import os
 
@@ -6,8 +6,8 @@ import os
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
-    aurorax.api.set_base_url("https://api.staging.aurorax.space")
-    aurorax.authenticate(api_key)
+    pyaurorax.api.set_base_url("https://api.staging.aurorax.space")
+    pyaurorax.authenticate(api_key)
 
     # set values
     program = "test-program-updated"
@@ -33,20 +33,21 @@ def main():
     ]
 
     # get the identifier
-    ds = aurorax.sources.get("test-program", "test-platform", "test-instrument")
+    ds = pyaurorax.sources.get(
+        "test-program", "test-platform", "test-instrument")
     if (ds == {}):
         print("Could not find test-instrument, make sure you've added it already")
         return 1
 
     # update the data source
-    updated_ds = aurorax.sources.update(identifier=ds["identifier"],
-                                        program=program,
-                                        platform=platform,
-                                        instrument_type=instrument_type,
-                                        source_type=source_type,
-                                        display_name=display_name,
-                                        ephemeris_metadata_schema=metadata_schema_ephemeris,
-                                        data_product_metadata_schema=metadata_schema_data_products)
+    updated_ds = pyaurorax.sources.update(identifier=ds["identifier"],
+                                          program=program,
+                                          platform=platform,
+                                          instrument_type=instrument_type,
+                                          source_type=source_type,
+                                          display_name=display_name,
+                                          ephemeris_metadata_schema=metadata_schema_ephemeris,
+                                          data_product_metadata_schema=metadata_schema_data_products)
 
     # output results
     print("Successfully updated source\n")

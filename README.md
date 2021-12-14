@@ -22,7 +22,7 @@ PyAuroraX officially supports Python 3.6+.
 ## Usage
 
 ```python
->>> import aurorax
+>>> import pyaurorax
 ```
 
 ## Development

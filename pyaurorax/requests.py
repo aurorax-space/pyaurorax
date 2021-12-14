@@ -1,7 +1,7 @@
 """
 The requests module contains methods for retrieving data from an AuroraX request.
 """
-import aurorax
+import pyaurorax
 import datetime
 import time
 from typing import Dict, List
@@ -23,14 +23,14 @@ def get_status(request_url: str) -> Dict:
 
     """
     # do request
-    req = aurorax.AuroraXRequest(method="get", url=request_url)
+    req = pyaurorax.AuroraXRequest(method="get", url=request_url)
     res = req.execute()
 
     # return
     return res.data
 
 
-def get_data(data_url: str) -> List:
+def get_data(data_url: str, post_body: Dict = None) -> List:
     """
     Retrieve the data for a request.
 
@@ -42,7 +42,11 @@ def get_data(data_url: str) -> List:
 
     """
     # do request
-    req = aurorax.AuroraXRequest(method="get", url=data_url)
+    if post_body is not None:
+        req = pyaurorax.AuroraXRequest(
+            method="post", url=data_url, body=post_body)
+    else:
+        req = pyaurorax.AuroraXRequest(method="get", url=data_url)
     res = req.execute()
 
     # set data var
@@ -54,17 +58,17 @@ def get_data(data_url: str) -> List:
             data_result[i]["epoch"] = datetime.datetime.strptime(data_result[i]["epoch"],
                                                                  "%Y-%m-%dT%H:%M:%S")
         if ("location_geo" in data_result[i]):
-            data_result[i]["location_geo"] = aurorax.Location(lat=data_result[i]["location_geo"]["lat"],
-                                                              lon=data_result[i]["location_geo"]["lon"])
+            data_result[i]["location_geo"] = pyaurorax.Location(lat=data_result[i]["location_geo"]["lat"],
+                                                                lon=data_result[i]["location_geo"]["lon"])
         if ("location_gsm" in data_result[i]):
-            data_result[i]["location_gsm"] = aurorax.Location(lat=data_result[i]["location_gsm"]["lat"],
-                                                              lon=data_result[i]["location_gsm"]["lon"])
+            data_result[i]["location_gsm"] = pyaurorax.Location(lat=data_result[i]["location_gsm"]["lat"],
+                                                                lon=data_result[i]["location_gsm"]["lon"])
         if ("nbtrace" in data_result[i]):
-            data_result[i]["nbtrace"] = aurorax.Location(lat=data_result[i]["nbtrace"]["lat"],
-                                                         lon=data_result[i]["nbtrace"]["lon"])
+            data_result[i]["nbtrace"] = pyaurorax.Location(lat=data_result[i]["nbtrace"]["lat"],
+                                                           lon=data_result[i]["nbtrace"]["lon"])
         if ("sbtrace" in data_result[i]):
-            data_result[i]["sbtrace"] = aurorax.Location(lat=data_result[i]["sbtrace"]["lat"],
-                                                         lon=data_result[i]["sbtrace"]["lon"])
+            data_result[i]["sbtrace"] = pyaurorax.Location(lat=data_result[i]["sbtrace"]["lat"],
+                                                           lon=data_result[i]["sbtrace"]["lon"])
 
     # return
     return data_result
@@ -139,7 +143,7 @@ def cancel(request_url: str,
     """
 
     # do request
-    req = aurorax.AuroraXRequest(
+    req = pyaurorax.AuroraXRequest(
         method="delete", url=request_url, null_response=True)
     req.execute()
 

@@ -1,10 +1,11 @@
-import aurorax
+import pyaurorax
 
 
 def main():
     # get schema
-    source = aurorax.sources.get_using_filters(program="swarm", platform="swarma", instrument_type="footprint")
-    schema = aurorax.metadata.get_ephemeris_schema(source[0]["identifier"])
+    source = pyaurorax.sources.get_using_filters(
+        program="swarm", platform="swarma", instrument_type="footprint")
+    schema = pyaurorax.metadata.get_ephemeris_schema(source[0]["identifier"])
 
     # create an example metadata dictionary
     metadata = {
@@ -17,7 +18,7 @@ def main():
     }
 
     # validate
-    valid = aurorax.metadata.validate(schema, metadata)
+    valid = pyaurorax.metadata.validate(schema, metadata)
     print("Metadata valid: %r" % (valid))
 
 

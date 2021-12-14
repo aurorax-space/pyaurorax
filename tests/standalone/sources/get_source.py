@@ -1,10 +1,11 @@
-import aurorax
+import pyaurorax
 import pprint
 
 
 def main():
     # get data source
-    source = aurorax.sources.get("swarm", "swarma", "footprint", format="full_record")
+    source = pyaurorax.sources.get(
+        "swarm", "swarma", "footprint", format="full_record")
     pprint.pprint(source)
 
 

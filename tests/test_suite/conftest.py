@@ -1,5 +1,5 @@
 import os
-import aurorax
+import pyaurorax
 import pytest
 import sys
 
@@ -28,21 +28,21 @@ def set_env_api_key(env, host):
 
     if env == "local":
         url = host
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_LOCAL"))
+        pyaurorax.api.authenticate(os.getenv("AURORAX_APIKEY_LOCAL"))
 
     elif env == "staging":
         url = "https://api.staging.aurorax.space"
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
+        pyaurorax.api.authenticate(os.getenv("AURORAX_APIKEY_STAGING"))
 
     elif env == "production":
         url = "https://api.aurorax.space"
-        aurorax.api.authenticate(os.getenv("AURORAX_APIKEY_PRODUCTION"))
+        pyaurorax.api.authenticate(os.getenv("AURORAX_APIKEY_PRODUCTION"))
     else:
         print(f"Error: env input {env} not recognized")
         sys.exit(-1)
 
-    if not aurorax.get_api_key():
+    if not pyaurorax.get_api_key():
         print(f"Warning: {env} API key not found")
 
     print("Using base address: " + url)
-    aurorax.api.set_base_url(url)
+    pyaurorax.api.set_base_url(url)

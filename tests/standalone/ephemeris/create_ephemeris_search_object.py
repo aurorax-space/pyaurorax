@@ -1,14 +1,14 @@
-import aurorax
+import pyaurorax
 import datetime
 
 
 def main():
     # start search
-    s = aurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                 datetime.datetime(2020, 1, 10, 0, 0, 0),
-                                 programs=["swarm"],
-                                 platforms=["swarma"],
-                                 instrument_types=["footprint"])
+    s = pyaurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                   datetime.datetime(2020, 1, 10, 0, 0, 0),
+                                   programs=["swarm"],
+                                   platforms=["swarma"],
+                                   instrument_types=["footprint"])
     print(s)
 
 

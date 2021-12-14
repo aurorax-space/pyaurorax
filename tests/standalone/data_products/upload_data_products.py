@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import os
 import datetime
 import pprint
@@ -7,10 +7,10 @@ import pprint
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
-    aurorax.authenticate(api_key)
+    pyaurorax.authenticate(api_key)
 
     # set as staging API
-    aurorax.api.set_base_url("https://api.staging.aurorax.space")
+    pyaurorax.api.set_base_url("https://api.staging.aurorax.space")
 
     # set values
     program = "test-program"
@@ -26,19 +26,19 @@ def main():
     end_dt = start_dt.replace(hour=23, minute=59, second=59)
 
     # get the data source ID
-    ds = aurorax.sources.get(program, platform, instrument_type)
+    ds = pyaurorax.sources.get(program, platform, instrument_type)
     identifier = ds["identifier"]
 
     # create DataProducts object
-    e = aurorax.data_products.DataProduct(identifier=identifier,
-                                          program=program,
-                                          platform=platform,
-                                          instrument_type=instrument_type,
-                                          data_product_type=data_product_type,
-                                          url=url,
-                                          start=start_dt,
-                                          end=end_dt,
-                                          metadata=metadata)
+    e = pyaurorax.data_products.DataProduct(identifier=identifier,
+                                            program=program,
+                                            platform=platform,
+                                            instrument_type=instrument_type,
+                                            data_product_type=data_product_type,
+                                            url=url,
+                                            start=start_dt,
+                                            end=end_dt,
+                                            metadata=metadata)
     pprint.pprint(e)
     print("\nUploading record ...")
 
@@ -47,7 +47,7 @@ def main():
     records.append(e)
 
     # upload record
-    aurorax.data_products.upload(identifier, records=records)
+    pyaurorax.data_products.upload(identifier, records=records)
     print("Successfully uploaded")
 
 

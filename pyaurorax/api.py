@@ -1,7 +1,7 @@
 """
 The API module contains classes and methods used throughout PyAuroraX for API interaction.
 """
-import aurorax
+import pyaurorax
 import json
 import pprint
 from pydantic import BaseModel
@@ -116,11 +116,11 @@ class AuroraXRequest(BaseModel):
                                data=body_santized)
 
         # retry request if needed
-        for i in range(0, aurorax.api.DEFAULT_RETRIES):
+        for i in range(0, pyaurorax.api.DEFAULT_RETRIES):
             if (req.status_code == 500 and "text/plain" in req.headers["Content-Type"]):
-                if (i == (aurorax.api.DEFAULT_RETRIES - 1)):
-                    raise aurorax.AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
-                                                                          req.status_code))
+                if (i == (pyaurorax.api.DEFAULT_RETRIES - 1)):
+                    raise pyaurorax.AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
+                                                                            req.status_code))
                 req = requests.request(self.method,
                                        self.url,
                                        headers=self.__merge_headers(),
@@ -132,12 +132,12 @@ class AuroraXRequest(BaseModel):
 
         # check if authorization worked
         if (req.status_code == 401):
-            raise aurorax.AuroraXUnauthorizedException("%s %s" % (req.status_code,
-                                                                  req.json()["error_message"]))
+            raise pyaurorax.AuroraXUnauthorizedException("%s %s" % (req.status_code,
+                                                                    req.json()["error_message"]))
 
         if (req.status_code == 404):
-            raise aurorax.AuroraXNotFoundException("%s %s" % (req.status_code,
-                                                              req.json()["error_message"]))
+            raise pyaurorax.AuroraXNotFoundException("%s %s" % (req.status_code,
+                                                                req.json()["error_message"]))
 
         # check if we only want to do limited evaluation
         if (limited_evaluation is True):
@@ -150,8 +150,8 @@ class AuroraXRequest(BaseModel):
             if (req.headers["Content-Type"] == "application/json"):
                 response_data = req.json()
             else:
-                raise aurorax.AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
-                                                                                 req.status_code))
+                raise pyaurorax.AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
+                                                                                   req.status_code))
         else:
             if (req.status_code != 200 and req.status_code != 201 and req.status_code != 202 and req.status_code != 204):
                 response_data = req.json()
@@ -162,10 +162,10 @@ class AuroraXRequest(BaseModel):
         if (req.status_code == 500):
             response_json = req.json()
             if ("error_message" in response_json):
-                raise aurorax.AuroraXException("%s (%s)" % (response_json["error_message"],
-                                                            req.status_code))
+                raise pyaurorax.AuroraXException("%s (%s)" % (response_json["error_message"],
+                                                              req.status_code))
             else:
-                raise aurorax.AuroraXException(response_json)
+                raise pyaurorax.AuroraXException(response_json)
 
         # create reponse object
         res = AuroraXResponse(
@@ -192,7 +192,7 @@ class URLs:
     __DEFAULT_URL_DATA_PRODUCTS_UPLOAD = "/api/v1/data_sources/{}/data_products"
     __DEFAULT_URL_DATA_PRODUCTS_SEARCH = "/api/v1/data_products/search"
     __DEFAULT_URL_DATA_PRODUCTS_REQUEST = "/api/v1/data_products/requests/{}"
-    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search_multi"
+    __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search"
     __DEFAULT_URL_CONJUNCTION_REQUEST = "/api/v1/conjunctions/requests/{}"
 
     def __init__(self, base_url: str = DEFAULT_URL_BASE) -> None:

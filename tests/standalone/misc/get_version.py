@@ -1,9 +1,9 @@
-import aurorax
+import pyaurorax
 
 
 def main():
     # get version information
-    print("PyAuroraX version: %s" % (aurorax.__version__))
+    print("PyAuroraX version: %s" % (pyaurorax.__version__))
 
 
 # -------------

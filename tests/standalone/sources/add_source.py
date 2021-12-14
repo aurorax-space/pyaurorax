@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import pprint
 import os
 
@@ -6,8 +6,8 @@ import os
 def main():
     # read API key from environment vars
     api_key = os.environ["AURORAX_API_KEY"]
-    aurorax.api.set_base_url("https://api.staging.aurorax.space")
-    aurorax.authenticate(api_key)
+    pyaurorax.api.set_base_url("https://api.staging.aurorax.space")
+    pyaurorax.authenticate(api_key)
 
     # set values
     identifier = 400
@@ -46,14 +46,14 @@ def main():
     ]
 
     # make request
-    r = aurorax.sources.add(program,
-                            platform,
-                            instrument_type,
-                            source_type,
-                            display_name,
-                            ephemeris_metadata_schema=metadata_schema_ephemeris,
-                            data_product_metadata_schema=metadata_schema_data_products,
-                            identifier=identifier)
+    r = pyaurorax.sources.add(program,
+                              platform,
+                              instrument_type,
+                              source_type,
+                              display_name,
+                              ephemeris_metadata_schema=metadata_schema_ephemeris,
+                              data_product_metadata_schema=metadata_schema_data_products,
+                              identifier=identifier)
 
     # output results
     print("Successfully added source\n")

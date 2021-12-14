@@ -1,5 +1,5 @@
-from aurorax.conjunctions import Conjunction
-import aurorax
+from pyaurorax.conjunctions import Conjunction
+import pyaurorax
 import datetime
 import pytest
 
@@ -15,7 +15,7 @@ def test_search_conjunctions_asynchronous():
     }]
     distance = 100
 
-    s = aurorax.conjunctions.search_async(
+    s = pyaurorax.conjunctions.search_async(
         start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
 
     s.wait()
@@ -41,8 +41,8 @@ def test_search_multi_conjunctions_synchronous():
     }]
     distance = 300
 
-    s = aurorax.conjunctions.search(start=start, end=end, ground=ground_params,
-                                    space=space_params, default_distance=distance, verbose=False)
+    s = pyaurorax.conjunctions.search(start=start, end=end, ground=ground_params,
+                                      space=space_params, default_distance=distance, verbose=False)
 
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
@@ -58,7 +58,7 @@ def test_create_conjunction_object():
     }]
     distance = 200
 
-    c = aurorax.conjunctions.search_async(
+    c = pyaurorax.conjunctions.search_async(
         start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
     c.wait()
     c.get_data()
@@ -96,7 +96,7 @@ def test_search_conjunctions_with_metadata_filters():
         ]
     }]
 
-    s = aurorax.conjunctions.search_async(
+    s = pyaurorax.conjunctions.search_async(
         start=start, end=end, ground=ground_params, space=space_params, default_distance=300)
     s.wait()
     s.get_data()
@@ -118,7 +118,7 @@ def test_search_conjunctions_space_only_with_hemispheres():
         }
     ]
 
-    s = aurorax.conjunctions.search_async(
+    s = pyaurorax.conjunctions.search_async(
         start=start, end=end, ground=[], space=space_params)
     s.wait()
     s.get_data()
@@ -147,7 +147,7 @@ def test_search_conjunctions_with_max_distances():
         "space1-space2": 500
     }
 
-    s = aurorax.conjunctions.search_async(
+    s = pyaurorax.conjunctions.search_async(
         start=start, end=end, ground=ground_params, space=space_params, max_distances=distances)
     s.wait()
     s.get_data()
@@ -173,8 +173,8 @@ def test_search_conjunctions_with_conjunction_types():
     conjunction_type = ["sbtrace"]
     distance = 100
 
-    s = aurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                          space=space_params, default_distance=distance, conjunction_types=conjunction_type)
+    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
+                                            space=space_params, default_distance=distance, conjunction_types=conjunction_type)
     s.wait()
     s.get_data()
 
@@ -193,7 +193,7 @@ def test_cancel_conjunction_search():
     conjunction_type = ["sbtrace"]
     distance = 100
 
-    s = aurorax.conjunctions.Search(
+    s = pyaurorax.conjunctions.Search(
         start, end, ground_params, space_params, conjunction_type, default_distance=distance)
     s.execute()
 
@@ -203,7 +203,7 @@ def test_cancel_conjunction_search():
 
 
 def test_too_many_criteria_blocks():
-    with pytest.raises(aurorax.exceptions.AuroraXBadParametersException):
+    with pytest.raises(pyaurorax.exceptions.AuroraXBadParametersException):
         start = datetime.datetime(2019, 1, 1, 0, 0, 0)
         end = datetime.datetime(2019, 1, 31, 23, 59, 59)
         ground_params = [
@@ -245,7 +245,7 @@ def test_too_many_criteria_blocks():
             },
         ]
 
-        s = aurorax.conjunctions.search(
+        s = pyaurorax.conjunctions.search(
             start=start, end=end, ground=ground_params, space=space_params)
         s.execute()
 
@@ -291,18 +291,18 @@ def test_epoch_search_precision():
     ]
     distance = 500
 
-    s1 = aurorax.conjunctions.search(start=start,
-                                     end=end,
-                                     ground=ground_params,
-                                     space=space_params,
-                                     default_distance=distance,
-                                     epoch_search_precision=30)
+    s1 = pyaurorax.conjunctions.search(start=start,
+                                       end=end,
+                                       ground=ground_params,
+                                       space=space_params,
+                                       default_distance=distance,
+                                       epoch_search_precision=30)
 
-    s2 = aurorax.conjunctions.search(start=start,
-                                     end=end,
-                                     ground=ground_params,
-                                     space=space_params,
-                                     default_distance=distance,
-                                     epoch_search_precision=60)
+    s2 = pyaurorax.conjunctions.search(start=start,
+                                       end=end,
+                                       ground=ground_params,
+                                       space=space_params,
+                                       default_distance=distance,
+                                       epoch_search_precision=60)
 
     assert len(s1.data) != len(s2.data)

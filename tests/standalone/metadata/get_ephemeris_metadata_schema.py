@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import pprint
 
 
@@ -13,12 +13,13 @@ def main():
     print("  Instrument Type:\t%s\n" % (instrument_type))
 
     # get idendifier
-    data_source = aurorax.sources.get_using_filters(program=program,
-                                                    platform=platform,
-                                                    instrument_type=instrument_type)
+    data_source = pyaurorax.sources.get_using_filters(program=program,
+                                                      platform=platform,
+                                                      instrument_type=instrument_type)
 
     # get schema
-    schema = aurorax.metadata.get_ephemeris_schema(data_source[0]["identifier"])
+    schema = pyaurorax.metadata.get_ephemeris_schema(
+        data_source[0]["identifier"])
     pprint.pprint(schema)
 
 

@@ -1,27 +1,27 @@
-import aurorax
-from aurorax.exceptions import AuroraXNotFoundException
-from aurorax.sources import DataSource, DataSourceStatistics
+import pyaurorax
+from pyaurorax.exceptions import AuroraXNotFoundException
+from pyaurorax.sources import DataSource, DataSourceStatistics
 import pytest
 
 
 def test_get_single_source():
-    source = aurorax.sources.get(
+    source = pyaurorax.sources.get(
         "swarm", "swarma", "footprint", format="full_record")
 
     assert type(source) is DataSource
 
 
 def test_get_source_by_filter():
-    source = aurorax.sources.get_using_filters(
+    source = pyaurorax.sources.get_using_filters(
         program="swarm", instrument_type="footprint", format="full_record")
 
     assert type(source) is list and len(source) > 0
 
 
 def test_get_source_by_id():
-    source = aurorax.sources.get(
+    source = pyaurorax.sources.get(
         "swarm", "swarma", "footprint", format="identifier_only")
-    source_using_id = aurorax.sources.get_using_identifier(
+    source_using_id = pyaurorax.sources.get_using_identifier(
         source.identifier, format="full_record")
 
     assert type(source_using_id) is DataSource
@@ -29,11 +29,11 @@ def test_get_source_by_id():
 
 def test_get_source_not_found():
     with pytest.raises(AuroraXNotFoundException):
-        aurorax.sources.get("space", "physics", "footprint")
+        pyaurorax.sources.get("space", "physics", "footprint")
 
 
 def test_get_source_using_filters_not_found():
-    sources = aurorax.sources.get_using_filters(
+    sources = pyaurorax.sources.get_using_filters(
         "space", "physics", "footprint")
 
     assert len(sources) == 0
@@ -41,7 +41,7 @@ def test_get_source_using_filters_not_found():
 
 def test_get_source_using_identifier_not_found():
     with pytest.raises(AuroraXNotFoundException):
-        aurorax.sources.get_using_identifier(12345678)
+        pyaurorax.sources.get_using_identifier(12345678)
 
 
 def test_get_source_stats():
@@ -49,17 +49,18 @@ def test_get_source_stats():
     platform = "themise"
     instrument_type = "footprint"
 
-    data_source = aurorax.sources.get_using_filters(program=program,
-                                                    platform=platform,
-                                                    instrument_type=instrument_type)
+    data_source = pyaurorax.sources.get_using_filters(program=program,
+                                                      platform=platform,
+                                                      instrument_type=instrument_type)
 
-    stats = aurorax.sources.get_stats(data_source[0].identifier, "full_record")
+    stats = pyaurorax.sources.get_stats(
+        data_source[0].identifier, "full_record")
 
     assert type(stats) is DataSourceStatistics
 
 
 def test_list_sources():
-    sources = aurorax.sources.list()
+    sources = pyaurorax.sources.list()
 
     assert type(sources) is list and len(sources) > 0
 
@@ -102,13 +103,13 @@ def test_add_source():
     ]
 
     # make request
-    source = aurorax.sources.DataSource(identifier=identifier, program=program, platform=platform,
-                                        instrument_type=instrument_type,
-                                        source_type=source_type, display_name=display_name,
-                                        ephemeris_metadata_schema=metadata_schema_ephemeris,
-                                        data_product_metadata_schema=metadata_schema_data_products)
+    source = pyaurorax.sources.DataSource(identifier=identifier, program=program, platform=platform,
+                                          instrument_type=instrument_type,
+                                          source_type=source_type, display_name=display_name,
+                                          ephemeris_metadata_schema=metadata_schema_ephemeris,
+                                          data_product_metadata_schema=metadata_schema_data_products)
 
-    r = aurorax.sources.add(source)
+    r = pyaurorax.sources.add(source)
 
     assert r.identifier == 400
 
@@ -116,7 +117,7 @@ def test_add_source():
 def test_update_source():
     # get the identifier
     try:
-        ds = aurorax.sources.get(
+        ds = pyaurorax.sources.get(
             "test-program", "test-platform-new", "test-instrument-new", format="full_record")
     except Exception:
         assert False
@@ -128,7 +129,7 @@ def test_update_source():
     }
 
     # update the data source
-    updated_ds = aurorax.sources.update(ds)
+    updated_ds = pyaurorax.sources.update(ds)
 
     assert (updated_ds.platform == "test-platform-updated"
             and updated_ds.instrument_type == "test-instrument-updated"
@@ -138,13 +139,13 @@ def test_update_source():
 def test_update_source_partial():
     # get the identifier
     try:
-        ds = aurorax.sources.get("test-program", "test-platform-updated",
-                                 "test-instrument-updated", format="full_record")
+        ds = pyaurorax.sources.get("test-program", "test-platform-updated",
+                                   "test-instrument-updated", format="full_record")
     except Exception:
         assert False
 
     # partially update the data source
-    updated_ds = aurorax.sources.partial_update(
+    updated_ds = pyaurorax.sources.partial_update(
         identifier=ds.identifier, instrument_type="test-instrument-updated-partial", metadata={}, ephemeris_metadata_schema=[])
 
     assert updated_ds.instrument_type == "test-instrument-updated-partial" and updated_ds.metadata == {
@@ -158,14 +159,14 @@ def test_delete_source():
     instrument_type = "test-instrument-updated-partial"
 
     # get source record to pull out the identifier
-    sources = aurorax.sources.get_using_filters(program=program,
-                                                platform=platform,
-                                                instrument_type=instrument_type)
+    sources = pyaurorax.sources.get_using_filters(program=program,
+                                                  platform=platform,
+                                                  instrument_type=instrument_type)
     if (len(sources) == 0):
         assert False
     identifier = sources[0].identifier
 
     # remove source
-    result = aurorax.sources.delete(identifier)
+    result = pyaurorax.sources.delete(identifier)
 
     assert result == 1

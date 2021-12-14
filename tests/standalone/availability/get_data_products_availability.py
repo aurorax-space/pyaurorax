@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import datetime
 import pprint
 
@@ -18,11 +18,11 @@ def main():
     print("  Instrument Type:\t%s\n" % (instrument_type))
 
     # get availability
-    availability = aurorax.availability.data_products(start_date,
-                                                      end_date,
-                                                      program=program,
-                                                      platform=platform,
-                                                      instrument_type=instrument_type)
+    availability = pyaurorax.availability.data_products(start_date,
+                                                        end_date,
+                                                        program=program,
+                                                        platform=platform,
+                                                        instrument_type=instrument_type)
     pprint.pprint(availability)
 
 
