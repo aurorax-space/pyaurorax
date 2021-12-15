@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import pprint
 
 
@@ -13,12 +13,12 @@ def main():
     print("  Instrument Type:\t%s\n" % (instrument_type))
 
     # get identifier
-    data_source = aurorax.sources.get_using_filters(program=program,
-                                                    platform=platform,
-                                                    instrument_type=instrument_type)
+    data_source = pyaurorax.sources.get_using_filters(program=program,
+                                                      platform=platform,
+                                                      instrument_type=instrument_type)
 
     # get statistics
-    stats = aurorax.sources.get_stats(data_source[0]["identifier"])
+    stats = pyaurorax.sources.get_stats(data_source[0]["identifier"])
     pprint.pprint(stats)
 
 

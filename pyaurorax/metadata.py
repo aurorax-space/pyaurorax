@@ -2,7 +2,7 @@
 AuroraX metadata schemas describe the intended structure of metadata stored in
 ephemeris and data product records.
 """
-import aurorax
+import pyaurorax
 from typing import Dict, List
 
 
@@ -39,7 +39,7 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
         Metadata schema associated with the record.
 
     """
-    source_info = aurorax.sources.get_using_identifier(
+    source_info = pyaurorax.sources.get_using_identifier(
         identifier, format="full_record")
     if source_info.ephemeris_metadata_schema:
         return source_info.ephemeris_metadata_schema
@@ -58,7 +58,7 @@ def get_data_products_schema(identifier: int) -> List[Dict]:
         Metadata schema associated with the record.
 
     """
-    source_info = aurorax.sources.get_using_identifier(
+    source_info = pyaurorax.sources.get_using_identifier(
         identifier, format="full_record")
     if source_info.data_product_metadata_schema:
         return source_info.data_product_metadata_schema

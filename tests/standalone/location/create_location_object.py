@@ -1,10 +1,10 @@
-import aurorax
+import pyaurorax
 import pprint
 
 
 def main():
     # create location object
-    loc = aurorax.Location(lat=51.0447, lon=-114.0719)
+    loc = pyaurorax.Location(lat=51.0447, lon=-114.0719)
 
     # print
     print("__str__:\n----------")

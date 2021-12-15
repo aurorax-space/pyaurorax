@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.6.11"
+version = "0.7.0"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
 homepage = "https://aurorax.space/data/apiLibraries"
@@ -9,7 +9,7 @@ authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 license = "MIT"
 packages = [
-    { include = "aurorax" },
+    { include = "pyaurorax" },
 ]
 
 [tool.poetry.dependencies]

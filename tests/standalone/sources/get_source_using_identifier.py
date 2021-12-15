@@ -1,10 +1,10 @@
-import aurorax
+import pyaurorax
 import pprint
 
 
 def main():
     # get data source
-    source = aurorax.sources.get_using_identifier(10, format="full_record")
+    source = pyaurorax.sources.get_using_identifier(10, format="full_record")
     pprint.pprint(source)
 
 

@@ -1,4 +1,4 @@
-import aurorax
+import pyaurorax
 import datetime
 import pprint
 
@@ -15,22 +15,22 @@ def main():
     metadata = {}
 
     # set as staging API
-    aurorax.api.set_base_url("https://api.staging.aurorax.space")
+    pyaurorax.api.set_base_url("https://api.staging.aurorax.space")
 
     # get identifier
-    data_source = aurorax.sources.get(program, platform, instrument_type)
+    data_source = pyaurorax.sources.get(program, platform, instrument_type)
     identifier = data_source["identifier"]
 
     # create DataProduct object
-    e = aurorax.data_products.DataProduct(identifier=identifier,
-                                          program=program,
-                                          platform=platform,
-                                          instrument_type=instrument_type,
-                                          data_product_type=data_product_type,
-                                          url=url,
-                                          start=start_dt,
-                                          end=end_dt,
-                                          metadata=metadata)
+    e = pyaurorax.data_products.DataProduct(identifier=identifier,
+                                            program=program,
+                                            platform=platform,
+                                            instrument_type=instrument_type,
+                                            data_product_type=data_product_type,
+                                            url=url,
+                                            start=start_dt,
+                                            end=end_dt,
+                                            metadata=metadata)
 
     # print
     print("__str__:\n----------")

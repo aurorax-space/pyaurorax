@@ -19,10 +19,10 @@ $ pip install pyaurorax
 
 Basic usage:
 ```python
-> import aurorax
+> import pyaurorax
 ```
 """
-__version__ = "0.6.11"
+__version__ = "0.7.0"
 
 # pull in top level functions
 from .api import AuroraXRequest
@@ -45,13 +45,13 @@ from .exceptions import AuroraXUploadException
 from .models import Location
 
 # pull in modules
-from aurorax import requests
-from aurorax import exceptions
-from aurorax import api
-from aurorax import sources
-from aurorax import metadata
-from aurorax import availability
-from aurorax import ephemeris
-from aurorax import data_products
-from aurorax import conjunctions
-from aurorax import util
+from pyaurorax import requests
+from pyaurorax import exceptions
+from pyaurorax import api
+from pyaurorax import sources
+from pyaurorax import metadata
+from pyaurorax import availability
+from pyaurorax import ephemeris
+from pyaurorax import data_products
+from pyaurorax import conjunctions
+from pyaurorax import util

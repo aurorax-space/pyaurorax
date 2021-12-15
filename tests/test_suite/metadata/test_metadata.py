@@ -1,12 +1,12 @@
-import aurorax
+import pyaurorax
 
 # are we going to enforce schema validation at the API level?
 
 
 def test_validate_schema():
-    source = aurorax.sources.get_using_filters(
+    source = pyaurorax.sources.get_using_filters(
         program="swarm", platform="swarma", instrument_type="footprint")
-    schema = aurorax.metadata.get_ephemeris_schema(source[0].identifier)
+    schema = pyaurorax.metadata.get_ephemeris_schema(source[0].identifier)
 
     # create an example metadata dictionary
     metadata = {
@@ -19,7 +19,7 @@ def test_validate_schema():
     }
 
     # validate
-    assert aurorax.metadata.validate(schema, metadata)
+    assert pyaurorax.metadata.validate(schema, metadata)
 
 
 def test_get_ephemeris_metadata_schema():
@@ -29,11 +29,11 @@ def test_get_ephemeris_metadata_schema():
     instrument_type = "footprint"
 
     # get idendifier
-    data_source = aurorax.sources.get(
+    data_source = pyaurorax.sources.get(
         program, platform, instrument_type, "identifier_only")
 
     # get schema
-    schema = aurorax.metadata.get_ephemeris_schema(data_source.identifier)
+    schema = pyaurorax.metadata.get_ephemeris_schema(data_source.identifier)
 
     assert type(schema) is list
 
@@ -45,10 +45,11 @@ def test_get_data_product_metadata_schema():
     instrument_type = "panchromatic ASI"
 
     # get idendifier
-    data_source = aurorax.sources.get(
+    data_source = pyaurorax.sources.get(
         program, platform, instrument_type, format="identifier_only")
 
     # get schema
-    schema = aurorax.metadata.get_data_products_schema(data_source.identifier)
+    schema = pyaurorax.metadata.get_data_products_schema(
+        data_source.identifier)
 
     assert type(schema) is list

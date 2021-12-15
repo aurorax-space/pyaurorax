@@ -12,7 +12,8 @@ import shutil
 
 def main():
     # args
-    parser = argparse.ArgumentParser(description="Bump the version number for the AuroraX library")
+    parser = argparse.ArgumentParser(
+        description="Bump the version number for the AuroraX library")
     parser.add_argument("version", type=str, help="Version number to bump to")
     args = parser.parse_args()
 
@@ -23,8 +24,10 @@ def main():
 
     # bump version test
     print("Updating tests/test_suite/test_version.py file ...")
-    src_filename = "%s/../tests/test_suite/test_version.py" % (os.path.dirname(os.path.realpath(__file__)))
-    dst_filename = "%s/../tests/test_suite/test_version.py.bak" % (os.path.dirname(os.path.realpath(__file__)))
+    src_filename = "%s/../tests/test_suite/test_version.py" % (
+        os.path.dirname(os.path.realpath(__file__)))
+    dst_filename = "%s/../tests/test_suite/test_version.py.bak" % (
+        os.path.dirname(os.path.realpath(__file__)))
     try:
         # open files for read/write
         shutil.copyfile(src_filename, dst_filename)
@@ -34,7 +37,8 @@ def main():
         # update file
         for line in fp_read:
             if ("assert __version__" in line):
-                fp_write.write("    assert __version__ == \"%s\"\n" % (args.version))
+                fp_write.write(
+                    "    assert __version__ == \"%s\"\n" % (args.version))
             else:
                 fp_write.write(line)
 
@@ -51,9 +55,11 @@ def main():
     print()
 
     # bump __version__ variable in __init__.py
-    print("Updating aurorax/__init__.py file ...")
-    src_filename = "%s/../aurorax/__init__.py" % (os.path.dirname(os.path.realpath(__file__)))
-    dst_filename = "%s/../aurorax/__init__.py.bak" % (os.path.dirname(os.path.realpath(__file__)))
+    print("Updating pyaurorax/__init__.py file ...")
+    src_filename = "%s/../pyaurorax/__init__.py" % (
+        os.path.dirname(os.path.realpath(__file__)))
+    dst_filename = "%s/../pyaurorax/__init__.py.bak" % (
+        os.path.dirname(os.path.realpath(__file__)))
     try:
         # open files for read/write
         shutil.copyfile(src_filename, dst_filename)

@@ -2,7 +2,7 @@
 Utility methods for converting geographic locations to North/South B trace coordinates.
 """
 import aacgmv2
-from aurorax import Location
+from pyaurorax import Location
 import datetime
 
 
@@ -37,11 +37,11 @@ def ground_geo_to_nbtrace(geo_location: Location, timestamp: datetime.datetime) 
     Convert geographic location to North B-Trace geographic location.
 
     Attributes:
-        geo_location: aurorax.Location object representing the geographic location.
+        geo_location: pyaurorax.Location object representing the geographic location.
         dt: datetime.datetime object representing the timestamp.
 
     Returns:
-        North B-trace location as an aurorax.Location object.
+        North B-trace location as a pyaurorax.Location object.
 
     """
     # check if location is in northern hemisphere
@@ -59,11 +59,11 @@ def ground_geo_to_sbtrace(geo_location: Location, timestamp: datetime.datetime) 
     Convert geographic location to South B-Trace geographic location.
 
     Attributes:
-        geo_location: aurorax.Location object representing the geographic location.
+        geo_location: pyaurorax.Location object representing the geographic location.
         dt: datetime.datetime object representing the timestamp.
 
     Returns:
-        South B-trace location as an aurorax.Location object.
+        South B-trace location as a pyaurorax.Location object.
 
     """
     # check if location is in southern hemisphere

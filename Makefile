@@ -22,10 +22,10 @@ test-flake8 flake8:
 	poetry run flake8 . --count --ignore=W391,W503 --max-complexity=20 --max-line-length=127 --statistics
 	
 test-pylint pylint:
-	poetry run pylint aurorax
+	poetry run pylint pyaurorax
 
 test-bandit bandit:
-	poetry run bandit -r aurorax
+	poetry run bandit -r pyaurorax
 
 test-pytest pytest:
 	poetry run pytest
@@ -41,7 +41,7 @@ test-pytest-create-update-delete:
 
 test-additional:
 	@echo "Type-checking ...\n============================="
-	-poetry run mypy aurorax
+	-poetry run mypy pyaurorax
 	@echo "\n\n"
 	@echo "Test coverage ...\n============================="
 	-poetry run coverage report

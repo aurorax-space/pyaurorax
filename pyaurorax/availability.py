@@ -2,7 +2,7 @@
 The availability module provides the means to quickly determine the availability of
 desired ephemeris or data product records in AuroraX.
 """
-import aurorax
+import pyaurorax
 import datetime
 import pprint
 from pydantic import BaseModel
@@ -14,12 +14,12 @@ class AvailabilityResult(BaseModel):
     Availability result data type.
 
     Attributes:
-        data_source: aurorax.sources.DataSource object that the ephemeris record is associated with.
+        data_source: pyaurorax.sources.DataSource object that the ephemeris record is associated with.
         available_data_products: data product availability dictionary of shape {"YYYY-MM-DD": <# of records>}.
         available_ephemeris: ephemeris availability dictionary of shape {"YYYY-MM-DD": <# of records>}.
 
     """
-    data_source: aurorax.sources.DataSource
+    data_source: pyaurorax.sources.DataSource
     available_data_products: Dict[str, int] = None
     available_ephemeris: Dict[str, int] = None
 
@@ -69,7 +69,7 @@ def ephemeris(start: datetime.date,
         slow: query the data directly (slower) for more accurate results, defaults to false.
 
     Returns:
-        A list of aurorax.availability.AvailabilityResult objects.
+        A list of pyaurorax.availability.AvailabilityResult objects.
 
     """
     # set parameters
@@ -86,8 +86,8 @@ def ephemeris(start: datetime.date,
     }
 
     # do request
-    req = aurorax.AuroraXRequest(
-        method="get", url=aurorax.api.urls.ephemeris_availability_url, params=params)
+    req = pyaurorax.AuroraXRequest(
+        method="get", url=pyaurorax.api.urls.ephemeris_availability_url, params=params)
     res = req.execute()
 
     # return
@@ -119,7 +119,7 @@ def data_products(start: datetime,
         slow: query the data directly (slower) for more accurate results, defaults to false.
 
     Returns:
-        A list of aurorax.availability.AvailabilityResult objects.
+        A list of pyaurorax.availability.AvailabilityResult objects.
 
     """
     # set parameters
@@ -136,8 +136,8 @@ def data_products(start: datetime,
     }
 
     # do request
-    req = aurorax.AuroraXRequest(
-        method="get", url=aurorax.api.urls.data_products_availability_url, params=params)
+    req = pyaurorax.AuroraXRequest(
+        method="get", url=pyaurorax.api.urls.data_products_availability_url, params=params)
     res = req.execute()
 
     # return
