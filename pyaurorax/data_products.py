@@ -291,7 +291,8 @@ class Search():
     data_url: URL string where data is accessed.
     query: dictionary of values sent for the search query.
     status: dictionary of status updates.
-    data: list of pyaurorax.data_products.DataProduct objects returned, or a list of raw JSON results if response_format is specified.
+    data: list of pyaurorax.data_products.DataProduct objects returned, or a list of raw JSON results
+        if response_format is specified.
     logs: list of logging messages from the API.
     """
 

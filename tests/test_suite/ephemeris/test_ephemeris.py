@@ -1,4 +1,3 @@
-from typing import Dict
 from pyaurorax.ephemeris import Ephemeris
 import pyaurorax
 import datetime
