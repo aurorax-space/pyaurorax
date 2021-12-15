@@ -47,6 +47,41 @@ def test_search_multi_conjunctions_synchronous():
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 
+def test_search_multi_conjunctions_response_format_synchronous():
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 4, 23, 59, 59)
+    ground_params = [{
+        "programs": ["themis-asi"]
+    },
+        {
+        "platforms": ["gillam"]
+    }]
+    space_params = [{
+        "programs": ["swarm"]
+    },
+        {
+        "programs": ["themis"]
+    }]
+    distance = 300
+
+    s = pyaurorax.conjunctions.search(start=start, end=end, ground=ground_params,
+                                      space=space_params, default_distance=distance, verbose=False,
+                                      response_format={
+                                          "conjunction_type": True,
+                                          "start": True,
+                                          "end": True,
+                                          "min_distance": True,
+                                          "closest_epoch": True,
+                                          "data_sources": {
+                                              "identifier": True
+                                          }
+                                      }
+                                      )
+
+    assert len(s.data) > 0 and type(
+        s.data[0]) is dict and "max_distance" not in s.data[0].keys()
+
+
 def test_create_conjunction_object():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 6, 59, 59)

@@ -117,8 +117,8 @@ def list(order: str = "identifier", format: str = "basic_info") -> List[DataSour
         A list of AuroraX DataSource objects.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
     """
     params = {
         format: format
@@ -152,9 +152,9 @@ def get(program: str,
         An AuroraX DataSource object matching the input parameters.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXNotFoundException: source not found.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXNotFoundException: source not found.
 
     """
     # make request
@@ -201,8 +201,8 @@ def get_using_filters(program: str = None,
         A list of AuroraX DataSource objects matching the filter parameters.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
 
     """
     # make request
@@ -240,8 +240,8 @@ def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSou
         An AuroraX DataSource object matching the input identifier.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
 
     """
     # make request
@@ -271,9 +271,9 @@ def get_stats(identifier: int,
         A dictionary of statistics information about the data source.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXNotFoundException: data source not found.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
 
     """
     # make request
@@ -300,9 +300,9 @@ def add(data_source: DataSource) -> DataSource:
         The newly created AuroraX DataSource object.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXDuplicateException: duplicate data source, already exists.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXDuplicateException: duplicate data source, already exists.
 
     """
 
@@ -348,10 +348,10 @@ def delete(identifier: int) -> int:
         1 on success.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXNotFoundException: data source not found.
-        aurorax.exceptions.AuroraXConflictException: conflict of some type.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
+        pyaurorax.exceptions.AuroraXConflictException: conflict of some type.
 
     """
     # do request
@@ -386,10 +386,10 @@ def update(data_source: DataSource) -> DataSource:
         The updated AuroraX DataSource object.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXNotFoundException: data source not found.
-        aurorax.exceptions.AuroraXBadParametersException: missing parameters.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
+        pyaurorax.exceptions.AuroraXBadParametersException: missing parameters.
 
     """
     if not all([data_source.identifier, data_source.program, data_source.platform,
@@ -447,10 +447,10 @@ def partial_update(identifier: int,
         The updated AuroraX DataSource object.
 
     Raises:
-        aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXNotFoundException: data source not found.
-        aurorax.exceptions.AuroraXBadParametersException: missing parameters.
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
+        pyaurorax.exceptions.AuroraXBadParametersException: missing parameters.
 
     """
     if not identifier:

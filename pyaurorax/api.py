@@ -99,10 +99,10 @@ class AuroraXRequest(BaseModel):
             An AuroraXResponse object.
 
         Raises:
-            aurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-            aurorax.exceptions.AuroraXNotFoundException: requested resource was not found.
-            aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
-            aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
+            pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
+            pyaurorax.exceptions.AuroraXNotFoundException: requested resource was not found.
+            pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
+            pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
         """
         # sanitize data

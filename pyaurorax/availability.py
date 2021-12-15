@@ -14,7 +14,7 @@ class AvailabilityResult(BaseModel):
     Availability result data type.
 
     Attributes:
-        data_source: aurorax.sources.DataSource object that the ephemeris record is associated with.
+        data_source: pyaurorax.sources.DataSource object that the ephemeris record is associated with.
         available_data_products: data product availability dictionary of shape {"YYYY-MM-DD": <# of records>}.
         available_ephemeris: ephemeris availability dictionary of shape {"YYYY-MM-DD": <# of records>}.
 
@@ -69,7 +69,7 @@ def ephemeris(start: datetime.date,
         slow: query the data directly (slower) for more accurate results, defaults to false.
 
     Returns:
-        A list of aurorax.availability.AvailabilityResult objects.
+        A list of pyaurorax.availability.AvailabilityResult objects.
 
     """
     # set parameters
@@ -119,7 +119,7 @@ def data_products(start: datetime,
         slow: query the data directly (slower) for more accurate results, defaults to false.
 
     Returns:
-        A list of aurorax.availability.AvailabilityResult objects.
+        A list of pyaurorax.availability.AvailabilityResult objects.
 
     """
     # set parameters

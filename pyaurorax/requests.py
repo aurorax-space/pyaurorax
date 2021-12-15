@@ -32,10 +32,12 @@ def get_status(request_url: str) -> Dict:
 
 def get_data(data_url: str, post_body: Dict = None) -> List:
     """
-    Retrieve the data for a request.
+    Retrieve the data for a request. Makes a GET request if no post_body is
+    specified, else makes a POST request with the given post_body.
 
     Attributes:
         data_url: URL for the data of a request.
+        post_body: dictionary for body of a post request.
 
     Returns:
         List of JSON data objects in the response.
@@ -137,8 +139,8 @@ def cancel(request_url: str,
         1 on success.
 
     Raises:
-        aurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-        aurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
+        pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
 
     """
 
