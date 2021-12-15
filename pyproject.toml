@@ -9,7 +9,7 @@ authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 license = "MIT"
 packages = [
-    { include = "aurorax" },
+    { include = "pyaurorax" },
 ]
 
 [tool.poetry.dependencies]

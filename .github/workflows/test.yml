@@ -53,10 +53,10 @@ jobs:
         poetry run flake8 . --count --ignore=W391,W503 --max-complexity=20 --max-line-length=127 --statistics
     - name: Linting (pylint)
       run: |
-        poetry run pylint aurorax
+        poetry run pylint pyaurorax
     - name: Security analysis (bandit)
       run: |
-        poetry run bandit -r aurorax    
+        poetry run bandit -r pyaurorax    
     - name: Run tests (pytest)
       run: |
         make test-pytest-read
@@ -87,10 +87,10 @@ jobs:
         poetry run flake8 . --count --ignore=W391,W503 --max-complexity=20 --max-line-length=127 --statistics
     - name: Linting (pylint)
       run: |
-        poetry run pylint aurorax
+        poetry run pylint pyaurorax
     - name: Security analysis (bandit)
       run: |
-        poetry run bandit -r aurorax    
+        poetry run bandit -r pyaurorax    
     - name: Run tests (pytest)
       run: |
         make test-pytest-create-update-delete
