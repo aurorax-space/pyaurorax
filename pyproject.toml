@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.6.10"
+version = "0.6.11"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
-homepage = "https://github.com/aurorax-space/pyaurorax"
+homepage = "https://aurorax.space/data/apiLibraries"
 repository = "https://github.com/aurorax-space/pyaurorax"
 authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
 maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
