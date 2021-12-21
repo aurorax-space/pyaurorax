@@ -75,6 +75,40 @@ def test_search_data_products_asynchronous():
     assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
+def test_search_data_products_metadata_filters_synchronous():
+    metadata_filters = [
+        {
+            "key": "keogram_type",
+            "operator": "=",
+            "values": [
+                "daily_hires"
+            ]
+        },
+        {
+            "key": "movie_type",
+            "operator": "=",
+            "values": [
+                "real-time daily"
+            ]
+        }
+    ]
+    s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                       datetime.datetime(
+                                           2020, 1, 2, 23, 59, 59),
+                                       programs=["auroramax"],
+                                       data_product_type_filters=[
+                                           "keogram", "movie"],
+                                       metadata_filters=metadata_filters,
+                                       verbose=False,
+                                       metadata_filters_logical_operator="OR")
+
+    result = s.data
+    result_filter = list(filter(lambda dp: (dp.data_product_type == "movie" and dp.metadata["movie_type"] == "real-time daily") or (
+        dp.data_product_type == "keogram" and dp.metadata["keogram_type"] == "daily_hires"), result))
+
+    assert len(s.data) == len(result_filter)
+
+
 def test_search_data_products_response_format_asynchronous():
     s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                              datetime.datetime(

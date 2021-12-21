@@ -136,7 +136,9 @@ class Search():
                  platforms: List[str] = None,
                  instrument_types: List[str] = None,
                  metadata_filters: List[Dict] = None,
-                 response_format: Dict = None) -> None:
+                 response_format: Dict = None,
+                 metadata_filters_logical_operator: str = "AND"
+                 ) -> None:
         """
         Create a new Search object.
 
@@ -158,6 +160,7 @@ class Search():
         self.platforms = platforms
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
+        self.metadata_filters_logical_operator = metadata_filters_logical_operator
         self.response_format = response_format
 
     def __str__(self) -> str:
@@ -200,7 +203,11 @@ class Search():
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
                 "instrument_types": [] if not self.instrument_types else self.instrument_types,
-                "ephemeris_metadata_filters": [] if not self.metadata_filters else self.metadata_filters,
+                "ephemeris_metadata_filters": {} if not self.metadata_filters
+                else {
+                    "logical_operator": self.metadata_filters_logical_operator,
+                    "expressions": self.metadata_filters
+                },
             },
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -311,7 +318,8 @@ def search_async(start: datetime.datetime,
                  platforms: List[str] = None,
                  instrument_types: List[str] = None,
                  metadata_filters: List[Dict] = None,
-                 response_format: Dict = None) -> Search:
+                 response_format: Dict = None,
+                 metadata_filters_logical_operator: str = None) -> Search:
     """
     Submit a request for an ephemeris search, return asynchronously.
 
@@ -347,7 +355,8 @@ def search_async(start: datetime.datetime,
                                    platforms=platforms,
                                    instrument_types=instrument_types,
                                    metadata_filters=metadata_filters,
-                                   response_format=response_format)
+                                   response_format=response_format,
+                                   metadata_filters_logical_operator=metadata_filters_logical_operator)
     s.execute()
     return s
 
@@ -360,7 +369,8 @@ def search(start: datetime.datetime,
            metadata_filters: List[Dict] = None,
            verbose: bool = False,
            poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           response_format: Dict = None) -> Search:
+           response_format: Dict = None,
+           metadata_filters_logical_operator: str = None) -> Search:
     """
     Search for ephemeris records.
 
@@ -395,7 +405,8 @@ def search(start: datetime.datetime,
     """
     # create a Search() object
     s = Search(start=start, end=end, programs=programs, platforms=platforms,
-               instrument_types=instrument_types, metadata_filters=metadata_filters, response_format=response_format)
+               instrument_types=instrument_types, metadata_filters=metadata_filters, response_format=response_format,
+               metadata_filters_logical_operator=metadata_filters_logical_operator)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 
