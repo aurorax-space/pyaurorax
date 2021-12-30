@@ -47,7 +47,6 @@ test-additional:
 	-poetry run coverage report
 
 publish:
-	${MAKE} test
 	poetry build
 	poetry publish
 	${MAKE} clean
