@@ -160,7 +160,7 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
 
 def delete_daterange(data_source: pyaurorax.sources.DataSource, start: datetime.datetime,
                      end: datetime.datetime, data_product_types: List[str] = None,
-                     metadata_filters: List[Dict] = None) -> int:
+                     metadata_filters: Dict = None) -> int:
     """
     Deletes data products associated with a data source in the date range provided. This method is asynchronous.
 
@@ -194,7 +194,7 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource, start: datetime.
                                            platforms=[data_source.platform],
                                            instrument_types=[
                                                data_source.instrument_type],
-                                           metadata_filters=[] if not metadata_filters else metadata_filters,
+                                           metadata_filters={} if not metadata_filters else metadata_filters,
                                            data_product_type_filters=[] if not data_product_types else data_product_types)
     except Exception as e:
         raise pyaurorax.AuroraXException(e)
@@ -273,7 +273,7 @@ class Search():
                 "string"
             ]
         }
-    data_product_type_filters: list of dictionaries describing data product  types to filter on e.g. "keogram",
+    data_product_type_filters: list of dictionaries describing data product types to filter on e.g. "keogram",
         defaults to None.
         e.g. {
             "key": "string",
@@ -304,7 +304,9 @@ class Search():
                  instrument_types: List[str] = None,
                  metadata_filters: List[Dict] = None,
                  data_product_type_filters: List[str] = None,
-                 response_format: Dict = None) -> None:
+                 response_format: Dict = None,
+                 metadata_filters_logical_operator: str = "AND"
+                 ) -> None:
         """
         Create a new Search object.
 
@@ -328,6 +330,7 @@ class Search():
         self.metadata_filters = metadata_filters
         self.data_product_type_filters = data_product_type_filters
         self.response_format = response_format
+        self.metadata_filters_logical_operator = metadata_filters_logical_operator
 
     def __str__(self) -> str:
         """
@@ -360,7 +363,11 @@ class Search():
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
                 "instrument_types": [] if not self.instrument_types else self.instrument_types,
-                "data_product_metadata_filters": [] if not self.metadata_filters else self.metadata_filters,
+                "data_product_metadata_filters": {} if not self.metadata_filters
+                else {
+                    "logical_operator": self.metadata_filters_logical_operator,
+                    "expressions": self.metadata_filters
+                },
             },
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -477,7 +484,9 @@ def search_async(start: datetime.datetime,
                  instrument_types: List[str] = None,
                  metadata_filters: List[Dict] = None,
                  data_product_type_filters: List[str] = None,
-                 response_format: Dict = None) -> Search:
+                 response_format: Dict = None,
+                 metadata_filters_logical_operator: str = None
+                 ) -> Search:
     """
     Submit a request for a data products search, return asynchronously.
 
@@ -517,7 +526,8 @@ def search_async(start: datetime.datetime,
                                        instrument_types=instrument_types,
                                        metadata_filters=metadata_filters,
                                        data_product_type_filters=data_product_type_filters,
-                                       response_format=response_format)
+                                       response_format=response_format,
+                                       metadata_filters_logical_operator=metadata_filters_logical_operator)
     s.execute()
     return s
 
@@ -531,7 +541,9 @@ def search(start: datetime.datetime,
            data_product_type_filters: List[str] = None,
            verbose: bool = False,
            poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           response_format: Dict = None) -> Search:
+           response_format: Dict = None,
+           metadata_filters_logical_operator: str = None
+           ) -> Search:
     """
     Search for data product records and block until results are returned.
 
@@ -569,7 +581,8 @@ def search(start: datetime.datetime,
     """
     # create a Search() object
     s = Search(start, end, programs, platforms, instrument_types,
-               metadata_filters, data_product_type_filters, response_format=response_format)
+               metadata_filters, data_product_type_filters, response_format=response_format,
+               metadata_filters_logical_operator=metadata_filters_logical_operator)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 

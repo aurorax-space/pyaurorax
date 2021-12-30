@@ -15,8 +15,8 @@ def test_search_conjunctions_asynchronous():
     }]
     distance = 100
 
-    s = pyaurorax.conjunctions.search_async(
-        start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
+    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
+                                            space=space_params, default_distance=distance)
 
     s.wait()
     s.get_data()
@@ -42,7 +42,8 @@ def test_search_multi_conjunctions_synchronous():
     distance = 300
 
     s = pyaurorax.conjunctions.search(start=start, end=end, ground=ground_params,
-                                      space=space_params, default_distance=distance, verbose=False)
+                                      space=space_params, default_distance=distance,
+                                      verbose=False)
 
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
@@ -93,8 +94,8 @@ def test_create_conjunction_object():
     }]
     distance = 200
 
-    c = pyaurorax.conjunctions.search_async(
-        start=start, end=end, ground=ground_params, space=space_params, default_distance=distance)
+    c = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
+                                            space=space_params, default_distance=distance)
     c.wait()
     c.get_data()
     if len(c.data) == 0:
@@ -108,31 +109,37 @@ def test_search_conjunctions_with_metadata_filters():
     end = datetime.datetime(2019, 3, 31, 23, 59, 59)
     ground_params = [{
         "programs": ["themis-asi"],
-        "ephemeris_metadata_filters": [
-            {
-                "key": "ml_cloud_v1",
-                "operator": "=",
-                "values": [
-                    "not classified as cloud"
-                ]
-            }
-        ]
+        "ephemeris_metadata_filters": {
+            "logical_operator": "AND",
+            "expressions": [
+                {
+                    "key": "ml_cloud_v1",
+                    "operator": "=",
+                    "values": [
+                        "not classified as cloud"
+                    ]
+                }
+            ]
+        }
     }]
     space_params = [{
         "programs": ["swarm"],
-        "ephemeris_metadata_filters": [
-            {
-                "key": "nbtrace_region",
-                "operator": "=",
-                "values": [
-                    "north polar cap"
-                ]
-            }
-        ]
+        "ephemeris_metadata_filters": {
+            "logical_operator": "AND",
+            "expressions": [
+                {
+                    "key": "nbtrace_region",
+                    "operator": "=",
+                    "values": [
+                        "north polar cap"
+                    ]
+                }
+            ]
+        }
     }]
 
-    s = pyaurorax.conjunctions.search_async(
-        start=start, end=end, ground=ground_params, space=space_params, default_distance=300)
+    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
+                                            space=space_params, default_distance=300)
     s.wait()
     s.get_data()
 
@@ -182,8 +189,8 @@ def test_search_conjunctions_with_max_distances():
         "space1-space2": 500
     }
 
-    s = pyaurorax.conjunctions.search_async(
-        start=start, end=end, ground=ground_params, space=space_params, max_distances=distances)
+    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
+                                            space=space_params, max_distances=distances)
     s.wait()
     s.get_data()
 
@@ -192,8 +199,8 @@ def test_search_conjunctions_with_max_distances():
     g1s1_distance_set = s.query["max_distances"]["ground1-space1"] == distances["ground1-space1"]
     s1s2_distance_set = s.query["max_distances"]["space1-space2"] == distances["space1-space2"]
 
-    assert all(x in query_distance_keys for x in distances_set) and g1s1_distance_set and s1s2_distance_set and len(
-        s.data) > 0
+    assert all(x in query_distance_keys for x in distances_set) and \
+        g1s1_distance_set and s1s2_distance_set and len(s.data) > 0
 
 
 def test_search_conjunctions_with_conjunction_types():
@@ -209,7 +216,8 @@ def test_search_conjunctions_with_conjunction_types():
     distance = 100
 
     s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                            space=space_params, default_distance=distance, conjunction_types=conjunction_type)
+                                            space=space_params, default_distance=distance,
+                                            conjunction_types=conjunction_type)
     s.wait()
     s.get_data()
 
@@ -228,8 +236,8 @@ def test_cancel_conjunction_search():
     conjunction_type = ["sbtrace"]
     distance = 100
 
-    s = pyaurorax.conjunctions.Search(
-        start, end, ground_params, space_params, conjunction_type, default_distance=distance)
+    s = pyaurorax.conjunctions.Search(start, end, ground_params, space_params,
+                                      conjunction_type, default_distance=distance)
     s.execute()
 
     result = s.cancel(wait=True)
@@ -280,8 +288,8 @@ def test_too_many_criteria_blocks():
             },
         ]
 
-        s = pyaurorax.conjunctions.search(
-            start=start, end=end, ground=ground_params, space=space_params)
+        s = pyaurorax.conjunctions.search(start=start, end=end,
+                                          ground=ground_params, space=space_params)
         s.execute()
 
 
@@ -296,22 +304,25 @@ def test_epoch_search_precision():
             "instrument_types": [
                 "panchromatic ASI"
             ],
-            "ephemeris_metadata_filters": [
-                {
-                    "key": "calgary_apa_ml_v1",
-                    "operator": "in",
-                    "values": [
-                        "classified as APA"
-                    ]
-                },
-                {
-                    "key": "calgary_apa_ml_v1_confidence",
-                    "operator": ">=",
-                    "values": [
-                        "95"
-                    ]
-                }
-            ]
+            "ephemeris_metadata_filters": {
+                "logical_operator": "AND",
+                "expressions": [
+                    {
+                        "key": "calgary_apa_ml_v1",
+                        "operator": "in",
+                        "values": [
+                            "classified as APA"
+                        ]
+                    },
+                    {
+                        "key": "calgary_apa_ml_v1_confidence",
+                        "operator": ">=",
+                        "values": [
+                            "95"
+                        ]
+                    }
+                ]
+            }
         }
     ]
     space_params = [
