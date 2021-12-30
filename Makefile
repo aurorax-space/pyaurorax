@@ -28,16 +28,16 @@ test-bandit bandit:
 	poetry run bandit -r pyaurorax
 
 test-pytest pytest:
-	poetry run pytest
+	poetry run pytest -v
 
 test-pytest-unauthorized-access:
-	poetry run pytest -k "test_AuroraXUnauthorizedException"
+	poetry run pytest -v -k "test_AuroraXUnauthorizedException"
 
 test-pytest-read:
-	poetry run pytest -k "not test_AuroraXUnauthorizedException and not add and not upload and not update and not delete"
+	poetry run pytest -v -k "not test_AuroraXUnauthorizedException and not add and not upload and not update and not delete"
 
 test-pytest-create-update-delete:
-	poetry run pytest -k "add or upload or update or delete"
+	poetry run pytest -v -k "add or upload or update or delete"
 
 test-additional:
 	@echo "Type-checking ...\n============================="

@@ -160,7 +160,7 @@ def upload(identifier: int, records: List[DataProduct], validate_source: bool = 
 
 def delete_daterange(data_source: pyaurorax.sources.DataSource, start: datetime.datetime,
                      end: datetime.datetime, data_product_types: List[str] = None,
-                     metadata_filters: List[Dict] = None) -> int:
+                     metadata_filters: Dict = None) -> int:
     """
     Deletes data products associated with a data source in the date range provided. This method is asynchronous.
 
@@ -194,7 +194,7 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource, start: datetime.
                                            platforms=[data_source.platform],
                                            instrument_types=[
                                                data_source.instrument_type],
-                                           metadata_filters=[] if not metadata_filters else metadata_filters,
+                                           metadata_filters={} if not metadata_filters else metadata_filters,
                                            data_product_type_filters=[] if not data_product_types else data_product_types)
     except Exception as e:
         raise pyaurorax.AuroraXException(e)
@@ -273,7 +273,7 @@ class Search():
                 "string"
             ]
         }
-    data_product_type_filters: list of dictionaries describing data product  types to filter on e.g. "keogram",
+    data_product_type_filters: list of dictionaries describing data product types to filter on e.g. "keogram",
         defaults to None.
         e.g. {
             "key": "string",
