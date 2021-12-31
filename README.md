@@ -7,7 +7,7 @@
 
 PyAuroraX is a Python library for interacting with [AuroraX](https://aurorax.space), a project working to be the world's first and foremost data platform for auroral science. The primary objective of AuroraX is to enable mining and exploration of existing and future auroral data, enabling key science and enhancing the benefits of the world's investment in auroral instrumentation. This will be accomplished with the development of key systems/standards for uniform metadata generation and search, image content analysis, interfaces to leading international tools, and a community involvement that includes more than 80% of the world's data providers.
 
-Documentation can be found at [here](https://docs.aurorax.space/python_libraries/pyaurorax/overview)
+Documentation can be found at [here](https://docs.aurorax.space/python_libraries/pyaurorax/overview).
 
 PyAuroraX officially supports Python 3.6, 3.7, 3.8, and 3.9 (Python 3.10 not currently supported).
 
