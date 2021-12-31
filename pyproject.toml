@@ -3,17 +3,23 @@ name = "pyaurorax"
 version = "0.9.0"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
-homepage = "https://aurorax.space/data/apiLibraries"
+homepage = "https://docs.aurorax.space"
 repository = "https://github.com/aurorax-space/pyaurorax"
-authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
-maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
+authors = [
+    "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
+    "Darren Chaddock <dchaddoc@ucalgary.ca>"
+]
+maintainers = [
+    "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
+    "Darren Chaddock <dchaddoc@ucalgary.ca>"
+]
 license = "MIT"
 packages = [
     { include = "pyaurorax" },
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=3.6,<3.10"
 requests = "^2.25.1"
 humanize = "^3.2.0"
 aacgmv2 = "^2.6.2"

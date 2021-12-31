@@ -9,7 +9,7 @@ PyAuroraX is a Python library for interacting with [AuroraX](https://aurorax.spa
 
 Documentation can be found at [here](https://docs.aurorax.space/python_libraries/pyaurorax/overview)
 
-PyAuroraX officially supports Python 3.6+.
+PyAuroraX officially supports Python 3.6, 3.7, 3.8, and 3.9 (Python 3.10 not currently supported).
 
 ## Installation
 

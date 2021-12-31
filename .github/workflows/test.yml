@@ -6,66 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 
-jobs:
-  unauthorized_access_tests:
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-    - name: Install Poetry and dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install poetry
-        poetry install
-    - name: Run unauthorized access test (pytest)
-      run: |
-        make test-pytest-unauthorized-access
-      env: 
-        AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
-  
-  build_and_read-only_tests:
+jobs:   
+  tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Poetry and dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install poetry
-        poetry install
-    - name: Style guide enforcing (flake8)
-      run: |
-        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        poetry run flake8 . --count --ignore=W391,W503 --max-complexity=20 --max-line-length=127 --statistics
-    - name: Linting (pylint)
-      run: |
-        poetry run pylint pyaurorax
-    - name: Security analysis (bandit)
-      run: |
-        poetry run bandit -r pyaurorax    
-    - name: Run tests (pytest)
-      run: |
-        make test-pytest-read
-      env: 
-        AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
-  
-  create-update-delete_tests:
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
       max-parallel: 1
     steps:
     - uses: actions/checkout@v2
@@ -78,18 +25,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry
         poetry install
-    - name: Style guide enforcing (flake8)
+    - name: Linting tests
       run: |
-        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        poetry run flake8 . --count --ignore=W391,W503 --max-complexity=20 --max-line-length=127 --statistics
-    - name: Linting (pylint)
+        make test-linting
+    - name: Run functionality tests (pytest)
       run: |
-        poetry run pylint pyaurorax
-    - name: Security analysis (bandit)
-      run: |
-        poetry run bandit -r pyaurorax    
-    - name: Run tests (pytest)
-      run: |
-        make test-pytest-create-update-delete
+        make test-pytest
       env: 
         AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
