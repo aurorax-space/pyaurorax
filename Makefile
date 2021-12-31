@@ -1,4 +1,4 @@
-.PHONY: install update test test-flake8 test-pylint test-bandit test-pytest test-additional clean publish
+.PHONY: install update test test-linting test-flake8 test-pylint test-bandit test-pytest test-additional clean publish
 
 all:
 
@@ -15,7 +15,9 @@ update upgrade:
 clean:
 	@rm -rf pyaurorax.egg-info build dist
 
-test: test-flake8 test-pylint test-bandit test-pytest
+test: test-linting test-pytest
+
+test-linting: test-flake8 test-pylint test-bandit
 
 test-flake8 flake8:
 	poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
