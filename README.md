@@ -22,8 +22,8 @@ $ python -m pip install pyaurorax
 Alternatively, you can install the latest development version from the Github repository
 ```console
 $ git clone https://github.com/aurorax-space/pyaurorax.git
-cd pyaurorax
-python -m pip install .
+$ cd pyaurorax
+$ python -m pip install .
 ```
 
 ## Usage
