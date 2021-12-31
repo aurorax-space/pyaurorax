@@ -1,8 +1,10 @@
+import pytest
 import pyaurorax
 import datetime
-from numpy import floor
+import numpy as np
 
 
+@pytest.mark.util
 def test_convert_nbtrace_northern():
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -14,9 +16,10 @@ def test_convert_nbtrace_northern():
     geo_location = pyaurorax.Location(lat=lat, lon=lon)
     nbtrace = pyaurorax.util.ground_geo_to_nbtrace(geo_location, timestamp)
 
-    assert floor(nbtrace.lat) == lat and floor(nbtrace.lon) == lon
+    assert np.floor(nbtrace.lat) == lat and np.floor(nbtrace.lon) == lon
 
 
+@pytest.mark.util
 def test_convert_nbtrace_southern():
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -28,9 +31,10 @@ def test_convert_nbtrace_southern():
     geo_location = pyaurorax.Location(lat=-lat, lon=lon)
     nbtrace = pyaurorax.util.ground_geo_to_nbtrace(geo_location, timestamp)
 
-    assert floor(nbtrace.lat) == 58 and floor(nbtrace.lon) == -9
+    assert np.floor(nbtrace.lat) == 58 and np.floor(nbtrace.lon) == -9
 
 
+@pytest.mark.util
 def test_convert_sbtrace_northern():
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -42,9 +46,10 @@ def test_convert_sbtrace_northern():
     geo_location = pyaurorax.Location(lat=lat, lon=lon)
     sbtrace = pyaurorax.util.ground_geo_to_sbtrace(geo_location, timestamp)
 
-    assert floor(sbtrace.lat) == lat and floor(sbtrace.lon) == lon
+    assert np.floor(sbtrace.lat) == lat and np.floor(sbtrace.lon) == lon
 
 
+@pytest.mark.util
 def test_convert_sbtrace_southern():
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -56,4 +61,4 @@ def test_convert_sbtrace_southern():
     geo_location = pyaurorax.Location(lat=-lat, lon=lon)
     sbtrace = pyaurorax.util.ground_geo_to_sbtrace(geo_location, timestamp)
 
-    assert floor(sbtrace.lat) == -48 and floor(sbtrace.lon) == 39
+    assert np.floor(sbtrace.lat) == -48 and np.floor(sbtrace.lon) == 39

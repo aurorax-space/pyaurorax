@@ -1,9 +1,11 @@
+import pytest
 import pyaurorax
 import datetime
 
 
+@pytest.mark.availability
 def test_ephemeris_availability():
-
+    # set params
     start_date = datetime.datetime(2019, 1, 1)
     end_date = datetime.date(2019, 1, 2)
     program = "swarm"
@@ -18,12 +20,16 @@ def test_ephemeris_availability():
                                                     instrument_type=instrument_type,
                                                     slow=False)
 
-    assert type(availability) is list and len(availability) > 0 and type(
-        availability[0]) is pyaurorax.availability.AvailabilityResult and availability[0].data_source.program == "swarm"
+    # check
+    assert type(availability) is list \
+        and len(availability) > 0 \
+        and type(availability[0]) is pyaurorax.availability.AvailabilityResult \
+        and availability[0].data_source.program == "swarm"
 
 
+@pytest.mark.availability
 def test_data_product_availability():
-
+    # set params
     start_date = datetime.datetime(2019, 1, 1)
     end_date = datetime.date(2019, 1, 2)
     program = "trex"
@@ -36,5 +42,8 @@ def test_data_product_availability():
                                                         instrument_type=instrument_type,
                                                         slow=True)
 
-    assert type(availability) is list and len(availability) > 0 and type(
-        availability[0]) is pyaurorax.availability.AvailabilityResult and availability[0].data_source.program == "trex"
+    # check
+    assert type(availability) is list \
+        and len(availability) > 0 \
+        and type(availability[0]) is pyaurorax.availability.AvailabilityResult \
+        and availability[0].data_source.program == "trex"

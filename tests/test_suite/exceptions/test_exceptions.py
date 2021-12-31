@@ -1,25 +1,32 @@
+import pytest
+import datetime
+import time
 import pyaurorax
 from pyaurorax.exceptions import (AuroraXConflictException, AuroraXDuplicateException,
-                                  AuroraXNotFoundException, AuroraXUnauthorizedException, AuroraXValidationException)
-import datetime
-import pytest
-import time
+                                  AuroraXNotFoundException, AuroraXUnauthorizedException,
+                                  AuroraXValidationException)
 
+# globals
 ACCOUNTS_URL = "/api/v1/accounts"
 
 
+@pytest.mark.exceptions
 def test_AuroraXNotFoundException():
     # test finding a source that doesn't exist
     with pytest.raises(AuroraXNotFoundException):
-        pyaurorax.sources.get(
-            "does-not-exist", "does-not-exist", "does-not-exist")
+        pyaurorax.sources.get("does-not-exist",
+                              "does-not-exist",
+                              "does-not-exist")
 
 
+@pytest.mark.exceptions
 def test_AuroraXDuplicateException():
     # test making duplicate data source
     with pytest.raises(AuroraXDuplicateException):
-        existing_source = pyaurorax.sources.get(
-            "test-program", "test-platform", "pytest", "full_record")
+        existing_source = pyaurorax.sources.get("test-program",
+                                                "test-platform",
+                                                "pytest",
+                                                "full_record")
 
         if not existing_source:
             assert False
@@ -30,6 +37,7 @@ def test_AuroraXDuplicateException():
         pyaurorax.sources.add(existing_source)
 
 
+@pytest.mark.exceptions
 def test_AuroraXValidationException_ephemeris():
     with pytest.raises(AuroraXValidationException):
         # set values
@@ -47,8 +55,8 @@ def test_AuroraXValidationException_ephemeris():
         sbtrace = pyaurorax.Location(lat=7.89, lon=101.23)
 
         # get the ephemeris source ID
-        source = pyaurorax.sources.get(
-            program, platform, instrument_type, format="basic_info")
+        source = pyaurorax.sources.get(program, platform, instrument_type,
+                                       format="basic_info")
         source.instrument_type = "wrong-type"
 
         # create Ephemeris object
@@ -68,6 +76,7 @@ def test_AuroraXValidationException_ephemeris():
         pyaurorax.ephemeris.upload(source.identifier, records, True)
 
 
+@pytest.mark.exceptions
 def test_AuroraXValidationException_data_product():
     with pytest.raises(AuroraXValidationException):
         # set values
@@ -103,6 +112,7 @@ def test_AuroraXValidationException_data_product():
         pyaurorax.data_products.upload(source.identifier, records, True)
 
 
+@pytest.mark.exceptions
 @pytest.fixture(scope="function")
 def set_bad_api_key():
     api_key = pyaurorax.api.get_api_key()
@@ -112,14 +122,16 @@ def set_bad_api_key():
     pyaurorax.api.authenticate(api_key)
 
 
+@pytest.mark.exceptions
 def test_AuroraXUnauthorizedException(set_bad_api_key):
     with pytest.raises(AuroraXUnauthorizedException):
-        req = pyaurorax.AuroraXRequest(
-            method="get", url=pyaurorax.api.urls.base_url + ACCOUNTS_URL)
+        req = pyaurorax.AuroraXRequest(method="get",
+                                       url=pyaurorax.api.urls.base_url + ACCOUNTS_URL)
 
         req.execute()
 
 
+@pytest.mark.exceptions
 def test_AuroraXConflictException():
     with pytest.raises(AuroraXConflictException):
         # add a record for the test instrument, then try deleting the instrument

@@ -1,9 +1,10 @@
-from pyaurorax.conjunctions import Conjunction
-import pyaurorax
-import datetime
 import pytest
+import datetime
+import pyaurorax
+from pyaurorax.conjunctions import Conjunction
 
 
+@pytest.mark.conjunctions
 def test_search_conjunctions_asynchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 6, 59, 59)
@@ -24,6 +25,7 @@ def test_search_conjunctions_asynchronous():
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 
+@pytest.mark.conjunctions
 def test_search_multi_conjunctions_synchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 4, 23, 59, 59)
@@ -48,6 +50,7 @@ def test_search_multi_conjunctions_synchronous():
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 
+@pytest.mark.conjunctions
 def test_search_multi_conjunctions_response_format_synchronous():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 4, 23, 59, 59)
@@ -76,13 +79,13 @@ def test_search_multi_conjunctions_response_format_synchronous():
                                           "data_sources": {
                                               "identifier": True
                                           }
-                                      }
-                                      )
+                                      })
 
     assert len(s.data) > 0 and type(
         s.data[0]) is dict and "max_distance" not in s.data[0].keys()
 
 
+@pytest.mark.conjunctions
 def test_create_conjunction_object():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 6, 59, 59)
@@ -104,6 +107,7 @@ def test_create_conjunction_object():
     assert type(c.data[0]) is Conjunction
 
 
+@pytest.mark.conjunctions
 def test_search_conjunctions_with_metadata_filters():
     start = datetime.datetime(2019, 3, 1, 0, 0, 0)
     end = datetime.datetime(2019, 3, 31, 23, 59, 59)
@@ -146,6 +150,7 @@ def test_search_conjunctions_with_metadata_filters():
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 
+@pytest.mark.conjunctions
 def test_search_conjunctions_space_only_with_hemispheres():
     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
     end = datetime.datetime(2019, 2, 1, 23, 59, 59)
@@ -168,6 +173,7 @@ def test_search_conjunctions_space_only_with_hemispheres():
     assert len(s.data) > 0 and type(s.data[0]) is Conjunction
 
 
+@pytest.mark.conjunctions
 def test_search_conjunctions_with_max_distances():
     start = datetime.datetime(2019, 2, 5, 0, 0, 0)
     end = datetime.datetime(2019, 2, 5, 23, 59, 59)
@@ -203,6 +209,7 @@ def test_search_conjunctions_with_max_distances():
         g1s1_distance_set and s1s2_distance_set and len(s.data) > 0
 
 
+@pytest.mark.conjunctions
 def test_search_conjunctions_with_conjunction_types():
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
@@ -224,6 +231,7 @@ def test_search_conjunctions_with_conjunction_types():
     assert len(s.data) > 0 and s.data[0].conjunction_type == "sbtrace"
 
 
+@pytest.mark.conjunctions
 def test_cancel_conjunction_search():
     start = datetime.datetime(2019, 1, 1, 0, 0, 0)
     end = datetime.datetime(2019, 12, 31, 23, 59, 59)
@@ -245,6 +253,7 @@ def test_cancel_conjunction_search():
     assert result == 1
 
 
+@pytest.mark.conjunctions
 def test_too_many_criteria_blocks():
     with pytest.raises(pyaurorax.exceptions.AuroraXBadParametersException):
         start = datetime.datetime(2019, 1, 1, 0, 0, 0)
@@ -293,6 +302,7 @@ def test_too_many_criteria_blocks():
         s.execute()
 
 
+@pytest.mark.conjunctions
 def test_epoch_search_precision():
     start = datetime.datetime(2008, 1, 1, 0, 0, 0)
     end = datetime.datetime(2008, 1, 31, 23, 59, 59)
