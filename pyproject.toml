@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.8.0"
+version = "0.9.0"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
 homepage = "https://aurorax.space/data/apiLibraries"
@@ -15,12 +15,12 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.6"
 requests = "^2.25.1"
-flake8 = "^3.8.4"
-pydantic = "^1.7.3"
 humanize = "^3.2.0"
 aacgmv2 = "^2.6.2"
+pydantic = "^1.7.3"
 
 [tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
 pytest = "^6.2.1"
 tabulate = "^0.8.7"
 mypy = "^0.790"
