@@ -37,7 +37,7 @@ $ python -m pip install .
 The program `aurorax-cli` is included in the PyAuroraX package as a command line tool.
 
 ```
-aurorax-cli --help
+$ aurorax-cli --help
 ```
 
 ## Development
