@@ -10,24 +10,23 @@ from typing import List, Dict
 
 class DataSource(BaseModel):
     """
-    Data source data type.
+    Data source data type
 
     Attributes:
-        identifier: an integer unique to the data source.
-        program: a string representing the data source program.
-        platform: a string representing the data source platform.
-        instrument_type: a string representing the data source instrument type.
-        source_type: a string representing the data source type.
-        display_name: a string representing the data source's proper display name.
-        metadata: a dictionary of metadata properties.
-        owner: a string representing the data source's owner in AuroraX.
+        identifier: an integer unique to the data source
+        program: a string representing the data source program
+        platform: a string representing the data source platform
+        instrument_type: a string representing the data source instrument type
+        source_type: a string representing the data source type
+        display_name: a string representing the data source's proper display name
+        metadata: a dictionary of metadata properties
+        owner: a string representing the data source's owner in AuroraX
         maintainers: a list of strings representing the email addresses of AuroraX accounts
-            that can alter this data source and its associated records.
+            that can alter this data source and its associated records
         ephemeris_metadata_schema: a list of dictionaries capturing the metadata keys and values
-            that can appear in ephemeris records associated with the data source.
+            that can appear in ephemeris records associated with the data source
         data_product_metadata_schema: a list of dictionaries capturing the metadata keys and values
-            that can appear in data product records associated with the data source.
-
+            that can appear in data product records associated with the data source
     """
     identifier: int = None
     program: str = None
@@ -46,8 +45,7 @@ class DataSource(BaseModel):
         String method.
 
         Returns:
-            String format of DataSource object.
-
+            String format of DataSource object
         """
         return self.__repr__()
 
@@ -56,8 +54,7 @@ class DataSource(BaseModel):
         Object representation.
 
         Returns:
-            Object representation of DataSource object.
-
+            Object representation of DataSource object
         """
         return pprint.pformat(self.__dict__)
 
@@ -104,14 +101,14 @@ class DataSourceStatistics(BaseModel):
         return pprint.pformat(self.__dict__)
 
 
-def list(order: str = "identifier", format: str = "basic_info") -> List[DataSource]:
+def list(order: str = "identifier", format: str = "full_record") -> List[DataSource]:
     """
     Retrieve all data source records.
 
     Attributes:
         order: string value to order results by (identifier, program, platform,
-            instrument_type, display_name, owner), defaults to "identifier".
-        format: string record format, defaults to "basic_info".
+               instrument_type, display_name, owner), defaults to "identifier".
+        format: string record format, defaults to "full_record".
 
     Returns:
         A list of AuroraX DataSource objects.
@@ -124,8 +121,9 @@ def list(order: str = "identifier", format: str = "basic_info") -> List[DataSour
         format: format
     }
     # make request
-    req = pyaurorax.AuroraXRequest(
-        method="get", url=pyaurorax.api.urls.data_sources_url, params=params if format else None)
+    req = pyaurorax.AuroraXRequest(method="get",
+                                   url=pyaurorax.api.urls.data_sources_url,
+                                   params=params if format else None)
     res = req.execute()
 
     # order results
@@ -138,7 +136,7 @@ def list(order: str = "identifier", format: str = "basic_info") -> List[DataSour
 def get(program: str,
         platform: str,
         instrument_type: str,
-        format: str = "basic_info") -> DataSource:
+        format: str = "full_record") -> DataSource:
     """
     Retrieve a specific data source record.
 
@@ -146,7 +144,7 @@ def get(program: str,
         program: the string name of the program.
         platform: the string name of the platform.
         instrument_type: the string name of the instrument type.
-        format: record format, defaults to "basic_info".
+        format: record format, defaults to "full_record".
 
     Returns:
         An AuroraX DataSource object matching the input parameters.
@@ -155,7 +153,6 @@ def get(program: str,
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
         pyaurorax.exceptions.AuroraXNotFoundException: source not found.
-
     """
     # make request
     params = {
@@ -164,14 +161,14 @@ def get(program: str,
         "instrument_type": instrument_type,
         "format": format,
     }
-    req = pyaurorax.AuroraXRequest(
-        method="get", url=pyaurorax.api.urls.data_sources_url, params=params)
+    req = pyaurorax.AuroraXRequest(method="get",
+                                   url=pyaurorax.api.urls.data_sources_url,
+                                   params=params)
     res = req.execute()
 
     # set results to the first thing
     if (len(res.data) == 1):
         res.data = res.data[0]
-
         return DataSource(**res.data)
     else:
         raise pyaurorax.AuroraXNotFoundException("Data source not found")
@@ -182,7 +179,7 @@ def get_using_filters(program: str = None,
                       instrument_type: str = None,
                       source_type: str = None,
                       owner: str = None,
-                      format: str = "basic_info",
+                      format: str = "full_record",
                       order: str = "identifier",) -> List[DataSource]:
     """
     Retrieve all data source records matching a filter.
@@ -193,7 +190,7 @@ def get_using_filters(program: str = None,
         instrument_type: the string name of the instrument type.
         source_type: the string name of the data source type.
         owner: the AuroraX data source owner's email address.
-        format: record format, defaults to "basic_info".
+        format: record format, defaults to "full_record".
         order: string value to order results by (identifier, program, platform,
             instrument_type, display_name, owner), defaults to "identifier".
 
@@ -203,7 +200,6 @@ def get_using_filters(program: str = None,
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-
     """
     # make request
     params = {
@@ -214,8 +210,9 @@ def get_using_filters(program: str = None,
         "owner": owner,
         "format": format,
     }
-    req = pyaurorax.AuroraXRequest(
-        method="get", url=pyaurorax.api.urls.data_sources_url, params=params)
+    req = pyaurorax.AuroraXRequest(method="get",
+                                   url=pyaurorax.api.urls.data_sources_url,
+                                   params=params)
     res = req.execute()
 
     # order results
@@ -228,7 +225,7 @@ def get_using_filters(program: str = None,
         return []
 
 
-def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSource:
+def get_using_identifier(identifier: int, format: str = "full_record") -> DataSource:
     """
     Retrieve data source record matching an identifier.
 
@@ -242,7 +239,6 @@ def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSou
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-
     """
     # make request
     params = {
@@ -257,14 +253,14 @@ def get_using_identifier(identifier: int, format: str = "basic_info") -> DataSou
 
 
 def get_stats(identifier: int,
-              format: str = "basic_info",
+              format: str = "full_record",
               slow: bool = False) -> Dict:
     """
     Retrieve statistics for a data source.
 
     Attributes:
         identifier: an integer unique to the data source.
-        format: record format, defaults to "basic_info".
+        format: record format, defaults to "full_record".
         slow: a boolean indicating whether to use slow method which gets most up-to-date stats info.
 
     Returns:
@@ -274,7 +270,6 @@ def get_stats(identifier: int,
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
         pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
-
     """
     # make request
     params = {
@@ -303,7 +298,6 @@ def add(data_source: DataSource) -> DataSource:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
         pyaurorax.exceptions.AuroraXDuplicateException: duplicate data source, already exists.
-
     """
 
     # do request
@@ -321,20 +315,21 @@ def add(data_source: DataSource) -> DataSource:
     if (data_source.identifier is not None):
         request_data["identifier"] = data_source.identifier
 
-    req = pyaurorax.AuroraXRequest(
-        method="post", url=pyaurorax.api.urls.data_sources_url, body=request_data)
+    req = pyaurorax.AuroraXRequest(method="post",
+                                   url=pyaurorax.api.urls.data_sources_url,
+                                   body=request_data)
     res = req.execute()
 
     # evaluate response
     if (res.status_code == 409):
-        raise pyaurorax.AuroraXDuplicateException(
-            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
+        raise pyaurorax.AuroraXDuplicateException("%s - %s" % (res.data["error_code"],
+                                                               res.data["error_message"]))
 
     # return
     try:
         return DataSource(**res.data)
     except Exception:
-        raise pyaurorax.AuroraXException("Could not create data source.")
+        raise pyaurorax.AuroraXException("Could not create data source")
 
 
 def delete(identifier: int) -> int:
@@ -352,7 +347,6 @@ def delete(identifier: int) -> int:
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
         pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
         pyaurorax.exceptions.AuroraXConflictException: conflict of some type.
-
     """
     # do request
     url = "%s/%d" % (pyaurorax.api.urls.data_sources_url, identifier)
@@ -362,11 +356,11 @@ def delete(identifier: int) -> int:
 
     # evaluate response
     if (res.status_code == 400):
-        raise pyaurorax.AuroraXBadParametersException(
-            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
+        raise pyaurorax.AuroraXBadParametersException("%s - %s" % (res.data["error_code"],
+                                                                   res.data["error_message"]))
     elif (res.status_code == 409):
-        raise pyaurorax.AuroraXConflictException(
-            "%s - %s" % (res.data["error_code"], res.data["error_message"]))
+        raise pyaurorax.AuroraXConflictException("%s - %s" % (res.data["error_code"],
+                                                              res.data["error_message"]))
 
     # return
     return 1
@@ -390,12 +384,11 @@ def update(data_source: DataSource) -> DataSource:
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
         pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
         pyaurorax.exceptions.AuroraXBadParametersException: missing parameters.
-
     """
     if not all([data_source.identifier, data_source.program, data_source.platform,
                 data_source.instrument_type, data_source.source_type, data_source.display_name]):
-        raise pyaurorax.AuroraXBadParametersException(
-            "One or more required data source fields are missing. Update operation aborted.")
+        raise pyaurorax.AuroraXBadParametersException("One or more required data source fields "
+                                                      "are missing, update operation aborted")
 
     # set URL
     url = f"{pyaurorax.api.urls.data_sources_url}/{data_source.identifier}"
@@ -406,9 +399,12 @@ def update(data_source: DataSource) -> DataSource:
 
     # return
     try:
-        return pyaurorax.sources.get(data_source.program, data_source.platform, data_source.instrument_type, "full_record")
+        return pyaurorax.sources.get(data_source.program,
+                                     data_source.platform,
+                                     data_source.instrument_type,
+                                     format="full_record")
     except Exception:
-        raise pyaurorax.AuroraXException("Could not update data source.")
+        raise pyaurorax.AuroraXException("Could not update data source")
 
 
 def partial_update(identifier: int,
@@ -451,11 +447,10 @@ def partial_update(identifier: int,
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error.
         pyaurorax.exceptions.AuroraXNotFoundException: data source not found.
         pyaurorax.exceptions.AuroraXBadParametersException: missing parameters.
-
     """
     if not identifier:
-        raise pyaurorax.AuroraXBadParametersException(
-            "Required identifier field is missing. Update operation aborted.")
+        raise pyaurorax.AuroraXBadParametersException("Required identifier field is "
+                                                      "missing, update operation aborted")
 
     # create a DataSource
     ds = DataSource(identifier=identifier,
@@ -479,6 +474,6 @@ def partial_update(identifier: int,
 
     # return
     try:
-        return pyaurorax.sources.get_using_identifier(ds.identifier, "full_record")
+        return pyaurorax.sources.get_using_identifier(ds.identifier, format="full_record")
     except Exception:
-        raise pyaurorax.AuroraXException("Could not update data source.")
+        raise pyaurorax.AuroraXException("Could not update data source")

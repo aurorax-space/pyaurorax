@@ -17,6 +17,24 @@ license = "MIT"
 packages = [
     { include = "pyaurorax" },
 ]
+classifiers = [
+    "Natural Language :: English",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries",
+]
+keywords = [
+    "aurorax",
+    "space physics",
+    "aurora",
+    "aurora borealis",
+    "northern lights",
+    "southern lights",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.6,<3.10"
@@ -24,6 +42,8 @@ requests = "^2.25.1"
 humanize = "^3.2.0"
 aacgmv2 = "^2.6.2"
 pydantic = "^1.7.3"
+click = "^8.0.3"
+texttable = "^1.6.4"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
@@ -33,6 +53,9 @@ mypy = "^0.790"
 pylint = "^2.6.0"
 bandit = "^1.7.0"
 autopep8 = "^1.5.4"
+
+[tool.poetry.scripts]
+aurorax-cli = "pyaurorax.cli.cli:cli"
 
 [build-system]
 requires = ["poetry>=0.12"]
