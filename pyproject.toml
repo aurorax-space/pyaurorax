@@ -53,6 +53,7 @@ mypy = "^0.790"
 pylint = "^2.6.0"
 bandit = "^1.7.0"
 autopep8 = "^1.5.4"
+pdoc3 = "^0.10.0"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"
