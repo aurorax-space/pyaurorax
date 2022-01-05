@@ -94,6 +94,11 @@ Below are some more commands for advanced usages of PyTest.
 - `poetry run pytest --markers` List all markers (includes builtin, plugin and per-project ones)
 - `cat pytest.ini` List custom markers
 
+You can also run Pytest against a different API. By default, it runs agains the staging API, but you also tell it to run against the production API or a local instance.
+
+- `poetry run pytest -v --env=production` Run all tests against production API, using the AURORAX_APIKEY_PRODUCTION environment variable
+- `poetry run pytest --env=local --host=http://localhost:3000` Run all tests against a local instance of the API, using the AURORAX_APIKEY_LOCAL environment variable
+
 ### Additional Testing
 
 To run additional tests that are not integrated into the CI pipeline, run the following:
