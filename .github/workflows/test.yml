@@ -47,12 +47,18 @@ jobs:
     - name: Style guide enforcing (flake8)
       run: |
         make test-flake8
+    - name: PEP8 checking (pycodestyle)
+      run: |
+        make test-pycodestyle
     - name: Linting (pylint)
       run: |
         make test-pylint
     - name: Security analysis (bandit)
       run: |
         make test-bandit    
+    - name: Type-checking (mypy)
+      run: |
+        make test-mypy    
     - name: Run functionality tests (pytest)
       run: |
         make test-pytest-read
