@@ -294,7 +294,7 @@ def delete(data_source: pyaurorax.sources.DataSource,
     Delete data products by URL. This method is asynchronous.
 
     Args:
-        data_source: the pyaurorax.sources.DataSource source associated with the 
+        data_source: the pyaurorax.sources.DataSource source associated with the
             data product records. Identifier, program, platform, and instrument_type
             are required.
         urls: list of URL strings associated with the data products being deleted
