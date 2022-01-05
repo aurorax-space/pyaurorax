@@ -21,7 +21,7 @@ test-linting: test-flake8 test-pylint test-bandit
 
 test-flake8 flake8:
 	poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-	poetry run flake8 . --count --ignore=W391,W503 --max-complexity=20 --max-line-length=127 --statistics
+	poetry run flake8 . --count --ignore=W391,W503,F541 --max-complexity=20 --max-line-length=127 --statistics
 	
 test-pylint pylint:
 	poetry run pylint pyaurorax

@@ -80,6 +80,12 @@ The PyTest functionality tests include several categories of tests. You can run 
 - `poetry run pytest -v -m availability` Perform only the tests for the "availability" marker
 - `poetry run pytest -v -m conjunctions` Perform only the tests for the "conjunctions" marker
 - `poetry run pytest -v -m ephemeris` Perform only the tests for the "ephemeris" marker
+- `poetry run pytest -v -m exceptions` Perform only the tests for the "exceptions" marker
+- `poetry run pytest -v -m location` Perform only the tests for the "location" marker
+- `poetry run pytest -v -m metadata` Perform only the tests for the "metadata" marker
+- `poetry run pytest -v -m requests` Perform only the tests for the "request" marker
+- `poetry run pytest -v -m sources` Perform only the tests for the "sources" marker
+- `poetry run pytest -v -m util` Perform only the tests for the "util" marker
 
 Below are some more commands for advanced usages of PyTest.
 

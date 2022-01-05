@@ -1,5 +1,5 @@
 """
-The exceptions module contains descriptive exceptions unique to AuroraX.
+The exceptions module contains exceptions unique to the PyAuroraX library
 """
 
 
@@ -16,62 +16,62 @@ class AuroraXException(Exception):
 
 class AuroraXNotFoundException(AuroraXException):
     """
-    The AuroraX record was not found.
+    The AuroraX record was not found
     """
     pass
 
 
 class AuroraXDuplicateException(AuroraXException):
     """
-    A duplicate record already exists.
+    A duplicate record already exists
     """
     pass
 
 
 class AuroraXValidationException(AuroraXException):
     """
-    Validation of data failed.
+    Validation of data failed
     """
     pass
 
 
 class AuroraXUnexpectedContentTypeException(AuroraXException):
     """
-    The API responded with an unexpected content type.
+    The API responded with an unexpected content type
     """
     pass
 
 
 class AuroraXMaxRetriesException(AuroraXException):
     """
-    The maximum number of retries for the request has been reached.
+    The maximum number of retries for the request has been reached
     """
     pass
 
 
 class AuroraXBadParametersException(AuroraXException):
     """
-    Bad parameters were given in the request.
+    Bad parameters were given in the request
     """
     pass
 
 
 class AuroraXUnauthorizedException(AuroraXException):
     """
-    A privileged operation was attempted without authorization.
+    A privileged operation was attempted without authorization
     """
     pass
 
 
 class AuroraXConflictException(AuroraXException):
     """
-    A conflict occurred while modifying records.
+    A conflict occurred while modifying records
     """
     pass
 
 
 class AuroraXUploadException(AuroraXException):
     """
-    Error occurred during upload operation.
+    Error occurred during upload operation
     """
     pass

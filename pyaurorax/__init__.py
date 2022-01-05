@@ -1,11 +1,15 @@
 """
-The PyAuroraX package provides a way to interact with the [AuroraX API](https://aurorax.space/data/api_libraries).
-It is intended to provide an intuitive process for those in the space physics and citizen science communities to
-programmatically query AuroraX's vast database for conjunctions, ephemeris or data product records, data availability,
-and other more. PyAuroraX requires Python 3.6, 3.7, 3.8, or 3.9 (Python 3.10 currently not supported).
+The PyAuroraX package provides a way to interact with the
+[AuroraX API](https://aurorax.space/data/api_libraries). It is intended
+to provide an intuitive process for those in the space physics and related
+communities to programmatically query AuroraX's vast database for conjunctions,
+ephemeris or data product records, data availability information, and more.
+PyAuroraX requires Python 3.6, 3.7, 3.8, or 3.9 (Python 3.10 currently not
+supported).
 
-Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax) and explore the evolving ecosystem of
-visualizations, tools, and data at [AuroraX](https://aurorax.space/).
+Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax)
+and explore the evolving ecosystem of visualizations, tools, and data
+at [AuroraX](https://aurorax.space/).
 
 For an overview of intended usage and examples, visit the
 [AuroraX Documentation website](https://docs.aurorax.space/python_libraries/pyaurorax/).
@@ -47,16 +51,16 @@ from .exceptions import AuroraXConflictException
 from .exceptions import AuroraXUploadException
 
 # pull in models
-from .models import Location
+from .location import Location
 
-# pull in modules
-from pyaurorax import requests
-from pyaurorax import exceptions
+# pull in modules (order matters otherwise we get circular import errors)
 from pyaurorax import api
 from pyaurorax import sources
+from pyaurorax import exceptions
 from pyaurorax import metadata
+from pyaurorax import requests
+from pyaurorax import util
 from pyaurorax import availability
+from pyaurorax import conjunctions
 from pyaurorax import ephemeris
 from pyaurorax import data_products
-from pyaurorax import conjunctions
-from pyaurorax import util

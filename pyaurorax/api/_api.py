@@ -1,16 +1,16 @@
-"""
-The API module contains classes and methods used throughout PyAuroraX for API interaction.
-"""
 import pyaurorax
 import json
 import pprint
-from pydantic import BaseModel
 import requests
+from pydantic import BaseModel
 from typing import Optional, Dict, Any, List, Union
-from ._internal.util import json_converter
+from .._internal.util import json_converter
+
+# pdoc init
+__pdoc__: Dict = {}
 
 # endpoint URLs
-DEFAULT_URL_BASE = "https://api.aurorax.space"
+DEFAULT_BASE_URL = "https://api.aurorax.space"
 
 # reqest globals
 DEFAULT_RETRIES = 2
@@ -26,20 +26,20 @@ __api_key = ""
 
 def get_api_key() -> str:
     """
-    Returns the currently set API key for the module.
+    Returns the currently set API key for the module
 
     Returns:
-        Current API key string.
+        Current API key string
     """
     return __api_key
 
 
 def authenticate(api_key: str) -> None:
     """
-    Set authentication values for use with subsequent queries.
+    Set authentication values for use with subsequent queries
 
-    Attributes:
-        api_key: AuroraX API key string.
+    Args:
+        api_key: AuroraX API key string
 
     """
 
@@ -49,6 +49,9 @@ def authenticate(api_key: str) -> None:
 
 
 class AuroraXResponse(BaseModel):
+    """
+    AuroraX API response class
+    """
     request: Any
     data: Any
     status_code: int
@@ -61,6 +64,9 @@ class AuroraXResponse(BaseModel):
 
 
 class AuroraXRequest(BaseModel):
+    """
+    AuroraX API request class
+    """
     url: str
     method: str
     params: Optional[Dict] = {}
@@ -89,21 +95,20 @@ class AuroraXRequest(BaseModel):
 
     def execute(self, limited_evaluation: bool = False) -> AuroraXResponse:
         """
-        Execute an AuroraX request.
+        Execute an AuroraX request
 
-        Attributes:
-            limited_evaluation: set this to True if you don't want to evaluate the response outside of
-                the retry mechanism, defaults to False.
+        Args:
+            limited_evaluation: set this to True if you don't want to evaluate
+                the response outside of the retry mechanism, defaults to False
 
         Returns:
-            An AuroraXResponse object.
+            An AuroraXResponse object
 
         Raises:
-            pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error.
-            pyaurorax.exceptions.AuroraXNotFoundException: requested resource was not found.
-            pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error.
-            pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation.
-
+            pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
+            pyaurorax.exceptions.AuroraXNotFoundException: requested resource was not found
+            pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+            pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
         """
         # sanitize data
         body_santized = json.dumps(self.body, default=json_converter)
@@ -141,7 +146,8 @@ class AuroraXRequest(BaseModel):
 
         # check if we only want to do limited evaluation
         if (limited_evaluation is True):
-            res = AuroraXResponse(request=req, data=None,
+            res = AuroraXResponse(request=req,
+                                  data=None,
                                   status_code=req.status_code)
             return res
 
@@ -195,7 +201,7 @@ class URLs:
     __DEFAULT_URL_CONJUNCTION_SEARCH = "/api/v1/conjunctions/search"
     __DEFAULT_URL_CONJUNCTION_REQUEST = "/api/v1/conjunctions/requests/{}"
 
-    def __init__(self, base_url: str = DEFAULT_URL_BASE) -> None:
+    def __init__(self, base_url: str = DEFAULT_BASE_URL) -> None:
         self.__base = base_url
         self.__data_sources = self.__DEFAULT_URL_DATA_SOURCES
         self.__stats = self.__DEFAULT_URL_STATS
@@ -222,49 +228,49 @@ class URLs:
     # -------------------
     @property
     def data_sources_url(self) -> str:
-        return "%s%s" % (self.__base, self.__data_sources)
+        return f"{self.__base}{self.__data_sources}"
 
     @property
     def stats_url(self) -> str:
-        return "%s%s" % (self.__base, self.__stats)
+        return f"{self.__base}{self.__stats}"
 
     # availability
     # -------------------
     @property
     def ephemeris_availability_url(self) -> str:
-        return "%s%s" % (self.__base, self.__ephemeris_availability)
+        return f"{self.__base}{self.__ephemeris_availability}"
 
     @property
     def data_products_availability_url(self) -> str:
-        return "%s%s" % (self.__base, self.__data_products_availability)
+        return f"{self.__base}{self.__data_products_availability}"
 
     # ephemeris
     # -------------------
     @property
     def ephemeris_search_url(self) -> str:
-        return "%s%s" % (self.__base, self.__ephemeris_search)
+        return f"{self.__base}{self.__ephemeris_search}"
 
     @property
     def ephemeris_upload_url(self) -> str:
-        return "%s%s" % (self.__base, self.__ephemeris_upload)
+        return f"{self.__base}{self.__ephemeris_upload}"
 
     @property
     def ephemeris_request_url(self) -> str:
-        return "%s%s" % (self.__base, self.__ephemeris_request)
+        return f"{self.__base}{self.__ephemeris_request}"
 
     # data products
     # -------------------
     @property
     def data_products_search_url(self) -> str:
-        return "%s%s" % (self.__base, self.__data_products_search)
+        return f"{self.__base}{self.__data_products_search}"
 
     @property
     def data_products_upload_url(self) -> str:
-        return "%s%s" % (self.__base, self.__data_products_upload)
+        return f"{self.__base}{self.__data_products_upload}"
 
     @property
     def data_products_request_url(self) -> str:
-        return "%s%s" % (self.__base, self.__data_products_request)
+        return f"{self.__base}{self.__data_products_request}"
 
     # conjunctions
     # -------------------
@@ -283,24 +289,24 @@ urls = URLs()
 
 def set_base_url(url: str) -> None:
     """
-    Change the base URL for the API (ie. change to the staging system or local server).
+    Change the base URL for the API (ie. change to the staging
+    system or local server)
 
-    Attributes:
-        url: new base url string (ie. 'https://api.staging.aurorax.space').
-
+    Args:
+        url: new base url string (ie. 'https://api.staging.aurorax.space')
     """
     urls.base_url = url
 
 
 def get_base_url() -> str:
     """
-    Returns the current base URL for the API.
+    Returns the current base URL for the API
     """
     return urls.base_url
 
 
 def reset_base_url() -> None:
     """
-    Set the base URL for the API back to the default.
+    Set the base URL for the API back to the default
     """
-    urls.base_url = DEFAULT_URL_BASE
+    urls.base_url = DEFAULT_BASE_URL
