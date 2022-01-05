@@ -1,11 +1,14 @@
-from pyaurorax.data_products import DataProduct
-import pyaurorax
+import pytest
 import datetime
 import time
+import pyaurorax
+from pyaurorax.data_products import DataProduct
 
+# globals
 MAX_WAIT_TIME = 30
 
 
+@pytest.mark.data_products
 def test_create_data_product_object():
     # set values
     program = "test-program"
@@ -32,16 +35,17 @@ def test_create_data_product_object():
         d) is DataProduct and d.data_source.instrument_type == "test-instrument-type"
 
 
+@pytest.mark.data_products
 def test_create_data_products_search_object():
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                       datetime.datetime(
-                                           2020, 1, 1, 23, 59, 59),
+                                       datetime.datetime(2020, 1, 1, 23, 59, 59),
                                        programs=["auroramax"])
 
-    assert type(s) is pyaurorax.data_products.Search and s.end == datetime.datetime(
-        2020, 1, 1, 23, 59, 59)
+    assert type(s) is pyaurorax.data_products.Search \
+        and s.end == datetime.datetime(2020, 1, 1, 23, 59, 59)
 
 
+@pytest.mark.data_products
 def test_search_data_products_synchronous():
     s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -52,6 +56,7 @@ def test_search_data_products_synchronous():
     assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
+@pytest.mark.data_products
 def test_search_data_products_asynchronous():
     s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                              datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -73,6 +78,7 @@ def test_search_data_products_asynchronous():
     assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
+@pytest.mark.data_products
 def test_search_data_products_metadata_filters_synchronous():
     metadata_filters = [
         {
@@ -107,6 +113,7 @@ def test_search_data_products_metadata_filters_synchronous():
     assert len(s.data) == len(result_filter)
 
 
+@pytest.mark.data_products
 def test_search_data_products_response_format_asynchronous():
     s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                              datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -119,8 +126,7 @@ def test_search_data_products_response_format_asynchronous():
 
                                                               },
                                                               "url": True,
-                                                              "metadata": True
-                                                              })
+                                                              "metadata": True})
 
     s.update_status()
     tries = 0
@@ -135,10 +141,12 @@ def test_search_data_products_response_format_asynchronous():
 
     s.get_data()
 
-    assert type(s.data) is list and type(
-        s.data[0]) is dict and "data_product_type" not in s.data[0].keys()
+    assert type(s.data) is list \
+        and type(s.data[0]) is dict \
+        and "data_product_type" not in s.data[0].keys()
 
 
+@pytest.mark.data_products
 def test_search_data_products_logs():
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 1, 23, 59, 59),
@@ -159,6 +167,7 @@ def test_search_data_products_logs():
     assert len(s.logs) > 0
 
 
+@pytest.mark.data_products
 def test_search_data_products_status():
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 1, 23, 59, 59),
@@ -179,6 +188,7 @@ def test_search_data_products_status():
     assert s.completed
 
 
+@pytest.mark.data_products
 def test_upload_data_products():
     # set values
     program = "test-program"
@@ -232,6 +242,7 @@ def test_upload_data_products():
     assert result == 1 and len(s.data) > 0
 
 
+@pytest.mark.data_products
 def test_delete_data_products():
     program = "test-program"
     platform = "test-platform"
@@ -272,6 +283,7 @@ def test_delete_data_products():
     assert len(s.data) == 0
 
 
+@pytest.mark.data_products
 def test_delete_data_products_daterange():
     program = "test-program"
     platform = "test-platform"
@@ -331,6 +343,7 @@ def test_delete_data_products_daterange():
     assert len(s1.data) == 0
 
 
+@pytest.mark.data_products
 def test_cancel_data_product_search():
     # set up query params
     start_dt = datetime.datetime(2018, 1, 1)
