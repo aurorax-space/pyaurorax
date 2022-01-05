@@ -1,6 +1,6 @@
 import pprint
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -28,17 +28,17 @@ class DataSource(BaseModel):
             keys and values that can appear in data product records associated with
             the data source
     """
-    identifier: int = None
-    program: str = None
-    platform: str = None
-    instrument_type: str = None
-    source_type: str = None
-    display_name: str = None
-    metadata: Dict = None
-    owner: str = None
-    maintainers: List[str] = None
-    ephemeris_metadata_schema: List[Dict] = None
-    data_product_metadata_schema: List[Dict] = None
+    identifier: Optional[int] = None
+    program: Optional[str] = None
+    platform: Optional[str] = None
+    instrument_type: Optional[str] = None
+    source_type: Optional[str] = None
+    display_name: Optional[str] = None
+    metadata: Optional[Dict] = None
+    owner: Optional[str] = None
+    maintainers: Optional[List[str]] = None
+    ephemeris_metadata_schema: Optional[List[Dict]] = None
+    data_product_metadata_schema: Optional[List[Dict]] = None
 
     def __str__(self) -> str:
         """

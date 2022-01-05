@@ -1,11 +1,13 @@
 import pyaurorax
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # pdoc init
 __pdoc__: Dict = {}
 
 
-def validate(schema: List[Dict], record: Dict, quiet: bool = False) -> bool:
+def validate(schema: List[Dict],
+             record: Dict,
+             quiet: Optional[bool] = False) -> bool:
     """
     Validate a metadata record against a schema. This checks that the
     key names match and there aren't fewer or more keys than expected.

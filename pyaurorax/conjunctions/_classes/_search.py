@@ -1,7 +1,7 @@
 import pyaurorax
 import pprint
 import datetime
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 from ._conjunction import Conjunction
 
 # pdoc init
@@ -72,11 +72,11 @@ class Search():
                  end: datetime.datetime,
                  ground: List[Dict],
                  space: List[Dict],
-                 conjunction_types: List[str] = ["nbtrace"],
-                 max_distances: Dict[str, float] = None,
-                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
-                 epoch_search_precision: int = 60,
-                 response_format: Dict = None):
+                 conjunction_types: Optional[List[str]] = ["nbtrace"],
+                 max_distances: Optional[Dict[str, float]] = None,
+                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
+                 epoch_search_precision: Optional[int] = 60,
+                 response_format: Optional[Dict] = None):
 
         self.request = None
         self.request_id = ""
@@ -186,7 +186,7 @@ class Search():
             self.request_id = self.request_url.rsplit("/", 1)[-1]
         self.request = res
 
-    def update_status(self, status: Dict = None) -> None:
+    def update_status(self, status: Optional[Dict] = None) -> None:
         """
         Update the status of this conjunctions search.
 
@@ -237,8 +237,8 @@ class Search():
             self.data = [Conjunction(**c) for c in raw_data]
 
     def wait(self,
-             poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-             verbose: bool = False) -> None:
+             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+             verbose: Optional[bool] = False) -> None:
         """
         Block and wait until the request is complete and data is
         available for retrieval
@@ -254,9 +254,9 @@ class Search():
                                                             verbose=verbose))
 
     def cancel(self,
-               wait: bool = False,
-               verbose: bool = False,
-               poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+               wait: Optional[bool] = False,
+               verbose: Optional[bool] = False,
+               poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
         Cancel the conjunction search request at the API. This method
         returns asynchronously by default.

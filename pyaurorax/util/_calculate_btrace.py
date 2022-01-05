@@ -7,7 +7,7 @@ from typing import Dict
 __pdoc__: Dict = {}
 
 
-def __calculate_btrace(geo_location: Location, dt) -> Location:
+def __calculate_btrace(geo_location: Location, dt: datetime.datetime) -> Location:
     # convert to magnetic coordinates
     mag_location = aacgmv2.convert_latlon(geo_location.lat,
                                           geo_location.lon,

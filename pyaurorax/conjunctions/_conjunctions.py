@@ -1,7 +1,7 @@
 import datetime
 import humanize
 import pyaurorax
-from typing import Dict, List
+from typing import Dict, List, Optional
 from ._classes._search import Search, DEFAULT_CONJUNCTION_DISTANCE
 
 # pdoc init
@@ -12,11 +12,11 @@ def search_async(start: datetime.datetime,
                  end: datetime.datetime,
                  ground: List[Dict],
                  space: List[Dict],
-                 conjunction_types: List[str] = ["nbtrace"],
-                 max_distances: Dict[str, float] = {},
-                 default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
-                 epoch_search_precision: int = 60,
-                 response_format: Dict = None) -> Search:
+                 conjunction_types: Optional[List[str]] = ["nbtrace"],
+                 max_distances: Optional[Dict[str, float]] = {},
+                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
+                 epoch_search_precision: Optional[int] = 60,
+                 response_format: Optional[Dict] = None) -> Search:
     """
     Submit a request for a conjunctions search, return asynchronously.
 
@@ -72,7 +72,6 @@ def search_async(start: datetime.datetime,
                epoch_search_precision=epoch_search_precision,
                response_format=response_format)
     s.execute()
-
     return s
 
 
@@ -80,13 +79,13 @@ def search(start: datetime.datetime,
            end: datetime.datetime,
            ground: List[Dict],
            space: List[Dict],
-           conjunction_types: List[str] = ["nbtrace"],
-           max_distances: Dict[str, float] = {},
-           default_distance: float = DEFAULT_CONJUNCTION_DISTANCE,
-           verbose: bool = False,
-           poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           epoch_search_precision: int = 60,
-           response_format: Dict = None) -> Search:
+           conjunction_types: Optional[List[str]] = ["nbtrace"],
+           max_distances: Optional[Dict[str, float]] = {},
+           default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
+           verbose: Optional[bool] = False,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           epoch_search_precision: Optional[int] = 60,
+           response_format: Optional[Dict] = None) -> Search:
     """
     Search for conjunctions and block until results are returned
 

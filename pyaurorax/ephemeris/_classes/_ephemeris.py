@@ -2,7 +2,7 @@ import pyaurorax
 import datetime
 import pprint
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -28,7 +28,7 @@ class Ephemeris(BaseModel):
     data_source: pyaurorax.sources.DataSource
     epoch: datetime.datetime
     location_geo: pyaurorax.Location
-    location_gsm: pyaurorax.Location = pyaurorax.Location(lat=None, lon=None)
+    location_gsm: Optional[pyaurorax.Location] = pyaurorax.Location(lat=None, lon=None)
     nbtrace: pyaurorax.Location
     sbtrace: pyaurorax.Location
     metadata: Dict = None

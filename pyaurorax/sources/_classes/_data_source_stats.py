@@ -1,7 +1,7 @@
 import datetime
 import pprint
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 from ._data_source import DataSource
 
 # pdoc init
@@ -22,11 +22,11 @@ class DataSourceStatistics(BaseModel):
         data_product_count: total number of ephemeris records for this data source
     """
     data_source: DataSource
-    earliest_ephemeris_loaded: datetime.datetime = None
-    latest_ephemeris_loaded: datetime.datetime = None
+    earliest_ephemeris_loaded: Optional[datetime.datetime] = None
+    latest_ephemeris_loaded: Optional[datetime.datetime] = None
     ephemeris_count: int
-    earliest_data_product_loaded: datetime.datetime = None
-    latest_data_product_loaded: datetime.datetime = None
+    earliest_data_product_loaded: Optional[datetime.datetime] = None
+    latest_data_product_loaded: Optional[datetime.datetime] = None
     data_product_count: int
 
     def __str__(self) -> str:

@@ -1,7 +1,7 @@
 import pyaurorax
 import datetime
 import time
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -29,7 +29,8 @@ def get_status(request_url: str) -> Dict:
     return res.data
 
 
-def get_data(data_url: str, post_body: Dict = None) -> List:
+def get_data(data_url: str,
+             post_body: Optional[Dict] = None) -> List:
     """
     Retrieve the data for a request. Makes a GET request if
     no post_body is specified, else makes a POST request with
@@ -97,8 +98,8 @@ def get_logs(request_url: str) -> List:
 
 
 def wait_for_data(request_url: str,
-                  poll_interval: float = STANDARD_POLLING_SLEEP_TIME,
-                  verbose: bool = False) -> Dict:
+                  poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
+                  verbose: Optional[bool] = False) -> Dict:
     """
     Block and wait for the data to be made available for a request
 
@@ -128,9 +129,9 @@ def wait_for_data(request_url: str,
 
 
 def cancel(request_url: str,
-           wait: bool = False,
-           poll_interval: float = STANDARD_POLLING_SLEEP_TIME,
-           verbose: bool = False) -> int:
+           wait: Optional[bool] = False,
+           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
+           verbose: Optional[bool] = False) -> int:
     """
     Cancel the request at the given URL. This operation is asynchronous
     by default unless the wait param is set to True.

@@ -93,7 +93,7 @@ class AuroraXRequest(BaseModel):
         # return
         return all_headers
 
-    def execute(self, limited_evaluation: bool = False) -> AuroraXResponse:
+    def execute(self, limited_evaluation: Optional[bool] = False) -> AuroraXResponse:
         """
         Execute an AuroraX request
 
@@ -174,8 +174,9 @@ class AuroraXRequest(BaseModel):
                 raise pyaurorax.AuroraXException(response_json)
 
         # create reponse object
-        res = AuroraXResponse(
-            request=req, data=response_data, status_code=req.status_code)
+        res = AuroraXResponse(request=req,
+                              data=response_data,
+                              status_code=req.status_code)
 
         # return
         return res

@@ -2,7 +2,7 @@
 This module contains the Location class used throughout the PyAuroraX library
 """
 from pydantic import BaseModel, validator
-from typing import Union
+from typing import Union, Optional
 
 
 class Location(BaseModel):
@@ -17,8 +17,8 @@ class Location(BaseModel):
         lat: latitude value
         lon: longitude value
     """
-    lat: Union[float, None]
-    lon: Union[float, None]
+    lat: Optional[Union[float, None]] = None
+    lon: Optional[Union[float, None]] = None
 
     @validator("lon")
     def both_must_be_none_or_number(cls, v, values):

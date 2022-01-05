@@ -1,5 +1,5 @@
 import pyaurorax
-from typing import List, Dict
+from typing import List, Dict, Optional
 from ._classes._data_source import DataSource
 from ._classes._data_source_stats import DataSourceStatistics
 
@@ -7,8 +7,8 @@ from ._classes._data_source_stats import DataSourceStatistics
 __pdoc__: Dict = {}
 
 
-def list(order: str = "identifier",
-         format: str = "full_record") -> List[DataSource]:
+def list(order: Optional[str] = "identifier",
+         format: Optional[str] = "full_record") -> List[DataSource]:
     """
     Retrieve all data source records
 
@@ -43,7 +43,7 @@ def list(order: str = "identifier",
 def get(program: str,
         platform: str,
         instrument_type: str,
-        format: str = "full_record") -> DataSource:
+        format: Optional[str] = "full_record") -> DataSource:
     """
     Retrieve a specific data source record
 
@@ -81,13 +81,13 @@ def get(program: str,
         raise pyaurorax.AuroraXNotFoundException("Data source not found")
 
 
-def get_using_filters(program: str = None,
-                      platform: str = None,
-                      instrument_type: str = None,
-                      source_type: str = None,
-                      owner: str = None,
-                      format: str = "full_record",
-                      order: str = "identifier") -> List[DataSource]:
+def get_using_filters(program: Optional[str] = None,
+                      platform: Optional[str] = None,
+                      instrument_type: Optional[str] = None,
+                      source_type: Optional[str] = None,
+                      owner: Optional[str] = None,
+                      format: Optional[str] = "full_record",
+                      order: Optional[str] = "identifier") -> List[DataSource]:
     """
     Retrieve all data source records matching a filter
 
@@ -133,7 +133,7 @@ def get_using_filters(program: str = None,
 
 
 def get_using_identifier(identifier: int,
-                         format: str = "full_record") -> DataSource:
+                         format: Optional[str] = "full_record") -> DataSource:
     """
     Retrieve data source record matching an identifier
 
@@ -161,8 +161,8 @@ def get_using_identifier(identifier: int,
 
 
 def get_stats(identifier: int,
-              format: str = "full_record",
-              slow: bool = False) -> Dict:
+              format: Optional[str] = "full_record",
+              slow: Optional[bool] = False) -> Dict:
     """
     Retrieve statistics for a data source
 
@@ -318,16 +318,16 @@ def update(data_source: DataSource) -> DataSource:
 
 
 def partial_update(identifier: int,
-                   program: str = None,
-                   platform: str = None,
-                   instrument_type: str = None,
-                   source_type: str = None,
-                   display_name: str = None,
-                   metadata: Dict = None,
-                   owner: str = None,
-                   maintainers: List[str] = None,
-                   ephemeris_metadata_schema: List[Dict] = None,
-                   data_product_metadata_schema: List[Dict] = None) -> DataSource:
+                   program: Optional[str] = None,
+                   platform: Optional[str] = None,
+                   instrument_type: Optional[str] = None,
+                   source_type: Optional[str] = None,
+                   display_name: Optional[str] = None,
+                   metadata: Optional[Dict] = None,
+                   owner: Optional[str] = None,
+                   maintainers: Optional[List[str]] = None,
+                   ephemeris_metadata_schema: Optional[List[Dict]] = None,
+                   data_product_metadata_schema: Optional[List[Dict]] = None) -> DataSource:
     """
     Partially update a data source in AuroraX
 

@@ -1,7 +1,7 @@
 import pyaurorax
 import datetime
 import pprint
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 from ._ephemeris import Ephemeris
 
 # pdoc init
@@ -51,12 +51,12 @@ class Search():
     def __init__(self,
                  start: datetime.datetime,
                  end: datetime.datetime,
-                 programs: List[str] = None,
-                 platforms: List[str] = None,
-                 instrument_types: List[str] = None,
-                 metadata_filters: List[Dict] = None,
-                 response_format: Dict = None,
-                 metadata_filters_logical_operator: str = "AND") -> None:
+                 programs: Optional[List[str]] = None,
+                 platforms: Optional[List[str]] = None,
+                 instrument_types: Optional[List[str]] = None,
+                 metadata_filters: Optional[List[Dict]] = None,
+                 response_format: Optional[Dict] = None,
+                 metadata_filters_logical_operator: Optional[str] = "AND") -> None:
 
         self.request = None
         self.request_id = ""
@@ -66,7 +66,7 @@ class Search():
         self.data_url = ""
         self.query = {}
         self.status = {}
-        self.data: List[Union[Ephemeris, Dict]] = []
+        self.data: Optional[List[Union[Ephemeris, Dict]]] = []
         self.logs = []
 
         self.start = start
@@ -142,7 +142,7 @@ class Search():
             self.request_id = self.request_url.rsplit("/", 1)[-1]
         self.request = res
 
-    def update_status(self, status: Dict = None) -> None:
+    def update_status(self, status: Optional[Dict] = None) -> None:
         """
         Update the status of this ephemeris search request
 
@@ -197,8 +197,8 @@ class Search():
             self.data = [Ephemeris(**e) for e in raw_data]
 
     def wait(self,
-             poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-             verbose: bool = False) -> None:
+             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+             verbose: Optional[bool] = False) -> None:
         """
         Block and wait for the request to complete and data is
         available for retrieval

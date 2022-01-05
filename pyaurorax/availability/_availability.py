@@ -59,13 +59,13 @@ def ephemeris(start: datetime.date,
 
 def data_products(start: datetime,
                   end: datetime,
-                  program: str = None,
-                  platform: str = None,
-                  instrument_type: str = None,
-                  source_type: str = None,
-                  owner: str = None,
-                  format: str = "basic_info",
-                  slow: bool = False) -> List[AvailabilityResult]:
+                  program: Optional[str] = None,
+                  platform: Optional[str] = None,
+                  instrument_type: Optional[str] = None,
+                  source_type: Optional[str] = None,
+                  owner: Optional[str] = None,
+                  format: Optional[str] = "basic_info",
+                  slow: Optional[bool] = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing data product records
 

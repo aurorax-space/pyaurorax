@@ -1,7 +1,7 @@
 import pyaurorax
 import datetime
 import pprint
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 from ._data_product import DataProduct
 
 # pdoc init
@@ -55,13 +55,13 @@ class Search():
     def __init__(self,
                  start: datetime.datetime,
                  end: datetime.datetime,
-                 programs: List[str] = None,
-                 platforms: List[str] = None,
-                 instrument_types: List[str] = None,
-                 metadata_filters: List[Dict] = None,
-                 data_product_type_filters: List[str] = None,
-                 response_format: Dict = None,
-                 metadata_filters_logical_operator: str = "AND") -> None:
+                 programs: Optional[List[str]] = None,
+                 platforms: Optional[List[str]] = None,
+                 instrument_types: Optional[List[str]] = None,
+                 metadata_filters: Optional[List[Dict]] = None,
+                 data_product_type_filters: Optional[List[str]] = None,
+                 response_format: Optional[Dict] = None,
+                 metadata_filters_logical_operator: Optional[str] = "AND") -> None:
 
         self.request = None
         self.request_id = ""
@@ -71,7 +71,7 @@ class Search():
         self.data_url = ""
         self.query = {}
         self.status = {}
-        self.data: List[Union[DataProduct, Dict]] = []
+        self.data: Optional[List[Union[DataProduct, Dict]]] = []
         self.logs = []
 
         self.start = start
@@ -141,7 +141,7 @@ class Search():
             self.request_id = self.request_url.rsplit("/", 1)[-1]
         self.request = res
 
-    def update_status(self, status: Dict = None) -> None:
+    def update_status(self, status: Optional[Dict] = None) -> None:
         """
         Update the status of this data products search request
 
@@ -194,8 +194,8 @@ class Search():
             self.data = [DataProduct(**dp) for dp in raw_data]
 
     def wait(self,
-             verbose: bool = False,
-             poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> None:
+             verbose: Optional[bool] = False,
+             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> None:
         """
         Block and wait for the request to complete and data is available
         for retrieval
@@ -211,9 +211,9 @@ class Search():
                                                             verbose=verbose))
 
     def cancel(self,
-               wait: bool = False,
-               verbose: bool = False,
-               poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+               wait: Optional[bool] = False,
+               verbose: Optional[bool] = False,
+               poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
         Cancel the data product search request at the API. This method
         returns asynchronously by default.

@@ -40,12 +40,12 @@ def __validate_data_source(identifier: int,
 
 def search_async(start: datetime.datetime,
                  end: datetime.datetime,
-                 programs: List[str] = None,
-                 platforms: List[str] = None,
-                 instrument_types: List[str] = None,
-                 metadata_filters: List[Dict] = None,
-                 response_format: Dict = None,
-                 metadata_filters_logical_operator: str = None) -> Search:
+                 programs: Optional[List[str]] = None,
+                 platforms: Optional[List[str]] = None,
+                 instrument_types: Optional[List[str]] = None,
+                 metadata_filters: Optional[List[Dict]] = None,
+                 response_format: Optional[Dict] = None,
+                 metadata_filters_logical_operator: Optional[str] = None) -> Search:
     """
     Submit a request for an ephemeris search, returns asynchronously
 
@@ -90,14 +90,14 @@ def search_async(start: datetime.datetime,
 
 def search(start: datetime.datetime,
            end: datetime.datetime,
-           programs: List[str] = None,
-           platforms: List[str] = None,
-           instrument_types: List[str] = None,
-           metadata_filters: List[Dict] = None,
-           verbose: bool = False,
-           poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           response_format: Dict = None,
-           metadata_filters_logical_operator: str = None) -> Search:
+           programs: Optional[List[str]] = None,
+           platforms: Optional[List[str]] = None,
+           instrument_types: Optional[List[str]] = None,
+           metadata_filters: Optional[List[Dict]] = None,
+           verbose: Optional[bool] = False,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           response_format: Optional[Dict] = None,
+           metadata_filters_logical_operator: Optional[str] = None) -> Search:
     """
     Search for ephemeris records
 
@@ -172,7 +172,7 @@ def search(start: datetime.datetime,
 
 def upload(identifier: int,
            records: List[Ephemeris],
-           validate_source: bool = False) -> int:
+           validate_source: Optional[bool] = False) -> int:
     """
     Upload ephemeris records to AuroraX
 

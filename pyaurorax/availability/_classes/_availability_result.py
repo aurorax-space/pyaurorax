@@ -1,7 +1,7 @@
 import pyaurorax
 import pprint
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -17,8 +17,8 @@ class AvailabilityResult(BaseModel):
         available_ephemeris: ephemeris availability dictionary
     """
     data_source: pyaurorax.sources.DataSource
-    available_data_products: Dict[str, int] = None
-    available_ephemeris: Dict[str, int] = None
+    available_data_products: Optional[Dict[str, int]] = None
+    available_ephemeris: Optional[Dict[str, int]] = None
 
     def __str__(self) -> str:
         """
