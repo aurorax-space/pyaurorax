@@ -8,7 +8,7 @@ from ._conjunction import Conjunction
 __pdoc__: Dict = {}
 
 # globals
-DEFAULT_CONJUNCTION_DISTANCE = 300
+DEFAULT_CONJUNCTION_DISTANCE: int = 300
 
 
 class Search():
@@ -78,16 +78,16 @@ class Search():
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None):
 
-        self.request = None
-        self.request_id = ""
-        self.request_url = ""
-        self.executed = False
-        self.completed = False
-        self.data_url = ""
-        self.query = {}
-        self.status = {}
+        self.request: pyaurorax.api.AuroraXResponse = None
+        self.request_id: str = ""
+        self.request_url: str = ""
+        self.executed: bool = False
+        self.completed: bool = False
+        self.data_url: str = ""
+        self.query: Dict = {}
+        self.status: Dict = {}
         self.data: List[Union[Conjunction, Dict]] = []
-        self.logs = []
+        self.logs: List[Dict] = []
 
         self.start = start
         self.end = end

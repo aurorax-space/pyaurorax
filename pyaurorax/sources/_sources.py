@@ -162,7 +162,7 @@ def get_using_identifier(identifier: int,
 
 def get_stats(identifier: int,
               format: Optional[str] = "full_record",
-              slow: Optional[bool] = False) -> Dict:
+              slow: Optional[bool] = False) -> DataSourceStatistics:
     """
     Retrieve statistics for a data source
 
@@ -173,7 +173,7 @@ def get_stats(identifier: int,
             most up-to-date stats info (this may take longer to return)
 
     Returns:
-        a dictionary of statistics information about the data source
+        a DataSourceStatistics object with information about the data source
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error

@@ -57,8 +57,8 @@ def ephemeris(start: datetime.date,
     return [AvailabilityResult(**av) for av in res.data]
 
 
-def data_products(start: datetime,
-                  end: datetime,
+def data_products(start: datetime.date,
+                  end: datetime.date,
                   program: Optional[str] = None,
                   platform: Optional[str] = None,
                   instrument_type: Optional[str] = None,

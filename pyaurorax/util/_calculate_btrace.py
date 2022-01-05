@@ -46,7 +46,7 @@ def ground_geo_to_nbtrace(geo_location: Location,
         the north B-trace location as a pyaurorax.Location object
     """
     # check if location is in northern hemisphere
-    if (geo_location.lat >= 0):
+    if (geo_location.lat is not None and geo_location.lat >= 0.0):
         # northern hemisphere, north b-trace is the same as geographic location
         return geo_location
 
@@ -70,7 +70,7 @@ def ground_geo_to_sbtrace(geo_location: Location,
         the south B-trace location as a pyaurorax.Location object
     """
     # check if location is in southern hemisphere
-    if (geo_location.lat < 0):
+    if (geo_location.lat is not None and geo_location.lat < 0.0):
         # southern hemisphere, south b-trace is the same as geographic location
         return geo_location
 

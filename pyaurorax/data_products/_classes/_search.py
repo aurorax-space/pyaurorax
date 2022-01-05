@@ -63,16 +63,16 @@ class Search():
                  response_format: Optional[Dict] = None,
                  metadata_filters_logical_operator: Optional[str] = "AND") -> None:
 
-        self.request = None
-        self.request_id = ""
-        self.request_url = ""
-        self.executed = False
-        self.completed = False
-        self.data_url = ""
-        self.query = {}
-        self.status = {}
-        self.data: Optional[List[Union[DataProduct, Dict]]] = []
-        self.logs = []
+        self.request: pyaurorax.api.AuroraXResponse = None
+        self.request_id: str = ""
+        self.request_url: str = ""
+        self.executed: bool = False
+        self.completed: bool = False
+        self.data_url: str = ""
+        self.query: Dict = {}
+        self.status: Dict = {}
+        self.data: List[Union[DataProduct, Dict]] = []
+        self.logs: List[Dict] = []
 
         self.start = start
         self.end = end

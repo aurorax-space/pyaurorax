@@ -10,18 +10,18 @@ from .._internal.util import json_converter
 __pdoc__: Dict = {}
 
 # endpoint URLs
-DEFAULT_BASE_URL = "https://api.aurorax.space"
+DEFAULT_BASE_URL: str = "https://api.aurorax.space"
 
-# reqest globals
-DEFAULT_RETRIES = 2
-REQUEST_HEADERS = {
+# request globals
+DEFAULT_RETRIES: int = 2
+REQUEST_HEADERS: Dict = {
     "accept": "application/json",
     "Content-Type": "application/json"
 }
-API_KEY_HEADER_NAME = "x-aurorax-api-key"
+API_KEY_HEADER_NAME: str = "x-aurorax-api-key"
 
 # private dynamic globals
-__api_key = ""
+__api_key: str = ""
 
 
 def get_api_key() -> str:

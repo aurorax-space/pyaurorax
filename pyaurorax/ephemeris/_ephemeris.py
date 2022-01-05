@@ -201,7 +201,7 @@ def upload(identifier: int,
     # dict (ie. convert datetimes to strings, etc.)
     for i, _ in enumerate(records):
         if (type(records[i]) is Ephemeris):
-            records[i] = records[i].to_json_serializable()
+            records[i] = records[i].to_json_serializable()  # type: ignore
 
     # make request
     url = pyaurorax.api.urls.ephemeris_upload_url.format(identifier)

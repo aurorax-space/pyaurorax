@@ -40,13 +40,13 @@ def __validate_data_source(identifier: int,
 
 def search_async(start: datetime.datetime,
                  end: datetime.datetime,
-                 programs: List[str] = None,
-                 platforms: List[str] = None,
-                 instrument_types: List[str] = None,
-                 metadata_filters: List[Dict] = None,
-                 data_product_type_filters: List[str] = None,
-                 response_format: Dict = None,
-                 metadata_filters_logical_operator: str = None) -> Search:
+                 programs: Optional[List[str]] = None,
+                 platforms: Optional[List[str]] = None,
+                 instrument_types: Optional[List[str]] = None,
+                 metadata_filters: Optional[List[Dict]] = None,
+                 data_product_type_filters: Optional[List[str]] = None,
+                 response_format: Optional[Dict] = None,
+                 metadata_filters_logical_operator: Optional[str] = None) -> Search:
     """
     Submit a request for a data products search, return asynchronously
 
@@ -96,15 +96,15 @@ def search_async(start: datetime.datetime,
 
 def search(start: datetime.datetime,
            end: datetime.datetime,
-           programs: List[str] = None,
-           platforms: List[str] = None,
-           instrument_types: List[str] = None,
-           metadata_filters: List[Dict] = None,
-           data_product_type_filters: List[str] = None,
-           verbose: bool = False,
-           poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           response_format: Dict = None,
-           metadata_filters_logical_operator: str = None) -> Search:
+           programs: Optional[List[str]] = None,
+           platforms: Optional[List[str]] = None,
+           instrument_types: Optional[List[str]] = None,
+           metadata_filters: Optional[List[Dict]] = None,
+           data_product_type_filters: Optional[List[str]] = None,
+           verbose: Optional[bool] = False,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           response_format: Optional[Dict] = None,
+           metadata_filters_logical_operator: Optional[str] = None) -> Search:
     """
     Search for data product records and block until results are returned
 
@@ -184,7 +184,7 @@ def search(start: datetime.datetime,
 
 def upload(identifier: int,
            records: List[DataProduct],
-           validate_source: bool = False) -> int:
+           validate_source: Optional[bool] = False) -> int:
     """
     Upload data product records to AuroraX
 
@@ -213,7 +213,7 @@ def upload(identifier: int,
     # dict (ie. convert datetimes to strings, etc.)
     for i, _ in enumerate(records):
         if (type(records[i]) is DataProduct):
-            records[i] = records[i].to_json_serializable()
+            records[i] = records[i].to_json_serializable()  # type: ignore
 
     # make request
     url = pyaurorax.api.urls.data_products_upload_url.format(identifier)
@@ -239,8 +239,7 @@ def upload(identifier: int,
 def delete_daterange(data_source: pyaurorax.sources.DataSource,
                      start: datetime.datetime,
                      end: datetime.datetime,
-                     data_product_types: List[str] = None,
-                     metadata_filters: Dict = None) -> int:
+                     data_product_types: Optional[List[str]] = None) -> int:
     """
     Deletes data products associated with a data source in the date range
     provided. This method is asynchronous.
@@ -274,7 +273,6 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
                                            programs=[data_source.program],
                                            platforms=[data_source.platform],
                                            instrument_types=[data_source.instrument_type],
-                                           metadata_filters={} if not metadata_filters else metadata_filters,
                                            data_product_type_filters=[] if not data_product_types else data_product_types)
     except Exception as e:
         raise pyaurorax.AuroraXException(e)
@@ -282,7 +280,7 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
     # collect URLs from search result
     urls = []
     for dp in s.data:
-        urls.append(dp.url)
+        urls.append(dp.url)  # type: ignore
 
     # do delete request
     return delete(data_source, urls)
