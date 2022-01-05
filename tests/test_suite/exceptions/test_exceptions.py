@@ -54,7 +54,7 @@ def test_AuroraXValidationException_ephemeris():
         nbtrace = pyaurorax.Location(lat=1.23, lon=45.6)
         sbtrace = pyaurorax.Location(lat=7.89, lon=101.23)
 
-        # get the ephemeris source ID
+        # get the data source ID
         source = pyaurorax.sources.get(program, platform, instrument_type,
                                        format="basic_info")
         source.instrument_type = "wrong-type"
@@ -149,7 +149,7 @@ def test_AuroraXConflictException():
         nbtrace = pyaurorax.Location(lat=1.23, lon=45.6)
         sbtrace = pyaurorax.Location(lat=7.89, lon=101.23)
 
-        # get the ephemeris source ID
+        # get the data source ID
         source = pyaurorax.sources.get(program, platform, instrument_type)
 
         e = pyaurorax.ephemeris.Ephemeris(data_source=source,

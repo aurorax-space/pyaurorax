@@ -29,7 +29,7 @@ def get_api_key() -> str:
     Returns the currently set API key for the module
 
     Returns:
-        Current API key string
+        current API key string
     """
     return __api_key
 
@@ -39,7 +39,7 @@ def authenticate(api_key: str) -> None:
     Set authentication values for use with subsequent queries
 
     Args:
-        api_key: AuroraX API key string
+        api_key: an AuroraX API key string
 
     """
 
@@ -102,7 +102,7 @@ class AuroraXRequest(BaseModel):
                 the response outside of the retry mechanism, defaults to False
 
         Returns:
-            An AuroraXResponse object
+            an AuroraXResponse object
 
         Raises:
             pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error

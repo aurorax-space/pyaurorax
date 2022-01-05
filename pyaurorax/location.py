@@ -14,8 +14,8 @@ class Location(BaseModel):
     for latitude and -180 to 180 for longitude.
 
     Attributes:
-        lat: latitude
-        lon: longitudes
+        lat: latitude value
+        lon: longitude value
     """
     lat: Union[float, None]
     lon: Union[float, None]
@@ -31,7 +31,7 @@ class Location(BaseModel):
         String method
 
         Returns:
-            String format of Location object
+            string format of Location object
         """
         return str(self.__dict__)
 
@@ -40,6 +40,6 @@ class Location(BaseModel):
         Object representation
 
         Returns:
-            Object representation of Location object
+            object representation of Location object
         """
         return "%s(lat=%s, lon=%s)" % (self.__class__.__name__, str(self.lat), str(self.lon))

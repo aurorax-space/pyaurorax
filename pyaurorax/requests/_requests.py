@@ -16,10 +16,10 @@ def get_status(request_url: str) -> Dict:
     Retrieve the status of a request
 
     Args:
-        request_url: URL of the request information
+        request_url: the URL of the request information
 
     Returns:
-        Status dictionary for the request
+        the status information for the request
     """
     # do request
     req = pyaurorax.AuroraXRequest(method="get", url=request_url)
@@ -36,11 +36,11 @@ def get_data(data_url: str, post_body: Dict = None) -> List:
     the given post_body.
 
     Args:
-        data_url: URL for the data of a request
+        data_url: the URL for the data of a request
         post_body: dictionary for body of a post request
 
     Returns:
-        List of JSON data objects in the response
+        the list of JSON data objects in the response
     """
     # do request
     if post_body is not None:
@@ -81,10 +81,10 @@ def get_logs(request_url: str) -> List:
     Retrieve the logs for a request
 
     Args:
-        request_url: URL of the request information
+        request_url: the URL of the request information
 
     Returns:
-        List of logged messages for the request
+        the list of logged messages for the request
     """
     # get status
     status = get_status(request_url)
@@ -103,20 +103,25 @@ def wait_for_data(request_url: str,
     Block and wait for the data to be made available for a request
 
     Args:
-        request_url: URL of the request information
+        request_url: the URL of the request information
         poll_interval: seconds to wait between polling calls, defaults
             to STANDARD_POLLING_SLEEP_TIME
         verbose: output poll times, defaults to False
 
     Returns:
-        Status dictionary for the request
+        the status information for the request
     """
+    # get status
     status = get_status(request_url)
+
+    # wait until request is done
     while (status["search_result"]["data_uri"] is None):
         time.sleep(poll_interval)
         if (verbose is True):
             print("[%s] Checking for data ..." % (datetime.datetime.now()))
         status = get_status(request_url)
+
+    # return
     if (verbose is True):
         print("[%s] Data is now available" % (datetime.datetime.now()))
     return status
@@ -131,12 +136,13 @@ def cancel(request_url: str,
     by default unless the wait param is set to True.
 
     Args:
-        request_url: URL string of the request to be canceled
-        wait: set to True to block until the cancellation request has
-            been completed (may wait for several minutes)
-        verbose: when wait=True, output poll times, defaults to False
-        poll_interval: when wait=True, seconds to wait between polling
-            calls, defaults to STANDARD_POLLING_SLEEP_TIME
+        request_url: the URL string of the request to be canceled
+        wait: set to True to block until the cancellation request
+            has been completed (may wait for several minutes)
+        verbose: if True then output poll times and other
+            progress, defaults to False
+        poll_interval: seconds to wait between polling
+            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
     Returns:
         1 on success

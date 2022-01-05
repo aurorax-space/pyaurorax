@@ -16,8 +16,8 @@ class Search():
     Class representing an AuroraX conjunctions search
 
     Attributes:
-        start: start timestamp of the search
-        end: end timestamp of the search
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
         ground: list of ground instrument search parameters
             e.g. [
                 {
@@ -58,14 +58,14 @@ class Search():
         request_url: unique AuroraX URL string assigned to the request
         executed: boolean, gets set to True when the search is executed
         completed: boolean, gets set to True when the search is checked to be finished
-        data_url: URL string where data is accessed
+        data_url: the URL string where data is accessed
         query: dictionary of values sent for the search query
         status: dictionary of status updates
         data: list of pyaurorax.conjunctions.Conjunction objects returned
         logs: list of logging messages from the API
 
         Returns:
-            A pyaurorax.conjunctions.Search object
+            a pyaurorax.conjunctions.Search object
     """
 
     def __init__(self, start: datetime.datetime,
@@ -104,7 +104,7 @@ class Search():
         String method
 
         Returns:
-            String format of Conjunction Search object
+            string format of Conjunction Search object
         """
         return self.__repr__()
 
@@ -113,7 +113,7 @@ class Search():
         Object representation
 
         Returns:
-            Object representation of Conjunction Search object
+            object representation of Conjunction Search object
         """
         return pprint.pformat(self.__dict__)
 
@@ -247,7 +247,6 @@ class Search():
             poll_interval: time in seconds to wait between polling attempts, defaults
                 to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
             verbose: output poll times, defaults to False
-
         """
         url = pyaurorax.api.urls.conjunction_request_url.format(self.request_id)
         self.update_status(pyaurorax.requests.wait_for_data(url,

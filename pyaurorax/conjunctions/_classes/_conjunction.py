@@ -34,7 +34,7 @@ class Conjunction(BaseModel):
         String method
 
         Returns:
-            String format of Conjunction object
+            string format of Conjunction object
         """
         return self.__repr__()
 
@@ -43,6 +43,6 @@ class Conjunction(BaseModel):
         Object representation
 
         Returns:
-            Object representation of Conjunction object
+            object representation of Conjunction object
         """
         return pprint.pformat(self.__dict__)

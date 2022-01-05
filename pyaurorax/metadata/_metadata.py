@@ -35,10 +35,10 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
     Retrieve the metadata schema for an ephemeris record
 
     Args:
-        identifier: ephemeris source ID
+        identifier: the AuroraX data source ID
 
     Returns:
-        Metadata schema associated with the record
+        the metadata schema associated with the record
     """
     source_info = pyaurorax.sources.get_using_identifier(identifier, format="full_record")
     if source_info.ephemeris_metadata_schema:
@@ -52,10 +52,10 @@ def get_data_products_schema(identifier: int) -> List[Dict]:
     Retrieve the metadata schema for a data products record
 
     Args:
-        identifier: ephemeris source ID
+        identifier: the AuroraX data source ID
 
     Returns:
-        Metadata schema associated with the record
+        the metadata schema associated with the record
     """
     source_info = pyaurorax.sources.get_using_identifier(identifier, format="full_record")
     if source_info.data_product_metadata_schema:

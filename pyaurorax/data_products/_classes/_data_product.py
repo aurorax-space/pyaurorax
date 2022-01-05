@@ -15,9 +15,9 @@ class DataProduct(BaseModel):
     Attributes:
         data_source: data source that the ephemeris record is associated with
         data_product_type: data product type ("keogram", "movie", "summary_plot")
-        start: starting datetime.datetime timestamp for the record in UTC
-        end: ending datetime.datetime timestamp for the record in UTC
-        url: URL location string of data product
+        start: starting timestamp for the record in UTC
+        end: ending timestamp for the record in UTC
+        url: the URL location string of data product
         metdata: metadata dictionary for this record
     """
     data_source: pyaurorax.sources.DataSource
@@ -33,7 +33,7 @@ class DataProduct(BaseModel):
         datetime objects to strings)
 
         Returns:
-            Dictionary JSON-serializable object
+            a dictionary object that is JSON-serializable
         """
         d = self.__dict__
 
@@ -66,7 +66,7 @@ class DataProduct(BaseModel):
         String method
 
         Returns:
-            String format of DataProduct object
+            string format of DataProduct object
         """
         return self.__repr__()
 
@@ -75,6 +75,6 @@ class DataProduct(BaseModel):
         Object representation
 
         Returns:
-            Object representation of DataProduct object
+            object representation of DataProduct object
         """
         return pprint.pformat(self.__dict__)

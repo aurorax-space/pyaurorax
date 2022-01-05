@@ -39,7 +39,7 @@ class Ephemeris(BaseModel):
         datetime objects to strings)
 
         Returns:
-            Dictionary JSON-serializable object
+            a dictionary object that is JSON-serializable
         """
         d = self.__dict__
 

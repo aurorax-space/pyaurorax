@@ -20,8 +20,8 @@ def ephemeris(start: datetime.date,
     Retrieve information about the number of existing ephemeris records
 
     Args:
-        start: start date
-        end: end date
+        start: start date to retrieve availability info from (inclusive)
+        end: end date to retrieve availability info to (inclusive)
         program: program string name to filter sources by, defaults to None
         platform: platform string name to filter sources by, defaults to None
         instrument_type: instrument type string to filter sources by, defaults to None
@@ -32,7 +32,7 @@ def ephemeris(start: datetime.date,
         slow: query the data directly (slower) for more accurate results, defaults to false
 
     Returns:
-        A list of pyaurorax.availability.AvailabilityResult objects
+        a list of pyaurorax.availability.AvailabilityResult objects
     """
     # set parameters
     params = {
@@ -70,8 +70,8 @@ def data_products(start: datetime,
     Retrieve information about the number of existing data product records
 
     Args:
-        start: start date
-        end: end date
+        start: start date to retrieve availability info from (inclusive)
+        end: end date to retrieve availability info to (inclusive)
         program: program string name to filter sources by, defaults to None
         platform: platform string name to filter sources by, defaults to None
         instrument_type: instrument type string to filter sources by, defaults to None
@@ -83,7 +83,7 @@ def data_products(start: datetime,
             to false
 
     Returns:
-        A list of pyaurorax.availability.AvailabilityResult objects
+        a list of pyaurorax.availability.AvailabilityResult objects
     """
     # set parameters
     params = {

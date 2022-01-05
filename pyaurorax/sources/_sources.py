@@ -18,7 +18,7 @@ def list(order: str = "identifier",
         format: string record format, defaults to "full_record"
 
     Returns:
-        A list of AuroraX DataSource objects
+        a list of AuroraX DataSource objects
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -54,7 +54,7 @@ def get(program: str,
         format: record format, defaults to "full_record"
 
     Returns:
-        An AuroraX DataSource object matching the input parameters
+        an AuroraX DataSource object matching the input parameters
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -92,13 +92,13 @@ def get_using_filters(program: str = None,
     Retrieve all data source records matching a filter
 
     Args:
-        program: the string name of the program
-        platform: the string name of the platform
-        instrument_type: the string name of the instrument type
-        source_type: the string name of the data source type
+        program: the name of the program
+        platform: the name of the platform
+        instrument_type: the name of the instrument type
+        source_type: the name of the data source type
         owner: the AuroraX data source owner's email address
         format: record format, defaults to "full_record"
-        order: string value to order results by (identifier, program, platform,
+        order: the value to order results by (identifier, program, platform,
             instrument_type, display_name, owner), defaults to "identifier"
 
     Returns:
@@ -173,7 +173,7 @@ def get_stats(identifier: int,
             most up-to-date stats info (this may take longer to return)
 
     Returns:
-        A dictionary of statistics information about the data source
+        a dictionary of statistics information about the data source
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -201,7 +201,7 @@ def add(data_source: DataSource) -> DataSource:
         data_source: the fully defined AuroraX DataSource object to add
 
     Returns:
-        The newly created AuroraX DataSource object
+        the newly created AuroraX DataSource object
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -287,7 +287,7 @@ def update(data_source: DataSource) -> DataSource:
         data_source: the fully defined AuroraX DataSource object to update
 
     Returns:
-        The updated AuroraX DataSource object
+        the updated AuroraX DataSource object
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -352,7 +352,7 @@ def partial_update(identifier: int,
             the data source
 
     Returns:
-        The updated AuroraX DataSource object
+        the updated AuroraX DataSource object
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error

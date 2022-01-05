@@ -13,8 +13,8 @@ class Search():
     Class representing an AuroraX data products search
 
     Attributes:
-        start: start datetime.datetime timestamp of the search
-        end: end datetime.datetime timestamp of the search
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
         programs: list of program names to search
         platforms: list of platform names to search
         instrument_types: list of instrument types to search
@@ -44,7 +44,7 @@ class Search():
         request_url: unique AuroraX URL string assigned to the request
         executed: boolean, gets set to True when the search is executed
         completed: boolean, gets set to True when the search is checked to be finished
-        data_url: URL string where data is accessed
+        data_url: the URL string where data is accessed
         query: dictionary of values sent for the search query
         status: dictionary of status updates
         data: list of pyaurorax.data_products.DataProduct objects returned, or a list of
@@ -89,7 +89,7 @@ class Search():
         String method
 
         Returns:
-            String format of DataProduct Search object
+            string format of DataProduct Search object
         """
         return self.__repr__()
 
@@ -98,7 +98,7 @@ class Search():
         Object representation
 
         Returns:
-            Object representation of DataProduct Search object
+            object representation of DataProduct Search object
         """
         return pprint.pformat(self.__dict__)
 
@@ -147,7 +147,7 @@ class Search():
 
         Args:
             status: retrieved status dictionary (include to avoid requesting it
-            from the API again), defaults to None
+                from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if (status is None):
@@ -232,7 +232,6 @@ class Search():
         Raises:
             pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
             pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
-
         """
         url = pyaurorax.api.urls.data_products_request_url.format(self.request_id)
         return pyaurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)

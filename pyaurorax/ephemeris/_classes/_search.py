@@ -40,7 +40,7 @@ class Search():
         request_url: unique AuroraX URL string assigned to the request
         executed: boolean, gets set to True when the search is executed
         completed: boolean, gets set to True when the search is checked to be finished
-        data_url: URL string where data is accessed
+        data_url: the URL string where data is accessed
         query: dictionary of values sent for the search query
         status: dictionary of status updates
         data: list of pyaurorax.ephemeris.Ephemeris objects returned, or a list of
@@ -83,7 +83,7 @@ class Search():
         String method
 
         Returns:
-            String format of Ephemeris Search object
+            string format of Ephemeris Search object
         """
         return self.__repr__()
 
@@ -92,7 +92,7 @@ class Search():
         Object representation
 
         Returns:
-            Object representation of Ephemeris Search object
+            object representation of Ephemeris Search object
         """
         return pprint.pformat(self.__dict__)
 

@@ -21,9 +21,9 @@ def search_async(start: datetime.datetime,
     Submit a request for a conjunctions search, return asynchronously.
 
     Args:
-        start: start timestamp of the search
-        end: end timestamp of the search
-        ground: List of ground instrument search parameters
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
+        ground: list of ground instrument search parameters
             e.g. [
                 {
                     "programs": ["themis-asi"],
@@ -31,7 +31,7 @@ def search_async(start: datetime.datetime,
                     "instrument_types": ["RGB"]
                 }
             ]
-        space: List of one or more space instrument search parameters
+        space: list of one or more space instrument search parameters
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
@@ -60,7 +60,7 @@ def search_async(start: datetime.datetime,
         response_format: JSON representation of desired data response format
 
     Returns:
-        A pyaurorax.conjunctions.Search object
+        a pyaurorax.conjunctions.Search object
     """
     s = Search(start=start,
                end=end,
@@ -91,8 +91,8 @@ def search(start: datetime.datetime,
     Search for conjunctions and block until results are returned
 
     Args:
-        start: start timestamp of the search
-        end: end timestamp of the search
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
         ground: list of ground instrument search parameters
             e.g. [
                 {
@@ -132,7 +132,7 @@ def search(start: datetime.datetime,
         response_format: JSON representation of desired data response format
 
     Returns:
-        A pyaurorax.conjunctions.Search object
+        a pyaurorax.conjunctions.Search object
     """
     # create a Search object
     s = Search(start=start,
@@ -149,25 +149,28 @@ def search(start: datetime.datetime,
 
     # execute the search
     s.execute()
-    if verbose:
-        print(f"[{datetime.datetime.now()}] Request submitted")
-        print(f"[{datetime.datetime.now()}] Request ID: {s.request_id}")
-        print(f"[{datetime.datetime.now()}] Request details available at: {s.request_url}")
-        print(f"[{datetime.datetime.now()}] Waiting for data ...")
+    if (verbose is True):
+        print("[%s] Request submitted" % (datetime.datetime.now()))
+        print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
+        print("[%s] Request details available at: %s" % (datetime.datetime.now(),
+                                                         s.request_url))
 
     # wait for data
+    if (verbose is True):
+        print("[%s] Waiting for data ..." % (datetime.datetime.now()))
     s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # get the data
-    if verbose:
-        print(f"[{datetime.datetime.now()}] Retrieving data ...")
+    if (verbose is True):
+        print("[%s] Retrieving data ..." % (datetime.datetime.now()))
     s.get_data()
 
-    # finish
-    if verbose:
-        print(f'[{datetime.datetime.now()}] Retrieved \
-              {humanize.filesize.naturalsize(s.status["search_result"]["file_size"])} of data containing \
-              {s.status["search_result"]["result_count"]} records')
+    # return response with the data
+    if (verbose is True):
+        print("[%s] Retrieved %s of data containing %d records" % (datetime.datetime.now(),
+                                                                   humanize.filesize.naturalsize(
+                                                                       s.status["search_result"]["file_size"]),
+                                                                   s.status["search_result"]["result_count"]))
 
     # return
     return s

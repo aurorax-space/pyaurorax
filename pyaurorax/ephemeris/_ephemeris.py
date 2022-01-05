@@ -177,7 +177,7 @@ def upload(identifier: int,
     Upload ephemeris records to AuroraX
 
     Args:
-        identifier: AuroraX data source ID int
+        identifier: AuroraX data source ID
         records: list of pyaurorax.ephemeris.Ephemeris records to upload
         validate_source: boolean, set to True to validate all records before uploading
 

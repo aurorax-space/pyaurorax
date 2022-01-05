@@ -34,7 +34,7 @@ class DataSourceStatistics(BaseModel):
         String method
 
         Returns:
-            String format of DataSource object
+            string format of DataSource object
         """
         return self.__repr__()
 
@@ -43,6 +43,6 @@ class DataSourceStatistics(BaseModel):
         Object representation
 
         Returns:
-            Object representation of DataSource object
+            object representation of DataSource object
         """
         return pprint.pformat(self.__dict__)

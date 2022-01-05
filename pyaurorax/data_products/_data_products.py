@@ -51,8 +51,8 @@ def search_async(start: datetime.datetime,
     Submit a request for a data products search, return asynchronously
 
     Args:
-        start: start timestamp of the search
-        end: end timestamp of the search
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
@@ -79,7 +79,7 @@ def search_async(start: datetime.datetime,
         response_format: JSON representation of desired data response format
 
     Returns:
-        A pyaurorax.data_products.Search object
+        a pyaurorax.data_products.Search object
     """
     s = pyaurorax.data_products.Search(start,
                                        end,
@@ -109,8 +109,8 @@ def search(start: datetime.datetime,
     Search for data product records and block until results are returned
 
     Args:
-        start: start timestamp of the search
-        end: end timestamp of the search
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
@@ -140,7 +140,7 @@ def search(start: datetime.datetime,
         response_format: JSON representation of desired data response format
 
     Returns:
-        A pyaurorax.data_products.Search object
+        a pyaurorax.data_products.Search object
     """
     # create a Search() object
     s = Search(start,
@@ -189,7 +189,7 @@ def upload(identifier: int,
     Upload data product records to AuroraX
 
     Args:
-        identifier: AuroraX data source ID int
+        identifier: the AuroraX data source ID
         records: list of pyaurorax.data_products.DataProduct records to upload
         validate_source: boolean, set to True to validate all records before uploading
 
@@ -294,8 +294,8 @@ def delete(data_source: pyaurorax.sources.DataSource,
     Delete data products by URL. This method is asynchronous.
 
     Args:
-        data_source: pyaurorax.sources.DataSource source associated with the data
-            product records. Identifier, program, platform, and instrument_type
+        data_source: the pyaurorax.sources.DataSource source associated with the 
+            data product records. Identifier, program, platform, and instrument_type
             are required.
         urls: list of URL strings associated with the data products being deleted
 

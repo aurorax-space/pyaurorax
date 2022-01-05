@@ -12,7 +12,7 @@ class AvailabilityResult(BaseModel):
     Availability result data type
 
     Attributes:
-        data_source: DataSource object that the records are associated with
+        data_source: a DataSource object that the records are associated with
         available_data_products: data product availability dictionary
         available_ephemeris: ephemeris availability dictionary
     """
@@ -25,7 +25,7 @@ class AvailabilityResult(BaseModel):
         String method
 
         Returns:
-            String format of AvailabilityResult
+            string format of AvailabilityResult
         """
         return self.__repr__()
 
@@ -34,6 +34,6 @@ class AvailabilityResult(BaseModel):
         Object representation
 
         Returns:
-            Object representation of AvailabilityResult
+            object representation of AvailabilityResult
         """
         return pprint.pformat(self.__dict__)
