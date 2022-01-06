@@ -1,3 +1,7 @@
+"""
+Class definition for a data product
+"""
+
 import pyaurorax
 import datetime
 import pprint

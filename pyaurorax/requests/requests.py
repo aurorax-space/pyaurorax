@@ -1,3 +1,7 @@
+"""
+Functions for interacting with AuroraX requests
+"""
+
 import pyaurorax
 import datetime
 import time
@@ -8,7 +12,10 @@ __pdoc__: Dict = {}
 
 # globals
 FIRST_FOLLOWUP_SLEEP_TIME: float = 0.050  # 50ms
+""" Initial sleep time when waiting for data """
+
 STANDARD_POLLING_SLEEP_TIME: float = 1.0  # 1s
+""" Polling sleep time when waiting for data (after the initial sleep time) """
 
 
 def get_status(request_url: str) -> Dict:

@@ -1,8 +1,12 @@
+"""
+Class definition for a data product search
+"""
+
 import pyaurorax
 import datetime
 import pprint
 from typing import Dict, List, Union, Optional
-from ._data_product import DataProduct
+from .data_product import DataProduct
 
 # pdoc init
 __pdoc__: Dict = {}

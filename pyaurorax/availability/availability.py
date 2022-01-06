@@ -1,7 +1,11 @@
+"""
+Main functions for retrieving availablity information
+"""
+
 import pyaurorax
 import datetime
 from typing import Dict, List, Optional
-from ._classes._availability_result import AvailabilityResult
+from .classes.availability_result import AvailabilityResult
 
 # pdoc init
 __pdoc__: Dict = {}

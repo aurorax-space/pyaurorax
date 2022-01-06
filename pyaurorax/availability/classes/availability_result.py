@@ -1,3 +1,7 @@
+"""
+Class definition used for containing Availability information 
+"""
+
 import pyaurorax
 import pprint
 from pydantic import BaseModel

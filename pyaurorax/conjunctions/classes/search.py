@@ -1,14 +1,19 @@
+"""
+Class definition for a conjunction search
+"""
+
 import pyaurorax
 import pprint
 import datetime
 from typing import Dict, List, Union, Optional
-from ._conjunction import Conjunction
+from .conjunction import Conjunction
 
 # pdoc init
 __pdoc__: Dict = {}
 
 # globals
 DEFAULT_CONJUNCTION_DISTANCE: int = 300
+""" The default distance used for conjunction searches """
 
 
 class Search():

@@ -1,20 +1,24 @@
 """
 The ephemeris module is used to search and upload ephemeris records
-within AuroraX
+within AuroraX.
+
+Note that all functions and classes from submodules are all imported
+at this level of the ephemeris module. They can be referenced from
+here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from ._ephemeris import search_async
-from ._ephemeris import search
-from ._ephemeris import upload
-from ._ephemeris import delete
-from ._classes._ephemeris import Ephemeris
-from ._classes._search import Search
+from .ephemeris import search_async
+from .ephemeris import search
+from .ephemeris import upload
+from .ephemeris import delete
+from .classes.ephemeris import Ephemeris
+from .classes.search import Search
 
 # pdoc imports and exports
-from ._ephemeris import __pdoc__ as __ephemeris_pdoc__
-from ._classes._ephemeris import __pdoc__ as __classes_ephemeris_pdoc__
-from ._classes._search import __pdoc__ as __classes_search_pdoc__
+from .ephemeris import __pdoc__ as __ephemeris_pdoc__
+from .classes.ephemeris import __pdoc__ as __classes_ephemeris_pdoc__
+from .classes.search import __pdoc__ as __classes_search_pdoc__
 __pdoc__ = __ephemeris_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_ephemeris_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_search_pdoc__)

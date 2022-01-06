@@ -1,8 +1,12 @@
+"""
+Main functions for performing conjunction searches
+"""
+
 import datetime
 import humanize
 import pyaurorax
 from typing import Dict, List, Optional
-from ._classes._search import Search, DEFAULT_CONJUNCTION_DISTANCE
+from .classes.search import Search, DEFAULT_CONJUNCTION_DISTANCE
 
 # pdoc init
 __pdoc__: Dict = {}

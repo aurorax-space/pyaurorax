@@ -1,7 +1,11 @@
+"""
+Functions for interacting with data sources
+"""
+
 import pyaurorax
 from typing import List, Dict, Optional
-from ._classes._data_source import DataSource
-from ._classes._data_source_stats import DataSourceStatistics
+from .classes.data_source import DataSource
+from .classes.data_source_stats import DataSourceStatistics
 
 # pdoc init
 __pdoc__: Dict = {}

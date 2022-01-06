@@ -1,3 +1,7 @@
+"""
+Class definition for a conjunction
+"""
+
 import pyaurorax
 import pprint
 import datetime

@@ -1,3 +1,7 @@
+"""
+Class definition for an ephemeris record
+"""
+
 import pyaurorax
 import datetime
 import pprint

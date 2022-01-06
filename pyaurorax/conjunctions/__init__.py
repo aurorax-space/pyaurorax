@@ -1,19 +1,23 @@
 """
 The conjunction module is used for finding conjunctions between
 groupings of data sources.
+
+Note that all functions and classes from submodules are all imported
+at this level of the conjunctions module. They can be referenced from
+here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from ._conjunctions import search_async
-from ._conjunctions import search
-from ._classes._conjunction import Conjunction
-from ._classes._search import Search
-from ._classes._search import DEFAULT_CONJUNCTION_DISTANCE
+from .conjunctions import search_async
+from .conjunctions import search
+from .classes.conjunction import Conjunction
+from .classes.search import Search
+from .classes.search import DEFAULT_CONJUNCTION_DISTANCE
 
 # pdoc imports and exports
-from ._conjunctions import __pdoc__ as __conjunctions_pdoc__
-from ._classes._conjunction import __pdoc__ as __classes_conjunctions_pdoc__
-from ._classes._search import __pdoc__ as __classes_search_pdoc__
+from .conjunctions import __pdoc__ as __conjunctions_pdoc__
+from .classes.conjunction import __pdoc__ as __classes_conjunctions_pdoc__
+from .classes.search import __pdoc__ as __classes_search_pdoc__
 __pdoc__ = __conjunctions_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_conjunctions_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_search_pdoc__)

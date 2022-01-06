@@ -1,3 +1,8 @@
+"""
+Helper functions for calculating the north and south B-trace geographic 
+locations for ground-based instruments.
+"""
+
 import datetime
 import aacgmv2
 from pyaurorax import Location

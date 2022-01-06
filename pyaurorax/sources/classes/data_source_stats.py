@@ -1,8 +1,12 @@
+"""
+Class definition for a statistics about a data source
+"""
+
 import datetime
 import pprint
 from pydantic import BaseModel
 from typing import Dict, Optional
-from ._data_source import DataSource
+from .data_source import DataSource
 
 # pdoc init
 __pdoc__: Dict = {}

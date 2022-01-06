@@ -1,9 +1,13 @@
+"""
+Main functions for performing data product searches
+"""
+
 import pyaurorax
 import datetime
 import humanize
 from typing import Dict, List, Optional
-from ._classes._data_product import DataProduct
-from ._classes._search import Search
+from .classes.data_product import DataProduct
+from .classes.search import Search
 
 # pdoc init
 __pdoc__: Dict = {}

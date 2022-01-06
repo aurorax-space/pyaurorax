@@ -1,6 +1,8 @@
 """
-This module contains the Location class used throughout the PyAuroraX library
+The Location module provides a class used throughout the PyAuroraX
+library to manage lat/lon positions of different things.
 """
+
 from pydantic import BaseModel, validator
 from typing import Union, Optional
 

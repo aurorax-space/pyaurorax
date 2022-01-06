@@ -1,3 +1,7 @@
+"""
+Class definition for a data source
+"""
+
 import pprint
 from pydantic import BaseModel
 from typing import List, Dict, Optional

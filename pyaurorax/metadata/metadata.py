@@ -1,3 +1,7 @@
+"""
+Functions for interacting with metadata filters
+"""
+
 import pyaurorax
 from typing import Dict, List, Optional
 

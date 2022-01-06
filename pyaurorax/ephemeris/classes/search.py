@@ -1,8 +1,12 @@
+"""
+Class definition for an ephemeris search
+"""
+
 import pyaurorax
 import datetime
 import pprint
 from typing import Dict, List, Union, Optional
-from ._ephemeris import Ephemeris
+from .ephemeris import Ephemeris
 
 # pdoc init
 __pdoc__: Dict = {}
