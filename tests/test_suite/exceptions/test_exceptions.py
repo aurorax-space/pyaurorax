@@ -56,7 +56,7 @@ def test_AuroraXValidationException_ephemeris():
 
         # get the data source ID
         source = pyaurorax.sources.get(program, platform, instrument_type,
-                                       format="basic_info")
+                                       format=pyaurorax.FORMAT_BASIC_INFO)
         source.instrument_type = "wrong-type"
 
         # create Ephemeris object

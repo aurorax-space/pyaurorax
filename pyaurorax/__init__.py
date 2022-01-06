@@ -11,7 +11,7 @@ Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax)
 and explore the evolving ecosystem of visualizations, tools, and data
 at [AuroraX](https://aurorax.space/).
 
-For an overview of intended usage and examples, visit the
+For an overview of usage and examples, visit the
 [AuroraX Documentation website](https://docs.aurorax.space/python_libraries/pyaurorax/).
 Details of functionality and options are available in the
 [API reference](https://docs.aurorax.space/python_libraries/pyaurorax/api_reference/aurorax/).
@@ -37,6 +37,11 @@ __pdoc__ = {"cli": False}
 from .api import AuroraXRequest
 from .api import authenticate
 from .api import get_api_key
+from .format import FORMAT_BASIC_INFO
+from .format import FORMAT_BASIC_INFO_WITH_METADATA
+from .format import FORMAT_FULL_RECORD
+from .format import FORMAT_IDENTIFIER_ONLY
+from .format import FORMAT_DEFAULT
 
 # pull in exceptions at top level
 from .exceptions import AuroraXException
@@ -64,3 +69,4 @@ from pyaurorax import availability
 from pyaurorax import conjunctions
 from pyaurorax import ephemeris
 from pyaurorax import data_products
+from pyaurorax import format

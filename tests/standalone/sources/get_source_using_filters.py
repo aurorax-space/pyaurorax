@@ -4,8 +4,9 @@ import pprint
 
 def main():
     # get data source
-    source = pyaurorax.sources.get_using_filters(
-        program="swarm", instrument_type="footprint", format="full_record")
+    source = pyaurorax.sources.get_using_filters(program="swarm",
+                                                 instrument_type="footprint",
+                                                 format=pyaurorax.FORMAT_FULL_RECORD)
     pprint.pprint(source)
 
 

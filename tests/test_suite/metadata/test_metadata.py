@@ -54,7 +54,7 @@ def test_get_data_product_metadata_schema():
     data_source = pyaurorax.sources.get(program,
                                         platform,
                                         instrument_type,
-                                        format="identifier_only")
+                                        format=pyaurorax.FORMAT_IDENTIFIER_ONLY)
 
     # get schema
     schema = pyaurorax.metadata.get_data_products_schema(data_source.identifier)

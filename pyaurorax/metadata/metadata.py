@@ -46,7 +46,7 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
     Returns:
         the metadata schema associated with the record
     """
-    source_info = pyaurorax.sources.get_using_identifier(identifier, format="full_record")
+    source_info = pyaurorax.sources.get_using_identifier(identifier, format=pyaurorax.FORMAT_FULL_RECORD)
     if source_info.ephemeris_metadata_schema:
         return source_info.ephemeris_metadata_schema
     else:
@@ -63,7 +63,7 @@ def get_data_products_schema(identifier: int) -> List[Dict]:
     Returns:
         the metadata schema associated with the record
     """
-    source_info = pyaurorax.sources.get_using_identifier(identifier, format="full_record")
+    source_info = pyaurorax.sources.get_using_identifier(identifier, format=pyaurorax.FORMAT_FULL_RECORD)
     if source_info.data_product_metadata_schema:
         return source_info.data_product_metadata_schema
     else:

@@ -18,7 +18,7 @@ def ephemeris(start: datetime.date,
               instrument_type: Optional[str] = None,
               source_type: Optional[str] = None,
               owner: Optional[str] = None,
-              format: Optional[str] = "basic_info",
+              format: Optional[str] = pyaurorax.FORMAT_DEFAULT,
               slow: Optional[bool] = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing ephemeris records
@@ -31,8 +31,9 @@ def ephemeris(start: datetime.date,
         instrument_type: instrument type string to filter sources by, defaults to None
         source_type: source type string to filter sources by, defaults to None
         owner: owner email address string to filter sources by, defaults to None
-        format: the format of the data sources returned (identifier_only, basic_info,
-            full_record, with_metadata), defaults to "basic_info"
+        format: the format of the data sources returned, defaults to "basic_info".
+            Other options are in the pyaurorax.formats module, or at the top level
+            using pyaurorax.FORMAT_* variables.
         slow: query the data directly (slower) for more accurate results, defaults to false
 
     Returns:
@@ -68,7 +69,7 @@ def data_products(start: datetime.date,
                   instrument_type: Optional[str] = None,
                   source_type: Optional[str] = None,
                   owner: Optional[str] = None,
-                  format: Optional[str] = "basic_info",
+                  format: Optional[str] = pyaurorax.FORMAT_DEFAULT,
                   slow: Optional[bool] = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing data product records
@@ -81,8 +82,9 @@ def data_products(start: datetime.date,
         instrument_type: instrument type string to filter sources by, defaults to None
         source_type: source type string to filter sources by, defaults to None
         owner: owner email address string to filter sources by, defaults to None
-        format: the format of the data sources returned (identifier_only, basic_info,
-            full_record, with_metadata), defaults to "basic_info"
+        format: the format of the data sources returned, defaults to "basic_info".
+            Other options are in the pyaurorax.formats module, or at the top level
+            using pyaurorax.FORMAT_* variables.
         slow: query the data directly (slower) for more up-to-date results, defaults
             to false
 

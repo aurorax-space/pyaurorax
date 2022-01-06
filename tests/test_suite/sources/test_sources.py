@@ -9,14 +9,14 @@ def test_get_single_source():
     source = pyaurorax.sources.get("swarm",
                                    "swarma",
                                    "footprint",
-                                   format="full_record")
+                                   format=pyaurorax.FORMAT_FULL_RECORD)
     assert type(source) is DataSource
 
 
 def test_get_source_by_filter():
     source = pyaurorax.sources.get_using_filters(program="swarm",
                                                  instrument_type="footprint",
-                                                 format="full_record")
+                                                 format=pyaurorax.FORMAT_FULL_RECORD)
     assert type(source) is list and len(source) > 0
 
 
@@ -25,9 +25,9 @@ def test_get_source_by_id():
     source = pyaurorax.sources.get("swarm",
                                    "swarma",
                                    "footprint",
-                                   format="identifier_only")
+                                   format=pyaurorax.FORMAT_IDENTIFIER_ONLY)
     source_using_id = pyaurorax.sources.get_using_identifier(source.identifier,
-                                                             format="full_record")
+                                                             format=pyaurorax.FORMAT_FULL_RECORD)
     assert type(source_using_id) is DataSource
 
 
@@ -133,7 +133,7 @@ def test_update_source():
         ds = pyaurorax.sources.get("test-program",
                                    "test-platform-new",
                                    "test-instrument-new",
-                                   format="full_record")
+                                   format=pyaurorax.FORMAT_FULL_RECORD)
     except Exception:
         assert False
 
@@ -158,7 +158,7 @@ def test_update_source_partial():
         ds = pyaurorax.sources.get("test-program",
                                    "test-platform-updated",
                                    "test-instrument-updated",
-                                   format="full_record")
+                                   format=pyaurorax.FORMAT_FULL_RECORD)
     except Exception:
         assert False
 
