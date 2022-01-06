@@ -116,10 +116,10 @@ def test_AuroraXValidationException_data_product():
 @pytest.fixture(scope="function")
 def set_bad_api_key():
     api_key = pyaurorax.api.get_api_key()
-    pyaurorax.api.authenticate(api_key[:-1])
+    pyaurorax.authenticate(api_key[:-1])
     yield
 
-    pyaurorax.api.authenticate(api_key)
+    pyaurorax.authenticate(api_key)
 
 
 @pytest.mark.exceptions

@@ -80,18 +80,21 @@ $ make docs
 
 ### Testing
 
-PyAuroraX includes several test evaluations bundled into two groups: linting and functionality tests. The linting includes looking through the codebase using tools such as Flake8, PyLint, Bandit, and Pycodestyle. The functionality tests use PyTest to test each function in the library.
+PyAuroraX includes several test evaluations bundled into two groups: linting and functionality tests. The linting includes looking through the codebase using tools such as Flake8, PyLint, Pycodestyle, Bandit, and MyPy. The functionality tests use PyTest to test modules in the library.
 
-There exist several makefile targets to help run these tests easier. Below are the available commands:
+When running the functionality tests using PyTest, you must have the environment variable `AURORAX_APIKEY_STAGING` set to your API key on the staging API system. Alternatively, you can specifiy your API key using the command line (example at the bottom of this section).
+
+There exist several makefile targets to help run these tests quicker/easier. Below are the available commands:
 
 - `make test-linting` Run all linting tests
 - `make test-pytest` Run all automated functional tests
-- `make test-flake8` Run Flake8 tests
-- `make test-pylint` Run PyLint tests
-- `make test-pycodestyle` Run pycodestyle test
-- `make test-bandit` Run Bandit test
+- `make test-flake8` Run Flake8 styling tests
+- `make test-pylint` Run PyLint styling tests
+- `make test-pycodestyle` Run pycodestyle styling tests
+- `make test-bandit` Run Bandit security test
+- `make test-mypy` Run mypy type checking test
 
-The PyTest functionality tests include several categories of tests. You can run each category separately if you want using the "markers" functionality of PyTest. All markers are found in the pytest.ini file at the root of the repository. 
+The PyTest functionality tests include several categories of tests. You can run each category separately if you want using the "markers" feature of PyTest. All markers are found in the pytest.ini file at the root of the repository.
 
 - `poetry run pytest --markers` List all markers
 - `poetry run pytest -v -m accounts` Perform only the tests for the "accounts" marker
@@ -112,10 +115,12 @@ Below are some more commands for advanced usages of PyTest.
 - `poetry run pytest --markers` List all markers (includes builtin, plugin and per-project ones)
 - `cat pytest.ini` List custom markers
 
-You can also run Pytest against a different API. By default, it runs agains the staging API, but you also tell it to run against the production API or a local instance.
+You can also run Pytest against a different API. By default, it runs agains the staging API, but you can alternatively tell it to run against the production API, or a local instance.
 
 - `poetry run pytest -v --env=production` Run all tests against production API, using the AURORAX_APIKEY_PRODUCTION environment variable
 - `poetry run pytest --env=local --host=http://localhost:3000` Run all tests against a local instance of the API, using the AURORAX_APIKEY_LOCAL environment variable
+- `poetry run pytest -v --api-key="SOME API KEY"` Run all tests against the staging API (default) with the specified API key
+- `poetry run pytest --help` View usage for pytest, including the usage for custom options (see the 'custom options' section of the output)
 
 ### Additional Testing
 
