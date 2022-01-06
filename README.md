@@ -59,7 +59,7 @@ $ aurorax-cli --help
 
 ## Development
 
-Some common things you can do include:
+Some common things you can do:
 - `make update` Update the Python dependency libraries
 - `tools/bump_version.py` Bump the version number
 - `make test-pytest-unauthorized-access` Only run the authorization tests
