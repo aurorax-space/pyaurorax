@@ -1,4 +1,4 @@
-.PHONY: install update test test-linting test-flake8 test-pycodestyle test-pylint test-bandit test-mypy test-pytest test-additional clean publish
+.PHONY: install update test test-linting test-flake8 test-pycodestyle test-pylint test-bandit test-mypy test-pytest test-additional docs publish
 
 all:
 
@@ -63,6 +63,9 @@ test-pytest-create-update-delete:
 test-additional:
 	@echo "Test coverage ...\n============================="
 	-poetry run coverage report
+
+docs:
+	poetry run python3 -m pdoc --html --force --output-dir docs pyaurorax --config "lunr_search={'fuzziness': 1}"
 
 publish:
 	poetry build

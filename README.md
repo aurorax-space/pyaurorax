@@ -106,3 +106,11 @@ To run additional tests that are not integrated into the CI pipeline, run the fo
 ```console
 $ make test-additional
 ```
+
+### Documentation
+
+Documentation for the PyAuroraX project is managed by a separate repository [here](https://github.com/aurorax-space/docs). However, you are still able to generate the documentation for this repo for testing/development purposes. To generate the docs, run the following:
+
+```console
+$ make docs
+```
