@@ -4,9 +4,16 @@ locations for ground-based instruments.
 """
 
 import datetime
-import aacgmv2
 from pyaurorax import Location
 from typing import Dict
+import warnings
+
+# import aacgmv2 if installed
+try:
+    import aacgmv2
+    aacgm_found = True
+except ModuleNotFoundError:
+    aacgm_found = False
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -42,6 +49,9 @@ def ground_geo_to_nbtrace(geo_location: Location,
     Convert geographic location to North B-Trace geographic
     location
 
+    Note: aacgmv2 must be installed. To install it, you can run
+    "python -m pip install pyaurorax[aacgmv2]".
+
     Args:
         geo_location: a pyaurorax.Location object representing the
             geographic location
@@ -50,6 +60,13 @@ def ground_geo_to_nbtrace(geo_location: Location,
     Returns:
         the north B-trace location as a pyaurorax.Location object
     """
+    # check to make sure aacgmv2 is installed
+    if (aacgm_found is False):
+        warnings.warn("The aacgmv2 package is not installed, so an unchanged "
+                      "location object will be returned. For this function to "
+                      "work, please install it using 'pip install pyaurorax[aacgmv2]'.")
+        return geo_location
+
     # check if location is in northern hemisphere
     if (geo_location.lat is not None and geo_location.lat >= 0.0):
         # northern hemisphere, north b-trace is the same as geographic location
@@ -66,6 +83,9 @@ def ground_geo_to_sbtrace(geo_location: Location,
     Convert geographic location to South B-Trace geographic
     location
 
+    Note: aacgmv2 must be installed. To install it, you can run
+    "python -m pip install pyaurorax[aacgmv2]".
+
     Args:
         geo_location: a pyaurorax.Location object representing the
             geographic location
@@ -74,6 +94,13 @@ def ground_geo_to_sbtrace(geo_location: Location,
     Returns:
         the south B-trace location as a pyaurorax.Location object
     """
+    # check to make sure aacgmv2 is installed
+    if (aacgm_found is False):
+        warnings.warn("The aacgmv2 package is not installed, so an unchanged "
+                      "location object will be returned. For this function to "
+                      "work, please install it using 'pip install pyaurorax[aacgmv2]'.")
+        return geo_location
+
     # check if location is in southern hemisphere
     if (geo_location.lat is not None and geo_location.lat < 0.0):
         # southern hemisphere, south b-trace is the same as geographic location

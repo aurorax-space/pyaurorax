@@ -8,19 +8,27 @@
 
 PyAuroraX is a Python library for interacting with [AuroraX](https://aurorax.space), a project working to be the world's first and foremost data platform for auroral science. The primary objective of AuroraX is to enable mining and exploration of existing and future auroral data, enabling key science and enhancing the benefits of the world's investment in auroral instrumentation. This will be accomplished with the development of key systems/standards for uniform metadata generation and search, image content analysis, interfaces to leading international tools, and a community involvement that includes more than 80% of the world's data providers.
 
-Documentation can be found at [here](https://docs.aurorax.space/python_libraries/pyaurorax/overview).
-
 PyAuroraX officially supports Python 3.6, 3.7, 3.8, and 3.9 (Python 3.10 not currently supported).
+
+Documentation can be found [here](https://docs.aurorax.space/python_libraries/pyaurorax/overview).
+API Reference can be found [here](https://docs.aurorax.space/python_libraries/pyaurorax/api_reference/pyaurorax).
 
 ## Installation
 
-PyAuroraX is available on PyPI:
+PyAuroraX is available on PyPI so pip can be used to install it:
 
 ```console
 $ python -m pip install pyaurorax
 ```
 
-Alternatively, you can install the latest development version from the Github repository
+To get full functionality, you can also install PyAuroraX with the aacgmv2 dependency. Note that without this, the calculate_btrace methods in the util module will show warning messages. All other functionality will work without this dependency.
+
+```console
+$ python -m pip install pyaurorax[aacgmv2]
+```
+
+Futhermore, if you want the most bleeding edge version of PyAuroraX, you can install it directly from the Github repository:
+
 ```console
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
