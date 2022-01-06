@@ -39,7 +39,7 @@ $ python -m pip install .
 
 ## Usage
 
-There are two things you can use as part of the PyAuroraX library: the main library, or the command line tool.
+There are two things you can use as part of the PyAuroraX library: the main library, and the command line tool.
 
 ### Library import
 
