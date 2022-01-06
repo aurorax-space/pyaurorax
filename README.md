@@ -39,13 +39,19 @@ $ python -m pip install .
 
 ## Usage
 
+There are two things you can use as part of the PyAuroraX library: the main library, or the command line tool.
+
+### Library import
+
+You can import the library using the following statement:
+
 ```python
 >>> import pyaurorax
 ```
 
-## CLI Program
+### CLI program
 
-The program `aurorax-cli` is included in the PyAuroraX package as a command line tool.
+The program `aurorax-cli` is included in the PyAuroraX package as a command line tool. Try it out using:
 
 ```
 $ aurorax-cli --help
