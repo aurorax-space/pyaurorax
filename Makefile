@@ -12,9 +12,6 @@ update upgrade:
 	python -m pip install --upgrade poetry
 	poetry update
 
-clean:
-	@rm -rf pyaurorax.egg-info build dist
-
 test: test-linting test-pytest
 
 test-linting: test-flake8 test-pycodestyle test-pylint test-bandit test-mypy
@@ -70,4 +67,4 @@ docs:
 publish:
 	poetry build
 	poetry publish
-	${MAKE} clean
+	@rm -rf pyaurorax.egg-info build dist

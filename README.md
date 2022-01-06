@@ -59,12 +59,13 @@ $ aurorax-cli --help
 
 ## Development
 
-Some things you can do include:
+Some common things you can do include:
 - `make update` Update the Python dependency libraries
 - `tools/bump_version.py` Bump the version number
 - `make test-pytest-unauthorized-access` Only run the authorization tests
-- `test-pytest-read` Only run the read-based tests
-- `test-pytest-create-update-delete` Only run the write-based tests
+- `make test-pytest-read` Only run the read-based tests
+- `make test-pytest-create-update-delete` Only run the write-based tests
+- `make docs` Generate pdoc documentation
 
 ### Setup
 
