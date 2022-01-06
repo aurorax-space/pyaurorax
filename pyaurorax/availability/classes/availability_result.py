@@ -1,5 +1,5 @@
 """
-Class definition used for containing Availability information 
+Class definition used for containing Availability information
 """
 
 import pyaurorax

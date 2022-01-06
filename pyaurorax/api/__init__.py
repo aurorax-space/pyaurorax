@@ -3,8 +3,8 @@ This module is the under-the-hood interface for RESTful API
 requests. It provides helper functions that the PyAuroraX library
 uses to make robust requests.
 
-Note that all functions and classes from submodules are all imported 
-at this level of the api module. They can be referenced from here 
+Note that all functions and classes from submodules are all imported
+at this level of the api module. They can be referenced from here
 instead of digging in deeper to the submodules.
 """
 

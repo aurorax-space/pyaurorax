@@ -1,5 +1,5 @@
 """
-Helper functions for calculating the north and south B-trace geographic 
+Helper functions for calculating the north and south B-trace geographic
 locations for ground-based instruments.
 """
 
