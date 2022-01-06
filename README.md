@@ -69,7 +69,7 @@ Some common things you can do include:
 
 ### Setup
 
-Clone the repository and install dependencies using Poetry.
+Clone the repository and install primary and development dependencies using Poetry.
 
 ```console
 $ git clone git@github.com:aurorax-space/pyaurorax.git
