@@ -70,6 +70,14 @@ $ cd pyaurorax
 $ make install
 ```
 
+### Documentation
+
+Documentation for the PyAuroraX project is managed by a separate repository [here](https://github.com/aurorax-space/docs). However, you are still able to generate the documentation for this repo for testing/development purposes. To generate the docs, run the following:
+
+```console
+$ make docs
+```
+
 ### Testing
 
 PyAuroraX includes several test evaluations bundled into two groups: linting and functionality tests. The linting includes looking through the codebase using tools such as Flake8, PyLint, Bandit, and Pycodestyle. The functionality tests use PyTest to test each function in the library.
@@ -115,12 +123,4 @@ To run additional tests that are not integrated into the CI pipeline, run the fo
 
 ```console
 $ make test-additional
-```
-
-### Documentation
-
-Documentation for the PyAuroraX project is managed by a separate repository [here](https://github.com/aurorax-space/docs). However, you are still able to generate the documentation for this repo for testing/development purposes. To generate the docs, run the following:
-
-```console
-$ make docs
 ```
