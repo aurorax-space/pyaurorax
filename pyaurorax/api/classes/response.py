@@ -14,6 +14,11 @@ __pdoc__: Dict = {}
 class AuroraXResponse(BaseModel):
     """
     AuroraX API response class
+
+    Attributes:
+        request: the request object
+        data: the data received as part of the request
+        status_code: the HTTP status code received when making the request
     """
     request: Any
     data: Any

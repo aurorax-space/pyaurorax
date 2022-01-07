@@ -32,6 +32,16 @@ API_KEY_HEADER_NAME: str = "x-aurorax-api-key"
 class AuroraXRequest(BaseModel):
     """
     AuroraX API request class
+
+    Attributes:
+        url: the URL to make the request against
+        method: the HTTP method to use (get, post, put, delete, etc.)
+        params: any URL parameters to send in the request, defaults to {}
+        body: the body of the request (ie. post data), defaults to {}
+        headers: any headers to send as part of the request (in addition to the default ones), default is {}
+        null_response: signifies if we expect a response from the API that has no
+            body/data in it (ie. requests to upload data that respond with just a
+            202 status code), defaults to False
     """
     url: str
     method: str
