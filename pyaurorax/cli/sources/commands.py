@@ -5,11 +5,11 @@ from texttable import Texttable
 
 # globals
 SUPPORTED_SOURCE_TYPES = [
-    "ground",
-    "leo",
-    "heo",
-    "lunar",
-    "event_list",
+    pyaurorax.sources.SOURCE_TYPE_EVENT_LIST,
+    pyaurorax.sources.SOURCE_TYPE_GROUND,
+    pyaurorax.sources.SOURCE_TYPE_HEO,
+    pyaurorax.sources.SOURCE_TYPE_LEO,
+    pyaurorax.sources.SOURCE_TYPE_LUNAR,
 ]
 
 

@@ -80,7 +80,7 @@ def test_add_source():
     program = "test-program"
     platform = "test-platform-new"
     instrument_type = "test-instrument-new"
-    source_type = "ground"
+    source_type = pyaurorax.SOURCE_TYPE_GROUND
     display_name = "Test Instrument"
     metadata_schema_ephemeris = [
         {

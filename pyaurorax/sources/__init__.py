@@ -20,10 +20,42 @@ from .sources import partial_update
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
 
-# pdoc imports and exports
+# pdoc imports
 from .sources import __pdoc__ as __sources_pdoc__
 from .classes.data_source import __pdoc__ as __classes_data_source_pdoc__
 from .classes.data_source_stats import __pdoc__ as __classes_data_source_stats_pdoc__
+
+# ground source type
+SOURCE_TYPE_GROUND: str = "ground"
+"""
+Data source 'source_type' category for a ground instrument
+"""
+
+# low-earth orbiting spacecraft source type
+SOURCE_TYPE_LEO: str = "leo"
+"""
+Data source 'source_type' category for a low-earth orbiting satellite
+"""
+
+# highly-elliptical orbiting spacecraft source type
+SOURCE_TYPE_HEO: str = "heo"
+"""
+Data source 'source_type' category for a highly-elliptical orbiting satellite
+"""
+
+# lunar orbiting spacecraft source type
+SOURCE_TYPE_LUNAR: str = "lunar"
+"""
+Data source 'source_type' category for a lunar orbiting satellite
+"""
+
+# event list source type
+SOURCE_TYPE_EVENT_LIST: str = "event_list"
+"""
+Data source 'source_type' category for a specially-curated event list
+"""
+
+# pdoc exports
 __pdoc__ = __sources_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_data_source_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_data_source_stats_pdoc__)
@@ -39,4 +71,9 @@ __all__ = [
     "partial_update",
     "DataSource",
     "DataSourceStatistics",
+    "SOURCE_TYPE_EVENT_LIST",
+    "SOURCE_TYPE_GROUND",
+    "SOURCE_TYPE_HEO",
+    "SOURCE_TYPE_LEO",
+    "SOURCE_TYPE_LUNAR",
 ]

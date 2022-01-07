@@ -13,7 +13,7 @@ def main():
     program = "test-program-updated"
     platform = "test-platform-updated"
     instrument_type = "test-instrument-type-updated"
-    source_type = "leo"
+    source_type = pyaurorax.SOURCE_TYPE_HEO
     display_name = "Test Instrument Updated"
     metadata_schema_ephemeris = [
         {

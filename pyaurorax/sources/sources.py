@@ -18,10 +18,10 @@ def list(order: Optional[str] = "identifier",
 
     Args:
         order: string value to order results by (identifier, program, platform,
-               instrument_type, display_name, owner), defaults to "identifier"
+            instrument_type, display_name, owner), defaults to "identifier"
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
-            using pyaurorax.FORMAT_* variables.
+            using the pyaurorax.FORMAT_* variables.
 
     Returns:
         a list of AuroraX DataSource objects
@@ -59,7 +59,7 @@ def get(program: str,
         instrument_type: the string name of the instrument type
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
-            using pyaurorax.FORMAT_* variables.
+            using the pyaurorax.FORMAT_* variables.
 
     Returns:
         an AuroraX DataSource object matching the input parameters
@@ -103,11 +103,12 @@ def get_using_filters(program: Optional[str] = None,
         program: the name of the program
         platform: the name of the platform
         instrument_type: the name of the instrument type
-        source_type: the name of the data source type
+        source_type: the data source type. Options are in the pyaurorax.sources module,
+            or at the top level using the pyaurorax.SOURCE_TYPE_* variables.
         owner: the AuroraX data source owner's email address
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
-            using pyaurorax.FORMAT_* variables.
+            using the pyaurorax.FORMAT_* variables.
         order: the value to order results by (identifier, program, platform,
             instrument_type, display_name, owner), defaults to "identifier"
 
@@ -151,7 +152,7 @@ def get_using_identifier(identifier: int,
         identifier: an integer unique to the data source
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
-            using pyaurorax.FORMAT_* variables.
+            using the pyaurorax.FORMAT_* variables.
 
     Returns:
         An AuroraX DataSource object matching the input identifier
@@ -182,7 +183,7 @@ def get_stats(identifier: int,
         identifier: an integer unique to the data source
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
-            using pyaurorax.FORMAT_* variables.
+            using the pyaurorax.FORMAT_* variables.
         slow: a boolean indicating whether to use slow method which gets
             most up-to-date stats info (this may take longer to return)
 
@@ -352,7 +353,9 @@ def partial_update(identifier: int,
         program: a string representing the data source program
         platform: a string representing the data source platform
         instrument_type: a string representing the data source instrument type
-        source_type: a string representing the data source type
+        source_type: a string representing the data source type. Options are
+            in the pyaurorax.sources module, or at the top level using the
+            pyaurorax.SOURCE_TYPE_* variables.
         display_name: a string representing the data source's proper display name
         metadata: a dictionary of metadata properties
         owner: a string representing the data source's owner in AuroraX

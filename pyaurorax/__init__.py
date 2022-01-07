@@ -42,6 +42,11 @@ from .format import FORMAT_BASIC_INFO_WITH_METADATA
 from .format import FORMAT_FULL_RECORD
 from .format import FORMAT_IDENTIFIER_ONLY
 from .format import FORMAT_DEFAULT
+from .sources import SOURCE_TYPE_EVENT_LIST
+from .sources import SOURCE_TYPE_GROUND
+from .sources import SOURCE_TYPE_HEO
+from .sources import SOURCE_TYPE_LEO
+from .sources import SOURCE_TYPE_LUNAR
 
 # pull in exceptions at top level
 from .exceptions import AuroraXException

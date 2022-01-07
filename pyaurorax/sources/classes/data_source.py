@@ -19,7 +19,9 @@ class DataSource(BaseModel):
         program: a string representing the data source program
         platform: a string representing the data source platform
         instrument_type: a string representing the data source instrument type
-        source_type: a string representing the data source type
+        source_type: a string representing the data source type. Options are
+            in the pyaurorax.sources module, or at the top level using the
+            pyaurorax.SOURCE_TYPE_* variables.
         display_name: a string representing the data source's proper display name
         metadata: a dictionary of metadata properties
         owner: a string representing the data source's owner in AuroraX
