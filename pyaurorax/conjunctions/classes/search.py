@@ -8,7 +8,7 @@ import datetime
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
 from ...requests import STANDARD_POLLING_SLEEP_TIME
-from ...conjunctions import DEFAULT_CONJUNCTION_DISTANCE
+from ...conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRACE
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -37,7 +37,9 @@ class Search():
                     "instrument_types": ["footprint"]
                 }
             ]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
+            in the pyaurorax.conjunctions module, or at the top level using the
+            pyaurorax.CONJUNCTION_TYPE_* variables.
         max_distances: dictionary of Dict[str, float] ground-space and space-space maximum
             distances for conjunctions. The default_distance will be used for any ground-space
             and space-space maximum distances not specified.
@@ -75,7 +77,7 @@ class Search():
                  end: datetime.datetime,
                  ground: List[Dict],
                  space: List[Dict],
-                 conjunction_types: Optional[List[str]] = ["nbtrace"],
+                 conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
                  max_distances: Optional[Dict[str, float]] = None,
                  default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,

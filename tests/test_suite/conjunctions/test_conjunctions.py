@@ -238,7 +238,7 @@ def test_search_conjunctions_with_conjunction_types():
     space_params = [{
         "programs": ["swarm"]
     }]
-    conjunction_type = ["sbtrace"]
+    conjunction_type = [pyaurorax.conjunctions.CONJUNCTION_TYPE_SBTRACE]
     distance = 100
 
     s = pyaurorax.conjunctions.search(start=start,
@@ -251,7 +251,7 @@ def test_search_conjunctions_with_conjunction_types():
     s.wait()
     s.get_data()
 
-    assert len(s.data) > 0 and s.data[0].conjunction_type == "sbtrace"
+    assert len(s.data) > 0 and s.data[0].conjunction_type == pyaurorax.conjunctions.CONJUNCTION_TYPE_SBTRACE
 
 
 @pytest.mark.conjunctions
@@ -264,7 +264,7 @@ def test_cancel_conjunction_search():
     space_params = [{
         "programs": ["swarm"]
     }]
-    conjunction_type = ["sbtrace"]
+    conjunction_type = [pyaurorax.conjunctions.CONJUNCTION_TYPE_SBTRACE]
     distance = 100
 
     s = pyaurorax.conjunctions.Search(start, end, ground_params, space_params,

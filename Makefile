@@ -24,8 +24,8 @@ test-flake8 flake8:
 
 test-pycodestyle:
 	@printf "Running pycodestyle tests\n+++++++++++++++++++++++++++\n"
-	pycodestyle --ignore=E501,W191,W293,E302,W291,W292,E126,E265,E226,E262,E261,W391,E121,E123,E712,E231,W605,W504,W503 pyaurorax
-	pycodestyle --ignore=E501,W191,W293,E302,W291,W292,E126,E265,E226,E262,E261,W391,E121,E123,E712,E231,W605,W504,W503 tools
+	pycodestyle --ignore=E501,W191,W293,E302,W291,W292,E126,E265,E226,E262,E261,W391,E121,E123,E712,E231,W605,W504,W503,E402 pyaurorax
+	pycodestyle --ignore=E501,W191,W293,E302,W291,W292,E126,E265,E226,E262,E261,W391,E121,E123,E712,E231,W605,W504,W503,E402 tools
 	@printf "\n\n"
 
 test-pylint pylint:

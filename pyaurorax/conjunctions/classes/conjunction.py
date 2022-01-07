@@ -17,13 +17,14 @@ class Conjunction(BaseModel):
     Conjunction data type
 
     Attributes:
-        conjunction_type: conjunction type "nbtrace" or "sbtrace"
-        start: start datetime.datetime of conjunction event(s)
-        end: end datetime.datetime of conjunction event(s)
-        data_sources: pyaurorax.sources.DataSource sources in the conjunction
-        min_distance: minimum kilometre distance of conjunction event(s), float
-        max_distance: maximum kilometre distance of conjunction event(s), float
-        events: list of dictionaries containing details of individual conjunction events
+        conjunction_type: the type of location data used when the conjunction
+            was found. It can either be "nbtrace" or "sbtrace"
+        start: start timestamp of conjunction
+        end: end timestamp of conjunction
+        data_sources: data sources in the conjunction
+        min_distance: minimum kilometer distance of conjunction
+        max_distance: maximum kilometer distance of conjunction
+        events: list of dictionaries containing details of sub-conjunctions
     """
     conjunction_type: str
     start: datetime.datetime

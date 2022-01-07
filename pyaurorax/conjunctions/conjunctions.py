@@ -8,7 +8,7 @@ import pyaurorax
 import warnings
 from typing import Dict, List, Optional
 from .classes.search import Search
-from ..conjunctions import DEFAULT_CONJUNCTION_DISTANCE
+from ..conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRACE
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -18,7 +18,7 @@ def search_async(start: datetime.datetime,
                  end: datetime.datetime,
                  ground: List[Dict],
                  space: List[Dict],
-                 conjunction_types: Optional[List[str]] = ["nbtrace"],
+                 conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
                  max_distances: Optional[Dict[str, float]] = {},
                  default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
@@ -55,7 +55,9 @@ def search_async(start: datetime.datetime,
                     "instrument_types": ["footprint"]
                 }
             ]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
+            in the pyaurorax.conjunctions module, or at the top level using the
+            pyaurorax.CONJUNCTION_TYPE_* variables.
         max_distances: dictionary of Dict[str, float] ground-space and space-space maximum
             distances for conjunctions. The default_distance will be used for any ground-space
             and space-space maximum distances not specified.
@@ -98,7 +100,7 @@ def search(start: datetime.datetime,
            end: datetime.datetime,
            ground: List[Dict],
            space: List[Dict],
-           conjunction_types: Optional[List[str]] = ["nbtrace"],
+           conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
            max_distances: Optional[Dict[str, float]] = {},
            default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
            verbose: Optional[bool] = False,
@@ -134,7 +136,9 @@ def search(start: datetime.datetime,
                     "instrument_types": ["footprint"]
                 }
             ]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
+            in the pyaurorax.conjunctions module, or at the top level using the
+            pyaurorax.CONJUNCTION_TYPE_* variables.
         max_distances: dictionary of Dict[str, float] ground-space and space-space
             maximum distances for conjunctions. The default_distance will be used for
             any ground-space and space-space maximum distances not specified.
