@@ -47,6 +47,8 @@ from .sources import SOURCE_TYPE_GROUND
 from .sources import SOURCE_TYPE_HEO
 from .sources import SOURCE_TYPE_LEO
 from .sources import SOURCE_TYPE_LUNAR
+from .conjunctions import CONJUNCTION_TYPE_NBTRACE
+from .conjunctions import CONJUNCTION_TYPE_SBTRACE
 
 # pull in exceptions at top level
 from .exceptions import AuroraXException
@@ -65,10 +67,10 @@ from .location import Location
 
 # pull in modules (order matters otherwise we get circular import errors)
 from pyaurorax import api
+from pyaurorax import requests
 from pyaurorax import sources
 from pyaurorax import exceptions
 from pyaurorax import metadata
-from pyaurorax import requests
 from pyaurorax import util
 from pyaurorax import availability
 from pyaurorax import conjunctions

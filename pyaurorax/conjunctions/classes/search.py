@@ -7,13 +7,13 @@ import pprint
 import datetime
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
+from ...requests import STANDARD_POLLING_SLEEP_TIME
 
 # pdoc init
 __pdoc__: Dict = {}
 
 # globals
-DEFAULT_CONJUNCTION_DISTANCE: int = 300
-""" The default distance used for conjunction searches """
+_DEFAULT_CONJUNCTION_DISTANCE: int = 300
 
 
 class Search():
@@ -79,7 +79,7 @@ class Search():
                  space: List[Dict],
                  conjunction_types: Optional[List[str]] = ["nbtrace"],
                  max_distances: Optional[Dict[str, float]] = None,
-                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
+                 default_distance: Optional[float] = _DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None):
 
@@ -241,7 +241,7 @@ class Search():
             self.data = [Conjunction(**c) for c in raw_data]
 
     def wait(self,
-             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+             poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
              verbose: Optional[bool] = False) -> None:
         """
         Block and wait until the request is complete and data is
@@ -260,7 +260,7 @@ class Search():
     def cancel(self,
                wait: Optional[bool] = False,
                verbose: Optional[bool] = False,
-               poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+               poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME) -> int:
         """
         Cancel the conjunction search request.
 
