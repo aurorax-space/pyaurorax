@@ -5,6 +5,7 @@ Main functions for performing data product searches
 import pyaurorax
 import datetime
 import humanize
+import warnings
 from typing import Dict, List, Optional
 from .classes.data_product import DataProduct
 from .classes.search import Search
@@ -52,7 +53,20 @@ def search_async(start: datetime.datetime,
                  response_format: Optional[Dict] = None,
                  metadata_filters_logical_operator: Optional[str] = None) -> Search:
     """
-    Submit a request for a data products search, return asynchronously
+    Submit a request for a data products search, return immediately.
+
+    The request will be done asynchronously by the API. Use the helper functions
+    as part of the Search object returned to check for data and/or download it.
+    If you don't want the search to return immediately and rather block until
+    all data is downloaded, please use the 'search' function instead.
+
+    Note: At least one search criteria from programs, platforms, or
+    instrument_types, must be specified.
+
+    .. deprecated::
+        This function is deprecated as of 0.9.0. Please use the 'search' function
+        with the 'return_immediately' flag set to True to get the same behaviour.
+        This function will be removed in a future release.
 
     Args:
         start: start timestamp of the search (inclusive)
@@ -85,6 +99,9 @@ def search_async(start: datetime.datetime,
     Returns:
         a pyaurorax.data_products.Search object
     """
+    warnings.warn("This function is deprecated and will be removed in a future release. Please "
+                  "use the 'search' function with the 'return_immediately' flag to produce the "
+                  "same behaviour.")
     s = pyaurorax.data_products.Search(start,
                                        end,
                                        programs=programs,
@@ -108,9 +125,19 @@ def search(start: datetime.datetime,
            verbose: Optional[bool] = False,
            poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            response_format: Optional[Dict] = None,
-           metadata_filters_logical_operator: Optional[str] = None) -> Search:
+           metadata_filters_logical_operator: Optional[str] = None,
+           return_immediately: Optional[bool] = False) -> Search:
     """
-    Search for data product records and block until results are returned
+    Search for data product records
+
+    By default, this function will block and wait until the request completes and
+    all data is downloaded. If you don't want to wait, set the 'return_immediately`
+    value to True. The Search object will be returned right after the search has been
+    started, and you can use the helper functions as part of that object to get the
+    data when it's done.
+
+    Note: At least one search criteria from programs, platforms, or
+    instrument_types, must be specified.
 
     Args:
         start: start timestamp of the search (inclusive)
@@ -142,6 +169,8 @@ def search(start: datetime.datetime,
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
+        return_immediately: initiate the search and return without waiting for data to
+            be received, defaults to False
 
     Returns:
         a pyaurorax.data_products.Search object
@@ -166,6 +195,10 @@ def search(start: datetime.datetime,
         print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
         print("[%s] Request details available at: %s" % (datetime.datetime.now(),
                                                          s.request_url))
+
+    # return immediately if we wanted to
+    if (return_immediately is True):
+        return s
 
     # wait for data
     if (verbose is True):
