@@ -53,12 +53,12 @@ def ground_geo_to_nbtrace(geo_location: Location,
     "python -m pip install pyaurorax[aacgmv2]".
 
     Args:
-        geo_location: a pyaurorax.Location object representing the
+        geo_location: a Location object representing the
             geographic location
         dt: a datetime.datetime object representing the timestamp
 
     Returns:
-        the north B-trace location as a pyaurorax.Location object
+        the north B-trace location as a Location object
     """
     # check to make sure aacgmv2 is installed
     if (aacgm_found is False):
@@ -87,12 +87,12 @@ def ground_geo_to_sbtrace(geo_location: Location,
     "python -m pip install pyaurorax[aacgmv2]".
 
     Args:
-        geo_location: a pyaurorax.Location object representing the
+        geo_location: a Location object representing the
             geographic location
         dt: a datetime.datetime object representing the timestamp
 
     Returns:
-        the south B-trace location as a pyaurorax.Location object
+        the south B-trace location as a Location object
     """
     # check to make sure aacgmv2 is installed
     if (aacgm_found is False):
