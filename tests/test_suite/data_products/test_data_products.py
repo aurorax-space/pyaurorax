@@ -58,9 +58,10 @@ def test_search_data_products_synchronous():
 
 @pytest.mark.data_products
 def test_search_data_products_asynchronous():
-    s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
-                                             programs=["auroramax"])
+    s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                       datetime.datetime(2020, 1, 2, 23, 59, 59),
+                                       programs=["auroramax"],
+                                       return_immediately=True)
 
     s.update_status()
     tries = 0
@@ -115,18 +116,19 @@ def test_search_data_products_metadata_filters_synchronous():
 
 @pytest.mark.data_products
 def test_search_data_products_response_format_asynchronous():
-    s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
-                                             programs=["auroramax"],
-                                             response_format={"start": True,
-                                                              "end": True,
-                                                              "data_source": {
-                                                                  "identifier": True,
-                                                                  "program": True,
+    s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                       datetime.datetime(2020, 1, 2, 23, 59, 59),
+                                       programs=["auroramax"],
+                                       response_format={"start": True,
+                                                        "end": True,
+                                                        "data_source": {
+                                                            "identifier": True,
+                                                            "program": True,
 
-                                                              },
-                                                              "url": True,
-                                                              "metadata": True})
+                                                        },
+                                                        "url": True,
+                                                        "metadata": True},
+                                       return_immediately=True)
 
     s.update_status()
     tries = 0

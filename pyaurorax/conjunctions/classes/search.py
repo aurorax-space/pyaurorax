@@ -262,8 +262,12 @@ class Search():
                verbose: Optional[bool] = False,
                poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
-        Cancel the conjunction search request at the API. This method
-        returns asynchronously by default.
+        Cancel the conjunction search request.
+
+        This method returns immediately by default since the API processes
+        this request asynchronously. If you would prefer to wait for it
+        to be completed, set the 'wait' parameter to True. You can adjust
+        the polling time using the 'poll_interval' parameter.
 
         Args:
             wait: set to True to block until the cancellation request

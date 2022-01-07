@@ -253,7 +253,10 @@ def delete(data_source: pyaurorax.sources.DataSource,
            start: datetime.datetime,
            end: datetime.datetime) -> int:
     """
-    Delete a range of ephemeris records. This method is asynchronous.
+    Delete a range of ephemeris records.
+
+    The API processes this request asynchronously, so this method will return
+    immediately whether or not the data has already been deleted.
 
     Args:
         data_source: pyaurorax.sources.DataSource source associated with

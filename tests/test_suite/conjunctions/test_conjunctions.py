@@ -16,8 +16,12 @@ def test_search_conjunctions_asynchronous():
     }]
     distance = 100
 
-    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                            space=space_params, default_distance=distance)
+    s = pyaurorax.conjunctions.search(start=start,
+                                      end=end,
+                                      ground=ground_params,
+                                      space=space_params,
+                                      default_distance=distance,
+                                      return_immediately=True)
 
     s.wait()
     s.get_data()
@@ -97,8 +101,12 @@ def test_create_conjunction_object():
     }]
     distance = 200
 
-    c = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                            space=space_params, default_distance=distance)
+    c = pyaurorax.conjunctions.search(start=start,
+                                      end=end,
+                                      ground=ground_params,
+                                      space=space_params,
+                                      default_distance=distance,
+                                      return_immediately=True)
     c.wait()
     c.get_data()
     if len(c.data) == 0:
@@ -142,8 +150,12 @@ def test_search_conjunctions_with_metadata_filters():
         }
     }]
 
-    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                            space=space_params, default_distance=300)
+    s = pyaurorax.conjunctions.search(start=start,
+                                      end=end,
+                                      ground=ground_params,
+                                      space=space_params,
+                                      default_distance=300,
+                                      return_immediately=True)
     s.wait()
     s.get_data()
 
@@ -165,8 +177,11 @@ def test_search_conjunctions_space_only_with_hemispheres():
         }
     ]
 
-    s = pyaurorax.conjunctions.search_async(
-        start=start, end=end, ground=[], space=space_params)
+    s = pyaurorax.conjunctions.search(start=start,
+                                      end=end,
+                                      ground=[],
+                                      space=space_params,
+                                      return_immediately=True)
     s.wait()
     s.get_data()
 
@@ -195,8 +210,12 @@ def test_search_conjunctions_with_max_distances():
         "space1-space2": 500
     }
 
-    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                            space=space_params, max_distances=distances)
+    s = pyaurorax.conjunctions.search(start=start,
+                                      end=end,
+                                      ground=ground_params,
+                                      space=space_params,
+                                      max_distances=distances,
+                                      return_immediately=True)
     s.wait()
     s.get_data()
 
@@ -222,9 +241,13 @@ def test_search_conjunctions_with_conjunction_types():
     conjunction_type = ["sbtrace"]
     distance = 100
 
-    s = pyaurorax.conjunctions.search_async(start=start, end=end, ground=ground_params,
-                                            space=space_params, default_distance=distance,
-                                            conjunction_types=conjunction_type)
+    s = pyaurorax.conjunctions.search(start=start,
+                                      end=end,
+                                      ground=ground_params,
+                                      space=space_params,
+                                      default_distance=distance,
+                                      conjunction_types=conjunction_type,
+                                      return_immediately=True)
     s.wait()
     s.get_data()
 

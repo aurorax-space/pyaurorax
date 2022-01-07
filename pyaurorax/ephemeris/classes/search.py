@@ -222,8 +222,12 @@ class Search():
                verbose: bool = False,
                poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
-        Cancel the ephemeris search request at the API. This method returns
-        asynchronously by default.
+        Cancel the ephemeris search request.
+
+        This method returns immediately by default since the API processes
+        this request asynchronously. If you would prefer to wait for it
+        to be completed, set the 'wait' parameter to True. You can adjust
+        the polling time using the 'poll_interval' parameter.
 
         Args:
             wait: set to True to block until the cancellation request

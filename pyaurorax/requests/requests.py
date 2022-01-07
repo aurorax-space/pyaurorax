@@ -137,11 +137,15 @@ def wait_for_data(request_url: str,
 
 def cancel(request_url: str,
            wait: Optional[bool] = False,
-           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
-           verbose: Optional[bool] = False) -> int:
+           verbose: Optional[bool] = False,
+           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME) -> int:
     """
-    Cancel the request at the given URL. This operation is asynchronous
-    by default unless the wait param is set to True.
+    Cancel the request at the given URL.
+
+    This method returns immediately by default since the API processes
+    this request asynchronously. If you would prefer to wait for it
+    to be completed, set the 'wait' parameter to True. You can adjust
+    the polling time using the 'poll_interval' parameter.
 
     Args:
         request_url: the URL string of the request to be canceled

@@ -60,11 +60,12 @@ def test_search_ephemeris_synchronous():
 
 @pytest.mark.ephemeris
 def test_search_ephemeris_asynchronous():
-    s = pyaurorax.ephemeris.search_async(datetime.datetime(2019, 1, 1, 0, 0, 0),
-                                         datetime.datetime(2019, 1, 1, 0, 59, 59),
-                                         programs=["swarm"],
-                                         platforms=["swarma"],
-                                         instrument_types=["footprint"])
+    s = pyaurorax.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                   datetime.datetime(2019, 1, 1, 0, 59, 59),
+                                   programs=["swarm"],
+                                   platforms=["swarma"],
+                                   instrument_types=["footprint"],
+                                   return_immediately=True)
 
     s.execute()
     s.update_status()
@@ -85,22 +86,23 @@ def test_search_ephemeris_asynchronous():
 
 @pytest.mark.ephemeris
 def test_search_ephemeris_response_format_asynchronous():
-    s = pyaurorax.ephemeris.search_async(datetime.datetime(2019, 1, 1, 0, 0, 0),
-                                         datetime.datetime(2019, 1, 1, 0, 59, 59),
-                                         programs=["swarm"],
-                                         platforms=["swarma"],
-                                         instrument_types=["footprint"],
-                                         response_format={
-                                             "data_source": {
-                                                 "identifier": True,
-                                                 "program": True,
-                                             },
-                                             "epoch": True,
-                                             "location_geo": {
-                                                 "lat": True,
-                                                 "lon": True
-                                             },
-                                             "metadata": True})
+    s = pyaurorax.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                   datetime.datetime(2019, 1, 1, 0, 59, 59),
+                                   programs=["swarm"],
+                                   platforms=["swarma"],
+                                   instrument_types=["footprint"],
+                                   response_format={
+                                       "data_source": {
+                                           "identifier": True,
+                                           "program": True,
+                                       },
+                                       "epoch": True,
+                                       "location_geo": {
+                                           "lat": True,
+                                           "lon": True
+                                       },
+                                       "metadata": True},
+                                   return_immediately=True)
 
     s.execute()
     s.update_status()

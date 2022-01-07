@@ -279,7 +279,10 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
                      data_product_types: Optional[List[str]] = None) -> int:
     """
     Deletes data products associated with a data source in the date range
-    provided. This method is asynchronous.
+    provided.
+
+    The API processes this request asynchronously, so this method will return
+    immediately whether or not the data has already been deleted.
 
     Args:
         data_source: pyaurorax.sources.DataSource source associated
@@ -326,7 +329,10 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
 def delete(data_source: pyaurorax.sources.DataSource,
            urls: List[str]) -> int:
     """
-    Delete data products by URL. This method is asynchronous.
+    Delete data products by URL.
+
+    The API processes this request asynchronously, so this method will return
+    immediately whether or not the data has already been deleted.
 
     Args:
         data_source: the pyaurorax.sources.DataSource source associated with the
