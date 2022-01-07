@@ -14,17 +14,17 @@ __pdoc__: Dict = {}
 def list(order: Optional[str] = "identifier",
          format: Optional[str] = pyaurorax.FORMAT_FULL_RECORD) -> List[DataSource]:
     """
-    Retrieve all data source records
+    Retrieve all data sources
 
     Args:
-        order: string value to order results by (identifier, program, platform,
+        order: value to order results by (identifier, program, platform,
             instrument_type, display_name, owner), defaults to "identifier"
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
             using the pyaurorax.FORMAT_* variables.
 
     Returns:
-        a list of AuroraX DataSource objects
+        all found data sources
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -54,15 +54,15 @@ def get(program: str,
     Retrieve a specific data source record
 
     Args:
-        program: the string name of the program
-        platform: the string name of the platform
-        instrument_type: the string name of the instrument type
+        program: the program name
+        platform: the platform name
+        instrument_type: the instrument type name
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
             using the pyaurorax.FORMAT_* variables.
 
     Returns:
-        an AuroraX DataSource object matching the input parameters
+        the data source matching the requested parameters
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -100,12 +100,13 @@ def get_using_filters(program: Optional[str] = None,
     Retrieve all data source records matching a filter
 
     Args:
-        program: the name of the program
-        platform: the name of the platform
-        instrument_type: the name of the instrument type
-        source_type: the data source type. Options are in the pyaurorax.sources module,
-            or at the top level using the pyaurorax.SOURCE_TYPE_* variables.
-        owner: the AuroraX data source owner's email address
+        program: the program to filter for, defaults to None
+        platform: the platform to filter for, defaults to None
+        instrument_type: the instrument type to filter for, defaults to None
+        source_type: the data source type to filter for, defaults to None.
+            Options are in the pyaurorax.sources module, or at the top level
+            using the pyaurorax.SOURCE_TYPE_* variables.
+        owner: the owner's email address to filter for, defaults to None
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
             using the pyaurorax.FORMAT_* variables.
@@ -113,7 +114,7 @@ def get_using_filters(program: Optional[str] = None,
             instrument_type, display_name, owner), defaults to "identifier"
 
     Returns:
-        A list of AuroraX DataSource objects matching the filter parameters
+        any data sources matching the requested parameters
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -149,13 +150,13 @@ def get_using_identifier(identifier: int,
     Retrieve data source record matching an identifier
 
     Args:
-        identifier: an integer unique to the data source
+        identifier: the AuroraX unique ID for the data source
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
             using the pyaurorax.FORMAT_* variables.
 
     Returns:
-        An AuroraX DataSource object matching the input identifier
+        the data source matching the identifier
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -180,15 +181,14 @@ def get_stats(identifier: int,
     Retrieve statistics for a data source
 
     Args:
-        identifier: an integer unique to the data source
+        identifier: the AuroraX unique ID for the data source
         format: the format of the data sources returned, defaults to "full_record".
             Other options are in the pyaurorax.formats module, or at the top level
             using the pyaurorax.FORMAT_* variables.
-        slow: a boolean indicating whether to use slow method which gets
-            most up-to-date stats info (this may take longer to return)
+        slow: retrieve the stats using a slower, but more accurate method, defaults to False
 
     Returns:
-        a DataSourceStatistics object with information about the data source
+        information about the data source
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -213,10 +213,11 @@ def add(data_source: DataSource) -> DataSource:
     Add a new data source to AuroraX
 
     Args:
-        data_source: the fully defined AuroraX DataSource object to add
+        data_source: the data source to add (note: it must be a fully-defined
+            DataSource object)
 
     Returns:
-        the newly created AuroraX DataSource object
+        the newly created data source
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -260,7 +261,7 @@ def delete(identifier: int) -> int:
     Delete a data source from AuroraX
 
     Args:
-        identifier: an integer unique to the data source
+        identifier: the AuroraX unique ID for the data source
 
     Returns:
         1 on success
@@ -299,10 +300,12 @@ def update(data_source: DataSource) -> DataSource:
     object is complete.
 
     Args:
-        data_source: the fully defined AuroraX DataSource object to update
+        data_source: the data source to update (note: it must be a fully-defined
+            DataSource object with the values set to what you want AuroraX to
+            update it to)
 
     Returns:
-        the updated AuroraX DataSource object
+        the updated data source
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -344,32 +347,28 @@ def partial_update(identifier: int,
                    ephemeris_metadata_schema: Optional[List[Dict]] = None,
                    data_product_metadata_schema: Optional[List[Dict]] = None) -> DataSource:
     """
-    Partially update a data source in AuroraX
-
-    Omitted fields are ignored in the update. Refer to examples for usage
+    Partially update a data source in AuroraX (omitted fields are ignored)
 
     Args:
-        identifier: an integer unique to the data source
-        program: a string representing the data source program
-        platform: a string representing the data source platform
-        instrument_type: a string representing the data source instrument type
-        source_type: a string representing the data source type. Options are
-            in the pyaurorax.sources module, or at the top level using the
+        identifier: the AuroraX unique ID for the data source, defaults to None
+        program: the new program for the data source, defaults to None
+        platform: the new platform for the data source, defaults to None
+        instrument_type: the new instrument type for the data source, defaults to None
+        source_type: the new source type for the data source, defaults to None. Options
+            are in the pyaurorax.sources module, or at the top level using the
             pyaurorax.SOURCE_TYPE_* variables.
-        display_name: a string representing the data source's proper display name
-        metadata: a dictionary of metadata properties
-        owner: a string representing the data source's owner in AuroraX
-        maintainers: a list of strings representing the email addresses of AuroraX
-            accounts that can alter this data source and its associated records
+        display_name: the new display name for the data source, defaults to None
+        metadata: the new metadata for the data source, defaults to None
+        maintainers: the new maintainer AuroraX account email addresses, defaults to None
         ephemeris_metadata_schema: a list of dictionaries capturing the metadata
             keys and values that can appear in ephemeris records associated with
-            the data source
+            the data source, defaults to None
         data_product_metadata_schema: a list of dictionaries capturing the metadata
             keys and values that can appear in data product records associated with
-            the data source
+            the data source, defaults to None
 
     Returns:
-        the updated AuroraX DataSource object
+        the updated data source
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error

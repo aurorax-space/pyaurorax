@@ -14,15 +14,15 @@ __pdoc__: Dict = {}
 
 class DataSourceStatistics(BaseModel):
     """
-    Data type for data source statistics
+    Data source statistics object
 
     Attributes:
         data_source: the data source the statistics are associated with
-        earliest_ephemeris_loaded: datetime.datetime of the earliest ephemeris record
-        latest_ephemeris_loaded: datetime.datetime of the latest ephemeris record
+        earliest_ephemeris_loaded: timestamp of the earliest ephemeris record
+        latest_ephemeris_loaded: timestamp of the latest ephemeris record
         ephemeris_count: total number of ephemeris records for this data source
-        earliest_data_product_loaded: datetime.datetime of the earliest data_product record
-        latest_data_product_loaded: datetime.datetime of the latest data product record
+        earliest_data_product_loaded: timestamp of the earliest data_product record
+        latest_data_product_loaded: timestamp of the latest data product record
         data_product_count: total number of ephemeris records for this data source
     """
     data_source: DataSource

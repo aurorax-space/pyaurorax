@@ -15,24 +15,24 @@ class DataSource(BaseModel):
     Data source object
 
     Attributes:
-        identifier: an integer unique to the data source
-        program: a string representing the data source program
-        platform: a string representing the data source platform
-        instrument_type: a string representing the data source instrument type
-        source_type: a string representing the data source type. Options are
+        identifier: the unique AuroraX ID for this data source
+        program: the program for this data source
+        platform: the platform for this data source
+        instrument_type: the instrument type for this data source
+        source_type: the data source type for this data source. Options are
             in the pyaurorax.sources module, or at the top level using the
             pyaurorax.SOURCE_TYPE_* variables.
-        display_name: a string representing the data source's proper display name
-        metadata: a dictionary of metadata properties
-        owner: a string representing the data source's owner in AuroraX
-        maintainers: a list of strings representing the email addresses of AuroraX
-            accounts that can alter this data source and its associated records
+        display_name: the display name for this data source
+        metadata: metadata for this data source (arbitrary keys and values)
+        owner: the owner's email address of this data source
+        maintainers: the email addresses of AuroraX accounts that can alter
+            this data source and its associated records
         ephemeris_metadata_schema: a list of dictionaries capturing the metadata
             keys and values that can appear in ephemeris records associated with
-            the data source
+            this data source
         data_product_metadata_schema: a list of dictionaries capturing the metadata
             keys and values that can appear in data product records associated with
-            the data source
+            this data source
     """
     identifier: Optional[int] = None
     program: Optional[str] = None
