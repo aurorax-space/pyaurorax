@@ -35,6 +35,8 @@ Futhermore, if you want the most bleeding edge version of PyAuroraX, you can ins
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
 $ python -m pip install .
+[ or with the aacgmv2 extra ]
+$ python -m pip install .[aacgmv2]
 ```
 
 ## Usage
