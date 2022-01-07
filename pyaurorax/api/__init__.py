@@ -30,6 +30,10 @@ __pdoc__ = __api_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_request_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_response_pdoc__)
 __all__ = [
+    "DEFAULT_BASE_URL",
+    "DEFAULT_RETRIES",
+    "REQUEST_HEADERS",
+    "API_KEY_HEADER_NAME",
     "AuroraXRequest",
     "AuroraXResponse",
     "urls",
@@ -38,8 +42,4 @@ __all__ = [
     "set_base_url",
     "get_base_url",
     "reset_base_url",
-    "DEFAULT_BASE_URL",
-    "DEFAULT_RETRIES",
-    "REQUEST_HEADERS",
-    "API_KEY_HEADER_NAME",
 ]

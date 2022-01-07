@@ -8,12 +8,10 @@ import pyaurorax
 import warnings
 from typing import Dict, List, Optional
 from .classes.search import Search
+from ..conjunctions import DEFAULT_CONJUNCTION_DISTANCE
 
 # pdoc init
 __pdoc__: Dict = {}
-
-# globals
-_DEFAULT_CONJUNCTION_DISTANCE: int = 300
 
 
 def search_async(start: datetime.datetime,
@@ -22,7 +20,7 @@ def search_async(start: datetime.datetime,
                  space: List[Dict],
                  conjunction_types: Optional[List[str]] = ["nbtrace"],
                  max_distances: Optional[Dict[str, float]] = {},
-                 default_distance: Optional[float] = _DEFAULT_CONJUNCTION_DISTANCE,
+                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None) -> Search:
     """
@@ -102,7 +100,7 @@ def search(start: datetime.datetime,
            space: List[Dict],
            conjunction_types: Optional[List[str]] = ["nbtrace"],
            max_distances: Optional[Dict[str, float]] = {},
-           default_distance: Optional[float] = _DEFAULT_CONJUNCTION_DISTANCE,
+           default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
            verbose: Optional[bool] = False,
            poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            epoch_search_precision: Optional[int] = 60,

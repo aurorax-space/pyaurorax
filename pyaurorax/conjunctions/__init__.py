@@ -7,16 +7,9 @@ at this level of the conjunctions module. They can be referenced from
 here instead of digging in deeper to the submodules.
 """
 
-# function and class imports
-from .conjunctions import search_async
-from .conjunctions import search
-from .classes.conjunction import Conjunction
-from .classes.search import Search
-
-# pdoc imports
-from .conjunctions import __pdoc__ as __conjunctions_pdoc__
-from .classes.conjunction import __pdoc__ as __classes_conjunctions_pdoc__
-from .classes.search import __pdoc__ as __classes_search_pdoc__
+# default conjunction distance
+DEFAULT_CONJUNCTION_DISTANCE: int = 300
+""" The default distance used for conjunction searches """
 
 # conjunction type - north b-trace
 CONJUNCTION_TYPE_NBTRACE = "nbtrace"
@@ -32,15 +25,25 @@ Conjunction search 'conjunction_type' category for
 finding conjunctions using the south B-trace data
 """
 
-# pdoc exports
+# function and class imports
+from .conjunctions import search_async
+from .conjunctions import search
+from .classes.conjunction import Conjunction
+from .classes.search import Search
+
+# pdoc imports and exports
+from .conjunctions import __pdoc__ as __conjunctions_pdoc__
+from .classes.conjunction import __pdoc__ as __classes_conjunctions_pdoc__
+from .classes.search import __pdoc__ as __classes_search_pdoc__
 __pdoc__ = __conjunctions_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_conjunctions_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_search_pdoc__)
 __all__ = [
+    "DEFAULT_CONJUNCTION_DISTANCE",
+    "CONJUNCTION_TYPE_NBTRACE",
+    "CONJUNCTION_TYPE_SBTRACE",
     "search_async",
     "search",
     "Conjunction",
     "Search",
-    "CONJUNCTION_TYPE_NBTRACE",
-    "CONJUNCTION_TYPE_SBTRACE",
 ]

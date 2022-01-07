@@ -8,12 +8,10 @@ import datetime
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
 from ...requests import STANDARD_POLLING_SLEEP_TIME
+from ...conjunctions import DEFAULT_CONJUNCTION_DISTANCE
 
 # pdoc init
 __pdoc__: Dict = {}
-
-# globals
-_DEFAULT_CONJUNCTION_DISTANCE: int = 300
 
 
 class Search():
@@ -79,7 +77,7 @@ class Search():
                  space: List[Dict],
                  conjunction_types: Optional[List[str]] = ["nbtrace"],
                  max_distances: Optional[Dict[str, float]] = None,
-                 default_distance: Optional[float] = _DEFAULT_CONJUNCTION_DISTANCE,
+                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None):
 
