@@ -227,7 +227,7 @@ class Search():
         """
         Retrieve the data available for this conjunctions search request
         """
-        if not self.completed:
+        if (self.completed is False):
             print("No data available, update status or check for data first")
             return
 
