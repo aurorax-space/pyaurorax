@@ -16,7 +16,7 @@ __pdoc__: Dict = {}
 
 class Search():
     """
-    Class representing an AuroraX conjunction search
+    Class representing a conjunction search
 
     Attributes:
         start: start timestamp of the search (inclusive)

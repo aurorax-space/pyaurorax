@@ -19,10 +19,10 @@ class DataProduct(BaseModel):
     Attributes:
         data_source: data source that the ephemeris record is associated with
         data_product_type: data product type ("keogram", "movie", "summary_plot")
-        start: starting timestamp for the record (assumed it is in UTC)
-        end: ending timestamp for the record (assumed it is in UTC)
-        url: the URL location string of data product
-        metdata: metadata dictionary for this record
+        start: starting timestamp for the record (assumed it is in UTC), inclusive
+        end: ending timestamp for the record (assumed it is in UTC), inclusive
+        url: the URL of data product
+        metdata: metadata for this record
     """
     data_source: pyaurorax.sources.DataSource
     data_product_type: str

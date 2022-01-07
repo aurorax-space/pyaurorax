@@ -14,7 +14,7 @@ __pdoc__: Dict = {}
 
 class Search():
     """
-    Class representing an AuroraX data products search
+    Class representing a data product search
 
     Attributes:
         start: start timestamp of the search (inclusive)
@@ -43,7 +43,7 @@ class Search():
                 ]
             }
         response_format: JSON representation of desired data response format
-        request: pyaurorax.AuroraXResponse object returned when the search is executed
+        request: AuroraXResponse object returned when the search is executed
         request_id: unique ID assigned to the request by the AuroraX API
         request_url: unique URL assigned to the request by the AuroraX API
         executed: indicates if the search has been executed/started
@@ -107,7 +107,7 @@ class Search():
 
     def execute(self) -> None:
         """
-        Initiate data products search request
+        Initiate a data product search request
         """
         # set up request
         url = pyaurorax.api.urls.data_products_search_url
@@ -146,11 +146,11 @@ class Search():
 
     def update_status(self, status: Optional[Dict] = None) -> None:
         """
-        Update the status of this data products search request
+        Update the status of this data product search request
 
         Args:
-            status: retrieved status dictionary (include to avoid requesting it
-                from the API again), defaults to None
+            status: the previously-retrieved status of this request (include
+                to avoid requesting it from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if (status is None):
@@ -168,7 +168,7 @@ class Search():
 
     def check_for_data(self) -> bool:
         """
-        Check to see if data is available for this data products
+        Check to see if data is available for this data product
         search request
 
         Returns:
@@ -179,7 +179,7 @@ class Search():
 
     def get_data(self) -> None:
         """
-        Retrieve the data available for this data products search request
+        Retrieve the data available for this data product search request
         """
         # check if it's completed yet
         if (self.completed is False):

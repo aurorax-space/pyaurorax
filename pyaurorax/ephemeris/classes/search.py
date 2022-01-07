@@ -14,7 +14,7 @@ __pdoc__: Dict = {}
 
 class Search():
     """
-    Class representing an AuroraX ephemeris search
+    Class representing an ephemeris search
 
     Note: At least one search criteria from programs, platforms, or instrument_types
     must be specified.
@@ -39,7 +39,7 @@ class Search():
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
-        request: pyaurorax.AuroraXResponse object returned when the search is executed
+        request: AuroraXResponse object returned when the search is executed
         request_id: unique ID assigned to the request by the AuroraX API
         request_url: unique URL assigned to the request by the AuroraX API
         executed: indicates if the search has been executed/started
@@ -150,8 +150,8 @@ class Search():
         Update the status of this ephemeris search request
 
         Args:
-            status: retrieved status dictionary (include to avoid requesting it
-                from the API again), defaults to None
+            status: the previously-retrieved status of this request (include
+                to avoid requesting it from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if (status is None):
