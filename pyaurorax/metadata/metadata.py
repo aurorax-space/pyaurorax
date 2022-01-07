@@ -17,9 +17,8 @@ def validate(schema: List[Dict],
     key names match and there aren't fewer or more keys than expected.
 
     Args:
-        schema: list of dictionaries representing the metadata schema
-            to validate against
-        record: metadata record dictionary to validate
+        schema: the metadata schema to validate against
+        record: metadata record to validate
 
     Returns:
         True if the metadata record is valid, False if it is not
@@ -38,13 +37,13 @@ def validate(schema: List[Dict],
 
 def get_ephemeris_schema(identifier: int) -> List[Dict]:
     """
-    Retrieve the metadata schema for an ephemeris record
+    Retrieve the ephemeris metadata schema for a data source
 
     Args:
         identifier: the AuroraX data source ID
 
     Returns:
-        the metadata schema associated with the record
+        the ephemeris metadata schema for the data source
     """
     source_info = pyaurorax.sources.get_using_identifier(identifier, format=pyaurorax.FORMAT_FULL_RECORD)
     if source_info.ephemeris_metadata_schema:
@@ -55,13 +54,13 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
 
 def get_data_products_schema(identifier: int) -> List[Dict]:
     """
-    Retrieve the metadata schema for a data products record
+    Retrieve the data products metadata schema for a data source
 
     Args:
         identifier: the AuroraX data source ID
 
     Returns:
-        the metadata schema associated with the record
+        the data products metadata schema for the data source
     """
     source_info = pyaurorax.sources.get_using_identifier(identifier, format=pyaurorax.FORMAT_FULL_RECORD)
     if source_info.data_product_metadata_schema:
