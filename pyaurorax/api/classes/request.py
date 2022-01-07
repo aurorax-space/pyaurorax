@@ -59,13 +59,17 @@ class AuroraXRequest(BaseModel):
         # return
         return all_headers
 
-    def execute(self, limited_evaluation: Optional[bool] = False) -> AuroraXResponse:
+    def execute(self,
+                limited_evaluation: Optional[bool] = False,
+                skip_retry_logic: Optional[bool] = False) -> AuroraXResponse:
         """
         Execute an AuroraX request
 
         Args:
-            limited_evaluation: set this to True if you don't want to evaluate
-                the response outside of the retry mechanism, defaults to False
+            limited_evaluation: don't evaluate the response after the retry
+                mechanism, defaults to False
+            skip_retry_logic: exclude the retry logic in the request, defaults
+                to False
 
         Returns:
             an AuroraXResponse object
@@ -87,19 +91,20 @@ class AuroraXRequest(BaseModel):
                                data=body_santized)
 
         # retry request if needed
-        for i in range(0, pyaurorax.api.DEFAULT_RETRIES):
-            if (req.status_code == 500 and "text/plain" in req.headers["Content-Type"]):
-                if (i == (pyaurorax.api.DEFAULT_RETRIES - 1)):
-                    raise pyaurorax.AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
-                                                                            req.status_code))
-                req = requests.request(self.method,
-                                       self.url,
-                                       headers=self.__merge_headers(),
-                                       params=self.params,
-                                       json=self.body,
-                                       data=body_santized)
-            else:
-                break
+        if (skip_retry_logic is False):
+            for i in range(0, pyaurorax.api.DEFAULT_RETRIES):
+                if (req.status_code == 500 and "text/plain" in req.headers["Content-Type"]):
+                    if (i == (pyaurorax.api.DEFAULT_RETRIES - 1)):
+                        raise pyaurorax.AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
+                                                                                req.status_code))
+                    req = requests.request(self.method,
+                                           self.url,
+                                           headers=self.__merge_headers(),
+                                           params=self.params,
+                                           json=self.body,
+                                           data=body_santized)
+                else:
+                    break
 
         # check if authorization worked
         if (req.status_code == 401):
