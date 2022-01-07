@@ -12,14 +12,14 @@ DEFAULT_CONJUNCTION_DISTANCE: int = 300
 """ The default distance used for conjunction searches """
 
 # conjunction type - north b-trace
-CONJUNCTION_TYPE_NBTRACE = "nbtrace"
+CONJUNCTION_TYPE_NBTRACE: str = "nbtrace"
 """
 Conjunction search 'conjunction_type' category for
 finding conjunctions using the north B-trace data
 """
 
 # conjunction type - south b-trace
-CONJUNCTION_TYPE_SBTRACE = "sbtrace"
+CONJUNCTION_TYPE_SBTRACE: str = "sbtrace"
 """
 Conjunction search 'conjunction_type' category for
 finding conjunctions using the south B-trace data
