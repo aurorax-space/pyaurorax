@@ -23,7 +23,7 @@ class Location(BaseModel):
     lon: Optional[Union[float, None]] = None
 
     @validator("lon")
-    def __both_must_be_none_or_number(cls, v, values):
+    def __both_must_be_none_or_number(cls, v, values):  # pylint: disable=unused-private-member
         if (v and not values["lat"]) or (values["lat"] and not v):
             raise ValueError("lat and lon must both be numbers or both be None")
         return v
