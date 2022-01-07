@@ -145,9 +145,8 @@ class Search():
         space_criteria_len = len(self.space)
 
         if ground_criteria_len + space_criteria_len > 10:
-            raise pyaurorax.exceptions.AuroraXBadParametersException("Number of ground + space criteria "
-                                                                     "blocks exceeds 10. Please use a smaller "
-                                                                     "search criteria.")
+            raise pyaurorax.exceptions.AuroraXBadParametersException("Number of criteria blocks exceeds 10, "
+                                                                     "please reduce the count")
 
         return
 

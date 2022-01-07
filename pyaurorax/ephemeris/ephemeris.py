@@ -19,7 +19,7 @@ def __validate_data_source(identifier: int,
     sources = {source.identifier: source for source in pyaurorax.sources.list()}
     if identifier not in sources.keys():
         raise pyaurorax.AuroraXValidationException(f"Data source with unique identifier "
-                                                   "{identifier} could not be found.")
+                                                   "{identifier} could not be found")
 
     # process each record to make sure the program/platform/instrument_type matches
     # the identifier found for the data source
@@ -30,7 +30,7 @@ def __validate_data_source(identifier: int,
         except KeyError:
             raise pyaurorax.AuroraXValidationException(f"Data source with unique identifier "
                                                        "{record.data_source.identifier} could "
-                                                       "not be found.")
+                                                       "not be found")
 
         # check if it's a bad record
         if not (record.data_source.program == reference.program

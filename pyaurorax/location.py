@@ -25,7 +25,7 @@ class Location(BaseModel):
     @validator("lon")
     def __both_must_be_none_or_number(cls, v, values):  # pylint: disable=unused-private-member
         if (v and not values["lat"]) or (values["lat"] and not v):
-            raise ValueError("lat and lon must both be numbers or both be None")
+            raise ValueError("Latitude and longitude must both be numbers, or both be None")
         return v
 
     def __str__(self) -> str:
