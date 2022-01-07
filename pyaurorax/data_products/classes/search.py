@@ -188,7 +188,7 @@ class Search():
 
         # get data
         url = self.data_url
-        raw_data = pyaurorax.requests.get_data(url, post_body=self.response_format)
+        raw_data = pyaurorax.requests.get_data(url, response_format=self.response_format)
 
         # set data variable
         if self.response_format is not None:
@@ -197,16 +197,17 @@ class Search():
             self.data = [DataProduct(**dp) for dp in raw_data]
 
     def wait(self,
-             verbose: Optional[bool] = False,
-             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> None:
+             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+             verbose: Optional[bool] = False) -> None:
         """
         Block and wait for the request to complete and data is available
         for retrieval
 
         Args:
-            verbose: output poll times, defaults to False
             poll_interval: time in seconds to wait between polling attempts,
                 defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+            verbose: output poll times and other progress messages, defaults
+                to False
         """
         url = pyaurorax.api.urls.data_products_request_url.format(self.request_id)
         self.update_status(pyaurorax.requests.wait_for_data(url,
@@ -215,8 +216,8 @@ class Search():
 
     def cancel(self,
                wait: Optional[bool] = False,
-               verbose: Optional[bool] = False,
-               poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+               poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+               verbose: Optional[bool] = False) -> int:
         """
         Cancel the data product search request
 
@@ -228,10 +229,10 @@ class Search():
         Args:
             wait: wait until the cancellation request has been
                 completed (may wait for several minutes)
-            verbose: output poll times and other progress messages, defaults
-                to False
             poll_interval: seconds to wait between polling
                 calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+            verbose: output poll times and other progress messages, defaults
+                to False
 
         Returns:
             1 on success

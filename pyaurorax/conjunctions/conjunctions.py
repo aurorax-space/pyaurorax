@@ -103,11 +103,11 @@ def search(start: datetime.datetime,
            conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
            max_distances: Optional[Dict[str, float]] = {},
            default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
-           verbose: Optional[bool] = False,
            poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            epoch_search_precision: Optional[int] = 60,
            response_format: Optional[Dict] = None,
-           return_immediately: Optional[bool] = False) -> Search:
+           return_immediately: Optional[bool] = False,
+           verbose: Optional[bool] = False) -> Search:
     """
     Search for conjunctions between data sources
 
@@ -154,13 +154,13 @@ def search(start: datetime.datetime,
         default_distance: default maximum distance in kilometers for conjunction. Used
             when max distance is not specified for any ground-space and space-space
             instrument pairs.
-        verbose: show the progress of the request using the request log, defaults
             to False
         poll_interval: seconds to wait between polling calls, defaults to
             pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
         return_immediately: initiate the search and return without waiting for data to
             be received, defaults to False
+        verbose: show the progress of the request using the request log, defaults
 
     Returns:
         a pyaurorax.conjunctions.Search object

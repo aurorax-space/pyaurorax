@@ -112,11 +112,11 @@ def search(start: datetime.datetime,
            platforms: Optional[List[str]] = None,
            instrument_types: Optional[List[str]] = None,
            metadata_filters: Optional[List[Dict]] = None,
-           verbose: Optional[bool] = False,
            poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            response_format: Optional[Dict] = None,
            metadata_filters_logical_operator: Optional[str] = None,
-           return_immediately: Optional[bool] = False) -> Search:
+           return_immediately: Optional[bool] = False,
+           verbose: Optional[bool] = False) -> Search:
     """
     Search for ephemeris records
 
@@ -145,10 +145,10 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
-        verbose: output poll times and other progress messages, defaults to False
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
+        verbose: output poll times and other progress messages, defaults to False
 
     Returns:
         A pyaurorax.ephemeris.Search object

@@ -35,7 +35,6 @@ class Search():
                     "string"
                 ]
             }
-        verbose: output poll times and other progress messages, defaults to False
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
@@ -190,8 +189,7 @@ class Search():
 
         # get data
         url = self.data_url
-        raw_data = pyaurorax.requests.get_data(url,
-                                               post_body=self.response_format)
+        raw_data = pyaurorax.requests.get_data(url, response_format=self.response_format)
 
         # set data variable
         if self.response_format is not None:
@@ -209,7 +207,8 @@ class Search():
         Args:
             poll_interval: time in seconds to wait between polling attempts,
                 defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times, defaults to False
+            verbose: output poll times and other progress messages, defaults
+                to False
         """
         url = pyaurorax.api.urls.ephemeris_request_url.format(self.request_id)
         self.update_status(pyaurorax.requests.wait_for_data(url,
@@ -217,9 +216,9 @@ class Search():
                                                             verbose=verbose))
 
     def cancel(self,
-               wait: bool = False,
-               verbose: bool = False,
-               poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
+               wait: Optional[bool] = False,
+               poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+               verbose: Optional[bool] = False) -> int:
         """
         Cancel the ephemeris search request
 
@@ -231,10 +230,10 @@ class Search():
         Args:
             wait: wait until the cancellation request has been
                 completed (may wait for several minutes)
-            verbose: output poll times and other progress messages, defaults
-                to False
             poll_interval: seconds to wait between polling
                 calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+            verbose: output poll times and other progress messages, defaults
+                to False
 
         Returns:
             1 on success
