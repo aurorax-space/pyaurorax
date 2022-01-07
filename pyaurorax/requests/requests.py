@@ -46,7 +46,7 @@ def get_data(data_url: str,
         post_body: body of a post request
 
     Returns:
-        the list of JSON data objects in the response
+        the data for this request
     """
     # do request
     if (response_format is not None):

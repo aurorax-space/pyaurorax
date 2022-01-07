@@ -22,7 +22,7 @@ class DataProduct(BaseModel):
         start: starting timestamp for the record (assumed it is in UTC), inclusive
         end: ending timestamp for the record (assumed it is in UTC), inclusive
         url: the URL of data product
-        metdata: metadata for this record
+        metdata: metadata for this record (arbitrary keys and values)
     """
     data_source: pyaurorax.sources.DataSource
     data_product_type: str

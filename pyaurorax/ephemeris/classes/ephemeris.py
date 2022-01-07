@@ -24,7 +24,7 @@ class Ephemeris(BaseModel):
             empty for data sources with a type of 'ground')
         nbtrace: Location object with north B-trace geographic latitude and longitude
         sbtrace: Location object with south B-trace geographic latitude and longitude
-        metadata: metadata for this record
+        metadata: metadata for this record (arbitrary keys and values)
     """
     data_source: pyaurorax.sources.DataSource
     epoch: datetime.datetime

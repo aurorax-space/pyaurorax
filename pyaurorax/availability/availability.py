@@ -39,7 +39,7 @@ def ephemeris(start: datetime.date,
         slow: query the data using a slower, but more accurate method, defaults to False
 
     Returns:
-        a list of AvailabilityResult objects
+        ephemeris availability information matching the requested parameters
     """
     # set parameters
     params = {
@@ -92,7 +92,7 @@ def data_products(start: datetime.date,
         slow: query the data using a slower, but more accurate method, defaults to False
 
     Returns:
-        a list of AvailabilityResult objects
+        data product availability information matching the requested parameters
     """
     # set parameters
     params = {
