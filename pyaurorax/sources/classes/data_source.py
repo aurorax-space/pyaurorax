@@ -12,7 +12,7 @@ __pdoc__: Dict = {}
 
 class DataSource(BaseModel):
     """
-    Data source data type
+    Data source object
 
     Attributes:
         identifier: an integer unique to the data source

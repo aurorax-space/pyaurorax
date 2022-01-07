@@ -14,7 +14,7 @@ __pdoc__: Dict = {}
 
 class Ephemeris(BaseModel):
     """
-    Ephemeris data type
+    Ephemeris object
 
     Attributes:
         data_source: data source that the ephemeris record is associated with

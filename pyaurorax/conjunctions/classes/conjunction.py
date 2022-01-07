@@ -14,7 +14,7 @@ __pdoc__: Dict = {}
 
 class Conjunction(BaseModel):
     """
-    Conjunction data type
+    Conjunction object
 
     Attributes:
         conjunction_type: the type of location data used when the conjunction

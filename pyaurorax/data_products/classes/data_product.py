@@ -14,7 +14,7 @@ __pdoc__: Dict = {}
 
 class DataProduct(BaseModel):
     """
-    DataProduct data type
+    Data product object
 
     Attributes:
         data_source: data source that the ephemeris record is associated with

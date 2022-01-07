@@ -13,12 +13,12 @@ __pdoc__: Dict = {}
 
 class AvailabilityResult(BaseModel):
     """
-    Availability result data type
+    Availability information object
 
     Attributes:
-        data_source: a DataSource object that the records are associated with
-        available_data_products: data product availability dictionary
-        available_ephemeris: ephemeris availability dictionary
+        data_source: the data source that the records are associated with
+        available_data_products: the data product availability information
+        available_ephemeris: the ephemeris availability information
     """
     data_source: pyaurorax.sources.DataSource
     available_data_products: Optional[Dict[str, int]] = None
