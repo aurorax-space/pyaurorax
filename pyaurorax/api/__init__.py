@@ -8,8 +8,11 @@ at this level of the api module. They can be referenced from here
 instead of digging in deeper to the submodules.
 """
 
+# endpoint URLs
+DEFAULT_BASE_URL: str = "https://api.aurorax.space"
+""" The default API base URL to use when sending requests """
+
 # function and class imports
-from .classes.urls import DEFAULT_BASE_URL
 from .classes.request import DEFAULT_RETRIES
 from .classes.request import REQUEST_HEADERS
 from .classes.request import API_KEY_HEADER_NAME

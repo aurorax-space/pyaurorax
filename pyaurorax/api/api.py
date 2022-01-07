@@ -3,7 +3,8 @@ Helper functions when interacting with the API
 """
 
 from typing import Dict
-from .classes.urls import URLs, DEFAULT_BASE_URL
+from .classes.urls import URLs
+from ..api import DEFAULT_BASE_URL
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -45,7 +46,7 @@ def set_base_url(url: str) -> None:
     system or local server)
 
     Args:
-        url: new base url string (ie. 'https://api.staging.aurorax.space')
+        url: the new base url string (ie. 'https://api.staging.aurorax.space')
     """
     urls.base_url = url
 

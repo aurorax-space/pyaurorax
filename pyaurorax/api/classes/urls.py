@@ -5,12 +5,10 @@ can use different base URLs if desired.
 """
 
 from typing import Dict
+from ...api import DEFAULT_BASE_URL
 
 # pdoc init
 __pdoc__: Dict = {}
-
-# endpoint URLs
-DEFAULT_BASE_URL: str = "https://api.aurorax.space"
 
 
 class URLs:
