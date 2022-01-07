@@ -37,24 +37,22 @@ def get_status(request_url: str) -> Dict:
 
 
 def get_data(data_url: str,
-             post_body: Optional[Dict] = None) -> List:
+             response_format: Optional[Dict] = None) -> List:
     """
-    Retrieve the data for a request. Makes a GET request if
-    no post_body is specified, else makes a POST request with
-    the given post_body.
+    Retrieve the data for a request
 
     Args:
         data_url: the URL for the data of a request
-        post_body: dictionary for body of a post request
+        post_body: body of a post request
 
     Returns:
         the list of JSON data objects in the response
     """
     # do request
-    if post_body is not None:
+    if (response_format is not None):
         req = pyaurorax.AuroraXRequest(method="post",
                                        url=data_url,
-                                       body=post_body)
+                                       body=response_format)
     else:
         req = pyaurorax.AuroraXRequest(method="get", url=data_url)
     res = req.execute()
@@ -92,7 +90,7 @@ def get_logs(request_url: str) -> List:
         request_url: the URL of the request information
 
     Returns:
-        the list of logged messages for the request
+        the log messages for the request
     """
     # get status
     status = get_status(request_url)
@@ -114,7 +112,7 @@ def wait_for_data(request_url: str,
         request_url: the URL of the request information
         poll_interval: seconds to wait between polling calls, defaults
             to STANDARD_POLLING_SLEEP_TIME
-        verbose: output poll times, defaults to False
+        verbose: output poll times and other progress messages, defaults to False
 
     Returns:
         the status information for the request
@@ -137,8 +135,8 @@ def wait_for_data(request_url: str,
 
 def cancel(request_url: str,
            wait: Optional[bool] = False,
-           verbose: Optional[bool] = False,
-           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME) -> int:
+           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
+           verbose: Optional[bool] = False) -> int:
     """
     Cancel the request at the given URL.
 
@@ -151,10 +149,10 @@ def cancel(request_url: str,
         request_url: the URL string of the request to be canceled
         wait: set to True to block until the cancellation request
             has been completed (may wait for several minutes)
-        verbose: if True then output poll times and other
-            progress, defaults to False
         poll_interval: seconds to wait between polling
             calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        verbose: if True then output poll times and other
+            progress, defaults to False
 
     Returns:
         1 on success
