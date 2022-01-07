@@ -37,11 +37,11 @@ __pdoc__ = {"cli": False}
 from .api import AuroraXRequest
 from .api import authenticate
 from .api import get_api_key
-from .format import FORMAT_BASIC_INFO
-from .format import FORMAT_BASIC_INFO_WITH_METADATA
-from .format import FORMAT_FULL_RECORD
-from .format import FORMAT_IDENTIFIER_ONLY
-from .format import FORMAT_DEFAULT
+from .sources import FORMAT_BASIC_INFO
+from .sources import FORMAT_BASIC_INFO_WITH_METADATA
+from .sources import FORMAT_FULL_RECORD
+from .sources import FORMAT_IDENTIFIER_ONLY
+from .sources import FORMAT_DEFAULT
 from .sources import SOURCE_TYPE_EVENT_LIST
 from .sources import SOURCE_TYPE_GROUND
 from .sources import SOURCE_TYPE_HEO
@@ -76,4 +76,3 @@ from pyaurorax import availability
 from pyaurorax import conjunctions
 from pyaurorax import ephemeris
 from pyaurorax import data_products
-from pyaurorax import format

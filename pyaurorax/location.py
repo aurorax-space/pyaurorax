@@ -10,7 +10,7 @@ from typing import Union, Optional
 class Location(BaseModel):
     """
     Class representing an AuroraX location (ie. geographic coordinates,
-    GSM coordinates, northern/southern magnetic footprints)
+    GSM coordinates, northern/southern B-trace magnetic footprints)
 
     The numbers are in decimal degrees format and range from -90 to 90
     for latitude and -180 to 180 for longitude.

@@ -34,7 +34,7 @@ def ephemeris(start: datetime.date,
             using the pyaurorax.SOURCE_TYPE_* variables.
         owner: owner email address to filter sources by, defaults to None
         format: the format of the data sources returned, defaults to "basic_info".
-            Other options are in the pyaurorax.formats module, or at the top level
+            Other options are in the pyaurorax.sources module, or at the top level
             using the pyaurorax.FORMAT_* variables.
         slow: query the data using a slower, but more accurate method, defaults to False
 
@@ -87,7 +87,7 @@ def data_products(start: datetime.date,
             using the pyaurorax.SOURCE_TYPE_* variables.
         owner: owner email address to filter sources by, defaults to None
         format: the format of the data sources returned, defaults to "basic_info".
-            Other options are in the pyaurorax.formats module, or at the top level
+            Other options are in the pyaurorax.sources module, or at the top level
             using the pyaurorax.FORMAT_* variables.
         slow: query the data using a slower, but more accurate method, defaults to False
 
