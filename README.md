@@ -1,4 +1,4 @@
-<a href="https://aurorax.space/"><img alt="AuroraX" src="logo.png" height="60"></a>
+<a href="https://aurorax.space/"><img alt="AuroraX" src="logo.svg" height="60"></a>
 
 [![Github Actions - Tests](https://github.com/aurorax-space/pyaurorax/workflows/tests/badge.svg)](https://github.com/aurorax-space/pyaurorax/actions?query=workflow%3Atests)
 [![PyPI version](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
