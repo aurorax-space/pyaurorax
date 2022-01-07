@@ -1,5 +1,5 @@
 """
-Function for performing data product searches
+Functions for performing data product searches
 """
 
 import pyaurorax

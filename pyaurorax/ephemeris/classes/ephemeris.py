@@ -19,15 +19,12 @@ class Ephemeris(BaseModel):
     Attributes:
         data_source: data source that the ephemeris record is associated with
         epoch: timestamp for the record (assumed it is in UTC)
-        location_geo: pyaurorax.Location object with latitude and longitude
-            in geographic coordinates
-        location_gsm: pyaurorax.Location object with latitude and longitude
-            in GSM coordinates (leave empty for data sources with a type of 'ground')
-        nbtrace: pyaurorax.Location object with north B-trace geographic
-            latitude and longitude
-        sbtrace: pyaurorax.Location object with south B-trace geographic
-            latitude and longitude
-        metadata: dictionary containing metadata values for this record
+        location_geo: Location object containing geographic latitude and longitude
+        location_gsm: Location object containing GSM latitude and longitude (leave
+            empty for data sources with a type of 'ground')
+        nbtrace: Location object with north B-trace geographic latitude and longitude
+        sbtrace: Location object with south B-trace geographic latitude and longitude
+        metadata: metadata for this record
     """
     data_source: pyaurorax.sources.DataSource
     epoch: datetime.datetime
@@ -65,8 +62,7 @@ class Ephemeris(BaseModel):
         if (type(self.metadata) is dict):
             for key, value in self.metadata.items():
                 if (type(value) is datetime.datetime or type(value) is datetime.date):
-                    self.metadata[key] = self.metadata[key].strftime(
-                        "%Y-%m-%dT%H:%M:%S.%f")
+                    self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
         if (type(self.metadata) is list):
             self.metadata = {}
 
@@ -84,7 +80,7 @@ class Ephemeris(BaseModel):
         String method
 
         Returns:
-            String format of Ephemeris
+            string format of Ephemeris
         """
         return self.__repr__()
 
@@ -93,6 +89,6 @@ class Ephemeris(BaseModel):
         Object representation
 
         Returns:
-            Object representation of Ephemeris
+            object representation of Ephemeris
         """
         return pprint.pformat(self.__dict__)

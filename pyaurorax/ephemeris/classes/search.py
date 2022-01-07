@@ -35,7 +35,7 @@ class Search():
                     "string"
                 ]
             }
-        verbose: output poll times, defaults to False
+        verbose: output poll times and other progress messages, defaults to False
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format

@@ -1,5 +1,5 @@
 """
-Main functions for performing ephemeris searches
+Functions for performing ephemeris searches
 """
 
 import pyaurorax
@@ -145,7 +145,7 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
-        verbose: output poll times, defaults to False
+        verbose: output poll times and other progress messages, defaults to False
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
@@ -207,8 +207,8 @@ def upload(identifier: int,
 
     Args:
         identifier: AuroraX data source ID
-        records: list of pyaurorax.ephemeris.Ephemeris records to upload
-        validate_source: boolean, set to True to validate all records before uploading
+        records: ephemeris records to upload
+        validate_source: validate all records before uploading, defaults to False
 
     Returns:
         1 for success, raises exception on error
@@ -253,15 +253,14 @@ def delete(data_source: pyaurorax.sources.DataSource,
            start: datetime.datetime,
            end: datetime.datetime) -> int:
     """
-    Delete a range of ephemeris records.
+    Delete ephemeris records between a timeframe.
 
     The API processes this request asynchronously, so this method will return
     immediately whether or not the data has already been deleted.
 
     Args:
-        data_source: pyaurorax.sources.DataSource source associated with
-            the data product records. Identifier, program, platform, and
-            instrument_type are required.
+        data_source: data source associated with the data product records (note that
+            identifier, program, platform, and instrument_type are required)
         start: timestamp marking beginning of range to delete records for, inclusive
         end: timestamp marking end of range to delete records for, inclusive
 
