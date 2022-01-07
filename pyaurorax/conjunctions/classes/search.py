@@ -16,7 +16,7 @@ __pdoc__: Dict = {}
 
 class Search():
     """
-    Class representing an AuroraX conjunctions search
+    Class representing an AuroraX conjunction search
 
     Attributes:
         start: start timestamp of the search (inclusive)
@@ -40,7 +40,7 @@ class Search():
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum
+        max_distances: dictionary of ground-space and space-space maximum
             distances for conjunctions. The default_distance will be used for any ground-space
             and space-space maximum distances not specified.
 
@@ -52,22 +52,22 @@ class Search():
                 "ground2-space2": 500,
                 "space1-space2": None
             }
-        default_distance: default maximum distance in kilometers for conjunction. Used when max
+        default_distance: maximum distance in kilometers to find conjunctions for. Used when max
             distance is not specified for any ground-space and space-space instrument pairs.
         epoch_search_precision: the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
         response_format: JSON representation of desired data response format
         request: AuroraXResponse object returned when the search is executed
-        request_id: unique AuroraX string ID assigned to the request
-        request_url: unique AuroraX URL string assigned to the request
-        executed: boolean, gets set to True when the search is executed
-        completed: boolean, gets set to True when the search is checked to be finished
-        data_url: the URL string where data is accessed
-        query: dictionary of values sent for the search query
-        status: dictionary of status updates
-        data: list of pyaurorax.conjunctions.Conjunction objects returned
-        logs: list of logging messages from the API
+        request_id: unique ID assigned to the request by the AuroraX API
+        request_url: unique URL assigned to the request by the AuroraX API
+        executed: indicates if the search has been executed/started
+        completed: indicates if the search has finished
+        data_url: the URL where data is accessed
+        query: the query for this request as JSON
+        status: the status of the query
+        data: the conjunctions found
+        logs: all log messages outputed by the AuroraX API for this request
 
         Returns:
             a pyaurorax.conjunctions.Search object
@@ -152,7 +152,7 @@ class Search():
 
     def execute(self):
         """
-        Initiate conjunction search request
+        Initiate a conjunction search request
 
         Raises:
             pyaurorax.exceptions.AuroraXBadParametersException: too many criteria blocks
@@ -192,11 +192,11 @@ class Search():
 
     def update_status(self, status: Optional[Dict] = None) -> None:
         """
-        Update the status of this conjunctions search.
+        Update the status of this conjunction search request
 
         Args:
-            status: retrieved status dictionary (include to avoid requesting
-                    it from the API again), defaults to None.
+            status: the previously-retrieved status of this request (include
+                to avoid requesting it from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if status is None:
@@ -213,7 +213,7 @@ class Search():
 
     def check_for_data(self) -> bool:
         """
-        Check to see if data is available for this conjunctions
+        Check to see if data is available for this conjunction
         search request
 
         Returns:
@@ -225,7 +225,7 @@ class Search():
 
     def get_data(self) -> None:
         """
-        Retrieve the data available for this conjunctions search request
+        Retrieve the data available for this conjunction search request
         """
         if (self.completed is False):
             print("No data available, update status or check for data first")
@@ -262,7 +262,7 @@ class Search():
                verbose: Optional[bool] = False,
                poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME) -> int:
         """
-        Cancel the conjunction search request.
+        Cancel the conjunction search request
 
         This method returns immediately by default since the API processes
         this request asynchronously. If you would prefer to wait for it
@@ -270,10 +270,10 @@ class Search():
         the polling time using the 'poll_interval' parameter.
 
         Args:
-            wait: set to True to block until the cancellation request
-                has been completed (may wait for several minutes)
-            verbose: if True then output poll times and other
-                progress, defaults to False
+            wait: wait until the cancellation request has been
+                completed (may wait for several minutes)
+            verbose: output poll times and other progress messages, defaults
+                to False
             poll_interval: seconds to wait between polling
                 calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 

@@ -1,5 +1,5 @@
 """
-Main functions for performing conjunction searches
+Functions for performing conjunction searches
 """
 
 import datetime
@@ -24,7 +24,7 @@ def search_async(start: datetime.datetime,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None) -> Search:
     """
-    Submit a request for a conjunctions search, return immediately.
+    Submit a request for a conjunctions search, return immediately
 
     The request will be done asynchronously by the API. Use the helper functions
     as part of the Search object returned to check for data and/or download it.
@@ -154,8 +154,8 @@ def search(start: datetime.datetime,
         default_distance: default maximum distance in kilometers for conjunction. Used
             when max distance is not specified for any ground-space and space-space
             instrument pairs.
-        verbose: boolean to show the progress of the request using the request
-            log, defaults to False
+        verbose: show the progress of the request using the request log, defaults
+            to False
         poll_interval: seconds to wait between polling calls, defaults to
             pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format

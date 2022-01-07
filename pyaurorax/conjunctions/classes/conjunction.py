@@ -17,14 +17,16 @@ class Conjunction(BaseModel):
     Conjunction object
 
     Attributes:
-        conjunction_type: the type of location data used when the conjunction
-            was found. It can either be "nbtrace" or "sbtrace"
-        start: start timestamp of conjunction
-        end: end timestamp of conjunction
+        conjunction_type: the type of location data used when the
+            conjunction was found (either be 'nbtrace' or 'sbtrace')
+        start: start timestamp of the conjunction
+        end: end timestamp of the conjunction
         data_sources: data sources in the conjunction
-        min_distance: minimum kilometer distance of conjunction
-        max_distance: maximum kilometer distance of conjunction
-        events: list of dictionaries containing details of sub-conjunctions
+        min_distance: minimum kilometer distance of the conjunction
+        max_distance: maximum kilometer distance of the conjunction
+        events: the sub-conjunctions that make up this over-arching
+            conjunction (the conjunctions between each set of two data
+            sources)
     """
     conjunction_type: str
     start: datetime.datetime

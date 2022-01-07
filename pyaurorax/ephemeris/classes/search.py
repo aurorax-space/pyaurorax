@@ -40,16 +40,15 @@ class Search():
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
         request: pyaurorax.AuroraXResponse object returned when the search is executed
-        request_id: unique AuroraX string ID assigned to the request
-        request_url: unique AuroraX URL string assigned to the request
-        executed: boolean, gets set to True when the search is executed
-        completed: boolean, gets set to True when the search is checked to be finished
-        data_url: the URL string where data is accessed
-        query: dictionary of values sent for the search query
-        status: dictionary of status updates
-        data: list of pyaurorax.ephemeris.Ephemeris objects returned, or a list of
-            raw JSON results if response_format is specified
-        logs: list of logging messages from the API
+        request_id: unique ID assigned to the request by the AuroraX API
+        request_url: unique URL assigned to the request by the AuroraX API
+        executed: indicates if the search has been executed/started
+        completed: indicates if the search has finished
+        data_url: the URL where data is accessed
+        query: the query for this request as JSON
+        status: the status of the query
+        data: the ephemeris records found
+        logs: all log messages outputed by the AuroraX API for this request
     """
 
     def __init__(self,
@@ -222,7 +221,7 @@ class Search():
                verbose: bool = False,
                poll_interval: float = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME) -> int:
         """
-        Cancel the ephemeris search request.
+        Cancel the ephemeris search request
 
         This method returns immediately by default since the API processes
         this request asynchronously. If you would prefer to wait for it
@@ -230,10 +229,10 @@ class Search():
         the polling time using the 'poll_interval' parameter.
 
         Args:
-            wait: set to True to block until the cancellation request
-                has been completed (may wait for several minutes)
-            verbose: if True then output poll times and other
-                progress, defaults to False
+            wait: wait until the cancellation request has been
+                completed (may wait for several minutes)
+            verbose: output poll times and other progress messages, defaults
+                to False
             poll_interval: seconds to wait between polling
                 calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
