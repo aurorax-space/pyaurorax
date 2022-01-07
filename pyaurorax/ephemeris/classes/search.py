@@ -20,8 +20,8 @@ class Search():
     must be specified.
 
     Args:
-        start: start timestamp of the search
-        end: end timestamp of the search
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
