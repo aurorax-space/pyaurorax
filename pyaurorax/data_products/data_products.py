@@ -43,6 +43,110 @@ def __validate_data_source(identifier: int,
     return None
 
 
+def search(start: datetime.datetime,
+           end: datetime.datetime,
+           programs: Optional[List[str]] = None,
+           platforms: Optional[List[str]] = None,
+           instrument_types: Optional[List[str]] = None,
+           metadata_filters: Optional[List[Dict]] = None,
+           data_product_type_filters: Optional[List[str]] = None,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           response_format: Optional[Dict] = None,
+           metadata_filters_logical_operator: Optional[str] = None,
+           return_immediately: Optional[bool] = False,
+           verbose: Optional[bool] = False) -> Search:
+    """
+    Search for data product records
+
+    By default, this function will block and wait until the request completes and
+    all data is downloaded. If you don't want to wait, set the 'return_immediately`
+    value to True. The Search object will be returned right after the search has been
+    started, and you can use the helper functions as part of that object to get the
+    data when it's done.
+
+    Note: At least one search criteria from programs, platforms, or
+    instrument_types, must be specified.
+
+    Args:
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
+        programs: list of programs to search through, defaults to None
+        platforms: list of platforms to search through, defaults to None
+        instrument_types: list of instrument types to search through, defaults to None
+        metadata_filters: list of dictionaries describing metadata keys and values
+            to filter on, defaults to None
+
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        data_product_type_filters: list of dictionaries describing data product types to
+            filter on e.g. "keogram", defaults to None
+
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        poll_interval: time in seconds to wait between polling attempts, defaults
+            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        response_format: JSON representation of desired data response format
+        return_immediately: initiate the search and return without waiting for data to
+            be received, defaults to False
+        verbose: output poll times and other progress messages, defaults to False
+
+    Returns:
+        a pyaurorax.data_products.Search object
+    """
+    # create a Search() object
+    s = Search(start,
+               end,
+               programs,
+               platforms,
+               instrument_types,
+               data_product_type_filters,
+               metadata_filters,
+               metadata_filters_logical_operator=metadata_filters_logical_operator,
+               response_format=response_format)
+    if (verbose is True):
+        print("[%s] Search object created" % (datetime.datetime.now()))
+
+    # execute the search
+    s.execute()
+    if (verbose is True):
+        print("[%s] Request submitted" % (datetime.datetime.now()))
+        print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
+        print("[%s] Request details available at: %s" % (datetime.datetime.now(),
+                                                         s.request_url))
+
+    # return immediately if we wanted to
+    if (return_immediately is True):
+        return s
+
+    # wait for data
+    if (verbose is True):
+        print("[%s] Waiting for data ..." % (datetime.datetime.now()))
+    s.wait(poll_interval=poll_interval, verbose=verbose)
+
+    # get the data
+    if (verbose is True):
+        print("[%s] Retrieving data ..." % (datetime.datetime.now()))
+    s.get_data()
+
+    # return response with the data
+    if (verbose is True):
+        print("[%s] Retrieved %s of data containing %d records" % (datetime.datetime.now(),
+                                                                   humanize.filesize.naturalsize(
+                                                                       s.status["search_result"]["file_size"]),
+                                                                   s.status["search_result"]["result_count"]))
+    return s
+
+
 def search_async(start: datetime.datetime,
                  end: datetime.datetime,
                  programs: Optional[List[str]] = None,
@@ -112,110 +216,6 @@ def search_async(start: datetime.datetime,
                                        response_format=response_format,
                                        metadata_filters_logical_operator=metadata_filters_logical_operator)
     s.execute()
-    return s
-
-
-def search(start: datetime.datetime,
-           end: datetime.datetime,
-           programs: Optional[List[str]] = None,
-           platforms: Optional[List[str]] = None,
-           instrument_types: Optional[List[str]] = None,
-           metadata_filters: Optional[List[Dict]] = None,
-           data_product_type_filters: Optional[List[str]] = None,
-           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           response_format: Optional[Dict] = None,
-           metadata_filters_logical_operator: Optional[str] = None,
-           return_immediately: Optional[bool] = False,
-           verbose: Optional[bool] = False) -> Search:
-    """
-    Search for data product records
-
-    By default, this function will block and wait until the request completes and
-    all data is downloaded. If you don't want to wait, set the 'return_immediately`
-    value to True. The Search object will be returned right after the search has been
-    started, and you can use the helper functions as part of that object to get the
-    data when it's done.
-
-    Note: At least one search criteria from programs, platforms, or
-    instrument_types, must be specified.
-
-    Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and values
-            to filter on, defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
-        data_product_type_filters: list of dictionaries describing data product types to
-            filter on e.g. "keogram", defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
-        verbose: output poll times and other progress messages, defaults to False
-        poll_interval: time in seconds to wait between polling attempts, defaults
-            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        response_format: JSON representation of desired data response format
-        return_immediately: initiate the search and return without waiting for data to
-            be received, defaults to False
-
-    Returns:
-        a pyaurorax.data_products.Search object
-    """
-    # create a Search() object
-    s = Search(start,
-               end,
-               programs,
-               platforms,
-               instrument_types,
-               metadata_filters,
-               data_product_type_filters,
-               response_format=response_format,
-               metadata_filters_logical_operator=metadata_filters_logical_operator)
-    if (verbose is True):
-        print("[%s] Search object created" % (datetime.datetime.now()))
-
-    # execute the search
-    s.execute()
-    if (verbose is True):
-        print("[%s] Request submitted" % (datetime.datetime.now()))
-        print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
-        print("[%s] Request details available at: %s" % (datetime.datetime.now(),
-                                                         s.request_url))
-
-    # return immediately if we wanted to
-    if (return_immediately is True):
-        return s
-
-    # wait for data
-    if (verbose is True):
-        print("[%s] Waiting for data ..." % (datetime.datetime.now()))
-    s.wait(poll_interval=poll_interval, verbose=verbose)
-
-    # get the data
-    if (verbose is True):
-        print("[%s] Retrieving data ..." % (datetime.datetime.now()))
-    s.get_data()
-
-    # return response with the data
-    if (verbose is True):
-        print("[%s] Retrieved %s of data containing %d records" % (datetime.datetime.now(),
-                                                                   humanize.filesize.naturalsize(
-                                                                       s.status["search_result"]["file_size"]),
-                                                                   s.status["search_result"]["result_count"]))
     return s
 
 
@@ -300,6 +300,7 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
         pyaurorax.exceptions.AuroraXNotFoundException: source not found
         pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
     """
+    # check to make sure the identifier, program, platform, and instrument type are all set in the data source
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
         raise pyaurorax.AuroraXBadParametersException("One or more required data source parameters "
                                                       "are missing, delete operation aborted")
@@ -346,6 +347,7 @@ def delete(data_source: pyaurorax.sources.DataSource,
         pyaurorax.exceptions.AuroraXBadParametersException: invalid parameters entered
         pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
     """
+    # check to make sure the identifier, program, platform, and instrument type are all set in the data source
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
         raise pyaurorax.AuroraXBadParametersException("One or more required data source parameters "
                                                       "are missing, delete operation aborted")

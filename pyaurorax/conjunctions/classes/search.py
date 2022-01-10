@@ -40,6 +40,19 @@ class Search():
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
+        metadata_filters: list of dictionaries describing metadata keys and
+            values to filter on, defaults to None
+
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        metadata_filters_logical_operator: the logical operator to use when
+            evaluating metadata filters (either 'AND' or 'OR'), defaults
+            to "AND"
         max_distances: dictionary of ground-space and space-space maximum
             distances for conjunctions. The default_distance will be used for any ground-space
             and space-space maximum distances not specified.
@@ -78,11 +91,27 @@ class Search():
                  ground: List[Dict],
                  space: List[Dict],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
+                 metadata_filters: Optional[List[Dict]] = None,
+                 metadata_filters_logical_operator: Optional[str] = "AND",
                  max_distances: Optional[Dict[str, float]] = None,
                  default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None):
 
+        # set variables using passed in args
+        self.start = start
+        self.end = end
+        self.ground = ground
+        self.space = space
+        self.conjunction_types = conjunction_types
+        self.metadata_filters = metadata_filters
+        self.metadata_filters_logical_operator = metadata_filters_logical_operator
+        self.max_distances = max_distances if max_distances else {}
+        self.default_distance = default_distance
+        self.epoch_search_precision = epoch_search_precision
+        self.response_format = response_format
+
+        # initialize additional variables
         self.request: pyaurorax.api.AuroraXResponse = None
         self.request_id: str = ""
         self.request_url: str = ""
@@ -93,16 +122,6 @@ class Search():
         self.status: Dict = {}
         self.data: List[Union[Conjunction, Dict]] = []
         self.logs: List[Dict] = []
-
-        self.start = start
-        self.end = end
-        self.ground = ground
-        self.space = space
-        self.conjunction_types = conjunction_types
-        self.max_distances = max_distances if max_distances else {}
-        self.default_distance = default_distance
-        self.epoch_search_precision = epoch_search_precision
-        self.response_format = response_format
 
     def __str__(self):
         """
@@ -123,32 +142,24 @@ class Search():
         return pprint.pformat(self.__dict__)
 
     def _set_max_distances(self):
-        ground_sources_len = len(self.ground)
-        space_sources_len = len(self.space)
-
         # check for ground-space and space-ground distances
-        for g in range(1, ground_sources_len + 1):
-            for s in range(1, space_sources_len + 1):
+        for g in range(1, len(self.ground) + 1):
+            for s in range(1, len(self.space) + 1):
                 if (f"ground{g}-space{s}" not in self.max_distances
                         and f"space{s}-ground{g}" not in self.max_distances):
                     self.max_distances[f"ground{g}-space{s}"] = self.default_distance
 
         # check for space-space distances
-        for s in range(1, space_sources_len + 1):
-            for s2 in range(s + 1, space_sources_len + 1):
+        for s in range(1, len(self.space) + 1):
+            for s2 in range(s + 1, len(self.space) + 1):
                 if (s != s2 and f"space{s}-space{s2}" not in self.max_distances
                         and f"space{s2}-space{s}" not in self.max_distances):
                     self.max_distances[f"space{s}-space{s2}"] = self.default_distance
 
     def _check_num_criteria_blocks(self):
-        ground_criteria_len = len(self.ground)
-        space_criteria_len = len(self.space)
-
-        if ground_criteria_len + space_criteria_len > 10:
+        if ((len(self.ground) + len(self.space)) > 10):
             raise pyaurorax.exceptions.AuroraXBadParametersException("Number of criteria blocks exceeds 10, "
                                                                      "please reduce the count")
-
-        return
 
     def execute(self):
         """
@@ -169,6 +180,11 @@ class Search():
             "ground": self.ground,
             "space": self.space,
             "conjunction_types": self.conjunction_types,
+            "ephemeris_metadata_filters": {} if not self.metadata_filters
+            else {
+                "logical_operator": self.metadata_filters_logical_operator,
+                "expressions": self.metadata_filters
+            },
             "max_distances": self.max_distances,
             "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
         }
@@ -188,6 +204,8 @@ class Search():
             self.executed = True
             self.request_url = res.request.headers["location"]
             self.request_id = self.request_url.rsplit("/", 1)[-1]
+
+        # set request variable
         self.request = res
 
     def update_status(self, status: Optional[Dict] = None) -> None:
@@ -199,11 +217,11 @@ class Search():
                 to avoid requesting it from the API again), defaults to None
         """
         # get the status if it isn't passed in
-        if status is None:
+        if (status is None):
             status = pyaurorax.requests.get_status(self.request_url)
 
         # update request status by checking if data URI is set
-        if status["search_result"]["data_uri"] is not None:
+        if (status["search_result"]["data_uri"] is not None):
             self.completed = True
             self.data_url = f'{pyaurorax.api.urls.base_url}{status["search_result"]["data_uri"]}'
 
@@ -220,21 +238,22 @@ class Search():
             True if data is available, else False
         """
         self.update_status()
-
         return self.completed
 
     def get_data(self) -> None:
         """
         Retrieve the data available for this conjunction search request
         """
+        # check if request is completed
         if (self.completed is False):
             print("No data available, update status or check for data first")
             return
 
-        url = self.data_url
-        raw_data = pyaurorax.requests.get_data(url, response_format=self.response_format)
+        # get data
+        raw_data = pyaurorax.requests.get_data(self.data_url, response_format=self.response_format)
 
-        if self.response_format is not None:
+        # set data variable
+        if (self.response_format is not None):
             self.data = raw_data
         else:
             self.data = [Conjunction(**c) for c in raw_data]

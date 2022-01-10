@@ -42,6 +42,7 @@ class Ephemeris(BaseModel):
         Returns:
             a dictionary object that is JSON-serializable
         """
+        # init
         d = self.__dict__
 
         # format epoch as str

@@ -34,8 +34,6 @@ def authenticate(api_key: str) -> None:
         api_key: an AuroraX API key string
 
     """
-
-    # set the global variable
     global __api_key
     __api_key = api_key
 

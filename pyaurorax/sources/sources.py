@@ -31,10 +31,10 @@ def list(order: Optional[str] = "identifier",
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
     """
+    # make request
     params = {
         format: format
     }
-    # make request
     req = pyaurorax.AuroraXRequest(method="get",
                                    url=pyaurorax.api.urls.data_sources_url,
                                    params=params if format else None)
@@ -82,10 +82,13 @@ def get(program: str,
                                    params=params)
     res = req.execute()
 
-    # set results to the first thing
+    # set results to the first thing found
     if (len(res.data) == 1):
         res.data = res.data[0]
         return DataSource(**res.data)
+    elif (len(res.data) > 1):
+        raise pyaurorax.AuroraXNotFoundException("Too many data sources found, "
+                                                 "should've gotten only one")
     else:
         raise pyaurorax.AuroraXNotFoundException("Data source not found")
 
@@ -298,7 +301,10 @@ def update(data_source: DataSource) -> DataSource:
 
     This operation will fully replace the data source with the
     data_source argument passed in. Be sure that the data_source
-    object is complete.
+    object is complete. If the data source is missing the value
+    for identifier, program, platform, instrument type, source
+    type, or display name, the update will fail and raise a
+    AuroraXBadParametersException exception.
 
     Args:
         data_source: the data source to update (note: it must be a fully-defined
@@ -314,6 +320,8 @@ def update(data_source: DataSource) -> DataSource:
         pyaurorax.exceptions.AuroraXNotFoundException: data source not found
         pyaurorax.exceptions.AuroraXBadParametersException: missing parameters
     """
+    # check to make sure the identifier, program, platform, instrument type,
+    # source type, and display name are all set in the data source
     if not all([data_source.identifier, data_source.program, data_source.platform,
                 data_source.instrument_type, data_source.source_type, data_source.display_name]):
         raise pyaurorax.AuroraXBadParametersException("One or more required data source fields "
@@ -377,10 +385,6 @@ def partial_update(identifier: int,
         pyaurorax.exceptions.AuroraXNotFoundException: data source not found
         pyaurorax.exceptions.AuroraXBadParametersException: missing parameters
     """
-    if not identifier:
-        raise pyaurorax.AuroraXBadParametersException("Required identifier field is "
-                                                      "missing, update operation aborted")
-
     # create a DataSource
     ds = DataSource(identifier=identifier,
                     program=program,
@@ -397,7 +401,7 @@ def partial_update(identifier: int,
     # set URL
     url = f"{pyaurorax.api.urls.data_sources_url}/{ds.identifier}"
 
-    # make request to update the data source passed in
+    # make request
     req = pyaurorax.AuroraXRequest(method="patch", url=url, body=ds)
     req.execute()
 

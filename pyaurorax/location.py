@@ -24,6 +24,9 @@ class Location(BaseModel):
 
     @validator("lon")
     def __both_must_be_none_or_number(cls, v, values):  # pylint: disable=unused-private-member
+        # check to make sure the values are both numbers or None types. We don't
+        # allow a Location object to have the latitude set and not the
+        # longitude (or vice-versa)
         if (v and not values["lat"]) or (values["lat"] and not v):
             raise ValueError("Latitude and longitude must both be numbers, or both be None")
         return v

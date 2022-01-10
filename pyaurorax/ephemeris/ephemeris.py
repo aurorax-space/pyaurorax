@@ -49,8 +49,8 @@ def search_async(start: datetime.datetime,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
                  metadata_filters: Optional[List[Dict]] = None,
-                 response_format: Optional[Dict] = None,
-                 metadata_filters_logical_operator: Optional[str] = None) -> Search:
+                 metadata_filters_logical_operator: Optional[str] = None,
+                 response_format: Optional[Dict] = None) -> Search:
     """
     Submit a request for a ephemeris search, return immediately.
 
@@ -112,9 +112,9 @@ def search(start: datetime.datetime,
            platforms: Optional[List[str]] = None,
            instrument_types: Optional[List[str]] = None,
            metadata_filters: Optional[List[Dict]] = None,
+           metadata_filters_logical_operator: Optional[str] = None,
            poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            response_format: Optional[Dict] = None,
-           metadata_filters_logical_operator: Optional[str] = None,
            return_immediately: Optional[bool] = False,
            verbose: Optional[bool] = False) -> Search:
     """
@@ -145,9 +145,14 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
+        metadata_filters_logical_operator: the logical operator to use when
+            evaluating metadata filters (either 'AND' or 'OR'), defaults
+            to "AND"
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
         response_format: JSON representation of desired data response format
+        return_immediately: initiate the search and return without waiting for data to
+            be received, defaults to False
         verbose: output poll times and other progress messages, defaults to False
 
     Returns:
@@ -163,8 +168,8 @@ def search(start: datetime.datetime,
                platforms=platforms,
                instrument_types=instrument_types,
                metadata_filters=metadata_filters,
-               response_format=response_format,
-               metadata_filters_logical_operator=metadata_filters_logical_operator)
+               metadata_filters_logical_operator=metadata_filters_logical_operator,
+               response_format=response_format)
     if (verbose is True):
         print("[%s] Search object created" % (datetime.datetime.now()))
 
@@ -274,6 +279,7 @@ def delete(data_source: pyaurorax.sources.DataSource,
         pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
         pyaurorax.exceptions.AuroraXBadParametersException: missing parameters
     """
+    # check to make sure the identifier, program, platform, and instrument type are all set in the data source
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
         raise pyaurorax.AuroraXBadParametersException("One or more required data source parameters "
                                                       "are missing, delete operation aborted")

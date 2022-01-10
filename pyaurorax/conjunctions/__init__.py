@@ -26,8 +26,8 @@ finding conjunctions using the south B-trace data
 """
 
 # function and class imports
-from .conjunctions import search_async
 from .conjunctions import search
+from .conjunctions import search_async
 from .classes.conjunction import Conjunction
 from .classes.search import Search
 
@@ -42,8 +42,8 @@ __all__ = [
     "DEFAULT_CONJUNCTION_DISTANCE",
     "CONJUNCTION_TYPE_NBTRACE",
     "CONJUNCTION_TYPE_SBTRACE",
-    "search_async",
     "search",
+    "search_async",
     "Conjunction",
     "Search",
 ]

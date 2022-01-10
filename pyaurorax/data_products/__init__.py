@@ -9,8 +9,8 @@ here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from .data_products import search_async
 from .data_products import search
+from .data_products import search_async
 from .data_products import upload
 from .data_products import delete
 from .data_products import delete_daterange
@@ -25,8 +25,8 @@ __pdoc__ = __data_products_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_data_product_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_search_pdoc__)
 __all__ = [
-    "search_async",
     "search",
+    "search_async",
     "upload",
     "delete",
     "delete_daterange",

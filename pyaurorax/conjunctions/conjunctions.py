@@ -14,88 +14,6 @@ from ..conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRAC
 __pdoc__: Dict = {}
 
 
-def search_async(start: datetime.datetime,
-                 end: datetime.datetime,
-                 ground: List[Dict],
-                 space: List[Dict],
-                 conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
-                 max_distances: Optional[Dict[str, float]] = {},
-                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
-                 epoch_search_precision: Optional[int] = 60,
-                 response_format: Optional[Dict] = None) -> Search:
-    """
-    Submit a request for a conjunctions search, return immediately
-
-    The request will be done asynchronously by the API. Use the helper functions
-    as part of the Search object returned to check for data and/or download it.
-    If you don't want the search to return immediately and rather block until
-    all data is downloaded, please use the 'search' function instead.
-
-    .. deprecated::
-        This function is deprecated as of 0.9.0. Please use the 'search' function
-        with the 'return_immediately' flag set to True to get the same behaviour.
-        This function will be removed in a future release.
-
-    Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        ground: list of ground instrument search parameters
-            e.g. [
-                {
-                    "programs": ["themis-asi"],
-                    "platforms": ["gillam", "rabbit lake"],
-                    "instrument_types": ["RGB"]
-                }
-            ]
-        space: list of one or more space instrument search parameters
-            e.g. [
-                {
-                    "programs": ["themis-asi", "swarm"],
-                    "platforms": ["themisa", "swarma"],
-                    "instrument_types": ["footprint"]
-                }
-            ]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
-            in the pyaurorax.conjunctions module, or at the top level using the
-            pyaurorax.CONJUNCTION_TYPE_* variables.
-        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum
-            distances for conjunctions. The default_distance will be used for any ground-space
-            and space-space maximum distances not specified.
-
-            e.g. distances = {
-                "ground1-ground2": None,
-                "ground1-space1": 500,
-                "ground1-space2": 500,
-                "ground2-space1": 500,
-                "ground2-space2": 500,
-                "space1-space2": None
-            }
-        default_distance: default maximum distance in kilometers for conjunction. Used when max
-            distance is not specified for any ground-space and space-space instrument pairs.
-        epoch_search_precision: the time precision to which conjunctions are calculated. Can be
-            30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-            development and still considered "alpha".
-        response_format: JSON representation of desired data response format
-
-    Returns:
-        a pyaurorax.conjunctions.Search object
-    """
-    warnings.warn("This function is deprecated and will be removed in a future release. Please "
-                  "use the 'search' function with the 'return_immediately' flag to produce the "
-                  "same behaviour.")
-    s = Search(start=start,
-               end=end,
-               ground=ground,
-               space=space,
-               conjunction_types=conjunction_types,
-               max_distances=max_distances,
-               default_distance=default_distance,
-               epoch_search_precision=epoch_search_precision,
-               response_format=response_format)
-    s.execute()
-    return s
-
-
 def search(start: datetime.datetime,
            end: datetime.datetime,
            ground: List[Dict],
@@ -208,4 +126,86 @@ def search(start: datetime.datetime,
                                                                    s.status["search_result"]["result_count"]))
 
     # return
+    return s
+
+
+def search_async(start: datetime.datetime,
+                 end: datetime.datetime,
+                 ground: List[Dict],
+                 space: List[Dict],
+                 conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
+                 max_distances: Optional[Dict[str, float]] = {},
+                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
+                 epoch_search_precision: Optional[int] = 60,
+                 response_format: Optional[Dict] = None) -> Search:
+    """
+    Submit a request for a conjunctions search, return immediately
+
+    The request will be done asynchronously by the API. Use the helper functions
+    as part of the Search object returned to check for data and/or download it.
+    If you don't want the search to return immediately and rather block until
+    all data is downloaded, please use the 'search' function instead.
+
+    .. deprecated::
+        This function is deprecated as of 0.9.0. Please use the 'search' function
+        with the 'return_immediately' flag set to True to get the same behaviour.
+        This function will be removed in a future release.
+
+    Args:
+        start: start timestamp of the search (inclusive)
+        end: end timestamp of the search (inclusive)
+        ground: list of ground instrument search parameters
+            e.g. [
+                {
+                    "programs": ["themis-asi"],
+                    "platforms": ["gillam", "rabbit lake"],
+                    "instrument_types": ["RGB"]
+                }
+            ]
+        space: list of one or more space instrument search parameters
+            e.g. [
+                {
+                    "programs": ["themis-asi", "swarm"],
+                    "platforms": ["themisa", "swarma"],
+                    "instrument_types": ["footprint"]
+                }
+            ]
+        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
+            in the pyaurorax.conjunctions module, or at the top level using the
+            pyaurorax.CONJUNCTION_TYPE_* variables.
+        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum
+            distances for conjunctions. The default_distance will be used for any ground-space
+            and space-space maximum distances not specified.
+
+            e.g. distances = {
+                "ground1-ground2": None,
+                "ground1-space1": 500,
+                "ground1-space2": 500,
+                "ground2-space1": 500,
+                "ground2-space2": 500,
+                "space1-space2": None
+            }
+        default_distance: default maximum distance in kilometers for conjunction. Used when max
+            distance is not specified for any ground-space and space-space instrument pairs.
+        epoch_search_precision: the time precision to which conjunctions are calculated. Can be
+            30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
+            development and still considered "alpha".
+        response_format: JSON representation of desired data response format
+
+    Returns:
+        a pyaurorax.conjunctions.Search object
+    """
+    warnings.warn("This function is deprecated and will be removed in a future release. Please "
+                  "use the 'search' function with the 'return_immediately' flag to produce the "
+                  "same behaviour.")
+    s = Search(start=start,
+               end=end,
+               ground=ground,
+               space=space,
+               conjunction_types=conjunction_types,
+               max_distances=max_distances,
+               default_distance=default_distance,
+               epoch_search_precision=epoch_search_precision,
+               response_format=response_format)
+    s.execute()
     return s

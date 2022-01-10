@@ -35,8 +35,9 @@ class Search():
                     "string"
                 ]
             }
-        poll_interval: time in seconds to wait between polling attempts, defaults
-            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        metadata_filters_logical_operator: the logical operator to use when
+            evaluating metadata filters (either 'AND' or 'OR'), defaults
+            to "AND"
         response_format: JSON representation of desired data response format
         request: AuroraXResponse object returned when the search is executed
         request_id: unique ID assigned to the request by the AuroraX API
@@ -57,9 +58,20 @@ class Search():
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
                  metadata_filters: Optional[List[Dict]] = None,
-                 response_format: Optional[Dict] = None,
-                 metadata_filters_logical_operator: Optional[str] = "AND") -> None:
+                 metadata_filters_logical_operator: Optional[str] = "AND",
+                 response_format: Optional[Dict] = None) -> None:
 
+        # set variables using passed in args
+        self.start = start
+        self.end = end
+        self.programs = programs
+        self.platforms = platforms
+        self.instrument_types = instrument_types
+        self.metadata_filters = metadata_filters
+        self.metadata_filters_logical_operator = metadata_filters_logical_operator
+        self.response_format = response_format
+
+        # initialize additional variables
         self.request: pyaurorax.api.AuroraXResponse = None
         self.request_id: str = ""
         self.request_url: str = ""
@@ -70,15 +82,6 @@ class Search():
         self.status: Dict = {}
         self.data: List[Union[Ephemeris, Dict]] = []
         self.logs: List[Dict] = []
-
-        self.start = start
-        self.end = end
-        self.programs = programs
-        self.platforms = platforms
-        self.instrument_types = instrument_types
-        self.metadata_filters = metadata_filters
-        self.metadata_filters_logical_operator = metadata_filters_logical_operator
-        self.response_format = response_format
 
     def __str__(self) -> str:
         """
@@ -142,6 +145,8 @@ class Search():
             self.executed = True
             self.request_url = res.request.headers["location"]
             self.request_id = self.request_url.rsplit("/", 1)[-1]
+
+        # set the request variable
         self.request = res
 
     def update_status(self, status: Optional[Dict] = None) -> None:
@@ -188,8 +193,7 @@ class Search():
             return
 
         # get data
-        url = self.data_url
-        raw_data = pyaurorax.requests.get_data(url, response_format=self.response_format)
+        raw_data = pyaurorax.requests.get_data(self.data_url, response_format=self.response_format)
 
         # set data variable
         if self.response_format is not None:
