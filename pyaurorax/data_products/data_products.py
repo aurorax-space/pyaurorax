@@ -2,13 +2,21 @@
 Functions for performing data product searches
 """
 
-import pyaurorax
 import datetime
 import humanize
 import warnings
 from typing import Dict, List, Optional
 from .classes.data_product import DataProduct
 from .classes.search import Search
+from ..sources import (DataSource,
+                       list as sources_list)
+from ..exceptions import (AuroraXValidationException,
+                          AuroraXUploadException,
+                          AuroraXBadParametersException,
+                          AuroraXException)
+from ..requests import STANDARD_POLLING_SLEEP_TIME
+from ..api import (AuroraXRequest,
+                   urls as api_urls)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -17,10 +25,10 @@ __pdoc__: Dict = {}
 def __validate_data_source(identifier: int,
                            records: List[DataProduct]) -> Optional[DataProduct]:
     # get all current sources
-    sources = {source.identifier: source for source in pyaurorax.sources.list()}
+    sources = {source.identifier: source for source in sources_list()}
     if identifier not in sources.keys():
-        raise pyaurorax.AuroraXValidationException(f"Data source with unique identifier "
-                                                   "{identifier} could not be found")
+        raise AuroraXValidationException(f"Data source with unique identifier "
+                                         "{identifier} could not be found")
 
     # process each record to make sure the program/platform/instrument_type matches
     # the identifier found for the data source
@@ -29,9 +37,9 @@ def __validate_data_source(identifier: int,
         try:
             reference = sources[record.data_source.identifier]
         except KeyError:
-            raise pyaurorax.AuroraXValidationException(f"Data source with unique identifier "
-                                                       "{record.data_source.identifier} could "
-                                                       "not be found")
+            raise AuroraXValidationException(f"Data source with unique identifier "
+                                             "{record.data_source.identifier} could "
+                                             "not be found")
 
         # check if it's a bad record
         if not (record.data_source.program == reference.program
@@ -52,7 +60,7 @@ def search(start: datetime.datetime,
            metadata_filters: Optional[List[Dict]] = None,
            metadata_filters_logical_operator: Optional[str] = None,
            response_format: Optional[Dict] = None,
-           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
            return_immediately: Optional[bool] = False,
            verbose: Optional[bool] = False) -> Search:
     """
@@ -212,15 +220,15 @@ def search_async(start: datetime.datetime,
     warnings.warn("This function is deprecated and will be removed in a future release. Please "
                   "use the 'search' function with the 'return_immediately' flag to produce the "
                   "same behaviour.")
-    s = pyaurorax.data_products.Search(start,
-                                       end,
-                                       programs=programs,
-                                       platforms=platforms,
-                                       instrument_types=instrument_types,
-                                       data_product_type_filters=data_product_type_filters,
-                                       metadata_filters=metadata_filters,
-                                       metadata_filters_logical_operator=metadata_filters_logical_operator,
-                                       response_format=response_format)
+    s = Search(start,
+               end,
+               programs=programs,
+               platforms=platforms,
+               instrument_types=instrument_types,
+               data_product_type_filters=data_product_type_filters,
+               metadata_filters=metadata_filters,
+               metadata_filters_logical_operator=metadata_filters_logical_operator,
+               response_format=response_format)
     s.execute()
     return s
 
@@ -249,8 +257,8 @@ def upload(identifier: int,
     if validate_source:
         validation_error = __validate_data_source(identifier, records)
         if validation_error:
-            raise pyaurorax.AuroraXValidationException(f"Unable to validate data source "
-                                                       "found in record: {validation_error}")
+            raise AuroraXValidationException(f"Unable to validate data source "
+                                             "found in record: {validation_error}")
 
     # translate each data product record to a request-friendly
     # dict (ie. convert datetimes to strings, etc.)
@@ -259,27 +267,27 @@ def upload(identifier: int,
             records[i] = records[i].to_json_serializable()  # type: ignore
 
     # make request
-    url = pyaurorax.api.urls.data_products_upload_url.format(identifier)
-    req = pyaurorax.AuroraXRequest(method="post",
-                                   url=url,
-                                   body=records,
-                                   null_response=True)
+    url = api_urls.data_products_upload_url.format(identifier)
+    req = AuroraXRequest(method="post",
+                         url=url,
+                         body=records,
+                         null_response=True)
     res = req.execute()
 
     # evaluate response
     if (res.status_code == 400):
         if type(res.data) is list:
-            raise pyaurorax.AuroraXUploadException("%s - %s" % (res.status_code,
-                                                                res.data[0]["error_message"]))
+            raise AuroraXUploadException("%s - %s" % (res.status_code,
+                                                      res.data[0]["error_message"]))
 
-        raise pyaurorax.AuroraXUploadException("%s - %s" % (res.status_code,
-                                                            res.data["error_message"]))
+        raise AuroraXUploadException("%s - %s" % (res.status_code,
+                                                  res.data["error_message"]))
 
     # return
     return 1
 
 
-def delete_daterange(data_source: pyaurorax.sources.DataSource,
+def delete_daterange(data_source: DataSource,
                      start: datetime.datetime,
                      end: datetime.datetime,
                      data_product_types: Optional[List[str]] = None) -> int:
@@ -308,19 +316,19 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
     """
     # check to make sure the identifier, program, platform, and instrument type are all set in the data source
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
-        raise pyaurorax.AuroraXBadParametersException("One or more required data source parameters "
-                                                      "are missing, delete operation aborted")
+        raise AuroraXBadParametersException("One or more required data source parameters "
+                                            "are missing, delete operation aborted")
 
     # do request to get all data products between start and end datetimes
     try:
-        s = pyaurorax.data_products.search(start=start,
-                                           end=end,
-                                           programs=[data_source.program],
-                                           platforms=[data_source.platform],
-                                           instrument_types=[data_source.instrument_type],
-                                           data_product_type_filters=[] if not data_product_types else data_product_types)
+        s = search(start,
+                   end,
+                   programs=[data_source.program],
+                   platforms=[data_source.platform],
+                   instrument_types=[data_source.instrument_type],
+                   data_product_type_filters=[] if not data_product_types else data_product_types)
     except Exception as e:
-        raise pyaurorax.AuroraXException(e)
+        raise AuroraXException(e)
 
     # collect URLs from search result
     urls = []
@@ -331,7 +339,7 @@ def delete_daterange(data_source: pyaurorax.sources.DataSource,
     return delete(data_source, urls)
 
 
-def delete(data_source: pyaurorax.sources.DataSource,
+def delete(data_source: DataSource,
            urls: List[str]) -> int:
     """
     Delete data products by URL.
@@ -355,30 +363,30 @@ def delete(data_source: pyaurorax.sources.DataSource,
     """
     # check to make sure the identifier, program, platform, and instrument type are all set in the data source
     if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
-        raise pyaurorax.AuroraXBadParametersException("One or more required data source parameters "
-                                                      "are missing, delete operation aborted")
+        raise AuroraXBadParametersException("One or more required data source parameters "
+                                            "are missing, delete operation aborted")
 
     # do request
-    url = pyaurorax.api.urls.data_products_upload_url.format(data_source.identifier)
+    url = api_urls.data_products_upload_url.format(data_source.identifier)
     params = {
         "program": data_source.program,
         "platform": data_source.platform,
         "instrument_type": data_source.instrument_type,
         "urls": urls
     }
-    delete_req = pyaurorax.AuroraXRequest(method="delete",
-                                          url=url,
-                                          body=params,
-                                          null_response=True)
+    delete_req = AuroraXRequest(method="delete",
+                                url=url,
+                                body=params,
+                                null_response=True)
     res = delete_req.execute()
 
     # evaluate response
     if (res.status_code == 400):
         if type(res.data) is list:
-            raise pyaurorax.AuroraXBadParametersException("%s - %s" % (res.status_code,
-                                                                       res.data[0]["message"]))
-        raise pyaurorax.AuroraXBadParametersException("%s - %s" % (res.status_code,
-                                                                   res.data["message"]))
+            raise AuroraXBadParametersException("%s - %s" % (res.status_code,
+                                                             res.data[0]["message"]))
+        raise AuroraXBadParametersException("%s - %s" % (res.status_code,
+                                                         res.data["message"]))
 
     # return
     return 1

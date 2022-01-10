@@ -2,13 +2,18 @@
 Class definition for a conjunction search
 """
 
-import pyaurorax
 import pprint
 import datetime
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
-from ...requests import STANDARD_POLLING_SLEEP_TIME
 from ...conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRACE
+from ...api import AuroraXRequest, AuroraXResponse, urls
+from ...exceptions import (AuroraXBadParametersException)
+from ...requests import (STANDARD_POLLING_SLEEP_TIME,
+                         cancel as requests_cancel,
+                         wait_for_data as requests_wait_for_data,
+                         get_data as requests_get_data,
+                         get_status as requests_get_status)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -118,7 +123,7 @@ class Search():
         self.response_format = response_format
 
         # initialize additional variables
-        self.request: pyaurorax.api.AuroraXResponse = None
+        self.request: AuroraXResponse = None
         self.request_id: str = ""
         self.request_url: str = ""
         self.executed: bool = False
@@ -164,8 +169,8 @@ class Search():
 
     def _check_num_criteria_blocks(self):
         if ((len(self.ground) + len(self.space)) > 10):
-            raise pyaurorax.exceptions.AuroraXBadParametersException("Number of criteria blocks exceeds 10, "
-                                                                     "please reduce the count")
+            raise AuroraXBadParametersException("Number of criteria blocks exceeds 10, "
+                                                "please reduce the count")
 
     def execute(self):
         """
@@ -178,7 +183,7 @@ class Search():
         self._check_num_criteria_blocks()
 
         # set up request
-        url = pyaurorax.api.urls.conjunction_search_url
+        url = urls.conjunction_search_url
         self._set_max_distances()
         post_data = {
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -192,10 +197,10 @@ class Search():
         self.query = post_data
 
         # do request
-        req = pyaurorax.AuroraXRequest(method="post",
-                                       url=url,
-                                       body=post_data,
-                                       null_response=True)
+        req = AuroraXRequest(method="post",
+                             url=url,
+                             body=post_data,
+                             null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -219,12 +224,12 @@ class Search():
         """
         # get the status if it isn't passed in
         if (status is None):
-            status = pyaurorax.requests.get_status(self.request_url)
+            status = requests_get_status(self.request_url)
 
         # update request status by checking if data URI is set
         if (status["search_result"]["data_uri"] is not None):
             self.completed = True
-            self.data_url = f'{pyaurorax.api.urls.base_url}{status["search_result"]["data_uri"]}'
+            self.data_url = f'{urls.base_url}{status["search_result"]["data_uri"]}'
 
         # set class variable "status" and "logs"
         self.status = status
@@ -251,7 +256,7 @@ class Search():
             return
 
         # get data
-        raw_data = pyaurorax.requests.get_data(self.data_url, response_format=self.response_format)
+        raw_data = requests_get_data(self.data_url, response_format=self.response_format)
 
         # set data variable
         if (self.response_format is not None):
@@ -271,10 +276,10 @@ class Search():
                 to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
             verbose: output poll times and other progress messages, defaults to False
         """
-        url = pyaurorax.api.urls.conjunction_request_url.format(self.request_id)
-        self.update_status(pyaurorax.requests.wait_for_data(url,
-                                                            poll_interval=poll_interval,
-                                                            verbose=verbose))
+        url = urls.conjunction_request_url.format(self.request_id)
+        self.update_status(requests_wait_for_data(url,
+                                                  poll_interval=poll_interval,
+                                                  verbose=verbose))
 
     def cancel(self,
                wait: Optional[bool] = False,
@@ -303,5 +308,5 @@ class Search():
             pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
             pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
         """
-        url = pyaurorax.api.urls.conjunction_request_url.format(self.request_id)
-        return pyaurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)
+        url = urls.conjunction_request_url.format(self.request_id)
+        return requests_cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)

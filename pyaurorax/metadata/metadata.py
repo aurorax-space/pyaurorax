@@ -2,8 +2,8 @@
 Functions for interacting with metadata filters
 """
 
-import pyaurorax
 from typing import Dict, List, Optional
+from ..sources import get_using_identifier, FORMAT_FULL_RECORD
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -48,7 +48,7 @@ def get_ephemeris_schema(identifier: int) -> List[Dict]:
         the ephemeris metadata schema for the data source
     """
     # get the data source
-    source_info = pyaurorax.sources.get_using_identifier(identifier, format=pyaurorax.FORMAT_FULL_RECORD)
+    source_info = get_using_identifier(identifier, format=FORMAT_FULL_RECORD)
 
     # if there's an ephemeris metadata schema, return it
     if source_info.ephemeris_metadata_schema:
@@ -68,7 +68,7 @@ def get_data_products_schema(identifier: int) -> List[Dict]:
         the data products metadata schema for the data source
     """
     # get the data source
-    source_info = pyaurorax.sources.get_using_identifier(identifier, format=pyaurorax.FORMAT_FULL_RECORD)
+    source_info = get_using_identifier(identifier, format=FORMAT_FULL_RECORD)
 
     # if there's a data products metadata schema, return it
     if source_info.data_product_metadata_schema:

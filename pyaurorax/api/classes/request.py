@@ -2,7 +2,6 @@
 Class definition used for managing an API request
 """
 
-import pyaurorax
 import json
 import pprint
 import requests
@@ -11,6 +10,11 @@ from typing import Optional, Dict, List, Union
 from ..._internal.util import json_converter
 from .response import AuroraXResponse
 from ..api import get_api_key
+from ...exceptions import (AuroraXMaxRetriesException,
+                           AuroraXUnauthorizedException,
+                           AuroraXNotFoundException,
+                           AuroraXUnexpectedContentTypeException,
+                           AuroraXException)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -102,11 +106,11 @@ class AuroraXRequest(BaseModel):
 
         # retry request if needed
         if (skip_retry_logic is False):
-            for i in range(0, pyaurorax.api.DEFAULT_RETRIES):
+            for i in range(0, DEFAULT_RETRIES):
                 if (req.status_code == 500 and "text/plain" in req.headers["Content-Type"]):
-                    if (i == (pyaurorax.api.DEFAULT_RETRIES - 1)):
-                        raise pyaurorax.AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
-                                                                                req.status_code))
+                    if (i == (DEFAULT_RETRIES - 1)):
+                        raise AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
+                                                                      req.status_code))
                     req = requests.request(self.method,
                                            self.url,
                                            headers=self.__merge_headers(),
@@ -118,12 +122,12 @@ class AuroraXRequest(BaseModel):
 
         # check if authorization worked
         if (req.status_code == 401):
-            raise pyaurorax.AuroraXUnauthorizedException("%s %s" % (req.status_code,
-                                                                    req.json()["error_message"]))
+            raise AuroraXUnauthorizedException("%s %s" % (req.status_code,
+                                                          req.json()["error_message"]))
 
         if (req.status_code == 404):
-            raise pyaurorax.AuroraXNotFoundException("%s %s" % (req.status_code,
-                                                                req.json()["error_message"]))
+            raise AuroraXNotFoundException("%s %s" % (req.status_code,
+                                                      req.json()["error_message"]))
 
         # check if we only want to do limited evaluation
         if (limited_evaluation is True):
@@ -137,8 +141,8 @@ class AuroraXRequest(BaseModel):
             if (req.headers["Content-Type"] == "application/json"):
                 response_data = req.json()
             else:
-                raise pyaurorax.AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
-                                                                                   req.status_code))
+                raise AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
+                                                                         req.status_code))
         else:
             if (req.status_code != 200 and req.status_code != 201 and req.status_code != 202 and req.status_code != 204):
                 response_data = req.json()
@@ -149,10 +153,10 @@ class AuroraXRequest(BaseModel):
         if (req.status_code == 500):
             response_json = req.json()
             if ("error_message" in response_json):
-                raise pyaurorax.AuroraXException("%s (%s)" % (response_json["error_message"],
-                                                              req.status_code))
+                raise AuroraXException("%s (%s)" % (response_json["error_message"],
+                                                    req.status_code))
             else:
-                raise pyaurorax.AuroraXException(response_json)
+                raise AuroraXException(response_json)
 
         # create reponse object
         res = AuroraXResponse(request=req,
