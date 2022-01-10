@@ -54,8 +54,8 @@ def search(start: datetime.datetime,
                             }
                         ]
                     }
-                ]
-            }
+                }
+            ]
         space: list of one or more space instrument search parameters
             e.g. [
                 {
@@ -196,8 +196,8 @@ def search_async(start: datetime.datetime,
                             }
                         ]
                     }
-                ]
-            }
+                }
+            ]
         space: list of one or more space instrument search parameters
             e.g. [
                 {

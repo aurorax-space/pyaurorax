@@ -37,8 +37,8 @@ class Search():
                             }
                         ]
                     }
-                ]
-            }
+                }
+            ]
         space: list of one or more space instrument search parameters
             e.g. [
                 {
