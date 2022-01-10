@@ -2,12 +2,11 @@
 Class definition for an ephemeris record
 """
 
+import pyaurorax
 import datetime
 import pprint
 from pydantic import BaseModel
 from typing import Dict, Optional
-from ...location import Location
-from ...sources import DataSource
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -27,12 +26,12 @@ class Ephemeris(BaseModel):
         sbtrace: Location object with south B-trace geographic latitude and longitude
         metadata: metadata for this record (arbitrary keys and values)
     """
-    data_source: DataSource
+    data_source: pyaurorax.sources.DataSource
     epoch: datetime.datetime
-    location_geo: Location
-    location_gsm: Optional[Location] = Location(lat=None, lon=None)
-    nbtrace: Location
-    sbtrace: Location
+    location_geo: pyaurorax.Location
+    location_gsm: Optional[pyaurorax.Location] = pyaurorax.Location(lat=None, lon=None)
+    nbtrace: pyaurorax.Location
+    sbtrace: pyaurorax.Location
     metadata: Dict = None
 
     def to_json_serializable(self) -> Dict:
@@ -51,13 +50,13 @@ class Ephemeris(BaseModel):
             d["epoch"] = d["epoch"].strftime("%Y-%m-%dT%H:%M:00.000Z")
 
         # format location
-        if (type(d["location_geo"]) is Location):
+        if (type(d["location_geo"]) is pyaurorax.Location):
             d["location_geo"] = d["location_geo"].__dict__
-        if (type(d["location_gsm"]) is Location):
+        if (type(d["location_gsm"]) is pyaurorax.Location):
             d["location_gsm"] = d["location_gsm"].__dict__
-        if (type(d["nbtrace"]) is Location):
+        if (type(d["nbtrace"]) is pyaurorax.Location):
             d["nbtrace"] = d["nbtrace"].__dict__
-        if (type(d["sbtrace"]) is Location):
+        if (type(d["sbtrace"]) is pyaurorax.Location):
             d["sbtrace"] = d["sbtrace"].__dict__
 
         # format metadata

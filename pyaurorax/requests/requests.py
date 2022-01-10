@@ -2,11 +2,10 @@
 Functions for interacting with AuroraX requests
 """
 
+import pyaurorax
 import datetime
 import time
 from typing import Dict, List, Optional
-from ..api import AuroraXRequest
-from ..location import Location
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -30,7 +29,7 @@ def get_status(request_url: str) -> Dict:
         the status information for the request
     """
     # do request
-    req = AuroraXRequest(method="get", url=request_url)
+    req = pyaurorax.AuroraXRequest(method="get", url=request_url)
     res = req.execute()
 
     # return
@@ -51,11 +50,11 @@ def get_data(data_url: str,
     """
     # do request
     if (response_format is not None):
-        req = AuroraXRequest(method="post",
-                             url=data_url,
-                             body=response_format)
+        req = pyaurorax.AuroraXRequest(method="post",
+                                       url=data_url,
+                                       body=response_format)
     else:
-        req = AuroraXRequest(method="get", url=data_url)
+        req = pyaurorax.AuroraXRequest(method="get", url=data_url)
     res = req.execute()
 
     # set data var
@@ -67,17 +66,17 @@ def get_data(data_url: str,
             data_result[i]["epoch"] = datetime.datetime.strptime(data_result[i]["epoch"],
                                                                  "%Y-%m-%dT%H:%M:%S")
         if ("location_geo" in data_result[i]):
-            data_result[i]["location_geo"] = Location(lat=data_result[i]["location_geo"]["lat"],
-                                                      lon=data_result[i]["location_geo"]["lon"])
+            data_result[i]["location_geo"] = pyaurorax.Location(lat=data_result[i]["location_geo"]["lat"],
+                                                                lon=data_result[i]["location_geo"]["lon"])
         if ("location_gsm" in data_result[i]):
-            data_result[i]["location_gsm"] = Location(lat=data_result[i]["location_gsm"]["lat"],
-                                                      lon=data_result[i]["location_gsm"]["lon"])
+            data_result[i]["location_gsm"] = pyaurorax.Location(lat=data_result[i]["location_gsm"]["lat"],
+                                                                lon=data_result[i]["location_gsm"]["lon"])
         if ("nbtrace" in data_result[i]):
-            data_result[i]["nbtrace"] = Location(lat=data_result[i]["nbtrace"]["lat"],
-                                                 lon=data_result[i]["nbtrace"]["lon"])
+            data_result[i]["nbtrace"] = pyaurorax.Location(lat=data_result[i]["nbtrace"]["lat"],
+                                                           lon=data_result[i]["nbtrace"]["lon"])
         if ("sbtrace" in data_result[i]):
-            data_result[i]["sbtrace"] = Location(lat=data_result[i]["sbtrace"]["lat"],
-                                                 lon=data_result[i]["sbtrace"]["lon"])
+            data_result[i]["sbtrace"] = pyaurorax.Location(lat=data_result[i]["sbtrace"]["lat"],
+                                                           lon=data_result[i]["sbtrace"]["lon"])
 
     # return
     return data_result
@@ -163,9 +162,9 @@ def cancel(request_url: str,
         pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
     """
     # do request
-    req = AuroraXRequest(method="delete",
-                         url=request_url,
-                         null_response=True)
+    req = pyaurorax.AuroraXRequest(method="delete",
+                                   url=request_url,
+                                   null_response=True)
     req.execute()
 
     # return immediately if we don't want to wait

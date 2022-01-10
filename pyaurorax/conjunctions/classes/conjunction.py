@@ -2,11 +2,11 @@
 Class definition for a conjunction
 """
 
+import pyaurorax
 import pprint
 import datetime
 from pydantic import BaseModel
 from typing import Dict, List
-from ...sources import DataSource
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -31,7 +31,7 @@ class Conjunction(BaseModel):
     conjunction_type: str
     start: datetime.datetime
     end: datetime.datetime
-    data_sources: List[DataSource]
+    data_sources: List[pyaurorax.sources.DataSource]
     min_distance: float
     max_distance: float
     events: List[Dict]

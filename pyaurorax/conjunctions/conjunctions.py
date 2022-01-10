@@ -4,11 +4,11 @@ Functions for performing conjunction searches
 
 import datetime
 import humanize
+import pyaurorax
 import warnings
 from typing import Dict, List, Optional
 from .classes.search import Search
 from ..conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRACE
-from ..requests import STANDARD_POLLING_SLEEP_TIME
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -23,7 +23,7 @@ def search(start: datetime.datetime,
            default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
            epoch_search_precision: Optional[int] = 60,
            response_format: Optional[Dict] = None,
-           poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            return_immediately: Optional[bool] = False,
            verbose: Optional[bool] = False) -> Search:
     """

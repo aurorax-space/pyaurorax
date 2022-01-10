@@ -2,11 +2,11 @@
 Class definition for a data product
 """
 
+import pyaurorax
 import datetime
 import pprint
 from pydantic import BaseModel
 from typing import Dict
-from ...sources import DataSource
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -24,7 +24,7 @@ class DataProduct(BaseModel):
         url: the URL of data product
         metdata: metadata for this record (arbitrary keys and values)
     """
-    data_source: DataSource
+    data_source: pyaurorax.sources.DataSource
     data_product_type: str
     start: datetime.datetime
     end: datetime.datetime
