@@ -2,11 +2,16 @@
 Class definition for a data product search
 """
 
-import pyaurorax
 import datetime
 import pprint
 from typing import Dict, List, Union, Optional
 from .data_product import DataProduct
+from ...api import AuroraXRequest, AuroraXResponse, urls
+from ...requests import (STANDARD_POLLING_SLEEP_TIME,
+                         cancel as requests_cancel,
+                         wait_for_data as requests_wait_for_data,
+                         get_data as requests_get_data,
+                         get_status as requests_get_status)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -81,7 +86,7 @@ class Search():
         self.response_format = response_format
 
         # initialize additional variables
-        self.request: pyaurorax.api.AuroraXResponse = None
+        self.request: AuroraXResponse = None
         self.request_id: str = ""
         self.request_url: str = ""
         self.executed: bool = False
@@ -115,7 +120,7 @@ class Search():
         Initiate a data product search request
         """
         # set up request
-        url = pyaurorax.api.urls.data_products_search_url
+        url = urls.data_products_search_url
         post_data = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,
@@ -134,10 +139,10 @@ class Search():
         self.query = post_data
 
         # do request
-        req = pyaurorax.AuroraXRequest(method="post",
-                                       url=url,
-                                       body=post_data,
-                                       null_response=True)
+        req = AuroraXRequest(method="post",
+                             url=url,
+                             body=post_data,
+                             null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -161,12 +166,12 @@ class Search():
         """
         # get the status if it isn't passed in
         if (status is None):
-            status = pyaurorax.requests.get_status(self.request_url)
+            status = requests_get_status(self.request_url)
 
         # update request status by checking if data URI is set
         if (status["search_result"]["data_uri"] is not None):
             self.completed = True
-            self.data_url = "%s%s" % (pyaurorax.api.urls.base_url,
+            self.data_url = "%s%s" % (urls.base_url,
                                       status["search_result"]["data_uri"])
 
         # set class variable "status" and "logs"
@@ -194,7 +199,7 @@ class Search():
             return
 
         # get data
-        raw_data = pyaurorax.requests.get_data(self.data_url, response_format=self.response_format)
+        raw_data = requests_get_data(self.data_url, response_format=self.response_format)
 
         # set data variable
         if self.response_format is not None:
@@ -203,7 +208,7 @@ class Search():
             self.data = [DataProduct(**dp) for dp in raw_data]
 
     def wait(self,
-             poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+             poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
              verbose: Optional[bool] = False) -> None:
         """
         Block and wait for the request to complete and data is available
@@ -215,14 +220,14 @@ class Search():
             verbose: output poll times and other progress messages, defaults
                 to False
         """
-        url = pyaurorax.api.urls.data_products_request_url.format(self.request_id)
-        self.update_status(pyaurorax.requests.wait_for_data(url,
-                                                            poll_interval=poll_interval,
-                                                            verbose=verbose))
+        url = urls.data_products_request_url.format(self.request_id)
+        self.update_status(requests_wait_for_data(url,
+                                                  poll_interval=poll_interval,
+                                                  verbose=verbose))
 
     def cancel(self,
                wait: Optional[bool] = False,
-               poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+               poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
                verbose: Optional[bool] = False) -> int:
         """
         Cancel the data product search request
@@ -247,5 +252,5 @@ class Search():
             pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
             pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
         """
-        url = pyaurorax.api.urls.data_products_request_url.format(self.request_id)
-        return pyaurorax.requests.cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)
+        url = urls.data_products_request_url.format(self.request_id)
+        return requests_cancel(url, wait=wait, poll_interval=poll_interval, verbose=verbose)

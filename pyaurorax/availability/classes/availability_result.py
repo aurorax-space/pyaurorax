@@ -2,10 +2,10 @@
 Class definition used for containing Availability information
 """
 
-import pyaurorax
 import pprint
 from pydantic import BaseModel
 from typing import Dict, Optional
+from ...sources import DataSource
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -20,7 +20,7 @@ class AvailabilityResult(BaseModel):
         available_data_products: the data product availability information
         available_ephemeris: the ephemeris availability information
     """
-    data_source: pyaurorax.sources.DataSource
+    data_source: DataSource
     available_data_products: Optional[Dict[str, int]] = None
     available_ephemeris: Optional[Dict[str, int]] = None
 

@@ -2,10 +2,11 @@
 Functions for retrieving availablity information
 """
 
-import pyaurorax
 import datetime
 from typing import Dict, List, Optional
 from .classes.availability_result import AvailabilityResult
+from ..sources import FORMAT_DEFAULT
+from ..api import urls, AuroraXRequest
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -18,7 +19,7 @@ def ephemeris(start: datetime.date,
               instrument_type: Optional[str] = None,
               source_type: Optional[str] = None,
               owner: Optional[str] = None,
-              format: Optional[str] = pyaurorax.FORMAT_DEFAULT,
+              format: Optional[str] = FORMAT_DEFAULT,
               slow: Optional[bool] = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing ephemeris records
@@ -55,9 +56,9 @@ def ephemeris(start: datetime.date,
     }
 
     # do request
-    req = pyaurorax.AuroraXRequest(method="get",
-                                   url=pyaurorax.api.urls.ephemeris_availability_url,
-                                   params=params)
+    req = AuroraXRequest(method="get",
+                         url=urls.ephemeris_availability_url,
+                         params=params)
     res = req.execute()
 
     # return
@@ -71,7 +72,7 @@ def data_products(start: datetime.date,
                   instrument_type: Optional[str] = None,
                   source_type: Optional[str] = None,
                   owner: Optional[str] = None,
-                  format: Optional[str] = pyaurorax.FORMAT_DEFAULT,
+                  format: Optional[str] = FORMAT_DEFAULT,
                   slow: Optional[bool] = False) -> List[AvailabilityResult]:
     """
     Retrieve information about the number of existing data product records
@@ -108,9 +109,9 @@ def data_products(start: datetime.date,
     }
 
     # do request
-    req = pyaurorax.AuroraXRequest(method="get",
-                                   url=pyaurorax.api.urls.data_products_availability_url,
-                                   params=params)
+    req = AuroraXRequest(method="get",
+                         url=urls.data_products_availability_url,
+                         params=params)
     res = req.execute()
 
     # return

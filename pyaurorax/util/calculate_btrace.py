@@ -4,9 +4,9 @@ locations for ground-based instruments.
 """
 
 import datetime
-from pyaurorax import Location
-from typing import Dict
 import warnings
+from typing import Dict
+from ..location import Location
 
 # import aacgmv2 if installed
 try:
