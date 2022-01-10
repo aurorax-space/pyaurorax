@@ -5,7 +5,7 @@ Functions for interacting with AuroraX requests
 import datetime
 import time
 from typing import Dict, List, Optional
-from ..api import AuroraXRequest
+from ..api.classes.request import AuroraXRequest
 from ..location import Location
 
 # pdoc init
