@@ -26,33 +26,43 @@ class Search():
                 {
                     "programs": ["themis-asi"],
                     "platforms": ["gillam", "rabbit lake"],
-                    "instrument_types": ["RGB"]
-                }
-            ]
+                    "instrument_types": ["RGB"],
+                    "ephemeris_metadata_filters": {
+                        "logical_operator": "AND",
+                        "expressions": [
+                            {
+                                "key": "calgary_apa_ml_v1",
+                                "operator": "in",
+                                "values": [ "classified as APA" ]
+                            }
+                        ]
+                    }
+                ]
+            }
         space: list of one or more space instrument search parameters
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
                     "platforms": ["themisa", "swarma"],
-                    "instrument_types": ["footprint"]
+                    "instrument_types": ["footprint"],
+                    "ephemeris_metadata_filters": {
+                        "logical_operator": "AND",
+                        "expressions": [
+                            {
+                                "key": "nbtrace_region",
+                                "operator": "in",
+                                "values": [ "north auroral oval" ]
+                            }
+                        ]
+                    },
+                    "hemisphere": [
+                        "northern"
+                    ]
                 }
             ]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either 'AND' or 'OR'), defaults
-            to "AND"
         max_distances: dictionary of ground-space and space-space maximum
             distances for conjunctions. The default_distance will be used for any ground-space
             and space-space maximum distances not specified.
@@ -91,8 +101,6 @@ class Search():
                  ground: List[Dict],
                  space: List[Dict],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
-                 metadata_filters: Optional[List[Dict]] = None,
-                 metadata_filters_logical_operator: Optional[str] = "AND",
                  max_distances: Optional[Dict[str, float]] = None,
                  default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
@@ -104,8 +112,6 @@ class Search():
         self.ground = ground
         self.space = space
         self.conjunction_types = conjunction_types
-        self.metadata_filters = metadata_filters
-        self.metadata_filters_logical_operator = metadata_filters_logical_operator
         self.max_distances = max_distances if max_distances else {}
         self.default_distance = default_distance
         self.epoch_search_precision = epoch_search_precision
@@ -180,11 +186,6 @@ class Search():
             "ground": self.ground,
             "space": self.space,
             "conjunction_types": self.conjunction_types,
-            "ephemeris_metadata_filters": {} if not self.metadata_filters
-            else {
-                "logical_operator": self.metadata_filters_logical_operator,
-                "expressions": self.metadata_filters
-            },
             "max_distances": self.max_distances,
             "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
         }

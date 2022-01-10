@@ -21,9 +21,9 @@ def search(start: datetime.datetime,
            conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
            max_distances: Optional[Dict[str, float]] = {},
            default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
-           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            epoch_search_precision: Optional[int] = 60,
            response_format: Optional[Dict] = None,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            return_immediately: Optional[bool] = False,
            verbose: Optional[bool] = False) -> Search:
     """
@@ -43,15 +43,38 @@ def search(start: datetime.datetime,
                 {
                     "programs": ["themis-asi"],
                     "platforms": ["gillam", "rabbit lake"],
-                    "instrument_types": ["RGB"]
-                }
-            ]
+                    "instrument_types": ["RGB"],
+                    "ephemeris_metadata_filters": {
+                        "logical_operator": "AND",
+                        "expressions": [
+                            {
+                                "key": "calgary_apa_ml_v1",
+                                "operator": "in",
+                                "values": [ "classified as APA" ]
+                            }
+                        ]
+                    }
+                ]
+            }
         space: list of one or more space instrument search parameters
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
                     "platforms": ["themisa", "swarma"],
-                    "instrument_types": ["footprint"]
+                    "instrument_types": ["footprint"],
+                    "ephemeris_metadata_filters": {
+                        "logical_operator": "AND",
+                        "expressions": [
+                            {
+                                "key": "nbtrace_region",
+                                "operator": "in",
+                                "values": [ "north auroral oval" ]
+                            }
+                        ]
+                    },
+                    "hemisphere": [
+                        "northern"
+                    ]
                 }
             ]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
@@ -73,9 +96,12 @@ def search(start: datetime.datetime,
             when max distance is not specified for any ground-space and space-space
             instrument pairs.
             to False
+        epoch_search_precision: the time precision to which conjunctions are calculated. Can be
+            30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
+            development and still considered "alpha".
+        response_format: JSON representation of desired data response format
         poll_interval: seconds to wait between polling calls, defaults to
             pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        response_format: JSON representation of desired data response format
         return_immediately: initiate the search and return without waiting for data to
             be received, defaults to False
         verbose: show the progress of the request using the request log, defaults
@@ -84,10 +110,10 @@ def search(start: datetime.datetime,
         a pyaurorax.conjunctions.Search object
     """
     # create a Search object
-    s = Search(start=start,
-               end=end,
-               ground=ground,
-               space=space,
+    s = Search(start,
+               end,
+               ground,
+               space,
                conjunction_types=conjunction_types,
                max_distances=max_distances,
                default_distance=default_distance,
@@ -159,15 +185,38 @@ def search_async(start: datetime.datetime,
                 {
                     "programs": ["themis-asi"],
                     "platforms": ["gillam", "rabbit lake"],
-                    "instrument_types": ["RGB"]
-                }
-            ]
+                    "instrument_types": ["RGB"],
+                    "ephemeris_metadata_filters": {
+                        "logical_operator": "AND",
+                        "expressions": [
+                            {
+                                "key": "calgary_apa_ml_v1",
+                                "operator": "in",
+                                "values": [ "classified as APA" ]
+                            }
+                        ]
+                    }
+                ]
+            }
         space: list of one or more space instrument search parameters
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
                     "platforms": ["themisa", "swarma"],
-                    "instrument_types": ["footprint"]
+                    "instrument_types": ["footprint"],
+                    "ephemeris_metadata_filters": {
+                        "logical_operator": "AND",
+                        "expressions": [
+                            {
+                                "key": "nbtrace_region",
+                                "operator": "in",
+                                "values": [ "north auroral oval" ]
+                            }
+                        ]
+                    },
+                    "hemisphere": [
+                        "northern"
+                    ]
                 }
             ]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
@@ -198,10 +247,10 @@ def search_async(start: datetime.datetime,
     warnings.warn("This function is deprecated and will be removed in a future release. Please "
                   "use the 'search' function with the 'return_immediately' flag to produce the "
                   "same behaviour.")
-    s = Search(start=start,
-               end=end,
-               ground=ground,
-               space=space,
+    s = Search(start,
+               end,
+               ground,
+               space,
                conjunction_types=conjunction_types,
                max_distances=max_distances,
                default_distance=default_distance,

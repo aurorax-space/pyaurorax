@@ -48,11 +48,11 @@ def search(start: datetime.datetime,
            programs: Optional[List[str]] = None,
            platforms: Optional[List[str]] = None,
            instrument_types: Optional[List[str]] = None,
-           metadata_filters: Optional[List[Dict]] = None,
            data_product_type_filters: Optional[List[str]] = None,
-           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
-           response_format: Optional[Dict] = None,
+           metadata_filters: Optional[List[Dict]] = None,
            metadata_filters_logical_operator: Optional[str] = None,
+           response_format: Optional[Dict] = None,
+           poll_interval: Optional[float] = pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
            return_immediately: Optional[bool] = False,
            verbose: Optional[bool] = False) -> Search:
     """
@@ -73,16 +73,6 @@ def search(start: datetime.datetime,
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and values
-            to filter on, defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
         data_product_type_filters: list of dictionaries describing data product types to
             filter on e.g. "keogram", defaults to None
 
@@ -93,9 +83,22 @@ def search(start: datetime.datetime,
                     "string"
                 ]
             }
+        metadata_filters: list of dictionaries describing metadata keys and
+            values to filter on, defaults to None
+
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        metadata_filters_logical_operator: the logical operator to use when
+            evaluating metadata filters (either 'AND' or 'OR'), defaults
+            to "AND"
+        response_format: JSON representation of desired data response format
         poll_interval: time in seconds to wait between polling attempts, defaults
             to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        response_format: JSON representation of desired data response format
         return_immediately: initiate the search and return without waiting for data to
             be received, defaults to False
         verbose: output poll times and other progress messages, defaults to False
@@ -106,11 +109,11 @@ def search(start: datetime.datetime,
     # create a Search() object
     s = Search(start,
                end,
-               programs,
-               platforms,
-               instrument_types,
-               data_product_type_filters,
-               metadata_filters,
+               programs=programs,
+               platforms=platforms,
+               instrument_types=instrument_types,
+               data_product_type_filters=data_product_type_filters,
+               metadata_filters=metadata_filters,
                metadata_filters_logical_operator=metadata_filters_logical_operator,
                response_format=response_format)
     if (verbose is True):
@@ -152,10 +155,10 @@ def search_async(start: datetime.datetime,
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 metadata_filters: Optional[List[Dict]] = None,
                  data_product_type_filters: Optional[List[str]] = None,
-                 response_format: Optional[Dict] = None,
-                 metadata_filters_logical_operator: Optional[str] = None) -> Search:
+                 metadata_filters: Optional[List[Dict]] = None,
+                 metadata_filters_logical_operator: Optional[str] = None,
+                 response_format: Optional[Dict] = None) -> Search:
     """
     Submit a request for a data products search, return immediately.
 
@@ -178,16 +181,6 @@ def search_async(start: datetime.datetime,
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and values
-            to filter on, defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
         data_product_type_filters: list of dictionaries describing data product
             types to filter on e.g. "keogram", defaults to None
 
@@ -198,6 +191,19 @@ def search_async(start: datetime.datetime,
                     "string"
                 ]
             }
+        metadata_filters: list of dictionaries describing metadata keys and
+            values to filter on, defaults to None
+
+            e.g. {
+                "key": "string",
+                "operator": "=",
+                "values": [
+                    "string"
+                ]
+            }
+        metadata_filters_logical_operator: the logical operator to use when
+            evaluating metadata filters (either 'AND' or 'OR'), defaults
+            to "AND"
         response_format: JSON representation of desired data response format
 
     Returns:
@@ -211,10 +217,10 @@ def search_async(start: datetime.datetime,
                                        programs=programs,
                                        platforms=platforms,
                                        instrument_types=instrument_types,
-                                       metadata_filters=metadata_filters,
                                        data_product_type_filters=data_product_type_filters,
-                                       response_format=response_format,
-                                       metadata_filters_logical_operator=metadata_filters_logical_operator)
+                                       metadata_filters=metadata_filters,
+                                       metadata_filters_logical_operator=metadata_filters_logical_operator,
+                                       response_format=response_format)
     s.execute()
     return s
 
