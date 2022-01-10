@@ -8,8 +8,8 @@ here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from .availability import ephemeris
-from .availability import data_products
+from .availability import (ephemeris,
+                           data_products)
 from .classes.availability_result import AvailabilityResult
 
 # pdoc imports and exports

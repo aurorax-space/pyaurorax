@@ -13,17 +13,17 @@ DEFAULT_BASE_URL: str = "https://api.aurorax.space"
 """ The default API base URL to use when sending requests """
 
 # function and class imports
-from .classes.request import DEFAULT_RETRIES
-from .classes.request import REQUEST_HEADERS
-from .classes.request import API_KEY_HEADER_NAME
-from .classes.request import AuroraXRequest
+from .classes.request import (DEFAULT_RETRIES,
+                              REQUEST_HEADERS,
+                              API_KEY_HEADER_NAME,
+                              AuroraXRequest)
 from .classes.response import AuroraXResponse
-from .api import urls
-from .api import get_api_key
-from .api import authenticate
-from .api import set_base_url
-from .api import get_base_url
-from .api import reset_base_url
+from .api import (urls,
+                  get_api_key,
+                  authenticate,
+                  set_base_url,
+                  get_base_url,
+                  reset_base_url)
 
 # pdoc import and exports
 from .api import __pdoc__ as __api_pdoc__

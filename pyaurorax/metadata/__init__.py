@@ -9,9 +9,9 @@ here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from .metadata import get_data_products_schema
-from .metadata import get_ephemeris_schema
-from .metadata import validate
+from .metadata import (get_data_products_schema,
+                       get_ephemeris_schema,
+                       validate)
 
 # pdoc imports and exports
 from .metadata import __pdoc__ as __metadata_pdoc__

@@ -34,40 +34,45 @@ __version__ = "0.9.0"
 __pdoc__ = {"cli": False}
 
 # pull in top level functions
-from .api import AuroraXRequest
-from .api import authenticate
-from .api import get_api_key
-from .sources import FORMAT_BASIC_INFO
-from .sources import FORMAT_BASIC_INFO_WITH_METADATA
-from .sources import FORMAT_FULL_RECORD
-from .sources import FORMAT_IDENTIFIER_ONLY
-from .sources import FORMAT_DEFAULT
-from .sources import SOURCE_TYPE_EVENT_LIST
-from .sources import SOURCE_TYPE_GROUND
-from .sources import SOURCE_TYPE_HEO
-from .sources import SOURCE_TYPE_LEO
-from .sources import SOURCE_TYPE_LUNAR
-from .conjunctions import CONJUNCTION_TYPE_NBTRACE
-from .conjunctions import CONJUNCTION_TYPE_SBTRACE
+from .api import (AuroraXRequest,
+                  authenticate,
+                  get_api_key)
+from .sources import (FORMAT_BASIC_INFO,
+                      FORMAT_BASIC_INFO_WITH_METADATA,
+                      FORMAT_FULL_RECORD,
+                      FORMAT_IDENTIFIER_ONLY,
+                      FORMAT_DEFAULT,
+                      SOURCE_TYPE_EVENT_LIST,
+                      SOURCE_TYPE_GROUND,
+                      SOURCE_TYPE_HEO,
+                      SOURCE_TYPE_LEO,
+                      SOURCE_TYPE_LUNAR)
+from .conjunctions import (CONJUNCTION_TYPE_NBTRACE,
+                           CONJUNCTION_TYPE_SBTRACE)
+from .data_products import (DATA_PRODUCT_TYPE_KEOGRAM,
+                            DATA_PRODUCT_TYPE_MONTAGE,
+                            DATA_PRODUCT_TYPE_MOVIE,
+                            DATA_PRODUCT_TYPE_SUMMARY_PLOT,
+                            DATA_PRODUCT_TYPE_DATA_AVAILABILITY)
 
 # pull in exceptions at top level
-from .exceptions import AuroraXException
-from .exceptions import AuroraXNotFoundException
-from .exceptions import AuroraXMaxRetriesException
-from .exceptions import AuroraXDuplicateException
-from .exceptions import AuroraXUnexpectedContentTypeException
-from .exceptions import AuroraXValidationException
-from .exceptions import AuroraXBadParametersException
-from .exceptions import AuroraXUnauthorizedException
-from .exceptions import AuroraXConflictException
-from .exceptions import AuroraXUploadException
+from .exceptions import (AuroraXException,
+                         AuroraXNotFoundException,
+                         AuroraXMaxRetriesException,
+                         AuroraXDuplicateException,
+                         AuroraXUnexpectedContentTypeException,
+                         AuroraXValidationException,
+                         AuroraXBadParametersException,
+                         AuroraXUnauthorizedException,
+                         AuroraXConflictException,
+                         AuroraXUploadException)
 
 # pull in models
 from .location import Location
 
 # pull in modules (order matters otherwise we get circular import errors)
-from pyaurorax import api
 from pyaurorax import requests
+from pyaurorax import api
 from pyaurorax import sources
 from pyaurorax import exceptions
 from pyaurorax import metadata

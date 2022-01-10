@@ -26,8 +26,8 @@ finding conjunctions using the south B-trace data
 """
 
 # function and class imports
-from .conjunctions import search
-from .conjunctions import search_async
+from .conjunctions import (search,
+                           search_async)
 from .classes.conjunction import Conjunction
 from .classes.search import Search
 

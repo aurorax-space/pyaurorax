@@ -8,10 +8,10 @@ here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from .ephemeris import search_async
-from .ephemeris import search
-from .ephemeris import upload
-from .ephemeris import delete
+from .ephemeris import (search_async,
+                        search,
+                        upload,
+                        delete)
 from .classes.ephemeris import Ephemeris
 from .classes.search import Search
 

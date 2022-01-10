@@ -72,15 +72,15 @@ Data source 'source_type' category for a specially-curated event list
 """
 
 # function and class imports
-from .sources import get
-from .sources import get_using_filters
-from .sources import get_using_identifier
-from .sources import get_stats
-from .sources import list
-from .sources import add
-from .sources import delete
-from .sources import update
-from .sources import partial_update
+from .sources import (get,
+                      get_using_filters,
+                      get_using_identifier,
+                      get_stats,
+                      list,
+                      add,
+                      delete,
+                      update,
+                      partial_update)
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
 

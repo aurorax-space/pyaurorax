@@ -9,8 +9,8 @@ here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from .calculate_btrace import ground_geo_to_nbtrace
-from .calculate_btrace import ground_geo_to_sbtrace
+from .calculate_btrace import (ground_geo_to_nbtrace,
+                               ground_geo_to_sbtrace)
 
 # pdoc imports and exports
 from .calculate_btrace import __pdoc__ as __btrace_pdoc__
