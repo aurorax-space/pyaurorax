@@ -56,7 +56,7 @@ def search(start: datetime.datetime,
            programs: Optional[List[str]] = None,
            platforms: Optional[List[str]] = None,
            instrument_types: Optional[List[str]] = None,
-           data_product_type_filters: Optional[List[str]] = None,
+           data_product_types: Optional[List[str]] = None,
            metadata_filters: Optional[List[Dict]] = None,
            metadata_filters_logical_operator: Optional[str] = None,
            response_format: Optional[Dict] = None,
@@ -81,16 +81,10 @@ def search(start: datetime.datetime,
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
-        data_product_type_filters: list of dictionaries describing data product types to
-            filter on e.g. "keogram", defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
+        data_product_types: list of dictionaries describing data product
+            types to filter on e.g. "keogram", defaults to None. Options are in the
+            pyaurorax.data_products module, or at the top level using the
+            pyaurorax.DATA_PRODUCT_TYPE* variables.
         metadata_filters: list of dictionaries describing metadata keys and
             values to filter on, defaults to None
 
@@ -120,7 +114,7 @@ def search(start: datetime.datetime,
                programs=programs,
                platforms=platforms,
                instrument_types=instrument_types,
-               data_product_type_filters=data_product_type_filters,
+               data_product_types=data_product_types,
                metadata_filters=metadata_filters,
                metadata_filters_logical_operator=metadata_filters_logical_operator,
                response_format=response_format)
@@ -163,7 +157,7 @@ def search_async(start: datetime.datetime,
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_type_filters: Optional[List[str]] = None,
+                 data_product_types: Optional[List[str]] = None,
                  metadata_filters: Optional[List[Dict]] = None,
                  metadata_filters_logical_operator: Optional[str] = None,
                  response_format: Optional[Dict] = None) -> Search:
@@ -189,16 +183,10 @@ def search_async(start: datetime.datetime,
         programs: list of programs to search through, defaults to None
         platforms: list of platforms to search through, defaults to None
         instrument_types: list of instrument types to search through, defaults to None
-        data_product_type_filters: list of dictionaries describing data product
-            types to filter on e.g. "keogram", defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
+        data_product_types: list of dictionaries describing data product
+            types to filter on e.g. "keogram", defaults to None. Options are in the
+            pyaurorax.data_products module, or at the top level using the
+            pyaurorax.DATA_PRODUCT_TYPE* variables.
         metadata_filters: list of dictionaries describing metadata keys and
             values to filter on, defaults to None
 
@@ -225,7 +213,7 @@ def search_async(start: datetime.datetime,
                programs=programs,
                platforms=platforms,
                instrument_types=instrument_types,
-               data_product_type_filters=data_product_type_filters,
+               data_product_types=data_product_types,
                metadata_filters=metadata_filters,
                metadata_filters_logical_operator=metadata_filters_logical_operator,
                response_format=response_format)
@@ -326,7 +314,7 @@ def delete_daterange(data_source: DataSource,
                    programs=[data_source.program],
                    platforms=[data_source.platform],
                    instrument_types=[data_source.instrument_type],
-                   data_product_type_filters=[] if not data_product_types else data_product_types)
+                   data_product_types=[] if not data_product_types else data_product_types)
     except Exception as e:
         raise AuroraXException(e)
 

@@ -27,16 +27,10 @@ class Search():
         programs: list of program names to search
         platforms: list of platform names to search
         instrument_types: list of instrument types to search
-        data_product_type_filters: list of dictionaries describing data product
-            types to filter on e.g. "keogram", defaults to None
-
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
+        data_product_types: list of dictionaries describing data product
+            types to filter on e.g. "keogram", defaults to None. Options are in the
+            pyaurorax.data_products module, or at the top level using the
+            pyaurorax.DATA_PRODUCT_TYPE* variables.
         metadata_filters: list of dictionaries describing metadata keys and
             values to filter on, defaults to None
 
@@ -69,7 +63,7 @@ class Search():
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_type_filters: Optional[List[str]] = None,
+                 data_product_types: Optional[List[str]] = None,
                  metadata_filters: Optional[List[Dict]] = None,
                  metadata_filters_logical_operator: Optional[str] = "AND",
                  response_format: Optional[Dict] = None) -> None:
@@ -80,7 +74,7 @@ class Search():
         self.programs = programs
         self.platforms = platforms
         self.instrument_types = instrument_types
-        self.data_product_type_filters = data_product_type_filters
+        self.data_product_types = data_product_types
         self.metadata_filters = metadata_filters
         self.metadata_filters_logical_operator = metadata_filters_logical_operator
         self.response_format = response_format
@@ -134,7 +128,7 @@ class Search():
             },
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
-            "data_product_type_filters": [] if not self.data_product_type_filters else self.data_product_type_filters,
+            "data_product_type_filters": [] if not self.data_product_types else self.data_product_types,
         }
         self.query = post_data
 

@@ -50,7 +50,7 @@ def test_search_data_products_synchronous():
     s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 2, 23, 59, 59),
                                        programs=["auroramax"],
-                                       data_product_type_filters=["keogram"],
+                                       data_product_types=["keogram"],
                                        verbose=False)
 
     assert type(s.data) is list and type(s.data[0]) is DataProduct
@@ -100,7 +100,7 @@ def test_search_data_products_metadata_filters_synchronous():
     s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 2, 23, 59, 59),
                                        programs=["auroramax"],
-                                       data_product_type_filters=["keogram", "movie"],
+                                       data_product_types=["keogram", "movie"],
                                        metadata_filters=metadata_filters,
                                        verbose=False,
                                        metadata_filters_logical_operator="OR")
@@ -340,7 +340,7 @@ def test_delete_data_products_daterange():
                                         programs=[program],
                                         platforms=[platform],
                                         instrument_types=[instrument_type],
-                                        data_product_type_filters=["keogram"])
+                                        data_product_types=["keogram"])
 
     assert len(s1.data) == 0
 
