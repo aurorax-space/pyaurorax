@@ -109,13 +109,9 @@ class Search():
         """
         return pprint.pformat(self.__dict__)
 
-    def execute(self) -> None:
-        """
-        Initiate a data product search request
-        """
-        # set up request
-        url = urls.data_products_search_url
-        post_data = {
+    @property
+    def query(self):
+        self._query = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
@@ -130,12 +126,21 @@ class Search():
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
             "data_product_type_filters": [] if not self.data_product_types else self.data_product_types,
         }
-        self.query = post_data
+        return self._query
 
+    @query.setter
+    def query(self, query):
+        self._query = query
+
+    def execute(self) -> None:
+        """
+        Initiate a data product search request
+        """
         # do request
+        url = urls.data_products_search_url
         req = AuroraXRequest(method="post",
                              url=url,
-                             body=post_data,
+                             body=self.query,
                              null_response=True)
         res = req.execute()
 

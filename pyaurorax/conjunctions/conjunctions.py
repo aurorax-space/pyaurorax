@@ -7,7 +7,8 @@ import humanize
 import warnings
 from typing import Dict, List, Optional
 from .classes.search import Search
-from ..conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRACE
+from ..conjunctions import (DEFAULT_CONJUNCTION_DISTANCE,
+                            CONJUNCTION_TYPE_NBTRACE)
 from ..requests import STANDARD_POLLING_SLEEP_TIME
 
 # pdoc init
@@ -16,8 +17,9 @@ __pdoc__: Dict = {}
 
 def search(start: datetime.datetime,
            end: datetime.datetime,
-           ground: List[Dict],
-           space: List[Dict],
+           ground: Optional[List[Dict]] = [],
+           space: Optional[List[Dict]] = [],
+           events: Optional[List[Dict]] = [],
            conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
            max_distances: Optional[Dict[str, float]] = {},
            default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
@@ -38,7 +40,7 @@ def search(start: datetime.datetime,
     Args:
         start: start timestamp of the search (inclusive)
         end: end timestamp of the search (inclusive)
-        ground: list of ground instrument search parameters
+        ground: list of ground instrument search parameters, defaults to []
             e.g. [
                 {
                     "programs": ["themis-asi"],
@@ -56,7 +58,7 @@ def search(start: datetime.datetime,
                     }
                 }
             ]
-        space: list of one or more space instrument search parameters
+        space: list of one or more space instrument search parameters, defaults to []
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
@@ -76,6 +78,19 @@ def search(start: datetime.datetime,
                         "northern"
                     ]
                 }
+            ]
+        events: list of one or more events search parameters, defaults to []
+            e.g. [
+                {
+                "programs": [
+                    "events"
+                ],
+                "platforms": [
+                    "toshi"
+                ],
+                "instrument_types": [
+                    "substorm onsets"
+                ]
             ]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
@@ -112,14 +127,15 @@ def search(start: datetime.datetime,
     # create a Search object
     s = Search(start,
                end,
-               ground,
-               space,
+               ground=ground,
+               space=space,
+               events=events,
                conjunction_types=conjunction_types,
                max_distances=max_distances,
                default_distance=default_distance,
                epoch_search_precision=epoch_search_precision,
                response_format=response_format)
-    if verbose:
+    if (verbose is True):
         print(f"[{datetime.datetime.now()}] Search object created")
 
     # execute the search
@@ -157,8 +173,9 @@ def search(start: datetime.datetime,
 
 def search_async(start: datetime.datetime,
                  end: datetime.datetime,
-                 ground: List[Dict],
-                 space: List[Dict],
+                 ground: Optional[List[Dict]] = [],
+                 space: Optional[List[Dict]] = [],
+                 events: Optional[List[Dict]] = [],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
                  max_distances: Optional[Dict[str, float]] = {},
                  default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
@@ -180,7 +197,7 @@ def search_async(start: datetime.datetime,
     Args:
         start: start timestamp of the search (inclusive)
         end: end timestamp of the search (inclusive)
-        ground: list of ground instrument search parameters
+        ground: list of ground instrument search parameters, defaults to []
             e.g. [
                 {
                     "programs": ["themis-asi"],
@@ -198,7 +215,7 @@ def search_async(start: datetime.datetime,
                     }
                 }
             ]
-        space: list of one or more space instrument search parameters
+        space: list of one or more space instrument search parameters, defaults to []
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
@@ -218,6 +235,19 @@ def search_async(start: datetime.datetime,
                         "northern"
                     ]
                 }
+            ]
+        events: list of one or more events search parameters, defaults to []
+            e.g. [
+                {
+                "programs": [
+                    "events"
+                ],
+                "platforms": [
+                    "toshi"
+                ],
+                "instrument_types": [
+                    "substorm onsets"
+                ]
             ]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
@@ -249,8 +279,9 @@ def search_async(start: datetime.datetime,
                   "same behaviour.")
     s = Search(start,
                end,
-               ground,
-               space,
+               ground=ground,
+               space=space,
+               events=events,
                conjunction_types=conjunction_types,
                max_distances=max_distances,
                default_distance=default_distance,

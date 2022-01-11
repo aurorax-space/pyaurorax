@@ -6,7 +6,8 @@ import pprint
 import datetime
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
-from ...conjunctions import DEFAULT_CONJUNCTION_DISTANCE, CONJUNCTION_TYPE_NBTRACE
+from ...conjunctions import (DEFAULT_CONJUNCTION_DISTANCE,
+                             CONJUNCTION_TYPE_NBTRACE)
 from ...api import AuroraXRequest, AuroraXResponse, urls
 from ...exceptions import (AuroraXBadParametersException)
 from ...requests import (STANDARD_POLLING_SLEEP_TIME,
@@ -26,7 +27,7 @@ class Search():
     Attributes:
         start: start timestamp of the search (inclusive)
         end: end timestamp of the search (inclusive)
-        ground: list of ground instrument search parameters
+        ground: list of ground instrument search parameters, defaults to []
             e.g. [
                 {
                     "programs": ["themis-asi"],
@@ -44,7 +45,7 @@ class Search():
                     }
                 }
             ]
-        space: list of one or more space instrument search parameters
+        space: list of one or more space instrument search parameters, defaults to []
             e.g. [
                 {
                     "programs": ["themis-asi", "swarm"],
@@ -64,6 +65,19 @@ class Search():
                         "northern"
                     ]
                 }
+            ]
+        events: list of one or more events search parameters, defaults to []
+            e.g. [
+                {
+                "programs": [
+                    "events"
+                ],
+                "platforms": [
+                    "toshi"
+                ],
+                "instrument_types": [
+                    "substorm onsets"
+                ]
             ]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
@@ -103,8 +117,9 @@ class Search():
 
     def __init__(self, start: datetime.datetime,
                  end: datetime.datetime,
-                 ground: List[Dict],
-                 space: List[Dict],
+                 ground: Optional[List[Dict]] = [],
+                 space: Optional[List[Dict]] = [],
+                 events: Optional[List[Dict]] = [],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
                  max_distances: Optional[Dict[str, float]] = None,
                  default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
@@ -116,6 +131,7 @@ class Search():
         self.end = end
         self.ground = ground
         self.space = space
+        self.events = events
         self.conjunction_types = conjunction_types
         self.max_distances = max_distances if max_distances else {}
         self.default_distance = default_distance
@@ -167,10 +183,43 @@ class Search():
                         and f"space{s2}-space{s}" not in self.max_distances):
                     self.max_distances[f"space{s}-space{s2}"] = self.default_distance
 
+        # check for ground-events and events-ground distances
+        for g in range(1, len(self.ground) + 1):
+            for s in range(1, len(self.events) + 1):
+                if (f"ground{g}-events{s}" not in self.max_distances
+                        and f"events{s}-ground{g}" not in self.max_distances):
+                    self.max_distances[f"ground{g}-events{s}"] = self.default_distance
+
+        # check for space-events and events-space distances
+        for g in range(1, len(self.space) + 1):
+            for s in range(1, len(self.events) + 1):
+                if (f"space{g}-events{s}" not in self.max_distances
+                        and f"events{s}-space{g}" not in self.max_distances):
+                    self.max_distances[f"space{g}-events{s}"] = self.default_distance
+
     def _check_num_criteria_blocks(self):
-        if ((len(self.ground) + len(self.space)) > 10):
+        if ((len(self.ground) + len(self.space) + len(self.events)) > 10):
             raise AuroraXBadParametersException("Number of criteria blocks exceeds 10, "
                                                 "please reduce the count")
+
+    @property
+    def query(self):
+        self._set_max_distances()
+        self._query = {
+            "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
+            "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
+            "ground": self.ground,
+            "space": self.space,
+            "events": self.events,
+            "conjunction_types": self.conjunction_types,
+            "max_distances": self.max_distances,
+            "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
+        }
+        return self._query
+
+    @query.setter
+    def query(self, query):
+        self._query = query
 
     def execute(self):
         """
@@ -182,24 +231,11 @@ class Search():
         # check number of criteria blocks
         self._check_num_criteria_blocks()
 
-        # set up request
-        url = urls.conjunction_search_url
-        self._set_max_distances()
-        post_data = {
-            "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
-            "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
-            "ground": self.ground,
-            "space": self.space,
-            "conjunction_types": self.conjunction_types,
-            "max_distances": self.max_distances,
-            "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
-        }
-        self.query = post_data
-
         # do request
+        url = urls.conjunction_search_url
         req = AuroraXRequest(method="post",
                              url=url,
-                             body=post_data,
+                             body=self.query,
                              null_response=True)
         res = req.execute()
 

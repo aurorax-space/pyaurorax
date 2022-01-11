@@ -107,21 +107,9 @@ class Search():
         """
         return pprint.pformat(self.__dict__)
 
-    def execute(self) -> None:
-        """
-        Initiate ephemeris search request
-
-        Raises:
-            pyaurorax.exceptions.AuroraXBadParametersException: missing parameters
-        """
-        # check for at least one filter criteria
-        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
-            raise AuroraXBadParametersException("At least one filter criteria parameter "
-                                                "besides 'start' and 'end' must be specified")
-
-        # set up request
-        url = urls.ephemeris_search_url
-        post_data = {
+    @property
+    def query(self):
+        self._query = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
@@ -135,12 +123,29 @@ class Search():
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
         }
-        self.query = post_data
+        return self._query
+
+    @query.setter
+    def query(self, query):
+        self._query = query
+
+    def execute(self) -> None:
+        """
+        Initiate ephemeris search request
+
+        Raises:
+            pyaurorax.exceptions.AuroraXBadParametersException: missing parameters
+        """
+        # check for at least one filter criteria
+        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+            raise AuroraXBadParametersException("At least one filter criteria parameter "
+                                                "besides 'start' and 'end' must be specified")
 
         # do request
+        url = urls.ephemeris_search_url
         req = AuroraXRequest(method="post",
                              url=url,
-                             body=post_data,
+                             body=self.query,
                              null_response=True)
         res = req.execute()
 
