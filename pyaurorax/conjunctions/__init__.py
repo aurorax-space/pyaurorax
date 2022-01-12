@@ -7,10 +7,6 @@ at this level of the conjunctions module. They can be referenced from
 here instead of digging in deeper to the submodules.
 """
 
-# default conjunction distance
-DEFAULT_CONJUNCTION_DISTANCE: int = 300
-""" The default distance used for conjunction searches """
-
 # conjunction type - north b-trace
 CONJUNCTION_TYPE_NBTRACE: str = "nbtrace"
 """
@@ -39,7 +35,6 @@ __pdoc__ = __conjunctions_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_conjunctions_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_search_pdoc__)
 __all__ = [
-    "DEFAULT_CONJUNCTION_DISTANCE",
     "CONJUNCTION_TYPE_NBTRACE",
     "CONJUNCTION_TYPE_SBTRACE",
     "search",

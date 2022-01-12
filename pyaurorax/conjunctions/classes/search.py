@@ -4,12 +4,12 @@ Class definition for a conjunction search
 
 import pprint
 import datetime
+import itertools
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
-from ...conjunctions import (DEFAULT_CONJUNCTION_DISTANCE,
-                             CONJUNCTION_TYPE_NBTRACE)
+from ...conjunctions import CONJUNCTION_TYPE_NBTRACE
 from ...api import AuroraXRequest, AuroraXResponse, urls
-from ...exceptions import (AuroraXBadParametersException)
+from ...exceptions import AuroraXBadParametersException
 from ...requests import (STANDARD_POLLING_SLEEP_TIME,
                          cancel as requests_cancel,
                          wait_for_data as requests_wait_for_data,
@@ -27,6 +27,9 @@ class Search():
     Attributes:
         start: start timestamp of the search (inclusive)
         end: end timestamp of the search (inclusive)
+        distance: the maximum distance allowed between data sources when searching for
+            conjunctions. This can either be a number (int or float), or a dictionary
+            modified from the output of the "get_advanced_distances_combos()" function.
         ground: list of ground instrument search parameters, defaults to []
             e.g. [
                 {
@@ -82,20 +85,6 @@ class Search():
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-        max_distances: dictionary of ground-space and space-space maximum
-            distances for conjunctions. The default_distance will be used for any ground-space
-            and space-space maximum distances not specified.
-
-            e.g. distances = {
-                "ground1-ground2": None,
-                "ground1-space1": 500,
-                "ground1-space2": 500,
-                "ground2-space1": 500,
-                "ground2-space2": 500,
-                "space1-space2": None
-            }
-        default_distance: maximum distance in kilometers to find conjunctions for. Used when max
-            distance is not specified for any ground-space and space-space instrument pairs.
         epoch_search_precision: the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
@@ -117,12 +106,11 @@ class Search():
 
     def __init__(self, start: datetime.datetime,
                  end: datetime.datetime,
+                 distance: Union[int, float, Dict[str, Union[int, float]]],
                  ground: Optional[List[Dict]] = [],
                  space: Optional[List[Dict]] = [],
                  events: Optional[List[Dict]] = [],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
-                 max_distances: Optional[Dict[str, float]] = None,
-                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None):
 
@@ -132,9 +120,8 @@ class Search():
         self.ground = ground
         self.space = space
         self.events = events
+        self.distance = distance
         self.conjunction_types = conjunction_types
-        self.max_distances = max_distances if max_distances else {}
-        self.default_distance = default_distance
         self.epoch_search_precision = epoch_search_precision
         self.response_format = response_format
 
@@ -168,43 +155,100 @@ class Search():
         """
         return pprint.pformat(self.__dict__)
 
-    def _set_max_distances(self):
-        # check for ground-space and space-ground distances
-        for g in range(1, len(self.ground) + 1):
-            for s in range(1, len(self.space) + 1):
-                if (f"ground{g}-space{s}" not in self.max_distances
-                        and f"space{s}-ground{g}" not in self.max_distances):
-                    self.max_distances[f"ground{g}-space{s}"] = self.default_distance
+    def check_criteria_block_count_validity(self) -> None:
+        """
+        Check the number of of criteria blocks to see if there
+        is too many. A max of 10 is allowed by the AuroraX
+        conjunction search engine. An exception is raised if
+        it was determined to have too many.
 
-        # check for space-space distances
-        for s in range(1, len(self.space) + 1):
-            for s2 in range(s + 1, len(self.space) + 1):
-                if (s != s2 and f"space{s}-space{s2}" not in self.max_distances
-                        and f"space{s2}-space{s}" not in self.max_distances):
-                    self.max_distances[f"space{s}-space{s2}"] = self.default_distance
-
-        # check for ground-events and events-ground distances
-        for g in range(1, len(self.ground) + 1):
-            for s in range(1, len(self.events) + 1):
-                if (f"ground{g}-events{s}" not in self.max_distances
-                        and f"events{s}-ground{g}" not in self.max_distances):
-                    self.max_distances[f"ground{g}-events{s}"] = self.default_distance
-
-        # check for space-events and events-space distances
-        for g in range(1, len(self.space) + 1):
-            for s in range(1, len(self.events) + 1):
-                if (f"space{g}-events{s}" not in self.max_distances
-                        and f"events{s}-space{g}" not in self.max_distances):
-                    self.max_distances[f"space{g}-events{s}"] = self.default_distance
-
-    def _check_num_criteria_blocks(self):
+        Raises:
+            pyaurorax.exceptions.AuroraXBadParametersException: too many criteria blocks are found
+        """
         if ((len(self.ground) + len(self.space) + len(self.events)) > 10):
             raise AuroraXBadParametersException("Number of criteria blocks exceeds 10, "
                                                 "please reduce the count")
 
+    def get_advanced_distances_combos(self, default_distance: Union[int, float] = None) -> Dict:
+        """
+        Get the advanced distances combinations for this search
+
+        Args:
+            default_distance: the default distance to use, defaults to None
+
+        Returns:
+            the advanced distances combinations
+        """
+        # set input arrays
+        options = []
+        for i in range(0, len(self.ground)):
+            options.append("ground%d" % (i + 1))
+        for i in range(0, len(self.space)):
+            options.append("space%d" % (i + 1))
+        for i in range(0, len(self.events)):
+            options.append("events%d" % (i + 1))
+
+        # derive all combinations of options of size 2
+        combinations = {}
+        for element in itertools.combinations(options, r=2):
+            combinations["%s-%s" % (element[0], element[1])] = default_distance
+
+        # return
+        return combinations
+
+    def __fill_in_missing_distances(self, curr_distances: Dict) -> Dict:
+        # get all distances possible
+        all_distances = self.get_advanced_distances_combos()
+
+        # go through current distances and fill in the values
+        for curr_key, curr_value in curr_distances.items():
+            curr_key_split = curr_key.split('-')
+            curr_key1 = curr_key_split[0].strip()
+            curr_key2 = curr_key_split[1].strip()
+            for all_key in all_distances.keys():
+                if (curr_key1 in all_key and curr_key2 in all_key):
+                    # found the matching key, replace the value
+                    all_distances[all_key] = curr_value
+
+        # return
+        return all_distances
+
     @property
-    def query(self):
-        self._set_max_distances()
+    def distance(self) -> Union[int, float, Dict[str, Union[int, float]]]:
+        """
+        Property getter for distance
+
+        Returns:
+            the distance dictionary with all combinations
+        """
+        return self._distance
+
+    @distance.setter
+    def distance(self, distance: Union[int, float, Dict[str, Union[int, float]]]) -> None:
+        """
+        Property setter for distance
+
+        Args:
+            distance: the distance(s) to use, can be an number (int or float), or a
+                dictionary. If it's a dictionary, to reduce unexpected mistakes
+                please use the 'get_advanced_distances_combo()' function and adjust
+                accordingly.
+        """
+        # set distances to a dict if it's an int or float
+        if (type(distance) is int or type(distance) is float):
+            self._distance = self.get_advanced_distances_combos(default_distance=distance)  # type: ignore
+        else:
+            # is a dict, fill in any gaps
+            self._distance = self.__fill_in_missing_distances(distance)  # type: ignore
+
+    @property
+    def query(self) -> Dict:
+        """
+        Property getter for query
+
+        Returns:
+            the query parameter
+        """
         self._query = {
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -212,16 +256,22 @@ class Search():
             "space": self.space,
             "events": self.events,
             "conjunction_types": self.conjunction_types,
-            "max_distances": self.max_distances,
+            "max_distances": self.distance,
             "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
         }
         return self._query
 
     @query.setter
-    def query(self, query):
+    def query(self, query: Dict) -> None:
+        """
+        Property setter for query
+
+        Args:
+            query: the new query value
+        """
         self._query = query
 
-    def execute(self):
+    def execute(self) -> None:
         """
         Initiate a conjunction search request
 
@@ -229,7 +279,7 @@ class Search():
             pyaurorax.exceptions.AuroraXBadParametersException: too many criteria blocks
         """
         # check number of criteria blocks
-        self._check_num_criteria_blocks()
+        self.check_criteria_block_count_validity()
 
         # do request
         url = urls.conjunction_search_url

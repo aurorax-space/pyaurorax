@@ -5,10 +5,9 @@ Functions for performing conjunction searches
 import datetime
 import humanize
 import warnings
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from .classes.search import Search
-from ..conjunctions import (DEFAULT_CONJUNCTION_DISTANCE,
-                            CONJUNCTION_TYPE_NBTRACE)
+from ..conjunctions import CONJUNCTION_TYPE_NBTRACE
 from ..requests import STANDARD_POLLING_SLEEP_TIME
 
 # pdoc init
@@ -17,12 +16,11 @@ __pdoc__: Dict = {}
 
 def search(start: datetime.datetime,
            end: datetime.datetime,
+           distance: Union[int, float, Dict[str, Union[int, float]]],
            ground: Optional[List[Dict]] = [],
            space: Optional[List[Dict]] = [],
            events: Optional[List[Dict]] = [],
            conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
-           max_distances: Optional[Dict[str, float]] = {},
-           default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
            epoch_search_precision: Optional[int] = 60,
            response_format: Optional[Dict] = None,
            poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
@@ -40,6 +38,9 @@ def search(start: datetime.datetime,
     Args:
         start: start timestamp of the search (inclusive)
         end: end timestamp of the search (inclusive)
+        distance: the maximum distance allowed between data sources when searching for
+            conjunctions. This can either be a number (int or float), or a dictionary
+            modified from the output of the "get_advanced_distances_combos()" function.
         ground: list of ground instrument search parameters, defaults to []
             e.g. [
                 {
@@ -95,22 +96,6 @@ def search(start: datetime.datetime,
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-        max_distances: dictionary of Dict[str, float] ground-space and space-space
-            maximum distances for conjunctions. The default_distance will be used for
-            any ground-space and space-space maximum distances not specified.
-
-            e.g. distances = {
-                "ground1-ground2": None,
-                "ground1-space1": 500,
-                "ground1-space2": 500,
-                "ground2-space1": 500,
-                "ground2-space2": 500,
-                "space1-space2": None
-            }
-        default_distance: default maximum distance in kilometers for conjunction. Used
-            when max distance is not specified for any ground-space and space-space
-            instrument pairs.
-            to False
         epoch_search_precision: the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
@@ -127,12 +112,11 @@ def search(start: datetime.datetime,
     # create a Search object
     s = Search(start,
                end,
+               distance,
                ground=ground,
                space=space,
                events=events,
                conjunction_types=conjunction_types,
-               max_distances=max_distances,
-               default_distance=default_distance,
                epoch_search_precision=epoch_search_precision,
                response_format=response_format)
     if (verbose is True):
@@ -173,12 +157,11 @@ def search(start: datetime.datetime,
 
 def search_async(start: datetime.datetime,
                  end: datetime.datetime,
+                 distance: Union[int, float, Dict[str, Union[int, float]]],
                  ground: Optional[List[Dict]] = [],
                  space: Optional[List[Dict]] = [],
                  events: Optional[List[Dict]] = [],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
-                 max_distances: Optional[Dict[str, float]] = {},
-                 default_distance: Optional[float] = DEFAULT_CONJUNCTION_DISTANCE,
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict] = None) -> Search:
     """
@@ -197,6 +180,9 @@ def search_async(start: datetime.datetime,
     Args:
         start: start timestamp of the search (inclusive)
         end: end timestamp of the search (inclusive)
+        distance: the maximum distance allowed between data sources when searching for
+            conjunctions. This can either be a number (int or float), or a dictionary
+            modified from the output of the "get_advanced_distances_combos()" function.
         ground: list of ground instrument search parameters, defaults to []
             e.g. [
                 {
@@ -252,20 +238,6 @@ def search_async(start: datetime.datetime,
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-        max_distances: dictionary of Dict[str, float] ground-space and space-space maximum
-            distances for conjunctions. The default_distance will be used for any ground-space
-            and space-space maximum distances not specified.
-
-            e.g. distances = {
-                "ground1-ground2": None,
-                "ground1-space1": 500,
-                "ground1-space2": 500,
-                "ground2-space1": 500,
-                "ground2-space2": 500,
-                "space1-space2": None
-            }
-        default_distance: default maximum distance in kilometers for conjunction. Used when max
-            distance is not specified for any ground-space and space-space instrument pairs.
         epoch_search_precision: the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
@@ -279,12 +251,11 @@ def search_async(start: datetime.datetime,
                   "same behaviour.")
     s = Search(start,
                end,
+               distance,
                ground=ground,
                space=space,
                events=events,
                conjunction_types=conjunction_types,
-               max_distances=max_distances,
-               default_distance=default_distance,
                epoch_search_precision=epoch_search_precision,
                response_format=response_format)
     s.execute()
