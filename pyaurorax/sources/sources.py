@@ -2,6 +2,7 @@
 Functions for interacting with data sources
 """
 
+import warnings
 from typing import List, Dict, Optional
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
@@ -17,96 +18,15 @@ from ..exceptions import (AuroraXNotFoundException,
 __pdoc__: Dict = {}
 
 
-def list(order: Optional[str] = "identifier",
-         format: Optional[str] = FORMAT_FULL_RECORD) -> List[DataSource]:
+def list(program: Optional[str] = None,
+         platform: Optional[str] = None,
+         instrument_type: Optional[str] = None,
+         source_type: Optional[str] = None,
+         owner: Optional[str] = None,
+         format: Optional[str] = FORMAT_FULL_RECORD,
+         order: Optional[str] = "identifier") -> List[DataSource]:
     """
-    Retrieve all data sources
-
-    Args:
-        order: value to order results by (identifier, program, platform,
-            instrument_type, display_name, owner), defaults to "identifier"
-        format: the format of the data sources returned, defaults to "full_record".
-            Other options are in the pyaurorax.sources module, or at the top level
-            using the pyaurorax.FORMAT_* variables.
-
-    Returns:
-        all found data sources
-
-    Raises:
-        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-    """
-    # make request
-    params = {
-        format: format
-    }
-    req = AuroraXRequest(method="get",
-                         url=urls.data_sources_url,
-                         params=params if format else None)
-    res = req.execute()
-
-    # order results
-    res.data = sorted(res.data, key=lambda x: x[order])
-
-    # return
-    return [DataSource(**source) for source in res.data]
-
-
-def get(program: str,
-        platform: str,
-        instrument_type: str,
-        format: Optional[str] = FORMAT_FULL_RECORD) -> DataSource:
-    """
-    Retrieve a specific data source record
-
-    Args:
-        program: the program name
-        platform: the platform name
-        instrument_type: the instrument type name
-        format: the format of the data sources returned, defaults to "full_record".
-            Other options are in the pyaurorax.sources module, or at the top level
-            using the pyaurorax.FORMAT_* variables.
-
-    Returns:
-        the data source matching the requested parameters
-
-    Raises:
-        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-        pyaurorax.exceptions.AuroraXNotFoundException: source not found
-    """
-    # make request
-    params = {
-        "program": program,
-        "platform": platform,
-        "instrument_type": instrument_type,
-        "format": format,
-    }
-    req = AuroraXRequest(method="get",
-                         url=urls.data_sources_url,
-                         params=params)
-    res = req.execute()
-
-    # set results to the first thing found
-    if (len(res.data) == 1):
-        res.data = res.data[0]
-        return DataSource(**res.data)
-    elif (len(res.data) > 1):
-        raise AuroraXNotFoundException("Too many data sources found, "
-                                       "should've gotten only one")
-    else:
-        raise AuroraXNotFoundException("Data source not found")
-
-
-def get_using_filters(program: Optional[str] = None,
-                      platform: Optional[str] = None,
-                      instrument_type: Optional[str] = None,
-                      source_type: Optional[str] = None,
-                      owner: Optional[str] = None,
-                      format: Optional[str] = FORMAT_FULL_RECORD,
-                      order: Optional[str] = "identifier") -> List[DataSource]:
-    """
-    Retrieve all data source records matching a filter
+    Retrieve all data source records (using params to filter as desired)
 
     Args:
         program: the program to filter for, defaults to None
@@ -151,6 +71,90 @@ def get_using_filters(program: Optional[str] = None,
         return [DataSource(**ds) for ds in res.data]
     else:
         return []
+
+
+def get(program: str,
+        platform: str,
+        instrument_type: str,
+        format: Optional[str] = FORMAT_FULL_RECORD) -> DataSource:
+    """
+    Retrieve a specific data source record
+
+    Args:
+        program: the program name
+        platform: the platform name
+        instrument_type: the instrument type name
+        format: the format of the data sources returned, defaults to "full_record".
+            Other options are in the pyaurorax.sources module, or at the top level
+            using the pyaurorax.FORMAT_* variables.
+
+    Returns:
+        the data source matching the requested parameters
+
+    Raises:
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+        pyaurorax.exceptions.AuroraXNotFoundException: source not found
+    """
+    # get the data source
+    data_sources = list(program=program,
+                        platform=platform,
+                        instrument_type=instrument_type,
+                        format=format)
+
+    # set results to the first thing found
+    if (len(data_sources) == 1):
+        return data_sources[0]
+    elif (len(data_sources) > 1):
+        warnings.warn("Found more than one data source matching this criteria, "
+                      "returning the first (found %d)" % (len(data_sources)))
+        return data_sources[0]
+    else:
+        raise AuroraXNotFoundException("No matching data source found")
+
+
+def get_using_filters(program: Optional[str] = None,
+                      platform: Optional[str] = None,
+                      instrument_type: Optional[str] = None,
+                      source_type: Optional[str] = None,
+                      owner: Optional[str] = None,
+                      format: Optional[str] = FORMAT_FULL_RECORD,
+                      order: Optional[str] = "identifier") -> List[DataSource]:
+    """
+    Retrieve all data source records matching a filter
+
+    Args:
+        program: the program to filter for, defaults to None
+        platform: the platform to filter for, defaults to None
+        instrument_type: the instrument type to filter for, defaults to None
+        source_type: the data source type to filter for, defaults to None.
+            Options are in the pyaurorax.sources module, or at the top level
+            using the pyaurorax.SOURCE_TYPE_* variables.
+        owner: the owner's email address to filter for, defaults to None
+        format: the format of the data sources returned, defaults to "full_record".
+            Other options are in the pyaurorax.sources module, or at the top level
+            using the pyaurorax.FORMAT_* variables.
+        order: the value to order results by (identifier, program, platform,
+            instrument_type, display_name, owner), defaults to "identifier"
+
+    Returns:
+        any data sources matching the requested parameters
+
+    Raises:
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+    """
+    # get data sources
+    data_sources = list(program=program,
+                        platform=platform,
+                        instrument_type=instrument_type,
+                        source_type=source_type,
+                        owner=owner,
+                        format=format,
+                        order=order)
+
+    # return
+    return data_sources
 
 
 def get_using_identifier(identifier: int,
