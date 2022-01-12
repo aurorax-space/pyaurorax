@@ -81,13 +81,13 @@ def search(start: datetime.datetime,
         metadata_filters: list of dictionaries describing metadata keys and
             values to filter on, defaults to None
 
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
+            Example:
+
+                [{
+                    "key": "nbtrace_region",
+                    "operator": "in",
+                    "values": ["north polar cap"]
+                }]
         metadata_filters_logical_operator: the logical operator to use when
             evaluating metadata filters (either 'AND' or 'OR'), defaults
             to "AND"
@@ -180,13 +180,13 @@ def search_async(start: datetime.datetime,
         metadata_filters: list of dictionaries describing metadata keys and
             values to filter on, defaults to None
 
-            e.g. {
-                "key": "string",
-                "operator": "=",
-                "values": [
-                    "string"
-                ]
-            }
+            Example:
+
+                [{
+                    "key": "nbtrace_region",
+                    "operator": "in",
+                    "values": ["north polar cap"]
+                }]
         metadata_filters_logical_operator: the logical operator to use when
             evaluating metadata filters (either 'AND' or 'OR'), defaults
             to "AND"

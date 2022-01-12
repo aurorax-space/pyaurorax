@@ -109,6 +109,9 @@ class Search():
 
     @property
     def query(self):
+        """
+        Property for the query value
+        """
         self._query = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,

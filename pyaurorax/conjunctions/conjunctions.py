@@ -17,12 +17,12 @@ __pdoc__: Dict = {}
 def search(start: datetime.datetime,
            end: datetime.datetime,
            distance: Union[int, float, Dict[str, Union[int, float]]],
-           ground: Optional[List[Dict]] = [],
-           space: Optional[List[Dict]] = [],
-           events: Optional[List[Dict]] = [],
+           ground: Optional[List[Dict[str, str]]] = [],
+           space: Optional[List[Dict[str, str]]] = [],
+           events: Optional[List[Dict[str, str]]] = [],
            conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
            epoch_search_precision: Optional[int] = 60,
-           response_format: Optional[Dict] = None,
+           response_format: Optional[Dict[str, bool]] = None,
            poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
            return_immediately: Optional[bool] = False,
            verbose: Optional[bool] = False) -> Search:
@@ -42,8 +42,10 @@ def search(start: datetime.datetime,
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the "get_advanced_distances_combos()" function.
         ground: list of ground instrument search parameters, defaults to []
-            e.g. [
-                {
+
+            Example:
+
+                [{
                     "programs": ["themis-asi"],
                     "platforms": ["gillam", "rabbit lake"],
                     "instrument_types": ["RGB"],
@@ -57,11 +59,12 @@ def search(start: datetime.datetime,
                             }
                         ]
                     }
-                }
-            ]
+                }]
         space: list of one or more space instrument search parameters, defaults to []
-            e.g. [
-                {
+
+            Example:
+
+                [{
                     "programs": ["themis-asi", "swarm"],
                     "platforms": ["themisa", "swarma"],
                     "instrument_types": ["footprint"],
@@ -78,21 +81,16 @@ def search(start: datetime.datetime,
                     "hemisphere": [
                         "northern"
                     ]
-                }
-            ]
+                }]
         events: list of one or more events search parameters, defaults to []
-            e.g. [
-                {
-                "programs": [
-                    "events"
-                ],
-                "platforms": [
-                    "toshi"
-                ],
-                "instrument_types": [
-                    "substorm onsets"
-                ]
-            ]
+
+            Example:
+
+                [{
+                    "programs": [ "events" ],
+                    "platforms": [ "toshi" ],
+                    "instrument_types": [ "substorm onsets" ]
+                }]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
@@ -158,12 +156,12 @@ def search(start: datetime.datetime,
 def search_async(start: datetime.datetime,
                  end: datetime.datetime,
                  distance: Union[int, float, Dict[str, Union[int, float]]],
-                 ground: Optional[List[Dict]] = [],
-                 space: Optional[List[Dict]] = [],
-                 events: Optional[List[Dict]] = [],
+                 ground: Optional[List[Dict[str, str]]] = [],
+                 space: Optional[List[Dict[str, str]]] = [],
+                 events: Optional[List[Dict[str, str]]] = [],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
                  epoch_search_precision: Optional[int] = 60,
-                 response_format: Optional[Dict] = None) -> Search:
+                 response_format: Optional[Dict[str, bool]] = None) -> Search:
     """
     Submit a request for a conjunctions search, return immediately
 
@@ -184,8 +182,10 @@ def search_async(start: datetime.datetime,
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the "get_advanced_distances_combos()" function.
         ground: list of ground instrument search parameters, defaults to []
-            e.g. [
-                {
+
+            Example:
+
+                [{
                     "programs": ["themis-asi"],
                     "platforms": ["gillam", "rabbit lake"],
                     "instrument_types": ["RGB"],
@@ -199,11 +199,12 @@ def search_async(start: datetime.datetime,
                             }
                         ]
                     }
-                }
-            ]
+                }]
         space: list of one or more space instrument search parameters, defaults to []
-            e.g. [
-                {
+
+            Example:
+
+                [{
                     "programs": ["themis-asi", "swarm"],
                     "platforms": ["themisa", "swarma"],
                     "instrument_types": ["footprint"],
@@ -220,21 +221,16 @@ def search_async(start: datetime.datetime,
                     "hemisphere": [
                         "northern"
                     ]
-                }
-            ]
+                }]
         events: list of one or more events search parameters, defaults to []
-            e.g. [
-                {
-                "programs": [
-                    "events"
-                ],
-                "platforms": [
-                    "toshi"
-                ],
-                "instrument_types": [
-                    "substorm onsets"
-                ]
-            ]
+
+            Example:
+
+                [{
+                    "programs": [ "events" ],
+                    "platforms": [ "toshi" ],
+                    "instrument_types": [ "substorm onsets" ]
+                }]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.

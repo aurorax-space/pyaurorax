@@ -31,8 +31,10 @@ class Search():
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the "get_advanced_distances_combos()" function.
         ground: list of ground instrument search parameters, defaults to []
-            e.g. [
-                {
+
+            Example:
+
+                [{
                     "programs": ["themis-asi"],
                     "platforms": ["gillam", "rabbit lake"],
                     "instrument_types": ["RGB"],
@@ -46,11 +48,12 @@ class Search():
                             }
                         ]
                     }
-                }
-            ]
+                }]
         space: list of one or more space instrument search parameters, defaults to []
-            e.g. [
-                {
+
+            Example:
+
+                [{
                     "programs": ["themis-asi", "swarm"],
                     "platforms": ["themisa", "swarma"],
                     "instrument_types": ["footprint"],
@@ -67,21 +70,16 @@ class Search():
                     "hemisphere": [
                         "northern"
                     ]
-                }
-            ]
+                }]
         events: list of one or more events search parameters, defaults to []
-            e.g. [
-                {
-                "programs": [
-                    "events"
-                ],
-                "platforms": [
-                    "toshi"
-                ],
-                "instrument_types": [
-                    "substorm onsets"
-                ]
-            ]
+
+            Example:
+
+                [{
+                    "programs": [ "events" ],
+                    "platforms": [ "toshi" ],
+                    "instrument_types": [ "substorm onsets" ]
+                }]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
@@ -107,12 +105,12 @@ class Search():
     def __init__(self, start: datetime.datetime,
                  end: datetime.datetime,
                  distance: Union[int, float, Dict[str, Union[int, float]]],
-                 ground: Optional[List[Dict]] = [],
-                 space: Optional[List[Dict]] = [],
-                 events: Optional[List[Dict]] = [],
+                 ground: Optional[List[Dict[str, str]]] = [],
+                 space: Optional[List[Dict[str, str]]] = [],
+                 events: Optional[List[Dict[str, str]]] = [],
                  conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
                  epoch_search_precision: Optional[int] = 60,
-                 response_format: Optional[Dict] = None):
+                 response_format: Optional[Dict[str, bool]] = None):
 
         # set variables using passed in args
         self.start = start
@@ -216,7 +214,7 @@ class Search():
     @property
     def distance(self) -> Union[int, float, Dict[str, Union[int, float]]]:
         """
-        Property getter for distance
+        Property for the distance parameter
 
         Returns:
             the distance dictionary with all combinations
@@ -225,15 +223,6 @@ class Search():
 
     @distance.setter
     def distance(self, distance: Union[int, float, Dict[str, Union[int, float]]]) -> None:
-        """
-        Property setter for distance
-
-        Args:
-            distance: the distance(s) to use, can be an number (int or float), or a
-                dictionary. If it's a dictionary, to reduce unexpected mistakes
-                please use the 'get_advanced_distances_combo()' function and adjust
-                accordingly.
-        """
         # set distances to a dict if it's an int or float
         if (type(distance) is int or type(distance) is float):
             self._distance = self.get_advanced_distances_combos(default_distance=distance)  # type: ignore
@@ -244,7 +233,7 @@ class Search():
     @property
     def query(self) -> Dict:
         """
-        Property getter for query
+        Property for the query value
 
         Returns:
             the query parameter
@@ -263,12 +252,6 @@ class Search():
 
     @query.setter
     def query(self, query: Dict) -> None:
-        """
-        Property setter for query
-
-        Args:
-            query: the new query value
-        """
         self._query = query
 
     def execute(self) -> None:
