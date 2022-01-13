@@ -2,7 +2,6 @@
 Class definition for a conjunction
 """
 
-import pprint
 import datetime
 from pydantic import BaseModel
 from typing import Dict, List
@@ -52,4 +51,6 @@ class Conjunction(BaseModel):
         Returns:
             object representation of Conjunction object
         """
-        return pprint.pformat(self.__dict__)
+        return f"Conjunction(start={repr(self.start)}, end={repr(self.end)}, " \
+            f"min_distance={self.min_distance:.2f}, max_distance={self.max_distance:.2f}, " \
+            "data_sources=[...], events=[...])"

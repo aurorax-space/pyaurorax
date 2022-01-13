@@ -3,7 +3,6 @@ Class definition for a data product search
 """
 
 import datetime
-import pprint
 from typing import Dict, List, Union, Optional
 from .data_product import DataProduct
 from ...api import AuroraXRequest, AuroraXResponse, urls
@@ -107,7 +106,12 @@ class Search():
         Returns:
             object representation of DataProduct Search object
         """
-        return pprint.pformat(self.__dict__)
+        if (self.executed is True):
+            r = f"DataProductsSearch(executed={self.executed}, " \
+                f"completed={self.completed}, request_id='{self.request_id}')"
+        else:
+            r = f"DataProductsSearch(executed={self.executed})"
+        return r
 
     @property
     def query(self):

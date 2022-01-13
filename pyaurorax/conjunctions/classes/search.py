@@ -2,13 +2,13 @@
 Class definition for a conjunction search
 """
 
-import pprint
 import datetime
 import itertools
 from typing import Dict, List, Union, Optional
 from .conjunction import Conjunction
 from ...conjunctions import CONJUNCTION_TYPE_NBTRACE
 from ...api import AuroraXRequest, AuroraXResponse, urls
+from ...sources import DataSource, FORMAT_BASIC_INFO
 from ...exceptions import AuroraXBadParametersException
 from ...requests import (STANDARD_POLLING_SLEEP_TIME,
                          cancel as requests_cancel,
@@ -151,7 +151,12 @@ class Search():
         Returns:
             object representation of Conjunction Search object
         """
-        return pprint.pformat(self.__dict__)
+        if (self.executed is True):
+            r = f"ConjunctionSearch(executed={self.executed}, " \
+                f"completed={self.completed}, request_id='{self.request_id}')"
+        else:
+            r = f"ConjunctionSearch(executed={self.executed})"
+        return r
 
     def check_criteria_block_count_validity(self) -> None:
         """
@@ -331,6 +336,13 @@ class Search():
         if (self.response_format is not None):
             self.data = raw_data
         else:
+            # cast data source objects
+            for i in range(0, len(raw_data)):
+                for j in range(0, len(raw_data[i]["data_sources"])):
+                    ds = DataSource(**raw_data[i]["data_sources"][j], format=FORMAT_BASIC_INFO)
+                    raw_data[i]["data_sources"][j] = ds
+
+            # cast conjunctions
             self.data = [Conjunction(**c) for c in raw_data]
 
     def wait(self,

@@ -3,7 +3,6 @@ Class definition for an ephemeris search
 """
 
 import datetime
-import pprint
 from typing import Dict, List, Union, Optional
 from .ephemeris import Ephemeris
 from ...api import AuroraXRequest, AuroraXResponse, urls
@@ -105,7 +104,12 @@ class Search():
         Returns:
             object representation of Ephemeris Search object
         """
-        return pprint.pformat(self.__dict__)
+        if (self.executed is True):
+            r = f"EphemerisSearch(executed={self.executed}, " \
+                f"completed={self.completed}, request_id='{self.request_id}')"
+        else:
+            r = f"EphemerisSearch(executed={self.executed})"
+        return r
 
     @property
     def query(self):
