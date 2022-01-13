@@ -2,9 +2,12 @@
 Class definition for a data source
 """
 
-import pprint
 from pydantic import BaseModel
 from typing import List, Dict, Optional
+from ...sources import (FORMAT_BASIC_INFO,
+                        FORMAT_BASIC_INFO_WITH_METADATA,
+                        FORMAT_IDENTIFIER_ONLY,
+                        FORMAT_FULL_RECORD)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -33,6 +36,9 @@ class DataSource(BaseModel):
         data_product_metadata_schema: a list of dictionaries capturing the metadata
             keys and values that can appear in data product records associated with
             this data source
+        format: the format used when printing the data source, defaults to
+            "full_record". Other options are in the pyaurorax.sources module, or
+            at the top level using the pyaurorax.FORMAT_* variables.
     """
     identifier: Optional[int] = None
     program: Optional[str] = None
@@ -45,6 +51,7 @@ class DataSource(BaseModel):
     maintainers: Optional[List[str]] = None
     ephemeris_metadata_schema: Optional[List[Dict]] = None
     data_product_metadata_schema: Optional[List[Dict]] = None
+    format: Optional[str] = FORMAT_FULL_RECORD
 
     def __str__(self) -> str:
         """
@@ -62,4 +69,46 @@ class DataSource(BaseModel):
         Returns:
             object representation of DataSource object
         """
-        return pprint.pformat(self.__dict__)
+        # init
+        max_len = 20
+
+        # for each format type, construct the string to return
+        if (self.format == FORMAT_IDENTIFIER_ONLY):
+            s = f"DataSource(identifier={self.identifier})"
+        elif (self.format == FORMAT_BASIC_INFO):
+            s = f"DataSource(identifier={self.identifier}, program='{self.program}', " \
+                f"platform='{self.platform}', instrument_type='{self.instrument_type}', " \
+                f"source_type='{self.source_type}', display_name='{self.display_name}')"
+        elif (self.format == FORMAT_BASIC_INFO_WITH_METADATA):
+            # shorten strings
+            metadata_str = f"{self.metadata}"
+            if (len(metadata_str) > 10):
+                metadata_str = metadata_str[0:10] + "...}"
+
+            # set return string
+            s = f"DataSource(identifier={self.identifier}, program='{self.program}', " \
+                f"platform='{self.platform}', instrument_type='{self.instrument_type}', " \
+                f"source_type='{self.source_type}', display_name='{self.display_name}', " \
+                f"metadata={metadata_str})"
+        elif (self.format == FORMAT_FULL_RECORD):
+            # shorten strings
+            metadata_str = f"{self.metadata}"
+            if (len(metadata_str) > max_len):
+                metadata_str = metadata_str[0:max_len] + "...}"
+            ephemeris_metadata_schema_str = f"{self.ephemeris_metadata_schema}"
+            if (len(ephemeris_metadata_schema_str) > max_len):
+                ephemeris_metadata_schema_str = ephemeris_metadata_schema_str[0:max_len] + "...}]"
+            data_product_metadata_schema_str = f"{self.data_product_metadata_schema}"
+            if (len(data_product_metadata_schema_str) > max_len):
+                data_product_metadata_schema_str = data_product_metadata_schema_str[0:max_len] + "...}]"
+
+            # set return string
+            s = f"DataSource(identifier={self.identifier}, program='{self.program}', " \
+                f"platform='{self.platform}', instrument_type='{self.instrument_type}', " \
+                f"source_type='{self.source_type}', display_name='{self.display_name}', " \
+                f"metadata={metadata_str}, owner='{self.owner}', maintainers={self.maintainers}, " \
+                f"ephemeris_metadata_schema={ephemeris_metadata_schema_str}, " \
+                f"data_product_metadata_schema={data_product_metadata_schema_str})"
+
+        # return constructed string
+        return s

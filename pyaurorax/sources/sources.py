@@ -68,7 +68,7 @@ def list(program: Optional[str] = None,
 
     # return
     if len(res.data):
-        return [DataSource(**ds) for ds in res.data]
+        return [DataSource(**ds, format=format) for ds in res.data]
     else:
         return []
 
@@ -184,7 +184,7 @@ def get_using_identifier(identifier: int,
     res = req.execute()
 
     # return
-    return DataSource(**res.data)
+    return DataSource(**res.data, format=format)
 
 
 def get_stats(identifier: int,
@@ -216,6 +216,10 @@ def get_stats(identifier: int,
     url = "%s/%d/stats" % (urls.data_sources_url, identifier)
     req = AuroraXRequest(method="get", url=url, params=params)
     res = req.execute()
+
+    # cast data source record
+    ds = DataSource(**res.data["data_source"], format=format)
+    res.data["data_source"] = ds
 
     # return
     return DataSourceStatistics(**res.data)
