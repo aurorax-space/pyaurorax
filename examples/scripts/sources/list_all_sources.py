@@ -4,7 +4,7 @@ from tabulate import tabulate
 
 def main():
     # get sources
-    sources = pyaurorax.sources.list()
+    sources = pyaurorax.sources.list(format=pyaurorax.FORMAT_BASIC_INFO)
 
     # print in a nice table
     headers = ["ID",
@@ -16,12 +16,12 @@ def main():
     rows = []
     for source in sources:
         rows.append([
-            int(source["identifier"]),
-            source["program"],
-            source["platform"],
-            source["instrument_type"],
-            source["source_type"],
-            source["display_name"],
+            int(source.identifier),
+            source.program,
+            source.platform,
+            source.instrument_type,
+            source.source_type,
+            source.display_name,
         ])
     rows = sorted(rows, key=lambda i: (i[1], i[3], i[2]))
     print(tabulate(rows, headers=headers, tablefmt="presto"))

@@ -1,5 +1,4 @@
 import pyaurorax
-import pprint
 import os
 
 
@@ -33,14 +32,13 @@ def main():
     ]
 
     # get the identifier
-    ds = pyaurorax.sources.get(
-        "test-program", "test-platform", "test-instrument")
+    ds = pyaurorax.sources.get("test-program", "test-platform", "test-instrument")
     if (ds == {}):
         print("Could not find test-instrument, make sure you've added it already")
         return 1
 
     # update the data source
-    updated_ds = pyaurorax.sources.update(identifier=ds["identifier"],
+    updated_ds = pyaurorax.sources.update(identifier=ds.identifier,
                                           program=program,
                                           platform=platform,
                                           instrument_type=instrument_type,
@@ -51,7 +49,7 @@ def main():
 
     # output results
     print("Successfully updated source\n")
-    pprint.pprint(updated_ds)
+    print(updated_ds)
 
 
 # ----------

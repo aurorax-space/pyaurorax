@@ -24,7 +24,7 @@ def main():
         if (len(sources) == 0):
             print("No data source found")
             return
-    identifier = sources[0]["identifier"]
+    identifier = sources[0].identifier
 
     # remove source
     pyaurorax.sources.delete(identifier)

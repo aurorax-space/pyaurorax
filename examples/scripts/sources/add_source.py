@@ -1,5 +1,4 @@
 import pyaurorax
-import pprint
 import os
 
 
@@ -46,18 +45,18 @@ def main():
     ]
 
     # make request
-    r = pyaurorax.sources.add(program,
-                              platform,
-                              instrument_type,
-                              source_type,
-                              display_name,
-                              ephemeris_metadata_schema=metadata_schema_ephemeris,
-                              data_product_metadata_schema=metadata_schema_data_products,
-                              identifier=identifier)
+    ds = pyaurorax.sources.add(program,
+                               platform,
+                               instrument_type,
+                               source_type,
+                               display_name,
+                               ephemeris_metadata_schema=metadata_schema_ephemeris,
+                               data_product_metadata_schema=metadata_schema_data_products,
+                               identifier=identifier)
 
     # output results
     print("Successfully added source\n")
-    pprint.pprint(r)
+    print(ds)
 
 
 # ----------

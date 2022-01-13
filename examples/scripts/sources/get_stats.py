@@ -1,5 +1,4 @@
 import pyaurorax
-import pprint
 
 
 def main():
@@ -18,8 +17,8 @@ def main():
                                                       instrument_type=instrument_type)
 
     # get statistics
-    stats = pyaurorax.sources.get_stats(data_source[0]["identifier"])
-    pprint.pprint(stats)
+    stats = pyaurorax.sources.get_stats(data_source[0].identifier, format=pyaurorax.FORMAT_BASIC_INFO)
+    print(stats)
 
 
 # ----------
