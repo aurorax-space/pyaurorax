@@ -344,7 +344,9 @@ def update(data_source: DataSource) -> DataSource:
     url = f"{urls.data_sources_url}/{data_source.identifier}"
 
     # make request to update the data source passed in
-    req = AuroraXRequest(method="put", url=url, body=data_source)
+    req_data = data_source.__dict__
+    del req_data["format"]
+    req = AuroraXRequest(method="put", url=url, body=req_data)
     req.execute()
 
     # return
@@ -411,11 +413,13 @@ def partial_update(identifier: int,
                     ephemeris_metadata_schema=ephemeris_metadata_schema,
                     data_product_metadata_schema=data_product_metadata_schema)
 
-    # set URL
+    # set URL and request data
     url = f"{urls.data_sources_url}/{ds.identifier}"
+    req_data = ds.__dict__
+    del req_data["format"]
 
     # make request
-    req = AuroraXRequest(method="patch", url=url, body=ds)
+    req = AuroraXRequest(method="patch", url=url, body=req_data)
     req.execute()
 
     # return
