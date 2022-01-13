@@ -6,7 +6,7 @@ poetry:
 	python -m pip install poetry
 
 install: poetry
-	poetry install
+	poetry install -E aacgmv2
 
 update upgrade:
 	python -m pip install --upgrade poetry

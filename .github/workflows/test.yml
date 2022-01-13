@@ -19,7 +19,7 @@ jobs:
     - name: Install Poetry and dependencies
       run: |
         pip install poetry
-        poetry install
+        poetry install -E aacgmv2
     - name: Run unauthorized access test (pytest)
       run: |
         make test-pytest-unauthorized-access
@@ -43,7 +43,7 @@ jobs:
     - name: Install Poetry and dependencies
       run: |
         pip install poetry
-        poetry install
+        poetry install -E aacgmv2
     - name: Style guide enforcing (flake8)
       run: |
         make test-flake8
@@ -82,7 +82,7 @@ jobs:
     - name: Install Poetry and dependencies
       run: |
         pip install poetry
-        poetry install
+        poetry install -E aacgmv2
     - name: Style guide enforcing (flake8)
       run: |
         make test-flake8
