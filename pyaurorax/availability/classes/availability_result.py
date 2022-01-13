@@ -2,7 +2,6 @@
 Class definition used for containing Availability information
 """
 
-import pprint
 from pydantic import BaseModel
 from typing import Dict, Optional
 from ...sources import DataSource
@@ -32,12 +31,3 @@ class AvailabilityResult(BaseModel):
             string format of AvailabilityResult
         """
         return self.__repr__()
-
-    def __repr__(self) -> str:
-        """
-        Object representation
-
-        Returns:
-            object representation of AvailabilityResult
-        """
-        return pprint.pformat(self.__dict__)

@@ -5,7 +5,7 @@ Functions for retrieving availablity information
 import datetime
 from typing import Dict, List, Optional
 from .classes.availability_result import AvailabilityResult
-from ..sources import FORMAT_DEFAULT
+from ..sources import FORMAT_DEFAULT, DataSource
 from ..api import urls, AuroraXRequest
 
 # pdoc init
@@ -61,6 +61,11 @@ def ephemeris(start: datetime.date,
                          params=params)
     res = req.execute()
 
+    # cast data source record
+    for i in range(0, len(res.data)):
+        ds = DataSource(**res.data[i]["data_source"], format=format)
+        res.data[i]["data_source"] = ds
+
     # return
     return [AvailabilityResult(**av) for av in res.data]
 
@@ -113,6 +118,11 @@ def data_products(start: datetime.date,
                          url=urls.data_products_availability_url,
                          params=params)
     res = req.execute()
+
+    # cast data source record
+    for i in range(0, len(res.data)):
+        ds = DataSource(**res.data[i]["data_source"], format=format)
+        res.data[i]["data_source"] = ds
 
     # return
     return [AvailabilityResult(**av) for av in res.data]

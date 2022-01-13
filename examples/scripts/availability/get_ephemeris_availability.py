@@ -1,6 +1,5 @@
 import pyaurorax
 import datetime
-import pprint
 
 
 def main():
@@ -22,8 +21,9 @@ def main():
                                                     end_date,
                                                     program=program,
                                                     platform=platform,
-                                                    instrument_type=instrument_type)
-    pprint.pprint(availability)
+                                                    instrument_type=instrument_type,
+                                                    format=pyaurorax.FORMAT_IDENTIFIER_ONLY)
+    print(availability)
 
 
 # ----------
