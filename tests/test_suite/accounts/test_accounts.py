@@ -1,8 +1,10 @@
+import pytest
 import pyaurorax
 
 ACCOUNTS_URL = "/api/v1/accounts"
 
 
+@pytest.mark.accounts
 def test_get_all_accounts():
     req = pyaurorax.AuroraXRequest(
         method="get", url=pyaurorax.api.urls.base_url + ACCOUNTS_URL)

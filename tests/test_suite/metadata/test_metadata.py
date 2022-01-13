@@ -1,11 +1,12 @@
+import pytest
 import pyaurorax
 
-# are we going to enforce schema validation at the API level?
 
-
+@pytest.mark.metadata
 def test_validate_schema():
-    source = pyaurorax.sources.get_using_filters(
-        program="swarm", platform="swarma", instrument_type="footprint")
+    source = pyaurorax.sources.get_using_filters(program="swarm",
+                                                 platform="swarma",
+                                                 instrument_type="footprint")
     schema = pyaurorax.metadata.get_ephemeris_schema(source[0].identifier)
 
     # create an example metadata dictionary
@@ -22,6 +23,7 @@ def test_validate_schema():
     assert pyaurorax.metadata.validate(schema, metadata)
 
 
+@pytest.mark.metadata
 def test_get_ephemeris_metadata_schema():
     # set parameters
     program = "swarm"
@@ -29,15 +31,19 @@ def test_get_ephemeris_metadata_schema():
     instrument_type = "footprint"
 
     # get idendifier
-    data_source = pyaurorax.sources.get(
-        program, platform, instrument_type, "identifier_only")
+    data_source = pyaurorax.sources.get(program,
+                                        platform,
+                                        instrument_type,
+                                        "identifier_only")
 
     # get schema
     schema = pyaurorax.metadata.get_ephemeris_schema(data_source.identifier)
 
+    # check
     assert type(schema) is list
 
 
+@pytest.mark.metadata
 def test_get_data_product_metadata_schema():
     # set parameters
     program = "themis-asi"
@@ -45,11 +51,13 @@ def test_get_data_product_metadata_schema():
     instrument_type = "panchromatic ASI"
 
     # get idendifier
-    data_source = pyaurorax.sources.get(
-        program, platform, instrument_type, format="identifier_only")
+    data_source = pyaurorax.sources.get(program,
+                                        platform,
+                                        instrument_type,
+                                        format=pyaurorax.FORMAT_IDENTIFIER_ONLY)
 
     # get schema
-    schema = pyaurorax.metadata.get_data_products_schema(
-        data_source.identifier)
+    schema = pyaurorax.metadata.get_data_products_schema(data_source.identifier)
 
+    # check
     assert type(schema) is list

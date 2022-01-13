@@ -1,11 +1,14 @@
-from pyaurorax.data_products import DataProduct
-import pyaurorax
+import pytest
 import datetime
 import time
+import pyaurorax
+from pyaurorax.data_products import DataProduct
 
+# globals
 MAX_WAIT_TIME = 30
 
 
+@pytest.mark.data_products
 def test_create_data_product_object():
     # set values
     program = "test-program"
@@ -13,7 +16,7 @@ def test_create_data_product_object():
     instrument_type = "test-instrument-type"
     start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end_dt = start_dt.replace(hour=23, minute=59, second=59)
-    data_product_type = "keogram"
+    data_product_type = pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM
     url = "testing_url.jpg"
     metadata = {}
 
@@ -28,34 +31,37 @@ def test_create_data_product_object():
                                             end=end_dt,
                                             metadata=metadata)
 
-    assert type(
-        d) is DataProduct and d.data_source.instrument_type == "test-instrument-type"
+    assert type(d) is DataProduct and \
+        d.data_source.instrument_type == "test-instrument-type"
 
 
+@pytest.mark.data_products
 def test_create_data_products_search_object():
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                       datetime.datetime(
-                                           2020, 1, 1, 23, 59, 59),
+                                       datetime.datetime(2020, 1, 1, 23, 59, 59),
                                        programs=["auroramax"])
 
-    assert type(s) is pyaurorax.data_products.Search and s.end == datetime.datetime(
-        2020, 1, 1, 23, 59, 59)
+    assert type(s) is pyaurorax.data_products.Search \
+        and s.end == datetime.datetime(2020, 1, 1, 23, 59, 59)
 
 
+@pytest.mark.data_products
 def test_search_data_products_synchronous():
     s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 2, 23, 59, 59),
                                        programs=["auroramax"],
-                                       data_product_type_filters=["keogram"],
+                                       data_product_types=[pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM],
                                        verbose=False)
 
     assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
+@pytest.mark.data_products
 def test_search_data_products_asynchronous():
-    s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
-                                             programs=["auroramax"])
+    s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                       datetime.datetime(2020, 1, 2, 23, 59, 59),
+                                       programs=["auroramax"],
+                                       return_immediately=True)
 
     s.update_status()
     tries = 0
@@ -73,6 +79,7 @@ def test_search_data_products_asynchronous():
     assert type(s.data) is list and type(s.data[0]) is DataProduct
 
 
+@pytest.mark.data_products
 def test_search_data_products_metadata_filters_synchronous():
     metadata_filters = [
         {
@@ -93,34 +100,37 @@ def test_search_data_products_metadata_filters_synchronous():
     s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 2, 23, 59, 59),
                                        programs=["auroramax"],
-                                       data_product_type_filters=["keogram", "movie"],
+                                       data_product_types=[
+                                           pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM,
+                                           pyaurorax.DATA_PRODUCT_TYPE_MOVIE],
                                        metadata_filters=metadata_filters,
                                        verbose=False,
                                        metadata_filters_logical_operator="OR")
 
     result = s.data
-    result_filter = list(filter(lambda dp: (dp.data_product_type == "movie"
+    result_filter = list(filter(lambda dp: (dp.data_product_type == pyaurorax.DATA_PRODUCT_TYPE_MOVIE
                                             and dp.metadata["movie_type"] == "real-time daily")
-                                or (dp.data_product_type == "keogram"
+                                or (dp.data_product_type == pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM
                                     and dp.metadata["keogram_type"] == "daily_hires"), result))
 
     assert len(s.data) == len(result_filter)
 
 
+@pytest.mark.data_products
 def test_search_data_products_response_format_asynchronous():
-    s = pyaurorax.data_products.search_async(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
-                                             programs=["auroramax"],
-                                             response_format={"start": True,
-                                                              "end": True,
-                                                              "data_source": {
-                                                                  "identifier": True,
-                                                                  "program": True,
+    s = pyaurorax.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                       datetime.datetime(2020, 1, 2, 23, 59, 59),
+                                       programs=["auroramax"],
+                                       response_format={"start": True,
+                                                        "end": True,
+                                                        "data_source": {
+                                                            "identifier": True,
+                                                            "program": True,
 
-                                                              },
-                                                              "url": True,
-                                                              "metadata": True
-                                                              })
+                                                        },
+                                                        "url": True,
+                                                        "metadata": True},
+                                       return_immediately=True)
 
     s.update_status()
     tries = 0
@@ -135,10 +145,12 @@ def test_search_data_products_response_format_asynchronous():
 
     s.get_data()
 
-    assert type(s.data) is list and type(
-        s.data[0]) is dict and "data_product_type" not in s.data[0].keys()
+    assert type(s.data) is list \
+        and type(s.data[0]) is dict \
+        and "data_product_type" not in s.data[0].keys()
 
 
+@pytest.mark.data_products
 def test_search_data_products_logs():
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 1, 23, 59, 59),
@@ -159,6 +171,7 @@ def test_search_data_products_logs():
     assert len(s.logs) > 0
 
 
+@pytest.mark.data_products
 def test_search_data_products_status():
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                        datetime.datetime(2020, 1, 1, 23, 59, 59),
@@ -179,6 +192,7 @@ def test_search_data_products_status():
     assert s.completed
 
 
+@pytest.mark.data_products
 def test_upload_data_products():
     # set values
     program = "test-program"
@@ -189,7 +203,7 @@ def test_upload_data_products():
         "test_meta1": "testing1",
         "test_meta2": "testing2",
     }
-    data_product_type = "keogram"
+    data_product_type = pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM
     start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end_dt = start_dt.replace(hour=23, minute=59, second=59)
 
@@ -232,6 +246,7 @@ def test_upload_data_products():
     assert result == 1 and len(s.data) > 0
 
 
+@pytest.mark.data_products
 def test_delete_data_products():
     program = "test-program"
     platform = "test-platform"
@@ -272,6 +287,7 @@ def test_delete_data_products():
     assert len(s.data) == 0
 
 
+@pytest.mark.data_products
 def test_delete_data_products_daterange():
     program = "test-program"
     platform = "test-platform"
@@ -282,25 +298,25 @@ def test_delete_data_products_daterange():
 
     # create DataProducts objects
     dp1 = pyaurorax.data_products.DataProduct(data_source=source,
-                                              data_product_type="keogram",
+                                              data_product_type=pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM,
                                               url="datrange-url-1.bmp",
                                               start=datetime.datetime(2021, 6, 27, 1, 0, 0),
                                               end=datetime.datetime(2021, 6, 27, 1, 59, 59),
                                               metadata={"keogram_type": "test"})
     dp2 = pyaurorax.data_products.DataProduct(data_source=source,
-                                              data_product_type="keogram",
+                                              data_product_type=pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM,
                                               url="datrange-url-2.bmp",
                                               start=datetime.datetime(2021, 6, 28, 2, 0, 0),
                                               end=datetime.datetime(2021, 6, 28, 2, 59, 59),
                                               metadata=[])
     dp3 = pyaurorax.data_products.DataProduct(data_source=source,
-                                              data_product_type="movie",
+                                              data_product_type=pyaurorax.DATA_PRODUCT_TYPE_MOVIE,
                                               url="datrange-url-3.bmp",
                                               start=datetime.datetime(2021, 6, 27, 1, 0, 0),
                                               end=datetime.datetime(2021, 6, 27, 1, 59, 59),
                                               metadata=[])
     dp4 = pyaurorax.data_products.DataProduct(data_source=source,
-                                              data_product_type="movie",
+                                              data_product_type=pyaurorax.DATA_PRODUCT_TYPE_MOVIE,
                                               url="datrange-url-4.bmp",
                                               start=datetime.datetime(2021, 6, 28, 2, 0, 0),
                                               end=datetime.datetime(2021, 6, 28, 2, 59, 59),
@@ -317,7 +333,7 @@ def test_delete_data_products_daterange():
     pyaurorax.data_products.delete_daterange(data_source=source,
                                              start=start_dt,
                                              end=end_dt,
-                                             data_product_types=["keogram"])
+                                             data_product_types=[pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM])
     time.sleep(5)
 
     # search data products again to see if they were deleted
@@ -326,16 +342,21 @@ def test_delete_data_products_daterange():
                                         programs=[program],
                                         platforms=[platform],
                                         instrument_types=[instrument_type],
-                                        data_product_type_filters=["keogram"])
+                                        data_product_types=[pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM])
 
     assert len(s1.data) == 0
 
 
+@pytest.mark.data_products
 def test_cancel_data_product_search():
     # set up query params
     start_dt = datetime.datetime(2018, 1, 1)
     end_dt = datetime.datetime(2021, 12, 31, 23, 59, 59)
-    programs = ["themis-asi", "auroramax", "trex"]
+    programs = [
+        "themis-asi",
+        "auroramax",
+        "trex"
+    ]
 
     # search for data products
     s = pyaurorax.data_products.Search(start=start_dt,

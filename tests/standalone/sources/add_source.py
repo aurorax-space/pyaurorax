@@ -14,7 +14,7 @@ def main():
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument"
-    source_type = "ground"
+    source_type = pyaurorax.SOURCE_TYPE_GROUND
     display_name = "Test Instrument"
     metadata_schema_ephemeris = [
         {

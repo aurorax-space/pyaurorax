@@ -26,7 +26,7 @@ def main():
     nbtrace = pyaurorax.Location(lat=1.23, lon=45.6)
     sbtrace = pyaurorax.Location(lat=7.89, lon=101.23)
 
-    # get the ephemeris source ID
+    # get the data source ID
     source = pyaurorax.sources.get_using_filters(program=[program],
                                                  platform=[platform],
                                                  instrument_type=[instrument_type])

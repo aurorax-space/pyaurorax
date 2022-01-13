@@ -1,32 +1,73 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.8.0"
+version = "0.9.0"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
-homepage = "https://aurorax.space/data/apiLibraries"
+homepage = "https://docs.aurorax.space"
 repository = "https://github.com/aurorax-space/pyaurorax"
-authors = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
-maintainers = ["Darren Chaddock <dchaddoc@ucalgary.ca>"]
+authors = [
+    "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
+    "Darren Chaddock <dchaddoc@ucalgary.ca>"
+]
+maintainers = [
+    "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
+    "Darren Chaddock <dchaddoc@ucalgary.ca>"
+]
 license = "MIT"
 packages = [
     { include = "pyaurorax" },
 ]
+classifiers = [
+    "Natural Language :: English",
+    "Intended Audience :: Science/Research",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: Libraries",
+]
+keywords = [
+    "aurorax",
+    "space physics",
+    "aurora",
+    "aurora borealis",
+    "northern lights",
+    "southern lights",
+]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=3.6,<3.10"
 requests = "^2.25.1"
-flake8 = "^3.8.4"
-pydantic = "^1.7.3"
 humanize = "^3.2.0"
-aacgmv2 = "^2.6.2"
+pydantic = "^1.7.3"
+click = "^8.0.3"
+texttable = "^1.6.4"
+aacgmv2 = { version = "^2.6.2", optional = true }
 
 [tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
 pytest = "^6.2.1"
 tabulate = "^0.8.7"
 mypy = "^0.790"
 pylint = "^2.6.0"
 bandit = "^1.7.0"
 autopep8 = "^1.5.4"
+pdoc3 = "^0.10.0"
+coverage = "^6.2"
+pycodestyle = ">=2.7.0,<2.8.0"
+
+[tool.poetry.scripts]
+aurorax-cli = "pyaurorax.cli.cli:cli"
+
+[tool.poetry.extras]
+aacgmv2 = ["aacgmv2"]
+
+[tool.poetry.urls]
+"Documentation" = "https://docs.aurorax.space/python_libraries/pyaurorax/overview"
+"API Reference" = "https://docs.aurorax.space/python_libraries/pyaurorax/api_reference/pyaurorax"
+"Bug Tracker" = "https://github.com/aurorax-space/pyaurorax/issues"
+"AuroraX Platform" = "https://aurorax.space"
 
 [build-system]
 requires = ["poetry>=0.12"]

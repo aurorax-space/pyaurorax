@@ -7,8 +7,12 @@ def main():
     sources = pyaurorax.sources.list()
 
     # print in a nice table
-    headers = ["ID", "Program", "Platform",
-               "Instrument Type", "Source Type", "Display Name"]
+    headers = ["ID",
+               "Program",
+               "Platform",
+               "Instrument Type",
+               "Source Type",
+               "Display Name"]
     rows = []
     for source in sources:
         rows.append([
