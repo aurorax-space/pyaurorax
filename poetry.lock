@@ -590,7 +590,7 @@ aacgmv2 = ["aacgmv2"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6,<3.10"
-content-hash = "2f8d00f0b946e43653b6d930fb6a9ed9e659ac917e4f6b2af6feca3c900396d9"
+content-hash = "48ecafa45b092061b209f4cdb82595677f60a3032652fbe62619cb8c7edf6686"
 
 [metadata.files]
 aacgmv2 = [
