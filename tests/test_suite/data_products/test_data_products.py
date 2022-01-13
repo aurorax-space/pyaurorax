@@ -31,8 +31,8 @@ def test_create_data_product_object():
                                             end=end_dt,
                                             metadata=metadata)
 
-    assert type(
-        d) is DataProduct and d.data_source.instrument_type == "test-instrument-type"
+    assert type(d) is DataProduct and \
+        d.data_source.instrument_type == "test-instrument-type"
 
 
 @pytest.mark.data_products
