@@ -27,7 +27,7 @@ def main():
 
     # get the data source ID
     ds = pyaurorax.sources.get(program, platform, instrument_type)
-    identifier = ds["identifier"]
+    identifier = ds.identifier
 
     # create DataProducts object
     e = pyaurorax.data_products.DataProduct(identifier=identifier,

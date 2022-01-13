@@ -5,14 +5,10 @@ import pprint
 
 
 def main():
-    # set as staging API
-    pyaurorax.api.set_base_url("https://api.staging.aurorax.space")
-
     # start search
     print("Executing request ...")
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                       datetime.datetime(
-                                           2020, 1, 1, 23, 59, 59),
+                                       datetime.datetime(2020, 1, 1, 23, 59, 59),
                                        programs=["auroramax"])
     s.execute()
 
@@ -29,7 +25,7 @@ def main():
         s.update_status()
 
     # print status
-    pprint.pprint(s)
+    pprint.pprint(s.status)
 
 
 # ----------

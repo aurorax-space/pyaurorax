@@ -3,7 +3,6 @@ Class definition for a data product
 """
 
 import datetime
-import pprint
 from pydantic import BaseModel
 from typing import Dict
 from ...sources import DataSource
@@ -82,4 +81,16 @@ class DataProduct(BaseModel):
         Returns:
             object representation of DataProduct object
         """
-        return pprint.pformat(self.__dict__)
+        # shorten the metadata and url
+        max_len = 20
+        attr_metadata = f"{self.metadata}"
+        if (len(attr_metadata) > max_len):
+            attr_metadata = attr_metadata[0:max_len] + "...}"
+        attr_url = f"{self.url}"
+        if (len(attr_url) > max_len):
+            attr_url = attr_url[0:max_len] + "..."
+
+        # return formatted representation
+        return f"DataProduct(data_source={repr(self.data_source)}, start={repr(self.start)}, " \
+            f"end={repr(self.end)}, data_product_type='{self.data_product_type}', url='{attr_url}', " \
+            f"metadata={attr_metadata})"

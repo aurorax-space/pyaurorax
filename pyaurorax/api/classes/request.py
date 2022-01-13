@@ -181,4 +181,4 @@ class AuroraXRequest(BaseModel):
         Returns:
             object representation of AuroraXRequest
         """
-        return f"AuroraXRequest(method='{self.method.upper()}', url='{self.url}')"
+        return f"AuroraXRequest(method='{self.method}', url='{self.url}')"
