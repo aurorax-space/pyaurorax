@@ -69,46 +69,64 @@ class DataSource(BaseModel):
         Returns:
             object representation of DataSource object
         """
-        # init
+        # set each attribute string
+        attr_identifier = "None" if self.identifier is None else f"{self.identifier}"
+        attr_program = "None" if self.program is None else f"'{self.program}'"
+        attr_platform = "None" if self.platform is None else f"'{self.platform}'"
+        attr_instrument_type = "None" if self.instrument_type is None else f"'{self.instrument_type}'"
+        attr_source_type = "None" if self.source_type is None else f"'{self.source_type}'"
+        attr_display_name = "None" if self.display_name is None else f"'{self.display_name}'"
+        attr_metadata = "None" if self.metadata is None else f"{self.metadata}"
+        attr_owner = "None" if self.owner is None else f"'{self.owner}'"
+        attr_maintainers = "None" if self.maintainers is None else f"{self.maintainers}"
+        attr_eph_schema = "None" if self.ephemeris_metadata_schema is None else f"{self.ephemeris_metadata_schema}"
+        attr_dp_schema = "None" if self.data_product_metadata_schema is None else f"{self.data_product_metadata_schema}"
+
+        # shorten strings
         max_len = 20
+        if (len(attr_metadata) > max_len):
+            attr_metadata = attr_metadata[0:max_len] + "...}"
+        if (len(attr_eph_schema) > max_len):
+            attr_eph_schema = attr_eph_schema[0:max_len] + "...}]"
+        if (len(attr_dp_schema) > max_len):
+            attr_dp_schema = attr_dp_schema[0:max_len] + "...}]"
 
-        # for each format type, construct the string to return
+        # for each format type, construct the repr to return
         if (self.format == FORMAT_IDENTIFIER_ONLY):
-            s = f"DataSource(identifier={self.identifier})"
+            r = "DataSource(identifier=%s)" % (attr_identifier)
         elif (self.format == FORMAT_BASIC_INFO):
-            s = f"DataSource(identifier={self.identifier}, program='{self.program}', " \
-                f"platform='{self.platform}', instrument_type='{self.instrument_type}', " \
-                f"source_type='{self.source_type}', display_name='{self.display_name}')"
+            r = "DataSource(identifier=%s, program=%s, platform=%s, " \
+                "instrument_type=%s, source_type=%s, display_name=%s)" % (attr_identifier,
+                                                                          attr_program,
+                                                                          attr_platform,
+                                                                          attr_instrument_type,
+                                                                          attr_source_type,
+                                                                          attr_display_name)
         elif (self.format == FORMAT_BASIC_INFO_WITH_METADATA):
-            # shorten strings
-            metadata_str = f"{self.metadata}"
-            if (len(metadata_str) > 10):
-                metadata_str = metadata_str[0:10] + "...}"
-
-            # set return string
-            s = f"DataSource(identifier={self.identifier}, program='{self.program}', " \
-                f"platform='{self.platform}', instrument_type='{self.instrument_type}', " \
-                f"source_type='{self.source_type}', display_name='{self.display_name}', " \
-                f"metadata={metadata_str})"
+            r = "DataSource(identifier=%s, program=%s, platform=%s, " \
+                "instrument_type=%s, source_type=%s, display_name=%s, " \
+                "metadata=%s)" % (attr_identifier,
+                                  attr_program,
+                                  attr_platform,
+                                  attr_instrument_type,
+                                  attr_source_type,
+                                  attr_display_name,
+                                  attr_metadata)
         elif (self.format == FORMAT_FULL_RECORD):
-            # shorten strings
-            metadata_str = f"{self.metadata}"
-            if (len(metadata_str) > max_len):
-                metadata_str = metadata_str[0:max_len] + "...}"
-            ephemeris_metadata_schema_str = f"{self.ephemeris_metadata_schema}"
-            if (len(ephemeris_metadata_schema_str) > max_len):
-                ephemeris_metadata_schema_str = ephemeris_metadata_schema_str[0:max_len] + "...}]"
-            data_product_metadata_schema_str = f"{self.data_product_metadata_schema}"
-            if (len(data_product_metadata_schema_str) > max_len):
-                data_product_metadata_schema_str = data_product_metadata_schema_str[0:max_len] + "...}]"
+            r = "DataSource(identifier=%s, program=%s, platform=%s, " \
+                "instrument_type=%s, source_type=%s, display_name=%s, " \
+                "metadata=%s, owner=%s, maintainers=%s, ephemeris_metadata_schema=%s, " \
+                "data_product_metadata_schema=%s)" % (attr_identifier,
+                                                      attr_program,
+                                                      attr_platform,
+                                                      attr_instrument_type,
+                                                      attr_source_type,
+                                                      attr_display_name,
+                                                      attr_metadata,
+                                                      attr_owner,
+                                                      attr_maintainers,
+                                                      attr_eph_schema,
+                                                      attr_dp_schema)
 
-            # set return string
-            s = f"DataSource(identifier={self.identifier}, program='{self.program}', " \
-                f"platform='{self.platform}', instrument_type='{self.instrument_type}', " \
-                f"source_type='{self.source_type}', display_name='{self.display_name}', " \
-                f"metadata={metadata_str}, owner='{self.owner}', maintainers={self.maintainers}, " \
-                f"ephemeris_metadata_schema={ephemeris_metadata_schema_str}, " \
-                f"data_product_metadata_schema={data_product_metadata_schema_str})"
-
-        # return constructed string
-        return s
+        # return constructed repr
+        return r
