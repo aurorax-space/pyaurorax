@@ -18,8 +18,7 @@ def main():
                                                       instrument_type=instrument_type)
 
     # get schema
-    schema = pyaurorax.metadata.get_data_products_schema(
-        data_source[0]["identifier"])
+    schema = pyaurorax.metadata.get_data_products_schema(data_source[0].identifier)
     pprint.pprint(schema)
 
 

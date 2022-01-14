@@ -17,6 +17,11 @@ def test_validate_schema():
         "radial_trace_region": "low latitude",
         "spacecraft_region": "nightside magnetosheath",
         "state": "definitive",
+        "tii_on": True,
+        "tii_quality_vixh": 0,
+        "tii_quality_vixv": 1,
+        "tii_quality_viy": 2,
+        "tii_quality_viz": 3
     }
 
     # validate
