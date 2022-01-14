@@ -24,39 +24,51 @@ ALLOWED_FORMATS = [
 
 def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
     # init
-    wrap_threshold = 50
+    wrap_threshold = 40
 
     # set table lists
     table_schemas = []
     table_allowed_values = []
     table_data_types = []
     table_descriptions = []
+    table_additional_descriptions = []
     table_field_names = []
     table_searchable = []
     for item in ephemeris_schema:
         table_schemas.append("ephemeris")
-        table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
-        table_data_types.append(item["data_type"])
-        table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
         table_field_names.append(item["field_name"])
+        table_data_types.append(item["data_type"])
+        table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
+        table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
+        if ("additional_description" in item):
+            table_additional_descriptions.append('\n'.join(textwrap.wrap(item["additional_description"],
+                                                                         wrap_threshold)))
+        else:
+            table_additional_descriptions.append("-")
         if ("searchable" in item):
             table_searchable.append(item["searchable"])
         else:
-            table_searchable.append("unknown")
+            table_searchable.append("-")
     for item in data_product_schema:
         table_schemas.append("data_product")
-        table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
-        table_data_types.append(item["data_type"])
-        table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
         table_field_names.append(item["field_name"])
+        table_data_types.append(item["data_type"])
+        table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
+        table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
+        if ("additional_description" in item):
+            table_additional_descriptions.append('\n'.join(textwrap.wrap(item["additional_description"],
+                                                                         wrap_threshold)))
+        else:
+            table_additional_descriptions.append("-")
         if ("searchable" in item):
             table_searchable.append(item["searchable"])
         else:
-            table_searchable.append("unknown")
+            table_searchable.append("-")
 
     # set header values
     table_headers = ["Schema", "Field Name", "Data Type",
-                     "Allowed Values", "Searchable", "Description"]
+                     "Allowed Values", "Searchable", "Description",
+                     "Additional Description"]
 
     # output information
     table = Texttable(max_width=400)
@@ -71,7 +83,8 @@ def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
                        table_data_types[i],
                        table_allowed_values[i],
                        table_searchable[i],
-                       table_descriptions[i]])
+                       table_descriptions[i],
+                       table_additional_descriptions[i]])
     click.echo(table.draw())
 
 
@@ -400,13 +413,11 @@ def get_using_identifier(config, identifier, format):
 
 @sources_group.command("get_stats", short_help="Get statistics about a data source")
 @click.argument("identifier", type=int)
-@click.option("--slow", is_flag=True,
-              help="Retrieve stats information using a slower method (more accurate)")
 @click.option("--format", type=click.Choice(ALLOWED_FORMATS),
               default=pyaurorax.FORMAT_BASIC_INFO,
               help="Amount of data about the data source to retrieve")
 @click.pass_obj
-def get_stats(config, identifier, slow, format):
+def get_stats(config, identifier, format):
     """
     Get statistics about a data source
 
@@ -416,7 +427,6 @@ def get_stats(config, identifier, slow, format):
     # get stats information
     try:
         stats = pyaurorax.sources.get_stats(identifier,
-                                            slow=slow,
                                             format=format)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
