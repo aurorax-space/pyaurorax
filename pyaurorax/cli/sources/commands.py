@@ -3,6 +3,7 @@ import pprint
 import click
 import humanize
 import pyaurorax
+import textwrap
 from texttable import Texttable
 
 # globals
@@ -13,6 +14,111 @@ SUPPORTED_SOURCE_TYPES = [
     pyaurorax.sources.SOURCE_TYPE_LEO,
     pyaurorax.sources.SOURCE_TYPE_LUNAR,
 ]
+ALLOWED_FORMATS = [
+    pyaurorax.FORMAT_BASIC_INFO,
+    pyaurorax.FORMAT_BASIC_INFO_WITH_METADATA,
+    pyaurorax.FORMAT_IDENTIFIER_ONLY,
+    pyaurorax.FORMAT_FULL_RECORD
+]
+
+
+def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
+    # init
+    wrap_threshold = 50
+
+    # set table lists
+    table_schemas = []
+    table_allowed_values = []
+    table_data_types = []
+    table_descriptions = []
+    table_field_names = []
+    table_searchable = []
+    for item in ephemeris_schema:
+        table_schemas.append("ephemeris")
+        table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
+        table_data_types.append(item["data_type"])
+        table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
+        table_field_names.append(item["field_name"])
+        if ("searchable" in item):
+            table_searchable.append(item["searchable"])
+        else:
+            table_searchable.append("unknown")
+    for item in data_product_schema:
+        table_schemas.append("data_product")
+        table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
+        table_data_types.append(item["data_type"])
+        table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
+        table_field_names.append(item["field_name"])
+        if ("searchable" in item):
+            table_searchable.append(item["searchable"])
+        else:
+            table_searchable.append("unknown")
+
+    # set header values
+    table_headers = ["Schema", "Field Name", "Data Type",
+                     "Allowed Values", "Searchable", "Description"]
+
+    # output information
+    table = Texttable(max_width=400)
+    table.set_deco(Texttable.HEADER)
+    table.set_cols_dtype(["t"] * len(table_headers))
+    table.set_header_align(["l"] * len(table_headers))
+    table.set_cols_align(["l"] * len(table_headers))
+    table.header(table_headers)
+    for i in range(0, len(table_field_names)):
+        table.add_row([table_schemas[i],
+                       table_field_names[i],
+                       table_data_types[i],
+                       table_allowed_values[i],
+                       table_searchable[i],
+                       table_descriptions[i]])
+    click.echo(table.draw())
+
+
+def __print_single_data_source(ds, format):
+    if (format == pyaurorax.FORMAT_IDENTIFIER_ONLY):
+        click.echo("Identifier:\t\t%d" % (ds.identifier))
+    elif (format == pyaurorax.FORMAT_BASIC_INFO):
+        click.echo("Identifier:\t\t%d" % (ds.identifier))
+        click.echo("Program:\t\t%s" % (ds.program))
+        click.echo("Platform:\t\t%s" % (ds.platform))
+        click.echo("Instument Type:\t\t%s" % (ds.instrument_type))
+        click.echo("Source Type:\t\t%s" % (ds.source_type))
+        click.echo("Display Name:\t\t%s" % (ds.display_name))
+    elif (format == pyaurorax.FORMAT_BASIC_INFO_WITH_METADATA):
+        click.echo("Identifier:\t\t%d" % (ds.identifier))
+        click.echo("Program:\t\t%s" % (ds.program))
+        click.echo("Platform:\t\t%s" % (ds.platform))
+        click.echo("Instument Type:\t\t%s" % (ds.instrument_type))
+        click.echo("Source Type:\t\t%s" % (ds.source_type))
+        click.echo("Display Name:\t\t%s" % (ds.display_name))
+        if (ds.metadata == {}):
+            click.echo("Metadata:\t\t%s" % (ds.metadata))
+        else:
+            click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))
+    elif (format == pyaurorax.FORMAT_FULL_RECORD):
+        click.echo("Identifier:\t\t%d" % (ds.identifier))
+        click.echo("Program:\t\t%s" % (ds.program))
+        click.echo("Platform:\t\t%s" % (ds.platform))
+        click.echo("Instument Type:\t\t%s" % (ds.instrument_type))
+        click.echo("Source Type:\t\t%s" % (ds.source_type))
+        click.echo("Display Name:\t\t%s" % (ds.display_name))
+        click.echo("Owner:\t\t\t%s" % (ds.owner))
+        click.echo("Maintainers:\t\t%s" % (ds.maintainers))
+        if (ds.metadata == {}):
+            click.echo("Metadata:\t\t%s" % (ds.metadata))
+        else:
+            click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))
+        if (ds.ephemeris_metadata_schema == []):
+            click.echo("Ephemeris Schema:\t[]")
+        else:
+            click.echo("Ephemeris Schema:\tsee below table")
+        if (ds.data_product_metadata_schema == []):
+            click.echo("Data Product Schema:\t[]\n")
+        else:
+            click.echo("Data Product Schema:\tsee below table\n")
+        __print_metadata_schema_table(ephemeris_schema=ds.ephemeris_metadata_schema,
+                                      data_product_schema=ds.data_product_metadata_schema)
 
 
 @click.group("sources", help="Interact with data sources")
@@ -236,56 +342,71 @@ def search(config, programs, platforms, instrument_types, order, reversed_):
     click.echo(table.draw())
 
 
-@sources_group.command("get", short_help="Get full data source")
+@sources_group.command("get", short_help="Get a single data source")
 @click.argument("program", type=str)
 @click.argument("platform", type=str)
 @click.argument("instrument_type", type=str)
+@click.option("--format", type=click.Choice(ALLOWED_FORMATS),
+              default=pyaurorax.FORMAT_BASIC_INFO,
+              help="Amount of data about the data source to retrieve")
 @click.pass_obj
-def get(config, program, platform, instrument_type):
+def get(config, program, platform, instrument_type, format):
     """
-    Get a complete single data source record (full record format)
+    Get a single data source record
 
     \b
     PROGRAM             the program value
     PLATFORM            the platform value
     INSTRUMENT_TYPE     the instrument type value
     """
+    # get the data source
     try:
         ds = pyaurorax.sources.get(program=program,
                                    platform=platform,
-                                   instrument_type=instrument_type)
-        click.echo(pprint.pformat(ds.__dict__))
+                                   instrument_type=instrument_type,
+                                   format=format)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
+    # print it out nicely
+    __print_single_data_source(ds, format)
+
 
 @sources_group.command("get_using_identifier",
-                       short_help="Get full data source (using an identifier)")
+                       short_help="Get a single data source (using an identifier)")
 @click.argument("identifier", type=int)
+@click.option("--format", type=click.Choice(ALLOWED_FORMATS),
+              default=pyaurorax.FORMAT_BASIC_INFO,
+              help="Amount of data about the data source to retrieve")
 @click.pass_obj
-def get_using_identifier(config, identifier):
+def get_using_identifier(config, identifier, format):
     """
-    Get a complete single data source record (full record
-    format), using an identifier
+    Get a single data source record using an identifier
 
     \b
     IDENTIFIER          the identifier of the data source
     """
+    # get data source
     try:
-        ds = pyaurorax.sources.get_using_identifier(identifier)
-        click.echo(pprint.pformat(ds.__dict__))
+        ds = pyaurorax.sources.get_using_identifier(identifier, format=format)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
+
+    # print it out nicely
+    __print_single_data_source(ds, format)
 
 
 @sources_group.command("get_stats", short_help="Get statistics about a data source")
 @click.argument("identifier", type=int)
 @click.option("--slow", is_flag=True,
               help="Retrieve stats information using a slower method (more accurate)")
+@click.option("--format", type=click.Choice(ALLOWED_FORMATS),
+              default=pyaurorax.FORMAT_BASIC_INFO,
+              help="Amount of data about the data source to retrieve")
 @click.pass_obj
-def get_stats(config, identifier, slow):
+def get_stats(config, identifier, slow, format):
     """
     Get statistics about a data source
 
@@ -294,7 +415,9 @@ def get_stats(config, identifier, slow):
     """
     # get stats information
     try:
-        stats = pyaurorax.sources.get_stats(identifier, slow=slow, format=pyaurorax.FORMAT_BASIC_INFO)
+        stats = pyaurorax.sources.get_stats(identifier,
+                                            slow=slow,
+                                            format=format)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
