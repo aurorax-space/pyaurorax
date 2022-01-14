@@ -12,7 +12,7 @@ def main():
                                    datetime.datetime(2020, 1, 1, 1, 0, 0),
                                    programs=["swarm"],
                                    platforms=["swarma"],
-                                   instrument_types=["ssc-web"])
+                                   instrument_types=["footprint"])
     r.execute()
 
     # sleep briefly
@@ -22,7 +22,7 @@ def main():
     logs = pyaurorax.requests.get_logs(r.request_url)
 
     # print logs
-    pprint.pprint(logs["data"])
+    pprint.pprint(logs)
 
 
 # ----------

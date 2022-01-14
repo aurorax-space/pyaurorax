@@ -12,7 +12,7 @@ def main():
                                    datetime.datetime(2020, 1, 1, 1, 0, 0),
                                    programs=["swarm"],
                                    platforms=["swarma"],
-                                   instrument_types=["ssc-web"])
+                                   instrument_types=["footprint"])
     r.execute()
 
     # sleep briefly
@@ -26,7 +26,7 @@ def main():
     r.get_data()
 
     # print data
-    pprint.pprint(r.data[0:2])
+    pprint.pprint(r.data[0:10])
     print("...")
 
 
