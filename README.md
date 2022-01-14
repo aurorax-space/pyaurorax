@@ -102,7 +102,7 @@ There exist several makefile targets to help run these tests quicker/easier. Bel
 - `make test-pycodestyle` Run pycodestyle styling tests
 - `make test-bandit` Run Bandit security test
 - `make test-mypy` Run mypy type checking test
-- `make test-coverage` View test coverage report (must be done after `make test-pytest` or other pytest command)
+- `make test-coverage` View test coverage report (must be done after `make test-pytest` or other coverage command)
 
 The PyTest functionality tests include several categories of tests. You can run each category separately if you want using the "markers" feature of PyTest. All markers are found in the pytest.ini file at the root of the repository.
 
@@ -132,7 +132,7 @@ You can also run Pytest against a different API. By default, it runs agains the 
 - `poetry run pytest -v --api-key=SOME_API_KEY` Run all tests with the specified API key (will run against the staging API since that's the default)
 - `poetry run pytest --help` View usage for pytest, including the usage for custom options (see the 'custom options' section of the output)
 
-Below are some more commands for evaluating the Pytest coverage.
+Below are some more commands for evaluating the PyTest coverage.
 
 - `poetry run coverage report` View test coverage report
 - `poetry run coverage html` Generate an HTML page of the coverage report
