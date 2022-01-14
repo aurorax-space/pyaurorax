@@ -3,7 +3,6 @@ Class definition for an ephemeris record
 """
 
 import datetime
-import pprint
 from pydantic import BaseModel
 from typing import Dict, Optional
 from ...location import Location
@@ -33,7 +32,7 @@ class Ephemeris(BaseModel):
     location_gsm: Optional[Location] = Location(lat=None, lon=None)
     nbtrace: Location
     sbtrace: Location
-    metadata: Dict = None
+    metadata: Optional[Dict] = None
 
     def to_json_serializable(self) -> Dict:
         """
@@ -93,4 +92,14 @@ class Ephemeris(BaseModel):
         Returns:
             object representation of Ephemeris
         """
-        return pprint.pformat(self.__dict__)
+        # shorten the metadata
+        max_len = 20
+        attr_metadata = f"{self.metadata}"
+        if (len(attr_metadata) > max_len):
+            attr_metadata = attr_metadata[0:max_len] + "...}"
+
+        # return formatted representation
+        return f"Ephemeris(data_source={repr(self.data_source)}, epoch={repr(self.epoch)}, " \
+            f"location_geo={repr(self.location_geo)}, location_gsm={repr(self.location_gsm)}, " \
+            f"nbtrace={repr(self.nbtrace)}, nbtrace={repr(self.nbtrace)}, " \
+            f"metadata={attr_metadata})"

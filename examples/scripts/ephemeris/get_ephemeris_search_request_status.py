@@ -5,9 +5,6 @@ import pprint
 
 
 def main():
-    # set to staging
-    pyaurorax.api.set_base_url("https://api.staging.aurorax.space")
-
     # start search
     print("Executing request ...")
     s = pyaurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
@@ -30,7 +27,7 @@ def main():
         s.update_status()
 
     # print status
-    pprint.pprint(s)
+    pprint.pprint(s.status)
 
 
 # ----------

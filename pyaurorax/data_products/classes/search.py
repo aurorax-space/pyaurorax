@@ -107,12 +107,8 @@ class Search():
         Returns:
             object representation of DataProduct Search object
         """
-        if (self.executed is True):
-            r = f"DataProductsSearch(executed={self.executed}, " \
-                f"completed={self.completed}, request_id='{self.request_id}')"
-        else:
-            r = f"DataProductsSearch(executed={self.executed})"
-        return r
+        return f"DataProductsSearch(executed={self.executed}, " \
+            f"completed={self.completed}, request_id='{self.request_id}')"
 
     @property
     def query(self):

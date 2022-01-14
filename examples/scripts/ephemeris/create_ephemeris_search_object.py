@@ -3,7 +3,6 @@ import datetime
 
 
 def main():
-    # start search
     s = pyaurorax.ephemeris.Search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                    datetime.datetime(2020, 1, 10, 0, 0, 0),
                                    programs=["swarm"],

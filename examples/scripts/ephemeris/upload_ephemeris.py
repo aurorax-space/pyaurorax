@@ -30,7 +30,7 @@ def main():
     source = pyaurorax.sources.get_using_filters(program=[program],
                                                  platform=[platform],
                                                  instrument_type=[instrument_type])
-    identifier = source[0]["identifier"]
+    identifier = source[0].identifier
 
     # create Ephemeris object
     e = pyaurorax.ephemeris.Ephemeris(identifier=identifier,

@@ -151,12 +151,8 @@ class Search():
         Returns:
             object representation of Conjunction Search object
         """
-        if (self.executed is True):
-            r = f"ConjunctionSearch(executed={self.executed}, " \
-                f"completed={self.completed}, request_id='{self.request_id}')"
-        else:
-            r = f"ConjunctionSearch(executed={self.executed})"
-        return r
+        return f"ConjunctionSearch(executed={self.executed}, " \
+            f"completed={self.completed}, request_id='{self.request_id}')"
 
     def check_criteria_block_count_validity(self) -> None:
         """

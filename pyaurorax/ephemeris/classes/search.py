@@ -6,6 +6,7 @@ import datetime
 from typing import Dict, List, Union, Optional
 from .ephemeris import Ephemeris
 from ...api import AuroraXRequest, AuroraXResponse, urls
+from ...sources import DataSource, FORMAT_BASIC_INFO
 from ...exceptions import (AuroraXBadParametersException)
 from ...requests import (STANDARD_POLLING_SLEEP_TIME,
                          cancel as requests_cancel,
@@ -104,12 +105,8 @@ class Search():
         Returns:
             object representation of Ephemeris Search object
         """
-        if (self.executed is True):
-            r = f"EphemerisSearch(executed={self.executed}, " \
-                f"completed={self.completed}, request_id='{self.request_id}')"
-        else:
-            r = f"EphemerisSearch(executed={self.executed})"
-        return r
+        return f"EphemerisSearch(executed={self.executed}, " \
+            f"completed={self.completed}, request_id='{self.request_id}')"
 
     @property
     def query(self):
@@ -217,6 +214,12 @@ class Search():
         if self.response_format is not None:
             self.data = raw_data
         else:
+            # cast data source objects
+            for i in range(0, len(raw_data)):
+                ds = DataSource(**raw_data[i]["data_source"], format=FORMAT_BASIC_INFO)
+                raw_data[i]["data_source"] = ds
+
+            # cast ephemeris objects
             self.data = [Ephemeris(**e) for e in raw_data]
 
     def wait(self,
