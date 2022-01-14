@@ -1,4 +1,4 @@
-.PHONY: install update test test-linting test-flake8 test-pycodestyle test-pylint test-bandit test-mypy test-pytest test-additional docs publish
+.PHONY: install update test test-linting test-flake8 test-pycodestyle test-pylint test-bandit test-mypy test-pytest test-coverage docs publish
 
 all:
 
@@ -45,21 +45,20 @@ test-mypy:
 
 test-pytest pytest:
 	@printf "Running pytest tests\n+++++++++++++++++++++++++++\n"
-	poetry run pytest -v
+	poetry run coverage run -m pytest -v
 	@printf "\n\n"
 
 test-pytest-unauthorized-access:
-	poetry run pytest -v -k "test_AuroraXUnauthorizedException"
+	poetry run coverage run -m pytest -v -k "test_AuroraXUnauthorizedException"
 
 test-pytest-read:
-	poetry run pytest -v -k "not test_AuroraXUnauthorizedException and not add and not upload and not update and not delete"
+	poetry run coverage run -m pytest -v -k "not test_AuroraXUnauthorizedException and not add and not upload and not update and not delete"
 
 test-pytest-create-update-delete:
-	poetry run pytest -v -k "add or upload or update or delete"
+	poetry run coverage run -m pytest -v -k "add or upload or update or delete"
 
-test-additional:
-	@echo "Test coverage ...\n============================="
-	-poetry run coverage report
+test-coverage:
+	poetry run coverage report
 
 docs:
 	poetry run python3 -m pdoc --html --force --output-dir docs pyaurorax --config "lunr_search={'fuzziness': 1}"
