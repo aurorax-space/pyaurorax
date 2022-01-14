@@ -108,6 +108,132 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
     click.echo(table.draw())
 
 
+@sources_group.command("search", short_help="Search for data sources")
+@click.option("--programs", type=str,
+              help="Search for program (comma separate for multiple values)")
+@click.option("--platforms", type=str,
+              help="Search for platform (comma separate for multiple values)")
+@click.option("--instrument-types", type=str,
+              help="Search for instrument type (comma separate for multiple values)")
+@click.option("--order", type=click.Choice(["identifier", "program", "platform",
+                                            "instrument_type", "display_name",
+                                            "owner"]),
+              default="identifier", help="Order results using a certain column")
+@click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
+@click.pass_obj
+def search(config, programs, platforms, instrument_types, order, reversed_):
+    """
+    Search for data sources using the options to filter as desired. Unlike
+    the 'list' command filters, this command supports multiple programs,
+    platforms, or instrument types (using commas).
+    """
+    # set programs values
+    parsed_programs = []
+    if (programs is None):
+        pass
+    elif (',' in programs):
+        for p in programs.split(','):
+            p = p.strip()
+            if (len(p) > 0):
+                parsed_programs.append(p)
+    else:
+        parsed_programs = [programs]
+
+    # set platforms values
+    parsed_platforms = []
+    if (platforms is None):
+        pass
+    elif (',' in platforms):
+        for p in platforms.split(','):
+            p = p.strip()
+            if (len(p) > 0):
+                parsed_platforms.append(p)
+    else:
+        parsed_platforms = [platforms]
+
+    # set instrument_types values
+    parsed_instrument_types = []
+    if (instrument_types is None):
+        pass
+    elif (',' in instrument_types):
+        for p in instrument_types.split(','):
+            p = p.strip()
+            if (len(p) > 0):
+                parsed_instrument_types.append(p)
+    else:
+        parsed_instrument_types = [instrument_types]
+
+    # search for data sources
+    try:
+        sources = pyaurorax.sources.search(programs=parsed_programs,
+                                           platforms=parsed_platforms,
+                                           instrument_types=parsed_instrument_types,
+                                           order=order)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
+
+    # reverse
+    if (reversed_ is True):
+        sources = reversed(sources)
+
+    # decide if we want to show the owner
+    show_owner = False
+    if (order == "owner"):
+        show_owner = True
+
+    # set table lists
+    table_identifiers = []
+    table_programs = []
+    table_platforms = []
+    table_instrument_types = []
+    table_source_types = []
+    table_display_names = []
+    table_owners = []
+    for source in sources:
+        table_identifiers.append(source.identifier)
+        table_programs.append(source.program)
+        table_platforms.append(source.platform)
+        table_instrument_types.append(source.instrument_type)
+        table_source_types.append(source.source_type)
+        table_display_names.append(source.display_name)
+        table_owners.append(source.owner)
+
+    # set header values
+    table_headers = ["Identifier", "Display Name", "Program",
+                     "Platform", "Instrument Type", "Source Type"]
+    if (show_owner is True):
+        table_headers.append("Owner")
+    for i in range(0, len(table_headers)):
+        if (table_headers[i].lower().replace(' ', '_') == order):
+            table_headers[i] += " " + "\u2193"
+
+    # output information
+    table = Texttable(max_width=400)
+    table.set_deco(Texttable.HEADER)
+    table.set_cols_dtype(["t"] * len(table_headers))
+    table.set_header_align(["l"] * len(table_headers))
+    table.set_cols_align(["l"] * len(table_headers))
+    table.header(table_headers)
+    for i in range(0, len(table_identifiers)):
+        if (show_owner is True):
+            table.add_row([table_identifiers[i],
+                           table_display_names[i],
+                           table_programs[i],
+                           table_platforms[i],
+                           table_instrument_types[i],
+                           table_source_types[i],
+                           table_owners[i]])
+        else:
+            table.add_row([table_identifiers[i],
+                           table_display_names[i],
+                           table_programs[i],
+                           table_platforms[i],
+                           table_instrument_types[i],
+                           table_source_types[i]])
+    click.echo(table.draw())
+
+
 @sources_group.command("add", short_help="Add a data source")
 @click.argument("program", type=str)
 @click.argument("platform", type=str)
