@@ -51,6 +51,11 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
     if (reversed_ is True):
         sources = reversed(sources)
 
+    # decide if we want to show the owner
+    show_owner = False
+    if (owner is not None or order == "owner"):
+        show_owner = True
+
     # set table lists
     table_identifiers = []
     table_programs = []
@@ -70,8 +75,9 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
 
     # set header values
     table_headers = ["Identifier", "Display Name", "Program",
-                     "Platform", "Instrument Type", "Source Type",
-                     "Owner"]
+                     "Platform", "Instrument Type", "Source Type"]
+    if (show_owner is True):
+        table_headers.append("Owner")
     for i in range(0, len(table_headers)):
         if (table_headers[i].lower().replace(' ', '_') == order):
             table_headers[i] += " " + "\u2193"
@@ -79,26 +85,26 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
     # output information
     table = Texttable(max_width=400)
     table.set_deco(Texttable.HEADER)
-    table.set_cols_dtype([
-        't',  # text
-        't',  # text
-        't',  # text
-        't',  # text
-        't',  # text
-        't',  # text
-        't',  # text
-    ])
-    table.set_header_align(["l", "l", "l", "l", "l", "l", "l"])
-    table.set_cols_align(["l", "l", "l", "l", "l", "l", "l"])
+    table.set_cols_dtype(["t"] * len(table_headers))
+    table.set_header_align(["l"] * len(table_headers))
+    table.set_cols_align(["l"] * len(table_headers))
     table.header(table_headers)
     for i in range(0, len(table_identifiers)):
-        table.add_row([table_identifiers[i],
-                       table_display_names[i],
-                       table_programs[i],
-                       table_platforms[i],
-                       table_instrument_types[i],
-                       table_source_types[i],
-                       table_owners[i]])
+        if (show_owner is True):
+            table.add_row([table_identifiers[i],
+                           table_display_names[i],
+                           table_programs[i],
+                           table_platforms[i],
+                           table_instrument_types[i],
+                           table_source_types[i],
+                           table_owners[i]])
+        else:
+            table.add_row([table_identifiers[i],
+                           table_display_names[i],
+                           table_programs[i],
+                           table_platforms[i],
+                           table_instrument_types[i],
+                           table_source_types[i]])
     click.echo(table.draw())
 
 
@@ -120,7 +126,6 @@ def add(config, program, platform, instrument_type, source_type, display_name, i
     INSTRUMENT_TYPE     the instrument type to set
     SOURCE_TYPE         the source type to set
     DISPLAY_NAME        the display name to set
-
     """
     # add data source
     try:
@@ -133,6 +138,37 @@ def add(config, program, platform, instrument_type, source_type, display_name, i
         added_ds = pyaurorax.sources.add(new_ds)
         click.echo("Created data source successfully\n")
         click.echo(added_ds)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
+
+
+@sources_group.command("update", short_help="Update a data source")
+@click.argument("identifier", type=str)
+@click.option("--program", type=str, help="New program value")
+@click.option("--platform", type=str, help="New platform value")
+@click.option("--instrument-type", type=str, help="New instrument type value")
+@click.option("--source-type", type=click.Choice(SUPPORTED_SOURCE_TYPES),
+              help="New source type value")
+@click.option("--display-name", type=str, help="New display name value")
+@click.pass_obj
+def update(config, identifier, program, platform, instrument_type, source_type, display_name):
+    """
+    Update a data source
+
+    \b
+    IDENTIFIER          the identifier of the data source to update
+    """
+    # get data sources
+    try:
+        ds = pyaurorax.sources.update_partial(identifier,
+                                              program=program,
+                                              platform=platform,
+                                              instrument_type=instrument_type,
+                                              source_type=source_type,
+                                              display_name=display_name)
+        click.echo("Updated data source successfully\n")
+        click.echo(ds)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)

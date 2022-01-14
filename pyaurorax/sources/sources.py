@@ -413,7 +413,7 @@ def update(data_source: DataSource) -> DataSource:
         raise AuroraXException("Could not update data source")
 
 
-def partial_update(identifier: int,
+def update_partial(identifier: int,
                    program: Optional[str] = None,
                    platform: Optional[str] = None,
                    instrument_type: Optional[str] = None,
@@ -481,3 +481,31 @@ def partial_update(identifier: int,
         return get_using_identifier(ds.identifier, format=FORMAT_FULL_RECORD)
     except Exception:
         raise AuroraXException("Could not update data source")
+
+
+@DeprecationWarning
+def partial_update(identifier: int,
+                   program: Optional[str] = None,
+                   platform: Optional[str] = None,
+                   instrument_type: Optional[str] = None,
+                   source_type: Optional[str] = None,
+                   display_name: Optional[str] = None,
+                   metadata: Optional[Dict] = None,
+                   owner: Optional[str] = None,
+                   maintainers: Optional[List[str]] = None,
+                   ephemeris_metadata_schema: Optional[List[Dict]] = None,
+                   data_product_metadata_schema: Optional[List[Dict]] = None) -> DataSource:
+    warnings.warn("The 'partial_update' function has been deprecated as of 0.9.0, and will "
+                  "be removed in a future release. Please use the 'update_partial' function "
+                  "instead.")
+    return update_partial(identifier,
+                          program=program,
+                          platform=platform,
+                          instrument_type=instrument_type,
+                          source_type=source_type,
+                          display_name=display_name,
+                          metadata=metadata,
+                          owner=owner,
+                          maintainers=maintainers,
+                          ephemeris_metadata_schema=ephemeris_metadata_schema,
+                          data_product_metadata_schema=data_product_metadata_schema)

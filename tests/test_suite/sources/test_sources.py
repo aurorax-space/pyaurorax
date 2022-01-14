@@ -171,7 +171,7 @@ def test_update_source_partial():
         assert False
 
     # partially update the data source
-    updated_ds = pyaurorax.sources.partial_update(identifier=ds.identifier,
+    updated_ds = pyaurorax.sources.update_partial(identifier=ds.identifier,
                                                   instrument_type="test-instrument-updated-partial",
                                                   metadata={},
                                                   ephemeris_metadata_schema=[])

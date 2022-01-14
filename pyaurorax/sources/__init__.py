@@ -81,6 +81,7 @@ from .sources import (get,
                       add,
                       delete,
                       update,
+                      update_partial,
                       partial_update)
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
@@ -112,7 +113,7 @@ __all__ = [
     "add",
     "delete",
     "update",
-    "partial_update",
+    "update_partial",
     "DataSource",
     "DataSourceStatistics",
 ]
