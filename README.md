@@ -123,10 +123,7 @@ Below are some more commands for advanced usages of PyTest.
 - `poetry run pytest -v` Run all tests in verbose mode
 - `poetry run pytest --collect-only` List all available tests
 - `poetry run pytest --markers` List all markers (includes builtin, plugin and per-project ones)
-- `poetry run coverage report` View test coverage report
 - `cat pytest.ini` List custom markers
-
-Note that the coverage report only gets updated when using the Makefile pytest targets, or when running coverage manually like `coverage run -m pytest -v`.
 
 You can also run Pytest against a different API. By default, it runs agains the staging API, but you can alternatively tell it to run against the production API, or a local instance.
 
@@ -134,3 +131,11 @@ You can also run Pytest against a different API. By default, it runs agains the 
 - `poetry run pytest --env=local --host=http://localhost:3000` Run all tests against a local instance of the API, using the AURORAX_APIKEY_LOCAL environment variable
 - `poetry run pytest -v --api-key=SOME_API_KEY` Run all tests with the specified API key (will run against the staging API since that's the default)
 - `poetry run pytest --help` View usage for pytest, including the usage for custom options (see the 'custom options' section of the output)
+
+Below are some more commands for evaluating the Pytest coverage.
+
+- `poetry run coverage report` View test coverage report
+- `poetry run coverage html` Generate an HTML page of the coverage report
+- `poetry run coverage report --show-missing` View the test coverage report and include the lines deemed to be not covered by tests
+
+Note that the coverage report only gets updated when using the Makefile pytest targets, or when running coverage manually like `coverage run -m pytest -v`. More information about usage of the `coverage` command can be found [here](https://coverage.readthedocs.io)
