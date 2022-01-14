@@ -73,6 +73,60 @@ def list(program: Optional[str] = None,
         return []
 
 
+def search(programs: Optional[List[str]] = [],
+           platforms: Optional[List[str]] = [],
+           instrument_types: Optional[List[str]] = [],
+           format: Optional[str] = FORMAT_FULL_RECORD,
+           order: Optional[str] = "identifier") -> List[DataSource]:
+    """
+    Search for data source records (using params to filter as desired)
+
+    This is very similar to the 'list' function, however multiple programs,
+    platforms, and/or instrument types can be supplied to this function. The
+    'list' function only supports single values for those parameters.
+
+    Args:
+        programs: the programs to filter for, defaults to []
+        platforms: the platforms to filter for, defaults to []
+        instrument_type: the instrument types to filter for, defaults to []
+        format: the format of the data sources returned, defaults to "full_record".
+            Other options are in the pyaurorax.sources module, or at the top level
+            using the pyaurorax.FORMAT_* variables.
+        order: the value to order results by (identifier, program, platform,
+            instrument_type, display_name), defaults to "identifier"
+
+    Returns:
+        any data sources matching the requested parameters
+
+    Raises:
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+    """
+    # make request
+    request_data = {
+        "programs": programs,
+        "platforms": platforms,
+        "instrument_types": instrument_types,
+    }
+    params = {
+        "format": format,
+    }
+    req = AuroraXRequest(method="post",
+                         url=urls.data_sources_search_url,
+                         params=params,
+                         body=request_data)
+    res = req.execute()
+
+    # order results
+    res.data = sorted(res.data, key=lambda x: x[order])
+
+    # return
+    if len(res.data):
+        return [DataSource(**ds, format=format) for ds in res.data]
+    else:
+        return []
+
+
 def get(program: str,
         platform: str,
         instrument_type: str,

@@ -13,7 +13,7 @@ __pdoc__: Dict = {}
 
 class URLs:
     __DEFAULT_URL_DATA_SOURCES = "/api/v1/data_sources"
-    __DEFAULT_URL_STATS = "/api/v1/stats"
+    __DEFAULT_URL_DATA_SOURCES_SEARCH = "/api/v1/data_sources/search"
     __DEFAULT_URL_EPHEMERIS_AVAILABILITY = "/api/v1/availability/ephemeris"
     __DEFAULT_URL_EPHEMERIS_UPLOAD = "/api/v1/data_sources/{}/ephemeris"
     __DEFAULT_URL_EPHEMERIS_SEARCH = "/api/v1/ephemeris/search"
@@ -31,7 +31,7 @@ class URLs:
     def __init__(self, base_url: str = DEFAULT_BASE_URL) -> None:
         self.__base = base_url
         self.__data_sources = self.__DEFAULT_URL_DATA_SOURCES
-        self.__stats = self.__DEFAULT_URL_STATS
+        self.__data_sources_search = self.__DEFAULT_URL_DATA_SOURCES_SEARCH
         self.__ephemeris_availability = self.__DEFAULT_URL_EPHEMERIS_AVAILABILITY
         self.__ephemeris_search = self.__DEFAULT_URL_EPHEMERIS_SEARCH
         self.__ephemeris_upload = self.__DEFAULT_URL_EPHEMERIS_UPLOAD
@@ -61,8 +61,8 @@ class URLs:
         return f"{self.__base}{self.__data_sources}"
 
     @property
-    def stats_url(self) -> str:
-        return f"{self.__base}{self.__stats}"
+    def data_sources_search_url(self) -> str:
+        return f"{self.__base}{self.__data_sources_search}"
 
     # availability
     # -------------------
