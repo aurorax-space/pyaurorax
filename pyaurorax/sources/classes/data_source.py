@@ -2,9 +2,12 @@
 Class definition for a data source
 """
 
-import pprint
 from pydantic import BaseModel
 from typing import List, Dict, Optional
+from ...sources import (FORMAT_BASIC_INFO,
+                        FORMAT_BASIC_INFO_WITH_METADATA,
+                        FORMAT_IDENTIFIER_ONLY,
+                        FORMAT_FULL_RECORD)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -33,6 +36,9 @@ class DataSource(BaseModel):
         data_product_metadata_schema: a list of dictionaries capturing the metadata
             keys and values that can appear in data product records associated with
             this data source
+        format: the format used when printing the data source, defaults to
+            "full_record". Other options are in the pyaurorax.sources module, or
+            at the top level using the pyaurorax.FORMAT_* variables.
     """
     identifier: Optional[int] = None
     program: Optional[str] = None
@@ -45,6 +51,7 @@ class DataSource(BaseModel):
     maintainers: Optional[List[str]] = None
     ephemeris_metadata_schema: Optional[List[Dict]] = None
     data_product_metadata_schema: Optional[List[Dict]] = None
+    format: Optional[str] = FORMAT_FULL_RECORD
 
     def __str__(self) -> str:
         """
@@ -62,4 +69,64 @@ class DataSource(BaseModel):
         Returns:
             object representation of DataSource object
         """
-        return pprint.pformat(self.__dict__)
+        # set each attribute string
+        attr_identifier = "None" if self.identifier is None else f"{self.identifier}"
+        attr_program = "None" if self.program is None else f"'{self.program}'"
+        attr_platform = "None" if self.platform is None else f"'{self.platform}'"
+        attr_instrument_type = "None" if self.instrument_type is None else f"'{self.instrument_type}'"
+        attr_source_type = "None" if self.source_type is None else f"'{self.source_type}'"
+        attr_display_name = "None" if self.display_name is None else f"'{self.display_name}'"
+        attr_metadata = "None" if self.metadata is None else f"{self.metadata}"
+        attr_owner = "None" if self.owner is None else f"'{self.owner}'"
+        attr_maintainers = "None" if self.maintainers is None else f"{self.maintainers}"
+        attr_eph_schema = "None" if self.ephemeris_metadata_schema is None else f"{self.ephemeris_metadata_schema}"
+        attr_dp_schema = "None" if self.data_product_metadata_schema is None else f"{self.data_product_metadata_schema}"
+
+        # shorten strings
+        max_len = 20
+        if (len(attr_metadata) > max_len):
+            attr_metadata = attr_metadata[0:max_len] + "...}"
+        if (len(attr_eph_schema) > max_len):
+            attr_eph_schema = attr_eph_schema[0:max_len] + "...}]"
+        if (len(attr_dp_schema) > max_len):
+            attr_dp_schema = attr_dp_schema[0:max_len] + "...}]"
+
+        # for each format type, construct the repr to return
+        if (self.format == FORMAT_IDENTIFIER_ONLY):
+            r = "DataSource(identifier=%s)" % (attr_identifier)
+        elif (self.format == FORMAT_BASIC_INFO):
+            r = "DataSource(identifier=%s, program=%s, platform=%s, " \
+                "instrument_type=%s, source_type=%s, display_name=%s)" % (attr_identifier,
+                                                                          attr_program,
+                                                                          attr_platform,
+                                                                          attr_instrument_type,
+                                                                          attr_source_type,
+                                                                          attr_display_name)
+        elif (self.format == FORMAT_BASIC_INFO_WITH_METADATA):
+            r = "DataSource(identifier=%s, program=%s, platform=%s, " \
+                "instrument_type=%s, source_type=%s, display_name=%s, " \
+                "metadata=%s)" % (attr_identifier,
+                                  attr_program,
+                                  attr_platform,
+                                  attr_instrument_type,
+                                  attr_source_type,
+                                  attr_display_name,
+                                  attr_metadata)
+        elif (self.format == FORMAT_FULL_RECORD):
+            r = "DataSource(identifier=%s, program=%s, platform=%s, " \
+                "instrument_type=%s, source_type=%s, display_name=%s, " \
+                "metadata=%s, owner=%s, maintainers=%s, ephemeris_metadata_schema=%s, " \
+                "data_product_metadata_schema=%s)" % (attr_identifier,
+                                                      attr_program,
+                                                      attr_platform,
+                                                      attr_instrument_type,
+                                                      attr_source_type,
+                                                      attr_display_name,
+                                                      attr_metadata,
+                                                      attr_owner,
+                                                      attr_maintainers,
+                                                      attr_eph_schema,
+                                                      attr_dp_schema)
+
+        # return constructed repr
+        return r

@@ -3,9 +3,9 @@ Class definition for a data product search
 """
 
 import datetime
-import pprint
 from typing import Dict, List, Union, Optional
 from .data_product import DataProduct
+from ...sources import DataSource, FORMAT_BASIC_INFO
 from ...api import AuroraXRequest, AuroraXResponse, urls
 from ...requests import (STANDARD_POLLING_SLEEP_TIME,
                          cancel as requests_cancel,
@@ -107,7 +107,8 @@ class Search():
         Returns:
             object representation of DataProduct Search object
         """
-        return pprint.pformat(self.__dict__)
+        return f"DataProductsSearch(executed={self.executed}, " \
+            f"completed={self.completed}, request_id='{self.request_id}')"
 
     @property
     def query(self):
@@ -207,6 +208,12 @@ class Search():
         if self.response_format is not None:
             self.data = raw_data
         else:
+            # cast data source objects
+            for i in range(0, len(raw_data)):
+                ds = DataSource(**raw_data[i]["data_source"], format=FORMAT_BASIC_INFO)
+                raw_data[i]["data_source"] = ds
+
+            # cast data product objects
             self.data = [DataProduct(**dp) for dp in raw_data]
 
     def wait(self,

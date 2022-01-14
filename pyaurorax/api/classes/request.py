@@ -3,7 +3,6 @@ Class definition used for managing an API request
 """
 
 import json
-import pprint
 import requests
 from pydantic import BaseModel
 from typing import Optional, Dict, List, Union
@@ -182,4 +181,4 @@ class AuroraXRequest(BaseModel):
         Returns:
             object representation of AuroraXRequest
         """
-        return pprint.pformat(self.__dict__)
+        return f"AuroraXRequest(method='{self.method}', url='{self.url}')"

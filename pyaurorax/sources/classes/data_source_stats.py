@@ -3,7 +3,6 @@ Class definition for a statistics about a data source
 """
 
 import datetime
-import pprint
 from pydantic import BaseModel
 from typing import Dict, Optional
 from .data_source import DataSource
@@ -41,12 +40,3 @@ class DataSourceStatistics(BaseModel):
             string format of DataSource object
         """
         return self.__repr__()
-
-    def __repr__(self) -> str:
-        """
-        Object representation
-
-        Returns:
-            object representation of DataSource object
-        """
-        return pprint.pformat(self.__dict__)

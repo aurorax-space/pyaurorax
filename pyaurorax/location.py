@@ -38,7 +38,7 @@ class Location(BaseModel):
         Returns:
             string format of Location object
         """
-        return str(self.__dict__)
+        return self.__repr__()
 
     def __repr__(self) -> str:
         """

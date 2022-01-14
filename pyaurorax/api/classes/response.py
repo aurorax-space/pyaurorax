@@ -3,7 +3,6 @@ Class definition used for managing the response from an
 API request
 """
 
-import pprint
 from pydantic import BaseModel
 from typing import Dict, Any
 
@@ -40,4 +39,4 @@ class AuroraXResponse(BaseModel):
         Returns:
             object representation of AuroraXResponse
         """
-        return pprint.pformat(self.__dict__)
+        return f"AuroraXResponse [{self.status_code}]"
