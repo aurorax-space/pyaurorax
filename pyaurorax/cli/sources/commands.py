@@ -1,4 +1,5 @@
 import sys
+import pprint
 import click
 import pyaurorax
 from texttable import Texttable
@@ -232,6 +233,31 @@ def search(config, programs, platforms, instrument_types, order, reversed_):
                            table_instrument_types[i],
                            table_source_types[i]])
     click.echo(table.draw())
+
+
+@sources_group.command("get", short_help="Get complete single data source record")
+@click.argument("program", type=str)
+@click.argument("platform", type=str)
+@click.argument("instrument_type", type=str)
+@click.pass_obj
+def get(config, program, platform, instrument_type):
+    """
+    Get a complete `single data source record (full record format)
+
+    \b
+    PROGRAM             the program value
+    PLATFORM            the platform value
+    INSTRUMENT_TYPE     the instrument type value
+    """
+    # get data source
+    try:
+        ds = pyaurorax.sources.get(program=program,
+                                   platform=platform,
+                                   instrument_type=instrument_type)
+        click.echo(pprint.pformat(ds.__dict__))
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
 
 
 @sources_group.command("add", short_help="Add a data source")
