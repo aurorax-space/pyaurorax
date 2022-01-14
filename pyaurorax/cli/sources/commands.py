@@ -172,3 +172,22 @@ def update(config, identifier, program, platform, instrument_type, source_type, 
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
+
+
+@sources_group.command("delete", short_help="Delete a data source")
+@click.argument("identifier", type=int)
+@click.pass_obj
+def delete(config, identifier):
+    """
+    Delete a data source
+
+    \b
+    IDENTIFIER          the identifier of the data source to delete
+    """
+    # delete data source
+    try:
+        pyaurorax.sources.delete(identifier)
+        click.echo("Successfully deleted data source #%d" % (identifier))
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
