@@ -1,6 +1,7 @@
 import sys
 import pprint
 import click
+import humanize
 import pyaurorax
 from texttable import Texttable
 
@@ -249,7 +250,6 @@ def get(config, program, platform, instrument_type):
     PLATFORM            the platform value
     INSTRUMENT_TYPE     the instrument type value
     """
-    # get data source
     try:
         ds = pyaurorax.sources.get(program=program,
                                    platform=platform,
@@ -270,17 +270,43 @@ def get_using_identifier(config, identifier):
     format), using an identifier
 
     \b
-    PROGRAM             the program value
-    PLATFORM            the platform value
-    INSTRUMENT_TYPE     the instrument type value
+    IDENTIFIER          the identifier of the data source
     """
-    # get data source
     try:
         ds = pyaurorax.sources.get_using_identifier(identifier)
         click.echo(pprint.pformat(ds.__dict__))
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
+
+
+@sources_group.command("get_stats", short_help="Get statistics about a data source")
+@click.argument("identifier", type=int)
+@click.option("--slow", is_flag=True,
+              help="Retrieve stats information using a slower method (more accurate)")
+@click.pass_obj
+def get_stats(config, identifier, slow):
+    """
+    Get statistics about a data source
+
+    \b
+    IDENTIFIER          the identifier of the data source
+    """
+    # get stats information
+    try:
+        stats = pyaurorax.sources.get_stats(identifier, slow=slow, format=pyaurorax.FORMAT_BASIC_INFO)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
+
+    # print it out nicely
+    click.echo("Data source:\t\t\t%s" % (stats.data_source))
+    click.echo("Ephemeris count:\t\t%s" % (humanize.intcomma(stats.ephemeris_count)))
+    click.echo("Earliest ephemeris loaded:\t%s" % (stats.earliest_ephemeris_loaded))
+    click.echo("Latest ephemeris loaded:\t%s" % (stats.latest_ephemeris_loaded))
+    click.echo("Data product count:\t\t%s" % (humanize.intcomma(stats.data_product_count)))
+    click.echo("Earliest data product loaded:\t%s" % (stats.earliest_data_product_loaded))
+    click.echo("Latest data product loaded:\t%s" % (stats.latest_data_product_loaded))
 
 
 @sources_group.command("add", short_help="Add a data source")
@@ -302,7 +328,6 @@ def add(config, program, platform, instrument_type, source_type, display_name, i
     SOURCE_TYPE         the source type to set
     DISPLAY_NAME        the display name to set
     """
-    # add data source
     try:
         new_ds = pyaurorax.sources.DataSource(identifier=identifier,
                                               program=program,
@@ -334,7 +359,6 @@ def update(config, identifier, program, platform, instrument_type, source_type, 
     \b
     IDENTIFIER          the identifier of the data source to update
     """
-    # get data sources
     try:
         ds = pyaurorax.sources.update_partial(identifier,
                                               program=program,
@@ -359,7 +383,6 @@ def delete(config, identifier):
     \b
     IDENTIFIER          the identifier of the data source to delete
     """
-    # delete data source
     try:
         pyaurorax.sources.delete(identifier)
         click.echo("Successfully deleted data source #%d" % (identifier))
