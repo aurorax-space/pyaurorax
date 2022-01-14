@@ -138,4 +138,4 @@ Below are some more commands for evaluating the PyTest coverage.
 - `poetry run coverage html` Generate an HTML page of the coverage report
 - `poetry run coverage report --show-missing` View the test coverage report and include the lines deemed to be not covered by tests
 
-Note that the coverage report only gets updated when using the Makefile pytest targets, or when running coverage manually like `coverage run -m pytest -v`. More information about usage of the `coverage` command can be found [here](https://coverage.readthedocs.io)
+Note that the coverage report only gets updated when using the Makefile pytest targets, or when running coverage manually like `coverage run -m pytest -v`. More information about usage of the `coverage` command can be found [here](https://coverage.readthedocs.io).
