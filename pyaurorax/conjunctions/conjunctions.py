@@ -244,7 +244,7 @@ def search_async(start: datetime.datetime,
     """
     warnings.warn("This function is deprecated and will be removed in a future release. Please "
                   "use the 'search' function with the 'return_immediately' flag to produce the "
-                  "same behaviour.")
+                  "same behaviour.", DeprecationWarning, stacklevel=2)
     s = Search(start,
                end,
                distance,

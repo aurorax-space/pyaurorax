@@ -497,7 +497,7 @@ def partial_update(identifier: int,
                    data_product_metadata_schema: Optional[List[Dict]] = None) -> DataSource:
     warnings.warn("The 'partial_update' function has been deprecated as of 0.9.0, and will "
                   "be removed in a future release. Please use the 'update_partial' function "
-                  "instead.")
+                  "instead.", DeprecationWarning, stacklevel=2)
     return update_partial(identifier,
                           program=program,
                           platform=platform,

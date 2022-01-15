@@ -6,13 +6,13 @@ from ..helpers import (print_request_logs_table,
                        print_request_status)
 
 
-@click.group("ephemeris", help="Interact with ephemeris searches")
-def ephemeris_group():
+@click.group("conjunctions", help="Interact with conjunction searches")
+def conjunctions_group():
     pass
 
 
-@ephemeris_group.command("get_status",
-                         short_help="Get status info for an ephemeris search request")
+@conjunctions_group.command("get_status",
+                            short_help="Get status info for a conjunction search request")
 @click.argument("request_uuid", type=str)
 @click.option("--show-logs", "show_logs", is_flag=True,
               help="Show the logs for the request")
@@ -26,14 +26,14 @@ def ephemeris_group():
 @click.pass_obj
 def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_max_width):
     """
-    Get information for an ephemeris search request
+    Get information for a conjunction search request
 
     \b
     REQUEST_UUID    the request unique identifier
     """
     # get request status
     try:
-        url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+        url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
     except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
@@ -50,8 +50,8 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
                          table_max_width=table_max_width)
 
 
-@ephemeris_group.command("get_logs",
-                         short_help="Get logs for an ephemeris search request")
+@conjunctions_group.command("get_logs",
+                            short_help="Get logs for a conjunction search request")
 @click.argument("request_uuid", type=str)
 @click.option("--filter", "--filter-logs", "filter_",
               type=click.Choice(["debug", "info", "warn", "error"]),
@@ -61,14 +61,14 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
 @click.pass_obj
 def get_logs(config, request_uuid, filter_, table_max_width):
     """
-    Get the logs for an ephemeris search request
+    Get the logs for a conjunction search request
 
     \b
     REQUEST_UUID    the request unique identifier
     """
     # get request status
     try:
-        url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+        url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
     except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
@@ -86,20 +86,20 @@ def get_logs(config, request_uuid, filter_, table_max_width):
         click.echo("Search logs: missing, unable to display")
 
 
-@ephemeris_group.command("get_query",
-                         short_help="Get query for an ephemeris search request")
+@conjunctions_group.command("get_query",
+                            short_help="Get query for a conjunction search request")
 @click.argument("request_uuid", type=str)
 @click.pass_obj
 def get_query(config, request_uuid):
     """
-    Get the query for an ephemeris search request
+    Get the query for a conjunction search request
 
     \b
     REQUEST_UUID    the request unique identifier
     """
     # get request status
     try:
-        url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+        url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
     except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))

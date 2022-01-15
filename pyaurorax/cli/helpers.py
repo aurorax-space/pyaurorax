@@ -1,16 +1,34 @@
+import os
 import click
 import pprint
 import datetime
 import humanize
 import textwrap
+import warnings
 import pyaurorax
 from termcolor import colored
 from texttable import Texttable
 
 
-def print_request_logs_table(logs, filter_level=None):
+def print_request_logs_table(logs, filter_level=None, table_max_width=None):
     # init
-    wrap_threshold = 70
+    default_wrap_threshold = 70
+    if (table_max_width is None):
+        try:
+            terminal_columns = os.get_terminal_size().columns
+            wrap_threshold = terminal_columns - 38 - 5  # 38 is the size level+timestamp, 5 for some padding
+            if (wrap_threshold < 0):
+                warnings.warn("Terminal width is too small, using default "
+                              "table width which might not look good")
+                wrap_threshold = default_wrap_threshold
+        except Exception:
+            wrap_threshold = default_wrap_threshold
+    else:
+        wrap_threshold = table_max_width - 38 - 5  # 38 is the size level+timestamp, 5 for some padding
+        if (wrap_threshold < 0):
+            warnings.warn("Terminal width is too small, using default "
+                          "table width which might not look good")
+            wrap_threshold = default_wrap_threshold
 
     # set table lists
     table_levels = []
@@ -39,7 +57,8 @@ def print_request_logs_table(logs, filter_level=None):
     click.echo(table.draw())
 
 
-def print_request_status(s, show_logs=False, show_query=False, filter_logs=None):
+def print_request_status(s, show_logs=False, show_query=False,
+                         filter_logs=None, table_max_width=None):
     # set formatted output variables
     request_completed = colored("False", "yellow")
     request_completed_timestamp = "-"
@@ -83,7 +102,9 @@ def print_request_status(s, show_logs=False, show_query=False, filter_logs=None)
     if (show_logs is True):
         if ("logs" in s):
             click.echo()
-            print_request_logs_table(s["logs"], filter_level=filter_logs)
+            print_request_logs_table(s["logs"],
+                                     filter_level=filter_logs,
+                                     table_max_width=table_max_width)
         else:
             click.echo("Search logs: missing, unable to display")
 

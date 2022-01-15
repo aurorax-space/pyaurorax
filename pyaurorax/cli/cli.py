@@ -2,6 +2,8 @@ import requests
 import click
 import pyaurorax
 from .availability import commands as availability_commands
+from .conjunctions import commands as conjunctions_commands
+from .data_products import commands as data_products_commands
 from .ephemeris import commands as ephemeris_commands
 from .sources import commands as sources_commands
 
@@ -74,5 +76,7 @@ To learn more about usage, type:
 
 # add sub commands
 cli.add_command(availability_commands.availability_group)
+cli.add_command(conjunctions_commands.conjunctions_group)
+cli.add_command(data_products_commands.data_products_group)
 cli.add_command(ephemeris_commands.ephemeris_group)
 cli.add_command(sources_commands.sources_group)
