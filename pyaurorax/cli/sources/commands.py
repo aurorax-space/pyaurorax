@@ -368,9 +368,9 @@ def get(config, program, platform, instrument_type, format):
     Get a single data source record
 
     \b
-    PROGRAM             the program value
-    PLATFORM            the platform value
-    INSTRUMENT_TYPE     the instrument type value
+    PROGRAM           the program value
+    PLATFORM          the platform value
+    INSTRUMENT_TYPE   the instrument type value
     """
     # get the data source
     try:
@@ -398,7 +398,7 @@ def get_using_identifier(config, identifier, format):
     Get a single data source record using an identifier
 
     \b
-    IDENTIFIER          the identifier of the data source
+    IDENTIFIER     the identifier of the data source
     """
     # get data source
     try:
@@ -422,7 +422,7 @@ def get_stats(config, identifier, format):
     Get statistics about a data source
 
     \b
-    IDENTIFIER          the identifier of the data source
+    IDENTIFIER     the identifier of the data source
     """
     # get stats information
     try:
@@ -455,11 +455,11 @@ def add(config, program, platform, instrument_type, source_type, display_name, i
     Add a data source
 
     \b
-    PROGRAM             the program to set
-    PLATFORM            the platform to set
-    INSTRUMENT_TYPE     the instrument type to set
-    SOURCE_TYPE         the source type to set
-    DISPLAY_NAME        the display name to set
+    PROGRAM           the program to set
+    PLATFORM          the platform to set
+    INSTRUMENT_TYPE   the instrument type to set
+    SOURCE_TYPE       the source type to set
+    DISPLAY_NAME      the display name to set
     """
     try:
         new_ds = pyaurorax.sources.DataSource(identifier=identifier,
@@ -490,7 +490,7 @@ def update(config, identifier, program, platform, instrument_type, source_type, 
     Update a data source
 
     \b
-    IDENTIFIER          the identifier of the data source to update
+    IDENTIFIER     the identifier of the data source
     """
     try:
         ds = pyaurorax.sources.update_partial(identifier,
@@ -514,7 +514,7 @@ def delete(config, identifier):
     Delete a data source
 
     \b
-    IDENTIFIER          the identifier of the data source to delete
+    IDENTIFIER     the identifier of the data source
     """
     try:
         pyaurorax.sources.delete(identifier)

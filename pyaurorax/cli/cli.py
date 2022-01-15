@@ -2,6 +2,7 @@ import requests
 import click
 import pyaurorax
 from .sources import commands as sources_commands
+from .availability import commands as availability_commands
 
 # default context settings
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -71,4 +72,5 @@ To learn more about usage, type:
 
 
 # add sub commands
+cli.add_command(availability_commands.availability_group)
 cli.add_command(sources_commands.sources_group)
