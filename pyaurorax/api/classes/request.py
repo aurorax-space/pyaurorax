@@ -124,16 +124,25 @@ class AuroraXRequest(BaseModel):
         # check if authorization worked (raised by API or by Nginx)
         if (req.status_code == 401):
             if (req.headers["Content-Type"] == "application/json"):
-                raise AuroraXUnauthorizedException("%s %s" % (req.status_code,
-                                                              req.json()["error_message"]))
+                if ("error_message" in req.json()):
+                    # this will be an error message that the API meant to send
+                    raise AuroraXUnauthorizedException("%s %s" % (req.status_code,
+                                                                  req.json()["error_message"]))
+                else:
+                    raise AuroraXUnauthorizedException("Error 401: unauthorized")
             else:
                 raise AuroraXUnauthorizedException("Error 401: unauthorized")
 
         # check for 404 error (raised by API or by Nginx)
         if (req.status_code == 404):
             if (req.headers["Content-Type"] == "application/json"):
-                raise AuroraXNotFoundException("%s %s" % (req.status_code,
-                                                          req.json()["error_message"]))
+                if ("error_message" in req.json()):
+                    # this will be an error message that the API meant to send
+                    raise AuroraXNotFoundException("%s %s" % (req.status_code,
+                                                              req.json()["error_message"]))
+                else:
+                    # this will likely be a 404 from the java servlet
+                    raise AuroraXNotFoundException("Error 404: not found")
             else:
                 raise AuroraXNotFoundException("Error 404: not found")
 
