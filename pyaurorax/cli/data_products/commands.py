@@ -1,11 +1,13 @@
 import sys
 import click
 import pprint
-from dateutil.parser import parse
+import json
 import pyaurorax
+from dateutil.parser import parse
 from ..helpers import (print_request_logs_table,
                        print_request_status,
                        get_search_data)
+from ..templates import DATA_PRODUCTS_SEARCH_TEMPLATE
 
 
 @click.group("data_products", help="Interact with data product searches")
@@ -126,7 +128,7 @@ def get_query(config, request_uuid):
 @click.option("--output-to-terminal", type=click.Choice(["dict", "objects"]),
               help="output data to terminal in a certain format (instead of to file)")
 @click.option("--indent", type=int, default=2, show_default=True,
-              help="intendation when saving data to file or printing in 'dict' form")
+              help="indentation when saving data to file")
 @click.option("--minify", is_flag=True, help="Minify the JSON data saved to file")
 @click.pass_obj
 def get_data(config, request_uuid, outfile, output_to_terminal, indent, minify):
@@ -203,3 +205,21 @@ def search_resubmit(config, request_uuid):
 
     # output new request ID
     click.echo("Request has been resubmitted, new request ID is %s" % (s.request_id))
+
+
+@data_products_group.command("search_template",
+                             short_help="Output template for a data product search request")
+@click.option("--outfile", type=str, help="save template to a file")
+@click.option("--indent", type=int, default=2, show_default=True,
+              help="indentation to use when outputing template")
+@click.pass_obj
+def search_template(config, outfile, indent):
+    """
+    Output template for a data product search request
+    """
+    if (outfile is not None):
+        with open(outfile, 'w', encoding="utf-8") as fp:
+            json.dump(DATA_PRODUCTS_SEARCH_TEMPLATE, fp, indent=indent)
+        click.echo("Saved template to %s" % (outfile))
+    else:
+        click.echo(json.dumps(DATA_PRODUCTS_SEARCH_TEMPLATE, indent=indent))

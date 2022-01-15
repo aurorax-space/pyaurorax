@@ -209,7 +209,7 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
         click.echo()  # one line spacer
         if (output_to_terminal == "dict"):
             # print dict format
-            pprint.pprint(data, indent=indent)
+            pprint.pprint(data)
         else:
             # serialize the data and print
             for d in data:
