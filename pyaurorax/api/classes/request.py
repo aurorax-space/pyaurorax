@@ -13,6 +13,7 @@ from ...exceptions import (AuroraXMaxRetriesException,
                            AuroraXUnauthorizedException,
                            AuroraXNotFoundException,
                            AuroraXUnexpectedContentTypeException,
+                           AuroraXUnexpectedEmptyResponse,
                            AuroraXException)
 
 # pdoc init
@@ -91,6 +92,7 @@ class AuroraXRequest(BaseModel):
             pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
             pyaurorax.exceptions.AuroraXNotFoundException: requested resource was not found
             pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+            pyaurorax.exceptions.AuroraXUnexpectedEmptyResponse: unexpected empty response
             pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
         """
         # sanitize data
@@ -138,7 +140,10 @@ class AuroraXRequest(BaseModel):
         # check content type
         if (self.null_response is False):
             if (req.headers["Content-Type"] == "application/json"):
-                response_data = req.json()
+                if (len(req.content) == 0):
+                    raise AuroraXUnexpectedEmptyResponse("No response received")
+                else:
+                    response_data = req.json()
             else:
                 raise AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
                                                                          req.status_code))
