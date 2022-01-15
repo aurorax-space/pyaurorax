@@ -66,7 +66,8 @@ from .exceptions import (AuroraXException,
                          AuroraXUnauthorizedException,
                          AuroraXConflictException,
                          AuroraXUploadException,
-                         AuroraXUnexpectedEmptyResponse)
+                         AuroraXUnexpectedEmptyResponse,
+                         AuroraXDataRetrievalError)
 
 # pull in models
 from .location import Location
