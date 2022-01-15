@@ -2,6 +2,7 @@ import sys
 import click
 import pprint
 import pyaurorax
+from dateutil.parser import parse
 from ..helpers import (print_request_logs_table,
                        print_request_status,
                        get_search_data)
@@ -147,7 +148,7 @@ def get_data(config, request_uuid, outfile, output_to_terminal, indent, minify):
                             short_help="Resubmit a conjunction search request")
 @click.argument("request_uuid", type=str)
 @click.pass_obj
-def get_data(config, request_uuid):
+def search_resubmit(config, request_uuid):
     """
     Resubmit a conjunction search request
 
@@ -156,11 +157,44 @@ def get_data(config, request_uuid):
     """
     # get request status
     try:
+        click.echo("Retrieving query for request '%s' ..." % (request_uuid))
         url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
-        s = pyaurorax.requests.get_status(url)
+        status = pyaurorax.requests.get_status(url)
     except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
+
+    # set the query to use for resubmission
+    if ("query" not in status["search_request"]):
+        click.echo("Error resubmitting: missing query from original request ID")
+        sys.exit(1)
+    q = status["search_request"]["query"]
+
+    # create search object
+    click.echo("Preparing new search ...")
+    start = parse(q["start"], ignoretz=True)
+    end = parse(q["end"], ignoretz=True)
+    max_distances = q["max_distances"]
+    ground = None if "ground" not in q else q["ground"]
+    space = None if "space" not in q else q["space"]
+    events = None if "events" not in q else q["events"]
+    conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
+    epoch_search_precision = None if "epoch_search_precision" not in q else q["epoch_search_precision"]
+    s = pyaurorax.conjunctions.Search(start,
+                                      end,
+                                      distance=max_distances,
+                                      ground=ground,
+                                      space=space,
+                                      events=events,
+                                      conjunction_types=conjunction_types,
+                                      epoch_search_precision=epoch_search_precision)
+
+    # submit search
+    click.echo("Submitting new search ...")
+    s.execute()
+
+    # output new request ID
+    click.echo("Request has been resubmitted, new request ID is %s" % (s.request_id))

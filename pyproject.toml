@@ -45,6 +45,7 @@ click = "^8.0.3"
 texttable = "^1.6.4"
 aacgmv2 = { version = "^2.6.2", optional = true }
 termcolor = "^1.1.0"
+python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"

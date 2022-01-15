@@ -2,6 +2,7 @@ import sys
 import click
 import pprint
 import pyaurorax
+from dateutil.parser import parse
 from ..helpers import (print_request_logs_table,
                        print_request_status,
                        get_search_data)
@@ -141,3 +142,62 @@ def get_data(config, request_uuid, outfile, output_to_terminal, indent, minify):
                     output_to_terminal,
                     indent,
                     minify)
+
+
+@ephemeris_group.command("search_resubmit",
+                         short_help="Resubmit an ephemeris search request")
+@click.argument("request_uuid", type=str)
+@click.pass_obj
+def search_resubmit(config, request_uuid):
+    """
+    Resubmit an ephemeris search request
+
+    \b
+    REQUEST_UUID    the request unique identifier
+    """
+    # get request status
+    try:
+        click.echo("Retrieving query for request '%s' ..." % (request_uuid))
+        url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+        status = pyaurorax.requests.get_status(url)
+    except pyaurorax.AuroraXNotFoundException as e:
+        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        sys.exit(1)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
+
+    # set the query to use for resubmission
+    if ("query" not in status["search_request"]):
+        click.echo("Error resubmitting: missing query from original request ID")
+        sys.exit(1)
+    q = status["search_request"]["query"]
+
+    # create search object
+    click.echo("Preparing new search ...")
+    start = parse(q["start"], ignoretz=True)
+    end = parse(q["end"], ignoretz=True)
+    programs = None if "programs" not in q["data_sources"] else q["data_sources"]["programs"]
+    platforms = None if "platforms" not in q["data_sources"] else q["data_sources"]["platforms"]
+    instrument_types = None if "instrument_types" not in q["data_sources"] else q["data_sources"]["instrument_types"]
+    metadata_filters = None
+    metadata_filters_logical_operator = None
+    if ("ephemeris_metadata_filters" in q["data_sources"]):
+        if ("expressions" in q["data_sources"]["ephemeris_metadata_filters"]):
+            metadata_filters = q["data_sources"]["ephemeris_metadata_filters"]["expressions"]
+        if ("logical_operator" in q["data_sources"]["ephemeris_metadata_filters"]):
+            metadata_filters_logical_operator = q["data_sources"]["ephemeris_metadata_filters"]["logical_operator"]
+    s = pyaurorax.ephemeris.Search(start,
+                                   end,
+                                   programs=programs,
+                                   platforms=platforms,
+                                   instrument_types=instrument_types,
+                                   metadata_filters=metadata_filters,
+                                   metadata_filters_logical_operator=metadata_filters_logical_operator)
+
+    # submit search
+    click.echo("Submitting new search ...")
+    s.execute()
+
+    # output new request ID
+    click.echo("Request has been resubmitted, new request ID is %s" % (s.request_id))

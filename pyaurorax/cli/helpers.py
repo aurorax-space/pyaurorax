@@ -8,6 +8,7 @@ import textwrap
 import warnings
 import json
 import pyaurorax
+from dateutil.parser import parse
 from termcolor import colored
 from texttable import Texttable
 
@@ -46,8 +47,7 @@ def print_request_logs_table(logs, filter_level=None, table_max_width=None):
         if (filter_level is None or log["level"] == filter_level):
             table_levels.append(log["level"])
             table_summaries.append('\n'.join(textwrap.wrap(log["summary"], wrap_threshold)))
-            table_timestamps.append(datetime.datetime.strptime(log["timestamp"][0:-1],
-                                                               "%Y-%m-%dT%H:%M:%S.%f"))
+            table_timestamps.append(parse(log["timestamp"], ignoretz=True))
     # set header values
     table_headers = ["Timestamp", "Level", "Summary"]
 
@@ -76,8 +76,7 @@ def print_request_status(s, show_logs=False, show_query=False,
     # set formatted output variables
     request_completed = colored("False", "yellow")
     request_completed_timestamp = "-"
-    request_started_timestamp = datetime.datetime.strptime(s["search_request"]["requested"][0:-1],
-                                                           "%Y-%m-%dT%H:%M:%S.%f")
+    request_started_timestamp = parse(s["search_request"]["requested"], ignoretz=True)
     error_condition = "-"
     query_duration = "-"
     data_url = "-"
@@ -85,9 +84,8 @@ def print_request_status(s, show_logs=False, show_query=False,
     result_count = "-"
     if (s["search_result"]["completed_timestamp"] is not None):
         # set completed and completed timestamp
-        request_completed = colored("True", "green")
-        request_completed_timestamp = datetime.datetime.strptime(s["search_result"]["completed_timestamp"][0:-1],
-                                                                 "%Y-%m-%dT%H:%M:%S.%f")
+        request_completed = "True"
+        request_completed_timestamp = parse(s["search_result"]["completed_timestamp"], ignoretz=True)
 
         # humanize some values
         query_duration = "%s (%.0fms)" % (humanize.precisedelta(
