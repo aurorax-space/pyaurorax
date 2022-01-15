@@ -130,3 +130,6 @@ dmypy.json
 
 # Editor stuff
 .vscode
+
+# random downloaded files from aurorax-cli
+*_data.json

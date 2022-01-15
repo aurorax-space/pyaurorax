@@ -88,7 +88,8 @@ def __print_availability_table(type: str,
 @click.option("--source-type", type=str, help="The source type to filter for")
 @click.option("--order", type=click.Choice(["identifier", "program", "platform",
                                             "instrument_type", "display_name"]),
-              default="identifier", help="Order results using a certain column")
+              default="identifier", show_default=True,
+              help="Order results using a certain column")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
 def ephemeris(config, start_date, end_date, program, platform, instrument_type, source_type,
@@ -156,7 +157,8 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
 @click.option("--source-type", type=str, help="The source type to filter for")
 @click.option("--order", type=click.Choice(["identifier", "program", "platform",
                                             "instrument_type", "display_name"]),
-              default="identifier", help="Order results using a certain column")
+              default="identifier", show_default=True,
+              help="Order results using a certain column")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
 def data_products(config, start_date, end_date, program, platform, instrument_type, source_type,

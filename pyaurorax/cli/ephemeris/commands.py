@@ -3,7 +3,8 @@ import click
 import pprint
 import pyaurorax
 from ..helpers import (print_request_logs_table,
-                       print_request_status)
+                       print_request_status,
+                       get_search_data)
 
 
 @click.group("ephemeris", help="Interact with ephemeris searches")
@@ -115,3 +116,28 @@ def get_query(config, request_uuid):
         click.echo(pprint.pformat(query_to_show))
     else:
         click.echo("\nSearch query missing from request status, unable to display")
+
+
+@ephemeris_group.command("get_data",
+                         short_help="Get data for an ephemeris search request")
+@click.argument("request_uuid", type=str)
+@click.option("--outfile", type=str, help="output file to save data to (a .json file)")
+@click.option("--output-to-terminal", type=click.Choice(["dict", "objects"]),
+              help="output data to terminal in a certain format (instead of to file)")
+@click.option("--indent", type=int, default=2, show_default=True,
+              help="intendation when saving data to file or printing in 'dict' form")
+@click.option("--minify", is_flag=True, help="Minify the JSON data saved to file")
+@click.pass_obj
+def get_data(config, request_uuid, outfile, output_to_terminal, indent, minify):
+    """
+    Get the data for an ephemeris search request
+
+    \b
+    REQUEST_UUID    the request unique identifier
+    """
+    get_search_data("ephemeris",
+                    request_uuid,
+                    outfile,
+                    output_to_terminal,
+                    indent,
+                    minify)

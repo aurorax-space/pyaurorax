@@ -149,7 +149,8 @@ def sources_group():
 @click.option("--order", type=click.Choice(["identifier", "program", "platform",
                                             "instrument_type", "display_name",
                                             "owner"]),
-              default="identifier", help="Order results using a certain column")
+              default="identifier", show_default=True,
+              help="Order results using a certain column")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
 def list(config, program, platform, instrument_type, source_type, owner, order, reversed_):
@@ -239,7 +240,8 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
 @click.option("--order", type=click.Choice(["identifier", "program", "platform",
                                             "instrument_type", "display_name",
                                             "owner"]),
-              default="identifier", help="Order results using a certain column")
+              default="identifier", show_default=True,
+              help="Order results using a certain column")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
 def search(config, programs, platforms, instrument_types, order, reversed_):

@@ -1,3 +1,4 @@
+import sys
 import os
 import click
 import pprint
@@ -5,12 +6,19 @@ import datetime
 import humanize
 import textwrap
 import warnings
+import json
 import pyaurorax
 from termcolor import colored
 from texttable import Texttable
 
 
 def print_request_logs_table(logs, filter_level=None, table_max_width=None):
+    """
+    Function to print request logs table
+
+    This is a shared helper function because it is used by the
+    conjunction, data products, and ephemeris command modules.
+    """
     # init
     default_wrap_threshold = 70
     if (table_max_width is None):
@@ -59,6 +67,12 @@ def print_request_logs_table(logs, filter_level=None, table_max_width=None):
 
 def print_request_status(s, show_logs=False, show_query=False,
                          filter_logs=None, table_max_width=None):
+    """
+    Function to print request status information
+
+    This is a shared helper function because it is used by the
+    conjunction, data products, and ephemeris command modules.
+    """
     # set formatted output variables
     request_completed = colored("False", "yellow")
     request_completed_timestamp = "-"
@@ -117,3 +131,119 @@ def print_request_status(s, show_logs=False, show_query=False,
             click.echo(pprint.pformat(query_to_show))
         else:
             click.echo("\nSearch query: missing, unable to display")
+
+
+def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, minify):
+    """
+    Function to get search request data
+
+    This is a shared helper function because it is used by the
+    conjunction, data products, and ephemeris command modules.
+    Some if statements are used to differentiate between the
+    commans.
+    """
+    # get the data
+    try:
+        # set status url
+        click.echo("Checking request status ...")
+        if (type == "conjunctions"):
+            url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
+        elif (type == "data_products"):
+            url = pyaurorax.api.urls.data_products_request_url.format(request_uuid)
+        elif (type == "ephemeris"):
+            url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+        else:
+            click.echo("Unexpected error occurred, please open an issue on "
+                       "the Github repository detailing how you were able "
+                       "to make this message appear")
+            sys.exit(1)
+
+        # get status
+        try:
+            s = pyaurorax.requests.get_status(url)
+        except pyaurorax.AuroraXNotFoundException:
+            click.echo("Error: request ID not found")
+            sys.exit(1)
+
+        # check status
+        if (s["search_result"]["completed_timestamp"] is None):
+            click.echo("Error: Search is not done yet, not retrieving data")
+            click.echo("\nNote: you can use the get_status command to "
+                       "check if the search has completed. Try the command "
+                       "\"aurorax-cli %s get_status %s\"" % (type, request_uuid))
+            sys.exit(1)
+
+        # get data
+        try:
+            click.echo("Downloading %s results and %s of data ..." % (humanize.intcomma(s["search_result"]["result_count"]),
+                                                                      humanize.naturalsize(s["search_result"]["file_size"])))
+            data = pyaurorax.requests.get_data("%s/data" % (url), skip_serializing=True)
+        except pyaurorax.AuroraXDataRetrievalError as e:
+            # parse error message
+            if ("NotFound" in (str(e))):
+                click.echo("\n%s" % ('\n'.join(textwrap.wrap("Error downloading data: this request is too old and the data "
+                                                             "file has been removed on the server. You can re-run the "
+                                                             "search using the command \"aurorax-cli %s "
+                                                             "search_resubmit %s\"." % (type, request_uuid), 110))))
+            else:
+                click.echo("Error downloading data: %s" % (str(e)))
+            sys.exit(1)
+    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        sys.exit(1)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
+
+    # order data
+    if (type == "conjunctions"):
+        data = sorted(data, key=lambda x: x["start"])
+    elif (type == "data_products"):
+        data = sorted(data, key=lambda x: x["start"])
+    elif (type == "ephemeris"):
+        data = sorted(data, key=lambda x: x["epoch"])
+
+    # save data to file, or print out
+    if (output_to_terminal is not None):
+        # print out to the terminal (don't save to file)
+        #
+        # format the data to objects if that was requested
+        click.echo()  # one line spacer
+        if (output_to_terminal == "dict"):
+            # print dict format
+            pprint.pprint(data, indent=indent)
+        else:
+            # serialize the data and print
+            for d in data:
+                if (type == "conjunctions"):
+                    # serialize into Conjunction object
+                    d_serialized = pyaurorax.conjunctions.Conjunction(**d, format=pyaurorax.FORMAT_BASIC_INFO)
+                elif (type == "data_products"):
+                    # serialize into DataProduct object
+                    d_serialized = pyaurorax.data_products.DataProduct(**d, format=pyaurorax.FORMAT_BASIC_INFO)
+                elif (type == "ephemeris"):
+                    # serialize into Ephemeris object
+                    d_serialized = pyaurorax.ephemeris.Ephemeris(**d, format=pyaurorax.FORMAT_BASIC_INFO)
+                else:
+                    click.echo("Unexpected error occurred, please open an issue on "
+                               "the Github repository detailing how you were able "
+                               "to make this message appear")
+                    sys.exit(1)
+
+                # print to terminal
+                click.echo(d_serialized)
+    else:
+        # write to file
+        #
+        # set filename
+        if (outfile is None):
+            outfile = "%s_data.json" % (request_uuid)
+
+        # write data to the file
+        click.echo("Writing data to file ...")
+        with open(outfile, 'w', encoding="utf-8") as fp:
+            if (minify is True):
+                json.dump(data, fp)
+            else:
+                json.dump(data, fp, indent=indent)
+        click.echo("Data has been saved to '%s'" % (outfile))
