@@ -36,7 +36,7 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
     try:
         url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
@@ -71,7 +71,7 @@ def get_logs(config, request_uuid, filter_, table_max_width):
     try:
         url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
@@ -102,7 +102,7 @@ def get_query(config, request_uuid):
     try:
         url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
@@ -141,3 +141,26 @@ def get_data(config, request_uuid, outfile, output_to_terminal, indent, minify):
                     output_to_terminal,
                     indent,
                     minify)
+
+
+@conjunctions_group.command("search_resubmit",
+                            short_help="Resubmit a conjunction search request")
+@click.argument("request_uuid", type=str)
+@click.pass_obj
+def get_data(config, request_uuid):
+    """
+    Resubmit a conjunction search request
+
+    \b
+    REQUEST_UUID    the request unique identifier
+    """
+    # get request status
+    try:
+        url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
+        s = pyaurorax.requests.get_status(url)
+    except pyaurorax.AuroraXNotFoundException as e:
+        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        sys.exit(1)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)

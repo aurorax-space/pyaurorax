@@ -36,7 +36,7 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
     try:
         url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
@@ -71,7 +71,7 @@ def get_logs(config, request_uuid, filter_, table_max_width):
     try:
         url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
@@ -102,7 +102,7 @@ def get_query(config, request_uuid):
     try:
         url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
         s = pyaurorax.requests.get_status(url)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:

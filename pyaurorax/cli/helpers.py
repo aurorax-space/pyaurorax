@@ -188,7 +188,7 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
             else:
                 click.echo("Error downloading data: %s" % (str(e)))
             sys.exit(1)
-    except pyaurorax.AuroraXUnexpectedEmptyResponse as e:
+    except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
