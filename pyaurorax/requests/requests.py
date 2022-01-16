@@ -6,6 +6,7 @@ import datetime
 import time
 from typing import Dict, List, Optional
 from ..api.classes.request import AuroraXRequest
+from ..exceptions import AuroraXDataRetrievalError
 from ..location import Location
 
 # pdoc init
@@ -38,13 +39,19 @@ def get_status(request_url: str) -> Dict:
 
 
 def get_data(data_url: str,
-             response_format: Optional[Dict] = None) -> List:
+             response_format: Optional[Dict] = None,
+             skip_serializing: Optional[bool] = False) -> List:
     """
     Retrieve the data for a request
 
     Args:
-        data_url: the URL for the data of a request
-        post_body: body of a post request
+        data_url: the URL for the data of a request,
+        response_format: the response format to send as post data, defaults
+            to None
+        skip_serializing: skip any object serializing, defaults to False
+
+    Raises:
+        pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
 
     Returns:
         the data for this request
@@ -58,26 +65,32 @@ def get_data(data_url: str,
         req = AuroraXRequest(method="get", url=data_url)
     res = req.execute()
 
+    # check for error message
+    if ("error" in res.data):
+        raise AuroraXDataRetrievalError("%s: %s" % (res.data["error"]["error_code"],
+                                                    res.data["error"]["error_message"]))
+
     # set data var
     data_result = res.data["result"]
 
     # serialize epochs and locations into datetimes and Locations
-    for i in range(0, len(data_result)):
-        if ("epoch" in data_result[i]):
-            data_result[i]["epoch"] = datetime.datetime.strptime(data_result[i]["epoch"],
-                                                                 "%Y-%m-%dT%H:%M:%S")
-        if ("location_geo" in data_result[i]):
-            data_result[i]["location_geo"] = Location(lat=data_result[i]["location_geo"]["lat"],
-                                                      lon=data_result[i]["location_geo"]["lon"])
-        if ("location_gsm" in data_result[i]):
-            data_result[i]["location_gsm"] = Location(lat=data_result[i]["location_gsm"]["lat"],
-                                                      lon=data_result[i]["location_gsm"]["lon"])
-        if ("nbtrace" in data_result[i]):
-            data_result[i]["nbtrace"] = Location(lat=data_result[i]["nbtrace"]["lat"],
-                                                 lon=data_result[i]["nbtrace"]["lon"])
-        if ("sbtrace" in data_result[i]):
-            data_result[i]["sbtrace"] = Location(lat=data_result[i]["sbtrace"]["lat"],
-                                                 lon=data_result[i]["sbtrace"]["lon"])
+    if (skip_serializing is False):
+        for i in range(0, len(data_result)):
+            if ("epoch" in data_result[i]):
+                data_result[i]["epoch"] = datetime.datetime.strptime(data_result[i]["epoch"],
+                                                                     "%Y-%m-%dT%H:%M:%S")
+            if ("location_geo" in data_result[i]):
+                data_result[i]["location_geo"] = Location(lat=data_result[i]["location_geo"]["lat"],
+                                                          lon=data_result[i]["location_geo"]["lon"])
+            if ("location_gsm" in data_result[i]):
+                data_result[i]["location_gsm"] = Location(lat=data_result[i]["location_gsm"]["lat"],
+                                                          lon=data_result[i]["location_gsm"]["lon"])
+            if ("nbtrace" in data_result[i]):
+                data_result[i]["nbtrace"] = Location(lat=data_result[i]["nbtrace"]["lat"],
+                                                     lon=data_result[i]["nbtrace"]["lon"])
+            if ("sbtrace" in data_result[i]):
+                data_result[i]["sbtrace"] = Location(lat=data_result[i]["sbtrace"]["lat"],
+                                                     lon=data_result[i]["sbtrace"]["lon"])
 
     # return
     return data_result

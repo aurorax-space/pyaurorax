@@ -207,7 +207,7 @@ def search_async(start: datetime.datetime,
     """
     warnings.warn("This function is deprecated and will be removed in a future release. Please "
                   "use the 'search' function with the 'return_immediately' flag to produce the "
-                  "same behaviour.")
+                  "same behaviour.", DeprecationWarning, stacklevel=2)
     s = Search(start,
                end,
                programs=programs,
@@ -275,60 +275,8 @@ def upload(identifier: int,
     return 1
 
 
-def delete_daterange(data_source: DataSource,
-                     start: datetime.datetime,
-                     end: datetime.datetime,
-                     data_product_types: Optional[List[str]] = None) -> int:
-    """
-    Delete data products associated with a data source within a date range.
-
-    The API processes this request asynchronously, so this method will return
-    immediately whether or not the data has already been deleted.
-
-    Args:
-        data_source: data source associated with the data product records (note that
-            identifier, program, platform, and instrument_type are required)
-        start: timestamp marking beginning of range to delete records for, inclusive
-        end: timestamp marking end of range to delete records for, inclusive
-        data_product_types: specific types of data product to delete, e.g.
-            ["keogram", "movie"]. If omitted, all data product types will be deleted.
-
-    Returns:
-        1 on success
-
-    Raises:
-        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
-        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
-        pyaurorax.exceptions.AuroraXNotFoundException: source not found
-        pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
-    """
-    # check to make sure the identifier, program, platform, and instrument type are all set in the data source
-    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
-        raise AuroraXBadParametersException("One or more required data source parameters "
-                                            "are missing, delete operation aborted")
-
-    # do request to get all data products between start and end datetimes
-    try:
-        s = search(start,
-                   end,
-                   programs=[data_source.program],
-                   platforms=[data_source.platform],
-                   instrument_types=[data_source.instrument_type],
-                   data_product_types=[] if not data_product_types else data_product_types)
-    except Exception as e:
-        raise AuroraXException(e)
-
-    # collect URLs from search result
-    urls = []
-    for dp in s.data:
-        urls.append(dp.url)  # type: ignore
-
-    # do delete request
-    return delete(data_source, urls)
-
-
-def delete(data_source: DataSource,
-           urls: List[str]) -> int:
+def delete_urls(data_source: DataSource,
+                urls: List[str]) -> int:
     """
     Delete data products by URL.
 
@@ -378,3 +326,75 @@ def delete(data_source: DataSource,
 
     # return
     return 1
+
+
+def delete(data_source: DataSource,
+           start: datetime.datetime,
+           end: datetime.datetime,
+           data_product_types: Optional[List[str]] = None) -> int:
+    """
+    Delete data products associated with a data source within a date range.
+
+    The API processes this request asynchronously, so this method will return
+    immediately whether or not the data has already been deleted.
+
+    Args:
+        data_source: data source associated with the data product records (note that
+            identifier, program, platform, and instrument_type are required)
+        start: timestamp marking beginning of range to delete records for, inclusive
+        end: timestamp marking end of range to delete records for, inclusive
+        data_product_types: specific types of data product to delete, e.g.
+            ["keogram", "movie"]. If omitted, all data product types will be deleted.
+
+    Returns:
+        1 on success
+
+    Raises:
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+        pyaurorax.exceptions.AuroraXNotFoundException: source not found
+        pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
+    """
+    # check to make sure the identifier, program, platform, and instrument type are all set in the data source
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
+        raise AuroraXBadParametersException("One or more required data source parameters "
+                                            "are missing, delete operation aborted")
+
+    # do request to get all data products between start and end datetimes
+    try:
+        s = search(start,
+                   end,
+                   programs=[data_source.program],
+                   platforms=[data_source.platform],
+                   instrument_types=[data_source.instrument_type],
+                   data_product_types=[] if not data_product_types else data_product_types)
+    except Exception as e:
+        raise AuroraXException(e)
+
+    # collect URLs from search result
+    urls = []
+    for dp in s.data:
+        urls.append(dp.url)  # type: ignore
+
+    # do delete request
+    return delete_urls(data_source, urls)
+
+
+def describe(search_obj: Search) -> str:
+    """
+    Describe a data product search as an "SQL-like" string
+
+    Args:
+        search_obj: the data product search object to describe
+
+    Returns:
+        the "SQL-like" string describing the data product search object
+    """
+    # make request
+    req = AuroraXRequest(method="post",
+                         url=api_urls.describe_data_products_query,
+                         body=search_obj.query)
+    res = req.execute()
+
+    # return
+    return res.data

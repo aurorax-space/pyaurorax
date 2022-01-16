@@ -73,6 +73,60 @@ def list(program: Optional[str] = None,
         return []
 
 
+def search(programs: Optional[List[str]] = [],
+           platforms: Optional[List[str]] = [],
+           instrument_types: Optional[List[str]] = [],
+           format: Optional[str] = FORMAT_FULL_RECORD,
+           order: Optional[str] = "identifier") -> List[DataSource]:
+    """
+    Search for data source records (using params to filter as desired)
+
+    This is very similar to the 'list' function, however multiple programs,
+    platforms, and/or instrument types can be supplied to this function. The
+    'list' function only supports single values for those parameters.
+
+    Args:
+        programs: the programs to filter for, defaults to []
+        platforms: the platforms to filter for, defaults to []
+        instrument_type: the instrument types to filter for, defaults to []
+        format: the format of the data sources returned, defaults to "full_record".
+            Other options are in the pyaurorax.sources module, or at the top level
+            using the pyaurorax.FORMAT_* variables.
+        order: the value to order results by (identifier, program, platform,
+            instrument_type, display_name), defaults to "identifier"
+
+    Returns:
+        any data sources matching the requested parameters
+
+    Raises:
+        pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
+        pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
+    """
+    # make request
+    request_data = {
+        "programs": programs,
+        "platforms": platforms,
+        "instrument_types": instrument_types,
+    }
+    params = {
+        "format": format,
+    }
+    req = AuroraXRequest(method="post",
+                         url=urls.data_sources_search_url,
+                         params=params,
+                         body=request_data)
+    res = req.execute()
+
+    # order results
+    res.data = sorted(res.data, key=lambda x: x[order])
+
+    # return
+    if len(res.data):
+        return [DataSource(**ds, format=format) for ds in res.data]
+    else:
+        return []
+
+
 def get(program: str,
         platform: str,
         instrument_type: str,
@@ -281,7 +335,7 @@ def delete(identifier: int) -> int:
         identifier: the AuroraX unique ID for the data source
 
     Returns:
-        1 on success
+        1 on success, raises error if an issue was encountered
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -359,7 +413,7 @@ def update(data_source: DataSource) -> DataSource:
         raise AuroraXException("Could not update data source")
 
 
-def partial_update(identifier: int,
+def update_partial(identifier: int,
                    program: Optional[str] = None,
                    platform: Optional[str] = None,
                    instrument_type: Optional[str] = None,
@@ -427,3 +481,31 @@ def partial_update(identifier: int,
         return get_using_identifier(ds.identifier, format=FORMAT_FULL_RECORD)
     except Exception:
         raise AuroraXException("Could not update data source")
+
+
+@DeprecationWarning
+def partial_update(identifier: int,
+                   program: Optional[str] = None,
+                   platform: Optional[str] = None,
+                   instrument_type: Optional[str] = None,
+                   source_type: Optional[str] = None,
+                   display_name: Optional[str] = None,
+                   metadata: Optional[Dict] = None,
+                   owner: Optional[str] = None,
+                   maintainers: Optional[List[str]] = None,
+                   ephemeris_metadata_schema: Optional[List[Dict]] = None,
+                   data_product_metadata_schema: Optional[List[Dict]] = None) -> DataSource:
+    warnings.warn("The 'partial_update' function has been deprecated as of 0.9.0, and will "
+                  "be removed in a future release. Please use the 'update_partial' function "
+                  "instead.", DeprecationWarning, stacklevel=2)
+    return update_partial(identifier,
+                          program=program,
+                          platform=platform,
+                          instrument_type=instrument_type,
+                          source_type=source_type,
+                          display_name=display_name,
+                          metadata=metadata,
+                          owner=owner,
+                          maintainers=maintainers,
+                          ephemeris_metadata_schema=ephemeris_metadata_schema,
+                          data_product_metadata_schema=data_product_metadata_schema)

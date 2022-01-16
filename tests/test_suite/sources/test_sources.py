@@ -13,6 +13,14 @@ def test_get_single_source():
     assert type(source) is DataSource
 
 
+@pytest.mark.sources
+def test_search_sources():
+    sources = pyaurorax.sources.search(programs=["swarm"],
+                                       format=pyaurorax.FORMAT_FULL_RECORD)
+    assert len(sources) > 1 and type(sources[0]) is DataSource
+
+
+@pytest.mark.sources
 def test_get_source_by_filter():
     source = pyaurorax.sources.get_using_filters(program="swarm",
                                                  instrument_type="footprint",
@@ -163,7 +171,7 @@ def test_update_source_partial():
         assert False
 
     # partially update the data source
-    updated_ds = pyaurorax.sources.partial_update(identifier=ds.identifier,
+    updated_ds = pyaurorax.sources.update_partial(identifier=ds.identifier,
                                                   instrument_type="test-instrument-updated-partial",
                                                   metadata={},
                                                   ephemeris_metadata_schema=[])

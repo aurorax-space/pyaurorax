@@ -1,0 +1,54 @@
+{
+  "start": "2019-01-01T00:00:00.000Z",
+  "end": "2019-01-09T23:59:59.000Z",
+  "conjunction_types": [
+    "nbtrace"
+  ],
+  "ground": [
+    {
+      "programs": [
+        "themis-asi"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "panchromatic ASI"
+      ],
+      "ephemeris_metadata_filters": {}
+    }
+  ],
+  "space": [
+    {
+      "programs": [
+        "themis"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    },
+    {
+      "programs": [
+        "swarm"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    }
+  ],
+  "events": [],
+  "max_distances": {
+    "ground1-space1": 900,
+    "ground1-space2": 900,
+    "space1-space2": null
+  },
+  "epoch_search_precision": 60
+}

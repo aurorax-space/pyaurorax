@@ -13,6 +13,7 @@ from ...exceptions import (AuroraXMaxRetriesException,
                            AuroraXUnauthorizedException,
                            AuroraXNotFoundException,
                            AuroraXUnexpectedContentTypeException,
+                           AuroraXUnexpectedEmptyResponse,
                            AuroraXException)
 
 # pdoc init
@@ -91,6 +92,7 @@ class AuroraXRequest(BaseModel):
             pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
             pyaurorax.exceptions.AuroraXNotFoundException: requested resource was not found
             pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected content error
+            pyaurorax.exceptions.AuroraXUnexpectedEmptyResponse: unexpected empty response
             pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
         """
         # sanitize data
@@ -119,14 +121,30 @@ class AuroraXRequest(BaseModel):
                 else:
                     break
 
-        # check if authorization worked
+        # check if authorization worked (raised by API or by Nginx)
         if (req.status_code == 401):
-            raise AuroraXUnauthorizedException("%s %s" % (req.status_code,
-                                                          req.json()["error_message"]))
+            if (req.headers["Content-Type"] == "application/json"):
+                if ("error_message" in req.json()):
+                    # this will be an error message that the API meant to send
+                    raise AuroraXUnauthorizedException("%s %s" % (req.status_code,
+                                                                  req.json()["error_message"]))
+                else:
+                    raise AuroraXUnauthorizedException("Error 401: unauthorized")
+            else:
+                raise AuroraXUnauthorizedException("Error 401: unauthorized")
 
+        # check for 404 error (raised by API or by Nginx)
         if (req.status_code == 404):
-            raise AuroraXNotFoundException("%s %s" % (req.status_code,
-                                                      req.json()["error_message"]))
+            if (req.headers["Content-Type"] == "application/json"):
+                if ("error_message" in req.json()):
+                    # this will be an error message that the API meant to send
+                    raise AuroraXNotFoundException("%s %s" % (req.status_code,
+                                                              req.json()["error_message"]))
+                else:
+                    # this will likely be a 404 from the java servlet
+                    raise AuroraXNotFoundException("Error 404: not found")
+            else:
+                raise AuroraXNotFoundException("Error 404: not found")
 
         # check if we only want to do limited evaluation
         if (limited_evaluation is True):
@@ -138,15 +156,18 @@ class AuroraXRequest(BaseModel):
         # check content type
         if (self.null_response is False):
             if (req.headers["Content-Type"] == "application/json"):
-                response_data = req.json()
+                if (len(req.content) == 0):
+                    raise AuroraXUnexpectedEmptyResponse("No response received")
+                else:
+                    response_data = req.json()
             else:
                 raise AuroraXUnexpectedContentTypeException("%s (%s)" % (req.content.decode(),
                                                                          req.status_code))
         else:
-            if (req.status_code != 200 and req.status_code != 201 and req.status_code != 202 and req.status_code != 204):
-                response_data = req.json()
-            else:
+            if (req.status_code in [200, 201, 202, 204]):
                 response_data = None
+            else:
+                response_data = req.json()
 
         # check for server error
         if (req.status_code == 500):

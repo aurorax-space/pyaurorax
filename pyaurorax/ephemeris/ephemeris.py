@@ -200,7 +200,7 @@ def search_async(start: datetime.datetime,
     """
     warnings.warn("This function is deprecated and will be removed in a future release. Please "
                   "use the 'search' function with the 'return_immediately' flag to produce the "
-                  "same behaviour.")
+                  "same behaviour.", DeprecationWarning, stacklevel=2)
     s = Search(start,
                end,
                programs=programs,
@@ -318,3 +318,23 @@ def delete(data_source: DataSource,
 
     # return
     return 1
+
+
+def describe(search_obj: Search) -> str:
+    """
+    Describe an ephemeris search as a "SQL-like" string
+
+    Args:
+        search_obj: the ephemeris search object to describe
+
+    Returns:
+        the "SQL-like" string describing the ephemeris search object
+    """
+    # make request
+    req = AuroraXRequest(method="post",
+                         url=urls.describe_ephemeris_query,
+                         body=search_obj.query)
+    res = req.execute()
+
+    # return
+    return res.data

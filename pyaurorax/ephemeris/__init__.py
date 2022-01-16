@@ -11,7 +11,8 @@ here instead of digging in deeper to the submodules.
 from .ephemeris import (search_async,
                         search,
                         upload,
-                        delete)
+                        delete,
+                        describe)
 from .classes.ephemeris import Ephemeris
 from .classes.search import Search
 
@@ -27,6 +28,7 @@ __all__ = [
     "search",
     "upload",
     "delete",
+    "describe",
     "Ephemeris",
     "Search",
 ]

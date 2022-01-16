@@ -1,0 +1,65 @@
+{
+  "start": "2020-01-01T00:00:00.000Z",
+  "end": "2020-01-04T23:59:59.000Z",
+  "conjunction_types": [
+    "nbtrace"
+  ],
+  "ground": [
+    {
+      "programs": [
+        "trex"
+      ],
+      "platforms": [],
+      "instrument_types": [],
+      "ephemeris_metadata_filters": {}
+    },
+    {
+      "programs": [
+        "rego"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "redline ASI"
+      ],
+      "ephemeris_metadata_filters": {}
+    }
+  ],
+  "space": [
+    {
+      "programs": [
+        "swarm"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    },
+    {
+      "programs": [
+        "themis"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    }
+  ],
+  "events": [],
+  "max_distances": {
+    "ground1-ground2": 0,
+    "ground1-space1": 500,
+    "ground1-space2": 500,
+    "ground2-space1": 500,
+    "ground2-space2": 500,
+    "space1-space2": null
+  },
+  "epoch_search_precision": 60
+}

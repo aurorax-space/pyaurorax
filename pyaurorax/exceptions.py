@@ -75,3 +75,17 @@ class AuroraXUploadException(AuroraXException):
     Error occurred during upload operation
     """
     pass
+
+
+class AuroraXUnexpectedEmptyResponse(AuroraXException):
+    """
+    An empty response was received when it wasn't expected
+    """
+    pass
+
+
+class AuroraXDataRetrievalError(AuroraXException):
+    """
+    Error occurred while retrieving search data
+    """
+    pass

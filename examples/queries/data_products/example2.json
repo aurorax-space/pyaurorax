@@ -1,0 +1,30 @@
+{
+    "start": "2020-01-01T00:00:00",
+    "end": "2020-01-10T23:59:59",
+    "data_sources": {
+        "programs": [
+            "trex"
+        ],
+        "platforms": [
+            "gillam"
+        ],
+        "instrument_types": [
+            "RGB ASI"
+        ],
+        "data_product_metadata_filters": {
+            "logical_operator": "AND",
+            "expressions": [
+                {
+                    "key": "keogram_type",
+                    "operator": "in",
+                    "values": [
+                        "daily"
+                    ]
+                }
+            ]
+        }
+    },
+    "data_product_type_filters": [
+        "keogram"
+    ]
+}
