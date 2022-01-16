@@ -60,8 +60,8 @@ data availability mechanism for Aurora.
 from .data_products import (search,
                             search_async,
                             upload,
+                            delete_urls,
                             delete,
-                            delete_daterange,
                             describe)
 from .classes.data_product import DataProduct
 from .classes.search import Search
@@ -82,8 +82,8 @@ __all__ = [
     "search",
     "search_async",
     "upload",
+    "delete_urls",
     "delete",
-    "delete_daterange",
     "describe",
     "DataProduct",
     "Search",

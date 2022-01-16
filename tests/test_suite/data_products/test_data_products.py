@@ -247,7 +247,7 @@ def test_upload_data_products():
 
 
 @pytest.mark.data_products
-def test_delete_data_products():
+def test_delete_urls_data_products():
     program = "test-program"
     platform = "test-platform"
     instrument_type = "pytest"
@@ -274,7 +274,7 @@ def test_delete_data_products():
         urls.append(dp.url)
 
     # delete data
-    pyaurorax.data_products.delete(source, urls)
+    pyaurorax.data_products.delete_urls(source, urls)
     time.sleep(5)
 
     # search data products again to see if they were deleted
@@ -288,7 +288,7 @@ def test_delete_data_products():
 
 
 @pytest.mark.data_products
-def test_delete_data_products_daterange():
+def test_delete_data_products():
     program = "test-program"
     platform = "test-platform"
     instrument_type = "pytest"
@@ -330,10 +330,10 @@ def test_delete_data_products_daterange():
     time.sleep(5)
 
     # delete range of data products
-    pyaurorax.data_products.delete_daterange(data_source=source,
-                                             start=start_dt,
-                                             end=end_dt,
-                                             data_product_types=[pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM])
+    pyaurorax.data_products.delete(data_source=source,
+                                   start=start_dt,
+                                   end=end_dt,
+                                   data_product_types=[pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM])
     time.sleep(5)
 
     # search data products again to see if they were deleted
