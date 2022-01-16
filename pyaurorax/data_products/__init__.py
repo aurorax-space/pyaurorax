@@ -61,7 +61,8 @@ from .data_products import (search,
                             search_async,
                             upload,
                             delete,
-                            delete_daterange)
+                            delete_daterange,
+                            describe)
 from .classes.data_product import DataProduct
 from .classes.search import Search
 
@@ -83,6 +84,7 @@ __all__ = [
     "upload",
     "delete",
     "delete_daterange",
+    "describe",
     "DataProduct",
     "Search",
 ]

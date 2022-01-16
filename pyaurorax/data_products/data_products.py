@@ -378,3 +378,23 @@ def delete(data_source: DataSource,
 
     # return
     return 1
+
+
+def describe(search_obj: Search) -> str:
+    """
+    Describe a data product search as an "SQL-like" string
+
+    Args:
+        search_obj: the data product search object to describe
+
+    Returns:
+        the "SQL-like" string describing the data product search object
+    """
+    # make request
+    req = AuroraXRequest(method="post",
+                         url=api_urls.describe_data_products_query,
+                         body=search_obj.query)
+    res = req.execute()
+
+    # return
+    return res.data

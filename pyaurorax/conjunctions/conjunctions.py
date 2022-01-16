@@ -7,6 +7,7 @@ import humanize
 import warnings
 from typing import Dict, List, Optional, Union
 from .classes.search import Search
+from ..api import AuroraXRequest, urls
 from ..conjunctions import CONJUNCTION_TYPE_NBTRACE
 from ..requests import STANDARD_POLLING_SLEEP_TIME
 
@@ -256,3 +257,23 @@ def search_async(start: datetime.datetime,
                response_format=response_format)
     s.execute()
     return s
+
+
+def describe(search_obj: Search) -> str:
+    """
+    Describe a conjunction search as an "SQL-like" string
+
+    Args:
+        search_obj: the conjunction search object to describe
+
+    Returns:
+        the "SQL-like" string describing the conjunction search object
+    """
+    # make request
+    req = AuroraXRequest(method="post",
+                         url=urls.describe_conjunction_query,
+                         body=search_obj.query)
+    res = req.execute()
+
+    # return
+    return res.data

@@ -348,7 +348,7 @@ def test_delete_data_products_daterange():
 
 
 @pytest.mark.data_products
-def test_cancel_data_product_search():
+def test_cancel_data_products_search():
     # set up query params
     start_dt = datetime.datetime(2018, 1, 1)
     end_dt = datetime.datetime(2021, 12, 31, 23, 59, 59)
@@ -367,3 +367,31 @@ def test_cancel_data_product_search():
     # cancel the search request
     result = s.cancel(wait=True)
     assert result == 1
+
+
+@pytest.mark.data_products
+def test_describe_data_products_search():
+    # set params
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 2, 23, 59, 59)
+    programs = ["auroramax"]
+    data_product_types = [pyaurorax.DATA_PRODUCT_TYPE_KEOGRAM]
+    expected_response_str = "Find data_products for ((program in (auroramax) filtered by " \
+        "metadata ()) AND  data_product_metadata_filters []) AND data_product start >= " \
+        "2020-01-01T00:00 UTC AND data_product end <= 2020-01-02T23:59:59 UTC AND " \
+        "data_product_type in (keogram)"
+
+    # create search object
+    s = pyaurorax.data_products.Search(start,
+                                       end,
+                                       programs=programs,
+                                       data_product_types=data_product_types)
+
+    # get describe string
+    describe_str = pyaurorax.data_products.describe(s)
+
+    # test response
+    if (describe_str is not None and describe_str == expected_response_str):
+        assert True
+    else:
+        assert False

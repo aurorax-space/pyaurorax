@@ -318,3 +318,23 @@ def delete(data_source: DataSource,
 
     # return
     return 1
+
+
+def describe(search_obj: Search) -> str:
+    """
+    Describe an ephemeris search as a "SQL-like" string
+
+    Args:
+        search_obj: the ephemeris search object to describe
+
+    Returns:
+        the "SQL-like" string describing the ephemeris search object
+    """
+    # make request
+    req = AuroraXRequest(method="post",
+                         url=urls.describe_ephemeris_query,
+                         body=search_obj.query)
+    res = req.execute()
+
+    # return
+    return res.data

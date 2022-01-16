@@ -295,3 +295,33 @@ def test_cancel_ephemeris_search():
     result = s.cancel(wait=True)
 
     assert result == 1
+
+
+@pytest.mark.ephemeris
+def test_describe_ephemeris_search():
+    # set params
+    start = datetime.datetime(2019, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 1, 1, 0, 59, 59)
+    programs = ["swarm"]
+    platforms = ["swarma"]
+    instrument_types = ["footprint"]
+    expected_response_str = "Find ephemeris for ((program in (swarm) AND platform in (swarma) " \
+        "AND instrument_type in (footprint) filtered by metadata ()) AND  ephemeris_metadata_filters " \
+        "[])  AND epoch between 2019-01-01T00:00 and 2019-01-01T00:59:59 UTC"
+
+    # create search object
+    s = pyaurorax.ephemeris.Search(start,
+                                   end,
+                                   programs=programs,
+                                   platforms=platforms,
+                                   instrument_types=instrument_types)
+
+    # get describe string
+    describe_str = pyaurorax.ephemeris.describe(s)
+    print(describe_str)
+
+    # test response
+    if (describe_str is not None and describe_str == expected_response_str):
+        assert True
+    else:
+        assert False
