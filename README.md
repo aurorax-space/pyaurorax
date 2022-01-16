@@ -5,6 +5,7 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5815985.svg)](https://doi.org/10.5281/zenodo.5815985)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Faurorax-space%2Fpyaurorax.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Faurorax-space%2Fpyaurorax?ref=badge_shield)
 
 PyAuroraX is a Python library for interacting with [AuroraX](https://aurorax.space), a project working to be the world's first and foremost data platform for auroral science. The primary objective of AuroraX is to enable mining and exploration of existing and future auroral data, enabling key science and enhancing the benefits of the world's investment in auroral instrumentation. This will be accomplished with the development of key systems/standards for uniform metadata generation and search, image content analysis, interfaces to leading international tools, and a community involvement that includes more than 80% of the world's data providers.
 
@@ -139,3 +140,7 @@ Below are some more commands for evaluating the PyTest coverage.
 - `poetry run coverage report --show-missing` View the test coverage report and include the lines deemed to be not covered by tests
 
 Note that the coverage report only gets updated when using the Makefile pytest targets, or when running coverage manually like `coverage run -m pytest -v`. More information about usage of the `coverage` command can be found [here](https://coverage.readthedocs.io).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Faurorax-space%2Fpyaurorax.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Faurorax-space%2Fpyaurorax?ref=badge_large)
