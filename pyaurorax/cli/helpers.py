@@ -13,6 +13,13 @@ from termcolor import colored
 from texttable import Texttable
 
 
+def __echo_helper(message, show_times=False):
+    if (show_times is True):
+        click.echo("[%s] %s" % (datetime.datetime.now(), message))
+    else:
+        click.echo(message)
+
+
 def print_request_logs_table(logs, filter_level=None, table_max_width=None):
     """
     Function to print request logs table
@@ -131,7 +138,7 @@ def print_request_status(s, show_logs=False, show_query=False,
             click.echo("\nSearch query: missing, unable to display")
 
 
-def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, minify):
+def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, minify, show_times=False):
     """
     Function to get search request data
 
@@ -143,7 +150,7 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
     # get the data
     try:
         # set status url
-        click.echo("Checking request status ...")
+        __echo_helper("Checking request status ...", show_times=show_times)
         if (type == "conjunctions"):
             url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
         elif (type == "data_products"):
@@ -173,8 +180,9 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
 
         # get data
         try:
-            click.echo("Downloading %s results and %s of data ..." % (humanize.intcomma(s["search_result"]["result_count"]),
-                                                                      humanize.naturalsize(s["search_result"]["file_size"])))
+            __echo_helper("Downloading %s results and %s of data ..." % (humanize.intcomma(s["search_result"]["result_count"]),
+                                                                         humanize.naturalsize(s["search_result"]["file_size"])),
+                          show_times=show_times)
             data = pyaurorax.requests.get_data("%s/data" % (url), skip_serializing=True)
         except pyaurorax.AuroraXDataRetrievalError as e:
             # parse error message
@@ -184,13 +192,13 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
                                                              "search using the command \"aurorax-cli %s "
                                                              "search_resubmit %s\"." % (type, request_uuid), 110))))
             else:
-                click.echo("Error downloading data: %s" % (str(e)))
+                __echo_helper("Error downloading data: %s" % (str(e)), show_times=show_times)
             sys.exit(1)
     except pyaurorax.AuroraXNotFoundException as e:
         click.echo("%s occurred: request ID not found" % (type(e).__name__))
         sys.exit(1)
     except pyaurorax.AuroraXException as e:
-        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        __echo_helper("%s occurred: %s" % (type(e).__name__, e.args[0]), show_times=show_times)
         sys.exit(1)
 
     # order data
@@ -238,10 +246,10 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
             outfile = "%s_data.json" % (request_uuid)
 
         # write data to the file
-        click.echo("Writing data to file ...")
+        __echo_helper("Writing data to file ...", show_times=show_times)
         with open(outfile, 'w', encoding="utf-8") as fp:
             if (minify is True):
                 json.dump(data, fp)
             else:
                 json.dump(data, fp, indent=indent)
-        click.echo("Data has been saved to '%s'" % (outfile))
+        __echo_helper("Data has been saved to '%s'" % (outfile), show_times=show_times)

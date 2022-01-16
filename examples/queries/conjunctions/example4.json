@@ -1,0 +1,50 @@
+{
+    "start": "2019-01-01T00:00:00.000Z",
+    "end": "2019-01-05T23:59:59.000Z",
+    "conjunction_types": [
+      "nbtrace"
+    ],
+    "ground": [
+      {
+        "programs": [],
+        "platforms": [],
+        "instrument_types": [
+          "blueline ASI",
+          "near-infrared ASI",
+          "panchromatic ASI",
+          "redline ASI",
+          "RGB ASI",
+          "spectrograph"
+        ],
+        "ephemeris_metadata_filters": {}
+      }
+    ],
+    "space": [
+      {
+        "programs": [
+          "arase",
+          "cluster",
+          "dmsp",
+          "epop",
+          "mms",
+          "rbsp",
+          "small-explorer",
+          "swarm",
+          "themis"
+        ],
+        "platforms": [],
+        "instrument_types": [
+          "footprint"
+        ],
+        "ephemeris_metadata_filters": {},
+        "hemisphere": [
+          "northern"
+        ]
+      }
+    ],
+    "events": [],
+    "max_distances": {
+      "ground1-space1": 200
+    },
+    "epoch_search_precision": 60
+  }

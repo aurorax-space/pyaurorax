@@ -2,6 +2,8 @@ import sys
 import click
 import pprint
 import json
+import os
+import datetime
 import pyaurorax
 from dateutil.parser import parse
 from ..helpers import (print_request_logs_table,
@@ -218,3 +220,75 @@ def search_template(config, outfile, indent):
         click.echo("Saved template to %s" % (outfile))
     else:
         click.echo(json.dumps(CONJUNCTION_SEARCH_TEMPLATE, indent=indent))
+
+
+@conjunctions_group.command("search",
+                            short_help="Perform a conjunction search request")
+@click.argument("infile", type=str)
+@click.option("--poll-interval",
+              default=pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
+              show_default=True,
+              help="polling interval when waiting for data (seconds)")
+@click.option("--outfile", type=str, help="output file to save data to (a .json file)")
+@click.option("--output-to-terminal", type=click.Choice(["dict", "objects"]),
+              help="output data to terminal in a certain format (instead of to file)")
+@click.option("--indent", type=int, default=2, show_default=True,
+              help="indentation when saving data to file")
+@click.option("--minify", is_flag=True, help="Minify the JSON data saved to file")
+@click.option("--quiet", is_flag=True, help="Quiet output")
+@click.pass_obj
+def search(config, infile, poll_interval, outfile, output_to_terminal, indent, minify, quiet):
+    """
+    Perform a conjunction search request
+
+    \b
+    INFILE      input file with query (must be a JSON)
+    """
+    # check that infile exists
+    if not (os.path.exists(infile)):
+        click.echo("Error: infile doesn't exist (%s" % (infile))
+        sys.exit(1)
+
+    # read in infile
+    if (quiet is False):
+        click.echo("[%s] Reading in query file ..." % (datetime.datetime.now()))
+    with open(infile, 'r', encoding="utf-8") as fp:
+        q = json.load(fp)
+
+    # set search params
+    if (quiet is False):
+        click.echo("[%s] Preparing search ..." % (datetime.datetime.now()))
+    start = parse(q["start"], ignoretz=True)
+    end = parse(q["end"], ignoretz=True)
+    max_distances = q["max_distances"]
+    ground = None if "ground" not in q else q["ground"]
+    space = None if "space" not in q else q["space"]
+    events = None if "events" not in q else q["events"]
+    conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
+    epoch_search_precision = None if "epoch_search_precision" not in q else q["epoch_search_precision"]
+    verbose_search = True if quiet is False else False  # pylint: disable=simplifiable-if-expression
+
+    # start search
+    s = pyaurorax.conjunctions.search(start,
+                                      end,
+                                      distance=max_distances,
+                                      ground=ground,
+                                      space=space,
+                                      events=events,
+                                      conjunction_types=conjunction_types,
+                                      epoch_search_precision=epoch_search_precision,
+                                      poll_interval=poll_interval,
+                                      verbose=verbose_search,
+                                      return_immediately=True)
+
+    # wait for data
+    s.wait(poll_interval=poll_interval, verbose=verbose_search)
+
+    # search has finished, save results to a file or output to terminal
+    get_search_data("conjunctions",
+                    s.request_id,
+                    outfile,
+                    output_to_terminal,
+                    indent,
+                    minify,
+                    show_times=True)
