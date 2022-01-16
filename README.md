@@ -20,13 +20,13 @@ Some links to help:
 PyAuroraX is available on PyPI so pip can be used to install it:
 
 ```console
-$ python -m pip install pyaurorax
+$ pip install pyaurorax
 ```
 
 To get full functionality, you can also install PyAuroraX with the aacgmv2 dependency. Note that without this, the calculate_btrace methods in the util module will show warning messages. All other functionality will work without this dependency.
 
 ```console
-$ python -m pip install pyaurorax[aacgmv2]
+$ pip install pyaurorax[aacgmv2]
 ```
 
 Futhermore, if you want the most bleeding edge version of PyAuroraX, you can install it directly from the Github repository:
@@ -34,9 +34,9 @@ Futhermore, if you want the most bleeding edge version of PyAuroraX, you can ins
 ```console
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
-$ python -m pip install .
+$ pip install .
 [ or with the aacgmv2 extra ]
-$ python -m pip install .[aacgmv2]
+$ pip install .[aacgmv2]
 ```
 
 ## Usage
