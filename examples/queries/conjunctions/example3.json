@@ -1,41 +1,41 @@
 {
-    "start": "2019-03-01T00:00:00.000Z",
-    "end": "2019-03-05T23:59:59.000Z",
-    "conjunction_types": [
-      "nbtrace"
-    ],
-    "ground": [
-      {
-        "programs": [
-          "trex"
-        ],
-        "platforms": [],
-        "instrument_types": [],
-        "ephemeris_metadata_filters": {}
-      }
-    ],
-    "space": [
-      {
-        "programs": [
-          "cluster",
-          "dmsp",
-          "mms",
-          "swarm",
-          "themis"
-        ],
-        "platforms": [],
-        "instrument_types": [
-          "footprint"
-        ],
-        "ephemeris_metadata_filters": {},
-        "hemisphere": [
-          "northern"
-        ]
-      }
-    ],
-    "events": [],
-    "max_distances": {
-      "ground1-space1": 500
-    },
-    "epoch_search_precision": 60
-  }
+  "start": "2019-03-01T00:00:00.000Z",
+  "end": "2019-03-05T23:59:59.000Z",
+  "conjunction_types": [
+    "nbtrace"
+  ],
+  "ground": [
+    {
+      "programs": [
+        "trex"
+      ],
+      "platforms": [],
+      "instrument_types": [],
+      "ephemeris_metadata_filters": {}
+    }
+  ],
+  "space": [
+    {
+      "programs": [
+        "cluster",
+        "dmsp",
+        "mms",
+        "swarm",
+        "themis"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    }
+  ],
+  "events": [],
+  "max_distances": {
+    "ground1-space1": 500
+  },
+  "epoch_search_precision": 60
+}

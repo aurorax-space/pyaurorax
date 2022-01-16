@@ -1,44 +1,44 @@
 {
-    "start": "2019-02-01T00:00:00.000Z",
-    "end": "2019-02-02T23:59:59.000Z",
-    "conjunction_types": [
-      "nbtrace"
-    ],
-    "ground": [
-      {
-        "programs": [
-          "rego"
-        ],
-        "platforms": [
-          "gillam",
-          "lucky lake"
-        ],
-        "instrument_types": [
-          "redline ASI"
-        ],
-        "ephemeris_metadata_filters": {}
-      }
-    ],
-    "space": [
-      {
-        "programs": [
-          "dmsp",
-          "swarm",
-          "themis"
-        ],
-        "platforms": [],
-        "instrument_types": [
-          "footprint"
-        ],
-        "ephemeris_metadata_filters": {},
-        "hemisphere": [
-          "northern"
-        ]
-      }
-    ],
-    "events": [],
-    "max_distances": {
-      "ground1-space1": 600
-    },
-    "epoch_search_precision": 60
-  }
+  "start": "2019-02-01T00:00:00.000Z",
+  "end": "2019-02-02T23:59:59.000Z",
+  "conjunction_types": [
+    "nbtrace"
+  ],
+  "ground": [
+    {
+      "programs": [
+        "rego"
+      ],
+      "platforms": [
+        "gillam",
+        "lucky lake"
+      ],
+      "instrument_types": [
+        "redline ASI"
+      ],
+      "ephemeris_metadata_filters": {}
+    }
+  ],
+  "space": [
+    {
+      "programs": [
+        "dmsp",
+        "swarm",
+        "themis"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    }
+  ],
+  "events": [],
+  "max_distances": {
+    "ground1-space1": 600
+  },
+  "epoch_search_precision": 60
+}

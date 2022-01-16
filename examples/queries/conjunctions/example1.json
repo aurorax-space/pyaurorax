@@ -1,42 +1,42 @@
 {
-    "start": "2019-01-01T00:00:00.000Z",
-    "end": "2019-01-03T23:59:59.000Z",
-    "conjunction_types": [
-      "nbtrace"
-    ],
-    "ground": [
-      {
-        "programs": [
-          "themis-asi"
-        ],
-        "platforms": [
-          "fort smith",
-          "gillam"
-        ],
-        "instrument_types": [
-          "panchromatic ASI"
-        ],
-        "ephemeris_metadata_filters": {}
-      }
-    ],
-    "space": [
-      {
-        "programs": [
-          "swarm"
-        ],
-        "platforms": [],
-        "instrument_types": [
-          "footprint"
-        ],
-        "ephemeris_metadata_filters": {},
-        "hemisphere": [
-          "northern"
-        ]
-      }
-    ],
-    "events": [],
-    "max_distances": {
-      "ground1-space1": 500
-    },
-    "epoch_search_precision": 60
-  }
+  "start": "2019-01-01T00:00:00.000Z",
+  "end": "2019-01-03T23:59:59.000Z",
+  "conjunction_types": [
+    "nbtrace"
+  ],
+  "ground": [
+    {
+      "programs": [
+        "themis-asi"
+      ],
+      "platforms": [
+        "fort smith",
+        "gillam"
+      ],
+      "instrument_types": [
+        "panchromatic ASI"
+      ],
+      "ephemeris_metadata_filters": {}
+    }
+  ],
+  "space": [
+    {
+      "programs": [
+        "swarm"
+      ],
+      "platforms": [],
+      "instrument_types": [
+        "footprint"
+      ],
+      "ephemeris_metadata_filters": {},
+      "hemisphere": [
+        "northern"
+      ]
+    }
+  ],
+  "events": [],
+  "max_distances": {
+    "ground1-space1": 500
+  },
+  "epoch_search_precision": 60
+}

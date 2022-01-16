@@ -291,4 +291,5 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                     output_to_terminal,
                     indent,
                     minify,
-                    show_times=True)
+                    show_times=True,
+                    search_obj=s)

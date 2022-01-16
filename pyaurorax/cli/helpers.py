@@ -138,7 +138,8 @@ def print_request_status(s, show_logs=False, show_query=False,
             click.echo("\nSearch query: missing, unable to display")
 
 
-def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, minify, show_times=False):
+def get_search_data(type, request_uuid, outfile, output_to_terminal,
+                    indent, minify, show_times=False, search_obj=None):
     """
     Function to get search request data
 
@@ -149,41 +150,49 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal, indent, min
     """
     # get the data
     try:
-        # set status url
-        __echo_helper("Checking request status ...", show_times=show_times)
-        if (type == "conjunctions"):
-            url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
-        elif (type == "data_products"):
-            url = pyaurorax.api.urls.data_products_request_url.format(request_uuid)
-        elif (type == "ephemeris"):
-            url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+        # check the status if we need to
+        if (search_obj is None):
+            # set status url
+            __echo_helper("Checking request status ...", show_times=show_times)
+            if (type == "conjunctions"):
+                url = pyaurorax.api.urls.conjunction_request_url.format(request_uuid)
+            elif (type == "data_products"):
+                url = pyaurorax.api.urls.data_products_request_url.format(request_uuid)
+            elif (type == "ephemeris"):
+                url = pyaurorax.api.urls.ephemeris_request_url.format(request_uuid)
+            else:
+                click.echo("Unexpected error occurred, please open an issue on "
+                           "the Github repository detailing how you were able "
+                           "to make this message appear")
+                sys.exit(1)
+
+            # get status
+            try:
+                s = pyaurorax.requests.get_status(url)
+            except pyaurorax.AuroraXNotFoundException:
+                click.echo("Error: request ID not found")
+                sys.exit(1)
+
+            # check status
+            if (s["search_result"]["completed_timestamp"] is None):
+                click.echo("Error: Search is not done yet, not retrieving data")
+                click.echo("\nNote: you can use the get_status command to "
+                           "check if the search has completed. Try the command "
+                           "\"aurorax-cli %s get_status %s\"" % (type, request_uuid))
+                sys.exit(1)
+
+            # set data url
+            data_url = "%s/data" % (url)
         else:
-            click.echo("Unexpected error occurred, please open an issue on "
-                       "the Github repository detailing how you were able "
-                       "to make this message appear")
-            sys.exit(1)
-
-        # get status
-        try:
-            s = pyaurorax.requests.get_status(url)
-        except pyaurorax.AuroraXNotFoundException:
-            click.echo("Error: request ID not found")
-            sys.exit(1)
-
-        # check status
-        if (s["search_result"]["completed_timestamp"] is None):
-            click.echo("Error: Search is not done yet, not retrieving data")
-            click.echo("\nNote: you can use the get_status command to "
-                       "check if the search has completed. Try the command "
-                       "\"aurorax-cli %s get_status %s\"" % (type, request_uuid))
-            sys.exit(1)
+            s = search_obj.status
+            data_url = search_obj.data_url
 
         # get data
         try:
             __echo_helper("Downloading %s results and %s of data ..." % (humanize.intcomma(s["search_result"]["result_count"]),
                                                                          humanize.naturalsize(s["search_result"]["file_size"])),
                           show_times=show_times)
-            data = pyaurorax.requests.get_data("%s/data" % (url), skip_serializing=True)
+            data = pyaurorax.requests.get_data(data_url, skip_serializing=True)
         except pyaurorax.AuroraXDataRetrievalError as e:
             # parse error message
             if ("NotFound" in (str(e))):
