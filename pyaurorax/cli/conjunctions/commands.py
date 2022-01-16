@@ -12,6 +12,26 @@ from ..helpers import (print_request_logs_table,
 from ..templates import CONJUNCTION_SEARCH_TEMPLATE
 
 
+def __create_search_object_from_query(q):
+    start = parse(q["start"], ignoretz=True)
+    end = parse(q["end"], ignoretz=True)
+    max_distances = q["max_distances"]
+    ground = None if "ground" not in q else q["ground"]
+    space = None if "space" not in q else q["space"]
+    events = None if "events" not in q else q["events"]
+    conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
+    epoch_search_precision = None if "epoch_search_precision" not in q else q["epoch_search_precision"]
+    s = pyaurorax.conjunctions.Search(start,
+                                      end,
+                                      distance=max_distances,
+                                      ground=ground,
+                                      space=space,
+                                      events=events,
+                                      conjunction_types=conjunction_types,
+                                      epoch_search_precision=epoch_search_precision)
+    return s
+
+
 @click.group("conjunctions", help="Interact with conjunction searches")
 def conjunctions_group():
     pass
@@ -179,22 +199,7 @@ def search_resubmit(config, request_uuid):
 
     # create search object
     click.echo("Preparing new search ...")
-    start = parse(q["start"], ignoretz=True)
-    end = parse(q["end"], ignoretz=True)
-    max_distances = q["max_distances"]
-    ground = None if "ground" not in q else q["ground"]
-    space = None if "space" not in q else q["space"]
-    events = None if "events" not in q else q["events"]
-    conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
-    epoch_search_precision = None if "epoch_search_precision" not in q else q["epoch_search_precision"]
-    s = pyaurorax.conjunctions.Search(start,
-                                      end,
-                                      distance=max_distances,
-                                      ground=ground,
-                                      space=space,
-                                      events=events,
-                                      conjunction_types=conjunction_types,
-                                      epoch_search_precision=epoch_search_precision)
+    s = __create_search_object_from_query(q)
 
     # submit search
     click.echo("Submitting new search ...")
@@ -293,3 +298,34 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                     minify,
                     show_times=True,
                     search_obj=s)
+
+
+@conjunctions_group.command("describe",
+                            short_help="Describe a conjunction search request")
+@click.argument("infile", type=str)
+@click.pass_obj
+def describe(config, infile):
+    """
+    Describe a conjunction search request using
+    "SQL-like" syntax
+
+    \b
+    INFILE      input file with query (must be a JSON)
+    """
+    # check that infile exists
+    if not (os.path.exists(infile)):
+        click.echo("Error: infile doesn't exist (%s" % (infile))
+        sys.exit(1)
+
+    # read in infile
+    with open(infile, 'r', encoding="utf-8") as fp:
+        q = json.load(fp)
+
+    # create search object
+    s = __create_search_object_from_query(q)
+
+    # describe the search
+    d = pyaurorax.conjunctions.describe(s)
+
+    # output
+    click.echo(d)

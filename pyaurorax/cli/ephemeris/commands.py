@@ -12,6 +12,29 @@ from ..helpers import (print_request_logs_table,
 from ..templates import EPHEMERIS_SEARCH_TEMPLATE
 
 
+def __create_search_object_from_query(q):
+    start = parse(q["start"], ignoretz=True)
+    end = parse(q["end"], ignoretz=True)
+    programs = None if "programs" not in q["data_sources"] else q["data_sources"]["programs"]
+    platforms = None if "platforms" not in q["data_sources"] else q["data_sources"]["platforms"]
+    instrument_types = None if "instrument_types" not in q["data_sources"] else q["data_sources"]["instrument_types"]
+    metadata_filters = None
+    metadata_filters_logical_operator = None
+    if ("ephemeris_metadata_filters" in q["data_sources"]):
+        if ("expressions" in q["data_sources"]["ephemeris_metadata_filters"]):
+            metadata_filters = q["data_sources"]["ephemeris_metadata_filters"]["expressions"]
+        if ("logical_operator" in q["data_sources"]["ephemeris_metadata_filters"]):
+            metadata_filters_logical_operator = q["data_sources"]["ephemeris_metadata_filters"]["logical_operator"]
+    s = pyaurorax.ephemeris.Search(start,
+                                   end,
+                                   programs=programs,
+                                   platforms=platforms,
+                                   instrument_types=instrument_types,
+                                   metadata_filters=metadata_filters,
+                                   metadata_filters_logical_operator=metadata_filters_logical_operator)
+    return s
+
+
 @click.group("ephemeris", help="Interact with ephemeris searches")
 def ephemeris_group():
     pass
@@ -179,25 +202,7 @@ def search_resubmit(config, request_uuid):
 
     # create search object
     click.echo("Preparing new search ...")
-    start = parse(q["start"], ignoretz=True)
-    end = parse(q["end"], ignoretz=True)
-    programs = None if "programs" not in q["data_sources"] else q["data_sources"]["programs"]
-    platforms = None if "platforms" not in q["data_sources"] else q["data_sources"]["platforms"]
-    instrument_types = None if "instrument_types" not in q["data_sources"] else q["data_sources"]["instrument_types"]
-    metadata_filters = None
-    metadata_filters_logical_operator = None
-    if ("ephemeris_metadata_filters" in q["data_sources"]):
-        if ("expressions" in q["data_sources"]["ephemeris_metadata_filters"]):
-            metadata_filters = q["data_sources"]["ephemeris_metadata_filters"]["expressions"]
-        if ("logical_operator" in q["data_sources"]["ephemeris_metadata_filters"]):
-            metadata_filters_logical_operator = q["data_sources"]["ephemeris_metadata_filters"]["logical_operator"]
-    s = pyaurorax.ephemeris.Search(start,
-                                   end,
-                                   programs=programs,
-                                   platforms=platforms,
-                                   instrument_types=instrument_types,
-                                   metadata_filters=metadata_filters,
-                                   metadata_filters_logical_operator=metadata_filters_logical_operator)
+    s = __create_search_object_from_query(q)
 
     # submit search
     click.echo("Submitting new search ...")
@@ -299,3 +304,34 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                     minify,
                     show_times=True,
                     search_obj=s)
+
+
+@ephemeris_group.command("describe",
+                         short_help="Describe an ephemeris search request")
+@click.argument("infile", type=str)
+@click.pass_obj
+def describe(config, infile):
+    """
+    Describe an ephemeris search request using
+    "SQL-like" syntax
+
+    \b
+    INFILE      input file with query (must be a JSON)
+    """
+    # check that infile exists
+    if not (os.path.exists(infile)):
+        click.echo("Error: infile doesn't exist (%s" % (infile))
+        sys.exit(1)
+
+    # read in infile
+    with open(infile, 'r', encoding="utf-8") as fp:
+        q = json.load(fp)
+
+    # create search object
+    s = __create_search_object_from_query(q)
+
+    # describe the search
+    d = pyaurorax.ephemeris.describe(s)
+
+    # output
+    click.echo(d)
