@@ -23,7 +23,7 @@ PyAuroraX is available on PyPI so pip can be used to install it:
 $ pip install pyaurorax
 ```
 
-To get full functionality, you can also install PyAuroraX with the aacgmv2 dependency. Note that without this, the calculate_btrace methods in the util module will show warning messages. All other functionality will work without this dependency.
+To get full functionality, you can install PyAuroraX with the aacgmv2 dependency. Note that without this, the calculate_btrace methods in the util module will show warning messages. All other functionality will work without this dependency.
 
 ```console
 $ pip install pyaurorax[aacgmv2]
