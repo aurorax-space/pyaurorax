@@ -84,8 +84,10 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
               help="Filter log messages")
 @click.option("--table-max-width", "--max-width", type=int,
               help="Max width for the logs table")
+@click.option("--no-truncate", is_flag=True,
+              help="Do not truncate log messages that are >1000 characters long")
 @click.pass_obj
-def get_logs(config, request_uuid, filter_, table_max_width):
+def get_logs(config, request_uuid, filter_, table_max_width, no_truncate):
     """
     Get the logs for a conjunction search request
 
@@ -103,11 +105,15 @@ def get_logs(config, request_uuid, filter_, table_max_width):
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
+    # set truncate
+    truncate = not no_truncate
+
     # print out the logs nicely
     if ("logs" in s):
         print_request_logs_table(s["logs"],
                                  filter_level=filter_,
-                                 table_max_width=table_max_width)
+                                 table_max_width=table_max_width,
+                                 truncate=truncate)
     else:
         click.echo("Search logs: missing, unable to display")
 

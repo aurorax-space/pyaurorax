@@ -20,7 +20,7 @@ def __echo_helper(message, show_times=False):
         click.echo(message)
 
 
-def print_request_logs_table(logs, filter_level=None, table_max_width=None):
+def print_request_logs_table(logs, filter_level=None, table_max_width=None, truncate=True):
     """
     Function to print request logs table
 
@@ -53,7 +53,10 @@ def print_request_logs_table(logs, filter_level=None, table_max_width=None):
     for log in logs:
         if (filter_level is None or log["level"] == filter_level):
             table_levels.append(log["level"])
-            table_summaries.append('\n'.join(textwrap.wrap(log["summary"], wrap_threshold)))
+            if (truncate is True and len(log["summary"]) > 1000):
+                table_summaries.append('\n'.join(textwrap.wrap(log["summary"][0:1000] + "...", wrap_threshold)))
+            else:
+                table_summaries.append('\n'.join(textwrap.wrap(log["summary"], wrap_threshold)))
             table_timestamps.append(parse(log["timestamp"], ignoretz=True))
     # set header values
     table_headers = ["Timestamp", "Level", "Summary"]
