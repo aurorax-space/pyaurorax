@@ -51,7 +51,7 @@ def set_base_url(url: str) -> None:
 def get_base_url() -> str:
     """
     Returns the current base URL for the API
-    
+
     Returns:
         current base URL
     """
