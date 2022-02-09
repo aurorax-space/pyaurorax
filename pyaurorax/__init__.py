@@ -7,9 +7,9 @@ ephemeris or data product records, data availability information, and more.
 PyAuroraX requires Python 3.6, 3.7, 3.8, or 3.9 (Python 3.10 currently not
 supported).
 
-Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax){:target="_blank"}
+Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax)
 and explore the evolving ecosystem of visualizations, tools, and data
-at [AuroraX](https://aurorax.space/){:target="_blank"}.
+at [AuroraX](https://aurorax.space/).
 
 For an overview of usage and examples, visit the
 [AuroraX Documentation website](https://docs.aurorax.space/code/overview).
