@@ -1,20 +1,20 @@
 """
 The PyAuroraX package provides a way to interact with the
-[AuroraX API](https://aurorax.space/data/api_libraries). It is intended
+[AuroraX API](https://aurorax.space/data/apiLibraries). It is intended
 to provide an intuitive process for those in the space physics and related
 communities to programmatically query AuroraX's vast database for conjunctions,
 ephemeris or data product records, data availability information, and more.
 PyAuroraX requires Python 3.6, 3.7, 3.8, or 3.9 (Python 3.10 currently not
 supported).
 
-Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax)
+Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax){:target="_blank"}
 and explore the evolving ecosystem of visualizations, tools, and data
-at [AuroraX](https://aurorax.space/).
+at [AuroraX](https://aurorax.space/){:target="_blank"}.
 
 For an overview of usage and examples, visit the
-[AuroraX Documentation website](https://docs.aurorax.space/python_libraries/pyaurorax/).
+[AuroraX Documentation website](https://docs.aurorax.space/code/overview).
 Details of functionality and options are available in the
-[API reference](https://docs.aurorax.space/python_libraries/pyaurorax/api_reference/aurorax/).
+[API reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax/).
 
 Installation:
 ```console
