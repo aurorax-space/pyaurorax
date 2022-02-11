@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "pyaurorax"
-version = "0.9.0"
+version = "0.9.1"
 description = "Python library for interacting with the AuroraX API"
 readme = "README.md"
-homepage = "https://docs.aurorax.space"
+homepage = "https://github.com/aurorax-space/pyaurorax"
 repository = "https://github.com/aurorax-space/pyaurorax"
 authors = [
     "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
@@ -66,8 +66,8 @@ aurorax-cli = "pyaurorax.cli.cli:cli"
 aacgmv2 = ["aacgmv2"]
 
 [tool.poetry.urls]
-"Documentation" = "https://docs.aurorax.space/python_libraries/pyaurorax/overview"
-"API Reference" = "https://docs.aurorax.space/python_libraries/pyaurorax/api_reference/pyaurorax"
+"Documentation" = "https://docs.aurorax.space/code/overview"
+"API Reference" = "https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax"
 "Bug Tracker" = "https://github.com/aurorax-space/pyaurorax/issues"
 "AuroraX Platform" = "https://aurorax.space"
 
