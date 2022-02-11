@@ -12,8 +12,8 @@ PyAuroraX officially supports Python 3.6, 3.7, 3.8, and 3.9 (Python 3.10 not cur
 
 Some links to help:
 - [AuroraX main website](https://aurorax.space)
-- [PyAuroraX documentation](https://docs.aurorax.space/python_libraries/pyaurorax/overview)
-- [PyAuroraX API Reference](https://docs.aurorax.space/python_libraries/pyaurorax/api_reference/pyaurorax)
+- [PyAuroraX documentation](https://docs.aurorax.space/code/overview)
+- [PyAuroraX API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax)
 
 ## Installation
 
