@@ -24,7 +24,8 @@ finding conjunctions using the south B-trace data
 # function and class imports
 from .conjunctions import (search,
                            search_async,
-                           describe)
+                           describe,
+                           get_request_url)
 from .classes.conjunction import Conjunction
 from .classes.search import Search
 
@@ -41,6 +42,7 @@ __all__ = [
     "search",
     "search_async",
     "describe",
+    "get_request_url",
     "Conjunction",
     "Search",
 ]

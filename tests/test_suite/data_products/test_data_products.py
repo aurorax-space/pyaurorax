@@ -395,3 +395,11 @@ def test_describe_data_products_search():
         assert True
     else:
         assert False
+
+
+@pytest.mark.data_products
+def test_get_request_url():
+    request_id = "testing-request-id"
+    expected_url = "https://api.staging.aurorax.space/api/v1/data_products/requests/" + request_id
+    returned_url = pyaurorax.data_products.get_request_url(request_id)
+    assert returned_url == expected_url

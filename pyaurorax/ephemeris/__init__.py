@@ -12,7 +12,8 @@ from .ephemeris import (search_async,
                         search,
                         upload,
                         delete,
-                        describe)
+                        describe,
+                        get_request_url)
 from .classes.ephemeris import Ephemeris
 from .classes.search import Search
 
@@ -29,6 +30,7 @@ __all__ = [
     "upload",
     "delete",
     "describe",
+    "get_request_url",
     "Ephemeris",
     "Search",
 ]

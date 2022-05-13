@@ -54,7 +54,7 @@ class Search():
         query: the query for this request as JSON
         status: the status of the query
         data: the ephemeris records found
-        logs: all log messages outputed by the AuroraX API for this request
+        logs: all log messages outputted by the AuroraX API for this request
     """
 
     def __init__(self,

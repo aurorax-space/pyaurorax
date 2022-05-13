@@ -277,3 +277,21 @@ def describe(search_obj: Search) -> str:
 
     # return
     return res.data
+
+
+def get_request_url(request_id: str) -> str:
+    """
+    Get the conjunction search request URL for a given
+    request ID. This URL can be used for subsequent
+    pyaurorax.requests function calls. Primarily this method
+    facilitates delving into details about a set of already-submitted
+    conjunction searches.
+
+    Args:
+        request_id: the request identifier
+
+    Returns:
+        the request URL
+    """
+    url = urls.conjunction_request_url.format(request_id)
+    return url

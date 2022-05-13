@@ -62,7 +62,8 @@ from .data_products import (search,
                             upload,
                             delete_urls,
                             delete,
-                            describe)
+                            describe,
+                            get_request_url)
 from .classes.data_product import DataProduct
 from .classes.search import Search
 
@@ -85,6 +86,7 @@ __all__ = [
     "delete_urls",
     "delete",
     "describe",
+    "get_request_url",
     "DataProduct",
     "Search",
 ]

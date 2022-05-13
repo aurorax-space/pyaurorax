@@ -124,6 +124,7 @@ Below are some more commands for advanced usages of PyTest.
 - `poetry run pytest --collect-only` List all available tests
 - `poetry run pytest --markers` List all markers (includes builtin, plugin and per-project ones)
 - `cat pytest.ini` List custom markers
+- `poetry run pytest tests/test_suite/ephemeris/test_ephemeris.py::test_get_request_url -v` Run a single specific test
 
 You can also run Pytest against a different API. By default, it runs agains the staging API, but you can alternatively tell it to run against the production API, or a local instance.
 

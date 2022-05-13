@@ -648,3 +648,11 @@ def test_conjunction_search_describe():
         assert True
     else:
         assert False
+
+
+@pytest.mark.conjunctions
+def test_get_request_url():
+    request_id = "testing-request-id"
+    expected_url = "https://api.staging.aurorax.space/api/v1/conjunctions/requests/" + request_id
+    returned_url = pyaurorax.conjunctions.get_request_url(request_id)
+    assert returned_url == expected_url
