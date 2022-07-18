@@ -1,4 +1,4 @@
-name: tests
+name: test-standard
 
 on:
   push:
@@ -7,33 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
-  unauthorized_access_tests:
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: "3.9"
-    - name: Install Poetry and dependencies
-      run: |
-        pip install poetry
-        poetry install -E aacgmv2
-    - name: Run unauthorized access test (pytest)
-      run: |
-        make test-pytest-unauthorized-access
-      env: 
-        AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
-  
-  build_and_read-only_tests:
-    timeout-minutes: 15
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.6", "3.7", "3.8", "3.9"]
-      max-parallel: 2
+      max-parallel: 4
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -59,8 +39,3 @@ jobs:
     - name: Type-checking (mypy)
       run: |
         make test-mypy    
-    - name: Run functionality tests (pytest)
-      run: |
-        make test-pytest-read
-      env: 
-        AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
