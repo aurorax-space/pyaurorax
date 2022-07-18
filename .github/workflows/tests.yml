@@ -1,4 +1,4 @@
-name: test-all-platforms
+name: tests-all-platforms
 
 on: workflow_dispatch
 
