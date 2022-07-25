@@ -11,6 +11,32 @@ from ..helpers import (print_request_logs_table,
                        get_search_data)
 from ..templates import CONJUNCTION_SEARCH_TEMPLATE
 
+# globals
+__BROWSER_TYPES = sorted(["default",
+                          "mozilla",
+                          "firefox",
+                          "netscape",
+                          "galeon",
+                          "epiphany",
+                          "skipstone",
+                          "kfmclient",
+                          "konqueror",
+                          "kfm",
+                          "mosaic",
+                          "opera",
+                          "grail",
+                          "links",
+                          "elinks",
+                          "lynx",
+                          "w3m",
+                          "windows-default",
+                          "macosx",
+                          "safari",
+                          "google-chrome",
+                          "chrome",
+                          "chromium",
+                          "chromium-browser"])
+
 
 def __create_search_object_from_query(q):
     start = parse(q["start"], ignoretz=True)
@@ -152,11 +178,11 @@ def get_query(config, request_uuid):
 @conjunctions_group.command("get_data",
                             short_help="Get data for a conjunction search request")
 @click.argument("request_uuid", type=str)
-@click.option("--outfile", type=str, help="output file to save data to (a .json file)")
+@click.option("--outfile", type=str, help="Output file to save data to (a .json file)")
 @click.option("--output-to-terminal", type=click.Choice(["dict", "objects"]),
-              help="output data to terminal in a certain format (instead of to file)")
+              help="Output data to terminal in a certain format (instead of to file)")
 @click.option("--indent", type=int, default=2, show_default=True,
-              help="indentation when saving data to file")
+              help="Indentation when saving data to file")
 @click.option("--minify", is_flag=True, help="Minify the JSON data saved to file")
 @click.pass_obj
 def get_data(config, request_uuid, outfile, output_to_terminal, indent, minify):
@@ -217,9 +243,9 @@ def search_resubmit(config, request_uuid):
 
 @conjunctions_group.command("search_template",
                             short_help="Output template for a conjunction search request")
-@click.option("--outfile", type=str, help="save template to a file")
+@click.option("--outfile", type=str, help="Save template to a file")
 @click.option("--indent", type=int, default=2, show_default=True,
-              help="indentation to use when outputing template")
+              help="Indentation to use when outputting template")
 @click.pass_obj
 def search_template(config, outfile, indent):
     """
@@ -239,16 +265,21 @@ def search_template(config, outfile, indent):
 @click.option("--poll-interval",
               default=pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME,
               show_default=True,
-              help="polling interval when waiting for data (seconds)")
-@click.option("--outfile", type=str, help="output file to save data to (a .json file)")
+              help="Polling interval when waiting for data (seconds)")
+@click.option("--outfile", type=str, help="Output file to save data to (a .json file)")
 @click.option("--output-to-terminal", type=click.Choice(["dict", "objects"]),
-              help="output data to terminal in a certain format (instead of to file)")
+              help="Output data to terminal in a certain format (instead of to file)")
 @click.option("--indent", type=int, default=2, show_default=True,
               help="indentation when saving data to file")
 @click.option("--minify", is_flag=True, help="Minify the JSON data saved to file")
 @click.option("--quiet", is_flag=True, help="Quiet output")
+@click.option("--swarmaurora-show-url", is_flag=True, help="Display the URL for displaying conjunction results in Swarm-Aurora")
+@click.option("--swarmaurora-open-browser", is_flag=True, help="In a browser, open the conjunction results in Swarm-Aurora")
+@click.option("--swarmaurora-browser-type", default="default", type=click.Choice(__BROWSER_TYPES),
+              help="Output data to terminal in a certain format (instead of to file)")
 @click.pass_obj
-def search(config, infile, poll_interval, outfile, output_to_terminal, indent, minify, quiet):
+def search(config, infile, poll_interval, outfile, output_to_terminal, indent, minify, quiet,
+           swarmaurora_show_url, swarmaurora_open_browser, swarmaurora_browser_type):
     """
     Perform a conjunction search request
 
@@ -304,6 +335,17 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                     minify,
                     show_times=True,
                     search_obj=s)
+
+    # do Swarm-Aurora tasks if requested
+    if (swarmaurora_show_url is True):
+        url = pyaurorax.conjunctions.swarmaurora.get_url(s)
+        print("[%s] Swarm-Aurora URL: %s" % (datetime.datetime.now(), url))
+    if (swarmaurora_open_browser is True):
+        print("[%s] Launching a browser to show this conjunction search in Swarm-Aurora (browser='%s') ..." % (datetime.datetime.now(),
+                                                                                                               swarmaurora_browser_type))
+        if (swarmaurora_browser_type == "default"):
+            swarmaurora_browser_type = None
+        pyaurorax.conjunctions.swarmaurora.open_in_browser(s, browser=swarmaurora_browser_type)
 
 
 @conjunctions_group.command("describe",
