@@ -8,7 +8,6 @@ import warnings
 from typing import Dict, List, Optional, Union
 from .classes.search import Search
 from ..api import AuroraXRequest, urls
-from ..conjunctions import CONJUNCTION_TYPE_NBTRACE
 from ..requests import STANDARD_POLLING_SLEEP_TIME
 
 # pdoc init
@@ -21,7 +20,7 @@ def search(start: datetime.datetime,
            ground: Optional[List[Dict[str, str]]] = [],
            space: Optional[List[Dict[str, str]]] = [],
            events: Optional[List[Dict[str, str]]] = [],
-           conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
+           conjunction_types: Optional[List[str]] = [],
            epoch_search_precision: Optional[int] = 60,
            response_format: Optional[Dict[str, bool]] = None,
            poll_interval: Optional[float] = STANDARD_POLLING_SLEEP_TIME,
@@ -92,9 +91,9 @@ def search(start: datetime.datetime,
                     "platforms": [ "toshi" ],
                     "instrument_types": [ "substorm onsets" ]
                 }]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
-            in the pyaurorax.conjunctions module, or at the top level using the
-            pyaurorax.CONJUNCTION_TYPE_* variables.
+        conjunction_types: list of conjunction types, defaults to [] (meaning all conjunction
+            types). Options are in the pyaurorax.conjunctions module, or at the top level using
+            the pyaurorax.CONJUNCTION_TYPE_* variables.
         epoch_search_precision: the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
@@ -160,7 +159,7 @@ def search_async(start: datetime.datetime,
                  ground: Optional[List[Dict[str, str]]] = [],
                  space: Optional[List[Dict[str, str]]] = [],
                  events: Optional[List[Dict[str, str]]] = [],
-                 conjunction_types: Optional[List[str]] = [CONJUNCTION_TYPE_NBTRACE],
+                 conjunction_types: Optional[List[str]] = [],
                  epoch_search_precision: Optional[int] = 60,
                  response_format: Optional[Dict[str, bool]] = None) -> Search:
     """
@@ -232,9 +231,9 @@ def search_async(start: datetime.datetime,
                     "platforms": [ "toshi" ],
                     "instrument_types": [ "substorm onsets" ]
                 }]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
-            in the pyaurorax.conjunctions module, or at the top level using the
-            pyaurorax.CONJUNCTION_TYPE_* variables.
+        conjunction_types: list of conjunction types, defaults to [] (meaning all conjunction
+            types). Options are in the pyaurorax.conjunctions module, or at the top level using
+            the pyaurorax.CONJUNCTION_TYPE_* variables.
         epoch_search_precision: the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
@@ -264,7 +263,7 @@ def describe(search_obj: Search) -> str:
     Describe a conjunction search as an "SQL-like" string
 
     Args:
-        search_obj: the conjunction search object to describe
+        search_obj: the conjunction search to describe
 
     Returns:
         the "SQL-like" string describing the conjunction search object
