@@ -277,9 +277,12 @@ def search_template(config, outfile, indent):
 @click.option("--swarmaurora-open-browser", is_flag=True, help="In a browser, open the conjunction results in Swarm-Aurora")
 @click.option("--swarmaurora-browser-type", default="default", type=click.Choice(__BROWSER_TYPES),
               help="Output data to terminal in a certain format (instead of to file)")
+@click.option("--swarmaurora-save-custom-import-file", is_flag=True,
+              help="Generate a Swarm-Aurora custom import file for the search")
 @click.pass_obj
 def search(config, infile, poll_interval, outfile, output_to_terminal, indent, minify, quiet,
-           swarmaurora_show_url, swarmaurora_open_browser, swarmaurora_browser_type):
+           swarmaurora_show_url, swarmaurora_open_browser, swarmaurora_browser_type,
+           swarmaurora_save_custom_import_file):
     """
     Perform a conjunction search request
 
@@ -337,6 +340,11 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                     search_obj=s)
 
     # do Swarm-Aurora tasks if requested
+    if (swarmaurora_save_custom_import_file is True):
+        print("[%s] Generating Swarm-Aurora custom import file ..." % (datetime.datetime.now()))
+        swarmaurora_custom_import_filename = pyaurorax.conjunctions.swarmaurora.create_custom_import_file(s)
+        print("[%s] Saved Swarm-Aurora custom import file to '%s'" % (datetime.datetime.now(),
+                                                                      swarmaurora_custom_import_filename))
     if (swarmaurora_show_url is True):
         url = pyaurorax.conjunctions.swarmaurora.get_url(s)
         print("[%s] Swarm-Aurora URL: %s" % (datetime.datetime.now(), url))

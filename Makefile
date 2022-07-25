@@ -12,9 +12,9 @@ update upgrade:
 	python -m pip install --upgrade poetry
 	poetry update
 
-test: test-linting test-pytest
+test test-linting: test-flake8 test-pycodestyle test-pylint test-bandit test-mypy
 
-test-linting: test-flake8 test-pycodestyle test-pylint test-bandit test-mypy
+test-all: test-linting test-pytest
 
 test-flake8 flake8:
 	@printf "Running flake8 tests\n+++++++++++++++++++++++++++\n"
