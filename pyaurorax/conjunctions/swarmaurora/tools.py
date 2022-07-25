@@ -47,9 +47,9 @@ def open_in_browser(search_obj: Search, browser: str = None) -> None:
         w.open_new_tab(url)
     except Exception as e:
         if ("could not locate runnable browser" in str(e)):
-            raise AuroraXException("Error: selected browser '%s' not found, please try " +
-                                   "another. For the list of options, refer to " +
-                                   "https://docs.python.org/3/library/webbrowser.html#webbrowser.get" % (browser))
+            raise AuroraXException(("Error: selected browser '%s' not found, please try "
+                                   "another. For the list of options, refer to "
+                                    "https://docs.python.org/3/library/webbrowser.html#webbrowser.get") % (browser))
 
 
 def create_custom_import_file(search_obj: Search,
