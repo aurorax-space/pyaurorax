@@ -26,7 +26,7 @@ from .conjunctions import (search,
                            search_async,
                            describe,
                            get_request_url)
-from .swarmaurora import __init__
+from .swarmaurora import __all__ as swarmaurora_all
 from .classes.conjunction import Conjunction
 from .classes.search import Search
 
@@ -46,5 +46,5 @@ __all__ = [
     "get_request_url",
     "Conjunction",
     "Search",
-    "swarmaurora",
+    "swarmaurora_all",
 ]

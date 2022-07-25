@@ -341,8 +341,9 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
         url = pyaurorax.conjunctions.swarmaurora.get_url(s)
         print("[%s] Swarm-Aurora URL: %s" % (datetime.datetime.now(), url))
     if (swarmaurora_open_browser is True):
-        print("[%s] Launching a browser to show this conjunction search in Swarm-Aurora (browser='%s') ..." % (datetime.datetime.now(),
-                                                                                                               swarmaurora_browser_type))
+        print(("[%s] Launching a browser to show this conjunction search in "
+              "Swarm-Aurora (browser='%s') ...") % (datetime.datetime.now(),
+                                                    swarmaurora_browser_type))
         if (swarmaurora_browser_type == "default"):
             swarmaurora_browser_type = None
         pyaurorax.conjunctions.swarmaurora.open_in_browser(s, browser=swarmaurora_browser_type)

@@ -27,7 +27,7 @@ def get_url(search_obj: Search) -> str:
 
 def open_in_browser(search_obj: Search, browser: str = None) -> None:
     """
-    In a browser, open a conjunction search in the Swarm-Aurora 
+    In a browser, open a conjunction search in the Swarm-Aurora
     Conjunction Finder.
 
     Args:

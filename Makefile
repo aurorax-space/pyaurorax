@@ -19,7 +19,7 @@ test-linting: test-flake8 test-pycodestyle test-pylint test-bandit test-mypy
 test-flake8 flake8:
 	@printf "Running flake8 tests\n+++++++++++++++++++++++++++\n"
 	poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-	poetry run flake8 . --count --ignore=W391,W503,F541 --max-complexity=30 --max-line-length=129 --statistics
+	poetry run flake8 . --count --ignore=W391,W503,F541,W504 --max-complexity=30 --max-line-length=129 --statistics
 	@printf "\n\n"
 
 test-pycodestyle:
