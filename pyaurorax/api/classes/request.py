@@ -4,7 +4,8 @@ Class definition used for managing an API request
 
 import json
 import requests
-import logging, sys
+import logging
+import sys
 from pydantic import BaseModel
 from typing import Optional, Dict, List, Union
 from ..._internal.util import json_converter
@@ -109,9 +110,9 @@ class AuroraXRequest(BaseModel):
                                params=self.params,
                                data=body_santized)
 
-        logging.debug('Request status code is %d', req.status_code);
+        logging.debug('Request status code is %d', req.status_code)
         if(req.status_code != 200 | req.status_code != 303):
-            logging.debug('Request status msg is %s', req.json()["error_message"]);
+            logging.debug('Request status msg is %s', req.json()["error_message"])
 
         # retry request if needed
         if (skip_retry_logic is False):
