@@ -330,6 +330,6 @@ def test_describe_ephemeris_search():
 @pytest.mark.ephemeris
 def test_get_request_url():
     request_id = "testing-request-id"
-    expected_url = "https://api.staging.aurorax.space/api/v1/ephemeris/requests/" + request_id
+    expected_url = pyaurorax.api.get_base_url() + "/api/v1/ephemeris/requests/" + request_id
     returned_url = pyaurorax.ephemeris.get_request_url(request_id)
     assert returned_url == expected_url
