@@ -1,7 +1,7 @@
 import os
-import pyaurorax
-import pytest
 import sys
+import pytest
+import pyaurorax
 
 
 def pytest_addoption(parser):
@@ -35,11 +35,8 @@ def api_key(request):
 
 @pytest.fixture(scope="session", autouse=True)
 def set_env_api_key(env, host, api_key):
-    # init
-    url = ""
-    print(f"\n\nTest environment: {env}")
-
     # set url and authenticate
+    print(f"\n\nTest environment: {env}")
     if (env == "local"):
         url = host
         if (api_key is not None):

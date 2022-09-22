@@ -243,7 +243,7 @@ def test_upload_data_products():
     s.check_for_data()
     s.get_data()
 
-    assert result == 1 and len(s.data) > 0
+    assert (result == 1) and (len(s.data) > 0)
 
 
 @pytest.mark.data_products
