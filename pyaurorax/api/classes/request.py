@@ -9,6 +9,7 @@ from typing import Optional, Dict, List, Union
 from ..._internal.util import json_converter
 from .response import AuroraXResponse
 from ..api import get_api_key
+from ...import __version__
 from ...exceptions import (AuroraXMaxRetriesException,
                            AuroraXUnauthorizedException,
                            AuroraXNotFoundException,
@@ -25,7 +26,8 @@ DEFAULT_RETRIES: int = 2
 
 REQUEST_HEADERS: Dict = {
     "accept": "application/json",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "User-Agent": "python-pyaurorax/%s" % (__version__),
 }
 """ The default headers sent as part of a request to the AuroraX API """
 
@@ -56,10 +58,7 @@ class AuroraXRequest(BaseModel):
 
     def __merge_headers(self):
         # set initial headers
-        all_headers = {
-            "accept": "application/json",
-            "Content-Type": "application/json"
-        }
+        all_headers = REQUEST_HEADERS
 
         # add headers passed into the class
         for key, value in self.headers.items():
