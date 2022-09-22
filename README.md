@@ -76,7 +76,8 @@ Clone the repository and install primary and development dependencies using Poet
 ```console
 $ git clone git@github.com:aurorax-space/pyaurorax.git
 $ cd pyaurorax
-$ make install
+$ python -m pip install poetry
+$ poetry install -E aacgmv2
 ```
 
 ### Documentation

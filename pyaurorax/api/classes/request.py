@@ -4,7 +4,6 @@ Class definition used for managing an API request
 
 import json
 import requests
-import sys
 from pydantic import BaseModel
 from typing import Optional, Dict, List, Union
 from ..._internal.util import json_converter
