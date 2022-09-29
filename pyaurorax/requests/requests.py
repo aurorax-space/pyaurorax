@@ -6,7 +6,7 @@ import datetime
 import time
 from typing import Dict, List, Optional
 from ..api.classes.request import AuroraXRequest
-from ..exceptions import AuroraXDataRetrievalError
+from ..exceptions import AuroraXDataRetrievalException
 from ..location import Location
 
 # pdoc init
@@ -51,7 +51,7 @@ def get_data(data_url: str,
         skip_serializing: skip any object serializing, defaults to False
 
     Raises:
-        pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
+        pyaurorax.exceptions.AuroraXDataRetrievalException: error retrieving data
 
     Returns:
         the data for this request
@@ -67,8 +67,8 @@ def get_data(data_url: str,
 
     # check for error message
     if ("error" in res.data):
-        raise AuroraXDataRetrievalError("%s: %s" % (res.data["error"]["error_code"],
-                                                    res.data["error"]["error_message"]))
+        raise AuroraXDataRetrievalException("%s: %s" % (res.data["error"]["error_code"],
+                                                        res.data["error"]["error_message"]))
 
     # set data var
     data_result = res.data["result"]

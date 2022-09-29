@@ -3,7 +3,7 @@ import pyaurorax
 
 def main():
     # get data source
-    ds = pyaurorax.sources.get_using_identifier(10, format=pyaurorax.FORMAT_FULL_RECORD)
+    ds = pyaurorax.sources.get_using_identifier(30, format=pyaurorax.FORMAT_FULL_RECORD)
     print(ds)
 
 

@@ -21,7 +21,7 @@ def main():
             source.platform,
             source.instrument_type,
             source.source_type,
-            source.display_name,
+            source.display_name
         ])
     rows = sorted(rows, key=lambda i: (i[1], i[3], i[2]))
     print(tabulate(rows, headers=headers, tablefmt="presto"))

@@ -84,8 +84,15 @@ class AuroraXUnexpectedEmptyResponse(AuroraXException):
     pass
 
 
-class AuroraXDataRetrievalError(AuroraXException):
+class AuroraXDataRetrievalException(AuroraXException):
     """
     Error occurred while retrieving search data
+    """
+    pass
+
+
+class AuroraXTimeoutException(AuroraXException):
+    """
+    A timeout was reached while communicating with the AuroraX API
     """
     pass

@@ -15,7 +15,8 @@ from ...exceptions import (AuroraXMaxRetriesException,
                            AuroraXNotFoundException,
                            AuroraXUnexpectedContentTypeException,
                            AuroraXUnexpectedEmptyResponse,
-                           AuroraXException)
+                           AuroraXException,
+                           AuroraXTimeoutException)
 
 # pdoc init
 __pdoc__: Dict = {}
@@ -30,6 +31,9 @@ REQUEST_HEADERS: Dict = {
     "User-Agent": "python-pyaurorax/%s" % (__version__),
 }
 """ The default headers sent as part of a request to the AuroraX API """
+
+REQUEST_TIMEOUT = 60
+""" Default request timeout, in seconds """
 
 API_KEY_HEADER_NAME: str = "x-aurorax-api-key"
 """ The API key header used when sending requests to the AuroraX API """
@@ -98,11 +102,15 @@ class AuroraXRequest(BaseModel):
         body_santized = json.dumps(self.body, default=json_converter)
 
         # make request
-        req = requests.request(self.method,
-                               self.url,
-                               headers=self.__merge_headers(),
-                               params=self.params,
-                               data=body_santized)
+        try:
+            req = requests.request(self.method,
+                                   self.url,
+                                   headers=self.__merge_headers(),
+                                   params=self.params,
+                                   data=body_santized,
+                                   timeout=REQUEST_TIMEOUT)
+        except requests.exceptions.Timeout:
+            raise AuroraXTimeoutException("Error 408: request timeout reached")
 
         # retry request if needed
         if (skip_retry_logic is False):
@@ -111,12 +119,16 @@ class AuroraXRequest(BaseModel):
                     if (i == (DEFAULT_RETRIES - 1)):
                         raise AuroraXMaxRetriesException("%s (%s)" % (req.content.decode(),
                                                                       req.status_code))
-                    req = requests.request(self.method,
-                                           self.url,
-                                           headers=self.__merge_headers(),
-                                           params=self.params,
-                                           json=self.body,
-                                           data=body_santized)
+                    try:
+                        req = requests.request(self.method,
+                                               self.url,
+                                               headers=self.__merge_headers(),
+                                               params=self.params,
+                                               json=self.body,
+                                               data=body_santized,
+                                               timeout=REQUEST_TIMEOUT)
+                    except requests.exceptions.Timeout:
+                        raise AuroraXTimeoutException("Error 408: request timeout reached")
                 else:
                     break
 
@@ -177,7 +189,7 @@ class AuroraXRequest(BaseModel):
             else:
                 raise AuroraXException(response_json)
 
-        # create reponse object
+        # create response object
         res = AuroraXResponse(request=req,
                               data=response_data,
                               status_code=req.status_code)

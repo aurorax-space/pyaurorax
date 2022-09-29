@@ -151,9 +151,10 @@ def sources_group():
                                             "owner"]),
               default="identifier", show_default=True,
               help="Order results using a certain column")
+@click.option("--include-stats", is_flag=True, help="Include additional information about data sources")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
-def list(config, program, platform, instrument_type, source_type, owner, order, reversed_):
+def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, reversed_):
     """
     List data sources using the options to filter as desired
     """
@@ -164,7 +165,8 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
                                                       instrument_type=instrument_type,
                                                       source_type=source_type,
                                                       owner=owner,
-                                                      order=order)
+                                                      order=order,
+                                                      include_stats=include_stats)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
@@ -186,6 +188,8 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
     table_source_types = []
     table_display_names = []
     table_owners = []
+    table_stats_ephemeris = []
+    table_stats_data_products = []
     for source in sources:
         table_identifiers.append(source.identifier)
         table_programs.append(source.program)
@@ -194,12 +198,31 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
         table_source_types.append(source.source_type)
         table_display_names.append(source.display_name)
         table_owners.append(source.owner)
+        if (source.stats.earliest_ephemeris_loaded is not None and source.stats.latest_ephemeris_loaded is not None):
+            table_stats_ephemeris.append("%s records (%s to %s)" % (humanize.intcomma(source.stats.ephemeris_count),
+                                                                    source.stats.earliest_ephemeris_loaded.strftime(
+                                                                        "%Y-%m-%dT%H:%M"),
+                                                                    source.stats.latest_ephemeris_loaded.strftime(
+                                                                        "%Y-%m-%dT%H:%M"))),
+        else:
+            table_stats_ephemeris.append("%s records" % (humanize.intcomma(source.stats.ephemeris_count)))
+        if (source.stats.earliest_data_product_loaded is not None and source.stats.latest_data_product_loaded is not None):
+            table_stats_data_products.append("%s records (%s to %s)" % (humanize.intcomma(source.stats.data_product_count),
+                                                                        source.stats.earliest_data_product_loaded.strftime(
+                                                                            "%Y-%m-%dT%H:%M"),
+                                                                        source.stats.latest_data_product_loaded.strftime(
+                                                                            "%Y-%m-%dT%H:%M"))),
+        else:
+            table_stats_data_products.append("%s records" % (humanize.intcomma(source.stats.data_product_count)))
 
     # set header values
     table_headers = ["Identifier", "Display Name", "Program",
                      "Platform", "Instrument Type", "Source Type"]
     if (show_owner is True):
         table_headers.append("Owner")
+    if (include_stats is True):
+        table_headers.append("Ephemeris stats")
+        table_headers.append("Data Products stats")
     for i in range(0, len(table_headers)):
         if (table_headers[i].lower().replace(' ', '_') == order):
             table_headers[i] += " " + "\u2193"
@@ -212,7 +235,17 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
     table.set_cols_align(["l"] * len(table_headers))
     table.header(table_headers)
     for i in range(0, len(table_identifiers)):
-        if (show_owner is True):
+        if (show_owner is True and include_stats is True):
+            table.add_row([table_identifiers[i],
+                           table_display_names[i],
+                           table_programs[i],
+                           table_platforms[i],
+                           table_instrument_types[i],
+                           table_source_types[i],
+                           table_owners[i],
+                           table_stats_ephemeris[i],
+                           table_stats_data_products[i]])
+        elif (show_owner is True):
             table.add_row([table_identifiers[i],
                            table_display_names[i],
                            table_programs[i],
@@ -220,6 +253,15 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
                            table_instrument_types[i],
                            table_source_types[i],
                            table_owners[i]])
+        elif (include_stats is True):
+            table.add_row([table_identifiers[i],
+                           table_display_names[i],
+                           table_programs[i],
+                           table_platforms[i],
+                           table_instrument_types[i],
+                           table_source_types[i],
+                           table_stats_ephemeris[i],
+                           table_stats_data_products[i]])
         else:
             table.add_row([table_identifiers[i],
                            table_display_names[i],

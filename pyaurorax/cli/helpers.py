@@ -196,7 +196,7 @@ def get_search_data(type, request_uuid, outfile, output_to_terminal,
                                                                          humanize.naturalsize(s["search_result"]["file_size"])),
                           show_times=show_times)
             data = pyaurorax.requests.get_data(data_url, skip_serializing=True)
-        except pyaurorax.AuroraXDataRetrievalError as e:
+        except pyaurorax.AuroraXDataRetrievalException as e:
             # parse error message
             if ("NotFound" in (str(e))):
                 click.echo("\n%s" % ('\n'.join(textwrap.wrap("Error downloading data: this request is too old and the data "

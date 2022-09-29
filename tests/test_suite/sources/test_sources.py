@@ -1,7 +1,7 @@
 import pytest
 import pyaurorax
 from pyaurorax import AuroraXNotFoundException
-from pyaurorax.sources import DataSource, DataSourceStatistics
+from pyaurorax.sources import DataSource
 
 
 @pytest.mark.sources
@@ -16,7 +16,8 @@ def test_get_single_source():
 @pytest.mark.sources
 def test_search_sources():
     sources = pyaurorax.sources.search(programs=["swarm"],
-                                       format=pyaurorax.FORMAT_FULL_RECORD)
+                                       format=pyaurorax.FORMAT_FULL_RECORD,
+                                       include_stats=True)
     assert len(sources) > 1 and type(sources[0]) is DataSource
 
 
@@ -69,10 +70,9 @@ def test_get_source_stats():
                                                       platform=platform,
                                                       instrument_type=instrument_type)
 
-    stats = pyaurorax.sources.get_stats(data_source[0].identifier,
-                                        "full_record")
+    data_source_with_stats = pyaurorax.sources.get_stats(data_source[0].identifier, "full_record")
 
-    assert type(stats) is DataSourceStatistics
+    assert type(data_source_with_stats) is DataSource
 
 
 @pytest.mark.sources

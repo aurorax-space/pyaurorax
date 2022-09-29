@@ -17,8 +17,9 @@ def main():
                                                       instrument_type=instrument_type)
 
     # get statistics
-    stats = pyaurorax.sources.get_stats(data_source[0].identifier, format=pyaurorax.FORMAT_BASIC_INFO)
-    print(stats)
+    data_source_with_stats = pyaurorax.sources.get_stats(data_source[0].identifier,
+                                                         format=pyaurorax.FORMAT_BASIC_INFO)
+    print(data_source_with_stats)
 
 
 # ----------

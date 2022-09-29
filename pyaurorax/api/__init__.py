@@ -15,6 +15,7 @@ DEFAULT_BASE_URL: str = "https://api.aurorax.space"
 # function and class imports
 from .classes.request import (DEFAULT_RETRIES,
                               REQUEST_HEADERS,
+                              REQUEST_TIMEOUT,
                               API_KEY_HEADER_NAME,
                               AuroraXRequest)
 from .classes.response import AuroraXResponse
@@ -36,6 +37,7 @@ __all__ = [
     "DEFAULT_BASE_URL",
     "DEFAULT_RETRIES",
     "REQUEST_HEADERS",
+    "REQUEST_TIMEOUT",
     "API_KEY_HEADER_NAME",
     "AuroraXRequest",
     "AuroraXResponse",

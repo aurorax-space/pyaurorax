@@ -78,6 +78,7 @@ $ git clone git@github.com:aurorax-space/pyaurorax.git
 $ cd pyaurorax
 $ python -m pip install poetry
 $ poetry install -E aacgmv2
+$ poetry run mypy --install-types
 ```
 
 ### Documentation

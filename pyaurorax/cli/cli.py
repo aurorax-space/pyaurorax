@@ -19,7 +19,14 @@ class Config(object):
 
 
 def __test_connectivity(quiet=False, return_json=False):
-    r = requests.get(pyaurorax.api.get_base_url())
+    # make request
+    try:
+        r = requests.get(pyaurorax.api.get_base_url(), timeout=pyaurorax.api.REQUEST_TIMEOUT)
+    except requests.exceptions.Timeout:
+        click.echo("Error connecting to AuroraX API, got a %d response" % (r.status_code))
+        return
+
+    # check status code
     if (r.status_code == 200):
         if (quiet is False):
             click.echo("Connectivity to the AuroraX API looks good!")
@@ -30,7 +37,7 @@ def __test_connectivity(quiet=False, return_json=False):
 
 
 @click.group(invoke_without_command=True)
-@click.version_option(version="0.10.0")
+@click.version_option(version="1.0.0")
 @click.option("--api-key", type=str, help="Specify an API key")
 @click.option("--api-base-url", type=str, help="Set the AuroraX API base URL")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")

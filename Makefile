@@ -7,6 +7,7 @@ poetry:
 
 install: poetry
 	poetry install -E aacgmv2
+	poetry run mypy --install-types
 
 update upgrade:
 	python -m pip install --upgrade poetry
