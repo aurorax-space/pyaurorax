@@ -43,9 +43,9 @@ class DataProduct(BaseModel):
 
         # format epoch as str
         if (type(d["start"]) is datetime.datetime):
-            d["start"] = d["start"].strftime("%Y-%m-%dT%H:%M:00.000Z")
+            d["start"] = d["start"].strftime("%Y-%m-%dT%H:%M:00.000")
         if (type(d["end"]) is datetime.datetime):
-            d["end"] = d["end"].strftime("%Y-%m-%dT%H:%M:00.000Z")
+            d["end"] = d["end"].strftime("%Y-%m-%dT%H:%M:00.000")
 
         # format metadata
         if (type(self.metadata) is dict):
