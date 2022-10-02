@@ -198,22 +198,26 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
         table_source_types.append(source.source_type)
         table_display_names.append(source.display_name)
         table_owners.append(source.owner)
-        if (source.stats.earliest_ephemeris_loaded is not None and source.stats.latest_ephemeris_loaded is not None):
-            table_stats_ephemeris.append("%s records (%s to %s)" % (humanize.intcomma(source.stats.ephemeris_count),
-                                                                    source.stats.earliest_ephemeris_loaded.strftime(
-                                                                        "%Y-%m-%dT%H:%M"),
-                                                                    source.stats.latest_ephemeris_loaded.strftime(
-                                                                        "%Y-%m-%dT%H:%M"))),
-        else:
-            table_stats_ephemeris.append("%s records" % (humanize.intcomma(source.stats.ephemeris_count)))
-        if (source.stats.earliest_data_product_loaded is not None and source.stats.latest_data_product_loaded is not None):
-            table_stats_data_products.append("%s records (%s to %s)" % (humanize.intcomma(source.stats.data_product_count),
-                                                                        source.stats.earliest_data_product_loaded.strftime(
+        if (source.stats is not None):
+            if (source.stats.earliest_ephemeris_loaded is not None and source.stats.latest_ephemeris_loaded is not None):
+                table_stats_ephemeris.append("%s records (%s to %s)" % (humanize.intcomma(source.stats.ephemeris_count),
+                                                                        source.stats.earliest_ephemeris_loaded.strftime(
                                                                             "%Y-%m-%dT%H:%M"),
-                                                                        source.stats.latest_data_product_loaded.strftime(
+                                                                        source.stats.latest_ephemeris_loaded.strftime(
                                                                             "%Y-%m-%dT%H:%M"))),
+            else:
+                table_stats_ephemeris.append("%s records" % (humanize.intcomma(source.stats.ephemeris_count)))
+            if (source.stats.earliest_data_product_loaded is not None and source.stats.latest_data_product_loaded is not None):
+                table_stats_data_products.append("%s records (%s to %s)" % (humanize.intcomma(source.stats.data_product_count),
+                                                                            source.stats.earliest_data_product_loaded.strftime(
+                                                                                "%Y-%m-%dT%H:%M"),
+                                                                            source.stats.latest_data_product_loaded.strftime(
+                                                                                "%Y-%m-%dT%H:%M"))),
+            else:
+                table_stats_data_products.append("%s records" % (humanize.intcomma(source.stats.data_product_count)))
         else:
-            table_stats_data_products.append("%s records" % (humanize.intcomma(source.stats.data_product_count)))
+            table_stats_ephemeris.append("-")
+            table_stats_data_products.append("-")
 
     # set header values
     table_headers = ["Identifier", "Display Name", "Program",
