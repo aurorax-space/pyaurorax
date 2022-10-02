@@ -22,6 +22,22 @@ ALLOWED_FORMATS = [
 ]
 
 
+def __print_stats(stats):
+    if (stats.ephemeris_count == 0):
+        click.echo("Ephemeris Stats:\t0 records")
+    else:
+        click.echo("Ephemeris Stats:\t%s (%s to %s)" % (humanize.intcomma(stats.ephemeris_count),
+                                                        stats.earliest_ephemeris_loaded.strftime("%Y-%m-%dT%H:%M"),
+                                                        stats.latest_ephemeris_loaded.strftime("%Y-%m-%dT%H:%M")))
+    if (stats.data_product_count == 0):
+        click.echo("Data Product Stats:\t0 records")
+    else:
+        click.echo("Data Product Stats:\t%s (%s to %s)" % (humanize.intcomma(stats.data_product_count),
+                                                           stats.earliest_data_product_loaded.strftime(
+                                                               "%Y-%m-%dT%H:%M"),
+                                                           stats.latest_data_product_loaded.strftime("%Y-%m-%dT%H:%M")))
+
+
 def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
     # init
     wrap_threshold = 40
@@ -88,9 +104,11 @@ def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
     click.echo(table.draw())
 
 
-def __print_single_data_source(ds, format):
+def __print_single_data_source(ds, format, include_stats):
     if (format == pyaurorax.FORMAT_IDENTIFIER_ONLY):
         click.echo("Identifier:\t\t%d" % (ds.identifier))
+        if (include_stats is True):
+            __print_stats(ds.stats)
     elif (format == pyaurorax.FORMAT_BASIC_INFO):
         click.echo("Identifier:\t\t%d" % (ds.identifier))
         click.echo("Program:\t\t%s" % (ds.program))
@@ -98,6 +116,8 @@ def __print_single_data_source(ds, format):
         click.echo("Instument Type:\t\t%s" % (ds.instrument_type))
         click.echo("Source Type:\t\t%s" % (ds.source_type))
         click.echo("Display Name:\t\t%s" % (ds.display_name))
+        if (include_stats is True):
+            __print_stats(ds.stats)
     elif (format == pyaurorax.FORMAT_BASIC_INFO_WITH_METADATA):
         click.echo("Identifier:\t\t%d" % (ds.identifier))
         click.echo("Program:\t\t%s" % (ds.program))
@@ -109,6 +129,8 @@ def __print_single_data_source(ds, format):
             click.echo("Metadata:\t\t%s" % (ds.metadata))
         else:
             click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))
+        if (include_stats is True):
+            __print_stats(ds.stats)
     elif (format == pyaurorax.FORMAT_FULL_RECORD):
         click.echo("Identifier:\t\t%d" % (ds.identifier))
         click.echo("Program:\t\t%s" % (ds.program))
@@ -122,6 +144,8 @@ def __print_single_data_source(ds, format):
             click.echo("Metadata:\t\t%s" % (ds.metadata))
         else:
             click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))
+        if (include_stats is True):
+            __print_stats(ds.stats)
         if (ds.ephemeris_metadata_schema == []):
             click.echo("Ephemeris Schema:\t[]")
         else:
@@ -134,52 +158,7 @@ def __print_single_data_source(ds, format):
                                       data_product_schema=ds.data_product_metadata_schema)
 
 
-@click.group("sources", help="Interact with data sources")
-def sources_group():
-    pass
-
-
-@sources_group.command("list", short_help="List data sources")
-@click.option("--program", type=str, help="Filter using program")
-@click.option("--platform", type=str, help="Filter using platform")
-@click.option("--instrument-type", type=str, help="Filter using instrument type")
-@click.option("--source-type", type=click.Choice(SUPPORTED_SOURCE_TYPES),
-              help="Filter using source type")
-@click.option("--owner", type=str, help="Filter using an owner")
-@click.option("--order", type=click.Choice(["identifier", "program", "platform",
-                                            "instrument_type", "display_name",
-                                            "owner"]),
-              default="identifier", show_default=True,
-              help="Order results using a certain column")
-@click.option("--include-stats", is_flag=True, help="Include additional information about data sources")
-@click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
-@click.pass_obj
-def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, reversed_):
-    """
-    List data sources using the options to filter as desired
-    """
-    # get data sources
-    try:
-        sources = pyaurorax.sources.get_using_filters(program=program,
-                                                      platform=platform,
-                                                      instrument_type=instrument_type,
-                                                      source_type=source_type,
-                                                      owner=owner,
-                                                      order=order,
-                                                      include_stats=include_stats)
-    except pyaurorax.AuroraXException as e:
-        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
-        sys.exit(1)
-
-    # reverse
-    if (reversed_ is True):
-        sources = reversed(sources)
-
-    # decide if we want to show the owner
-    show_owner = False
-    if (owner is not None or order == "owner"):
-        show_owner = True
-
+def __print_sources_table(sources, order, show_owner, include_stats):
     # set table lists
     table_identifiers = []
     table_programs = []
@@ -276,6 +255,56 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
     click.echo(table.draw())
 
 
+@ click.group("sources", help="Interact with data sources")
+def sources_group():
+    pass
+
+
+@ sources_group.command("list", short_help="List data sources")
+@ click.option("--program", type=str, help="Filter using program")
+@ click.option("--platform", type=str, help="Filter using platform")
+@ click.option("--instrument-type", type=str, help="Filter using instrument type")
+@ click.option("--source-type", type=click.Choice(SUPPORTED_SOURCE_TYPES),
+               help="Filter using source type")
+@click.option("--owner", type=str, help="Filter using an owner")
+@click.option("--order", type=click.Choice(["identifier", "program", "platform",
+                                            "instrument_type", "display_name",
+                                            "owner"]),
+              default="identifier", show_default=True,
+              help="Order results using a certain column")
+@click.option("--include-stats", is_flag=True, help="Include additional information about data sources")
+@click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
+@click.pass_obj
+def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, reversed_):
+    """
+    List data sources using the options to filter as desired
+    """
+    # get data sources
+    try:
+        sources = pyaurorax.sources.get_using_filters(program=program,
+                                                      platform=platform,
+                                                      instrument_type=instrument_type,
+                                                      source_type=source_type,
+                                                      owner=owner,
+                                                      order=order,
+                                                      include_stats=include_stats)
+    except pyaurorax.AuroraXException as e:
+        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
+        sys.exit(1)
+
+    # reverse
+    if (reversed_ is True):
+        sources = reversed(sources)
+
+    # decide if we want to show the owner
+    show_owner = False
+    if (owner is not None or order == "owner"):
+        show_owner = True
+
+    # print the table
+    __print_sources_table(sources, order, show_owner, include_stats)
+
+
 @sources_group.command("search", short_help="Search for data sources")
 @click.option("--programs", type=str,
               help="Search for program (comma separate for multiple values)")
@@ -288,9 +317,11 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
                                             "owner"]),
               default="identifier", show_default=True,
               help="Order results using a certain column")
+@click.option("--include-stats", is_flag=True,
+              help="Include additional information about data sources")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
-def search(config, programs, platforms, instrument_types, order, reversed_):
+def search(config, programs, platforms, instrument_types, order, include_stats, reversed_):
     """
     Search for data sources using the options to filter as desired. Unlike
     the 'list' command filters, this command supports multiple programs,
@@ -337,7 +368,8 @@ def search(config, programs, platforms, instrument_types, order, reversed_):
         sources = pyaurorax.sources.search(programs=parsed_programs,
                                            platforms=parsed_platforms,
                                            instrument_types=parsed_instrument_types,
-                                           order=order)
+                                           order=order,
+                                           include_stats=include_stats)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
@@ -351,56 +383,8 @@ def search(config, programs, platforms, instrument_types, order, reversed_):
     if (order == "owner"):
         show_owner = True
 
-    # set table lists
-    table_identifiers = []
-    table_programs = []
-    table_platforms = []
-    table_instrument_types = []
-    table_source_types = []
-    table_display_names = []
-    table_owners = []
-    for source in sources:
-        table_identifiers.append(source.identifier)
-        table_programs.append(source.program)
-        table_platforms.append(source.platform)
-        table_instrument_types.append(source.instrument_type)
-        table_source_types.append(source.source_type)
-        table_display_names.append(source.display_name)
-        table_owners.append(source.owner)
-
-    # set header values
-    table_headers = ["Identifier", "Display Name", "Program",
-                     "Platform", "Instrument Type", "Source Type"]
-    if (show_owner is True):
-        table_headers.append("Owner")
-    for i in range(0, len(table_headers)):
-        if (table_headers[i].lower().replace(' ', '_') == order):
-            table_headers[i] += " " + "\u2193"
-
-    # output information
-    table = Texttable(max_width=400)
-    table.set_deco(Texttable.HEADER)
-    table.set_cols_dtype(["t"] * len(table_headers))
-    table.set_header_align(["l"] * len(table_headers))
-    table.set_cols_align(["l"] * len(table_headers))
-    table.header(table_headers)
-    for i in range(0, len(table_identifiers)):
-        if (show_owner is True):
-            table.add_row([table_identifiers[i],
-                           table_display_names[i],
-                           table_programs[i],
-                           table_platforms[i],
-                           table_instrument_types[i],
-                           table_source_types[i],
-                           table_owners[i]])
-        else:
-            table.add_row([table_identifiers[i],
-                           table_display_names[i],
-                           table_programs[i],
-                           table_platforms[i],
-                           table_instrument_types[i],
-                           table_source_types[i]])
-    click.echo(table.draw())
+    # print the table
+    __print_sources_table(sources, order, show_owner, include_stats)
 
 
 @sources_group.command("get", short_help="Get a single data source")
@@ -410,8 +394,10 @@ def search(config, programs, platforms, instrument_types, order, reversed_):
 @click.option("--format", type=click.Choice(ALLOWED_FORMATS),
               default=pyaurorax.FORMAT_BASIC_INFO,
               help="Amount of data about the data source to retrieve")
+@click.option("--include-stats", is_flag=True,
+              help="Include additional information about data sources")
 @click.pass_obj
-def get(config, program, platform, instrument_type, format):
+def get(config, program, platform, instrument_type, format, include_stats):
     """
     Get a single data source record
 
@@ -425,13 +411,14 @@ def get(config, program, platform, instrument_type, format):
         ds = pyaurorax.sources.get(program=program,
                                    platform=platform,
                                    instrument_type=instrument_type,
-                                   format=format)
+                                   format=format,
+                                   include_stats=include_stats)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
     # print it out nicely
-    __print_single_data_source(ds, format)
+    __print_single_data_source(ds, format, include_stats)
 
 
 @sources_group.command("get_using_identifier",
@@ -440,8 +427,10 @@ def get(config, program, platform, instrument_type, format):
 @click.option("--format", type=click.Choice(ALLOWED_FORMATS),
               default=pyaurorax.FORMAT_BASIC_INFO,
               help="Amount of data about the data source to retrieve")
+@click.option("--include-stats", is_flag=True,
+              help="Include additional information about data sources")
 @click.pass_obj
-def get_using_identifier(config, identifier, format):
+def get_using_identifier(config, identifier, format, include_stats):
     """
     Get a single data source record using an identifier
 
@@ -450,22 +439,21 @@ def get_using_identifier(config, identifier, format):
     """
     # get data source
     try:
-        ds = pyaurorax.sources.get_using_identifier(identifier, format=format)
+        ds = pyaurorax.sources.get_using_identifier(identifier,
+                                                    format=format,
+                                                    include_stats=include_stats)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
     # print it out nicely
-    __print_single_data_source(ds, format)
+    __print_single_data_source(ds, format, include_stats=include_stats)
 
 
 @sources_group.command("get_stats", short_help="Get statistics about a data source")
 @click.argument("identifier", type=int)
-@click.option("--format", type=click.Choice(ALLOWED_FORMATS),
-              default=pyaurorax.FORMAT_BASIC_INFO,
-              help="Amount of data about the data source to retrieve")
 @click.pass_obj
-def get_stats(config, identifier, format):
+def get_stats(config, identifier):
     """
     Get statistics about a data source
 
@@ -474,20 +462,13 @@ def get_stats(config, identifier, format):
     """
     # get stats information
     try:
-        stats = pyaurorax.sources.get_stats(identifier,
-                                            format=format)
+        ds = pyaurorax.sources.get_stats(identifier)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
     # print it out nicely
-    click.echo("Data source:\t\t\t%s" % (stats.data_source))
-    click.echo("Ephemeris count:\t\t%s" % (humanize.intcomma(stats.ephemeris_count)))
-    click.echo("Earliest ephemeris loaded:\t%s" % (stats.earliest_ephemeris_loaded))
-    click.echo("Latest ephemeris loaded:\t%s" % (stats.latest_ephemeris_loaded))
-    click.echo("Data product count:\t\t%s" % (humanize.intcomma(stats.data_product_count)))
-    click.echo("Earliest data product loaded:\t%s" % (stats.earliest_data_product_loaded))
-    click.echo("Latest data product loaded:\t%s" % (stats.latest_data_product_loaded))
+    __print_single_data_source(ds, format=pyaurorax.FORMAT_BASIC_INFO, include_stats=True)
 
 
 @sources_group.command("add", short_help="Add a data source")
