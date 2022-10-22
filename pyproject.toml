@@ -6,11 +6,9 @@ readme = "README.md"
 homepage = "https://github.com/aurorax-space/pyaurorax"
 repository = "https://github.com/aurorax-space/pyaurorax"
 authors = [
-    "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
     "Darren Chaddock <dchaddoc@ucalgary.ca>"
 ]
 maintainers = [
-    "Maryam Sohrabi <sohrabm@ucalgary.ca>", 
     "Darren Chaddock <dchaddoc@ucalgary.ca>"
 ]
 license = "MIT"
