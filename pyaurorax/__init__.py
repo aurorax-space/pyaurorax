@@ -28,7 +28,7 @@ Basic usage:
 """
 
 # versioning info
-__version__ = "0.11.0"
+__version__ = "1.0.0"
 
 # documentation excludes
 __pdoc__ = {"cli": False}
