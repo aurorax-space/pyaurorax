@@ -6,7 +6,7 @@ import warnings
 from typing import List, Dict, Optional, Any
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
-from ..sources import FORMAT_FULL_RECORD
+from ..sources import FORMAT_FULL_RECORD, SOURCE_TYPE_NOT_APPLICABLE
 from ..api import AuroraXRequest, urls
 from ..exceptions import (AuroraXNotFoundException,
                           AuroraXDuplicateException,
@@ -25,7 +25,8 @@ def list(program: Optional[str] = None,
          owner: Optional[str] = None,
          format: Optional[str] = FORMAT_FULL_RECORD,
          order: Optional[str] = "identifier",
-         include_stats: Optional[bool] = False) -> List[DataSource]:
+         include_stats: Optional[bool] = False,
+         include_na: Optional[bool] = False) -> List[DataSource]:
     """
     Retrieve all data source records (using params to filter as desired)
 
@@ -45,6 +46,7 @@ def list(program: Optional[str] = None,
         include_stats: include additional stats information about the data source (note:
             slower response time since an additional request must be done for each
             data source), defaults to False
+        include_na: include "not_applicable" special data sources (ie. adhoc sources)
 
     Returns:
         any data sources matching the requested parameters
@@ -72,18 +74,27 @@ def list(program: Optional[str] = None,
 
     # cast
     if len(res.data):
-        data_sources = [DataSource(**ds, format=format) for ds in res.data]
+        sources = [DataSource(**ds, format=format) for ds in res.data]
     else:
         return []
 
+    # remove not_applicable sources
+    sources_pruned = []
+    if (include_na is False):
+        for source in sources:
+            if (source.source_type != SOURCE_TYPE_NOT_APPLICABLE):
+                sources_pruned.append(source)
+    else:
+        sources_pruned = sources
+
     # get stats if requested
     if (include_stats is True):
-        for i in range(0, len(data_sources)):
-            data_source_with_stats = get_stats(data_sources[i].identifier)
-            data_sources[i].stats = data_source_with_stats.stats
+        for i in range(0, len(sources_pruned)):
+            source_with_stats = get_stats(sources_pruned[i].identifier)
+            sources_pruned[i].stats = source_with_stats.stats
 
     # return
-    return data_sources
+    return sources_pruned
 
 
 def search(programs: Optional[List[str]] = [],
@@ -205,7 +216,8 @@ def get_using_filters(program: Optional[str] = None,
                       owner: Optional[str] = None,
                       format: Optional[str] = FORMAT_FULL_RECORD,
                       order: Optional[str] = "identifier",
-                      include_stats: Optional[bool] = False) -> List[DataSource]:
+                      include_stats: Optional[bool] = False,
+                      include_na: Optional[bool] = False) -> List[DataSource]:
     """
     Retrieve all data source records matching a filter
 
@@ -225,6 +237,7 @@ def get_using_filters(program: Optional[str] = None,
         include_stats: include additional stats information about the data source (note:
             slower response time since an additional request must be done for each
             data source), defaults to False
+        include_na: include "not_applicable" special data sources (ie. adhoc sources)
 
     Returns:
         any data sources matching the requested parameters
@@ -241,7 +254,8 @@ def get_using_filters(program: Optional[str] = None,
                         owner=owner,
                         format=format,
                         order=order,
-                        include_stats=include_stats)
+                        include_stats=include_stats,
+                        include_na=include_na)
 
     # return
     return data_sources
@@ -531,31 +545,3 @@ def update_partial(identifier: int,
         return get_using_identifier(ds.identifier, format=FORMAT_FULL_RECORD)
     except Exception:
         raise AuroraXException("Could not update data source")
-
-
-@DeprecationWarning
-def partial_update(identifier: int,
-                   program: Optional[str] = None,
-                   platform: Optional[str] = None,
-                   instrument_type: Optional[str] = None,
-                   source_type: Optional[str] = None,
-                   display_name: Optional[str] = None,
-                   metadata: Optional[Dict] = None,
-                   owner: Optional[str] = None,
-                   maintainers: Optional[List[str]] = None,
-                   ephemeris_metadata_schema: Optional[List[Dict]] = None,
-                   data_product_metadata_schema: Optional[List[Dict]] = None) -> DataSource:
-    warnings.warn("The 'partial_update' function has been deprecated as of 0.9.0, and will "
-                  "be removed in a future release. Please use the 'update_partial' function "
-                  "instead.", DeprecationWarning, stacklevel=2)
-    return update_partial(identifier,
-                          program=program,
-                          platform=platform,
-                          instrument_type=instrument_type,
-                          source_type=source_type,
-                          display_name=display_name,
-                          metadata=metadata,
-                          owner=owner,
-                          maintainers=maintainers,
-                          ephemeris_metadata_schema=ephemeris_metadata_schema,
-                          data_product_metadata_schema=data_product_metadata_schema)

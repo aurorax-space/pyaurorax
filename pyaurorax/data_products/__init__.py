@@ -58,7 +58,6 @@ data availability mechanism for Aurora.
 
 # function and class imports
 from .data_products import (search,
-                            search_async,
                             upload,
                             delete_urls,
                             delete,
@@ -81,7 +80,6 @@ __all__ = [
     "DATA_PRODUCT_TYPE_SUMMARY_PLOT",
     "DATA_PRODUCT_TYPE_DATA_AVAILABILITY",
     "search",
-    "search_async",
     "upload",
     "delete_urls",
     "delete",

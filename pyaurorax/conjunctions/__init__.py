@@ -23,7 +23,6 @@ finding conjunctions using the south B-trace data
 
 # function and class imports
 from .conjunctions import (search,
-                           search_async,
                            describe,
                            get_request_url)
 from .swarmaurora import __all__ as swarmaurora_all
@@ -41,7 +40,6 @@ __all__ = [
     "CONJUNCTION_TYPE_NBTRACE",
     "CONJUNCTION_TYPE_SBTRACE",
     "search",
-    "search_async",
     "describe",
     "get_request_url",
     "Conjunction",

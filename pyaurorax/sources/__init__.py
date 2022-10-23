@@ -71,6 +71,12 @@ SOURCE_TYPE_EVENT_LIST: str = "event_list"
 Data source 'source_type' category for a specially-curated event list
 """
 
+# not applicable source type
+SOURCE_TYPE_NOT_APPLICABLE: str = "not_applicable"
+"""
+Data source 'source_type' category for a specially-curated event list
+"""
+
 # function and class imports
 from .sources import (get,
                       get_using_filters,
@@ -81,8 +87,7 @@ from .sources import (get,
                       add,
                       delete,
                       update,
-                      update_partial,
-                      partial_update)
+                      update_partial)
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
 
@@ -99,6 +104,7 @@ __all__ = [
     "FORMAT_FULL_RECORD",
     "FORMAT_IDENTIFIER_ONLY",
     "FORMAT_DEFAULT",
+    "SOURCE_TYPE_NOT_APPLICABLE",
     "SOURCE_TYPE_EVENT_LIST",
     "SOURCE_TYPE_GROUND",
     "SOURCE_TYPE_HEO",

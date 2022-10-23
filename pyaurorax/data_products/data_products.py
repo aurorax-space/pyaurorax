@@ -4,7 +4,6 @@ Functions for performing data product searches
 
 import datetime
 import humanize
-import warnings
 from typing import Dict, List, Optional
 from .classes.data_product import DataProduct
 from .classes.search import Search
@@ -149,75 +148,6 @@ def search(start: datetime.datetime,
                                                                    humanize.filesize.naturalsize(
                                                                        s.status["search_result"]["file_size"]),
                                                                    s.status["search_result"]["result_count"]))
-    return s
-
-
-def search_async(start: datetime.datetime,
-                 end: datetime.datetime,
-                 programs: Optional[List[str]] = None,
-                 platforms: Optional[List[str]] = None,
-                 instrument_types: Optional[List[str]] = None,
-                 data_product_types: Optional[List[str]] = None,
-                 metadata_filters: Optional[List[Dict]] = None,
-                 metadata_filters_logical_operator: Optional[str] = None,
-                 response_format: Optional[Dict] = None) -> Search:
-    """
-    Submit a request for a data products search, return immediately.
-
-    The request will be done asynchronously by the API. Use the helper functions
-    as part of the Search object returned to check for data and/or download it.
-    If you don't want the search to return immediately and rather block until
-    all data is downloaded, please use the 'search' function instead.
-
-    Note: At least one search criteria from programs, platforms, or
-    instrument_types, must be specified.
-
-    .. deprecated::
-        This function is deprecated as of 0.9.0. Please use the 'search' function
-        with the 'return_immediately' flag set to True to get the same behaviour.
-        This function will be removed in a future release.
-
-    Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        data_product_types: list of dictionaries describing data product
-            types to filter on e.g. "keogram", defaults to None. Options are in the
-            pyaurorax.data_products module, or at the top level using the
-            pyaurorax.DATA_PRODUCT_TYPE* variables.
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
-
-            Example:
-
-                [{
-                    "key": "nbtrace_region",
-                    "operator": "in",
-                    "values": ["north polar cap"]
-                }]
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either 'AND' or 'OR'), defaults
-            to "AND"
-        response_format: JSON representation of desired data response format
-
-    Returns:
-        a pyaurorax.data_products.Search object
-    """
-    warnings.warn("This function is deprecated and will be removed in a future release. Please "
-                  "use the 'search' function with the 'return_immediately' flag to produce the "
-                  "same behaviour.", DeprecationWarning, stacklevel=2)
-    s = Search(start,
-               end,
-               programs=programs,
-               platforms=platforms,
-               instrument_types=instrument_types,
-               data_product_types=data_product_types,
-               metadata_filters=metadata_filters,
-               metadata_filters_logical_operator=metadata_filters_logical_operator,
-               response_format=response_format)
-    s.execute()
     return s
 
 

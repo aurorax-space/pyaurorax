@@ -13,6 +13,7 @@ SUPPORTED_SOURCE_TYPES = [
     pyaurorax.sources.SOURCE_TYPE_HEO,
     pyaurorax.sources.SOURCE_TYPE_LEO,
     pyaurorax.sources.SOURCE_TYPE_LUNAR,
+    pyaurorax.sources.SOURCE_TYPE_NOT_APPLICABLE,
 ]
 ALLOWED_FORMATS = [
     pyaurorax.FORMAT_BASIC_INFO,
@@ -169,6 +170,8 @@ def __print_sources_table(sources, order, show_owner, include_stats):
     table_owners = []
     table_stats_ephemeris = []
     table_stats_data_products = []
+    sum_ephemeris_count = 0
+    sum_data_product_count = 0
     for source in sources:
         table_identifiers.append(source.identifier)
         table_programs.append(source.program)
@@ -183,7 +186,8 @@ def __print_sources_table(sources, order, show_owner, include_stats):
                                                                         source.stats.earliest_ephemeris_loaded.strftime(
                                                                             "%Y-%m-%dT%H:%M"),
                                                                         source.stats.latest_ephemeris_loaded.strftime(
-                                                                            "%Y-%m-%dT%H:%M"))),
+                                                                            "%Y-%m-%dT%H:%M")))
+                sum_ephemeris_count += source.stats.ephemeris_count
             else:
                 table_stats_ephemeris.append("%s records" % (humanize.intcomma(source.stats.ephemeris_count)))
             if (source.stats.earliest_data_product_loaded is not None and source.stats.latest_data_product_loaded is not None):
@@ -191,7 +195,8 @@ def __print_sources_table(sources, order, show_owner, include_stats):
                                                                             source.stats.earliest_data_product_loaded.strftime(
                                                                                 "%Y-%m-%dT%H:%M"),
                                                                             source.stats.latest_data_product_loaded.strftime(
-                                                                                "%Y-%m-%dT%H:%M"))),
+                                                                                "%Y-%m-%dT%H:%M")))
+                sum_data_product_count += source.stats.data_product_count
             else:
                 table_stats_data_products.append("%s records" % (humanize.intcomma(source.stats.data_product_count)))
         else:
@@ -254,6 +259,11 @@ def __print_sources_table(sources, order, show_owner, include_stats):
                            table_source_types[i]])
     click.echo(table.draw())
 
+    # show stats sums
+    if (include_stats is True):
+        print("\nTotal Ephemeris records:\t%s" % (humanize.intcomma(sum_ephemeris_count)))
+        print("Total Data Product records:\t%s\n" % (humanize.intcomma(sum_data_product_count)))
+
 
 @ click.group("sources", help="Interact with data sources")
 def sources_group():
@@ -273,9 +283,10 @@ def sources_group():
               default="identifier", show_default=True,
               help="Order results using a certain column")
 @click.option("--include-stats", is_flag=True, help="Include additional information about data sources")
+@click.option("--include-na", is_flag=True, help="Include not_applicable special data sources (ie. ad-hoc sources)")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
-def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, reversed_):
+def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, include_na, reversed_):
     """
     List data sources using the options to filter as desired
     """
@@ -287,7 +298,8 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
                                                       source_type=source_type,
                                                       owner=owner,
                                                       order=order,
-                                                      include_stats=include_stats)
+                                                      include_stats=include_stats,
+                                                      include_na=include_na)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)

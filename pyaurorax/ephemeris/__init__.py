@@ -8,8 +8,7 @@ here instead of digging in deeper to the submodules.
 """
 
 # function and class imports
-from .ephemeris import (search_async,
-                        search,
+from .ephemeris import (search,
                         upload,
                         delete,
                         describe,
@@ -25,7 +24,6 @@ __pdoc__ = __ephemeris_pdoc__
 __pdoc__ = dict(__pdoc__, **__classes_ephemeris_pdoc__)
 __pdoc__ = dict(__pdoc__, **__classes_search_pdoc__)
 __all__ = [
-    "search_async",
     "search",
     "upload",
     "delete",
