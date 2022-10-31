@@ -27,6 +27,7 @@ class URLs:
     __DEFAULT_URL_DESCRIBE_CONJUNCTION_QUERY = "/api/v1/utils/describe/query/conjunction"
     __DEFAULT_URL_DESCRIBE_DATA_PRODUCTS_QUERY = "/api/v1/utils/describe/query/data_products"
     __DEFAULT_URL_DESCRIBE_EPHEMERIS_QUERY = "/api/v1/utils/describe/query/ephemeris"
+    __DEFAULT_URL_LIST_REQUESTS = "/api/v1/utils/admin/search_requests"
 
     def __init__(self, base_url: str = DEFAULT_BASE_URL) -> None:
         self.__base = base_url
@@ -42,9 +43,10 @@ class URLs:
         self.__data_products_request = self.__DEFAULT_URL_DATA_PRODUCTS_REQUEST
         self.__conjunction_search = self.__DEFAULT_URL_CONJUNCTION_SEARCH
         self.__conjunction_request = self.__DEFAULT_URL_CONJUNCTION_REQUEST
-        self.__describe_conjunction_query = self.__DEFAULT_URL_DESCRIBE_CONJUNCTION_QUERY
-        self.__describe_data_products_query = self.__DEFAULT_URL_DESCRIBE_DATA_PRODUCTS_QUERY
-        self.__describe_ephemeris_query = self.__DEFAULT_URL_DESCRIBE_EPHEMERIS_QUERY
+        self.__describe_conjunction_query_url = self.__DEFAULT_URL_DESCRIBE_CONJUNCTION_QUERY
+        self.__describe_data_products_query_url = self.__DEFAULT_URL_DESCRIBE_DATA_PRODUCTS_QUERY
+        self.__describe_ephemeris_query_url = self.__DEFAULT_URL_DESCRIBE_EPHEMERIS_QUERY
+        self.__list_requests_url = self.__DEFAULT_URL_LIST_REQUESTS
 
     @property
     def base_url(self) -> str:
@@ -115,13 +117,19 @@ class URLs:
     # describe
     # -------------------
     @property
-    def describe_conjunction_query(self) -> str:
-        return f"{self.__base}{self.__describe_conjunction_query}"
+    def describe_conjunction_query_url(self) -> str:
+        return f"{self.__base}{self.__describe_conjunction_query_url}"
 
     @property
-    def describe_data_products_query(self) -> str:
-        return f"{self.__base}{self.__describe_data_products_query}"
+    def describe_data_products_query_url(self) -> str:
+        return f"{self.__base}{self.__describe_data_products_query_url}"
 
     @property
-    def describe_ephemeris_query(self) -> str:
-        return f"{self.__base}{self.__describe_ephemeris_query}"
+    def describe_ephemeris_query_url(self) -> str:
+        return f"{self.__base}{self.__describe_ephemeris_query_url}"
+
+    # admin
+    # -------------------
+    @property
+    def list_requests_url(self) -> str:
+        return f"{self.__base}{self.__list_requests_url}"

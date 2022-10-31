@@ -322,7 +322,7 @@ def describe(search_obj: Search) -> str:
     """
     # make request
     req = AuroraXRequest(method="post",
-                         url=api_urls.describe_data_products_query,
+                         url=api_urls.describe_data_products_query_url,
                          body=search_obj.query)
     res = req.execute()
 

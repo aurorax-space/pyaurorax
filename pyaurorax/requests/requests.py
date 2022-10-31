@@ -4,8 +4,10 @@ Functions for interacting with AuroraX requests
 
 import datetime
 import time
-from typing import Dict, List, Optional
+import warnings
+from typing import Dict, List, Optional, Any
 from ..api.classes.request import AuroraXRequest
+from ..api import urls
 from ..exceptions import AuroraXDataRetrievalException
 from ..location import Location
 
@@ -18,6 +20,9 @@ FIRST_FOLLOWUP_SLEEP_TIME: float = 0.050  # 50ms
 
 STANDARD_POLLING_SLEEP_TIME: float = 1.0  # 1s
 """ Polling sleep time when waiting for data (after the initial sleep time) """
+
+ALLOWED_SEARCH_LISTING_TYPES = ["conjunction", "data_product", "ephemeris"]
+""" Allowed types when listing search requests """
 
 
 def get_status(request_url: str) -> Dict:
@@ -199,3 +204,70 @@ def cancel(request_url: str,
     if (verbose is True):
         print("[%s] The request has been cancelled" % (datetime.datetime.now()))
     return 1
+
+
+def list_searches(search_type: Optional[str] = None,
+                  active: Optional[bool] = None,
+                  start: Optional[datetime.datetime] = None,
+                  end: Optional[datetime.datetime] = None,
+                  file_size: Optional[int] = None,
+                  result_count: Optional[int] = None,
+                  query_duration: Optional[int] = None,
+                  error_condition: Optional[bool] = None) -> List:
+    """
+    Retrieve a list of search requests matching certain criteria
+
+    Args:
+        search_type: the type of search request, valid values are 'conjunction',
+            'ephemeris', or 'data_product'. Exclusion of value will return all
+            search requests of any type, defaults to None
+        active: return searches that are currently active or not, exclude for
+            both, defaults to None
+        start: start timestamp for narrowing down search timeframes, defaults to None
+        end: end timestamp for narrowing down search timeframes, defaults to None
+        file_size: filter by result file size, measured in KB, defaults to None
+        result_count: filter by result count, defaults to None
+        query_duration: filter by query duration, measured in milliseconds, defaults
+            to None
+        error_condition: filter by if an error occurred or not, exclude for both,
+            defaults to None
+
+    Returns:
+        list of matching search requests
+    """
+    # check the search request type
+    if (search_type is not None and search_type not in ALLOWED_SEARCH_LISTING_TYPES):
+        warnings.warn("The search type value '%s' is not one that "
+                      "PyAuroraX knows about. Supported values are: "
+                      "%s. Aborting request." % (search_type,
+                                                 ', '.join(ALLOWED_SEARCH_LISTING_TYPES)))
+        return []
+
+    # set params
+    params: Dict[str, Any] = {}
+    if (search_type is not None):
+        params["search_type"] = search_type
+    if (active is not None):
+        params["active"] = active
+    if (start is not None):
+        params["start"] = start.strftime("%Y-%m-%dT%H:%M:%S")
+    if (end is not None):
+        params["end"] = end.strftime("%Y-%m-%dT%H:%M:%S")
+    if (file_size is not None):
+        params["file_size"] = file_size
+    if (result_count is not None):
+        params["result_count"] = result_count
+    if (query_duration is not None):
+        params["query_duration"] = query_duration
+    if (error_condition is not None):
+        params["query_duration"] = query_duration
+
+    # do request
+    url = urls.list_requests_url
+    req = AuroraXRequest(method="get",
+                         url=url,
+                         params=params)
+    res = req.execute()
+
+    # return
+    return res.data

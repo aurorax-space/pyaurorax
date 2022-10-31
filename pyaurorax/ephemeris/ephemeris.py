@@ -265,7 +265,7 @@ def describe(search_obj: Search) -> str:
     """
     # make request
     req = AuroraXRequest(method="post",
-                         url=urls.describe_ephemeris_query,
+                         url=urls.describe_ephemeris_query_url,
                          body=search_obj.query)
     res = req.execute()
 
