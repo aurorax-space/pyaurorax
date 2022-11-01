@@ -28,6 +28,7 @@ class URLs:
     __DEFAULT_URL_DESCRIBE_DATA_PRODUCTS_QUERY = "/api/v1/utils/describe/query/data_products"
     __DEFAULT_URL_DESCRIBE_EPHEMERIS_QUERY = "/api/v1/utils/describe/query/ephemeris"
     __DEFAULT_URL_LIST_REQUESTS = "/api/v1/utils/admin/search_requests"
+    __DEFAULT_URL_DELETE_REQUESTS = "/api/v1/utils/admin/search_requests/{}"
 
     def __init__(self, base_url: str = DEFAULT_BASE_URL) -> None:
         self.__base = base_url
@@ -47,6 +48,7 @@ class URLs:
         self.__describe_data_products_query_url = self.__DEFAULT_URL_DESCRIBE_DATA_PRODUCTS_QUERY
         self.__describe_ephemeris_query_url = self.__DEFAULT_URL_DESCRIBE_EPHEMERIS_QUERY
         self.__list_requests_url = self.__DEFAULT_URL_LIST_REQUESTS
+        self.__delete_requests_url = self.__DEFAULT_URL_DELETE_REQUESTS
 
     @property
     def base_url(self) -> str:
@@ -133,3 +135,7 @@ class URLs:
     @property
     def list_requests_url(self) -> str:
         return f"{self.__base}{self.__list_requests_url}"
+
+    @property
+    def delete_requests_url(self) -> str:
+        return f"{self.__base}{self.__delete_requests_url}"

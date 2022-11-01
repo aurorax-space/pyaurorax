@@ -328,7 +328,7 @@ def test_conjunctions_search_asynchronous_cancel():
     result = s.cancel(wait=True)
 
     # check to make sure it has been cancelled
-    assert result == 1
+    assert result == 0
 
 
 @pytest.mark.conjunctions

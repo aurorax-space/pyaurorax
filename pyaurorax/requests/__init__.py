@@ -16,7 +16,8 @@ from .requests import (FIRST_FOLLOWUP_SLEEP_TIME,
                        get_status,
                        wait_for_data,
                        cancel,
-                       list_searches)
+                       list,
+                       delete)
 
 # pdoc imports and exports
 from .requests import __pdoc__ as __requests_pdoc__
@@ -30,5 +31,6 @@ __all__ = [
     "get_status",
     "wait_for_data",
     "cancel",
-    "list_searches",
+    "list",
+    "delete",
 ]

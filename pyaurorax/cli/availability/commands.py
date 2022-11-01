@@ -105,12 +105,12 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
     try:
         start_dt = datetime.datetime.strptime(start_date, "%Y/%m/%d")
     except Exception as e:
-        click.echo("Error parsing start date, make sure it in YYYY/MM/DD format (%s)" % (str(e)))
+        click.echo("Error parsing start date, make sure it is in YYYY/MM/DD format (%s)" % (str(e)))
         sys.exit(1)
     try:
         end_dt = datetime.datetime.strptime(end_date, "%Y/%m/%d")
     except Exception as e:
-        click.echo("Error parsing end date, make sure it in YYYY/MM/DD format (%s)" % (str(e)))
+        click.echo("Error parsing end date, make sure it is in YYYY/MM/DD format (%s)" % (str(e)))
         sys.exit(1)
 
     # get availability info
@@ -174,12 +174,12 @@ def data_products(config, start_date, end_date, program, platform, instrument_ty
     try:
         start_dt = datetime.datetime.strptime(start_date, "%Y/%m/%d")
     except Exception as e:
-        click.echo("Error parsing start date, make sure it in YYYY/MM/DD format (%s)" % (str(e)))
+        click.echo("Error parsing start date, make sure it is in YYYY/MM/DD format (%s)" % (str(e)))
         sys.exit(1)
     try:
         end_dt = datetime.datetime.strptime(end_date, "%Y/%m/%d")
     except Exception as e:
-        click.echo("Error parsing end date, make sure it in YYYY/MM/DD format (%s)" % (str(e)))
+        click.echo("Error parsing end date, make sure it is in YYYY/MM/DD format (%s)" % (str(e)))
         sys.exit(1)
 
     # get availability info

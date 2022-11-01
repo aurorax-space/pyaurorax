@@ -243,7 +243,7 @@ def test_upload_data_products():
     s.check_for_data()
     s.get_data()
 
-    assert (result == 1) and (len(s.data) > 0)
+    assert (result == 0) and (len(s.data) > 0)
 
 
 @pytest.mark.data_products
@@ -366,7 +366,7 @@ def test_cancel_data_products_search():
 
     # cancel the search request
     result = s.cancel(wait=True)
-    assert result == 1
+    assert result == 0
 
 
 @pytest.mark.data_products

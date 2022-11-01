@@ -199,4 +199,4 @@ def test_delete_source():
     # remove source
     result = pyaurorax.sources.delete(identifier)
 
-    assert result == 1
+    assert result == 0

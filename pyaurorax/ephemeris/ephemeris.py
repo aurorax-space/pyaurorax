@@ -158,7 +158,7 @@ def upload(identifier: int,
         validate_source: validate all records before uploading, defaults to False
 
     Returns:
-        1 for success, raises exception on error
+        0 for success, raises exception on error
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -193,7 +193,7 @@ def upload(identifier: int,
                                                   res.data["error_message"]))
 
     # return
-    return 1
+    return 0
 
 
 def delete(data_source: DataSource,
@@ -212,7 +212,7 @@ def delete(data_source: DataSource,
         end: timestamp marking end of range to delete records for, inclusive
 
     Returns:
-        1 on success
+        0 on success
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -250,7 +250,7 @@ def delete(data_source: DataSource,
                                                          res.data["error_message"]))
 
     # return
-    return 1
+    return 0
 
 
 def describe(search_obj: Search) -> str:

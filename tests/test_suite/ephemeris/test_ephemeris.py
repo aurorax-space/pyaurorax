@@ -228,7 +228,7 @@ def test_upload_ephemeris():
     s.check_for_data()
     s.get_data()
 
-    assert result == 1 and len(s.data) > 0
+    assert result == 0 and len(s.data) > 0
 
 
 @pytest.mark.ephemeris
@@ -294,7 +294,7 @@ def test_cancel_ephemeris_search():
 
     result = s.cancel(wait=True)
 
-    assert result == 1
+    assert result == 0
 
 
 @pytest.mark.ephemeris

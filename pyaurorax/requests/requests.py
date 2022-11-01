@@ -8,7 +8,10 @@ import warnings
 from typing import Dict, List, Optional, Any
 from ..api.classes.request import AuroraXRequest
 from ..api import urls
-from ..exceptions import AuroraXDataRetrievalException
+from ..exceptions import (
+    AuroraXDataRetrievalException,
+    AuroraXException,
+    AuroraXUnauthorizedException)
 from ..location import Location
 
 # pdoc init
@@ -174,7 +177,7 @@ def cancel(request_url: str,
             progress, defaults to False
 
     Returns:
-        1 on success
+        0 on success
 
     Raises:
         pyaurorax.exceptions.AuroraXUnexpectedContentTypeException: unexpected error
@@ -188,7 +191,7 @@ def cancel(request_url: str,
 
     # return immediately if we don't want to wait
     if (wait is False):
-        return 1
+        return 0
 
     # get status
     status = get_status(request_url)
@@ -203,19 +206,19 @@ def cancel(request_url: str,
     # return
     if (verbose is True):
         print("[%s] The request has been cancelled" % (datetime.datetime.now()))
-    return 1
+    return 0
 
 
-def list_searches(search_type: Optional[str] = None,
-                  active: Optional[bool] = None,
-                  start: Optional[datetime.datetime] = None,
-                  end: Optional[datetime.datetime] = None,
-                  file_size: Optional[int] = None,
-                  result_count: Optional[int] = None,
-                  query_duration: Optional[int] = None,
-                  error_condition: Optional[bool] = None) -> List:
+def list(search_type: Optional[str] = None,
+         active: Optional[bool] = None,
+         start: Optional[datetime.datetime] = None,
+         end: Optional[datetime.datetime] = None,
+         file_size: Optional[int] = None,
+         result_count: Optional[int] = None,
+         query_duration: Optional[int] = None,
+         error_condition: Optional[bool] = None) -> List:
     """
-    Retrieve a list of search requests matching certain criteria
+    Retrieve a list of search requests matching certain criteria.  Administrators only.
 
     Args:
         search_type: the type of search request, valid values are 'conjunction',
@@ -234,6 +237,9 @@ def list_searches(search_type: Optional[str] = None,
 
     Returns:
         list of matching search requests
+
+    Raises:
+        pyaurorax.exceptions.AuroraXUnauthorizedException: invalid API key for this operation
     """
     # check the search request type
     if (search_type is not None and search_type not in ALLOWED_SEARCH_LISTING_TYPES):
@@ -269,5 +275,40 @@ def list_searches(search_type: Optional[str] = None,
                          params=params)
     res = req.execute()
 
+    # check responses
+    if (res.status_code == 401):
+        raise AuroraXUnauthorizedException("API key not detected, please authenticate first.")
+    if (res.status_code == 403):
+        raise AuroraXUnauthorizedException("Administrator account required. API key not valid "
+                                           "for this level of access")
+
     # return
     return res.data
+
+
+def delete(request_id: str) -> int:
+    """
+    Entirely remove a search request from the AuroraX
+    database. Administrators only.
+
+    Args:
+        request_id: search request UUID
+
+    Returns:
+        0 on success, raises error on failure
+
+    Raises:
+        pyaurorax.exceptions.AuroraXNotFoundException: data source not found
+    """
+    # do request
+    url = urls.delete_requests_url.format(request_id)
+    req = AuroraXRequest(method="delete",
+                         url=url,
+                         null_response=True)
+    res = req.execute()
+
+    # check response and return
+    if (res.status_code != 200):
+        raise AuroraXException("%s - %s" % (res.data["error_code"],
+                                            res.data["error_message"]))
+    return 0

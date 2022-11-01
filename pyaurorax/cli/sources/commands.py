@@ -265,17 +265,17 @@ def __print_sources_table(sources, order, show_owner, include_stats):
         print("Total Data Product records:\t%s\n" % (humanize.intcomma(sum_data_product_count)))
 
 
-@ click.group("sources", help="Interact with data sources")
+@click.group("sources", help="Interact with data sources")
 def sources_group():
     pass
 
 
-@ sources_group.command("list", short_help="List data sources")
-@ click.option("--program", type=str, help="Filter using program")
-@ click.option("--platform", type=str, help="Filter using platform")
-@ click.option("--instrument-type", type=str, help="Filter using instrument type")
-@ click.option("--source-type", type=click.Choice(SUPPORTED_SOURCE_TYPES),
-               help="Filter using source type")
+@sources_group.command("list", short_help="List data sources")
+@click.option("--program", type=str, help="Filter using program")
+@click.option("--platform", type=str, help="Filter using platform")
+@click.option("--instrument-type", type=str, help="Filter using instrument type")
+@click.option("--source-type", type=click.Choice(SUPPORTED_SOURCE_TYPES),
+              help="Filter using source type")
 @click.option("--owner", type=str, help="Filter using an owner")
 @click.option("--order", type=click.Choice(["identifier", "program", "platform",
                                             "instrument_type", "display_name",

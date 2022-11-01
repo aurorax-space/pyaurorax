@@ -397,7 +397,7 @@ def delete(identifier: int) -> int:
         identifier: the AuroraX unique ID for the data source
 
     Returns:
-        1 on success, raises error if an issue was encountered
+        0 on success, raises error if an issue was encountered
 
     Raises:
         pyaurorax.exceptions.AuroraXMaxRetriesException: max retry error
@@ -421,7 +421,7 @@ def delete(identifier: int) -> int:
                                                     res.data["error_message"]))
 
     # return
-    return 1
+    return 0
 
 
 def update(data_source: DataSource) -> DataSource:
