@@ -25,16 +25,40 @@ def __print_requests_table(search_requests, order):
     table_result_counts = []
     table_file_exists = []
     for search_request in search_requests:
+        # standard values
         table_search_types.append(search_request["search_type"])
         table_active.append(search_request["active"])
-        table_file_sizes.append(humanize.naturalsize(search_request["file_size"]))
         table_ip_addresses.append(search_request["ip_address"])
-        table_query_durations.append("%.03fs (%s)" % (search_request["query_duration"] / 1000.0,
-                                                      humanize.naturaldelta(search_request["query_duration"] / 1000.0)))
         table_request_ids.append(search_request["request_id"])
         table_requested_timestamps.append(search_request["requested"])
-        table_result_counts.append(humanize.intcomma(search_request["result_count"]))
         table_file_exists.append(search_request["result_file_exists"])
+
+        # result count
+        if (search_request["result_count"] is not None):
+            table_result_counts.append(humanize.intcomma(search_request["result_count"]))
+        else:
+            table_result_counts.append("-")
+
+        # query duration
+        if (search_request["result_count"] is not None):
+            table_query_durations.append("%.03fs (%s)" % (search_request["query_duration"] / 1000.0,
+                                                          humanize.naturaldelta(search_request["query_duration"] / 1000.0)))
+        else:
+            table_query_durations.append("-")
+
+        # file size
+        if (search_request["result_count"] is not None):
+            table_file_sizes.append(humanize.naturalsize(search_request["file_size"]))
+        else:
+            table_file_sizes.append("-")
+
+        # file size
+        if (search_request["file_size"] is not None):
+            table_file_sizes.append(humanize.naturalsize(search_request["file_size"]))
+        else:
+            table_file_sizes.append("-")
+
+        # error condition
         if (search_request["error_condition"] is True):
             table_error_conditions.append(colored("True", "red"))
         else:
