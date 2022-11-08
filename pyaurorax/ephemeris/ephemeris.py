@@ -9,7 +9,8 @@ from .classes.ephemeris import Ephemeris
 from .classes.search import Search
 from ..sources import (DataSource,
                        list as sources_list)
-from ..exceptions import (AuroraXValidationException,
+from ..exceptions import (AuroraXSearchException,
+                          AuroraXValidationException,
                           AuroraXUploadException,
                           AuroraXBadParametersException)
 from ..requests import STANDARD_POLLING_SLEEP_TIME
@@ -131,6 +132,11 @@ def search(start: datetime.datetime,
     if (verbose is True):
         print("[%s] Waiting for data ..." % (datetime.datetime.now()))
     s.wait(poll_interval=poll_interval, verbose=verbose)
+
+    # check if error condition encountered
+    if (s.status["search_result"]["error_condition"] is True):
+        # error encountered
+        raise AuroraXSearchException(s.logs[-1]["summary"])
 
     # get the data
     if (verbose is True):

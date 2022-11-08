@@ -5,6 +5,7 @@ Functions for performing conjunction searches
 import datetime
 import humanize
 from typing import Dict, List, Optional, Union
+from ..exceptions import AuroraXSearchException
 from .classes.search import Search
 from ..api import AuroraXRequest, urls
 from ..requests import STANDARD_POLLING_SLEEP_TIME
@@ -135,6 +136,11 @@ def search(start: datetime.datetime,
     if (verbose is True):
         print("[%s] Waiting for data ..." % (datetime.datetime.now()))
     s.wait(poll_interval=poll_interval, verbose=verbose)
+
+    # check if error condition encountered
+    if (s.status["search_result"]["error_condition"] is True):
+        # error encountered
+        raise AuroraXSearchException(s.logs[-1]["summary"])
 
     # get the data
     if (verbose is True):

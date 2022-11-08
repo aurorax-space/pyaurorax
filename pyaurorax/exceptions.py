@@ -96,3 +96,10 @@ class AuroraXTimeoutException(AuroraXException):
     A timeout was reached while communicating with the AuroraX API
     """
     pass
+
+
+class AuroraXSearchException(AuroraXException):
+    """
+    An error occured in the API while performing a search
+    """
+    pass
