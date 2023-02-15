@@ -105,6 +105,7 @@ disable=abstract-method,
         unused-import,
         unused-variable,
         unused-wildcard-import,
+        use-dict-literal,
         used-before-assignment,
         useless-object-inheritance,  # Required for Python 2 support
         useless-return,

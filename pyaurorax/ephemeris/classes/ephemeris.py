@@ -101,5 +101,5 @@ class Ephemeris(BaseModel):
         # return formatted representation
         return f"Ephemeris(data_source={repr(self.data_source)}, epoch={repr(self.epoch)}, " \
             f"location_geo={repr(self.location_geo)}, location_gsm={repr(self.location_gsm)}, " \
-            f"nbtrace={repr(self.nbtrace)}, nbtrace={repr(self.nbtrace)}, " \
+            f"nbtrace={repr(self.nbtrace)}, sbtrace={repr(self.sbtrace)}, " \
             f"metadata={attr_metadata})"
