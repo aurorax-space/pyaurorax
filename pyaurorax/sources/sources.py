@@ -6,7 +6,7 @@ import warnings
 from typing import List, Dict, Optional, Any
 from .classes.data_source import DataSource
 from .classes.data_source_stats import DataSourceStatistics
-from ..sources import FORMAT_FULL_RECORD, SOURCE_TYPE_NOT_APPLICABLE
+from ..sources import FORMAT_FULL_RECORD
 from ..api import AuroraXRequest, urls
 from ..exceptions import (AuroraXNotFoundException,
                           AuroraXDuplicateException,
@@ -25,8 +25,7 @@ def list(program: Optional[str] = None,
          owner: Optional[str] = None,
          format: Optional[str] = FORMAT_FULL_RECORD,
          order: Optional[str] = "identifier",
-         include_stats: Optional[bool] = False,
-         include_na: Optional[bool] = False) -> List[DataSource]:
+         include_stats: Optional[bool] = False) -> List[DataSource]:
     """
     Retrieve all data source records (using params to filter as desired)
 
@@ -46,7 +45,6 @@ def list(program: Optional[str] = None,
         include_stats: include additional stats information about the data source (note:
             slower response time since an additional request must be done for each
             data source), defaults to False
-        include_na: include "not_applicable" special data sources (ie. adhoc sources)
 
     Returns:
         any data sources matching the requested parameters
@@ -80,12 +78,10 @@ def list(program: Optional[str] = None,
 
     # remove not_applicable sources
     sources_pruned = []
-    if (include_na is False):
-        for source in sources:
-            if (source.source_type != SOURCE_TYPE_NOT_APPLICABLE):
-                sources_pruned.append(source)
-    else:
-        sources_pruned = sources
+    for source in sources:
+        if (source.identifier >= 0):
+            # exclude under-the-hood adhoc data sources
+            sources_pruned.append(source)
 
     # get stats if requested
     if (include_stats is True):
@@ -216,8 +212,7 @@ def get_using_filters(program: Optional[str] = None,
                       owner: Optional[str] = None,
                       format: Optional[str] = FORMAT_FULL_RECORD,
                       order: Optional[str] = "identifier",
-                      include_stats: Optional[bool] = False,
-                      include_na: Optional[bool] = False) -> List[DataSource]:
+                      include_stats: Optional[bool] = False) -> List[DataSource]:
     """
     Retrieve all data source records matching a filter
 
@@ -237,7 +232,6 @@ def get_using_filters(program: Optional[str] = None,
         include_stats: include additional stats information about the data source (note:
             slower response time since an additional request must be done for each
             data source), defaults to False
-        include_na: include "not_applicable" special data sources (ie. adhoc sources)
 
     Returns:
         any data sources matching the requested parameters
@@ -254,8 +248,7 @@ def get_using_filters(program: Optional[str] = None,
                         owner=owner,
                         format=format,
                         order=order,
-                        include_stats=include_stats,
-                        include_na=include_na)
+                        include_stats=include_stats)
 
     # return
     return data_sources

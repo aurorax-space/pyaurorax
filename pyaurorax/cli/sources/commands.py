@@ -283,10 +283,9 @@ def sources_group():
               default="identifier", show_default=True,
               help="Order results using a certain column")
 @click.option("--include-stats", is_flag=True, help="Include additional information about data sources")
-@click.option("--include-na", is_flag=True, help="Include not_applicable special data sources (ie. ad-hoc sources)")
 @click.option("--reversed", "reversed_", is_flag=True, help="Reverse ordering")
 @click.pass_obj
-def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, include_na, reversed_):
+def list(config, program, platform, instrument_type, source_type, owner, order, include_stats, reversed_):
     """
     List data sources using the options to filter as desired
     """
@@ -298,8 +297,7 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
                                                       source_type=source_type,
                                                       owner=owner,
                                                       order=order,
-                                                      include_stats=include_stats,
-                                                      include_na=include_na)
+                                                      include_stats=include_stats)
     except pyaurorax.AuroraXException as e:
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
