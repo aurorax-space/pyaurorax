@@ -256,7 +256,7 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
     """
     # check that infile exists
     if not (os.path.exists(infile)):
-        click.echo("Error: infile doesn't exist (%s" % (infile))
+        click.echo("Error: infile doesn't exist (%s)" % (infile))
         sys.exit(1)
 
     # read in infile
@@ -324,7 +324,7 @@ def describe(config, infile):
     """
     # check that infile exists
     if not (os.path.exists(infile)):
-        click.echo("Error: infile doesn't exist (%s" % (infile))
+        click.echo("Error: infile doesn't exist (%s)" % (infile))
         sys.exit(1)
 
     # read in infile
