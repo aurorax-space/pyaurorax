@@ -77,7 +77,6 @@ class Search():
 
                 [{
                     "programs": [ "events" ],
-                    "platforms": [ "toshi" ],
                     "instrument_types": [ "substorm onsets" ]
                 }]
         conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
