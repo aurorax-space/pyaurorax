@@ -88,7 +88,6 @@ def search(start: datetime.datetime,
 
                 [{
                     "programs": [ "events" ],
-                    "platforms": [ "toshi" ],
                     "instrument_types": [ "substorm onsets" ]
                 }]
         conjunction_types: list of conjunction types, defaults to [] (meaning all conjunction

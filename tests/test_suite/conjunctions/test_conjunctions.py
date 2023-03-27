@@ -252,7 +252,6 @@ def test_conjunctions_search_synchronous_events_and_space():
     events_params = [
         {
             "programs": ["events"],
-            "platforms": ["toshi"],
             "instrument_types": ["substorm onsets"]
         }
     ]
@@ -390,7 +389,6 @@ def test_conjunctions_search_asynchronous_events_and_space():
     events_params = [
         {
             "programs": ["events"],
-            "platforms": ["toshi"],
             "instrument_types": ["substorm onsets"]
         }
     ]
