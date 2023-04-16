@@ -5,7 +5,7 @@ import pyaurorax
 from pyaurorax.data_products import DataProduct
 
 # globals
-MAX_WAIT_TIME = 30
+MAX_WAIT_TIME = 60
 
 
 @pytest.mark.data_products
