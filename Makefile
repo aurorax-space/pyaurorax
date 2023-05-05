@@ -35,7 +35,7 @@ test-pylint pylint:
 
 test-bandit bandit:
 	@printf "Running bandit tests\n+++++++++++++++++++++++++++\n"
-	poetry run bandit -r pyaurorax
+	poetry run bandit -r -ii pyaurorax
 	@printf "\n\n"
 
 test-mypy:
