@@ -4,7 +4,6 @@ The PyAuroraX package provides a way to interact with the
 to provide an intuitive process for those in the space physics and related
 communities to programmatically query AuroraX's vast database for conjunctions,
 ephemeris or data product records, data availability information, and more.
-PyAuroraX requires Python 3.7, 3.8, 3.9, or 3.10.
 
 Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax)
 and explore the evolving ecosystem of visualizations, tools, and data
