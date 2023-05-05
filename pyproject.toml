@@ -44,7 +44,6 @@ texttable = "^1.6.4"
 aacgmv2 = { version = "^2.6.2", optional = true }
 termcolor = "^2.0.1"
 python-dateutil = "^2.8.2"
-pdoc3 = "^0.10.0"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"
