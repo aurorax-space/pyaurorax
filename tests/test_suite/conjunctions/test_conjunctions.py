@@ -252,7 +252,7 @@ def test_conjunctions_search_synchronous_events_and_space():
     events_params = [
         {
             "programs": ["events"],
-            "instrument_types": ["substorm onsets"]
+            "instrument_types": ["substorm onset"]
         }
     ]
     distance = 500
@@ -389,7 +389,7 @@ def test_conjunctions_search_asynchronous_events_and_space():
     events_params = [
         {
             "programs": ["events"],
-            "instrument_types": ["substorm onsets"]
+            "instrument_types": ["substorm onset"]
         }
     ]
     distance = 500
