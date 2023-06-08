@@ -1,6 +1,5 @@
 import pytest
 import datetime
-import time
 import pyaurorax
 from pyaurorax.exceptions import (AuroraXConflictException, AuroraXDuplicateException,
                                   AuroraXNotFoundException, AuroraXUnauthorizedException,
