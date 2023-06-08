@@ -152,20 +152,20 @@ def test_AuroraXConflictException():
         # get the data source ID
         source = pyaurorax.sources.get(program, platform, instrument_type)
 
-        e = pyaurorax.ephemeris.Ephemeris(data_source=source,
-                                          epoch=epoch,
-                                          location_geo=location_geo,
-                                          location_gsm=location_gsm,
-                                          nbtrace=nbtrace,
-                                          sbtrace=sbtrace,
-                                          metadata=metadata)
+        # create ephemeris record
+        record = pyaurorax.ephemeris.Ephemeris(data_source=source,
+                                               epoch=epoch,
+                                               location_geo=location_geo,
+                                               location_gsm=location_gsm,
+                                               nbtrace=nbtrace,
+                                               sbtrace=sbtrace,
+                                               metadata=metadata)
 
         # set records array
-        records = [e]
+        records = [record]
 
         # upload record
         pyaurorax.ephemeris.upload(source.identifier, records=records)
-        time.sleep(10)
 
         # try deleting the test instrument
         pyaurorax.sources.delete(source.identifier)

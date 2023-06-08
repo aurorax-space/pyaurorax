@@ -234,6 +234,10 @@ def test_upload_data_products():
     # upload record
     result = pyaurorax.data_products.upload(ds.identifier, records, True)
 
+    # wait
+    time.sleep(10)
+
+    # search for data
     s = pyaurorax.data_products.Search(datetime.datetime(2020, 1, 2, 0, 0, 0),
                                        datetime.datetime(2020, 1, 2, 23, 59, 59),
                                        programs=["test-program"])
