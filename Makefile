@@ -1,4 +1,4 @@
-.PHONY: install update test test-linting test-flake8 test-pycodestyle test-pylint test-bandit test-mypy test-pytest test-coverage docs publish
+.PHONY: install update test test-linting test-pycodestyle test-bandit test-pytest test-pytest-search test-coverage show-outdated docs publish
 
 all:
 
@@ -6,62 +6,55 @@ poetry:
 	python -m pip install poetry
 
 install: poetry
-	poetry install -E aacgmv2
+	poetry install
 
 update upgrade:
 	python -m pip install --upgrade poetry
 	poetry update
 
-test test-linting: test-flake8 test-pycodestyle test-pylint test-bandit test-mypy
+test: test-linting
 
-test-all: test-linting test-pytest
+test-linting: test-ruff test-pycodestyle test-pyright test-bandit
 
-test-flake8 flake8:
-	@printf "Running flake8 tests\n+++++++++++++++++++++++++++\n"
-	poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-	poetry run flake8 . --count --ignore=W391,W503,F541,W504 --max-complexity=30 --max-line-length=129 --statistics
+test-ruff ruff:
+	@printf "Running ruff tests\n+++++++++++++++++++++++++++\n"
+	ruff check --respect-gitignore --quiet pyaurorax
+	ruff check --respect-gitignore --quiet tests
+	ruff check --respect-gitignore --quiet tools
 	@printf "\n\n"
 
 test-pycodestyle:
 	@printf "Running pycodestyle tests\n+++++++++++++++++++++++++++\n"
-	poetry run pycodestyle --ignore=E501,W191,W293,E302,W291,W292,E126,E265,E226,E262,E261,W391,E121,E123,E712,E231,W605,W504,W503,E402 pyaurorax
-	poetry run pycodestyle --ignore=E501,W191,W293,E302,W291,W292,E126,E265,E226,E262,E261,W391,E121,E123,E712,E231,W605,W504,W503,E402 tools
+	pycodestyle --config=.pycodestyle pyaurorax
+	pycodestyle --config=.pycodestyle tests
+	pycodestyle --config=.pycodestyle tools
 	@printf "\n\n"
 
-test-pylint pylint:
-	@printf "Running pylint tests\n+++++++++++++++++++++++++++\n"
-	poetry run pylint pyaurorax
+test-pyright pyright:
+	@printf "Running pyright tests\n+++++++++++++++++++++++++++\n"
+	pyright
 	@printf "\n\n"
 
 test-bandit bandit:
 	@printf "Running bandit tests\n+++++++++++++++++++++++++++\n"
-	poetry run bandit -r -ii pyaurorax
-	@printf "\n\n"
-
-test-mypy:
-	@printf "Running mypy tests\n+++++++++++++++++++++++++++\n"
-	poetry run mypy --ignore-missing-imports --no-strict-optional pyaurorax
+	bandit -c pyproject.toml -r -ii pyaurorax
 	@printf "\n\n"
 
 test-pytest pytest:
-	@printf "Running pytest tests\n+++++++++++++++++++++++++++\n"
-	poetry run coverage run -m pytest -v
-	@printf "\n\n"
+	pytest -n auto --cov=pyaurorax --cov-report= --maxfail=1
 
-test-pytest-unauthorized-access:
-	poetry run coverage run -m pytest -v -k "test_AuroraXUnauthorizedException"
+test-pytest-search:
+	pytest -n auto -m "search_accounts or search_availability or search_conjunctions or search_data_products or search_ephemeris or search_exceptions or search_location or search_metadata or search_requests or search_sources or search_util"
 
-test-pytest-read:
-	poetry run coverage run -m pytest -v -k "not test_AuroraXUnauthorizedException and not add and not upload and not update and not delete"
+test-coverage coverage:
+	coverage report
+	@tools/update_coverage_file.py
 
-test-pytest-create-update-delete:
-	poetry run coverage run -m pytest -v -k "add or upload or update or delete"
-
-test-coverage:
-	poetry run coverage report
+show-outdated:
+	poetry show --outdated
 
 docs:
-	poetry run python3 -m pdoc --html --force --output-dir docs pyaurorax --config "lunr_search={'fuzziness': 1}"
+	poetry run pdoc3 --html --force --output-dir docs/generated pyaurorax --config "lunr_search={'fuzziness': 1}" --template-dir docs/templates
 
 publish:
 	poetry build

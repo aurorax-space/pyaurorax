@@ -1,84 +1,71 @@
+# Copyright 2024 University of Calgary
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
-The PyAuroraX package provides a way to interact with the
-[AuroraX API](https://aurorax.space/data/apiLibraries). It is intended
-to provide an intuitive process for those in the space physics and related
-communities to programmatically query AuroraX's vast database for conjunctions,
-ephemeris or data product records, data availability information, and more.
-
-Check out this project on [GitHub](https://github.com/aurorax-space/pyaurorax)
-and explore the evolving ecosystem of visualizations, tools, and data
-at [AuroraX](https://aurorax.space/).
+The PyAuroraX package provides a way to interact with the [AuroraX Data Platform](https://aurorax.space), 
+facilitating programmatic usage of AuroraX's search engine and data analysis tools.
 
 For an overview of usage and examples, visit the
-[AuroraX Documentation website](https://docs.aurorax.space/code/overview).
-Details of functionality and options are available in the
-[API reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax/).
+[AuroraX Developer Zone website](https://docs.aurorax.space/code/overview), or explore the examples contained
+in the Github repository [here](https://github.com/aurorax-space/pyaurorax/tree/main/examples).
 
 Installation:
 ```console
-$ python -m pip install pyaurorax
+pip install pyaurorax
 ```
 
 Basic usage:
 ```python
-> import pyaurorax
+import pyaurorax
+aurorax = pyaurorax.PyAuroraX()
 ```
 """
 
 # versioning info
-__version__ = "0.13.3"
+__version__ = "1.0.0-rc1"
 
 # documentation excludes
-__pdoc__ = {"cli": False}
+__pdoc__ = {"cli": False, "pyaurorax": False}
+__all__ = ["PyAuroraX"]
 
-# pull in top level functions
-from .api import (AuroraXRequest,
-                  authenticate,
-                  get_api_key)
-from .sources import (FORMAT_BASIC_INFO,
-                      FORMAT_BASIC_INFO_WITH_METADATA,
-                      FORMAT_FULL_RECORD,
-                      FORMAT_IDENTIFIER_ONLY,
-                      FORMAT_DEFAULT,
-                      SOURCE_TYPE_EVENT_LIST,
-                      SOURCE_TYPE_GROUND,
-                      SOURCE_TYPE_HEO,
-                      SOURCE_TYPE_LEO,
-                      SOURCE_TYPE_LUNAR)
-from .conjunctions import (CONJUNCTION_TYPE_NBTRACE,
-                           CONJUNCTION_TYPE_SBTRACE)
-from .data_products import (DATA_PRODUCT_TYPE_KEOGRAM,
-                            DATA_PRODUCT_TYPE_MONTAGE,
-                            DATA_PRODUCT_TYPE_MOVIE,
-                            DATA_PRODUCT_TYPE_SUMMARY_PLOT,
-                            DATA_PRODUCT_TYPE_DATA_AVAILABILITY)
+# pull in top level class
+from .pyaurorax import PyAuroraX
 
-# pull in exceptions at top level
-from .exceptions import (AuroraXException,
-                         AuroraXNotFoundException,
-                         AuroraXMaxRetriesException,
-                         AuroraXDuplicateException,
-                         AuroraXUnexpectedContentTypeException,
-                         AuroraXValidationException,
-                         AuroraXBadParametersException,
-                         AuroraXUnauthorizedException,
-                         AuroraXConflictException,
-                         AuroraXUploadException,
-                         AuroraXUnexpectedEmptyResponse,
-                         AuroraXDataRetrievalException,
-                         AuroraXTimeoutException)
+# pull in top-level submodules
+#
+# NOTE: we do this only so that we can access classes within the
+# submodules, like `pyaurorax.search.EphemerisSearch`. Without this,
+# they are selectively addressable, such as within ipython, but not
+# vscode. Currently, this is ONLY included for VSCode's sake. Will
+# take more testing to explore other use-cases.
+from . import search
+from . import data
+from . import models
 
-# pull in models
-from .location import Location
-
-# pull in modules (order matters otherwise we get circular import errors)
-from pyaurorax import requests
-from pyaurorax import api
-from pyaurorax import sources
-from pyaurorax import exceptions
-from pyaurorax import metadata
-from pyaurorax import util
-from pyaurorax import availability
-from pyaurorax import conjunctions
-from pyaurorax import ephemeris
-from pyaurorax import data_products
+# pull in exceptions
+from .exceptions import (
+    AuroraXError,
+    AuroraXInitializationError,
+    AuroraXPurgeError,
+    AuroraXAPIError,
+    AuroraXNotFoundError,
+    AuroraXDuplicateError,
+    AuroraXUnauthorizedError,
+    AuroraXConflictError,
+    AuroraXDataRetrievalError,
+    AuroraXSearchError,
+    AuroraXUploadError,
+    AuroraXMaintenanceError,
+    AuroraXUnsupportedReadError,
+    AuroraXDownloadError,
+)

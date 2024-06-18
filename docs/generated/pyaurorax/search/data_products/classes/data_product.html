@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>pyaurorax.search.data_products.classes.data_product API documentation</title>
+<meta name="description" content="Class definition for a data product" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<style>
+@media screen and (max-width: 699px) {
+#content {
+padding-left: 2em;
+padding-right: 2em;
+padding-top: 0;
+}
+}
+@media screen and (min-width: 700px) {
+#content {
+max-width: 125ch;
+padding-left: 3em;
+padding-right: 3em;
+padding-top: 1em;
+border-left: 1px solid #ddd;
+}
+}
+</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyaurorax.search.data_products.classes.data_product</code></h1>
+</header>
+<section id="section-intro">
+<p>Class definition for a data product</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Copyright 2024 University of Calgary
+#
+# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+&#34;&#34;&#34;
+Class definition for a data product
+&#34;&#34;&#34;
+
+import datetime
+from typing import Dict, Optional
+from ...sources.classes.data_source import DataSource
+
+# keogram data product type
+DATA_PRODUCT_TYPE_KEOGRAM = &#34;keogram&#34;
+&#34;&#34;&#34;
+Data product type for keograms. Keograms are a 2-D
+representation of a series of images, and are one of
+the most popular data products that auroral science
+uses. More information can be found at
+https://docs.aurorax.space/about_the_data/standards/#keograms.
+&#34;&#34;&#34;
+
+# montage data product type
+DATA_PRODUCT_TYPE_MONTAGE = &#34;montage&#34;
+&#34;&#34;&#34;
+Data product type for montages. Like keograms, montages are
+another representation of a series of images. However, montages
+are not a 2D representation but rather a collage of thumnbail
+images for the period of time. An example can be found at
+https://data.phys.ucalgary.ca/sort_by_project/THEMIS/asi/stream2/2021/12/28/gill_themis19/20211228__gill_themis19_full-montage.pgm.jpg
+&#34;&#34;&#34;
+
+# movie data product type
+DATA_PRODUCT_TYPE_MOVIE = &#34;movie&#34;
+&#34;&#34;&#34;
+Data product type for movies. Movies are timelapse video
+files of auroral data, usually as MP4 or MPEG. They can
+consist of frames for a whole night, or an hour, and can
+be at any cadence that is most appropriate.
+&#34;&#34;&#34;
+
+# summary plot data product type
+DATA_PRODUCT_TYPE_SUMMARY_PLOT = &#34;summary_plot&#34;
+&#34;&#34;&#34;
+Data product type for summary plots. A summary plot can be any type
+of plot that shows auroral data in a summary format, for example a
+background-subtracted meridian scanning photometer plot showing
+counts in Rayleighs.
+&#34;&#34;&#34;
+
+# data availability data product type
+DATA_PRODUCT_TYPE_DATA_AVAILABILITY = &#34;data_availability&#34;
+&#34;&#34;&#34;
+Data product type for data availability. The AuroraX data availability
+system does not account for times when data was not expected to be
+collected, such as summer shutdowns due to inadequate night hours. This
+data product type for &#39;data availability&#39; is meant to be used as a smarter
+data availability mechanism for Aurora.
+&#34;&#34;&#34;
+
+
+class DataProductData:
+    &#34;&#34;&#34;
+    Data product object
+
+    Attributes:
+        data_source: data source that the ephemeris record is associated with
+        data_product_type: data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;)
+        start: starting timestamp for the record (assumed it is in UTC), inclusive
+        end: ending timestamp for the record (assumed it is in UTC), inclusive
+        url: the URL of data product
+        metadata: metadata for this record (arbitrary keys and values)
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        data_source: DataSource,
+        data_product_type: str,
+        start: datetime.datetime,
+        end: datetime.datetime,
+        url: str,
+        metadata: Optional[Dict] = None,
+    ):
+        self.data_source = data_source
+        self.data_product_type = data_product_type
+        self.start = start
+        self.end = end
+        self.url = url
+        self.metadata = metadata
+
+    def to_json_serializable(self) -&gt; Dict:
+        &#34;&#34;&#34;
+        Convert object to a JSON-serializable object (ie. translate
+        datetime objects to strings)
+
+        Returns:
+            a dictionary object that is JSON-serializable
+        &#34;&#34;&#34;
+        # init
+        d = self.__dict__
+
+        # format epoch as str
+        if (type(d[&#34;start&#34;]) is datetime.datetime):
+            d[&#34;start&#34;] = d[&#34;start&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+        if (type(d[&#34;end&#34;]) is datetime.datetime):
+            d[&#34;end&#34;] = d[&#34;end&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+
+        # format metadata
+        if (self.metadata is not None):
+            for key, value in self.metadata.items():
+                if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
+                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
+        # if (isinstance(self.metadata, list) is True):
+        #     self.metadata = {}
+
+        # format data source fields for query
+        d[&#34;program&#34;] = self.data_source.program
+        d[&#34;platform&#34;] = self.data_source.platform
+        d[&#34;instrument_type&#34;] = self.data_source.instrument_type
+        del d[&#34;data_source&#34;]
+
+        # return
+        return d
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # shorten the metadata and url
+        max_len = 20
+        attr_metadata = f&#34;{self.metadata}&#34;
+        if (len(attr_metadata) &gt; max_len):
+            attr_metadata = attr_metadata[0:max_len] + &#34;...}&#34;
+        attr_url = f&#34;{self.url}&#34;
+        if (len(attr_url) &gt; max_len):
+            attr_url = attr_url[0:max_len] + &#34;...&#34;
+
+        # return formatted representation
+        return f&#34;DataProductData(start={repr(self.start)}, end={repr(self.end)}, data_product_type=&#39;{self.data_product_type}&#39;, &#34; \
+            f&#34;url=&#39;{attr_url}&#39;, metadata={attr_metadata}, data_source=DataSource(...))&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_DATA_AVAILABILITY"><code class="name">var <span class="ident">DATA_PRODUCT_TYPE_DATA_AVAILABILITY</span></code></dt>
+<dd>
+<div class="desc"><p>Data product type for data availability. The AuroraX data availability
+system does not account for times when data was not expected to be
+collected, such as summer shutdowns due to inadequate night hours. This
+data product type for 'data availability' is meant to be used as a smarter
+data availability mechanism for Aurora.</p></div>
+</dd>
+<dt id="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_KEOGRAM"><code class="name">var <span class="ident">DATA_PRODUCT_TYPE_KEOGRAM</span></code></dt>
+<dd>
+<div class="desc"><p>Data product type for keograms. Keograms are a 2-D
+representation of a series of images, and are one of
+the most popular data products that auroral science
+uses. More information can be found at
+<a href="https://docs.aurorax.space/about_the_data/standards/#keograms.">https://docs.aurorax.space/about_the_data/standards/#keograms.</a></p></div>
+</dd>
+<dt id="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MONTAGE"><code class="name">var <span class="ident">DATA_PRODUCT_TYPE_MONTAGE</span></code></dt>
+<dd>
+<div class="desc"><p>Data product type for montages. Like keograms, montages are
+another representation of a series of images. However, montages
+are not a 2D representation but rather a collage of thumnbail
+images for the period of time. An example can be found at
+<a href="https://data.phys.ucalgary.ca/sort_by_project/THEMIS/asi/stream2/2021/12/28/gill_themis19/20211228__gill_themis19_full-montage.pgm.jpg">https://data.phys.ucalgary.ca/sort_by_project/THEMIS/asi/stream2/2021/12/28/gill_themis19/20211228__gill_themis19_full-montage.pgm.jpg</a></p></div>
+</dd>
+<dt id="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MOVIE"><code class="name">var <span class="ident">DATA_PRODUCT_TYPE_MOVIE</span></code></dt>
+<dd>
+<div class="desc"><p>Data product type for movies. Movies are timelapse video
+files of auroral data, usually as MP4 or MPEG. They can
+consist of frames for a whole night, or an hour, and can
+be at any cadence that is most appropriate.</p></div>
+</dd>
+<dt id="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_SUMMARY_PLOT"><code class="name">var <span class="ident">DATA_PRODUCT_TYPE_SUMMARY_PLOT</span></code></dt>
+<dd>
+<div class="desc"><p>Data product type for summary plots. A summary plot can be any type
+of plot that shows auroral data in a summary format, for example a
+background-subtracted meridian scanning photometer plot showing
+counts in Rayleighs.</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyaurorax.search.data_products.classes.data_product.DataProductData"><code class="flex name class">
+<span>class <span class="ident">DataProductData</span></span>
+<span>(</span><span>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="../../sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>, data_product_type: str, start: datetime.datetime, end: datetime.datetime, url: str, metadata: Optional[Dict] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Data product object</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>data_source</code></strong></dt>
+<dd>data source that the ephemeris record is associated with</dd>
+<dt><strong><code>data_product_type</code></strong></dt>
+<dd>data product type ("keogram", "movie", "summary_plot")</dd>
+<dt><strong><code>start</code></strong></dt>
+<dd>starting timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>ending timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dt><strong><code>url</code></strong></dt>
+<dd>the URL of data product</dd>
+<dt><strong><code>metadata</code></strong></dt>
+<dd>metadata for this record (arbitrary keys and values)</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataProductData:
+    &#34;&#34;&#34;
+    Data product object
+
+    Attributes:
+        data_source: data source that the ephemeris record is associated with
+        data_product_type: data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;)
+        start: starting timestamp for the record (assumed it is in UTC), inclusive
+        end: ending timestamp for the record (assumed it is in UTC), inclusive
+        url: the URL of data product
+        metadata: metadata for this record (arbitrary keys and values)
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        data_source: DataSource,
+        data_product_type: str,
+        start: datetime.datetime,
+        end: datetime.datetime,
+        url: str,
+        metadata: Optional[Dict] = None,
+    ):
+        self.data_source = data_source
+        self.data_product_type = data_product_type
+        self.start = start
+        self.end = end
+        self.url = url
+        self.metadata = metadata
+
+    def to_json_serializable(self) -&gt; Dict:
+        &#34;&#34;&#34;
+        Convert object to a JSON-serializable object (ie. translate
+        datetime objects to strings)
+
+        Returns:
+            a dictionary object that is JSON-serializable
+        &#34;&#34;&#34;
+        # init
+        d = self.__dict__
+
+        # format epoch as str
+        if (type(d[&#34;start&#34;]) is datetime.datetime):
+            d[&#34;start&#34;] = d[&#34;start&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+        if (type(d[&#34;end&#34;]) is datetime.datetime):
+            d[&#34;end&#34;] = d[&#34;end&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+
+        # format metadata
+        if (self.metadata is not None):
+            for key, value in self.metadata.items():
+                if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
+                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
+        # if (isinstance(self.metadata, list) is True):
+        #     self.metadata = {}
+
+        # format data source fields for query
+        d[&#34;program&#34;] = self.data_source.program
+        d[&#34;platform&#34;] = self.data_source.platform
+        d[&#34;instrument_type&#34;] = self.data_source.instrument_type
+        del d[&#34;data_source&#34;]
+
+        # return
+        return d
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # shorten the metadata and url
+        max_len = 20
+        attr_metadata = f&#34;{self.metadata}&#34;
+        if (len(attr_metadata) &gt; max_len):
+            attr_metadata = attr_metadata[0:max_len] + &#34;...}&#34;
+        attr_url = f&#34;{self.url}&#34;
+        if (len(attr_url) &gt; max_len):
+            attr_url = attr_url[0:max_len] + &#34;...&#34;
+
+        # return formatted representation
+        return f&#34;DataProductData(start={repr(self.start)}, end={repr(self.end)}, data_product_type=&#39;{self.data_product_type}&#39;, &#34; \
+            f&#34;url=&#39;{attr_url}&#39;, metadata={attr_metadata}, data_source=DataSource(...))&#34;</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.data_products.classes.data_product.DataProductData.to_json_serializable"><code class="name flex">
+<span>def <span class="ident">to_json_serializable</span></span>(<span>self) ‑> Dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
+datetime objects to strings)</p>
+<h2 id="returns">Returns</h2>
+<p>a dictionary object that is JSON-serializable</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_json_serializable(self) -&gt; Dict:
+    &#34;&#34;&#34;
+    Convert object to a JSON-serializable object (ie. translate
+    datetime objects to strings)
+
+    Returns:
+        a dictionary object that is JSON-serializable
+    &#34;&#34;&#34;
+    # init
+    d = self.__dict__
+
+    # format epoch as str
+    if (type(d[&#34;start&#34;]) is datetime.datetime):
+        d[&#34;start&#34;] = d[&#34;start&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+    if (type(d[&#34;end&#34;]) is datetime.datetime):
+        d[&#34;end&#34;] = d[&#34;end&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+
+    # format metadata
+    if (self.metadata is not None):
+        for key, value in self.metadata.items():
+            if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
+                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
+    # if (isinstance(self.metadata, list) is True):
+    #     self.metadata = {}
+
+    # format data source fields for query
+    d[&#34;program&#34;] = self.data_source.program
+    d[&#34;platform&#34;] = self.data_source.platform
+    d[&#34;instrument_type&#34;] = self.data_source.instrument_type
+    del d[&#34;data_source&#34;]
+
+    # return
+    return d</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<form>
+<input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
+disabled minlength="2">
+</form>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<style>
+.modal-dialog iframe {
+width: 100vw;
+height: calc(100vh - 80px);
+}
+@media screen and (min-width: 700px) {
+.modal-dialog iframe {
+width: 70vw;
+height: 80vh;
+}
+}
+.modal-dialog .tingle-modal-box {width: auto;}
+.modal-dialog .tingle-modal-box__content {padding: 0;}
+</style>
+<script>
+const input = document.getElementById('lunr-search');
+input.disabled = false;
+input.form.addEventListener('submit', (ev) => {
+ev.preventDefault();
+const url = new URL(window.location);
+url.searchParams.set('q', input.value);
+history.replaceState({}, null, url.toString());
+search(input.value);
+});
+const query = new URL(window.location).searchParams.get('q');
+if (query)
+search(query);
+function search(query) {
+const url = '../../../../doc-search.html#' + encodeURIComponent(query);
+new tingle.modal({
+cssClass: ['modal-dialog'],
+onClose: () => {
+const url = new URL(window.location);
+url.searchParams.delete('q');
+history.replaceState({}, null, url.toString());
+setTimeout(() => input.focus(), 100);
+}
+}).setContent('<iframe src="' + url + '"></iframe>').open();
+}
+</script>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyaurorax.search.data_products.classes" href="index.html">pyaurorax.search.data_products.classes</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_DATA_AVAILABILITY" href="#pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_DATA_AVAILABILITY">DATA_PRODUCT_TYPE_DATA_AVAILABILITY</a></code></li>
+<li><code><a title="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_KEOGRAM" href="#pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_KEOGRAM">DATA_PRODUCT_TYPE_KEOGRAM</a></code></li>
+<li><code><a title="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MONTAGE" href="#pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MONTAGE">DATA_PRODUCT_TYPE_MONTAGE</a></code></li>
+<li><code><a title="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MOVIE" href="#pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MOVIE">DATA_PRODUCT_TYPE_MOVIE</a></code></li>
+<li><code><a title="pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_SUMMARY_PLOT" href="#pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_SUMMARY_PLOT">DATA_PRODUCT_TYPE_SUMMARY_PLOT</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.search.data_products.classes.data_product.DataProductData" href="#pyaurorax.search.data_products.classes.data_product.DataProductData">DataProductData</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.data_products.classes.data_product.DataProductData.to_json_serializable" href="#pyaurorax.search.data_products.classes.data_product.DataProductData.to_json_serializable">to_json_serializable</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

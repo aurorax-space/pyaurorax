@@ -1,0 +1,266 @@
+# Copyright 2024 University of Calgary
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import numpy as np
+import pyproj
+import cartopy.crs
+import cartopy.feature
+import matplotlib.pyplot as plt
+import matplotlib.collections
+from typing import Optional, Union, Dict, List
+from ..classes.mosaic import Mosaic, MosaicData, MosaicSkymap
+from .._scale_intensity import scale_intensity
+
+# globals
+__DEFAULT_SCALE_MIN = 0
+__DEFAULT_SCALE_MAX = 20000
+
+
+def create(prepped_data: MosaicData,
+           prepped_skymap: MosaicSkymap,
+           frame_idx: int,
+           cartopy_projection: cartopy.crs.Projection,
+           min_elevation: int = 5,
+           colormap: Optional[str] = "gray",
+           image_intensity_scales: Optional[Union[List, Dict]] = None) -> Mosaic:
+    """
+    Create a mosaic object.
+
+    Args:
+        prepped_data (pyaurorax.tools.MosaicData): 
+            The prepared mosaic data. Generated from a prior `prep_images()` function call.
+
+        prepped_skymap (pyaurorax.tools.MosaicSkymap): 
+            The prepared skymap data. Generated from a prior `prep_skymaps()` function call.
+
+        frame_idx (int): 
+            The frame number to generate a mosaic for.
+
+        cartopy_projection (cartopy.crs.Projection): 
+            The cartopy projection to use when creating the mosaic.
+
+        min_elevation (int): 
+            The minimum elevation cutoff when projecting images on the map, in degrees. Default is `5`.
+
+        cbar_colorcmap (str): 
+            The matplotlib colormap to use for the rendered image data. Default is `grey`.
+
+            Commonly used colormaps are:
+
+            - REGO: `gist_heat`
+            - THEMIS ASI: `gray`
+            - TREx Blue: `Blues_r`
+            - TREx NIR: `gray`
+            - TREx RGB: `None`
+
+            A list of all available colormaps can be found on the 
+            [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
+
+        image_intensity_scaled (List or Dict): 
+            Ranges for scaling images. Either a a list with 2 elements which will scale all sites with 
+            the same range, or as a dictionary which can be used for scaling each site differently. 
+
+            Example of uniform scaling across all sites: 
+            `image_intensity_scales = [2000, 8000]`
+
+            Example of scaling each site differently:
+            `image_intensity_scales = {"fsmi": [1000, 10000], "gill": [2000, 8000]}`
+
+    Returns:
+        The generated `pyaurorax.tools.Mosaic` object.
+
+    Raises:
+        ValueError: issues with supplied parameters.
+    """
+    # init coordinates transformer
+    #
+    # To convert from geodetic coordinates onto the map projection, we use pyproj instead
+    # of cartopy's native transformations. This is an optimization.
+    pyproj_src_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
+    pyproj_des_proj = pyproj.CRS.from_user_input(cartopy_projection)
+    transformer = pyproj.Transformer.from_crs(pyproj_src_proj, pyproj_des_proj, always_xy=True)
+
+    # get sites
+    site_list = prepped_data.site_uid_list
+
+    # set image intensity scales
+    if (image_intensity_scales is None):
+        # defaults to scaling all sites between 0-20000
+        image_intensity_scales = {}
+        for site_uid in prepped_skymap.site_uid_list:
+            image_intensity_scales[site_uid] = [__DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX]
+    elif (isinstance(image_intensity_scales, list) is True):
+        image_intensity_scales_dict = {}
+        for site_uid in site_list:
+            image_intensity_scales_dict[site_uid] = image_intensity_scales
+        image_intensity_scales = image_intensity_scales_dict
+    elif (isinstance(image_intensity_scales, dict) is True):
+        # no action needed
+        pass
+    else:
+        raise ValueError("Invalid image_intensity_scales format. Please refer to the documentation for this function.")
+
+    # We need a numpy array of the sites requested, that will be used to make sure any sites
+    # that don't have data for the requested frame are not plotted. Also empty dict for images..
+    site_list_arr = np.array(site_list)
+    # all_images = np.zeros([len(site_list), width * height, __N_CHANNELS], dtype=np.int32)
+    all_images = {}
+
+    # Grab the elevation, and filling lats/lons
+    elev = prepped_skymap.elevation
+    polyfill_lon = prepped_skymap.polyfill_lon
+    polyfill_lat = prepped_skymap.polyfill_lat
+
+    # Now we begin to fill in the above arrays, one site at a time. Before doing so
+    # we need lists to keep track of which sites actually have data for this frame.
+    sites_with_data = []
+    sites_with_data_idx = []
+
+    # We also define a list that will hold all unique timestamps pulled from each
+    # frame's metadata. This should be of length 1, and we can check that to make
+    # sure all images being plotted correspond to the same time.
+    unique_timestamps = []
+    n_channels_dict = {}
+    for site in site_list:
+
+        # set image dimensions
+        height = prepped_data.images_dimensions[site][0]
+        width = prepped_data.images_dimensions[site][1]
+
+        # Grab the timestamp for this frame/site
+        meta_timestamp = prepped_data.timestamps[frame_idx]
+
+        # Determine whether current image is single or multi-channel, and add to dictionary for reference
+        if len(prepped_data.images[site].shape) == 4:
+            n_channels = prepped_data.images[site].shape[2]
+        else:
+            n_channels = 1
+        n_channels_dict[site] = n_channels
+
+        # Now, obtain the frame of interest, for this site, from the image data and flatten it
+        if n_channels == 1:
+            img = prepped_data.images[site][:, :, frame_idx]
+            flattened_img = np.reshape(img, (width * height))
+        else:
+            img = prepped_data.images[site][:, :, :, frame_idx]
+            flattened_img = np.reshape(img, (width * height, n_channels))
+
+        tmp = flattened_img
+
+        if (np.sum(tmp) == 0.0):
+            # If it's sum is zero, we know there is no data so we can simply continue.
+            continue
+
+        # Scale this site's data based on previously defined scaling bounds
+        tmp = scale_intensity(tmp, min=image_intensity_scales[site][0], max=image_intensity_scales[site][1], top=255)  # type: ignore
+
+        # Add the timestamp to tracking list if it's unique
+        if meta_timestamp not in unique_timestamps:
+            unique_timestamps.append(meta_timestamp)
+
+        # Append sites to respective lists, and add image data to master list
+        sites_with_data.append(site)
+        sites_with_data_idx.append(np.where(site_list_arr == site)[0][0])
+        all_images[site] = tmp.astype(np.int32)
+
+    # This checks to make sure all images have the same timestamps
+    if len(unique_timestamps) != 1:
+        raise Exception("Error: Images have different timestamps.")
+
+    # Create empty lists for tracking the pixel polygons and their values
+    lon_list = []
+    lat_list = []
+    cmap_vals = []
+
+    # Set up elevation increment for plotting. We start at the min elevation
+    # and plot groups of elevations until reaching 90 deg.
+    elev_delta = 0.1
+    el = min_elevation
+
+    # Iterate through all elevation ranges
+    while el < 90:
+
+        # Only iterate through the sites that actually have data
+        for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
+            # Get this sites number of channels
+            n_channels = n_channels_dict[site_id]
+
+            # Get all pixels within current elevation threshold
+            el_idx = np.nonzero(np.logical_and(elev[site_idx] > el, elev[site_idx] <= el + elev_delta))[0]
+            if len(el_idx) == 0:
+                continue
+
+            # Grab this level's filling lat/lons
+            el_lvl_fill_lats = polyfill_lat[site_idx][:, el_idx]
+            el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
+
+            # Grab this level's data values
+            if n_channels == 1:
+                el_lvl_cmap_vals = all_images[site_id][el_idx]
+            else:
+                el_lvl_cmap_vals = all_images[site_id][el_idx, :]
+
+            # # Mask any nans that may have slipped through - done as a precaution
+            nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
+
+            el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
+            el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
+            if n_channels == 1:
+                el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
+            else:
+                el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
+
+            # Convert pixel values to a normalized float
+            el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
+
+            # Append polygon lat/lons and values to master lists
+            if n_channels == 1:
+                # print(1, len(el_lvl_fill_lats), len(el_lvl_colors))
+                cmap = plt.get_cmap(colormap)
+                for k in range(len(el_lvl_fill_lats[0, :])):
+                    lon_list.append(el_lvl_fill_lons[:, k])
+                    lat_list.append(el_lvl_fill_lats[:, k])
+                    cmap_vals.append(cmap(el_lvl_colors[k]))
+            else:
+                for k in range(len(el_lvl_fill_lats[0, :])):
+                    lon_list.append(el_lvl_fill_lons[:, k])
+                    lat_list.append(el_lvl_fill_lats[:, k])
+                    cmap_vals.append(el_lvl_colors[k, :])
+
+        el += elev_delta
+
+    # Use our transformer object to convert the lat/lon polygons into projection coordinates.
+    lons, lats = transformer.transform(np.array(lon_list), np.array(lat_list))
+
+    # Format polygons for creation of PolyCollection object
+    lonlat_polygons = np.empty((lons.shape[0], 5, 2))
+    lonlat_polygons[:, :, 0] = lons
+    lonlat_polygons[:, :, 1] = lats
+
+    # generate a PolyCollection object, containing all of the Polygons shaded with
+    # their corresponding RGB value
+
+    img_data_poly = matplotlib.collections.PolyCollection(
+        lonlat_polygons,  # type: ignore
+        facecolors=cmap_vals,
+        array=None,
+        clim=[0.0, 1.0],
+        edgecolors="face",
+    )
+
+    # cast into mosaic object
+    mosaic = Mosaic(polygon_data=img_data_poly, cartopy_projection=cartopy_projection)
+
+    # return
+    return mosaic

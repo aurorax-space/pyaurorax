@@ -1,0 +1,8 @@
+[run]
+branch = False
+source = pyaurorax
+
+[report]
+show_missing = True
+skip_empty = True
+omit =

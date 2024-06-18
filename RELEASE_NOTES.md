@@ -1,0 +1,115 @@
+Version 1.0.0
+--------------------
+
+Please note that this release contains major breaking changes.
+
+- Major codebase refactor. All functions are now accessed via a PyAuroraX object which must be instantiated. This was done in support of the new submodules.
+- Addition of submodules: 
+  - `data` for data downloading and reading
+  - `models` for using the TREx Auroral Transport Model (ATM)
+  - `tools` for All-sky Imager data analysis tools
+- Naming convention for exceptions changed. AuroraXException is now AuroraXError ('Exception' changed to 'Error'), adhering to best practices for naming Python exceptions.
+- Removed `sources.get_stats()` function. This was deprecated within the AuroraX API, and replaced by `include_stats` flags part of the other data source listing/get functions.
+functionality.
+- API `authenticate()` function removed. Not necessary anymore due to the refactor.
+- Class renames
+    - `Ephemeris` renamed to `EphemerisData`
+    - `DataProduct` renamed to `DataProductData`
+    - Ephemeris `Search` renamed to `EphemerisSearch`
+    - Conjunction `Search` renamed to `ConjunctionSearch`
+    - Data product `Search` renamed to `DataProductSearch`
+- CLI commands previously available are now wrapped into a `search` top level command (ie. `aurorax-cli sources list` is now `aurorax-cli search sources list`)
+- Other
+  - Add chunking of ephemeris data upload (#80)
+  - Collapse data source partial_update function into single update function (#33)
+  - Add exception handling for when API is in maintenance mode (#77)
+  - Add ability to upload ephemeris records with null location data (#78)
+  - Updates to adding data sources (#79)
+
+
+Version 0.13.3
+--------------------
+
+Bugfix for `pyaurorax.Location` class validator
+
+
+Version 0.13.2
+--------------------
+
+Updated data source retrieval to handle new adhoc sources
+
+
+Version 0.13.1
+--------------------
+
+Minor bugfix for Ephemeris class output string
+
+
+Version 0.13.0
+--------------------
+
+Additional error handling for search requests.
+
+
+Version 0.12.0
+--------------------
+
+- Add search request listing to CLI program (#65)
+- Remove search_async functions (#49)
+- Remove data sources 'partial_update' function (#64)
+- Add support for Python 3.10 (#40)
+
+
+Version 0.11.0
+--------------------
+
+Dropped support for Python 3.6 and added support for Python 3.10. Updated various dependency versions.
+
+
+Version 0.10.0
+--------------------
+
+- Add functions for interacting with Swarm-Aurora using conjunction searches (#73)
+- Remove default conjunction types of only nbtrace (#72)
+- Add functions for getting the request URL (#74)
+
+
+Version 0.9.0
+--------------------
+
+- Final updates for 0.9.0 release (#69)
+- Switch data products delete and delete_daterange functions (#68)
+- Add aurorax-cli command line application (#30)
+- Stack trace when requesting status for a request ID that doesn't exist bug (#67)
+- Add error handling for missing data file in get_data requests function (#66)
+- Add data source search function (#62)
+- More updates for v0.9.0 release (#61)
+- Update Jupyter notebooks and standalone tests to sync up with latest codebase (#32)
+- Change __repr__ methods to be object format instead of pformatted dicts (#60)
+- Make printing of data source object respond to the format parameter (#59)
+- Majority of updates for v0.9.0 release (#58)
+- Add describe utility functions (#27)
+- Simplify the data source get functions (#34)
+- Add events to the searches as another criteria block (#50)
+- Change max_distances to advanced_distances for conjunction search (#55)
+- Make advanced_distances not rely on the default distance (#56)
+- Add a set of 'data product type' variables (#52)
+- Add metadata filter capabilities to conjunction searches invalid (#53)
+- Add a set of 'conjunction type' variables (#47)
+- Merge search_async into search function (#48)
+- Add a set of 'source_type' variables (#46)
+- Add a set of 'format' variables (#43)
+- Make aacgmv2 an optional dependency (#45)
+- Clean up output from mypy tests (#31)
+- Add optional type to functions that need it (#29)
+- Reorganize codebase to split into more files (#35)
+- Change default data source format to "full_record" (#36)
+- Change flake8 dependency into a dev dependency (#37)
+- Upgrade dependencies for 0.9.0 release (#38)
+- Add MacOS and Windows tests to the CI pipeline (#39)
+
+
+Version 0.8.0 or earlier
+--------------------
+
+Active development. Changes not documented.

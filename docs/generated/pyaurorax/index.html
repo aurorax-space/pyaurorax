@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>pyaurorax API documentation</title>
+<meta name="description" content="The PyAuroraX package provides a way to interact with the [AuroraX Data Platform](https://aurorax.space),
+facilitating programmatic usage of …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<style>
+@media screen and (max-width: 699px) {
+#content {
+padding-left: 2em;
+padding-right: 2em;
+padding-top: 0;
+}
+}
+@media screen and (min-width: 700px) {
+#content {
+max-width: 125ch;
+padding-left: 3em;
+padding-right: 3em;
+padding-top: 1em;
+border-left: 1px solid #ddd;
+}
+}
+</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Package <code>pyaurorax</code></h1>
+</header>
+<section id="section-intro">
+<p>The PyAuroraX package provides a way to interact with the <a href="https://aurorax.space">AuroraX Data Platform</a>,
+facilitating programmatic usage of AuroraX's search engine and data analysis tools.</p>
+<p>For an overview of usage and examples, visit the
+<a href="https://docs.aurorax.space/code/overview">AuroraX Developer Zone website</a>, or explore the examples contained
+in the Github repository <a href="https://github.com/aurorax-space/pyaurorax/tree/main/examples">here</a>.</p>
+<p>Installation:</p>
+<pre><code class="language-console">pip install pyaurorax
+</code></pre>
+<p>Basic usage:</p>
+<pre><code class="language-python">import pyaurorax
+aurorax = pyaurorax.PyAuroraX()
+</code></pre>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Copyright 2024 University of Calgary
+#
+# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+&#34;&#34;&#34;
+The PyAuroraX package provides a way to interact with the [AuroraX Data Platform](https://aurorax.space), 
+facilitating programmatic usage of AuroraX&#39;s search engine and data analysis tools.
+
+For an overview of usage and examples, visit the
+[AuroraX Developer Zone website](https://docs.aurorax.space/code/overview), or explore the examples contained
+in the Github repository [here](https://github.com/aurorax-space/pyaurorax/tree/main/examples).
+
+Installation:
+```console
+pip install pyaurorax
+```
+
+Basic usage:
+```python
+import pyaurorax
+aurorax = pyaurorax.PyAuroraX()
+```
+&#34;&#34;&#34;
+
+# versioning info
+__version__ = &#34;1.0.0-rc1&#34;
+
+# documentation excludes
+__pdoc__ = {&#34;cli&#34;: False, &#34;pyaurorax&#34;: False}
+__all__ = [&#34;PyAuroraX&#34;]
+
+# pull in top level class
+from .pyaurorax import PyAuroraX
+
+# pull in top-level submodules
+#
+# NOTE: we do this only so that we can access classes within the
+# submodules, like `pyaurorax.search.EphemerisSearch`. Without this,
+# they are selectively addressable, such as within ipython, but not
+# vscode. Currently, this is ONLY included for VSCode&#39;s sake. Will
+# take more testing to explore other use-cases.
+from . import search
+from . import data
+from . import models
+
+# pull in exceptions
+from .exceptions import (
+    AuroraXError,
+    AuroraXInitializationError,
+    AuroraXPurgeError,
+    AuroraXAPIError,
+    AuroraXNotFoundError,
+    AuroraXDuplicateError,
+    AuroraXUnauthorizedError,
+    AuroraXConflictError,
+    AuroraXDataRetrievalError,
+    AuroraXSearchError,
+    AuroraXUploadError,
+    AuroraXMaintenanceError,
+    AuroraXUnsupportedReadError,
+    AuroraXDownloadError,
+)</code></pre>
+</details>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="pyaurorax.data" href="data/index.html">pyaurorax.data</a></code></dt>
+<dd>
+<div class="desc"><p>Instrument data downloading and reading module. This module presently has support
+for data provided by the University of Calgary, such as THEMIS ASI, …</p></div>
+</dd>
+<dt><code class="name"><a title="pyaurorax.exceptions" href="exceptions.html">pyaurorax.exceptions</a></code></dt>
+<dd>
+<div class="desc"><p>Unique exception classes utilized by PyAuroraX. These exceptions can be used to help trap specific
+errors raised by this library …</p></div>
+</dd>
+<dt><code class="name"><a title="pyaurorax.models" href="models/index.html">pyaurorax.models</a></code></dt>
+<dd>
+<div class="desc"><p>Interact with various auroral models, such as the TREx Auroral Transport Model (ATM).</p></div>
+</dd>
+<dt><code class="name"><a title="pyaurorax.search" href="search/index.html">pyaurorax.search</a></code></dt>
+<dd>
+<div class="desc"><p>Interact with the AuroraX search engine. This includes finding data sources, searching
+for conjunctions or ephemeris data, and uploading/managing …</p></div>
+</dd>
+<dt><code class="name"><a title="pyaurorax.tools" href="tools/index.html">pyaurorax.tools</a></code></dt>
+<dd>
+<div class="desc"><p>Data analysis toolkit for working with all-sky imager data available within the
+AuroraX platform …</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyaurorax.PyAuroraX"><code class="flex name class">
+<span>class <span class="ident">PyAuroraX</span></span>
+<span>(</span><span>download_output_root_path: Optional[str] = None, read_tar_temp_path: Optional[str] = None, api_base_url: Optional[str] = None, api_timeout: Optional[int] = None, api_headers: Optional[Dict] = None, api_key: Optional[str] = None, srs_obj: Optional[pyucalgarysrs.pyucalgarysrs.PyUCalgarySRS] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The <code><a title="pyaurorax.PyAuroraX" href="#pyaurorax.PyAuroraX">PyAuroraX</a></code> class is the primary entry point for utilizing
+this library. It is used to initialize a session, capturing details
+about API connectivity, environment, and more. All submodules are
+encapsulated within this class, so any usage of the library starts
+with creating this object.</p>
+<pre><code class="language-python">import pyaurorax
+aurorax = pyaurorax.PyAuroraX()
+</code></pre>
+<p>When working with this object, you can set configuration parameters, such
+as the destination directory for downloaded data, or API special settings
+(e.g., timeout, HTTP headers, API key). These parameters can be set when
+instantiating the object, or after instantiating using the self-contained
+accessible variables.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>download_output_root_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Destination directory for downloaded data. The default for this path is a
+subfolder in the user's home directory, such
+as <code>/home/user/pyaurorax_data</code>
+in Linux. In Windows and Mac, it is similar.</dd>
+<dt><strong><code>read_tar_temp_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>Temporary directory used for tar extraction phases during file reading (e.g.,
+reading TREx RGB Burst data). The default for this is <code>&lt;download_output_root_path&gt;/.tar_temp_working</code>.
+For faster performance when reading tar-based data, one option on Linux is
+to set this to use RAM directly at <code>/dev/shm/pyaurorax_tar_temp_working</code>.</dd>
+<dt><strong><code>api_base_url</code></strong> :&ensp;<code>str</code></dt>
+<dd>URL prefix to use when interacting with the AuroraX API. By default this is set to
+<code>https://api.phys.ucalgary.ca</code>. This parameter is primarily used by the development
+team to test and build new functions using the private staging API.</dd>
+<dt><strong><code>api_timeout</code></strong> :&ensp;<code>int</code></dt>
+<dd>The timeout used when communicating with the Aurorax API. This value is represented in
+seconds, and by default is <code>10 seconds</code>.</dd>
+<dt><strong><code>api_headers</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>HTTP headers used when communicating with the AuroraX API. The default for this value
+consists of several standard headers. Any changes to this parameter are in addition to
+the default standard headers.</dd>
+<dt><strong><code>api_key</code></strong> :&ensp;<code>str</code></dt>
+<dd>API key to use when interacting with the AuroraX API. The default value is None. Please note
+that an API key is only required for write operations to the AuroraX search API, such as
+creating data sources or uploading ephemeris data.</dd>
+<dt><strong><code>srs_obj</code></strong> :&ensp;<code>pyucalgarysrs.PyUCalgarySRS</code></dt>
+<dd>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/#pyucalgarysrs.PyUCalgarySRS">PyUCalgarySRS</a> object.
+If not supplied, it will create the object with some settings carried over from the PyAuroraX
+object. Note that specifying this is for advanced users and only necessary a few special use-cases.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXInitializationError" href="exceptions.html#pyaurorax.exceptions.AuroraXInitializationError">AuroraXInitializationError</a></code></dt>
+<dd>an error was encountered during initialization
+of the paths</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PyAuroraX:
+    &#34;&#34;&#34;
+    The `PyAuroraX` class is the primary entry point for utilizing
+    this library. It is used to initialize a session, capturing details
+    about API connectivity, environment, and more. All submodules are 
+    encapsulated within this class, so any usage of the library starts 
+    with creating this object.
+
+    ```python
+    import pyaurorax
+    aurorax = pyaurorax.PyAuroraX()
+    ```
+
+    When working with this object, you can set configuration parameters, such 
+    as the destination directory for downloaded data, or API special settings 
+    (e.g., timeout, HTTP headers, API key). These parameters can be set when 
+    instantiating the object, or after instantiating using the self-contained 
+    accessible variables.
+    &#34;&#34;&#34;
+
+    __DEFAULT_API_BASE_URL = &#34;https://api.aurorax.space&#34;
+    __DEFAULT_API_TIMEOUT = 10
+    __DEFAULT_API_HEADERS = {
+        &#34;content-type&#34;: &#34;application/json&#34;,
+        &#34;user-agent&#34;: &#34;python-pyaurorax/%s&#34; % (__version__),
+    }  # NOTE: these MUST be lowercase so that the decorator logic cannot be overridden
+
+    def __init__(self,
+                 download_output_root_path: Optional[str] = None,
+                 read_tar_temp_path: Optional[str] = None,
+                 api_base_url: Optional[str] = None,
+                 api_timeout: Optional[int] = None,
+                 api_headers: Optional[Dict] = None,
+                 api_key: Optional[str] = None,
+                 srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None):
+        &#34;&#34;&#34;
+        Attributes:
+            download_output_root_path (str): 
+                Destination directory for downloaded data. The default for this path is a 
+                subfolder in the user&#39;s home directory, such  as `/home/user/pyaurorax_data` 
+                in Linux. In Windows and Mac, it is similar.
+
+            read_tar_temp_path (str): 
+                Temporary directory used for tar extraction phases during file reading (e.g., 
+                reading TREx RGB Burst data). The default for this is `&lt;download_output_root_path&gt;/.tar_temp_working`. 
+                For faster performance when reading tar-based data, one option on Linux is 
+                to set this to use RAM directly at `/dev/shm/pyaurorax_tar_temp_working`.
+
+            api_base_url (str): 
+                URL prefix to use when interacting with the AuroraX API. By default this is set to 
+                `https://api.phys.ucalgary.ca`. This parameter is primarily used by the development 
+                team to test and build new functions using the private staging API.
+
+            api_timeout (int): 
+                The timeout used when communicating with the Aurorax API. This value is represented in 
+                seconds, and by default is `10 seconds`.
+            
+            api_headers (Dict): 
+                HTTP headers used when communicating with the AuroraX API. The default for this value 
+                consists of several standard headers. Any changes to this parameter are in addition to 
+                the default standard headers.
+
+            api_key (str): 
+                API key to use when interacting with the AuroraX API. The default value is None. Please note
+                that an API key is only required for write operations to the AuroraX search API, such as
+                creating data sources or uploading ephemeris data.
+        
+            srs_obj (pyucalgarysrs.PyUCalgarySRS): 
+                A [PyUCalgarySRS](https://docs-pyucalgarysrs.phys.ucalgary.ca/#pyucalgarysrs.PyUCalgarySRS) object. 
+                If not supplied, it will create the object with some settings carried over from the PyAuroraX 
+                object. Note that specifying this is for advanced users and only necessary a few special use-cases.
+
+        Raises:
+            pyaurorax.exceptions.AuroraXInitializationError: an error was encountered during initialization 
+                of the paths
+        &#34;&#34;&#34;
+        # initialize path parameters
+        self.__download_output_root_path = download_output_root_path
+        self.__read_tar_temp_path = read_tar_temp_path
+
+        # initialize api parameters
+        self.__api_base_url = api_base_url
+        if (api_base_url is None):
+            self.__api_base_url = self.__DEFAULT_API_BASE_URL
+        self.__api_headers = api_headers
+        if (api_headers is None):
+            self.__api_headers = self.__DEFAULT_API_HEADERS
+        self.__api_timeout = api_timeout
+        if (api_timeout is None):
+            self.__api_timeout = self.__DEFAULT_API_TIMEOUT
+        self.__api_key = api_key
+
+        # initialize paths
+        self.__initialize_paths()
+
+        # initialize PyUCalgarySRS object
+        if (srs_obj is None):
+            self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
+                api_headers=self.__api_headers,
+                api_timeout=self.__api_timeout,
+                download_output_root_path=self.download_output_root_path,
+                read_tar_temp_path=self.read_tar_temp_path,
+            )
+        else:
+            self.__srs_obj = srs_obj
+
+        # initialize sub-modules
+        self.__search = SearchManager(self)
+        self.__data = DataManager(self)
+        self.__models = ModelsManager(self)
+        self.__tools = tools_module
+
+    # ------------------------------------------
+    # properties for submodule managers
+    # ------------------------------------------
+    @property
+    def search(self):
+        &#34;&#34;&#34;
+        Access to the `search` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__search
+
+    @property
+    def data(self):
+        &#34;&#34;&#34;
+        Access to the `data` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__data
+
+    @property
+    def models(self):
+        &#34;&#34;&#34;
+        Access to the `models` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__models
+
+    @property
+    def tools(self):
+        &#34;&#34;&#34;
+        Access to the `tools` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__tools
+
+    # ------------------------------------------
+    # properties for configuration parameters
+    # ------------------------------------------
+    @property
+    def api_base_url(self):
+        &#34;&#34;&#34;
+        Property for the API base URL. See above for details.
+        &#34;&#34;&#34;
+        return self.__api_base_url
+
+    @api_base_url.setter
+    def api_base_url(self, value: str):
+        if (value is None):
+            self.__api_base_url = self.__DEFAULT_API_BASE_URL
+        else:
+            self.__api_base_url = value
+
+    @property
+    def api_headers(self):
+        &#34;&#34;&#34;
+        Property for the API headers. See above for details.
+        &#34;&#34;&#34;
+        return self.__api_headers
+
+    @api_headers.setter
+    def api_headers(self, value: Dict):
+        new_headers = self.__DEFAULT_API_HEADERS
+        if (value is not None):
+            for k, v in value.items():
+                k = k.lower()
+                if (k in new_headers):
+                    warnings.warn(&#34;Cannot override default &#39;%s&#39; header&#34; % (k), UserWarning, stacklevel=1)
+                else:
+                    new_headers[k] = v
+        self.__api_headers = new_headers
+        if (&#34;user-agent&#34; in new_headers):
+            self.__srs_obj.api_headers = {&#34;user-agent&#34;: new_headers[&#34;user-agent&#34;]}
+
+    @property
+    def api_timeout(self):
+        &#34;&#34;&#34;
+        Property for the API timeout. See above for details.
+        &#34;&#34;&#34;
+        return self.__api_timeout
+
+    @api_timeout.setter
+    def api_timeout(self, value: int):
+        new_timeout = self.__DEFAULT_API_TIMEOUT
+        if (value is not None):
+            new_timeout = value
+        self.__api_timeout = new_timeout
+        self.__srs_obj.api_timeout = new_timeout
+
+    @property
+    def api_key(self):
+        &#34;&#34;&#34;
+        Property for the API key. See above for details.
+        &#34;&#34;&#34;
+        return self.__api_key
+
+    @api_key.setter
+    def api_key(self, value: str):
+        self.__api_key = value
+
+    @property
+    def download_output_root_path(self):
+        &#34;&#34;&#34;
+        Property for the download output root path. See above for details.
+        &#34;&#34;&#34;
+        return str(self.__download_output_root_path)
+
+    @download_output_root_path.setter
+    def download_output_root_path(self, value: str):
+        self.__download_output_root_path = value
+        self.__initialize_paths()
+        self.__srs_obj.download_output_root_path = self.__download_output_root_path
+
+    @property
+    def read_tar_temp_path(self):
+        &#34;&#34;&#34;
+        Property for the read tar temp path. See above for details.
+        &#34;&#34;&#34;
+        return str(self.__read_tar_temp_path)
+
+    @read_tar_temp_path.setter
+    def read_tar_temp_path(self, value: str):
+        self.__read_tar_temp_path = value
+        self.__initialize_paths()
+        self.__srs_obj.read_tar_temp_path = self.__read_tar_temp_path
+
+    @property
+    def srs_obj(self):
+        &#34;&#34;&#34;
+        Property for the PyUCalgarySRS object. See above for details.
+        &#34;&#34;&#34;
+        return self.__srs_obj
+
+    @srs_obj.setter
+    def srs_obj(self, new_obj: pyucalgarysrs.PyUCalgarySRS):
+        self.__srs_obj = new_obj
+
+    # -----------------------------
+    # special methods
+    # -----------------------------
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return (&#34;PyAuroraX(download_output_root_path=&#39;%s&#39;, read_tar_temp_path=&#39;%s&#39;, api_base_url=&#39;%s&#39;, &#34; +
+                &#34;api_headers=%s, api_timeout=%s, api_key=&#39;%s&#39;, srs_obj=PyUCalgarySRS(...))&#34;) % (
+                    self.__download_output_root_path,
+                    self.__read_tar_temp_path,
+                    self.api_base_url,
+                    self.api_headers,
+                    self.api_timeout,
+                    self.api_key,
+                )
+
+    # -----------------------------
+    # private methods
+    # -----------------------------
+    def __initialize_paths(self):
+        &#34;&#34;&#34;
+        Initialize the `download_output_root_path` and `read_tar_temp_path` directories.
+
+        Raises:
+            pyaurorax.exceptions.AuroraXInitializationError: an error was encountered during
+                initialization of the paths
+        &#34;&#34;&#34;
+        if (self.__download_output_root_path is None):
+            self.__download_output_root_path = Path(&#34;%s/pyaurorax_data&#34; % (str(Path.home())))
+        if (self.__read_tar_temp_path is None):
+            self.__read_tar_temp_path = Path(&#34;%s/tar_temp_working&#34; % (self.__download_output_root_path))
+        try:
+            os.makedirs(self.download_output_root_path, exist_ok=True)
+            os.makedirs(self.read_tar_temp_path, exist_ok=True)
+        except IOError as e:  # pragma: nocover
+            raise AuroraXInitializationError(&#34;Error during output path creation: %s&#34; % str(e)) from e
+
+    # -----------------------------
+    # public methods
+    # -----------------------------
+    def purge_download_output_root_path(self):
+        &#34;&#34;&#34;
+        Delete all files in the `download_output_root_path` directory. Since the
+        library downloads data to this directory, over time it can grow too large
+        and the user can risk running out of space. This method is here to assist
+        with easily clearing out this directory.
+
+        Note that it also deletes all files in the PyUCalgarySRS object&#39;s 
+        download_output_root_path path as well. Normally, these two paths are the 
+        same, but it can be different if the user specifically changes it. 
+
+        Raises:
+            pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
+        &#34;&#34;&#34;
+        try:
+            # purge pyaurorax path
+            for item in os.listdir(self.download_output_root_path):
+                item = Path(self.download_output_root_path) / item
+                if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
+                    shutil.rmtree(item)
+                elif (os.path.isfile(item) is True):
+                    os.remove(item)
+
+            # purge pyucalgarysrs path
+            self.__srs_obj.purge_download_output_root_path()
+        except Exception as e:  # pragma: nocover
+            raise AuroraXPurgeError(&#34;Error while purging download output root path: %s&#34; % (str(e))) from e
+
+    def purge_read_tar_temp_path(self):
+        &#34;&#34;&#34;
+        Delete all files in the `read_tar_temp_path` directory. Since the library 
+        extracts temporary data to this directory, sometime issues during reading 
+        can cause this directory to contain residual files that aren&#39;t deleted during 
+        the normal read routine. Though this is very rare, it is still possible. 
+        Therefore, this method is here to assist with easily clearing out this 
+        directory.
+
+        Note that it also deletes all files in the PyUCalgarySRS object&#39;s 
+        read_tar_temp_path path as well. Normally, these two paths are the 
+        same, but it can be different if the user specifically changes it. 
+
+        Raises:
+            pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
+        &#34;&#34;&#34;
+        try:
+            # purge pyaurorax path
+            for item in os.listdir(self.read_tar_temp_path):
+                item = Path(self.read_tar_temp_path) / item
+                if (os.path.isdir(item) is True and self.download_output_root_path not in str(item)):
+                    shutil.rmtree(item)
+                elif (os.path.isfile(item) is True):
+                    os.remove(item)
+
+            # purge pyucalgarysrs path
+            self.__srs_obj.purge_read_tar_temp_path()
+        except Exception as e:  # pragma: nocover
+            raise AuroraXPurgeError(&#34;Error while purging read tar temp path: %s&#34; % (str(e))) from e
+
+    def show_data_usage(self, order: Literal[&#34;name&#34;, &#34;size&#34;] = &#34;size&#34;, return_dict: bool = False) -&gt; Any:
+        &#34;&#34;&#34;
+        Print the volume of data existing in the download_output_root_path, broken down
+        by dataset. Alternatively return the information in a dictionary.
+        
+        This can be a helpful tool for managing your disk space.
+
+        Args:
+            order (bool): 
+                Order results by either `size` or `name`. Default is `size`.
+
+            return_dict (bool): 
+                Instead of printing the data usage information, return the information as a dictionary.
+
+        Returns:
+            Printed output. If `return_dict` is True, then it will instead return a dictionary with the
+            disk usage information.
+        
+        Notes:
+            Note that size on disk may differ slightly from the values determined by this 
+            routine. For example, the results here will be slightly different than the output
+            of a &#39;du&#39; command on *nix systems.
+        &#34;&#34;&#34;
+        # init
+        total_size = 0
+        download_pathlib_path = Path(self.download_output_root_path)
+
+        # get list of dataset paths
+        dataset_paths = []
+        for f in os.listdir(download_pathlib_path):
+            path_f = download_pathlib_path / f
+            if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
+                dataset_paths.append(path_f)
+
+        # get size of each dataset path
+        dataset_dict = {}
+        longest_path_len = 0
+        for dataset_path in dataset_paths:
+            # get size
+            dataset_size = 0
+            for dirpath, _, filenames in os.walk(dataset_path):
+                for filename in filenames:
+                    filepath = os.path.join(dirpath, filename)
+                    if (os.path.isfile(filepath) is True):
+                        dataset_size += os.path.getsize(filepath)
+
+            # check if this is the longest path name
+            path_basename = os.path.basename(dataset_path)
+            if (longest_path_len == 0):
+                longest_path_len = len(path_basename)
+            elif (len(path_basename) &gt; longest_path_len):
+                longest_path_len = len(path_basename)
+
+            # set dict
+            dataset_dict[path_basename] = {
+                &#34;path_obj&#34;: dataset_path,
+                &#34;size_bytes&#34;: dataset_size,
+                &#34;size_str&#34;: humanize.naturalsize(dataset_size),
+            }
+
+            # add to total
+            total_size += dataset_size
+
+        # return dictionary
+        if (return_dict is True):
+            return dataset_dict
+
+        # print table
+        #
+        # order into list
+        order_key = &#34;size_bytes&#34; if order == &#34;size&#34; else order
+        ordered_list = []
+        for path, p_dict in dataset_dict.items():
+            this_dict = p_dict
+            this_dict[&#34;name&#34;] = path
+            ordered_list.append(this_dict)
+        if (order == &#34;size&#34;):
+            ordered_list = reversed(sorted(ordered_list, key=lambda x: x[order_key]))
+        else:
+            ordered_list = sorted(ordered_list, key=lambda x: x[order_key])
+
+        # set column data
+        table_names = []
+        table_sizes = []
+        for item in ordered_list:
+            table_names.append(item[&#34;name&#34;])
+            table_sizes.append(item[&#34;size_str&#34;])
+
+        # set header values
+        table_headers = [&#34;Dataset name&#34;, &#34;Size&#34;]
+
+        # print as table
+        table = Texttable()
+        table.set_deco(Texttable.HEADER)
+        table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
+        table.set_header_align([&#34;l&#34;] * len(table_headers))
+        table.set_cols_align([&#34;l&#34;] * len(table_headers))
+        table.header(table_headers)
+        for i in range(0, len(table_names)):
+            table.add_row([table_names[i], table_sizes[i]])
+        print(table.draw())
+
+        print(&#34;\nTotal size: %s&#34; % (humanize.naturalsize(total_size)))</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.PyAuroraX.api_base_url"><code class="name">var <span class="ident">api_base_url</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the API base URL. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def api_base_url(self):
+    &#34;&#34;&#34;
+    Property for the API base URL. See above for details.
+    &#34;&#34;&#34;
+    return self.__api_base_url</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.api_headers"><code class="name">var <span class="ident">api_headers</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the API headers. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def api_headers(self):
+    &#34;&#34;&#34;
+    Property for the API headers. See above for details.
+    &#34;&#34;&#34;
+    return self.__api_headers</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.api_key"><code class="name">var <span class="ident">api_key</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the API key. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def api_key(self):
+    &#34;&#34;&#34;
+    Property for the API key. See above for details.
+    &#34;&#34;&#34;
+    return self.__api_key</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.api_timeout"><code class="name">var <span class="ident">api_timeout</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the API timeout. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def api_timeout(self):
+    &#34;&#34;&#34;
+    Property for the API timeout. See above for details.
+    &#34;&#34;&#34;
+    return self.__api_timeout</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dd>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.data" href="data/index.html">pyaurorax.data</a></code> submodule from within a PyAuroraX object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def data(self):
+    &#34;&#34;&#34;
+    Access to the `data` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__data</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.download_output_root_path"><code class="name">var <span class="ident">download_output_root_path</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the download output root path. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def download_output_root_path(self):
+    &#34;&#34;&#34;
+    Property for the download output root path. See above for details.
+    &#34;&#34;&#34;
+    return str(self.__download_output_root_path)</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.models"><code class="name">var <span class="ident">models</span></code></dt>
+<dd>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.models" href="models/index.html">pyaurorax.models</a></code> submodule from within a PyAuroraX object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def models(self):
+    &#34;&#34;&#34;
+    Access to the `models` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__models</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.read_tar_temp_path"><code class="name">var <span class="ident">read_tar_temp_path</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the read tar temp path. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def read_tar_temp_path(self):
+    &#34;&#34;&#34;
+    Property for the read tar temp path. See above for details.
+    &#34;&#34;&#34;
+    return str(self.__read_tar_temp_path)</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.search"><code class="name">var <span class="ident">search</span></code></dt>
+<dd>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search" href="search/index.html">pyaurorax.search</a></code> submodule from within a PyAuroraX object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def search(self):
+    &#34;&#34;&#34;
+    Access to the `search` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__search</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.srs_obj"><code class="name">var <span class="ident">srs_obj</span></code></dt>
+<dd>
+<div class="desc"><p>Property for the PyUCalgarySRS object. See above for details.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def srs_obj(self):
+    &#34;&#34;&#34;
+    Property for the PyUCalgarySRS object. See above for details.
+    &#34;&#34;&#34;
+    return self.__srs_obj</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.tools"><code class="name">var <span class="ident">tools</span></code></dt>
+<dd>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools" href="tools/index.html">pyaurorax.tools</a></code> submodule from within a PyAuroraX object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def tools(self):
+    &#34;&#34;&#34;
+    Access to the `tools` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__tools</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.PyAuroraX.purge_download_output_root_path"><code class="name flex">
+<span>def <span class="ident">purge_download_output_root_path</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Delete all files in the <code>download_output_root_path</code> directory. Since the
+library downloads data to this directory, over time it can grow too large
+and the user can risk running out of space. This method is here to assist
+with easily clearing out this directory.</p>
+<p>Note that it also deletes all files in the PyUCalgarySRS object's
+download_output_root_path path as well. Normally, these two paths are the
+same, but it can be different if the user specifically changes it. </p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>
+<dd>an error was encountered during the purge operation</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def purge_download_output_root_path(self):
+    &#34;&#34;&#34;
+    Delete all files in the `download_output_root_path` directory. Since the
+    library downloads data to this directory, over time it can grow too large
+    and the user can risk running out of space. This method is here to assist
+    with easily clearing out this directory.
+
+    Note that it also deletes all files in the PyUCalgarySRS object&#39;s 
+    download_output_root_path path as well. Normally, these two paths are the 
+    same, but it can be different if the user specifically changes it. 
+
+    Raises:
+        pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
+    &#34;&#34;&#34;
+    try:
+        # purge pyaurorax path
+        for item in os.listdir(self.download_output_root_path):
+            item = Path(self.download_output_root_path) / item
+            if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
+                shutil.rmtree(item)
+            elif (os.path.isfile(item) is True):
+                os.remove(item)
+
+        # purge pyucalgarysrs path
+        self.__srs_obj.purge_download_output_root_path()
+    except Exception as e:  # pragma: nocover
+        raise AuroraXPurgeError(&#34;Error while purging download output root path: %s&#34; % (str(e))) from e</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.purge_read_tar_temp_path"><code class="name flex">
+<span>def <span class="ident">purge_read_tar_temp_path</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Delete all files in the <code>read_tar_temp_path</code> directory. Since the library
+extracts temporary data to this directory, sometime issues during reading
+can cause this directory to contain residual files that aren't deleted during
+the normal read routine. Though this is very rare, it is still possible.
+Therefore, this method is here to assist with easily clearing out this
+directory.</p>
+<p>Note that it also deletes all files in the PyUCalgarySRS object's
+read_tar_temp_path path as well. Normally, these two paths are the
+same, but it can be different if the user specifically changes it. </p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>
+<dd>an error was encountered during the purge operation</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def purge_read_tar_temp_path(self):
+    &#34;&#34;&#34;
+    Delete all files in the `read_tar_temp_path` directory. Since the library 
+    extracts temporary data to this directory, sometime issues during reading 
+    can cause this directory to contain residual files that aren&#39;t deleted during 
+    the normal read routine. Though this is very rare, it is still possible. 
+    Therefore, this method is here to assist with easily clearing out this 
+    directory.
+
+    Note that it also deletes all files in the PyUCalgarySRS object&#39;s 
+    read_tar_temp_path path as well. Normally, these two paths are the 
+    same, but it can be different if the user specifically changes it. 
+
+    Raises:
+        pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
+    &#34;&#34;&#34;
+    try:
+        # purge pyaurorax path
+        for item in os.listdir(self.read_tar_temp_path):
+            item = Path(self.read_tar_temp_path) / item
+            if (os.path.isdir(item) is True and self.download_output_root_path not in str(item)):
+                shutil.rmtree(item)
+            elif (os.path.isfile(item) is True):
+                os.remove(item)
+
+        # purge pyucalgarysrs path
+        self.__srs_obj.purge_read_tar_temp_path()
+    except Exception as e:  # pragma: nocover
+        raise AuroraXPurgeError(&#34;Error while purging read tar temp path: %s&#34; % (str(e))) from e</code></pre>
+</details>
+</dd>
+<dt id="pyaurorax.PyAuroraX.show_data_usage"><code class="name flex">
+<span>def <span class="ident">show_data_usage</span></span>(<span>self, order: Literal['name', 'size'] = 'size', return_dict: bool = False) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Print the volume of data existing in the download_output_root_path, broken down
+by dataset. Alternatively return the information in a dictionary.</p>
+<p>This can be a helpful tool for managing your disk space.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>order</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Order results by either <code>size</code> or <code>name</code>. Default is <code>size</code>.</dd>
+<dt><strong><code>return_dict</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Instead of printing the data usage information, return the information as a dictionary.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Printed output. If <code>return_dict</code> is True, then it will instead return a dictionary with the
+disk usage information.</p>
+<h2 id="notes">Notes</h2>
+<p>Note that size on disk may differ slightly from the values determined by this
+routine. For example, the results here will be slightly different than the output
+of a 'du' command on *nix systems.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def show_data_usage(self, order: Literal[&#34;name&#34;, &#34;size&#34;] = &#34;size&#34;, return_dict: bool = False) -&gt; Any:
+    &#34;&#34;&#34;
+    Print the volume of data existing in the download_output_root_path, broken down
+    by dataset. Alternatively return the information in a dictionary.
+    
+    This can be a helpful tool for managing your disk space.
+
+    Args:
+        order (bool): 
+            Order results by either `size` or `name`. Default is `size`.
+
+        return_dict (bool): 
+            Instead of printing the data usage information, return the information as a dictionary.
+
+    Returns:
+        Printed output. If `return_dict` is True, then it will instead return a dictionary with the
+        disk usage information.
+    
+    Notes:
+        Note that size on disk may differ slightly from the values determined by this 
+        routine. For example, the results here will be slightly different than the output
+        of a &#39;du&#39; command on *nix systems.
+    &#34;&#34;&#34;
+    # init
+    total_size = 0
+    download_pathlib_path = Path(self.download_output_root_path)
+
+    # get list of dataset paths
+    dataset_paths = []
+    for f in os.listdir(download_pathlib_path):
+        path_f = download_pathlib_path / f
+        if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
+            dataset_paths.append(path_f)
+
+    # get size of each dataset path
+    dataset_dict = {}
+    longest_path_len = 0
+    for dataset_path in dataset_paths:
+        # get size
+        dataset_size = 0
+        for dirpath, _, filenames in os.walk(dataset_path):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                if (os.path.isfile(filepath) is True):
+                    dataset_size += os.path.getsize(filepath)
+
+        # check if this is the longest path name
+        path_basename = os.path.basename(dataset_path)
+        if (longest_path_len == 0):
+            longest_path_len = len(path_basename)
+        elif (len(path_basename) &gt; longest_path_len):
+            longest_path_len = len(path_basename)
+
+        # set dict
+        dataset_dict[path_basename] = {
+            &#34;path_obj&#34;: dataset_path,
+            &#34;size_bytes&#34;: dataset_size,
+            &#34;size_str&#34;: humanize.naturalsize(dataset_size),
+        }
+
+        # add to total
+        total_size += dataset_size
+
+    # return dictionary
+    if (return_dict is True):
+        return dataset_dict
+
+    # print table
+    #
+    # order into list
+    order_key = &#34;size_bytes&#34; if order == &#34;size&#34; else order
+    ordered_list = []
+    for path, p_dict in dataset_dict.items():
+        this_dict = p_dict
+        this_dict[&#34;name&#34;] = path
+        ordered_list.append(this_dict)
+    if (order == &#34;size&#34;):
+        ordered_list = reversed(sorted(ordered_list, key=lambda x: x[order_key]))
+    else:
+        ordered_list = sorted(ordered_list, key=lambda x: x[order_key])
+
+    # set column data
+    table_names = []
+    table_sizes = []
+    for item in ordered_list:
+        table_names.append(item[&#34;name&#34;])
+        table_sizes.append(item[&#34;size_str&#34;])
+
+    # set header values
+    table_headers = [&#34;Dataset name&#34;, &#34;Size&#34;]
+
+    # print as table
+    table = Texttable()
+    table.set_deco(Texttable.HEADER)
+    table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
+    table.set_header_align([&#34;l&#34;] * len(table_headers))
+    table.set_cols_align([&#34;l&#34;] * len(table_headers))
+    table.header(table_headers)
+    for i in range(0, len(table_names)):
+        table.add_row([table_names[i], table_sizes[i]])
+    print(table.draw())
+
+    print(&#34;\nTotal size: %s&#34; % (humanize.naturalsize(total_size)))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<form>
+<input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
+disabled minlength="2">
+</form>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<style>
+.modal-dialog iframe {
+width: 100vw;
+height: calc(100vh - 80px);
+}
+@media screen and (min-width: 700px) {
+.modal-dialog iframe {
+width: 70vw;
+height: 80vh;
+}
+}
+.modal-dialog .tingle-modal-box {width: auto;}
+.modal-dialog .tingle-modal-box__content {padding: 0;}
+</style>
+<script>
+const input = document.getElementById('lunr-search');
+input.disabled = false;
+input.form.addEventListener('submit', (ev) => {
+ev.preventDefault();
+const url = new URL(window.location);
+url.searchParams.set('q', input.value);
+history.replaceState({}, null, url.toString());
+search(input.value);
+});
+const query = new URL(window.location).searchParams.get('q');
+if (query)
+search(query);
+function search(query) {
+const url = '../doc-search.html#' + encodeURIComponent(query);
+new tingle.modal({
+cssClass: ['modal-dialog'],
+onClose: () => {
+const url = new URL(window.location);
+url.searchParams.delete('q');
+history.replaceState({}, null, url.toString());
+setTimeout(() => input.focus(), 100);
+}
+}).setContent('<iframe src="' + url + '"></iframe>').open();
+}
+</script>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="pyaurorax.data" href="data/index.html">pyaurorax.data</a></code></li>
+<li><code><a title="pyaurorax.exceptions" href="exceptions.html">pyaurorax.exceptions</a></code></li>
+<li><code><a title="pyaurorax.models" href="models/index.html">pyaurorax.models</a></code></li>
+<li><code><a title="pyaurorax.search" href="search/index.html">pyaurorax.search</a></code></li>
+<li><code><a title="pyaurorax.tools" href="tools/index.html">pyaurorax.tools</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.PyAuroraX" href="#pyaurorax.PyAuroraX">PyAuroraX</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.PyAuroraX.api_base_url" href="#pyaurorax.PyAuroraX.api_base_url">api_base_url</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.api_headers" href="#pyaurorax.PyAuroraX.api_headers">api_headers</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.api_key" href="#pyaurorax.PyAuroraX.api_key">api_key</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.api_timeout" href="#pyaurorax.PyAuroraX.api_timeout">api_timeout</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.data" href="#pyaurorax.PyAuroraX.data">data</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.download_output_root_path" href="#pyaurorax.PyAuroraX.download_output_root_path">download_output_root_path</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.models" href="#pyaurorax.PyAuroraX.models">models</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.purge_download_output_root_path" href="#pyaurorax.PyAuroraX.purge_download_output_root_path">purge_download_output_root_path</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.purge_read_tar_temp_path" href="#pyaurorax.PyAuroraX.purge_read_tar_temp_path">purge_read_tar_temp_path</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.read_tar_temp_path" href="#pyaurorax.PyAuroraX.read_tar_temp_path">read_tar_temp_path</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.search" href="#pyaurorax.PyAuroraX.search">search</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.show_data_usage" href="#pyaurorax.PyAuroraX.show_data_usage">show_data_usage</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.srs_obj" href="#pyaurorax.PyAuroraX.srs_obj">srs_obj</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.tools" href="#pyaurorax.PyAuroraX.tools">tools</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
