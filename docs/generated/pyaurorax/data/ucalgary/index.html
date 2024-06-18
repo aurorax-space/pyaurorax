@@ -1804,7 +1804,14 @@ class Skymap:
                     var_str = str(var_value)
 
             # print string for this var
-            print(&#34;  %-23s: %s&#34; % (var_name, var_str))</code></pre>
+            print(&#34;  %-23s: %s&#34; % (var_name, var_str))
+
+    def get_precalculated_altitudes(self):
+        &#34;&#34;&#34;
+        Get the altitudes that have been precalculated in this skymap. Units are kilometers.
+        &#34;&#34;&#34;
+        alts_km = [float(x / 1000.) for x in self.full_map_altitude]
+        return alts_km</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -1867,6 +1874,23 @@ class Skymap:
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.data.ucalgary.Skymap.get_precalculated_altitudes"><code class="name flex">
+<span>def <span class="ident">get_precalculated_altitudes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the altitudes that have been precalculated in this skymap. Units are kilometers.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_precalculated_altitudes(self):
+    &#34;&#34;&#34;
+    Get the altitudes that have been precalculated in this skymap. Units are kilometers.
+    &#34;&#34;&#34;
+    alts_km = [float(x / 1000.) for x in self.full_map_altitude]
+    return alts_km</code></pre>
+</details>
+</dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
@@ -3936,7 +3960,7 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li>
 <h4><code><a title="pyaurorax.data.ucalgary.Skymap" href="#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.filename" href="#pyaurorax.data.ucalgary.Skymap.filename">filename</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.full_azimuth" href="#pyaurorax.data.ucalgary.Skymap.full_azimuth">full_azimuth</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.full_elevation" href="#pyaurorax.data.ucalgary.Skymap.full_elevation">full_elevation</a></code></li>
@@ -3944,6 +3968,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.full_map_latitude" href="#pyaurorax.data.ucalgary.Skymap.full_map_latitude">full_map_latitude</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.full_map_longitude" href="#pyaurorax.data.ucalgary.Skymap.full_map_longitude">full_map_longitude</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.generation_info" href="#pyaurorax.data.ucalgary.Skymap.generation_info">generation_info</a></code></li>
+<li><code><a title="pyaurorax.data.ucalgary.Skymap.get_precalculated_altitudes" href="#pyaurorax.data.ucalgary.Skymap.get_precalculated_altitudes">get_precalculated_altitudes</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.imager_uid" href="#pyaurorax.data.ucalgary.Skymap.imager_uid">imager_uid</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.pretty_print" href="#pyaurorax.data.ucalgary.Skymap.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.Skymap.project_uid" href="#pyaurorax.data.ucalgary.Skymap.project_uid">project_uid</a></code></li>
