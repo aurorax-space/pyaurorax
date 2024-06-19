@@ -155,11 +155,11 @@ class Mosaic:
              max_rayleighs: int = 20000,
              title: Optional[str] = None,
              ocean_color: Optional[str] = None,
-             land_color: str = "grey",
+             land_color: str = "gray",
              land_edgecolor: str = "#8A8A8A",
              borders_color: str = "#AEAEAE",
              borders_disable: bool = False,
-             cbar_colormap: str = "grey",
+             cbar_colormap: str = "gray",
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -189,7 +189,7 @@ class Mosaic:
                 as a word, or hexcode prefixed with a '#' character (ie. `#55AADD`).
             
             land_color (str): 
-                Colour of the land. Default is `grey`. Colours can be supplied as a word, or hexcode 
+                Colour of the land. Default is `gray`. Colours can be supplied as a word, or hexcode 
                 prefixed with a '#' character (ie. `#41BB87`).
 
             land_edgecolor (str): 
@@ -204,7 +204,7 @@ class Mosaic:
                 Disbale rendering of the borders. Default is `False`.
 
             cbar_colorcmap (str): 
-                The matplotlib colormap to use for the plotted color bar. Default is `grey`.
+                The matplotlib colormap to use for the plotted color bar. Default is `gray`.
 
                 Commonly used colormaps are:
 

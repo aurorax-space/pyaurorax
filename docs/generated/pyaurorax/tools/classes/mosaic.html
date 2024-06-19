@@ -174,7 +174,7 @@ class Mosaic:
         contour_data (Dict[str, List[Any]]): 
             Generated contour data.
     &#34;&#34;&#34;
-    polygon_data: PolyCollection
+    polygon_data: Union[PolyCollection, List[PolyCollection]]
     cartopy_projection: Projection
     contour_data: Optional[Dict[str, List[Any]]] = None
 
@@ -182,13 +182,18 @@ class Mosaic:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
+        if isinstance(self.polygon_data, list):
+            polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+        else:
+            polycollection_str = &#34;PolyCollection(...)&#34;
+
         if self.contour_data is not None:
             return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %s Contours)&#34; % (
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get(&#34;x&#34;, [])),
             )
         else:
-            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
+            return &#34;Mosaic(polygon_data=&#34;+polycollection_str+&#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
 
     def plot(self,
              map_extent: Sequence[Union[float, int]],
@@ -197,11 +202,11 @@ class Mosaic:
              max_rayleighs: int = 20000,
              title: Optional[str] = None,
              ocean_color: Optional[str] = None,
-             land_color: str = &#34;grey&#34;,
+             land_color: str = &#34;gray&#34;,
              land_edgecolor: str = &#34;#8A8A8A&#34;,
              borders_color: str = &#34;#AEAEAE&#34;,
              borders_disable: bool = False,
-             cbar_colormap: str = &#34;grey&#34;,
+             cbar_colormap: str = &#34;gray&#34;,
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -231,7 +236,7 @@ class Mosaic:
                 as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
             
             land_color (str): 
-                Colour of the land. Default is `grey`. Colours can be supplied as a word, or hexcode 
+                Colour of the land. Default is `gray`. Colours can be supplied as a word, or hexcode 
                 prefixed with a &#39;#&#39; character (ie. `#41BB87`).
 
             land_edgecolor (str): 
@@ -246,7 +251,7 @@ class Mosaic:
                 Disbale rendering of the borders. Default is `False`.
 
             cbar_colorcmap (str): 
-                The matplotlib colormap to use for the plotted color bar. Default is `grey`.
+                The matplotlib colormap to use for the plotted color bar. Default is `gray`.
 
                 Commonly used colormaps are:
 
@@ -321,7 +326,11 @@ class Mosaic:
         #
         # NOTE: it seems that when running this function a second time, the polygon
         # data is not too happy. So to handle this, we plot a copy of the polygon data
-        ax.add_collection(copy(self.polygon_data))
+        if isinstance(self.polygon_data, list):
+            for polygon_data in self.polygon_data:
+                ax.add_collection(copy(polygon_data))
+        else:
+            ax.add_collection(copy(self.polygon_data))
 
         if self.contour_data is not None:
             for i in range(len(self.contour_data[&#34;x&#34;])):
@@ -330,6 +339,7 @@ class Mosaic:
                         color=self.contour_data[&#34;color&#34;][i],
                         linewidth=self.contour_data[&#34;linewidth&#34;][i],
                         linestyle=self.contour_data[&#34;linestyle&#34;][i],
+                        marker=self.contour_data[&#34;marker&#34;][i],
                         zorder=self.contour_data[&#34;zorder&#34;][i])
 
         # set title
@@ -338,6 +348,9 @@ class Mosaic:
 
         # add text
         if (rayleighs is True):
+            if isinstance(self.polygon_data, list):
+                raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
+            
             # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
             cbar_ticks = [float(j) / 5. for j in range(0, 6)]
             cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]
@@ -402,6 +415,7 @@ class Mosaic:
                          color: str = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
+                         marker: str = &#34;&#34;,
                          bring_to_front: bool = False):
         &#34;&#34;&#34;
         Add geographic contours to a mosaic.
@@ -427,6 +441,9 @@ class Mosaic:
             
             linestyle (str):
                 The matplotlib linestyle used for the contour(s).
+
+            marker (str):
+                The matplotlib marker used for the contour(s).
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -454,6 +471,10 @@ class Mosaic:
         if linewidth &lt;= 0:
             raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
 
+        # Check that marker is valid
+        if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+            raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+        
         # Convert numerics to lists if necessary
         if constant_lats is not None:
             if isinstance(constant_lats, (float, int)):
@@ -464,7 +485,7 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn&#39;t exist yet
         if self.contour_data is None:
-            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;zorder&#34;: []}
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
         # Obtain the mosaic&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -490,6 +511,7 @@ class Mosaic:
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Next handling lines of constant latitude
@@ -511,6 +533,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Now handling lines of constant longitude
@@ -533,6 +556,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
     def add_mag_contours(self,
@@ -544,6 +568,7 @@ class Mosaic:
                          color: str = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
+                         marker: str = &#34;&#34;,
                          bring_to_front: bool = False):
         &#34;&#34;&#34;
         Add geomagnetic contours to a mosaic.
@@ -572,6 +597,9 @@ class Mosaic:
 
             linestyle (str):
                 The matplotlib linestyle used for the contour(s).
+
+            marker (str):
+                The matplotlib marker used for the contour(s).
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -609,7 +637,7 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn&#39;t exist yet
         if self.contour_data is None:
-            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;zorder&#34;: []}
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
         # Obtain the mosaic&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -636,6 +664,7 @@ class Mosaic:
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Next handling lines of constant latitude
@@ -659,6 +688,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Now handling lines of constant longitude
@@ -682,6 +712,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 </section>
@@ -696,7 +727,7 @@ class Mosaic:
 <dl>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic"><code class="flex name class">
 <span>class <span class="ident">Mosaic</span></span>
-<span>(</span><span>polygon_data: matplotlib.collections.PolyCollection, cartopy_projection: cartopy.crs.Projection, contour_data: Optional[Dict[str, List[Any]]] = None)</span>
+<span>(</span><span>polygon_data: Union[matplotlib.collections.PolyCollection, List[matplotlib.collections.PolyCollection]], cartopy_projection: cartopy.crs.Projection, contour_data: Optional[Dict[str, List[Any]]] = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class representation for a generated mosaic.</p>
@@ -726,7 +757,7 @@ class Mosaic:
         contour_data (Dict[str, List[Any]]): 
             Generated contour data.
     &#34;&#34;&#34;
-    polygon_data: PolyCollection
+    polygon_data: Union[PolyCollection, List[PolyCollection]]
     cartopy_projection: Projection
     contour_data: Optional[Dict[str, List[Any]]] = None
 
@@ -734,13 +765,18 @@ class Mosaic:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
+        if isinstance(self.polygon_data, list):
+            polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+        else:
+            polycollection_str = &#34;PolyCollection(...)&#34;
+
         if self.contour_data is not None:
             return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %s Contours)&#34; % (
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get(&#34;x&#34;, [])),
             )
         else:
-            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
+            return &#34;Mosaic(polygon_data=&#34;+polycollection_str+&#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
 
     def plot(self,
              map_extent: Sequence[Union[float, int]],
@@ -749,11 +785,11 @@ class Mosaic:
              max_rayleighs: int = 20000,
              title: Optional[str] = None,
              ocean_color: Optional[str] = None,
-             land_color: str = &#34;grey&#34;,
+             land_color: str = &#34;gray&#34;,
              land_edgecolor: str = &#34;#8A8A8A&#34;,
              borders_color: str = &#34;#AEAEAE&#34;,
              borders_disable: bool = False,
-             cbar_colormap: str = &#34;grey&#34;,
+             cbar_colormap: str = &#34;gray&#34;,
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -783,7 +819,7 @@ class Mosaic:
                 as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
             
             land_color (str): 
-                Colour of the land. Default is `grey`. Colours can be supplied as a word, or hexcode 
+                Colour of the land. Default is `gray`. Colours can be supplied as a word, or hexcode 
                 prefixed with a &#39;#&#39; character (ie. `#41BB87`).
 
             land_edgecolor (str): 
@@ -798,7 +834,7 @@ class Mosaic:
                 Disbale rendering of the borders. Default is `False`.
 
             cbar_colorcmap (str): 
-                The matplotlib colormap to use for the plotted color bar. Default is `grey`.
+                The matplotlib colormap to use for the plotted color bar. Default is `gray`.
 
                 Commonly used colormaps are:
 
@@ -873,7 +909,11 @@ class Mosaic:
         #
         # NOTE: it seems that when running this function a second time, the polygon
         # data is not too happy. So to handle this, we plot a copy of the polygon data
-        ax.add_collection(copy(self.polygon_data))
+        if isinstance(self.polygon_data, list):
+            for polygon_data in self.polygon_data:
+                ax.add_collection(copy(polygon_data))
+        else:
+            ax.add_collection(copy(self.polygon_data))
 
         if self.contour_data is not None:
             for i in range(len(self.contour_data[&#34;x&#34;])):
@@ -882,6 +922,7 @@ class Mosaic:
                         color=self.contour_data[&#34;color&#34;][i],
                         linewidth=self.contour_data[&#34;linewidth&#34;][i],
                         linestyle=self.contour_data[&#34;linestyle&#34;][i],
+                        marker=self.contour_data[&#34;marker&#34;][i],
                         zorder=self.contour_data[&#34;zorder&#34;][i])
 
         # set title
@@ -890,6 +931,9 @@ class Mosaic:
 
         # add text
         if (rayleighs is True):
+            if isinstance(self.polygon_data, list):
+                raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
+            
             # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
             cbar_ticks = [float(j) / 5. for j in range(0, 6)]
             cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]
@@ -954,6 +998,7 @@ class Mosaic:
                          color: str = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
+                         marker: str = &#34;&#34;,
                          bring_to_front: bool = False):
         &#34;&#34;&#34;
         Add geographic contours to a mosaic.
@@ -979,6 +1024,9 @@ class Mosaic:
             
             linestyle (str):
                 The matplotlib linestyle used for the contour(s).
+
+            marker (str):
+                The matplotlib marker used for the contour(s).
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -1006,6 +1054,10 @@ class Mosaic:
         if linewidth &lt;= 0:
             raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
 
+        # Check that marker is valid
+        if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+            raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+        
         # Convert numerics to lists if necessary
         if constant_lats is not None:
             if isinstance(constant_lats, (float, int)):
@@ -1016,7 +1068,7 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn&#39;t exist yet
         if self.contour_data is None:
-            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;zorder&#34;: []}
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
         # Obtain the mosaic&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -1042,6 +1094,7 @@ class Mosaic:
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Next handling lines of constant latitude
@@ -1063,6 +1116,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Now handling lines of constant longitude
@@ -1085,6 +1139,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
     def add_mag_contours(self,
@@ -1096,6 +1151,7 @@ class Mosaic:
                          color: str = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
+                         marker: str = &#34;&#34;,
                          bring_to_front: bool = False):
         &#34;&#34;&#34;
         Add geomagnetic contours to a mosaic.
@@ -1124,6 +1180,9 @@ class Mosaic:
 
             linestyle (str):
                 The matplotlib linestyle used for the contour(s).
+
+            marker (str):
+                The matplotlib marker used for the contour(s).
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -1161,7 +1220,7 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn&#39;t exist yet
         if self.contour_data is None:
-            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;zorder&#34;: []}
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
         # Obtain the mosaic&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -1188,6 +1247,7 @@ class Mosaic:
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Next handling lines of constant latitude
@@ -1211,6 +1271,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
         # Now handling lines of constant longitude
@@ -1234,6 +1295,7 @@ class Mosaic:
                 self.contour_data[&#34;color&#34;].append(color)
                 self.contour_data[&#34;linewidth&#34;].append(linewidth)
                 self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <h3>Class variables</h3>
@@ -1246,7 +1308,7 @@ class Mosaic:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.polygon_data"><code class="name">var <span class="ident">polygon_data</span> : matplotlib.collections.PolyCollection</code></dt>
+<dt id="pyaurorax.tools.classes.mosaic.Mosaic.polygon_data"><code class="name">var <span class="ident">polygon_data</span> : Union[matplotlib.collections.PolyCollection, List[matplotlib.collections.PolyCollection]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -1254,7 +1316,7 @@ class Mosaic:
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours"><code class="name flex">
-<span>def <span class="ident">add_geo_contours</span></span>(<span>self, lats: Union[numpy.ndarray, list, ForwardRef(None)] = None, lons: Union[numpy.ndarray, list, ForwardRef(None)] = None, constant_lats: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, constant_lons: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, color: str = 'black', linewidth: Union[float, int] = 1, linestyle: str = 'solid', bring_to_front: bool = False)</span>
+<span>def <span class="ident">add_geo_contours</span></span>(<span>self, lats: Union[numpy.ndarray, list, ForwardRef(None)] = None, lons: Union[numpy.ndarray, list, ForwardRef(None)] = None, constant_lats: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, constant_lons: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, color: str = 'black', linewidth: Union[float, int] = 1, linestyle: str = 'solid', marker: str = '', bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Add geographic contours to a mosaic.</p>
@@ -1273,6 +1335,8 @@ The matplotlib color used for the contour(s).</p>
 The contour thickness.</p>
 <p>linestyle (str):
 The matplotlib linestyle used for the contour(s).</p>
+<p>marker (str):
+The matplotlib marker used for the contour(s).</p>
 <h2 id="returns">Returns</h2>
 <p>The object's contour_data parameter is populated appropriately.</p>
 <h2 id="raises">Raises</h2>
@@ -1292,6 +1356,7 @@ The matplotlib linestyle used for the contour(s).</p>
                      color: str = &#34;black&#34;,
                      linewidth: Union[float, int] = 1,
                      linestyle: str = &#34;solid&#34;,
+                     marker: str = &#34;&#34;,
                      bring_to_front: bool = False):
     &#34;&#34;&#34;
     Add geographic contours to a mosaic.
@@ -1317,6 +1382,9 @@ The matplotlib linestyle used for the contour(s).</p>
         
         linestyle (str):
             The matplotlib linestyle used for the contour(s).
+
+        marker (str):
+            The matplotlib marker used for the contour(s).
 
     Returns:
         The object&#39;s contour_data parameter is populated appropriately.
@@ -1344,6 +1412,10 @@ The matplotlib linestyle used for the contour(s).</p>
     if linewidth &lt;= 0:
         raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
 
+    # Check that marker is valid
+    if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+        raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+    
     # Convert numerics to lists if necessary
     if constant_lats is not None:
         if isinstance(constant_lats, (float, int)):
@@ -1354,7 +1426,7 @@ The matplotlib linestyle used for the contour(s).</p>
 
     # Initialize contour data dict if it doesn&#39;t exist yet
     if self.contour_data is None:
-        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;zorder&#34;: []}
+        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
     # Obtain the mosaic&#39;s projection
     source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -1380,6 +1452,7 @@ The matplotlib linestyle used for the contour(s).</p>
         self.contour_data[&#34;color&#34;].append(color)
         self.contour_data[&#34;linewidth&#34;].append(linewidth)
         self.contour_data[&#34;linestyle&#34;].append(linestyle)
+        self.contour_data[&#34;marker&#34;].append(marker)
         self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
     # Next handling lines of constant latitude
@@ -1401,6 +1474,7 @@ The matplotlib linestyle used for the contour(s).</p>
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
     # Now handling lines of constant longitude
@@ -1423,11 +1497,12 @@ The matplotlib linestyle used for the contour(s).</p>
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours"><code class="name flex">
-<span>def <span class="ident">add_mag_contours</span></span>(<span>self, timestamp: datetime.datetime, constant_lats: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, constant_lons: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, lats: Union[numpy.ndarray, list, ForwardRef(None)] = None, lons: Union[numpy.ndarray, list, ForwardRef(None)] = None, color: str = 'black', linewidth: Union[float, int] = 1, linestyle: str = 'solid', bring_to_front: bool = False)</span>
+<span>def <span class="ident">add_mag_contours</span></span>(<span>self, timestamp: datetime.datetime, constant_lats: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, constant_lons: Union[float, int, Sequence[Union[float, int]], numpy.ndarray, ForwardRef(None)] = None, lats: Union[numpy.ndarray, list, ForwardRef(None)] = None, lons: Union[numpy.ndarray, list, ForwardRef(None)] = None, color: str = 'black', linewidth: Union[float, int] = 1, linestyle: str = 'solid', marker: str = '', bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
@@ -1448,6 +1523,8 @@ The matplotlib color used for the contour(s).</p>
 The contour thickness.</p>
 <p>linestyle (str):
 The matplotlib linestyle used for the contour(s).</p>
+<p>marker (str):
+The matplotlib marker used for the contour(s).</p>
 <h2 id="returns">Returns</h2>
 <p>The object's contour_data parameter is populated appropriately.</p>
 <h2 id="raises">Raises</h2>
@@ -1468,6 +1545,7 @@ The matplotlib linestyle used for the contour(s).</p>
                      color: str = &#34;black&#34;,
                      linewidth: Union[float, int] = 1,
                      linestyle: str = &#34;solid&#34;,
+                     marker: str = &#34;&#34;,
                      bring_to_front: bool = False):
     &#34;&#34;&#34;
     Add geomagnetic contours to a mosaic.
@@ -1496,6 +1574,9 @@ The matplotlib linestyle used for the contour(s).</p>
 
         linestyle (str):
             The matplotlib linestyle used for the contour(s).
+
+        marker (str):
+            The matplotlib marker used for the contour(s).
 
     Returns:
         The object&#39;s contour_data parameter is populated appropriately.
@@ -1533,7 +1614,7 @@ The matplotlib linestyle used for the contour(s).</p>
 
     # Initialize contour data dict if it doesn&#39;t exist yet
     if self.contour_data is None:
-        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;zorder&#34;: []}
+        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
     # Obtain the mosaic&#39;s projection
     source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -1560,6 +1641,7 @@ The matplotlib linestyle used for the contour(s).</p>
         self.contour_data[&#34;color&#34;].append(color)
         self.contour_data[&#34;linewidth&#34;].append(linewidth)
         self.contour_data[&#34;linestyle&#34;].append(linestyle)
+        self.contour_data[&#34;marker&#34;].append(marker)
         self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
     # Next handling lines of constant latitude
@@ -1583,6 +1665,7 @@ The matplotlib linestyle used for the contour(s).</p>
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
 
     # Now handling lines of constant longitude
@@ -1606,11 +1689,12 @@ The matplotlib linestyle used for the contour(s).</p>
             self.contour_data[&#34;color&#34;].append(color)
             self.contour_data[&#34;linewidth&#34;].append(linewidth)
             self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self, map_extent: Sequence[Union[float, int]], figsize: Optional[Tuple[int, int]] = None, rayleighs: bool = False, max_rayleighs: int = 20000, title: Optional[str] = None, ocean_color: Optional[str] = None, land_color: str = 'grey', land_edgecolor: str = '#8A8A8A', borders_color: str = '#AEAEAE', borders_disable: bool = False, cbar_colormap: str = 'grey', returnfig: bool = False, savefig: bool = False, savefig_filename: Optional[str] = None, savefig_quality: Optional[int] = None) ‑> Any</span>
+<span>def <span class="ident">plot</span></span>(<span>self, map_extent: Sequence[Union[float, int]], figsize: Optional[Tuple[int, int]] = None, rayleighs: bool = False, max_rayleighs: int = 20000, title: Optional[str] = None, ocean_color: Optional[str] = None, land_color: str = 'gray', land_edgecolor: str = '#8A8A8A', borders_color: str = '#AEAEAE', borders_disable: bool = False, cbar_colormap: str = 'gray', returnfig: bool = False, savefig: bool = False, savefig_filename: Optional[str] = None, savefig_quality: Optional[int] = None) ‑> Any</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Generate a plot of the mosaic data. </p>
@@ -1631,7 +1715,7 @@ and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
 <dd>Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
 as a word, or hexcode prefixed with a '#' character (ie. <code>#55AADD</code>).</dd>
 <dt><strong><code>land_color</code></strong> :&ensp;<code>str</code></dt>
-<dd>Colour of the land. Default is <code>grey</code>. Colours can be supplied as a word, or hexcode
+<dd>Colour of the land. Default is <code>gray</code>. Colours can be supplied as a word, or hexcode
 prefixed with a '#' character (ie. <code>#41BB87</code>).</dd>
 <dt><strong><code>land_edgecolor</code></strong> :&ensp;<code>str</code></dt>
 <dd>Color of the land edges. Default is <code>#8A8A8A</code>. Colours can be supplied as a word, or
@@ -1643,7 +1727,7 @@ hexcode prefixed with a '#' character.</dd>
 <dd>Disbale rendering of the borders. Default is <code>False</code>.</dd>
 <dt><strong><code>cbar_colorcmap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
-<p>The matplotlib colormap to use for the plotted color bar. Default is <code>grey</code>.</p>
+<p>The matplotlib colormap to use for the plotted color bar. Default is <code>gray</code>.</p>
 <p>Commonly used colormaps are:</p>
 <ul>
 <li>REGO: <code>gist_heat</code></li>
@@ -1687,11 +1771,11 @@ Raises:</p></div>
          max_rayleighs: int = 20000,
          title: Optional[str] = None,
          ocean_color: Optional[str] = None,
-         land_color: str = &#34;grey&#34;,
+         land_color: str = &#34;gray&#34;,
          land_edgecolor: str = &#34;#8A8A8A&#34;,
          borders_color: str = &#34;#AEAEAE&#34;,
          borders_disable: bool = False,
-         cbar_colormap: str = &#34;grey&#34;,
+         cbar_colormap: str = &#34;gray&#34;,
          returnfig: bool = False,
          savefig: bool = False,
          savefig_filename: Optional[str] = None,
@@ -1721,7 +1805,7 @@ Raises:</p></div>
             as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
         
         land_color (str): 
-            Colour of the land. Default is `grey`. Colours can be supplied as a word, or hexcode 
+            Colour of the land. Default is `gray`. Colours can be supplied as a word, or hexcode 
             prefixed with a &#39;#&#39; character (ie. `#41BB87`).
 
         land_edgecolor (str): 
@@ -1736,7 +1820,7 @@ Raises:</p></div>
             Disbale rendering of the borders. Default is `False`.
 
         cbar_colorcmap (str): 
-            The matplotlib colormap to use for the plotted color bar. Default is `grey`.
+            The matplotlib colormap to use for the plotted color bar. Default is `gray`.
 
             Commonly used colormaps are:
 
@@ -1811,7 +1895,11 @@ Raises:</p></div>
     #
     # NOTE: it seems that when running this function a second time, the polygon
     # data is not too happy. So to handle this, we plot a copy of the polygon data
-    ax.add_collection(copy(self.polygon_data))
+    if isinstance(self.polygon_data, list):
+        for polygon_data in self.polygon_data:
+            ax.add_collection(copy(polygon_data))
+    else:
+        ax.add_collection(copy(self.polygon_data))
 
     if self.contour_data is not None:
         for i in range(len(self.contour_data[&#34;x&#34;])):
@@ -1820,6 +1908,7 @@ Raises:</p></div>
                     color=self.contour_data[&#34;color&#34;][i],
                     linewidth=self.contour_data[&#34;linewidth&#34;][i],
                     linestyle=self.contour_data[&#34;linestyle&#34;][i],
+                    marker=self.contour_data[&#34;marker&#34;][i],
                     zorder=self.contour_data[&#34;zorder&#34;][i])
 
     # set title
@@ -1828,6 +1917,9 @@ Raises:</p></div>
 
     # add text
     if (rayleighs is True):
+        if isinstance(self.polygon_data, list):
+            raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
+        
         # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
         cbar_ticks = [float(j) / 5. for j in range(0, 6)]
         cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]

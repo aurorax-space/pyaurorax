@@ -54,7 +54,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             The minimum elevation cutoff when projecting images on the map, in degrees. Default is `5`.
 
         cbar_colorcmap (str): 
-            The matplotlib colormap to use for the rendered image data. Default is `grey`.
+            The matplotlib colormap to use for the rendered image data. Default is `gray`.
 
             Commonly used colormaps are:
 
@@ -100,7 +100,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
         if colormap is None:
             colormap = []
             for _ in range(len(prepped_data)):
-                colormap.append('grey')
+                colormap.append('gray')
         else:
             colormap = [colormap]
     if not isinstance(min_elevation, list):
@@ -108,13 +108,13 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
         for _ in range(len(prepped_data)):
             tmp.append(min_elevation)
         min_elevation = tmp
-    
+
     # Make sure all lists are same length
     if (len(prepped_data) != len(prepped_skymap)):
         raise ValueError("When passing lists of prepped data and prepped skymap, they must be of the same length.")
     if (len(prepped_data) != len(colormap)) or (len(prepped_skymap) != len(colormap)):
         raise ValueError("List of colormaps must have same length as lists of prepped data and prepped skymaps.")
-    
+
     # Itarate through each set of prepped data, prepped skymap
     img_poly_list = []
     for mosaic_data_idx in range(len(prepped_data)):

@@ -346,7 +346,7 @@ def create_custom(
 
     if preview:
         plt.figure()
-        plt.imshow(preview_img, cmap='grey', origin='lower')
+        plt.imshow(preview_img, cmap='gray', origin='lower')
         plt.axis("off")
         plt.title("Keogram Domain Preview")
         plt.show()
