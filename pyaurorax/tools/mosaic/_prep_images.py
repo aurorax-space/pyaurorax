@@ -159,7 +159,6 @@ def prep_images(image_list: List[Data], data_attribute: Literal["data", "calibra
         if site_uid in images_dict.keys():
             warnings.warn(
                 "Same site between differing networks detected. Omitting additional '%s' data" % (site_uid),
-                UserWarning,
                 stacklevel=1,
             )
             continue
