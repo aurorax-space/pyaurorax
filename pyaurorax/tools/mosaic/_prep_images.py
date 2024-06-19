@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import numpy as np
 import datetime
+import warnings
+import numpy as np
 from typing import List, Literal
 from ...data.ucalgary import Data
 from ..classes.mosaic import MosaicData
@@ -156,9 +157,8 @@ def prep_images(image_list: List[Data], data_attribute: Literal["data", "calibra
 
         # We don't attempt to handle the same site being passed in for multiple networks
         if site_uid in images_dict.keys():
-            print("Warning: Same site between differing networks detected. Omitting " + site_uid)
+            warnings.warn("Same site between differing networks detected. Omitting additional '%s' data" % (site_uid), stacklevel=1)
             continue
-
         site_uid_list.append(site_uid)
 
         # initialize this site's data destination variables
