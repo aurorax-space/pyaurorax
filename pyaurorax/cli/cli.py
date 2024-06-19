@@ -52,7 +52,7 @@ def __test_connectivity(aurorax, quiet=False, return_json=False):
 
 
 @click.group(invoke_without_command=True)
-@click.version_option(version="1.0.0-rc2")
+@click.version_option(version="1.0.0-rc3")
 @click.option("--api-key", type=str, help="Specify an API key")
 @click.option("--api-base-url", type=str, help="Set the AuroraX API base URL")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
