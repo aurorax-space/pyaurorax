@@ -157,7 +157,11 @@ def prep_images(image_list: List[Data], data_attribute: Literal["data", "calibra
 
         # We don't attempt to handle the same site being passed in for multiple networks
         if site_uid in images_dict.keys():
-            warnings.warn("Same site between differing networks detected. Omitting additional '%s' data" % (site_uid), stacklevel=1)
+            warnings.warn(
+                "Same site between differing networks detected. Omitting additional '%s' data" % (site_uid),
+                UserWarning,
+                stacklevel=1,
+            )
             continue
         site_uid_list.append(site_uid)
 
