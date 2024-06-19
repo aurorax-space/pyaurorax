@@ -27,12 +27,12 @@ __DEFAULT_SCALE_MIN = 0
 __DEFAULT_SCALE_MAX = 20000
 
 
-def create(prepped_data: MosaicData,
-           prepped_skymap: MosaicSkymap,
+def create(prepped_data: Union[MosaicData, List[MosaicData]],
+           prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
            frame_idx: int,
            cartopy_projection: cartopy.crs.Projection,
-           min_elevation: int = 5,
-           colormap: Optional[str] = "gray",
+           min_elevation: Union[int, List[int]] = 5,
+           colormap: Optional[Union[str, List[str]]] = None,
            image_intensity_scales: Optional[Union[List, Dict]] = None) -> Mosaic:
     """
     Create a mosaic object.
@@ -91,176 +91,213 @@ def create(prepped_data: MosaicData,
     pyproj_des_proj = pyproj.CRS.from_user_input(cartopy_projection)
     transformer = pyproj.Transformer.from_crs(pyproj_src_proj, pyproj_des_proj, always_xy=True)
 
-    # get sites
-    site_list = prepped_data.site_uid_list
-
-    # set image intensity scales
-    if (image_intensity_scales is None):
-        # defaults to scaling all sites between 0-20000
-        image_intensity_scales = {}
-        for site_uid in prepped_skymap.site_uid_list:
-            image_intensity_scales[site_uid] = [__DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX]
-    elif (isinstance(image_intensity_scales, list) is True):
-        image_intensity_scales_dict = {}
-        for site_uid in site_list:
-            image_intensity_scales_dict[site_uid] = image_intensity_scales
-        image_intensity_scales = image_intensity_scales_dict
-    elif (isinstance(image_intensity_scales, dict) is True):
-        # no action needed
-        pass
-    else:
-        raise ValueError("Invalid image_intensity_scales format. Please refer to the documentation for this function.")
-
-    # We need a numpy array of the sites requested, that will be used to make sure any sites
-    # that don't have data for the requested frame are not plotted. Also empty dict for images..
-    site_list_arr = np.array(site_list)
-    # all_images = np.zeros([len(site_list), width * height, __N_CHANNELS], dtype=np.int32)
-    all_images = {}
-
-    # Grab the elevation, and filling lats/lons
-    elev = prepped_skymap.elevation
-    polyfill_lon = prepped_skymap.polyfill_lon
-    polyfill_lat = prepped_skymap.polyfill_lat
-
-    # Now we begin to fill in the above arrays, one site at a time. Before doing so
-    # we need lists to keep track of which sites actually have data for this frame.
-    sites_with_data = []
-    sites_with_data_idx = []
-
-    # We also define a list that will hold all unique timestamps pulled from each
-    # frame's metadata. This should be of length 1, and we can check that to make
-    # sure all images being plotted correspond to the same time.
-    unique_timestamps = []
-    n_channels_dict = {}
-    for site in site_list:
-
-        # set image dimensions
-        height = prepped_data.images_dimensions[site][0]
-        width = prepped_data.images_dimensions[site][1]
-
-        # Grab the timestamp for this frame/site
-        meta_timestamp = prepped_data.timestamps[frame_idx]
-
-        # Determine whether current image is single or multi-channel, and add to dictionary for reference
-        if len(prepped_data.images[site].shape) == 4:
-            n_channels = prepped_data.images[site].shape[2]
+    # Convert data, skymaps, colormap indicators to lists for iteration purposed
+    if not isinstance(prepped_data, list):
+        prepped_data = [prepped_data]
+    if not isinstance(prepped_skymap, list):
+        prepped_skymap = [prepped_skymap]
+    if not isinstance(colormap, list):
+        if colormap is None:
+            colormap = []
+            for _ in range(len(prepped_data)):
+                colormap.append('grey')
         else:
-            n_channels = 1
-        n_channels_dict[site] = n_channels
+            colormap = [colormap]
+    if not isinstance(min_elevation, list):
+        tmp = []
+        for _ in range(len(prepped_data)):
+            tmp.append(min_elevation)
+        min_elevation = tmp
+    
+    # Make sure all lists are same length
+    if (len(prepped_data) != len(prepped_skymap)):
+        raise ValueError("When passing lists of prepped data and prepped skymap, they must be of the same length.")
+    if (len(prepped_data) != len(colormap)) or (len(prepped_skymap) != len(colormap)):
+        raise ValueError("List of colormaps must have same length as lists of prepped data and prepped skymaps.")
+    
+    # Itarate through each set of prepped data, prepped skymap
+    img_poly_list = []
+    for mosaic_data_idx in range(len(prepped_data)):
+        data = prepped_data[mosaic_data_idx]
+        skymap = prepped_skymap[mosaic_data_idx]
+        iter_cmap = colormap[mosaic_data_idx]
+        min_el = min_elevation[mosaic_data_idx]
 
-        # Now, obtain the frame of interest, for this site, from the image data and flatten it
-        if n_channels == 1:
-            img = prepped_data.images[site][:, :, frame_idx]
-            flattened_img = np.reshape(img, (width * height))
+        # get sites
+        site_list = data.site_uid_list
+
+        # set image intensity scales
+        if (image_intensity_scales is None):
+            # defaults to scaling all sites between 0-20000
+            image_intensity_scales = {}
+            for site_uid in skymap.site_uid_list:
+                image_intensity_scales[site_uid] = [__DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX]
+        elif (isinstance(image_intensity_scales, list) is True):
+            image_intensity_scales_dict = {}
+            for site_uid in site_list:
+                image_intensity_scales_dict[site_uid] = image_intensity_scales
+            image_intensity_scales = image_intensity_scales_dict
+        elif (isinstance(image_intensity_scales, dict) is True):
+            # no action needed
+            pass
         else:
-            img = prepped_data.images[site][:, :, :, frame_idx]
-            flattened_img = np.reshape(img, (width * height, n_channels))
+            raise ValueError("Invalid image_intensity_scales format. Please refer to the documentation for this function.")
 
-        tmp = flattened_img
+        # We need a numpy array of the sites requested, that will be used to make sure any sites
+        # that don't have data for the requested frame are not plotted. Also empty dict for images..
+        site_list_arr = np.array(site_list)
+        # all_images = np.zeros([len(site_list), width * height, __N_CHANNELS], dtype=np.int32)
+        all_images = {}
 
-        if (np.sum(tmp) == 0.0):
-            # If it's sum is zero, we know there is no data so we can simply continue.
-            continue
+        # Grab the elevation, and filling lats/lons
+        elev = skymap.elevation
+        polyfill_lon = skymap.polyfill_lon
+        polyfill_lat = skymap.polyfill_lat
 
-        # Scale this site's data based on previously defined scaling bounds
-        tmp = scale_intensity(tmp, min=image_intensity_scales[site][0], max=image_intensity_scales[site][1], top=255)  # type: ignore
+        # Now we begin to fill in the above arrays, one site at a time. Before doing so
+        # we need lists to keep track of which sites actually have data for this frame.
+        sites_with_data = []
+        sites_with_data_idx = []
 
-        # Add the timestamp to tracking list if it's unique
-        if meta_timestamp not in unique_timestamps:
-            unique_timestamps.append(meta_timestamp)
+        # We also define a list that will hold all unique timestamps pulled from each
+        # frame's metadata. This should be of length 1, and we can check that to make
+        # sure all images being plotted correspond to the same time.
+        unique_timestamps = []
+        n_channels_dict = {}
+        for site in site_list:
 
-        # Append sites to respective lists, and add image data to master list
-        sites_with_data.append(site)
-        sites_with_data_idx.append(np.where(site_list_arr == site)[0][0])
-        all_images[site] = tmp.astype(np.int32)
+            # set image dimensions
+            height = data.images_dimensions[site][0]
+            width = data.images_dimensions[site][1]
 
-    # This checks to make sure all images have the same timestamps
-    if len(unique_timestamps) != 1:
-        raise Exception("Error: Images have different timestamps.")
+            # Grab the timestamp for this frame/site
+            meta_timestamp = data.timestamps[frame_idx]
 
-    # Create empty lists for tracking the pixel polygons and their values
-    lon_list = []
-    lat_list = []
-    cmap_vals = []
+            # Determine whether current image is single or multi-channel, and add to dictionary for reference
+            if len(data.images[site].shape) == 4:
+                n_channels = data.images[site].shape[2]
+            else:
+                n_channels = 1
+            n_channels_dict[site] = n_channels
 
-    # Set up elevation increment for plotting. We start at the min elevation
-    # and plot groups of elevations until reaching 90 deg.
-    elev_delta = 0.1
-    el = min_elevation
+            # Now, obtain the frame of interest, for this site, from the image data and flatten it
+            if n_channels == 1:
+                img = data.images[site][:, :, frame_idx]
+                flattened_img = np.reshape(img, (width * height))
+            else:
+                img = data.images[site][:, :, :, frame_idx]
+                flattened_img = np.reshape(img, (width * height, n_channels))
 
-    # Iterate through all elevation ranges
-    while el < 90:
+            tmp = flattened_img
 
-        # Only iterate through the sites that actually have data
-        for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
-            # Get this sites number of channels
-            n_channels = n_channels_dict[site_id]
-
-            # Get all pixels within current elevation threshold
-            el_idx = np.nonzero(np.logical_and(elev[site_idx] > el, elev[site_idx] <= el + elev_delta))[0]
-            if len(el_idx) == 0:
+            if (np.sum(tmp) == 0.0):
+                # If it's sum is zero, we know there is no data so we can simply continue.
                 continue
 
-            # Grab this level's filling lat/lons
-            el_lvl_fill_lats = polyfill_lat[site_idx][:, el_idx]
-            el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
+            # Scale this site's data based on previously defined scaling bounds
+            tmp = scale_intensity(tmp, min=image_intensity_scales[site][0], max=image_intensity_scales[site][1], top=255)  # type: ignore
 
-            # Grab this level's data values
-            if n_channels == 1:
-                el_lvl_cmap_vals = all_images[site_id][el_idx]
-            else:
-                el_lvl_cmap_vals = all_images[site_id][el_idx, :]
+            # Add the timestamp to tracking list if it's unique
+            if meta_timestamp not in unique_timestamps:
+                unique_timestamps.append(meta_timestamp)
 
-            # # Mask any nans that may have slipped through - done as a precaution
-            nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
+            # Append sites to respective lists, and add image data to master list
+            sites_with_data.append(site)
+            sites_with_data_idx.append(np.where(site_list_arr == site)[0][0])
+            all_images[site] = tmp.astype(np.int32)
 
-            el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
-            el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
-            if n_channels == 1:
-                el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
-            else:
-                el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
+        # This checks to make sure all images have the same timestamps
+        if len(unique_timestamps) != 1:
+            raise Exception("Error: Images have different timestamps.")
 
-            # Convert pixel values to a normalized float
-            el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
+        # Create empty lists for tracking the pixel polygons and their values
+        lon_list = []
+        lat_list = []
+        cmap_vals = []
 
-            # Append polygon lat/lons and values to master lists
-            if n_channels == 1:
-                # print(1, len(el_lvl_fill_lats), len(el_lvl_colors))
-                cmap = plt.get_cmap(colormap)
-                for k in range(len(el_lvl_fill_lats[0, :])):
-                    lon_list.append(el_lvl_fill_lons[:, k])
-                    lat_list.append(el_lvl_fill_lats[:, k])
-                    cmap_vals.append(cmap(el_lvl_colors[k]))
-            else:
-                for k in range(len(el_lvl_fill_lats[0, :])):
-                    lon_list.append(el_lvl_fill_lons[:, k])
-                    lat_list.append(el_lvl_fill_lats[:, k])
-                    cmap_vals.append(el_lvl_colors[k, :])
+        # Set up elevation increment for plotting. We start at the min elevation
+        # and plot groups of elevations until reaching 90 deg.
+        elev_delta = 0.1
+        el = min_el
 
-        el += elev_delta
+        # Iterate through all elevation ranges
+        while el < 90:
 
-    # Use our transformer object to convert the lat/lon polygons into projection coordinates.
-    lons, lats = transformer.transform(np.array(lon_list), np.array(lat_list))
+            # Only iterate through the sites that actually have data
+            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
+                # Get this sites number of channels
+                n_channels = n_channels_dict[site_id]
 
-    # Format polygons for creation of PolyCollection object
-    lonlat_polygons = np.empty((lons.shape[0], 5, 2))
-    lonlat_polygons[:, :, 0] = lons
-    lonlat_polygons[:, :, 1] = lats
+                # Get all pixels within current elevation threshold
+                el_idx = np.nonzero(np.logical_and(elev[site_idx] > el, elev[site_idx] <= el + elev_delta))[0]
+                if len(el_idx) == 0:
+                    continue
 
-    # generate a PolyCollection object, containing all of the Polygons shaded with
-    # their corresponding RGB value
+                # Grab this level's filling lat/lons
+                el_lvl_fill_lats = polyfill_lat[site_idx][:, el_idx]
+                el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
 
-    img_data_poly = matplotlib.collections.PolyCollection(
-        lonlat_polygons,  # type: ignore
-        facecolors=cmap_vals,
-        array=None,
-        clim=[0.0, 1.0],
-        edgecolors="face",
-    )
+                # Grab this level's data values
+                if n_channels == 1:
+                    el_lvl_cmap_vals = all_images[site_id][el_idx]
+                else:
+                    el_lvl_cmap_vals = all_images[site_id][el_idx, :]
+
+                # # Mask any nans that may have slipped through - done as a precaution
+                nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
+
+                el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
+                el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
+                if n_channels == 1:
+                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
+                else:
+                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
+
+                # Convert pixel values to a normalized float
+                el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
+
+                # Append polygon lat/lons and values to master lists
+                if n_channels == 1:
+                    # print(1, len(el_lvl_fill_lats), len(el_lvl_colors))
+                    cmap = plt.get_cmap(iter_cmap)
+                    for k in range(len(el_lvl_fill_lats[0, :])):
+                        lon_list.append(el_lvl_fill_lons[:, k])
+                        lat_list.append(el_lvl_fill_lats[:, k])
+                        cmap_vals.append(cmap(el_lvl_colors[k]))
+                else:
+                    for k in range(len(el_lvl_fill_lats[0, :])):
+                        lon_list.append(el_lvl_fill_lons[:, k])
+                        lat_list.append(el_lvl_fill_lats[:, k])
+                        cmap_vals.append(el_lvl_colors[k, :])
+
+            el += elev_delta
+
+        # Use our transformer object to convert the lat/lon polygons into projection coordinates.
+        lons, lats = transformer.transform(np.array(lon_list), np.array(lat_list))
+
+        # Format polygons for creation of PolyCollection object
+        lonlat_polygons = np.empty((lons.shape[0], 5, 2))
+        lonlat_polygons[:, :, 0] = lons
+        lonlat_polygons[:, :, 1] = lats
+
+        # generate a PolyCollection object, containing all of the Polygons shaded with
+        # their corresponding RGB value
+
+        img_data_poly = matplotlib.collections.PolyCollection(
+            lonlat_polygons,  # type: ignore
+            facecolors=cmap_vals,
+            array=None,
+            clim=[0.0, 1.0],
+            edgecolors="face",
+        )
+
+        img_poly_list.append(img_data_poly)
 
     # cast into mosaic object
-    mosaic = Mosaic(polygon_data=img_data_poly, cartopy_projection=cartopy_projection)
+    if len(img_poly_list) == 1:
+        mosaic = Mosaic(polygon_data=img_poly_list[0], cartopy_projection=cartopy_projection)
+    else:
+        mosaic = Mosaic(polygon_data=img_poly_list, cartopy_projection=cartopy_projection)
 
     # return
     return mosaic
