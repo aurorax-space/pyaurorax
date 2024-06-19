@@ -500,9 +500,11 @@ Default is <code>data</code>.</dd>
 
         # We don&#39;t attempt to handle the same site being passed in for multiple networks
         if site_uid in images_dict.keys():
-            print(&#34;Warning: Same site between differing networks detected. Omitting &#34; + site_uid)
+            warnings.warn(
+                &#34;Same site between differing networks detected. Omitting additional &#39;%s&#39; data&#34; % (site_uid),
+                stacklevel=1,
+            )
             continue
-
         site_uid_list.append(site_uid)
 
         # initialize this site&#39;s data destination variables

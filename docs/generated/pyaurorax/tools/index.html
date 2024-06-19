@@ -505,7 +505,7 @@ multiprocessing.</dd>
 </details>
 </dd>
 <dt id="pyaurorax.tools.scale_intensity"><code class="name flex">
-<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray, min: Optional[float] = None, max: Optional[float] = None, top: Optional[float] = None) ‑> numpy.ndarray</span>
+<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray, min: Optional[float] = None, max: Optional[float] = None, top: Optional[float] = None, memory_saver: bool = False) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Scale all values of an array that lie in the range min&lt;=x&lt;=max in to
@@ -513,17 +513,20 @@ the range 0&lt;=x&lt;=high.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
-<dd>data array, can be 2, 3, or 4-dimensional. Assumed
-to be an image, or array of images. Also assumed that the first 2 dimensions
-are the image's x and y coordinates, and the following dimensions are some
-combination of the number of images, and/or the colour channel.</dd>
+<dd>Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of
+images. Also assumed that the first 2 dimensions are the image's x and y
+coordinates, and the following dimensions are some combination of the number of
+images, and/or the colour channel.</dd>
 <dt><strong><code>min</code></strong> :&ensp;<code>float</code></dt>
-<dd>minimum value of array to be considered</dd>
+<dd>Minimum value of array to be considered</dd>
 <dt><strong><code>max</code></strong> :&ensp;<code>float</code></dt>
-<dd>maximum value of array to be considered</dd>
+<dd>Maximum value of array to be considered</dd>
 <dt><strong><code>top</code></strong> :&ensp;<code>float</code></dt>
-<dd>maximum value of the scaled result. If not supplied, the max value
+<dd>Maximum value of the scaled result. If not supplied, the max value
 of the data array's dtype is used.</dd>
+<dt><strong><code>memory_saver</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Utilize less RAM when scaling a set of images. Note that this routine is slower if this
+is set to <code>True</code>.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
@@ -542,20 +545,32 @@ with the scaling applied.</p>
     min: Optional[float] = None,
     max: Optional[float] = None,
     top: Optional[float] = None,
+    memory_saver: bool = False,
 ) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Scale all values of an array that lie in the range min&lt;=x&lt;=max in to 
     the range 0&lt;=x&lt;=high.
     
     Args:
-        data (numpy.ndarray): data array, can be 2, 3, or 4-dimensional. Assumed 
-            to be an image, or array of images. Also assumed that the first 2 dimensions
-            are the image&#39;s x and y coordinates, and the following dimensions are some
-            combination of the number of images, and/or the colour channel.
-        min (float): minimum value of array to be considered
-        max (float): maximum value of array to be considered
-        top (float): maximum value of the scaled result. If not supplied, the max value
+        data (numpy.ndarray): 
+            Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of 
+            images. Also assumed that the first 2 dimensions are the image&#39;s x and y 
+            coordinates, and the following dimensions are some combination of the number of 
+            images, and/or the colour channel.
+
+        min (float): 
+            Minimum value of array to be considered
+
+        max (float): 
+            Maximum value of array to be considered
+
+        top (float): 
+            Maximum value of the scaled result. If not supplied, the max value
             of the data array&#39;s dtype is used.
+
+        memory_saver (bool): 
+            Utilize less RAM when scaling a set of images. Note that this routine is slower if this
+            is set to `True`.
 
     Returns:
         A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
@@ -564,51 +579,34 @@ with the scaling applied.</p>
     Raises:
         ValueError: Issues with the supplied min, max, or top
     &#34;&#34;&#34;
-    # init
-    bottom = 0
+    if (memory_saver is True):
+        # determine if we are single or 3 channel
+        n_channels = 1
+        if (len(data.shape) == 3):
+            # single channel
+            n_channels = 1
+        elif (len(data.shape) == 4):
+            # three channel
+            n_channels = 3
+        else:
+            ValueError(&#34;Unable to determine number of channels based on the supplied images. Make sure you are supplying a &#34; +
+                       &#34;[rows,cols,images] or [rows,cols,channels,images] sized array.&#34;)
 
-    # set top val
-    #
-    # NOTE: we only care about this if it&#39;s a uint array. If it&#39;s a double array, then we
-    # check to make sure that a top was specified.
-    if (&#34;float&#34; in str(data.dtype)):
-        # this is float type, check that the top was specified
-        if (top is None):
-            raise ValueError(&#34;The top parameter must be specified when a float array is supplied&#34;)
+        # init destination array
+        images_scaled = np.empty((data.shape), dtype=data.dtype)
+
+        # cycle through each image
+        for i in range(0, data.shape[-1]):
+            if (n_channels == 1):
+                images_scaled[:, :, i] = __scale_data(data[:, :, i], min, max, top)
+            else:
+                images_scaled[:, :, :, i] = __scale_data(data[:, :, :, i], min, max, top)
+
+        # return
+        return images_scaled
     else:
-        dtype_maxval = np.iinfo(data.dtype).max
-        if (top is None):
-            # derive values using dtype of data array
-            top = dtype_maxval
-
-        # check top
-        if (top &gt; dtype_maxval):
-            raise ValueError(&#34;The top value must be less than or equal to %s&#34; % (dtype_maxval))
-
-    # set min and max
-    if (min is None):
-        cmin = data.min()
-    else:
-        cmin = float(min)
-    if (max is None):
-        cmax = data.max()
-    else:
-        cmax = float(max)
-
-    # set scaling factor
-    cscale = cmax - cmin
-    if cscale &lt; 0:
-        raise ValueError(&#34;The max value must be larger than the min value&#34;)
-    elif cscale == 0:
-        cscale = 1
-
-    # do scaling
-    scale = float(top - bottom) / cscale
-    byte_data = (data - cmin) * scale + bottom
-    scaled_data = (byte_data.clip(bottom, top) + 0.5).astype(data.dtype)
-
-    # return
-    return scaled_data</code></pre>
+        # scale and return
+        return __scale_data(data, min, max, top)</code></pre>
 </details>
 </dd>
 <dt id="pyaurorax.tools.set_theme"><code class="name flex">
