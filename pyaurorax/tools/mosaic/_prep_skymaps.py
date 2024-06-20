@@ -66,7 +66,6 @@ def __flatten_skymap(processing_dict):
             if np.isnan(pix_lons).any():
                 # Skip any nans, as we only fill pixels with 4 finite corners
                 continue
-            site_polyfill_lon[:, ii, jj] = pix_lons
 
             # repeat the above for latitudes.
             lat1 = np.interp(height_km, interpol_alts, lats[:, ii, jj])
@@ -77,6 +76,8 @@ def __flatten_skymap(processing_dict):
             if np.isnan(np.array(pix_lats)).any():
                 # Skip any nans, as we only fill pixels with 4 finite corners
                 continue
+            
+            site_polyfill_lon[:, ii, jj] = pix_lons
             site_polyfill_lat[:, ii, jj] = pix_lats
 
     # Flatten this site's filling and elevation arrays and insert them into master arrays
