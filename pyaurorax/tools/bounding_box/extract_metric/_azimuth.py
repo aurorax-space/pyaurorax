@@ -72,9 +72,9 @@ def azimuth(images: np.ndarray,
 
     # Ensure that coordinates are valid
     if az_0 > 360 or az_0 < 0:
-        raise ValueError("Invalid Elevation: " + str(az_0))
+        raise ValueError("Invalid Azimuth: " + str(az_0))
     elif az_1 > 360 or az_1 < 0:
-        raise ValueError("Invalid Elevation: " + str(az_1))
+        raise ValueError("Invalid Azimuth: " + str(az_1))
 
     # Ensure that azimuths are properly ordered
     if az_0 > az_1:
@@ -82,9 +82,9 @@ def azimuth(images: np.ndarray,
 
     # Ensure that this is a valid polygon
     if (az_0 == az_1):
-        raise ValueError("Elevation bounds defined with zero area.")
+        raise ValueError("Azimuth bounds defined with zero area.")
 
-    # Obtain elevation array from skymap
+    # Obtain azimuth array from skymap
     az = np.squeeze(skymap.full_azimuth)
 
     # Obtain indices into skymap within azimuth range
