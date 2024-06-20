@@ -53,7 +53,7 @@ def azimuth(images: np.ndarray,
         ValueError: issue encountered with value supplied in parameter
     """
 
-    # Select individual elevations from list
+    # Select individual azimuths from list
     az_0 = azimuth_bounds[0]
     az_1 = azimuth_bounds[1]
 
