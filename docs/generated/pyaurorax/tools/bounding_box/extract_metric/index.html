@@ -210,7 +210,7 @@ Plot a preview of the bounded area.</p>
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -221,7 +221,7 @@ Plot a preview of the bounded area.</p>
             preview_img[bound_idx[0], bound_idx[1],0] = 255
             preview_img[bound_idx[0], bound_idx[1],1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -254,7 +254,7 @@ be any arbitrary set of images. It is anticipated that the order of axes is [row
 or [row, cols, channels, num_images].</dd>
 <dt><strong><code>ccd_bounds</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric.
-Anticipated order is [y_0, y_1, x_0, x_1].</dd>
+Anticipated order is [x_0, x_1, y_0, y_1].</dd>
 <dt><strong><code>metric</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the metric that is to be computed for the bounded area. Valid metrics are <code>mean</code>,
 <code>median</code>, <code>sum</code>. Defaults to <code>median</code>.</dd>
@@ -291,7 +291,7 @@ Plot a preview of the bounded area.</p>
         
         ccd_bounds (List[int]): 
             A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric. 
-            Anticipated order is [y_0, y_1, x_0, x_1].
+            Anticipated order is [x_0, x_1, y_0, y_1].
 
         metric (str): 
             The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
@@ -360,7 +360,7 @@ Plot a preview of the bounded area.</p>
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[y_0:y_1, x_0:x_1] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -371,7 +371,7 @@ Plot a preview of the bounded area.</p>
             preview_img[y_0:y_1, x_0:x_1,0] = 255
             preview_img[y_0:y_1, x_0:x_1,1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -516,7 +516,7 @@ Plot a preview of the bounded area.</p>
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -527,7 +527,7 @@ Plot a preview of the bounded area.</p>
             preview_img[bound_idx[0], bound_idx[1],0] = 255
             preview_img[bound_idx[0], bound_idx[1],1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -733,7 +733,7 @@ Plot a preview of the bounded area.</p>
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -744,7 +744,7 @@ Plot a preview of the bounded area.</p>
             preview_img[bound_idx[0], bound_idx[1],0] = 255
             preview_img[bound_idx[0], bound_idx[1],1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -956,7 +956,7 @@ Plot a preview of the bounded area.</p>
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
@@ -967,7 +967,7 @@ Plot a preview of the bounded area.</p>
             preview_img[bound_idx[0], bound_idx[1],0] = 255
             preview_img[bound_idx[0], bound_idx[1],1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;)
+            plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
             plt.axis(&#34;off&#34;)
             plt.show()
