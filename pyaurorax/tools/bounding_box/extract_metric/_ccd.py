@@ -34,7 +34,7 @@ def ccd(images: np.ndarray,
         
         ccd_bounds (List[int]): 
             A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric. 
-            Anticipated order is [y_0, y_1, x_0, x_1].
+            Anticipated order is [x_0, x_1, y_0, y_1].
 
         metric (str): 
             The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
@@ -103,7 +103,7 @@ def ccd(images: np.ndarray,
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[y_0:y_1, x_0:x_1] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap="grey")
+            plt.imshow(preview_img, cmap="grey", origin="lower")
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
@@ -114,7 +114,7 @@ def ccd(images: np.ndarray,
             preview_img[y_0:y_1, x_0:x_1,0] = 255
             preview_img[y_0:y_1, x_0:x_1,1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap="grey")
+            plt.imshow(preview_img, origin="lower")
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()

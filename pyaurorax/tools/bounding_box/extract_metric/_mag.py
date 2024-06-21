@@ -175,7 +175,7 @@ def mag(images: np.ndarray,
             preview_img = scale_intensity(images[:,:,0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
-            plt.imshow(preview_img, cmap="grey")
+            plt.imshow(preview_img, cmap="grey", origin="lower")
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
@@ -186,7 +186,7 @@ def mag(images: np.ndarray,
             preview_img[bound_idx[0], bound_idx[1],0] = 255
             preview_img[bound_idx[0], bound_idx[1],1:] = 0
             plt.figure()
-            plt.imshow(preview_img, cmap="grey")
+            plt.imshow(preview_img, origin="lower")
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
