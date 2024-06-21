@@ -37,10 +37,13 @@ class Montage:
             Timestamps corresponding to each montage image.
     """
 
-    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime]):
+    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime], n_channels: int):
         # public vars
         self.data = data
         self.timestamp = timestamp
+
+        # private vars
+        self.__n_channels = n_channels
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -131,12 +134,12 @@ class Montage:
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
-            if (len(self.data.shape) == 3):
+            if (self.__n_channels == 1):
                 # single channel
                 ax.imshow(self.data[:, :, i], cmap=cmap, origin="lower", interpolation="nearest")
-            elif (len(self.data.shape) == 4):
+            elif (self.__n_channels == 3):
                 # single channel
-                ax.imshow(self.data[:, :, i], cmap=cmap, origin="lower", interpolation="nearest")
+                ax.imshow(self.data[:, :, :, i], cmap=cmap, origin="lower", interpolation="nearest")
             else:
                 raise ValueError("Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s" %
                                  (self.data.shape))
@@ -147,7 +150,7 @@ class Montage:
             if (timestamps_display is True):
                 ax.text(
                     int(np.floor(self.data.shape[1] / 2.)),
-                    0.5,
+                    5,
                     self.timestamp[i].strftime(timestamps_format),
                     ha="center",
                     fontsize=timestamps_fontsize,

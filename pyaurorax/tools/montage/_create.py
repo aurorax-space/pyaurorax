@@ -38,12 +38,24 @@ def create(images: np.ndarray, timestamp: List[datetime.datetime]) -> Montage:
     Returns:
         A `pyaurorax.tools.Montage` object.
     """
+    # determine if we are single or 3 channel
+    n_channels = 1
+    if (len(images.shape) == 3):
+        # single channel
+        n_channels = 1
+    elif (len(images.shape) == 4):
+        # three channel
+        n_channels = 3
+    else:
+        ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
+                   "[rows,cols,images] or [rows,cols,channels,images] sized array.")
+
     # create the montage object
     #
     # NOTE: we presently do nothing more than repackage the data. This logic for create()
     # is here in case we need to further expand functionality and need it. It's also good
     # for consistency.
-    montage_obj = Montage(data=images, timestamp=timestamp)
+    montage_obj = Montage(data=images, timestamp=timestamp, n_channels=n_channels)
 
     # return
     return montage_obj
