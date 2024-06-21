@@ -13,8 +13,10 @@
 # limitations under the License.
 
 import numpy as np
+import matplotlib.pyplot as plt
 from typing import Union, Optional, Literal, Sequence
 from ....data.ucalgary import Skymap
+from ....tools import scale_intensity
 
 
 def geo(images: np.ndarray,
@@ -22,7 +24,8 @@ def geo(images: np.ndarray,
         altitude_km: Union[int, float],
         lonlat_bounds: Sequence[Union[int, float]],
         metric: Literal["mean", "median", "sum"] = "median",
-        n_channels: Optional[int] = None) -> np.ndarray:
+        n_channels: Optional[int] = None,
+        show_preview: bool = False) -> np.ndarray:
     """
     Compute a metric of image data within a geographic lat/lon boundary.
 
@@ -49,6 +52,9 @@ def geo(images: np.ndarray,
         n_channels (int): 
             By default, function will assume the type of data passed as input - this argument can be used
             to manually specify the number of channels contained in image data.
+        
+        show_preview (bool):
+            Plot a preview of the bounded area.
 
     Returns:
         A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
@@ -103,8 +109,9 @@ def geo(images: np.ndarray,
         raise ValueError("Polygon defined with zero area.")
 
     # Obtain lat/lon arrays from skymap
-    if (altitude_km * 1000.0 in skymap.full_map_altitude):
-        altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
+    interp_alts = skymap.full_map_altitude / 1000.0
+    if (altitude_km in interp_alts):
+        altitude_idx = np.where(altitude_km == interp_alts)
 
         lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
         lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
@@ -112,28 +119,42 @@ def geo(images: np.ndarray,
 
     else:
         # Make sure altitude is in range that can be interpolated
-        if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
+        if (altitude_km  < interp_alts[0]) or (altitude_km > interp_alts[2]):
             raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
-                             str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
+                             str((interp_alts[0], interp_alts[2])))
 
         # Initialze empty lat/lon arrays
         lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-        lons = lats.copy()
+        lons = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
 
         # Interpolate lats and lons at desired altitude
         for i in range(skymap.full_map_latitude.shape[1]):
             for j in range(skymap.full_map_latitude.shape[2]):
-                lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
-                lons[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_longitude[:, i, j])
+                pixel_lats = skymap.full_map_latitude[:, i, j]
+                pixel_lons = skymap.full_map_longitude[:, i, j]
+                if np.isnan(pixel_lats).any() or np.isnan(pixel_lons).any():
+                    continue
+                lats[i, j] = np.interp(altitude_km, interp_alts, pixel_lats)
+                lons[i, j] = np.interp(altitude_km, interp_alts, pixel_lons)
 
         lons[np.where(lons > 180)] -= 360.0  # Fix skymap to be in (-180,180) format
 
+    # Check that lat/lon range is reasonable
+    min_skymap_lat = np.nanmin(lats)
+    max_skymap_lat = np.nanmax(lats)
+    min_skymap_lon = np.nanmin(lons)
+    max_skymap_lon = np.nanmax(lons)
+    if (lat_0 <= min_skymap_lat) or (lat_1 >= max_skymap_lat):
+        raise ValueError(f"Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.")
+    if (lon_0 <= min_skymap_lon) or (lon_1 >= max_skymap_lon):
+        raise ValueError(f"Longitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.")
+    
     # Obtain indices into skymap within lat/lon range
-    bound_idx = np.where(np.logical_and.reduce((lats > float(lat_0), lats < float(lat_1), lons > float(lon_0), lons < float(lon_1))))
+    bound_idx = np.where(np.logical_and.reduce((lats >= float(lat_0), lats <= float(lat_1), lons >= float(lon_0), lons <= float(lon_1))))
 
     # If boundaries contain no data, raise error
     if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
-        raise ValueError("No data within desired bounds.")
+        raise ValueError("No data within desired bounds. Try a larger area.")
 
     # Convert from skymap coords to image coords
     bound_idx = tuple(i - 1 for i in bound_idx)
@@ -142,8 +163,25 @@ def geo(images: np.ndarray,
     # Slice out the bounded data
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
+        if show_preview:
+            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img[bound_idx[0], bound_idx[1]] = 255
+            plt.figure()
+            plt.imshow(preview_img, cmap="grey")
+            plt.title("Bounded Area Preview")
+            plt.axis("off")
+            plt.show()
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
+        if show_preview:
+            preview_img = scale_intensity(images[:,:,:,0], top=230)
+            preview_img[bound_idx[0], bound_idx[1],0] = 255
+            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            plt.figure()
+            plt.imshow(preview_img, cmap="grey")
+            plt.title("Bounded Area Preview")
+            plt.axis("off")
+            plt.show()
     else:
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 

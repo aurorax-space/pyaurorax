@@ -13,15 +13,18 @@
 # limitations under the License.
 
 import numpy as np
+import matplotlib.pyplot as plt
 from typing import Union, Optional, Literal, Sequence
 from ....data.ucalgary import Skymap
+from ....tools import scale_intensity
 
 
 def elevation(images: np.ndarray,
               skymap: Skymap,
               elevation_bounds: Sequence[Union[int, float]],
               metric: Literal["mean", "median", "sum"] = "median",
-              n_channels: Optional[int] = None) -> np.ndarray:
+              n_channels: Optional[int] = None,
+              show_preview: bool = False) -> np.ndarray:
     """
     Compute a metric of image data within an elevation boundary.
 
@@ -45,6 +48,10 @@ def elevation(images: np.ndarray,
         n_channels (int): 
             By default, function will assume the type of data passed as input - this argument can be used
             to manually specify the number of channels contained in image data.
+        
+        show_preview (bool):
+            Plot a preview of the bounded area.
+
 
     Returns:
         A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
@@ -88,17 +95,34 @@ def elevation(images: np.ndarray,
     elev = np.squeeze(skymap.full_elevation)
 
     # Obtain indices into skymap within elevation range
-    bound_idx = np.where(np.logical_and(elev > float(elev_0), elev < float(elev_1)))
+    bound_idx = np.where(np.logical_and(elev >= float(elev_0), elev <= float(elev_1)))
 
     # If boundaries contain no data, raise error
     if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
-        raise ValueError("No data within desired bounds.")
+        raise ValueError("No data within desired bounds. Try a larger area.")
 
     # Slice out the bounded data
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
+        if show_preview:
+            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img[bound_idx[0], bound_idx[1]] = 255
+            plt.figure()
+            plt.imshow(preview_img, cmap="grey")
+            plt.title("Bounded Area Preview")
+            plt.axis("off")
+            plt.show()
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
+        if show_preview:
+            preview_img = scale_intensity(images[:,:,:,0], top=230)
+            preview_img[bound_idx[0], bound_idx[1],0] = 255
+            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            plt.figure()
+            plt.imshow(preview_img, cmap="grey")
+            plt.title("Bounded Area Preview")
+            plt.axis("off")
+            plt.show()
     else:
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 

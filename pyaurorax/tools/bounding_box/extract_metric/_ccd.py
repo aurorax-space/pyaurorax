@@ -13,13 +13,16 @@
 # limitations under the License.
 
 import numpy as np
+import matplotlib.pyplot as plt
 from typing import Optional, Literal, Sequence
+from ....tools import scale_intensity
 
 
 def ccd(images: np.ndarray,
         ccd_bounds: Sequence[int],
         metric: Literal["mean", "median", "sum"] = "median",
-        n_channels: Optional[int] = None) -> np.ndarray:
+        n_channels: Optional[int] = None,
+        show_preview: bool = False) -> np.ndarray:
     """
     Compute a metric of image data within a CCD boundary.
 
@@ -40,6 +43,9 @@ def ccd(images: np.ndarray,
         n_channels (int): 
             By default, function will assume the type of data passed as input - this argument can be used
             to manually specify the number of channels contained in image data.
+        
+        show_preview (bool):
+            Plot a preview of the bounded area.
 
     Returns:
         A numpy.ndarray containing the metrics computed within CCD bounds, for all image frames.
@@ -93,8 +99,25 @@ def ccd(images: np.ndarray,
     # Slice out the bounded data
     if n_channels == 1:
         bound_data = images[y_0:y_1, x_0:x_1, :]
+        if show_preview:
+            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img[y_0:y_1, x_0:x_1] = 255
+            plt.figure()
+            plt.imshow(preview_img, cmap="grey")
+            plt.title("Bounded Area Preview")
+            plt.axis("off")
+            plt.show()
     elif n_channels == 3:
         bound_data = images[y_0:y_1, x_0:x_1, :, :]
+        if show_preview:
+            preview_img = scale_intensity(images[:,:,:,0], top=230)
+            preview_img[y_0:y_1, x_0:x_1,0] = 255
+            preview_img[y_0:y_1, x_0:x_1,1:] = 0
+            plt.figure()
+            plt.imshow(preview_img, cmap="grey")
+            plt.title("Bounded Area Preview")
+            plt.axis("off")
+            plt.show()
     else:
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
