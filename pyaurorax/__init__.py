@@ -32,7 +32,7 @@ aurorax = pyaurorax.PyAuroraX()
 """
 
 # versioning info
-__version__ = "1.0.0-rc4"
+__version__ = "1.0.0-rc5"
 
 # documentation excludes
 __pdoc__ = {"cli": False, "pyaurorax": False}
