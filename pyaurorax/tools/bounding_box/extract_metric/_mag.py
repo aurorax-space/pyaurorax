@@ -122,9 +122,8 @@ def mag(images: np.ndarray,
 
     else:
         # Make sure altitude is in range that can be interpolated
-        if (altitude_km  < interp_alts[0]) or (altitude_km > interp_alts[2]):
-            raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
-                             str((interp_alts[0], interp_alts[2])))
+        if (altitude_km < interp_alts[0]) or (altitude_km > interp_alts[2]):
+            raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " + str((interp_alts[0], interp_alts[2])))
 
         # Initialze empty lat/lon arrays
         lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
@@ -156,9 +155,15 @@ def mag(images: np.ndarray,
         raise ValueError(f"Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.")
     if (lon_0 <= min_skymap_lon) or (lon_1 >= max_skymap_lon):
         raise ValueError(f"Latitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.")
-    
+
     # Obtain indices into skymap within lat/lon range
-    bound_idx = np.where(np.logical_and.reduce((mag_lats >= float(lat_0), mag_lats <= float(lat_1), mag_lons >= float(lon_0), mag_lons <= float(lon_1))))
+    bound_idx = np.where(
+        np.logical_and.reduce((
+            mag_lats >= float(lat_0),
+            mag_lats <= float(lat_1),
+            mag_lons >= float(lon_0),
+            mag_lons <= float(lon_1),
+        )))
 
     # If boundaries contain no data, raise error
     if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
@@ -172,7 +177,7 @@ def mag(images: np.ndarray,
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap="grey", origin="lower")
@@ -182,9 +187,9 @@ def mag(images: np.ndarray,
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[bound_idx[0], bound_idx[1],0] = 255
-            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[bound_idx[0], bound_idx[1], 0] = 255
+            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin="lower")
             plt.title("Bounded Area Preview")

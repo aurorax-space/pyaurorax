@@ -100,7 +100,7 @@ def ccd(images: np.ndarray,
     if n_channels == 1:
         bound_data = images[y_0:y_1, x_0:x_1, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[y_0:y_1, x_0:x_1] = 255
             plt.figure()
             plt.imshow(preview_img, cmap="grey", origin="lower")
@@ -110,9 +110,9 @@ def ccd(images: np.ndarray,
     elif n_channels == 3:
         bound_data = images[y_0:y_1, x_0:x_1, :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[y_0:y_1, x_0:x_1,0] = 255
-            preview_img[y_0:y_1, x_0:x_1,1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[y_0:y_1, x_0:x_1, 0] = 255
+            preview_img[y_0:y_1, x_0:x_1, 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin="lower")
             plt.title("Bounded Area Preview")

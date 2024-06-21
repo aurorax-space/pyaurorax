@@ -55,7 +55,7 @@ def perform_dark_frame_correction(images: np.ndarray, size: int) -> np.ndarray:
     return images
 
 
-def perform_flatfield_correction(images: np.ndarray, cal_flatfield: Calibration) -> np.ndarray:
+def perform_flatfield_calibration(images: np.ndarray, cal_flatfield: Calibration) -> np.ndarray:
     # add axis if it's a single image
     if (len(images.shape) == 2):
         # only a single image, add an axis
