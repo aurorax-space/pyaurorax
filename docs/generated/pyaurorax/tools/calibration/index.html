@@ -79,7 +79,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pyaurorax.tools.calibration.rego"><code class="name flex">
-<span>def <span class="ident">rego</span></span>(<span>images: numpy.ndarray, cal_flatfield: Optional[pyucalgarysrs.data.classes.Calibration] = None, cal_rayleighs: Optional[pyucalgarysrs.data.classes.Calibration] = None, step_dark_frame_correction: bool = True, step_flatfield_correction: bool = True, step_rayleighs_conversion: bool = True, exposure_length_sec: float = 2.0) ‑> numpy.ndarray</span>
+<span>def <span class="ident">rego</span></span>(<span>images: numpy.ndarray, cal_flatfield: Optional[pyucalgarysrs.data.classes.Calibration] = None, cal_rayleighs: Optional[pyucalgarysrs.data.classes.Calibration] = None, step_dark_frame_correction: bool = True, step_flatfield_calibration: bool = True, step_rayleighs_calibration: bool = True, exposure_length_sec: float = 2.0) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Apply various calibration adjustments to a single or set of images raw images.</p>
@@ -92,13 +92,13 @@ __all__ = [
 the <code>step_flatfield_corection</code> is set to True.</dd>
 <dt><strong><code>cal_rayleighs</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Calibration" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Calibration">Calibration</a></code></dt>
 <dd>Calibration object containing the Rayleighs data to utilize. This field is required if
-the <code>step_rayleighs_conversion</code> is set to True.</dd>
+the <code>step_rayleighs_calibration</code> is set to True.</dd>
 <dt><strong><code>step_dark_frame_correction</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the dark frame correction step. Defaults to <code>True</code>.</dd>
-<dt><strong><code>step_flatfield_correction</code></strong> :&ensp;<code>bool</code></dt>
+<dt><strong><code>step_flatfield_calibration</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the flatfield correction step. Defaults to <code>True</code>. Note that the <code>cal_flatfield</code> parameter
 must be supplied if this is True.</dd>
-<dt><strong><code>step_rayleighs_conversion</code></strong> :&ensp;<code>bool</code></dt>
+<dt><strong><code>step_rayleighs_calibration</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the Rayleighs conversion step. Defaults to <code>True.</code> Note that the <code>cal_rayleighs</code> parameter
 must be supplied if this is True.</dd>
 <dt><strong><code>exposure_length_sec</code></strong> :&ensp;<code>float</code></dt>
@@ -124,8 +124,8 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
     cal_flatfield: Optional[Calibration] = None,
     cal_rayleighs: Optional[Calibration] = None,
     step_dark_frame_correction: bool = True,
-    step_flatfield_correction: bool = True,
-    step_rayleighs_conversion: bool = True,
+    step_flatfield_calibration: bool = True,
+    step_rayleighs_calibration: bool = True,
     exposure_length_sec: float = 2.0,
 ) -&gt; np.ndarray:
     &#34;&#34;&#34;
@@ -139,13 +139,13 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
             the `step_flatfield_corection` is set to True.
         cal_rayleighs (pyaurorax.data.ucalgary.Calibration): 
             Calibration object containing the Rayleighs data to utilize. This field is required if 
-            the `step_rayleighs_conversion` is set to True.
+            the `step_rayleighs_calibration` is set to True.
         step_dark_frame_correction (bool): 
             Perform the dark frame correction step. Defaults to `True`.
-        step_flatfield_correction (bool): 
+        step_flatfield_calibration (bool): 
             Perform the flatfield correction step. Defaults to `True`. Note that the `cal_flatfield` parameter
             must be supplied if this is True.
-        step_rayleighs_conversion (bool): 
+        step_rayleighs_calibration (bool): 
             Perform the Rayleighs conversion step. Defaults to `True.` Note that the `cal_rayleighs` parameter
             must be supplied if this is True.
         exposure_length_sec (float): 
@@ -163,9 +163,9 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
     # verify that we have everything we need for each requested step
-    if (step_flatfield_correction is True and cal_flatfield is None):
+    if (step_flatfield_calibration is True and cal_flatfield is None):
         raise ValueError(&#34;The cal_flatfield parameter must be supplied to perform the flatfield correction step&#34;)
-    if (step_rayleighs_conversion is True and cal_rayleighs is None):
+    if (step_rayleighs_calibration is True and cal_rayleighs is None):
         raise ValueError(&#34;The cal_rayleighs parameter must be supplied to perform the rayleighs conversion step&#34;)
 
     # init
@@ -178,11 +178,11 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
         calibrated_images = perform_dark_frame_correction(images, 5)
 
     # apply the flatfield correction
-    if (step_flatfield_correction is True and cal_flatfield is not None):
-        calibrated_images = perform_flatfield_correction(calibrated_images, cal_flatfield)
+    if (step_flatfield_calibration is True and cal_flatfield is not None):
+        calibrated_images = perform_flatfield_calibration(calibrated_images, cal_flatfield)
 
     # apply the rayleighs conversion
-    if (step_rayleighs_conversion is True and cal_rayleighs is not None):
+    if (step_rayleighs_calibration is True and cal_rayleighs is not None):
         calibrated_images = perform_rayleighs_correction(calibrated_images, cal_rayleighs, exposure_length_sec)
 
     # return
@@ -190,7 +190,7 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
 </details>
 </dd>
 <dt id="pyaurorax.tools.calibration.trex_nir"><code class="name flex">
-<span>def <span class="ident">trex_nir</span></span>(<span>images: numpy.ndarray, cal_flatfield: Optional[pyucalgarysrs.data.classes.Calibration] = None, cal_rayleighs: Optional[pyucalgarysrs.data.classes.Calibration] = None, step_dark_frame_correction: bool = True, step_flatfield_correction: bool = True, step_rayleighs_conversion: bool = True, exposure_length_sec: float = 5.0) ‑> numpy.ndarray</span>
+<span>def <span class="ident">trex_nir</span></span>(<span>images: numpy.ndarray, cal_flatfield: Optional[pyucalgarysrs.data.classes.Calibration] = None, cal_rayleighs: Optional[pyucalgarysrs.data.classes.Calibration] = None, step_dark_frame_correction: bool = True, step_flatfield_calibration: bool = True, step_rayleighs_calibration: bool = True, exposure_length_sec: float = 5.0) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Apply various calibration adjustments to a single or set of images raw images.</p>
@@ -203,13 +203,13 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
 the <code>step_flatfield_corection</code> is set to True.</dd>
 <dt><strong><code>cal_rayleighs</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Calibration" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Calibration">Calibration</a></code></dt>
 <dd>Calibration object containing the Rayleighs data to utilize. This field is required if
-the <code>step_rayleighs_conversion</code> is set to True.</dd>
+the <code>step_rayleighs_calibration</code> is set to True.</dd>
 <dt><strong><code>step_dark_frame_correction</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the dark frame correction step. Defaults to <code>True</code>.</dd>
-<dt><strong><code>step_flatfield_correction</code></strong> :&ensp;<code>bool</code></dt>
+<dt><strong><code>step_flatfield_calibration</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the flatfield correction step. Defaults to <code>True</code>. Note that the <code>cal_flatfield</code> parameter
 must be supplied if this is True.</dd>
-<dt><strong><code>step_rayleighs_conversion</code></strong> :&ensp;<code>bool</code></dt>
+<dt><strong><code>step_rayleighs_calibration</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the Rayleighs conversion step. Defaults to <code>True.</code> Note that the <code>cal_rayleighs</code> parameter
 must be supplied if this is True.</dd>
 <dt><strong><code>exposure_length_sec</code></strong> :&ensp;<code>float</code></dt>
@@ -235,8 +235,8 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
     cal_flatfield: Optional[Calibration] = None,
     cal_rayleighs: Optional[Calibration] = None,
     step_dark_frame_correction: bool = True,
-    step_flatfield_correction: bool = True,
-    step_rayleighs_conversion: bool = True,
+    step_flatfield_calibration: bool = True,
+    step_rayleighs_calibration: bool = True,
     exposure_length_sec: float = 5.0,
 ) -&gt; np.ndarray:
     &#34;&#34;&#34;
@@ -250,13 +250,13 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
             the `step_flatfield_corection` is set to True.
         cal_rayleighs (pyaurorax.data.ucalgary.Calibration): 
             Calibration object containing the Rayleighs data to utilize. This field is required if 
-            the `step_rayleighs_conversion` is set to True.
+            the `step_rayleighs_calibration` is set to True.
         step_dark_frame_correction (bool): 
             Perform the dark frame correction step. Defaults to `True`.
-        step_flatfield_correction (bool): 
+        step_flatfield_calibration (bool): 
             Perform the flatfield correction step. Defaults to `True`. Note that the `cal_flatfield` parameter
             must be supplied if this is True.
-        step_rayleighs_conversion (bool): 
+        step_rayleighs_calibration (bool): 
             Perform the Rayleighs conversion step. Defaults to `True.` Note that the `cal_rayleighs` parameter
             must be supplied if this is True.
         exposure_length_sec (float): 
@@ -274,9 +274,9 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
     # verify that we have everything we need for each requested step
-    if (step_flatfield_correction is True and cal_flatfield is None):
+    if (step_flatfield_calibration is True and cal_flatfield is None):
         raise ValueError(&#34;The cal_flatfield parameter must be supplied to perform the flatfield correction step&#34;)
-    if (step_rayleighs_conversion is True and cal_rayleighs is None):
+    if (step_rayleighs_calibration is True and cal_rayleighs is None):
         raise ValueError(&#34;The cal_rayleighs parameter must be supplied to perform the rayleighs conversion step&#34;)
 
     # init
@@ -289,11 +289,11 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
         calibrated_images = perform_dark_frame_correction(images, 5)
 
     # apply the flatfield correction
-    if (step_flatfield_correction is True and cal_flatfield is not None):
-        calibrated_images = perform_flatfield_correction(calibrated_images, cal_flatfield)
+    if (step_flatfield_calibration is True and cal_flatfield is not None):
+        calibrated_images = perform_flatfield_calibration(calibrated_images, cal_flatfield)
 
     # apply the rayleighs conversion
-    if (step_rayleighs_conversion is True and cal_rayleighs is not None):
+    if (step_rayleighs_calibration is True and cal_rayleighs is not None):
         calibrated_images = perform_rayleighs_correction(calibrated_images, cal_rayleighs, exposure_length_sec)
 
     # return

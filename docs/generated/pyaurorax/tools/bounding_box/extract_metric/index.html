@@ -207,7 +207,7 @@ Plot a preview of the bounded area.</p>
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
@@ -217,9 +217,9 @@ Plot a preview of the bounded area.</p>
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[bound_idx[0], bound_idx[1],0] = 255
-            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[bound_idx[0], bound_idx[1], 0] = 255
+            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
@@ -357,7 +357,7 @@ Plot a preview of the bounded area.</p>
     if n_channels == 1:
         bound_data = images[y_0:y_1, x_0:x_1, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[y_0:y_1, x_0:x_1] = 255
             plt.figure()
             plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
@@ -367,9 +367,9 @@ Plot a preview of the bounded area.</p>
     elif n_channels == 3:
         bound_data = images[y_0:y_1, x_0:x_1, :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[y_0:y_1, x_0:x_1,0] = 255
-            preview_img[y_0:y_1, x_0:x_1,1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[y_0:y_1, x_0:x_1, 0] = 255
+            preview_img[y_0:y_1, x_0:x_1, 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
@@ -513,7 +513,7 @@ Plot a preview of the bounded area.</p>
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
@@ -523,9 +523,9 @@ Plot a preview of the bounded area.</p>
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[bound_idx[0], bound_idx[1],0] = 255
-            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[bound_idx[0], bound_idx[1], 0] = 255
+            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
@@ -685,9 +685,8 @@ Plot a preview of the bounded area.</p>
 
     else:
         # Make sure altitude is in range that can be interpolated
-        if (altitude_km  &lt; interp_alts[0]) or (altitude_km &gt; interp_alts[2]):
-            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; +
-                             str((interp_alts[0], interp_alts[2])))
+        if (altitude_km &lt; interp_alts[0]) or (altitude_km &gt; interp_alts[2]):
+            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; + str((interp_alts[0], interp_alts[2])))
 
         # Initialze empty lat/lon arrays
         lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
@@ -714,7 +713,7 @@ Plot a preview of the bounded area.</p>
         raise ValueError(f&#34;Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.&#34;)
     if (lon_0 &lt;= min_skymap_lon) or (lon_1 &gt;= max_skymap_lon):
         raise ValueError(f&#34;Longitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.&#34;)
-    
+
     # Obtain indices into skymap within lat/lon range
     bound_idx = np.where(np.logical_and.reduce((lats &gt;= float(lat_0), lats &lt;= float(lat_1), lons &gt;= float(lon_0), lons &lt;= float(lon_1))))
 
@@ -730,7 +729,7 @@ Plot a preview of the bounded area.</p>
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
@@ -740,9 +739,9 @@ Plot a preview of the bounded area.</p>
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[bound_idx[0], bound_idx[1],0] = 255
-            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[bound_idx[0], bound_idx[1], 0] = 255
+            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
@@ -903,9 +902,8 @@ Plot a preview of the bounded area.</p>
 
     else:
         # Make sure altitude is in range that can be interpolated
-        if (altitude_km  &lt; interp_alts[0]) or (altitude_km &gt; interp_alts[2]):
-            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; +
-                             str((interp_alts[0], interp_alts[2])))
+        if (altitude_km &lt; interp_alts[0]) or (altitude_km &gt; interp_alts[2]):
+            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; + str((interp_alts[0], interp_alts[2])))
 
         # Initialze empty lat/lon arrays
         lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
@@ -937,9 +935,15 @@ Plot a preview of the bounded area.</p>
         raise ValueError(f&#34;Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.&#34;)
     if (lon_0 &lt;= min_skymap_lon) or (lon_1 &gt;= max_skymap_lon):
         raise ValueError(f&#34;Latitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.&#34;)
-    
+
     # Obtain indices into skymap within lat/lon range
-    bound_idx = np.where(np.logical_and.reduce((mag_lats &gt;= float(lat_0), mag_lats &lt;= float(lat_1), mag_lons &gt;= float(lon_0), mag_lons &lt;= float(lon_1))))
+    bound_idx = np.where(
+        np.logical_and.reduce((
+            mag_lats &gt;= float(lat_0),
+            mag_lats &lt;= float(lat_1),
+            mag_lons &gt;= float(lon_0),
+            mag_lons &lt;= float(lon_1),
+        )))
 
     # If boundaries contain no data, raise error
     if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
@@ -953,7 +957,7 @@ Plot a preview of the bounded area.</p>
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,0], top=230)
+            preview_img = scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
@@ -963,9 +967,9 @@ Plot a preview of the bounded area.</p>
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:,:,:,0], top=230)
-            preview_img[bound_idx[0], bound_idx[1],0] = 255
-            preview_img[bound_idx[0], bound_idx[1],1:] = 0
+            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img[bound_idx[0], bound_idx[1], 0] = 255
+            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
             plt.imshow(preview_img, origin=&#34;lower&#34;)
             plt.title(&#34;Bounded Area Preview&#34;)
