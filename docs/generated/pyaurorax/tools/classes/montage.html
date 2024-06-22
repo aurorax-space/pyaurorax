@@ -84,10 +84,13 @@ class Montage:
             Timestamps corresponding to each montage image.
     &#34;&#34;&#34;
 
-    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime]):
+    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime], n_channels: int):
         # public vars
         self.data = data
         self.timestamp = timestamp
+
+        # private vars
+        self.__n_channels = n_channels
 
     def __str__(self) -&gt; str:
         return self.__repr__()
@@ -178,12 +181,12 @@ class Montage:
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
-            if (len(self.data.shape) == 3):
+            if (self.__n_channels == 1):
                 # single channel
                 ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-            elif (len(self.data.shape) == 4):
+            elif (self.__n_channels == 3):
                 # single channel
-                ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
+                ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
             else:
                 raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                                  (self.data.shape))
@@ -194,7 +197,7 @@ class Montage:
             if (timestamps_display is True):
                 ax.text(
                     int(np.floor(self.data.shape[1] / 2.)),
-                    0.5,
+                    5,
                     self.timestamp[i].strftime(timestamps_format),
                     ha=&#34;center&#34;,
                     fontsize=timestamps_fontsize,
@@ -250,7 +253,7 @@ class Montage:
 <dl>
 <dt id="pyaurorax.tools.classes.montage.Montage"><code class="flex name class">
 <span>class <span class="ident">Montage</span></span>
-<span>(</span><span>data: numpy.ndarray, timestamp: List[datetime.datetime])</span>
+<span>(</span><span>data: numpy.ndarray, timestamp: List[datetime.datetime], n_channels: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class representation for a montage</p>
@@ -278,10 +281,13 @@ class Montage:
             Timestamps corresponding to each montage image.
     &#34;&#34;&#34;
 
-    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime]):
+    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime], n_channels: int):
         # public vars
         self.data = data
         self.timestamp = timestamp
+
+        # private vars
+        self.__n_channels = n_channels
 
     def __str__(self) -&gt; str:
         return self.__repr__()
@@ -372,12 +378,12 @@ class Montage:
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
-            if (len(self.data.shape) == 3):
+            if (self.__n_channels == 1):
                 # single channel
                 ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-            elif (len(self.data.shape) == 4):
+            elif (self.__n_channels == 3):
                 # single channel
-                ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
+                ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
             else:
                 raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                                  (self.data.shape))
@@ -388,7 +394,7 @@ class Montage:
             if (timestamps_display is True):
                 ax.text(
                     int(np.floor(self.data.shape[1] / 2.)),
-                    0.5,
+                    5,
                     self.timestamp[i].strftime(timestamps_format),
                     ha=&#34;center&#34;,
                     fontsize=timestamps_fontsize,
@@ -568,12 +574,12 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 
     # for each image
     for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
-        if (len(self.data.shape) == 3):
+        if (self.__n_channels == 1):
             # single channel
             ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-        elif (len(self.data.shape) == 4):
+        elif (self.__n_channels == 3):
             # single channel
-            ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
+            ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
         else:
             raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                              (self.data.shape))
@@ -584,7 +590,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
         if (timestamps_display is True):
             ax.text(
                 int(np.floor(self.data.shape[1] / 2.)),
-                0.5,
+                5,
                 self.timestamp[i].strftime(timestamps_format),
                 ha=&#34;center&#34;,
                 fontsize=timestamps_fontsize,
