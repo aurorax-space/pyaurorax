@@ -115,8 +115,10 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
 
         # Make sure lat/lon falls within skymap
         if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):
+            continue
             raise ValueError(f"Latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
         if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):
+            continue
             raise ValueError(f"Longitude {target_lon} is outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
 
         # Compute haversine distance between all points in skymap
@@ -255,7 +257,24 @@ def create_custom(
     x_max = images.shape[1] - 1
     y_max = images.shape[0] - 1
 
-    # Make sure all supplied points are within image bounds
+    # Remove any points that are not within the image CCD
+    parsed_x_locs = []
+    parsed_y_locs = []
+    for i in range(x_locs.shape[0]):
+        x = x_locs[i]
+        y = y_locs[i]
+
+        if x < 0 or x > x_max:
+            continue
+        if y < 0 or y > y_max:
+            continue
+
+        parsed_x_locs.append(x)
+        parsed_y_locs.append(y)
+    x_locs = np.array(parsed_x_locs)
+    y_locs = np.array(parsed_y_locs)
+
+    # Make sure all supplied points are within image bounds # NOTE: This should be good to remove as it shouldn't hit, testing needed
     if len(np.where(np.logical_or(x_locs < 0, x_locs > x_max))[0]) != 0:
         raise ValueError("The following CCD coordinates passed in through x_locs are outside of the CCD image range: " +
                          str(x_locs[np.where(np.logical_or(x_locs < 0, x_locs > x_max))]))
@@ -264,6 +283,7 @@ def create_custom(
                          str(y_locs[np.where(np.logical_or(y_locs < 0, y_locs > y_max))]))
 
     # Iterate points in pairs of two
+    path_counter = 0
     for i in range(x_locs.shape[0] - 1):
 
         # Points of concern for this iteration
@@ -277,7 +297,8 @@ def create_custom(
         dy = y_1 - y_0
         length = np.sqrt(dx**2 + dy**2)
         if length == 0:
-            raise ValueError(f"Successive points (x_locs[{i}], y_locs[{i}]) and (x_locs[{i+1}], y_locs[{i+1}]) may not be the same.")
+            continue
+
         dx /= length
         dy /= length
 
@@ -304,7 +325,8 @@ def create_custom(
         indices_inside = __indices_in_polygon(vertices, (images.shape[0], images.shape[1]))
 
         if np.any(np.array(indices_inside.shape) == 0):
-            raise ValueError("Could not form keogram path... Try increasing 'width' or decreasing number of points in input coordinates.")
+            continue
+            
         row_idx, col_idx = zip(*indices_inside)
 
         if n_channels == 1:
@@ -341,6 +363,11 @@ def create_custom(
             keo_arr[i, :, 1] = g_pixel_keogram
             keo_arr[i, :, 2] = b_pixel_keogram
 
+        path_counter += 1
+
+    if path_counter == 0:
+        raise ValueError("Could not form keogram path... Try increasing 'width' or decreasing number of points in input coordinates.")
+    
     # Create keogram object
     keo_obj = Keogram(data=keo_arr, timestamp=timestamp)
 
