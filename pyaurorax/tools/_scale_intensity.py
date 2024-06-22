@@ -69,7 +69,7 @@ def scale_intensity(
     min: Optional[float] = None,
     max: Optional[float] = None,
     top: Optional[float] = None,
-    memory_saver: bool = False,
+    memory_saver: bool = True,
 ) -> np.ndarray:
     """
     Scale all values of an array that lie in the range min<=x<=max in to 
@@ -93,8 +93,8 @@ def scale_intensity(
             of the data array's dtype is used.
 
         memory_saver (bool): 
-            Utilize less RAM when scaling a set of images. Note that this routine is slower if this
-            is set to `True`.
+            Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
+            the scaling routine will be faster, but will utilize significantly more RAM.
 
     Returns:
         A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
