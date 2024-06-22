@@ -326,7 +326,7 @@ def create_custom(
 
         if np.any(np.array(indices_inside.shape) == 0):
             continue
-            
+
         row_idx, col_idx = zip(*indices_inside)
 
         if n_channels == 1:
@@ -366,8 +366,10 @@ def create_custom(
         path_counter += 1
 
     if path_counter == 0:
-        raise ValueError("Could not form keogram path... Try increasing 'width' or decreasing number of points in input coordinates.")
-    
+        raise ValueError(
+            "Could not form keogram path... Try increasing 'width' or decreasing number of points in input coordinates. Also ensure that coordinates are within image range."
+        )
+
     # Create keogram object
     keo_obj = Keogram(data=keo_arr, timestamp=timestamp)
 
