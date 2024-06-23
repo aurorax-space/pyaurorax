@@ -505,7 +505,7 @@ multiprocessing.</dd>
 </details>
 </dd>
 <dt id="pyaurorax.tools.scale_intensity"><code class="name flex">
-<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray, min: Optional[float] = None, max: Optional[float] = None, top: Optional[float] = None, memory_saver: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray, min: Optional[float] = None, max: Optional[float] = None, top: Optional[float] = None, memory_saver: bool = True) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Scale all values of an array that lie in the range min&lt;=x&lt;=max in to
@@ -525,8 +525,8 @@ images, and/or the colour channel.</dd>
 <dd>Maximum value of the scaled result. If not supplied, the max value
 of the data array's dtype is used.</dd>
 <dt><strong><code>memory_saver</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Utilize less RAM when scaling a set of images. Note that this routine is slower if this
-is set to <code>True</code>.</dd>
+<dd>Utilize less RAM when scaling a set of images. Defaults to <code>True</code>. If set to <code>False</code> then
+the scaling routine will be faster, but will utilize significantly more RAM.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
@@ -545,7 +545,7 @@ with the scaling applied.</p>
     min: Optional[float] = None,
     max: Optional[float] = None,
     top: Optional[float] = None,
-    memory_saver: bool = False,
+    memory_saver: bool = True,
 ) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Scale all values of an array that lie in the range min&lt;=x&lt;=max in to 
@@ -569,8 +569,8 @@ with the scaling applied.</p>
             of the data array&#39;s dtype is used.
 
         memory_saver (bool): 
-            Utilize less RAM when scaling a set of images. Note that this routine is slower if this
-            is set to `True`.
+            Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
+            the scaling routine will be faster, but will utilize significantly more RAM.
 
     Returns:
         A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
@@ -1604,7 +1604,7 @@ object. If the specified altitude is not valid, a ValueError will be raised.</dd
 </dd>
 <dt id="pyaurorax.tools.Montage"><code class="flex name class">
 <span>class <span class="ident">Montage</span></span>
-<span>(</span><span>data: numpy.ndarray, timestamp: List[datetime.datetime])</span>
+<span>(</span><span>data: numpy.ndarray, timestamp: List[datetime.datetime], n_channels: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class representation for a montage</p>
@@ -1632,10 +1632,13 @@ class Montage:
             Timestamps corresponding to each montage image.
     &#34;&#34;&#34;
 
-    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime]):
+    def __init__(self, data: np.ndarray, timestamp: List[datetime.datetime], n_channels: int):
         # public vars
         self.data = data
         self.timestamp = timestamp
+
+        # private vars
+        self.__n_channels = n_channels
 
     def __str__(self) -&gt; str:
         return self.__repr__()
@@ -1726,12 +1729,12 @@ class Montage:
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
-            if (len(self.data.shape) == 3):
+            if (self.__n_channels == 1):
                 # single channel
                 ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-            elif (len(self.data.shape) == 4):
+            elif (self.__n_channels == 3):
                 # single channel
-                ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
+                ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
             else:
                 raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                                  (self.data.shape))
@@ -1742,7 +1745,7 @@ class Montage:
             if (timestamps_display is True):
                 ax.text(
                     int(np.floor(self.data.shape[1] / 2.)),
-                    0.5,
+                    5,
                     self.timestamp[i].strftime(timestamps_format),
                     ha=&#34;center&#34;,
                     fontsize=timestamps_fontsize,
@@ -1922,12 +1925,12 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 
     # for each image
     for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
-        if (len(self.data.shape) == 3):
+        if (self.__n_channels == 1):
             # single channel
             ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-        elif (len(self.data.shape) == 4):
+        elif (self.__n_channels == 3):
             # single channel
-            ax.imshow(self.data[:, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
+            ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
         else:
             raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                              (self.data.shape))
@@ -1938,7 +1941,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
         if (timestamps_display is True):
             ax.text(
                 int(np.floor(self.data.shape[1] / 2.)),
-                0.5,
+                5,
                 self.timestamp[i].strftime(timestamps_format),
                 ha=&#34;center&#34;,
                 fontsize=timestamps_fontsize,
