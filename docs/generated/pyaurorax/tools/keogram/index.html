@@ -438,7 +438,7 @@ Raises:</p></div>
 
     if path_counter == 0:
         raise ValueError(
-            &#34;Could not form keogram path... Try increasing &#39;width&#39; or decreasing number of points in input coordinates. Also ensure that coordinates are within image range.&#34;
+            &#34;Could not form keogram path... First ensure that coordinates are within image range. Then try increasing &#39;width&#39; or decreasing number of points in input coordinates.&#34;
         )
 
     # Create keogram object
