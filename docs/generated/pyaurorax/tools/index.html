@@ -505,7 +505,7 @@ multiprocessing.</dd>
 </details>
 </dd>
 <dt id="pyaurorax.tools.scale_intensity"><code class="name flex">
-<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray, min: Optional[float] = None, max: Optional[float] = None, top: Optional[float] = None, memory_saver: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray, min: Optional[float] = None, max: Optional[float] = None, top: Optional[float] = None, memory_saver: bool = True) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Scale all values of an array that lie in the range min&lt;=x&lt;=max in to
@@ -525,8 +525,8 @@ images, and/or the colour channel.</dd>
 <dd>Maximum value of the scaled result. If not supplied, the max value
 of the data array's dtype is used.</dd>
 <dt><strong><code>memory_saver</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Utilize less RAM when scaling a set of images. Note that this routine is slower if this
-is set to <code>True</code>.</dd>
+<dd>Utilize less RAM when scaling a set of images. Defaults to <code>True</code>. If set to <code>False</code> then
+the scaling routine will be faster, but will utilize significantly more RAM.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
@@ -545,7 +545,7 @@ with the scaling applied.</p>
     min: Optional[float] = None,
     max: Optional[float] = None,
     top: Optional[float] = None,
-    memory_saver: bool = False,
+    memory_saver: bool = True,
 ) -&gt; np.ndarray:
     &#34;&#34;&#34;
     Scale all values of an array that lie in the range min&lt;=x&lt;=max in to 
@@ -569,8 +569,8 @@ with the scaling applied.</p>
             of the data array&#39;s dtype is used.
 
         memory_saver (bool): 
-            Utilize less RAM when scaling a set of images. Note that this routine is slower if this
-            is set to `True`.
+            Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
+            the scaling routine will be faster, but will utilize significantly more RAM.
 
     Returns:
         A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
