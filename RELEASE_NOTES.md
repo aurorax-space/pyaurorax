@@ -7,7 +7,7 @@ Please note that this release contains major breaking changes.
 - Addition of submodules: 
   - `data` for data downloading and reading
   - `models` for using the TREx Auroral Transport Model (ATM)
-  - `tools` for All-sky Imager data analysis tools
+  - `tools` for All-sky Imager analysis support tools
 - Naming convention for exceptions changed. AuroraXException is now AuroraXError ('Exception' changed to 'Error'), adhering to best practices for naming Python exceptions.
 - Removed `sources.get_stats()` function. This was deprecated within the AuroraX API, and replaced by `include_stats` flags part of the other data source listing/get functions.
 functionality.

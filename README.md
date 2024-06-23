@@ -50,6 +50,7 @@ $ aurorax-cli --help
 
 ## Migrating from V0 to V1
 
-A significant upgrade was released for PyAuroraX for version 1.0.0. A major code reorganization and addition of many new features is part of version 1.x, and therefore includes breaking changes.
+A significant upgrade was released for PyAuroraX for version 1.0.0. A major code reorganization and addition of many new features is part of version 1.x, and therefore includes breaking changes. The existing codebase from v0.13.3 and earlier has remained mostly unchanged, but, has been reorganized and some classes
+were renamed. Simply changing the names of imports, function calls, and/or class instantiations should suffice in most cases. 
 
-The existing codebase from v0.13.3 and earlier has remained mostly unchanged, but has been reorganized and includes changes to inputs and outputs for the conjunction/ephemeris/data-products search methods. Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was changed, the [documentation](https://docs.aurorax.space/code/overview), and the [API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax) to help adjust your code.
+Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was changed, the [documentation](https://docs.aurorax.space/code/overview), and the [API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax) to help adjust your code.
