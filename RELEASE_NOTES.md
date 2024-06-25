@@ -1,3 +1,9 @@
+Version 1.0.2
+--------------------
+
+- bugfix for search engine `get_data` calls where an extra slash in the URL was causing errors
+
+
 Version 1.0.1
 --------------------
 
