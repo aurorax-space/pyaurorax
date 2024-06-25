@@ -366,9 +366,8 @@ def create_custom(
         path_counter += 1
 
     if path_counter == 0:
-        raise ValueError(
-            "Could not form keogram path... First ensure that coordinates are within image range. Then try increasing 'width' or decreasing number of points in input coordinates."
-        )
+        raise ValueError("Could not form keogram path. First ensure that coordinates are within image range. Then " +
+                         "try increasing 'width' or decreasing number of points in input coordinates.")
 
     # Create keogram object
     keo_obj = Keogram(data=keo_arr, timestamp=timestamp)

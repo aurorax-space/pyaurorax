@@ -57,7 +57,7 @@ numpy = "^1.26.4"
 matplotlib = "^3.9.0"
 pyproj = "^3.6.1"
 cartopy = "^0.23.0"
-pyucalgarysrs = ">=1.0.7"
+pyucalgarysrs = ">=1.0.8"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"
