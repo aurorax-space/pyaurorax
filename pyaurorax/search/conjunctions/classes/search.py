@@ -315,7 +315,7 @@ class ConjunctionSearch:
         # update request status by checking if data URI is set
         if (status["search_result"]["data_uri"] is not None):
             self.completed = True
-            self.data_url = "%s/%s" % (self.aurorax_obj.api_base_url, status["search_result"]["data_uri"])
+            self.data_url = "%s/data" % (self.request_url)
 
         # set class variable "status" and "logs"
         self.status = status
