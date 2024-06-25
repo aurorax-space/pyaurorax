@@ -1,3 +1,11 @@
+Version 1.0.1
+--------------------
+
+- bugfix for TREx RGB mosaic scaling
+- added ATM inverse `atmospheric_attenuation_correction` flag
+- forced PyUCalgarySRS version 1.0.8 or higher to support the above two fixes
+
+
 Version 1.0.0
 --------------------
 
