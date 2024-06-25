@@ -195,7 +195,13 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                 continue
 
             # Scale this site's data based on previously defined scaling bounds
-            tmp = scale_intensity(tmp, min=image_intensity_scales[site][0], max=image_intensity_scales[site][1], top=255)  # type: ignore
+            tmp = scale_intensity(
+                tmp,
+                min=image_intensity_scales[site][0],  # type: ignore
+                max=image_intensity_scales[site][1],  # type: ignore
+                top=255,
+                memory_saver=False,
+            )
 
             # Add the timestamp to tracking list if it's unique
             if meta_timestamp not in unique_timestamps:
