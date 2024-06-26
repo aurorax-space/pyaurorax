@@ -517,13 +517,13 @@ files = [
 
 [[package]]
 name = "importlib-metadata"
-version = "7.2.1"
+version = "8.0.0"
 description = "Read metadata from Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "importlib_metadata-7.2.1-py3-none-any.whl", hash = "sha256:ffef94b0b66046dd8ea2d619b701fe978d9264d38f3998bc4c27ec3b146a87c8"},
-    {file = "importlib_metadata-7.2.1.tar.gz", hash = "sha256:509ecb2ab77071db5137c655e24ceb3eee66e7bbc6574165d0d114d9fc4bbe68"},
+    {file = "importlib_metadata-8.0.0-py3-none-any.whl", hash = "sha256:15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f"},
+    {file = "importlib_metadata-8.0.0.tar.gz", hash = "sha256:188bd24e4c346d3f0a933f275c2fec67050326a856b9a359881d7c2a697e8812"},
 ]
 
 [package.dependencies]
@@ -1332,13 +1332,13 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pyucalgarysrs"
-version = "1.0.8"
+version = "1.1.0"
 description = "Tools for interacting with UCalgary Space Remote Sensing data"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pyucalgarysrs-1.0.8-py3-none-any.whl", hash = "sha256:9a4df1c840f357593fe9c389d6cfbc8d623c3b27854031c2663f8beaee1a7bbd"},
-    {file = "pyucalgarysrs-1.0.8.tar.gz", hash = "sha256:9b40b9bd5b3d3e0b9241fae2b7091a1a0dccb92736c554c46edd529c05991998"},
+    {file = "pyucalgarysrs-1.1.0-py3-none-any.whl", hash = "sha256:9bf3c6ab55b1840794c419199571a9b66dff83ef28a8be6c34906b9057803b46"},
+    {file = "pyucalgarysrs-1.1.0.tar.gz", hash = "sha256:419805cf6fa4decaf0f8fbbe76f1b3d1a285d11ea8949529345acf30ce9f00c5"},
 ]
 
 [package.dependencies]
@@ -1722,4 +1722,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "6e1b4f0d6c53bbe9a9205742fb3a8aff48fe13bafadc0c7e9a6827d6c6d1a44a"
+content-hash = "16a44cb395b5c9d075a167e577a155c50e3657ab326127512360beabd223b260"
