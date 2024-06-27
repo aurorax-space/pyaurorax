@@ -1,3 +1,9 @@
+Version 1.1.1
+--------------------
+
+- increase PyUCalgarySRS dependency version to support new grid file datasets
+
+
 Version 1.0.2
 --------------------
 
