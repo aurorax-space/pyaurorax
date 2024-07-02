@@ -58,7 +58,8 @@ def __scale_data(data, min, max, top):
     # do scaling
     scale = float(top - bottom) / cscale
     byte_data = (data - cmin) * scale + bottom
-    scaled_data = (byte_data.clip(bottom, top) + 0.5).astype(data.dtype)
+    scaled_data = (byte_data.clip(bottom, top)).astype(data.dtype)
+    # scaled_data = (byte_data.clip(bottom, top) + 0.5).astype(data.dtype)  NOTE: Ask Darren about this line (this line is original)!
 
     # return
     return scaled_data

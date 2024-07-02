@@ -48,6 +48,7 @@ from . import calibration
 from . import bounding_box
 from . import mosaic
 from . import ccd_contour
+from . import grid_files
 
 __all__ = [
     # sub-modules
@@ -57,6 +58,7 @@ __all__ = [
     "bounding_box",
     "mosaic",
     "ccd_contour",
+    "grid_files",
 
     # top level functions
     "display",
