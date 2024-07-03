@@ -14,6 +14,7 @@
 
 import numpy as np
 import pyproj
+import datetime
 import cartopy.crs
 import cartopy.feature
 import matplotlib.pyplot as plt
@@ -29,7 +30,7 @@ __DEFAULT_SCALE_MAX = 20000
 
 def create(prepped_data: Union[MosaicData, List[MosaicData]],
            prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
-           frame_idx: int,
+           timestamp: datetime.datetime,
            cartopy_projection: cartopy.crs.Projection,
            min_elevation: Union[int, List[int]] = 5,
            colormap: Optional[Union[str, List[str]]] = None,
@@ -44,8 +45,9 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
         prepped_skymap (pyaurorax.tools.MosaicSkymap): 
             The prepared skymap data. Generated from a prior `prep_skymaps()` function call.
 
-        frame_idx (int): 
-            The frame number to generate a mosaic for.
+        timestamp (datetime.datetime): 
+            The timestamp to generate a mosaic for. Must be within the range of timestamps
+            for which image data was prepped and provided.
 
         cartopy_projection (cartopy.crs.Projection): 
             The cartopy projection to use when creating the mosaic.
@@ -159,6 +161,17 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
         sites_with_data = []
         sites_with_data_idx = []
 
+        # Determine the frame index of data the corresponds to the requested timestamp
+        minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
+        maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
+        if timestamp < minimum_timestamp or timestamp > maximum_timestamp:
+            raise ValueError("Could not create mosaic for timestamp " + timestamp.strftime("%Y/%m/%d %H:%M:%S") +
+                                " as image data was only supplied " + "for the timestamp range: " + minimum_timestamp.strftime("%Y/%m/%d %H:%M:%S") +
+                                " to " + maximum_timestamp.strftime("%Y/%m/%d %H:%M:%S"))
+
+        # Get the frame index of the timestamp closest to desired mosaic frame
+        frame_idx = np.argmin(np.abs(np.array(data.timestamps) - timestamp))
+        
         # We also define a list that will hold all unique timestamps pulled from each
         # frame's metadata. This should be of length 1, and we can check that to make
         # sure all images being plotted correspond to the same time.
