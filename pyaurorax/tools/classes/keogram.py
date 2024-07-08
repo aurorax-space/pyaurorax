@@ -73,21 +73,17 @@ class Keogram:
 
         return "Keogram(data=%s, timestamp=%s, ccd_y=%s, mag_y=%s, geo_y=%s)" % (data_str, timestamp_str, ccd_y_str, mag_y_str, geo_y_str)
 
-    def set_geographic_latitudes(self, skymap: Skymap, altitude: Optional[Union[int, float]] = None) -> None:
+    def set_geographic_latitudes(self, skymap: Skymap, altitude_km: Optional[Union[int, float]] = None) -> None:
         """
         Set the geographic latitude values for this keogram, using the specified skymap 
         data. The data will be set to the geo_y attribute of this Keogram object, which
         can then be used for plotting and/or further analysis.
 
-        Note: currently only specific altitudes are supported at this time, matching the 
-        ones in the passed-in skymap object. A future release will implement an interpolation 
-        routine to allow for a wider range of altitudes.
-
         Args:
             skymap (pyaurorax.data.ucalgary.Skymap): 
                 The skymap object to use. This parameter is required.
 
-            altitude (int): 
+            altitude_km (int): 
                 The altitude to use, in kilometers. If not specified, it will use the default in the 
                 skymap object. If the specified altitude is not valid, a ValueError will be raised.
         
@@ -104,16 +100,16 @@ class Keogram:
                              "this action not supported at this time.")
 
         # determine altitude index to use
-        if (altitude is not None):
+        if (altitude_km is not None):
             # Obtain lat/lon arrays from skymap
-            if (altitude * 1000.0 in skymap.full_map_altitude):
-                altitude_idx = np.where(altitude * 1000.0 == skymap.full_map_altitude)
+            if (altitude_km * 1000.0 in skymap.full_map_altitude):
+                altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
                 self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
             else:
                 # Make sure altitude is in range that can be interpolated
-                if (altitude * 1000.0 < skymap.full_map_altitude[0]) or (altitude * 1000.0 > skymap.full_map_altitude[2]):
-                    raise ValueError("Altitude " + str(altitude) + " outside valid range of " +
+                if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
+                    raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
                                      str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
 
                 # Initialze empty lat/lon arrays
@@ -122,23 +118,19 @@ class Keogram:
                 # Interpolate lats and lons at desired altitude
                 for i in range(skymap.full_map_latitude.shape[1]):
                     for j in range(skymap.full_map_latitude.shape[2]):
-                        lats[i, j] = np.interp(altitude * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
+                        lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
 
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
             self.geo_y = np.squeeze(skymap.full_map_latitude[1,:, self.__slice_idx]).copy()
 
-    def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude: Optional[Union[int, float]] = None) -> None:
+    def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -> None:
         """
         Set the magnetic latitude values for this keogram, using the specified skymap 
         data. AACGMv2 will be utilized to perform the calculations. The resulting data
         will be set to the mag_y attribute of this Keogram object, which can then be
         used for plotting and/or further analysis.
-
-        Note: currently only specific altitudes are supported at this time, matching the 
-        ones in the passed-in skymap object. A future release will implement an interpolation 
-        routine to allow for a wider range of altitudes.
 
         Args:
             skymap (pyaurorax.data.ucalgary.Skymap): 
@@ -148,7 +140,7 @@ class Keogram:
                 The timestamp to use when converting skymap data to magnetic coordinates. Utilizes
                 AACGMv2 to do the conversion.
 
-            altitude (int): 
+            altitude_km (int): 
                 The altitude to use. If not specified, it will use the default in the skymap
                 object. If the specified altitude is not valid, a ValueError will be raised.
         
@@ -165,10 +157,10 @@ class Keogram:
                              "this action not supported at this time.")
 
         # determine altitude index to use
-        if (altitude is not None):
+        if (altitude_km is not None):
             # Obtain lat/lon arrays from skymap
-            if (altitude * 1000.0 in skymap.full_map_altitude):
-                altitude_idx = np.where(altitude * 1000.0 == skymap.full_map_altitude)
+            if (altitude_km * 1000.0 in skymap.full_map_altitude):
+                altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
                 lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
                 lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
@@ -176,8 +168,8 @@ class Keogram:
 
             else:
                 # Make sure altitude is in range that can be interpolated
-                if (altitude * 1000.0 < skymap.full_map_altitude[0]) or (altitude * 1000.0 > skymap.full_map_altitude[2]):
-                    raise ValueError("Altitude " + str(altitude) + " outside valid range of " +
+                if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
+                    raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
                                      str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
 
                 # Initialze empty lat/lon arrays
@@ -187,8 +179,8 @@ class Keogram:
                 # Interpolate lats and lons at desired altitude
                 for i in range(skymap.full_map_latitude.shape[1]):
                     for j in range(skymap.full_map_latitude.shape[2]):
-                        lats[i, j] = np.interp(altitude * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
-                        lons[i, j] = np.interp(altitude * 1000.0, skymap.full_map_altitude, skymap.full_map_longitude[:, i, j])
+                        lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
+                        lons[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_longitude[:, i, j])
 
                 lons[np.where(lons > 180)] -= 360.0
 
