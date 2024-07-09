@@ -133,7 +133,8 @@ class ATMManager:
                 The duration of the precipitation, in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             timescale_transport (int): 
-                Transport timescale in seconds. Default is 600 (10 minutes). This parameter is optional.
+                Defined by L/v0, in which L is the dimension of the auroral structure, and v0 is the cross-structure drift 
+                speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             atm_model_version (str): 
                 ATM model version number. Possible values are only '1.0' at this time, but will have
