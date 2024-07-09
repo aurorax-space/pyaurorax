@@ -1,3 +1,9 @@
+Version 1.3.0
+--------------------
+
+- adjustment to ATM `forward()` function `timescale_transport` default value. Changed from 5 minutes to 10 minutes.
+
+
 Version 1.2.0
 --------------------
 
