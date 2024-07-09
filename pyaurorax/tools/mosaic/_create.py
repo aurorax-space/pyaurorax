@@ -165,13 +165,13 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
         minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
         maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
         if timestamp < minimum_timestamp or timestamp > maximum_timestamp:
-            raise ValueError("Could not create mosaic for timestamp " + timestamp.strftime("%Y/%m/%d %H:%M:%S") +
-                                " as image data was only supplied " + "for the timestamp range: " + minimum_timestamp.strftime("%Y/%m/%d %H:%M:%S") +
-                                " to " + maximum_timestamp.strftime("%Y/%m/%d %H:%M:%S"))
+            raise ValueError("Could not create mosaic for timestamp" + timestamp.strftime("%Y/%m/%d %H:%M:%S") +
+                             " as image data was only supplied for the timestamp range: " + minimum_timestamp.strftime("%Y/%m/%d %H:%M:%S") + " to " +
+                             maximum_timestamp.strftime("%Y/%m/%d %H:%M:%S"))
 
         # Get the frame index of the timestamp closest to desired mosaic frame
         frame_idx = np.argmin(np.abs(np.array(data.timestamps) - timestamp))
-        
+
         # We also define a list that will hold all unique timestamps pulled from each
         # frame's metadata. This should be of length 1, and we can check that to make
         # sure all images being plotted correspond to the same time.

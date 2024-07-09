@@ -1,3 +1,10 @@
+Version 1.2.0
+--------------------
+
+- addition of `prep_grid_image()` function for turning grid data to RGBA for plotting
+- added examples for plotting various gridded data
+
+
 Version 1.1.0
 --------------------
 
