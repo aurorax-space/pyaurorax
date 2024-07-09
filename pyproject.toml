@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "pyaurorax"
-version = "1.3.0"
+version = "1.3.1"
 description = "Python library for interacting with the AuroraX platform"
 readme = "README.md"
 homepage = "https://github.com/aurorax-space/pyaurorax"
@@ -57,7 +57,7 @@ numpy = "^1.26.4"
 matplotlib = "^3.9.0"
 pyproj = "^3.6.1"
 cartopy = "^0.23.0"
-pyucalgarysrs = ">=1.1.1"
+pyucalgarysrs = ">=1.2.0"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"

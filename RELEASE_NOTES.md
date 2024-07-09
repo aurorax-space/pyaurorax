@@ -1,3 +1,8 @@
+Version 1.3.1
+--------------------
+
+- increase PyUCalgarySRS dependency version
+
 Version 1.3.0
 --------------------
 
