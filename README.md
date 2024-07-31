@@ -10,9 +10,8 @@ PyAuroraX is a Python library providing data access and analysis support for All
 PyAuroraX officially supports Python 3.9+.
 
 Some links to help:
-- [PyAuroraX documentation](https://docs.aurorax.space/code/overview)
+- [Example Gallery](https://data.phys.ucalgary.ca/working_with_data/index.html#python)
 - [PyAuroraX API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax)
-- [Jupyter notebook examples](https://github.com/aurorax-space/pyaurorax/tree/main/examples/notebooks)
 - [AuroraX main website](https://aurorax.space)
 
 ## Installation
