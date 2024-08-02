@@ -56,6 +56,6 @@ Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was cha
 
 ## Contributing
 
-Bug reports, feature suggestions, and other contributions are greatly appreciated! The PyAuroraX team and welcomes both feedback and contributions.
+Bug reports, feature suggestions, and other contributions are greatly appreciated!
 
 Templates for bug report and feature suggestions can be found when creating a Github Issue. If you have questions or issues installing PyAuroraX, we encourage that you open up a topic in the Github Discussions page.
