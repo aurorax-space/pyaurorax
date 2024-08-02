@@ -53,3 +53,9 @@ A significant upgrade was released for PyAuroraX for version 1.0.0. A major code
 were renamed. Simply changing the names of imports, function calls, and/or class instantiations should suffice in most cases. 
 
 Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was changed, the [documentation](https://docs.aurorax.space/code/overview), and the [API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax) to help adjust your code.
+
+## Contributing
+
+Bug reports, feature suggestions, and other contributions are greatly appreciated! The PyAuroraX team and welcomes both feedback and contributions.
+
+Templates for bug report and feature suggestions can be found when creating a Github Issue. If you have questions or issues installing PyAuroraX, we encourage that you open up a topic in the Github Discussions page.
