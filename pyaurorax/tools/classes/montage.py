@@ -133,7 +133,7 @@ class Montage:
         fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
 
         # for each image
-        for ax, i in zip(axs.flat, range(0, len(self.timestamp))):
+        for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
             if (self.__n_channels == 1):
                 # single channel
                 ax.imshow(self.data[:, :, i], cmap=cmap, origin="lower", interpolation="nearest")

@@ -2,17 +2,16 @@
 
 [![GitHub tests](https://github.com/aurorax-space/pyaurorax/actions/workflows/test_standard.yml/badge.svg)](https://github.com/aurorax-space/pyaurorax/actions/workflows/test_standard.yml)
 [![PyPI version](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
-[![PyPI Python versions](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue)](https://pypi.python.org/pypi/pyaurorax/)
+![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12532077.svg)](https://doi.org/10.5281/zenodo.12532077)
 
-PyAuroraX is a Python library for interacting with [AuroraX](https://aurorax.space), a project working to be the world's first and foremost data platform for auroral science. The primary objective of AuroraX is to enable mining and exploration of existing and future auroral data, enabling key science and enhancing the benefits of the world's investment in auroral instrumentation. This will be accomplished with the development of key systems/standards for uniform metadata generation and search, image content analysis, interfaces to leading international tools, and a community involvement that includes more than 80% of the world's data providers.
+PyAuroraX is a Python library providing data access and analysis support for All-Sky Imager data (THEMIS, TREx, REGO, etc.), the ability to utilize the TREx Auroral Transport Model, and interact with the AuroraX Search Engine. [AuroraX](https://aurorax.space) is a project working to be the world's first and foremost data platform for auroral science. The primary objective is to enable mining and exploration of existing and future auroral data, enabling key science and enhancing the benefits of the world's investment in auroral instrumentation. We have developed key systems/standards for uniform metadata generation and search, image content analysis, interfaces to leading international tools, and a community involvement that includes more than 80% of the world's data providers.
 
 PyAuroraX officially supports Python 3.9+.
 
 Some links to help:
-- [PyAuroraX documentation](https://docs.aurorax.space/code/overview)
+- [Example Gallery](https://data.phys.ucalgary.ca/working_with_data/index.html#python)
 - [PyAuroraX API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax)
-- [Jupyter notebook examples](https://github.com/aurorax-space/pyaurorax/tree/main/examples/notebooks)
 - [AuroraX main website](https://aurorax.space)
 
 ## Installation
@@ -54,3 +53,9 @@ A significant upgrade was released for PyAuroraX for version 1.0.0. A major code
 were renamed. Simply changing the names of imports, function calls, and/or class instantiations should suffice in most cases. 
 
 Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was changed, the [documentation](https://docs.aurorax.space/code/overview), and the [API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax) to help adjust your code.
+
+## Contributing
+
+Bug reports, feature suggestions, and other contributions are greatly appreciated!
+
+Templates for bug report and feature suggestions can be found when creating a Github Issue. If you have questions or issues installing PyAuroraX, we encourage that you open up a topic in the Github Discussions page.

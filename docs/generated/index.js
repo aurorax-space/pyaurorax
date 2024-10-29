@@ -41,12 +41,13 @@ URLS=[
 "pyaurorax/tools/calibration/index.html",
 "pyaurorax/tools/ccd_contour/index.html",
 "pyaurorax/tools/classes/index.html",
-"pyaurorax/tools/classes/keogram.html",
 "pyaurorax/tools/classes/montage.html",
 "pyaurorax/tools/classes/mosaic.html",
+"pyaurorax/tools/classes/keogram.html",
 "pyaurorax/tools/keogram/index.html",
 "pyaurorax/tools/montage/index.html",
-"pyaurorax/tools/mosaic/index.html"
+"pyaurorax/tools/mosaic/index.html",
+"pyaurorax/tools/grid_files/index.html"
 ];
 INDEX=[
 {
@@ -687,13 +688,13 @@ INDEX=[
 {
 "ref":"pyaurorax.models.atm.ATMManager.forward",
 "url":6,
-"doc":"Perform a forward calculation using the TREx Auroral Transport Model and the supplied input parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform the calculation. Args: timestamp (datetime.datetime): Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the end of the previous day. Any timezone data will be ignored. This parameter is required. geodetic_latitude (float): Latitude in geodetic coordinates: -90.0 to 90.0. This parameter is required. geodetic_longitude (float): Longitude in geodetic coordinates: -180.0 to 180.0. This parameter is required. output (ATMForwardOutputFlags): Flags to indicate which values are included in the output. See [ ATMForwardOutputFlags ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_forward.html pyucalgarysrs.models.atm.classes_forward.ATMForwardOutputFlags) for more details. This parameter is required. maxwellian_energy_flux (float): Maxwellian energy flux in erg/cm2/s. Default is 10. This parameter is optional. gaussian_energy_flux (float): Gaussian energy flux in erg/cm2/s. Default is 0.0. Note that  gaussian_peak_energy and  gaussian_spectral_width must be specified if the  gaussian_energy_flux is not 0. This parameter is optional. maxwellian_characteristic_energy (float): Maxwellian characteristic energy in eV. Default is 5000. Note that  maxwellian_characteristic_energy must be specified if the  maxwellian_energy_flux is not 0. This parameter is optional. gaussian_peak_energy (float): Gaussian peak energy in eV. Default is 1000. Note this parameter must be specified if the  gaussian_energy_flux is not 0. This parameter is optional. gaussian_spectral_width (float): Gaussian spectral width in eV. Default is 100. Note this parameter must be specified if the  gaussian_energy_flux is not 0. This parameter is optional. nrlmsis_model_version (str): NRLMSIS version number. Possible values are  00 or  2.0 . Default is  2.0 . This parameter is optional. More details about this empirical model can be found [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~00/), and [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/). oxygen_correction_factor (float): Oxygen correction factor used to multiply by in the empirical model. Default is 1. This parameter is optional. timescale_auroral (int): Auroral timescale in seconds. Default is 600 (10 minutes). This parameter is optional. timescale_transport (int): Transport timescale in seconds. Default is 300 (5 minutes). This parameter is optional. atm_model_version (str): ATM model version number. Possible values are only '1.0' at this time, but will have additional possible values in the future. This parameter is optional. custom_spectrum (ndarray): A 2-dimensional numpy array (dtype is any float type) containing values representing the energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError will be raised if so). This parameter is optional. no_cache (bool): The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM calculations. If this variation of input parameters has been run before (and the cache is still valid), then it will not re-run the calculation. Instead it will return the cached results immediately. To disable the caching layer, set this parameter to  True . Default is  False . This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: An [ ATMForwardResult ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_forward.html pyucalgarysrs.models.atm.classes_forward.ATMForwardResult) object containing the requested output data, among other values. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"doc":"Perform a forward calculation using the TREx Auroral Transport Model and the supplied input parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform the calculation. The ATM model is 1D and time-independent. However, the optional parameters  timescale_auroral and  timescale_transport provide limited support for time-dependent and transport process. The  timescale_auroral parameter (T0) is the duration of the precipitation. The  timescale_transport parameter is defined by L/v0, in which L is the dimension of the auroral structure, and v0 is the cross-structure drift speed. The model quasi-analytically solves the continuity equation under a square input (with time duration T0 and spatial width L) input of precipitation. The initial/boundary conditions are given by IRI. The output yields the mean density/VER over [0-L] at time T0. Args: timestamp (datetime.datetime): Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the end of the previous day. Any timezone data will be ignored. This parameter is required. geodetic_latitude (float): Latitude in geodetic coordinates: -90.0 to 90.0. This parameter is required. geodetic_longitude (float): Longitude in geodetic coordinates: -180.0 to 180.0. This parameter is required. output (ATMForwardOutputFlags): Flags to indicate which values are included in the output. See [ ATMForwardOutputFlags ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_forward.html pyucalgarysrs.models.atm.classes_forward.ATMForwardOutputFlags) for more details. This parameter is required. maxwellian_energy_flux (float): Maxwellian energy flux in erg/cm2/s. Default is 10. This parameter is optional. gaussian_energy_flux (float): Gaussian energy flux in erg/cm2/s. Default is 0.0. Note that  gaussian_peak_energy and  gaussian_spectral_width must be specified if the  gaussian_energy_flux is not 0. This parameter is optional. maxwellian_characteristic_energy (float): Maxwellian characteristic energy in eV. Default is 5000. Note that  maxwellian_characteristic_energy must be specified if the  maxwellian_energy_flux is not 0. This parameter is optional. gaussian_peak_energy (float): Gaussian peak energy in eV. Default is 1000. Note this parameter must be specified if the  gaussian_energy_flux is not 0. This parameter is optional. gaussian_spectral_width (float): Gaussian spectral width in eV. Default is 100. Note this parameter must be specified if the  gaussian_energy_flux is not 0. This parameter is optional. nrlmsis_model_version (str): NRLMSIS version number. Possible values are  00 or  2.0 . Default is  2.0 . This parameter is optional. More details about this empirical model can be found [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~00/), and [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/). oxygen_correction_factor (float): Oxygen correction factor used to multiply by in the empirical model. Default is 1. This parameter is optional. timescale_auroral (int): The duration of the precipitation, in seconds. Default is 600 (10 minutes). This parameter is optional. timescale_transport (int): Transport timescale in seconds. Default is 600 (10 minutes). This parameter is optional. atm_model_version (str): ATM model version number. Possible values are only '1.0' at this time, but will have additional possible values in the future. This parameter is optional. custom_spectrum (ndarray): A 2-dimensional numpy array (dtype is any float type) containing values representing the energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError will be raised if so). This parameter is optional. no_cache (bool): The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM calculations. If this variation of input parameters has been run before (and the cache is still valid), then it will not re-run the calculation. Instead it will return the cached results immediately. To disable the caching layer, set this parameter to  True . Default is  False . This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: An [ ATMForwardResult ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_forward.html pyucalgarysrs.models.atm.classes_forward.ATMForwardResult) object containing the requested output data, among other values. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.models.atm.ATMManager.inverse",
 "url":6,
-"doc":"Perform an inverse calculation using the TREx Auroral Transport Model and the supplied input parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform the calculation. Args: timestamp (datetime.datetime): Timestamp for the calculation. This value is expected to be in UTC, and is valid a pre-defined timeframe. An error will be raised if outside of the valid timeframe. Any timezone data will be ignored. This parameter is required. geodetic_latitude (float): Latitude in geodetic coordinates. Currently limited to the Transition Region Explorer (TREx) region of >=50.0 and  =-110 and <-70 degrees. An error will be raised if outside of this range. This parameter is required. intensity_4278 (float): Intensity of the 427.8nm (blue) wavelength in Rayleighs. This parameter is required. intensity_5577 (float): Intensity of the 557.7nm (green) wavelength in Rayleighs. This parameter is required. intensity_6300 (float): Intensity of the 630.0nm (red) wavelength in Rayleighs. This parameter is required. intensity_8446 (float): Intensity of the 844.6nm (near infrared) wavelength in Rayleighs. This parameter is required. output (ATMInverseOutputFlags): Flags to indicate which values are included in the output. See [ ATMInverseOutputFlags ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_inverse.html pyucalgarysrs.models.atm.classes_inverse.ATMInverseOutputFlags) for more details. This parameter is required. precipitation_flux_spectral_type (str): The precipitation flux spectral type to use. Possible values are  gaussian or  maxwellian . The default is  gaussian . This parameter is optional. nrlmsis_model_version (str): NRLMSIS version number. Possible values are  00 or  2.0 . Default is  2.0 . This parameter is optional. More details about this empirical model can be found [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~00/), and [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/). atm_model_version (str): ATM model version number. Possible values are only '1.0' at this time, but will have additional possible values in the future. This parameter is optional. no_cache (bool): The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM calculations. If this variation of input parameters has been run before (and the cache is still valid), then it will not re-run the calculation. Instead it will return the cached results immediately. To disable the caching layer, set this parameter to  True . Default is  False . This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: An [ ATMInverseResult ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_inverse.html pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult) object containing the requested output data, among other values. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"doc":"Perform an inverse calculation using the TREx Auroral Transport Model and the supplied input parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform the calculation. Args: timestamp (datetime.datetime): Timestamp for the calculation. This value is expected to be in UTC, and is valid a pre-defined timeframe. An error will be raised if outside of the valid timeframe. Any timezone data will be ignored. This parameter is required. geodetic_latitude (float): Latitude in geodetic coordinates. Currently limited to the Transition Region Explorer (TREx) region of >=50.0 and  =-110 and <-70 degrees. An error will be raised if outside of this range. This parameter is required. intensity_4278 (float): Intensity of the 427.8nm (blue) wavelength in Rayleighs. This parameter is required. intensity_5577 (float): Intensity of the 557.7nm (green) wavelength in Rayleighs. This parameter is required. intensity_6300 (float): Intensity of the 630.0nm (red) wavelength in Rayleighs. This parameter is required. intensity_8446 (float): Intensity of the 844.6nm (near infrared) wavelength in Rayleighs. This parameter is required. output (ATMInverseOutputFlags): Flags to indicate which values are included in the output. See [ ATMInverseOutputFlags ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_inverse.html pyucalgarysrs.models.atm.classes_inverse.ATMInverseOutputFlags) for more details. This parameter is required. precipitation_flux_spectral_type (str): The precipitation flux spectral type to use. Possible values are  gaussian or  maxwellian . The default is  gaussian . This parameter is optional. nrlmsis_model_version (str): NRLMSIS version number. Possible values are  00 or  2.0 . Default is  2.0 . This parameter is optional. More details about this empirical model can be found [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~00/), and [here](https: ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/). atmospheric_attenuation_correction (bool): Apply an atmospheric attenuation correction factor. Default is  False . atm_model_version (str): ATM model version number. Possible values are only '1.0' at this time, but will have additional possible values in the future. This parameter is optional. no_cache (bool): The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM calculations. If this variation of input parameters has been run before (and the cache is still valid), then it will not re-run the calculation. Instead it will return the cached results immediately. To disable the caching layer, set this parameter to  True . Default is  False . This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: An [ ATMInverseResult ](https: docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_inverse.html pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult) object containing the requested output data, among other values. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
@@ -2085,13 +2086,13 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.Keogram.set_geographic_latitudes",
 "url":36,
-"doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Note: currently only specific altitudes are supported at this time, matching the ones in the passed-in skymap object. A future release will implement an interpolation routine to allow for a wider range of altitudes. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
+"doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude_km (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Keogram.set_magnetic_latitudes",
 "url":36,
-"doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Note: currently only specific altitudes are supported at this time, matching the ones in the passed-in skymap object. A future release will implement an interpolation routine to allow for a wider range of altitudes. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
+"doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude_km (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
@@ -2291,140 +2292,140 @@ INDEX=[
 "doc":"Class definitions for data analysis objects."
 },
 {
-"ref":"pyaurorax.tools.classes.keogram",
-"url":42,
-"doc":"Class representation for a keogram."
-},
-{
-"ref":"pyaurorax.tools.classes.keogram.Keogram",
-"url":42,
-"doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
-},
-{
-"ref":"pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes",
-"url":42,
-"doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Note: currently only specific altitudes are supported at this time, matching the ones in the passed-in skymap object. A future release will implement an interpolation routine to allow for a wider range of altitudes. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
-"func":1
-},
-{
-"ref":"pyaurorax.tools.classes.keogram.Keogram.set_magnetic_latitudes",
-"url":42,
-"doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Note: currently only specific altitudes are supported at this time, matching the ones in the passed-in skymap object. A future release will implement an interpolation routine to allow for a wider range of altitudes. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
-"func":1
-},
-{
-"ref":"pyaurorax.tools.classes.keogram.Keogram.plot",
-"url":42,
-"doc":"Generate a plot of the keogram data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: y_type (str): Type of y-axis to use when plotting. Options are  ccd ,  mag , or  geo . The default is  ccd . This parameter is required. title (str): The title to display above the plotted keogram. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). aspect (str or float): The matplotlib imshow aspect ration to use. A common value for this is  auto . All valid values can be found on the [matplotlib documentation](https: matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). axes_visible (bool): Display the axes. Default is  True . xlabel (str): The x-axis label to use. Default is  Time (UTC) . ylabel (str): The y-axis label to use. Default is based on y_type. xtick_increment (int): The x-axis tick increment to use. Default is 100. ytick_increment (int): The y-axis tick increment to use. Default is 50. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed keogram, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: Issues with the y-axis choice.",
-"func":1
-},
-{
 "ref":"pyaurorax.tools.classes.montage",
-"url":43,
+"url":42,
 "doc":"Class representation for a montage."
 },
 {
 "ref":"pyaurorax.tools.classes.montage.Montage",
-"url":43,
+"url":42,
 "doc":"Class representation for a montage Attributes: data (numpy.ndarray): The derived montage data. timestamp (List[datetime.datetime]): Timestamps corresponding to each montage image."
 },
 {
 "ref":"pyaurorax.tools.classes.montage.Montage.plot",
-"url":43,
+"url":42,
 "doc":"Generate a plot of the montage data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: Issues with the y-axis choice.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic",
-"url":44,
+"url":43,
 "doc":"Class representation for a mosaic."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap",
-"url":44,
+"url":43,
 "doc":"Prepared skymap data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. elevation (List[numpy.ndarray]): List of elevation data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lat (List[numpy.ndarray]): List of latitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lon (List[numpy.ndarray]): List of longitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData",
-"url":44,
+"url":43,
 "doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.timestamps",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.images",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic",
-"url":44,
+"url":43,
 "doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.polygon_data",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.contour_data",
-"url":44,
+"url":43,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.plot",
-"url":44,
+"url":43,
 "doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_colorcmap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours",
-"url":44,
+"url":43,
 "doc":"Add geographic contours to a mosaic. Args: lats (ndarray or list): Sequence of geographic latitudes defining a contour. lons (ndarray or list): Sequence of geographic longitudes defining a contour. constant_lats (float, int, or Sequence): Geographic Latitude(s) at which to add line(s) of constant latitude. constant_lons (float, int, or Sequence): Geographic Longitude(s) at which to add line(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours",
-"url":44,
+"url":43,
 "doc":"Add geomagnetic contours to a mosaic. Args: timestamp (datetime.datetime): The timestamp used in computing AACGM coordinates. lats (ndarray or list): Sequence of geomagnetic latitudes defining a contour. lons (ndarray or list): Sequence of geomagnetic longitudes defining a contour. constant_lats (float, int, Sequence): Geomagnetic latitude(s) at which to add contour(s) of constant latitude. constant_lons (float, int, Sequence): Geomagnetic longitude(s) at which to add contours(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.keogram",
+"url":44,
+"doc":"Class representation for a keogram."
+},
+{
+"ref":"pyaurorax.tools.classes.keogram.Keogram",
+"url":44,
+"doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
+},
+{
+"ref":"pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes",
+"url":44,
+"doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude_km (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.keogram.Keogram.set_magnetic_latitudes",
+"url":44,
+"doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude_km (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.keogram.Keogram.plot",
+"url":44,
+"doc":"Generate a plot of the keogram data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: y_type (str): Type of y-axis to use when plotting. Options are  ccd ,  mag , or  geo . The default is  ccd . This parameter is required. title (str): The title to display above the plotted keogram. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). aspect (str or float): The matplotlib imshow aspect ration to use. A common value for this is  auto . All valid values can be found on the [matplotlib documentation](https: matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). axes_visible (bool): Display the axes. Default is  True . xlabel (str): The x-axis label to use. Default is  Time (UTC) . ylabel (str): The y-axis label to use. Default is based on y_type. xtick_increment (int): The x-axis tick increment to use. Default is 100. ytick_increment (int): The y-axis tick increment to use. Default is 50. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed keogram, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: Issues with the y-axis choice.",
 "func":1
 },
 {
@@ -2475,7 +2476,18 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.mosaic.create",
 "url":47,
-"doc":"Create a mosaic object. Args: prepped_data (pyaurorax.tools.MosaicData): The prepared mosaic data. Generated from a prior  prep_images() function call. prepped_skymap (pyaurorax.tools.MosaicSkymap): The prepared skymap data. Generated from a prior  prep_skymaps() function call. frame_idx (int): The frame number to generate a mosaic for. cartopy_projection (cartopy.crs.Projection): The cartopy projection to use when creating the mosaic. min_elevation (int): The minimum elevation cutoff when projecting images on the map, in degrees. Default is  5 . cbar_colorcmap (str): The matplotlib colormap to use for the rendered image data. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). image_intensity_scaled (List or Dict): Ranges for scaling images. Either a a list with 2 elements which will scale all sites with the same range, or as a dictionary which can be used for scaling each site differently. Example of uniform scaling across all sites:  image_intensity_scales = [2000, 8000] Example of scaling each site differently:  image_intensity_scales = {\"fsmi\": [1000, 10000], \"gill\": [2000, 8000]} Returns: The generated  pyaurorax.tools.Mosaic object. Raises: ValueError: issues with supplied parameters.",
+"doc":"Create a mosaic object. Args: prepped_data (pyaurorax.tools.MosaicData): The prepared mosaic data. Generated from a prior  prep_images() function call. prepped_skymap (pyaurorax.tools.MosaicSkymap): The prepared skymap data. Generated from a prior  prep_skymaps() function call. timestamp (datetime.datetime): The timestamp to generate a mosaic for. Must be within the range of timestamps for which image data was prepped and provided. cartopy_projection (cartopy.crs.Projection): The cartopy projection to use when creating the mosaic. min_elevation (int): The minimum elevation cutoff when projecting images on the map, in degrees. Default is  5 . cbar_colorcmap (str): The matplotlib colormap to use for the rendered image data. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). image_intensity_scaled (List or Dict): Ranges for scaling images. Either a a list with 2 elements which will scale all sites with the same range, or as a dictionary which can be used for scaling each site differently. Example of uniform scaling across all sites:  image_intensity_scales = [2000, 8000] Example of scaling each site differently:  image_intensity_scales = {\"fsmi\": [1000, 10000], \"gill\": [2000, 8000]} Returns: The generated  pyaurorax.tools.Mosaic object. Raises: ValueError: issues with supplied parameters.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.grid_files",
+"url":48,
+"doc":"Prepare grid data for plotting."
+},
+{
+"ref":"pyaurorax.tools.grid_files.prep_grid_image",
+"url":48,
+"doc":"Takes a grid array, and converts it to RGBA format, masking all empty cells with max transparency, so that it can be plotted overtop of a map. Args: grid (numpy.ndarray): The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file. fill_val (int or float): The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file's metadata. scale (list or numpy.ndarray): A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max). cmap (str): A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to \"Greys_r\"). Returns: The prepared RGBA grid array. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 }
 ]

@@ -437,9 +437,8 @@ Raises:</p></div>
         path_counter += 1
 
     if path_counter == 0:
-        raise ValueError(
-            &#34;Could not form keogram path... First ensure that coordinates are within image range. Then try increasing &#39;width&#39; or decreasing number of points in input coordinates.&#34;
-        )
+        raise ValueError(&#34;Could not form keogram path. First ensure that coordinates are within image range. Then &#34; +
+                         &#34;try increasing &#39;width&#39; or decreasing number of points in input coordinates.&#34;)
 
     # Create keogram object
     keo_obj = Keogram(data=keo_arr, timestamp=timestamp)

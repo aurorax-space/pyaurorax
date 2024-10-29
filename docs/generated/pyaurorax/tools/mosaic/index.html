@@ -81,7 +81,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pyaurorax.tools.mosaic.create"><code class="name flex">
-<span>def <span class="ident">create</span></span>(<span>prepped_data: Union[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>, List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>]], prepped_skymap: Union[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>, List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>]], frame_idx: int, cartopy_projection: cartopy.crs.Projection, min_elevation: Union[int, List[int]] = 5, colormap: Union[str, List[str], ForwardRef(None)] = None, image_intensity_scales: Union[List, Dict, ForwardRef(None)] = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
+<span>def <span class="ident">create</span></span>(<span>prepped_data: Union[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>, List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>]], prepped_skymap: Union[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>, List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>]], timestamp: datetime.datetime, cartopy_projection: cartopy.crs.Projection, min_elevation: Union[int, List[int]] = 5, colormap: Union[str, List[str], ForwardRef(None)] = None, image_intensity_scales: Union[List, Dict, ForwardRef(None)] = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create a mosaic object.</p>
@@ -91,8 +91,9 @@ __all__ = [
 <dd>The prepared mosaic data. Generated from a prior <code><a title="pyaurorax.tools.mosaic.prep_images" href="#pyaurorax.tools.mosaic.prep_images">prep_images()</a></code> function call.</dd>
 <dt><strong><code>prepped_skymap</code></strong> :&ensp;<code><a title="pyaurorax.tools.MosaicSkymap" href="../index.html#pyaurorax.tools.MosaicSkymap">MosaicSkymap</a></code></dt>
 <dd>The prepared skymap data. Generated from a prior <code><a title="pyaurorax.tools.mosaic.prep_skymaps" href="#pyaurorax.tools.mosaic.prep_skymaps">prep_skymaps()</a></code> function call.</dd>
-<dt><strong><code>frame_idx</code></strong> :&ensp;<code>int</code></dt>
-<dd>The frame number to generate a mosaic for.</dd>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The timestamp to generate a mosaic for. Must be within the range of timestamps
+for which image data was prepped and provided.</dd>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
 <dd>The cartopy projection to use when creating the mosaic.</dd>
 <dt><strong><code>min_elevation</code></strong> :&ensp;<code>int</code></dt>
@@ -134,7 +135,7 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 </summary>
 <pre><code class="python">def create(prepped_data: Union[MosaicData, List[MosaicData]],
            prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
-           frame_idx: int,
+           timestamp: datetime.datetime,
            cartopy_projection: cartopy.crs.Projection,
            min_elevation: Union[int, List[int]] = 5,
            colormap: Optional[Union[str, List[str]]] = None,
@@ -149,8 +150,9 @@ the same range, or as a dictionary which can be used for scaling each site diffe
         prepped_skymap (pyaurorax.tools.MosaicSkymap): 
             The prepared skymap data. Generated from a prior `prep_skymaps()` function call.
 
-        frame_idx (int): 
-            The frame number to generate a mosaic for.
+        timestamp (datetime.datetime): 
+            The timestamp to generate a mosaic for. Must be within the range of timestamps
+            for which image data was prepped and provided.
 
         cartopy_projection (cartopy.crs.Projection): 
             The cartopy projection to use when creating the mosaic.
@@ -264,6 +266,17 @@ the same range, or as a dictionary which can be used for scaling each site diffe
         sites_with_data = []
         sites_with_data_idx = []
 
+        # Determine the frame index of data the corresponds to the requested timestamp
+        minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
+        maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
+        if timestamp &lt; minimum_timestamp or timestamp &gt; maximum_timestamp:
+            raise ValueError(&#34;Could not create mosaic for timestamp&#34; + timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;) +
+                             &#34; as image data was only supplied for the timestamp range: &#34; + minimum_timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;) + &#34; to &#34; +
+                             maximum_timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;))
+
+        # Get the frame index of the timestamp closest to desired mosaic frame
+        frame_idx = np.argmin(np.abs(np.array(data.timestamps) - timestamp))
+
         # We also define a list that will hold all unique timestamps pulled from each
         # frame&#39;s metadata. This should be of length 1, and we can check that to make
         # sure all images being plotted correspond to the same time.
@@ -300,7 +313,13 @@ the same range, or as a dictionary which can be used for scaling each site diffe
                 continue
 
             # Scale this site&#39;s data based on previously defined scaling bounds
-            tmp = scale_intensity(tmp, min=image_intensity_scales[site][0], max=image_intensity_scales[site][1], top=255)  # type: ignore
+            tmp = scale_intensity(
+                tmp,
+                min=image_intensity_scales[site][0],  # type: ignore
+                max=image_intensity_scales[site][1],  # type: ignore
+                top=255,
+                memory_saver=False,
+            )
 
             # Add the timestamp to tracking list if it&#39;s unique
             if meta_timestamp not in unique_timestamps:
