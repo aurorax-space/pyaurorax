@@ -103,18 +103,27 @@ def scale_intensity(
     Raises:
         ValueError: Issues with the supplied min, max, or top
     """
+
     if (memory_saver is True):
+        # Save original data shape
+        input_shape = data.shape
+
         # determine if we are single or 3 channel
-        n_channels = 1
-        if (len(data.shape) == 3):
+        if (len(data.shape) == 2):
+            n_channels = 1
+            data = data[:, :, np.newaxis]
+        elif (len(data.shape) == 3):
             # single channel
             n_channels = 1
         elif (len(data.shape) == 4):
             # three channel
             n_channels = 3
         else:
-            ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
-                       "[rows,cols,images] or [rows,cols,channels,images] sized array.")
+            raise ValueError(
+                "Unable to determine number of channels based on the supplied images. Make sure you are supplying a "
+                +
+                "[rows,cols,images] or [rows,cols,channels,images] sized array."
+            )
 
         # init destination array
         images_scaled = np.empty((data.shape), dtype=data.dtype)
@@ -122,9 +131,15 @@ def scale_intensity(
         # cycle through each image
         for i in range(0, data.shape[-1]):
             if (n_channels == 1):
-                images_scaled[:, :, i] = __scale_data(data[:, :, i], min, max, top)
+                images_scaled[:, :, i] = __scale_data(data[:, :, i], min, max,
+                                                      top)
             else:
-                images_scaled[:, :, :, i] = __scale_data(data[:, :, :, i], min, max, top)
+                images_scaled[:, :, :,
+                              i] = __scale_data(data[:, :, :, i], min, max,
+                                                top)
+
+        # Reshape to confirm output is the same shape as input
+        images_scaled = np.reshape(images_scaled, input_shape)
 
         # return
         return images_scaled
