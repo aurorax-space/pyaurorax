@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.8
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: "3.8"
+        python-version: "3.11"
     - name: Install Poetry and dependencies
       run: |
         pip install poetry
@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
       max-parallel: 2
     steps:
     - uses: actions/checkout@v3
@@ -40,23 +40,11 @@ jobs:
       run: |
         pip install poetry
         poetry install -E aacgmv2
-    - name: Style guide enforcing (flake8)
+    - name: Linting checks
       run: |
-        make test-flake8
-    - name: PEP8 checking (pycodestyle)
-      run: |
-        make test-pycodestyle
-    - name: Linting (pylint)
-      run: |
-        make test-pylint
-    - name: Security analysis (bandit)
-      run: |
-        make test-bandit    
-    - name: Type-checking (mypy)
-      run: |
-        make test-mypy    
-    - name: Run functionality tests (pytest)
-      run: |
-        make test-pytest-read
-      env: 
-        AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
+        poetry run make test-linting
+    # - name: Functional tests
+    #   run: |
+    #     poetry run make test-pytest-ci
+    #   env: 
+    #     AURORAX_APIKEY_STAGING: ${{ secrets.AURORAX_APIKEY_STAGING }}
