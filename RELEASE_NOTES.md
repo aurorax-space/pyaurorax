@@ -1,12 +1,20 @@
+Version 1.3.3
+-------------------
+
+- pinned PyUCalgarySRS dependency
+
+
 Version 1.3.2
 --------------------
 
 - bugfix to `scale_intensity()` function to handle scaling a single RGB image
 
+
 Version 1.3.1
 --------------------
 
 - increase PyUCalgarySRS dependency version
+
 
 Version 1.3.0
 --------------------
