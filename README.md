@@ -1,6 +1,6 @@
 <a href="https://aurorax.space/"><img alt="AuroraX" src="logo.svg" height="60"></a>
 
-[![GitHub tests](https://github.com/aurorax-space/pyaurorax/actions/workflows/test_standard.yml/badge.svg)](https://github.com/aurorax-space/pyaurorax/actions/workflows/test_standard.yml)
+[![GitHub tests](https://github.com/aurorax-space/pyaurorax/actions/workflows/tests_default.yml/badge.svg)](https://github.com/aurorax-space/pyaurorax/actions/workflows/tests_default.yml)
 [![PyPI version](https://img.shields.io/pypi/v/pyaurorax.svg)](https://pypi.python.org/pypi/pyaurorax/)
 ![PyPI Python versions](https://img.shields.io/pypi/pyversions/pyaurorax)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12532077.svg)](https://doi.org/10.5281/zenodo.12532077)
