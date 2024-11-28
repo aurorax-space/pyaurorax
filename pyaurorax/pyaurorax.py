@@ -78,7 +78,7 @@ class PyAuroraX:
 
             api_base_url (str): 
                 URL prefix to use when interacting with the AuroraX API. By default this is set to 
-                `https://api.phys.ucalgary.ca`. This parameter is primarily used by the development 
+                `https://api.aurorax.space`. This parameter is primarily used by the development 
                 team to test and build new functions using the private staging API.
 
             api_timeout (int): 

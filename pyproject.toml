@@ -43,6 +43,7 @@ keywords = [
 "API Reference" = "https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax"
 "Bug Tracker" = "https://github.com/aurorax-space/pyaurorax/issues"
 "AuroraX Platform" = "https://aurorax.space"
+"UCalgary SRS Open Data Platform" = "https://data.phys.ucalgary.ca"
 
 [tool.poetry.dependencies]
 python = ">=3.9"
