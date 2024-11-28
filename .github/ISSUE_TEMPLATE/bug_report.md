@@ -25,8 +25,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Environemnt:**
  - OS: [e.g. Ubuntu 20.04]
- - pyaurorax version [e.g. 1.0.0]
  - Python Version [e.g. 3.8.5]
+ - pyaurorax version [e.g. 1.0.0]
 
 **Additional context**
 Add any other context about the problem here.
