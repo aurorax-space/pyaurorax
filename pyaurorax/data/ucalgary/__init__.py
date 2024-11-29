@@ -90,7 +90,11 @@ class UCalgaryManager:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
         """
         try:
-            return self.__aurorax_obj.srs_obj.data.list_datasets(name=name, timeout=timeout)
+            return self.__aurorax_obj.srs_obj.data.list_datasets(
+                name=name,
+                timeout=timeout,
+                supported_library="pyaurorax",
+            )
         except SRSAPIError as e:
             raise AuroraXAPIError(e) from e
 

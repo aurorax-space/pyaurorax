@@ -15,7 +15,7 @@ pyaurorax/cli/search/sources/commands.py                         315    315     
 pyaurorax/cli/search/util/commands.py                            124    124     0%   15-294
 pyaurorax/cli/templates.py                                         3      3     0%   19-90
 pyaurorax/data/__init__.py                                        70     55    21%   48, 73-85, 112-151, 183-195, 230-269
-pyaurorax/data/ucalgary/__init__.py                              105     77    27%   35, 68, 92-95, 126-129, 138, 159, 272-290, 375-389, 450-460, 522, 569-605, 645-681, 721-757
+pyaurorax/data/ucalgary/__init__.py                              105     77    27%   35, 68, 92-99, 130-133, 142, 163, 276-294, 379-393, 454-464, 526, 573-609, 649-685, 725-761
 pyaurorax/data/ucalgary/read/__init__.py                          40     20    50%   21, 40, 61, 120-132, 181-191, 240, 296, 353, 410, 466, 512, 556
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      1    90%   49
