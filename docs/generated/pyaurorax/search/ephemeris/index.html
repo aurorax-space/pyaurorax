@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>pyaurorax.search.ephemeris API documentation</title>
-<meta name="description" content="Use the AuroraX search engine to search and upload ephemeris records …" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="Use the AuroraX search engine to search and upload ephemeris records …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 <style>
 @media screen and (max-width: 699px) {
 #content {
@@ -44,200 +47,6 @@ border-left: 1px solid #ddd;
 <p>Note that all functions and classes from submodules are all imported
 at this level of the ephemeris module. They can be referenced from
 here instead of digging in deeper to the submodules.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># Copyright 2024 University of Calgary
-#
-# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-&#34;&#34;&#34;
-Use the AuroraX search engine to search and upload ephemeris records.
-
-Note that all functions and classes from submodules are all imported
-at this level of the ephemeris module. They can be referenced from
-here instead of digging in deeper to the submodules.
-&#34;&#34;&#34;
-
-import datetime
-from typing import Dict, List, Optional
-from .classes.ephemeris import EphemerisData
-from .classes.search import EphemerisSearch
-from ..sources.classes.data_source import DataSource
-from ._ephemeris import search as func_search
-from ._ephemeris import upload as func_upload
-from ._ephemeris import delete as func_delete
-from ._ephemeris import describe as func_describe
-from ._ephemeris import get_request_url as func_get_request_url
-
-__all__ = [&#34;EphemerisManager&#34;]
-
-
-class EphemerisManager:
-    &#34;&#34;&#34;
-    The EphemerisManager object is initialized within every PyAuroraX object. It acts as a way to access 
-    the submodules and carry over configuration information in the super class.
-    &#34;&#34;&#34;
-
-    __STANDARD_POLLING_SLEEP_TIME: float = 1.0  # polling sleep time when waiting for data (after the initial sleep time), in seconds
-    __UPLOAD_CHUNK_SIZE = 500  # number of ephemeris records to upload at a time
-
-    def __init__(self, aurorax_obj):
-        self.__aurorax_obj = aurorax_obj
-
-    def search(self,
-               start: datetime.datetime,
-               end: datetime.datetime,
-               programs: Optional[List[str]] = None,
-               platforms: Optional[List[str]] = None,
-               instrument_types: Optional[List[str]] = None,
-               metadata_filters: Optional[List[Dict]] = None,
-               metadata_filters_logical_operator: Optional[str] = None,
-               response_format: Optional[Dict] = None,
-               poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
-               return_immediately: bool = False,
-               verbose: bool = False) -&gt; EphemerisSearch:
-        &#34;&#34;&#34;
-        Search for ephemeris records
-
-        By default, this function will block and wait until the request completes and
-        all data is downloaded. If you don&#39;t want to wait, set the &#39;return_immediately`
-        value to True. The Search object will be returned right after the search has been
-        started, and you can use the helper functions as part of that object to get the
-        data when it&#39;s done.
-
-        Note: At least one search criteria from programs, platforms, or
-        instrument_types, must be specified.
-
-        Args:
-            start: start timestamp of the search (inclusive)
-            end: end timestamp of the search (inclusive)
-            programs: list of programs to search through, defaults to None
-            platforms: list of platforms to search through, defaults to None
-            instrument_types: list of instrument types to search through, defaults to None
-            metadata_filters: list of dictionaries describing metadata keys and
-                values to filter on, defaults to None
-
-                Example:
-
-                    [{
-                        &#34;key&#34;: &#34;nbtrace_region&#34;,
-                        &#34;operator&#34;: &#34;in&#34;,
-                        &#34;values&#34;: [&#34;north polar cap&#34;]
-                    }]
-            metadata_filters_logical_operator: the logical operator to use when
-                evaluating metadata filters (either &#39;AND&#39; or &#39;OR&#39;), defaults
-                to &#34;AND&#34;
-            response_format: JSON representation of desired data response format
-            poll_interval: time in seconds to wait between polling attempts, defaults
-                to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            return_immediately: initiate the search and return without waiting for data to
-                be received, defaults to False
-            verbose: output poll times and other progress messages, defaults to False
-
-        Returns:
-            A `pyaurorax..search.EphemerisSearch` object
-
-        Raises:
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-        &#34;&#34;&#34;
-        return func_search(
-            self.__aurorax_obj,
-            start,
-            end,
-            programs,
-            platforms,
-            instrument_types,
-            metadata_filters,
-            metadata_filters_logical_operator,
-            response_format,
-            poll_interval,
-            return_immediately,
-            verbose,
-        )
-
-    def upload(self, identifier: int, records: List[EphemerisData], validate_source: bool = False, chunk_size: int = __UPLOAD_CHUNK_SIZE) -&gt; int:
-        &#34;&#34;&#34;
-        Upload ephemeris records to AuroraX
-
-        Args:
-            identifier: AuroraX data source ID
-            records: ephemeris records to upload
-            validate_source: validate all records before uploading, defaults to False
-            chunk_size: number of records to upload in a single call, defaults to 500
-
-        Returns:
-            0 for success, raises exception on error
-
-        Raises:
-            pyaurorax.exceptions.AuroraXUploadError: upload error
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-        &#34;&#34;&#34;
-        return func_upload(self.__aurorax_obj, identifier, records, validate_source, chunk_size)
-
-    def delete(self, data_source: DataSource, start: datetime.datetime, end: datetime.datetime) -&gt; int:
-        &#34;&#34;&#34;
-        Delete ephemeris records between a timeframe.
-
-        The API processes this request asynchronously, so this method will return
-        immediately whether or not the data has already been deleted.
-
-        Args:
-            data_source: data source associated with the data product records (note that
-                identifier, program, platform, and instrument_type are required)
-            start: timestamp marking beginning of range to delete records for, inclusive
-            end: timestamp marking end of range to delete records for, inclusive
-
-        Returns:
-            0 on success
-
-        Raises:
-            pyaurorax.exceptions.AuroraXNotFoundError: source not found
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-        &#34;&#34;&#34;
-        return func_delete(self.__aurorax_obj, data_source, start, end)
-
-    def describe(self, search_obj: Optional[EphemerisSearch] = None, query_dict: Optional[Dict] = None) -&gt; str:
-        &#34;&#34;&#34;
-        Describe an ephemeris search as an &#34;SQL-like&#34; string. Either a EphemerisSearch
-        object can be supplied, or a dictionary of the raw JSON query.
-
-        Args:
-            search_obj: the ephemeris search to describe, optional
-            query_dict: the ephemeris search query represented as a raw dictionary, optional
-
-        Returns:
-            the &#34;SQL-like&#34; string describing the ephemeris search object
-        &#34;&#34;&#34;
-        return func_describe(self.__aurorax_obj, search_obj, query_dict)
-
-    def get_request_url(self, request_id: str) -&gt; str:
-        &#34;&#34;&#34;
-        Get the ephemeris search request URL for a given
-        request ID. This URL can be used for subsequent
-        pyaurorax.requests function calls. Primarily this method
-        facilitates delving into details about a set of already-submitted
-        ephemeris searches.
-
-        Args:
-            request_id: the request identifier
-
-        Returns:
-            the request URL
-        &#34;&#34;&#34;
-        return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
-</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
@@ -424,7 +233,7 @@ the submodules and carry over configuration information in the super class.</p><
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.delete"><code class="name flex">
-<span>def <span class="ident">delete</span></span>(<span>self, data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="../sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>, start: datetime.datetime, end: datetime.datetime) ‑> int</span>
+<span>def <span class="ident">delete</span></span>(<span>self,<br>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="../sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>,<br>start: datetime.datetime,<br>end: datetime.datetime) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Delete ephemeris records between a timeframe.</p>
@@ -451,36 +260,9 @@ identifier, program, platform, and instrument_type are required)</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def delete(self, data_source: DataSource, start: datetime.datetime, end: datetime.datetime) -&gt; int:
-    &#34;&#34;&#34;
-    Delete ephemeris records between a timeframe.
-
-    The API processes this request asynchronously, so this method will return
-    immediately whether or not the data has already been deleted.
-
-    Args:
-        data_source: data source associated with the data product records (note that
-            identifier, program, platform, and instrument_type are required)
-        start: timestamp marking beginning of range to delete records for, inclusive
-        end: timestamp marking end of range to delete records for, inclusive
-
-    Returns:
-        0 on success
-
-    Raises:
-        pyaurorax.exceptions.AuroraXNotFoundError: source not found
-        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-    &#34;&#34;&#34;
-    return func_delete(self.__aurorax_obj, data_source, start, end)</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.describe"><code class="name flex">
-<span>def <span class="ident">describe</span></span>(<span>self, search_obj: Optional[<a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch" href="classes/search.html#pyaurorax.search.ephemeris.classes.search.EphemerisSearch">EphemerisSearch</a>] = None, query_dict: Optional[Dict] = None) ‑> str</span>
+<span>def <span class="ident">describe</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch" href="classes/search.html#pyaurorax.search.ephemeris.classes.search.EphemerisSearch">EphemerisSearch</a> | None = None,<br>query_dict: Dict | None = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Describe an ephemeris search as an "SQL-like" string. Either a EphemerisSearch
@@ -494,24 +276,6 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>the "SQL-like" string describing the ephemeris search object</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def describe(self, search_obj: Optional[EphemerisSearch] = None, query_dict: Optional[Dict] = None) -&gt; str:
-    &#34;&#34;&#34;
-    Describe an ephemeris search as an &#34;SQL-like&#34; string. Either a EphemerisSearch
-    object can be supplied, or a dictionary of the raw JSON query.
-
-    Args:
-        search_obj: the ephemeris search to describe, optional
-        query_dict: the ephemeris search query represented as a raw dictionary, optional
-
-    Returns:
-        the &#34;SQL-like&#34; string describing the ephemeris search object
-    &#34;&#34;&#34;
-    return func_describe(self.__aurorax_obj, search_obj, query_dict)</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.get_request_url"><code class="name flex">
 <span>def <span class="ident">get_request_url</span></span>(<span>self, request_id: str) ‑> str</span>
@@ -529,29 +293,9 @@ ephemeris searches.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>the request URL</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_request_url(self, request_id: str) -&gt; str:
-    &#34;&#34;&#34;
-    Get the ephemeris search request URL for a given
-    request ID. This URL can be used for subsequent
-    pyaurorax.requests function calls. Primarily this method
-    facilitates delving into details about a set of already-submitted
-    ephemeris searches.
-
-    Args:
-        request_id: the request identifier
-
-    Returns:
-        the request URL
-    &#34;&#34;&#34;
-    return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self, start: datetime.datetime, end: datetime.datetime, programs: Optional[List[str]] = None, platforms: Optional[List[str]] = None, instrument_types: Optional[List[str]] = None, metadata_filters: Optional[List[Dict]] = None, metadata_filters_logical_operator: Optional[str] = None, response_format: Optional[Dict] = None, poll_interval: float = 1.0, return_immediately: bool = False, verbose: bool = False) ‑> <a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch" href="classes/search.html#pyaurorax.search.ephemeris.classes.search.EphemerisSearch">EphemerisSearch</a></span>
+<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: List[str] | None = None,<br>platforms: List[str] | None = None,<br>instrument_types: List[str] | None = None,<br>metadata_filters: List[Dict] | None = None,<br>metadata_filters_logical_operator: str | None = None,<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch" href="classes/search.html#pyaurorax.search.ephemeris.classes.search.EphemerisSearch">EphemerisSearch</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Search for ephemeris records</p>
@@ -608,84 +352,9 @@ be received, defaults to False</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def search(self,
-           start: datetime.datetime,
-           end: datetime.datetime,
-           programs: Optional[List[str]] = None,
-           platforms: Optional[List[str]] = None,
-           instrument_types: Optional[List[str]] = None,
-           metadata_filters: Optional[List[Dict]] = None,
-           metadata_filters_logical_operator: Optional[str] = None,
-           response_format: Optional[Dict] = None,
-           poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
-           return_immediately: bool = False,
-           verbose: bool = False) -&gt; EphemerisSearch:
-    &#34;&#34;&#34;
-    Search for ephemeris records
-
-    By default, this function will block and wait until the request completes and
-    all data is downloaded. If you don&#39;t want to wait, set the &#39;return_immediately`
-    value to True. The Search object will be returned right after the search has been
-    started, and you can use the helper functions as part of that object to get the
-    data when it&#39;s done.
-
-    Note: At least one search criteria from programs, platforms, or
-    instrument_types, must be specified.
-
-    Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
-
-            Example:
-
-                [{
-                    &#34;key&#34;: &#34;nbtrace_region&#34;,
-                    &#34;operator&#34;: &#34;in&#34;,
-                    &#34;values&#34;: [&#34;north polar cap&#34;]
-                }]
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either &#39;AND&#39; or &#39;OR&#39;), defaults
-            to &#34;AND&#34;
-        response_format: JSON representation of desired data response format
-        poll_interval: time in seconds to wait between polling attempts, defaults
-            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        return_immediately: initiate the search and return without waiting for data to
-            be received, defaults to False
-        verbose: output poll times and other progress messages, defaults to False
-
-    Returns:
-        A `pyaurorax..search.EphemerisSearch` object
-
-    Raises:
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-    &#34;&#34;&#34;
-    return func_search(
-        self.__aurorax_obj,
-        start,
-        end,
-        programs,
-        platforms,
-        instrument_types,
-        metadata_filters,
-        metadata_filters_logical_operator,
-        response_format,
-        poll_interval,
-        return_immediately,
-        verbose,
-    )</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.upload"><code class="name flex">
-<span>def <span class="ident">upload</span></span>(<span>self, identifier: int, records: List[<a title="pyaurorax.search.ephemeris.classes.ephemeris.EphemerisData" href="classes/ephemeris.html#pyaurorax.search.ephemeris.classes.ephemeris.EphemerisData">EphemerisData</a>], validate_source: bool = False, chunk_size: int = 500) ‑> int</span>
+<span>def <span class="ident">upload</span></span>(<span>self,<br>identifier: int,<br>records: List[<a title="pyaurorax.search.ephemeris.classes.ephemeris.EphemerisData" href="classes/ephemeris.html#pyaurorax.search.ephemeris.classes.ephemeris.EphemerisData">EphemerisData</a>],<br>validate_source: bool = False,<br>chunk_size: int = 500) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Upload ephemeris records to AuroraX</p>
@@ -709,29 +378,6 @@ be received, defaults to False</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def upload(self, identifier: int, records: List[EphemerisData], validate_source: bool = False, chunk_size: int = __UPLOAD_CHUNK_SIZE) -&gt; int:
-    &#34;&#34;&#34;
-    Upload ephemeris records to AuroraX
-
-    Args:
-        identifier: AuroraX data source ID
-        records: ephemeris records to upload
-        validate_source: validate all records before uploading, defaults to False
-        chunk_size: number of records to upload in a single call, defaults to 500
-
-    Returns:
-        0 for success, raises exception on error
-
-    Raises:
-        pyaurorax.exceptions.AuroraXUploadError: upload error
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-    &#34;&#34;&#34;
-    return func_upload(self.__aurorax_obj, identifier, records, validate_source, chunk_size)</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
@@ -743,8 +389,8 @@ be received, defaults to False</dd>
 <input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
 disabled minlength="2">
 </form>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
 <style>
 .modal-dialog iframe {
 width: 100vw;
@@ -785,7 +431,6 @@ setTimeout(() => input.focus(), 100);
 }).setContent('<iframe src="' + url + '"></iframe>').open();
 }
 </script>
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -818,7 +463,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>

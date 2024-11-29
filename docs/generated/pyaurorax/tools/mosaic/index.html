@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>pyaurorax.tools.mosaic API documentation</title>
-<meta name="description" content="Prepare data and create mosaics." />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="Prepare data and create mosaics.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 <style>
 @media screen and (max-width: 699px) {
 #content {
@@ -41,37 +44,6 @@ border-left: 1px solid #ddd;
 </header>
 <section id="section-intro">
 <p>Prepare data and create mosaics.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># Copyright 2024 University of Calgary
-#
-# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-&#34;&#34;&#34;
-Prepare data and create mosaics.
-&#34;&#34;&#34;
-
-from ._prep_skymaps import prep_skymaps
-from ._prep_images import prep_images
-from ._create import create
-
-__all__ = [
-    &#34;prep_skymaps&#34;,
-    &#34;prep_images&#34;,
-    &#34;create&#34;,
-]</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -81,7 +53,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pyaurorax.tools.mosaic.create"><code class="name flex">
-<span>def <span class="ident">create</span></span>(<span>prepped_data: Union[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>, List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>]], prepped_skymap: Union[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>, List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>]], timestamp: datetime.datetime, cartopy_projection: cartopy.crs.Projection, min_elevation: Union[int, List[int]] = 5, colormap: Union[str, List[str], ForwardRef(None)] = None, image_intensity_scales: Union[List, Dict, ForwardRef(None)] = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
+<span>def <span class="ident">create</span></span>(<span>prepped_data: <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>],<br>prepped_skymap: <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>],<br>timestamp: datetime.datetime,<br>cartopy_projection: cartopy.crs.Projection,<br>min_elevation: int | List[int] = 5,<br>colormap: str | List[str] | None = None,<br>image_intensity_scales: List | Dict | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create a mosaic object.</p>
@@ -129,306 +101,9 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <dt><code>ValueError</code></dt>
 <dd>issues with supplied parameters.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def create(prepped_data: Union[MosaicData, List[MosaicData]],
-           prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
-           timestamp: datetime.datetime,
-           cartopy_projection: cartopy.crs.Projection,
-           min_elevation: Union[int, List[int]] = 5,
-           colormap: Optional[Union[str, List[str]]] = None,
-           image_intensity_scales: Optional[Union[List, Dict]] = None) -&gt; Mosaic:
-    &#34;&#34;&#34;
-    Create a mosaic object.
-
-    Args:
-        prepped_data (pyaurorax.tools.MosaicData): 
-            The prepared mosaic data. Generated from a prior `prep_images()` function call.
-
-        prepped_skymap (pyaurorax.tools.MosaicSkymap): 
-            The prepared skymap data. Generated from a prior `prep_skymaps()` function call.
-
-        timestamp (datetime.datetime): 
-            The timestamp to generate a mosaic for. Must be within the range of timestamps
-            for which image data was prepped and provided.
-
-        cartopy_projection (cartopy.crs.Projection): 
-            The cartopy projection to use when creating the mosaic.
-
-        min_elevation (int): 
-            The minimum elevation cutoff when projecting images on the map, in degrees. Default is `5`.
-
-        cbar_colorcmap (str): 
-            The matplotlib colormap to use for the rendered image data. Default is `gray`.
-
-            Commonly used colormaps are:
-
-            - REGO: `gist_heat`
-            - THEMIS ASI: `gray`
-            - TREx Blue: `Blues_r`
-            - TREx NIR: `gray`
-            - TREx RGB: `None`
-
-            A list of all available colormaps can be found on the 
-            [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
-
-        image_intensity_scaled (List or Dict): 
-            Ranges for scaling images. Either a a list with 2 elements which will scale all sites with 
-            the same range, or as a dictionary which can be used for scaling each site differently. 
-
-            Example of uniform scaling across all sites: 
-            `image_intensity_scales = [2000, 8000]`
-
-            Example of scaling each site differently:
-            `image_intensity_scales = {&#34;fsmi&#34;: [1000, 10000], &#34;gill&#34;: [2000, 8000]}`
-
-    Returns:
-        The generated `pyaurorax.tools.Mosaic` object.
-
-    Raises:
-        ValueError: issues with supplied parameters.
-    &#34;&#34;&#34;
-    # init coordinates transformer
-    #
-    # To convert from geodetic coordinates onto the map projection, we use pyproj instead
-    # of cartopy&#39;s native transformations. This is an optimization.
-    pyproj_src_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
-    pyproj_des_proj = pyproj.CRS.from_user_input(cartopy_projection)
-    transformer = pyproj.Transformer.from_crs(pyproj_src_proj, pyproj_des_proj, always_xy=True)
-
-    # Convert data, skymaps, colormap indicators to lists for iteration purposed
-    if not isinstance(prepped_data, list):
-        prepped_data = [prepped_data]
-    if not isinstance(prepped_skymap, list):
-        prepped_skymap = [prepped_skymap]
-    if not isinstance(colormap, list):
-        if colormap is None:
-            colormap = []
-            for _ in range(len(prepped_data)):
-                colormap.append(&#39;gray&#39;)
-        else:
-            colormap = [colormap]
-    if not isinstance(min_elevation, list):
-        tmp = []
-        for _ in range(len(prepped_data)):
-            tmp.append(min_elevation)
-        min_elevation = tmp
-
-    # Make sure all lists are same length
-    if (len(prepped_data) != len(prepped_skymap)):
-        raise ValueError(&#34;When passing lists of prepped data and prepped skymap, they must be of the same length.&#34;)
-    if (len(prepped_data) != len(colormap)) or (len(prepped_skymap) != len(colormap)):
-        raise ValueError(&#34;List of colormaps must have same length as lists of prepped data and prepped skymaps.&#34;)
-
-    # Itarate through each set of prepped data, prepped skymap
-    img_poly_list = []
-    for mosaic_data_idx in range(len(prepped_data)):
-        data = prepped_data[mosaic_data_idx]
-        skymap = prepped_skymap[mosaic_data_idx]
-        iter_cmap = colormap[mosaic_data_idx]
-        min_el = min_elevation[mosaic_data_idx]
-
-        # get sites
-        site_list = data.site_uid_list
-
-        # set image intensity scales
-        if (image_intensity_scales is None):
-            # defaults to scaling all sites between 0-20000
-            image_intensity_scales = {}
-            for site_uid in skymap.site_uid_list:
-                image_intensity_scales[site_uid] = [__DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX]
-        elif (isinstance(image_intensity_scales, list) is True):
-            image_intensity_scales_dict = {}
-            for site_uid in site_list:
-                image_intensity_scales_dict[site_uid] = image_intensity_scales
-            image_intensity_scales = image_intensity_scales_dict
-        elif (isinstance(image_intensity_scales, dict) is True):
-            # no action needed
-            pass
-        else:
-            raise ValueError(&#34;Invalid image_intensity_scales format. Please refer to the documentation for this function.&#34;)
-
-        # We need a numpy array of the sites requested, that will be used to make sure any sites
-        # that don&#39;t have data for the requested frame are not plotted. Also empty dict for images..
-        site_list_arr = np.array(site_list)
-        # all_images = np.zeros([len(site_list), width * height, __N_CHANNELS], dtype=np.int32)
-        all_images = {}
-
-        # Grab the elevation, and filling lats/lons
-        elev = skymap.elevation
-        polyfill_lon = skymap.polyfill_lon
-        polyfill_lat = skymap.polyfill_lat
-
-        # Now we begin to fill in the above arrays, one site at a time. Before doing so
-        # we need lists to keep track of which sites actually have data for this frame.
-        sites_with_data = []
-        sites_with_data_idx = []
-
-        # Determine the frame index of data the corresponds to the requested timestamp
-        minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
-        maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
-        if timestamp &lt; minimum_timestamp or timestamp &gt; maximum_timestamp:
-            raise ValueError(&#34;Could not create mosaic for timestamp&#34; + timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;) +
-                             &#34; as image data was only supplied for the timestamp range: &#34; + minimum_timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;) + &#34; to &#34; +
-                             maximum_timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;))
-
-        # Get the frame index of the timestamp closest to desired mosaic frame
-        frame_idx = np.argmin(np.abs(np.array(data.timestamps) - timestamp))
-
-        # We also define a list that will hold all unique timestamps pulled from each
-        # frame&#39;s metadata. This should be of length 1, and we can check that to make
-        # sure all images being plotted correspond to the same time.
-        unique_timestamps = []
-        n_channels_dict = {}
-        for site in site_list:
-
-            # set image dimensions
-            height = data.images_dimensions[site][0]
-            width = data.images_dimensions[site][1]
-
-            # Grab the timestamp for this frame/site
-            meta_timestamp = data.timestamps[frame_idx]
-
-            # Determine whether current image is single or multi-channel, and add to dictionary for reference
-            if len(data.images[site].shape) == 4:
-                n_channels = data.images[site].shape[2]
-            else:
-                n_channels = 1
-            n_channels_dict[site] = n_channels
-
-            # Now, obtain the frame of interest, for this site, from the image data and flatten it
-            if n_channels == 1:
-                img = data.images[site][:, :, frame_idx]
-                flattened_img = np.reshape(img, (width * height))
-            else:
-                img = data.images[site][:, :, :, frame_idx]
-                flattened_img = np.reshape(img, (width * height, n_channels))
-
-            tmp = flattened_img
-
-            if (np.sum(tmp) == 0.0):
-                # If it&#39;s sum is zero, we know there is no data so we can simply continue.
-                continue
-
-            # Scale this site&#39;s data based on previously defined scaling bounds
-            tmp = scale_intensity(
-                tmp,
-                min=image_intensity_scales[site][0],  # type: ignore
-                max=image_intensity_scales[site][1],  # type: ignore
-                top=255,
-                memory_saver=False,
-            )
-
-            # Add the timestamp to tracking list if it&#39;s unique
-            if meta_timestamp not in unique_timestamps:
-                unique_timestamps.append(meta_timestamp)
-
-            # Append sites to respective lists, and add image data to master list
-            sites_with_data.append(site)
-            sites_with_data_idx.append(np.where(site_list_arr == site)[0][0])
-            all_images[site] = tmp.astype(np.int32)
-
-        # This checks to make sure all images have the same timestamps
-        if len(unique_timestamps) != 1:
-            raise Exception(&#34;Error: Images have different timestamps.&#34;)
-
-        # Create empty lists for tracking the pixel polygons and their values
-        lon_list = []
-        lat_list = []
-        cmap_vals = []
-
-        # Set up elevation increment for plotting. We start at the min elevation
-        # and plot groups of elevations until reaching 90 deg.
-        elev_delta = 0.1
-        el = min_el
-
-        # Iterate through all elevation ranges
-        while el &lt; 90:
-
-            # Only iterate through the sites that actually have data
-            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
-                # Get this sites number of channels
-                n_channels = n_channels_dict[site_id]
-
-                # Get all pixels within current elevation threshold
-                el_idx = np.nonzero(np.logical_and(elev[site_idx] &gt; el, elev[site_idx] &lt;= el + elev_delta))[0]
-                if len(el_idx) == 0:
-                    continue
-
-                # Grab this level&#39;s filling lat/lons
-                el_lvl_fill_lats = polyfill_lat[site_idx][:, el_idx]
-                el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
-
-                # Grab this level&#39;s data values
-                if n_channels == 1:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx]
-                else:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx, :]
-
-                # # Mask any nans that may have slipped through - done as a precaution
-                nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) &amp; ~np.isnan(el_lvl_fill_lons).any(axis=0)
-
-                el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
-                el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
-                if n_channels == 1:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
-                else:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
-
-                # Convert pixel values to a normalized float
-                el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
-
-                # Append polygon lat/lons and values to master lists
-                if n_channels == 1:
-                    # print(1, len(el_lvl_fill_lats), len(el_lvl_colors))
-                    cmap = plt.get_cmap(iter_cmap)
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(cmap(el_lvl_colors[k]))
-                else:
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(el_lvl_colors[k, :])
-
-            el += elev_delta
-
-        # Use our transformer object to convert the lat/lon polygons into projection coordinates.
-        lons, lats = transformer.transform(np.array(lon_list), np.array(lat_list))
-
-        # Format polygons for creation of PolyCollection object
-        lonlat_polygons = np.empty((lons.shape[0], 5, 2))
-        lonlat_polygons[:, :, 0] = lons
-        lonlat_polygons[:, :, 1] = lats
-
-        # generate a PolyCollection object, containing all of the Polygons shaded with
-        # their corresponding RGB value
-
-        img_data_poly = matplotlib.collections.PolyCollection(
-            lonlat_polygons,  # type: ignore
-            facecolors=cmap_vals,
-            array=None,
-            clim=[0.0, 1.0],
-            edgecolors=&#34;face&#34;,
-        )
-
-        img_poly_list.append(img_data_poly)
-
-    # cast into mosaic object
-    if len(img_poly_list) == 1:
-        mosaic = Mosaic(polygon_data=img_poly_list[0], cartopy_projection=cartopy_projection)
-    else:
-        mosaic = Mosaic(polygon_data=img_poly_list, cartopy_projection=cartopy_projection)
-
-    # return
-    return mosaic</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.tools.mosaic.prep_images"><code class="name flex">
-<span>def <span class="ident">prep_images</span></span>(<span>image_list: List[pyucalgarysrs.data.classes.Data], data_attribute: Literal['data', 'calibrated_data'] = 'data') ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></span>
+<span>def <span class="ident">prep_images</span></span>(<span>image_list: List[pyucalgarysrs.data.classes.Data],<br>data_attribute: Literal['data', 'calibrated_data'] = 'data') ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prepare the image data for use in a mosaic.</p>
@@ -447,173 +122,9 @@ Default is <code>data</code>.</dd>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied paramters.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def prep_images(image_list: List[Data], data_attribute: Literal[&#34;data&#34;, &#34;calibrated_data&#34;] = &#34;data&#34;) -&gt; MosaicData:
-    &#34;&#34;&#34;
-    Prepare the image data for use in a mosaic.
-
-    Args:
-        image_list (List[pyaurorax.data.ucalgary.Data]): 
-            List of image data. Each element of the list is the data for each site.
-        
-        data_attribute (str): 
-            The data attribute to use when prepping the images. Either `data` or `calibrated_data`. 
-            Default is `data`.
-
-    Returns:
-        The prepared data, as a `pyaurorax.tools.MosaicData` object.
-
-    Raises:
-        ValueError: issues encountered with supplied paramters.
-    &#34;&#34;&#34;
-    # set image dimensions and number of sites
-    if (data_attribute == &#34;data&#34;):
-        # check that the timestamp and calibrated data match in size
-        for i in range(0, len(image_list)):
-            if (image_list[i].data.shape[-1] != len(image_list[i].timestamp)):
-                raise ValueError((&#34;Number of frames does not match number of timestamp records. There are %d timestamp &#34; +
-                                  &#34;records, and %d images for list index %d&#34;) % (
-                                      len(image_list[i].timestamp),
-                                      image_list[i].data.shape[-1],
-                                      i,
-                                  ))
-
-        # set height and width
-        height = image_list[0].data.shape[0]
-        width = image_list[0].data.shape[1]
-    elif (data_attribute == &#34;calibrated_data&#34;):
-        # check that the timestamp and calibrated data match in size
-        for i in range(0, len(image_list)):
-            if (image_list[i].calibrated_data.shape[-1] != len(image_list[i].timestamp)):
-                raise ValueError((&#34;Number of frames does not match number of timestamp records. There are %d timestamp &#34; +
-                                  &#34;records, and %d images for list index %d&#34;) % (
-                                      len(image_list[i].timestamp),
-                                      image_list[i].calibrated_data.shape[-1],
-                                      i,
-                                  ))
-    else:
-        raise ValueError(&#34;Invalid &#39;data_attribute&#39; parameter. Must be either &#39;data&#39; or &#39;calibrated_data&#39;.&#34;)
-
-    # determine the number of expected frames
-    #
-    # NOTE: this is done to ensure that the eventual image arrays are all the
-    # same size, and we adequately account for dropped frames.
-    #
-    # Steps:
-    #   1) finding the over-arching start and end times of data across all sites
-    #   2) determine the cadence using the timestamps
-    #   3) determine the number of expected frames using the cadence, start and end
-    #
-    start_dt = image_list[0].timestamp[0]
-    end_dt = image_list[0].timestamp[-1]
-    for site_data in image_list:
-        this_start_dt = site_data.timestamp[0]
-        this_end_dt = site_data.timestamp[-1]
-        if (this_start_dt &lt; start_dt):
-            start_dt = this_start_dt
-        if (this_end_dt &gt; end_dt):
-            end_dt = this_end_dt
-    cadence = __determine_cadence(image_list[0].timestamp)
-    curr_dt = start_dt.replace(microsecond=0)
-    expected_num_frames = 0
-    expected_timestamps = []
-    while (curr_dt &lt;= end_dt):
-        expected_timestamps.append(curr_dt)
-        expected_num_frames += 1
-        curr_dt += datetime.timedelta(seconds=cadence)
-
-    # for each site
-    site_uid_list = []
-    images_dict = {}
-    for site_image_data in image_list:
-
-        if (data_attribute == &#34;data&#34;):
-            site_data = site_image_data.data
-        elif (data_attribute == &#34;calibrated_data&#34;):
-            site_data = site_image_data.calibrated_data
-
-        # set image dimensions
-        height = site_data.shape[0]
-        width = site_data.shape[1]
-
-        # Determine number of channels of image data
-        if len(site_data.shape) == 4:
-            n_channels = site_data.shape[2]
-        else:
-            n_channels = 1
-
-        # add to site uid list - must use try as metadata differs between networks
-        try:
-            site_uid = site_image_data.metadata[0][&#34;site_unique_id&#34;]
-        except KeyError:
-            try:
-                site_uid = site_image_data.metadata[0][&#34;Site unique ID&#34;]
-            except KeyError as e:
-                raise KeyError(&#34;Unable to find site UID in Metadata&#34;) from e
-
-        # We don&#39;t attempt to handle the same site being passed in for multiple networks
-        if site_uid in images_dict.keys():
-            warnings.warn(
-                &#34;Same site between differing networks detected. Omitting additional &#39;%s&#39; data&#34; % (site_uid),
-                stacklevel=1,
-            )
-            continue
-        site_uid_list.append(site_uid)
-
-        # initialize this site&#39;s data destination variables
-        images_dict[site_uid] = np.squeeze(np.full((height, width, n_channels, expected_num_frames), np.nan))
-
-        # use binary search to find the index in the data corresponding to each
-        # expected timestamp (we assume it is already sorted)
-        for i in range(0, len(expected_timestamps)):
-            searching_dt = expected_timestamps[i]
-            found_idx = None
-            low = 0
-            high = len(site_image_data.timestamp) - 1
-            while (low &lt;= high):
-                mid = low + (high - low) // 2
-                this_ts = site_image_data.timestamp[mid].replace(microsecond=0)
-
-                if (this_ts == searching_dt):
-                    found_idx = mid
-                    break
-                elif (this_ts &gt; searching_dt):
-                    high = mid - 1
-                else:
-                    low = mid + 1
-
-            if (found_idx is None):
-                # didn&#39;t find the timestamp, just move on because there will be no data
-                # for this timestamp
-                continue
-            else:
-                # found data for this timestamp
-                if n_channels != 1:
-                    images_dict[site_uid][:, :, :, i] = site_data[:, :, :, found_idx]
-                else:
-                    images_dict[site_uid][:, :, i] = site_data[:, :, found_idx]
-
-    dimensions_dict = {}
-    for site_uid, image in images_dict.items():
-        dimensions_dict[site_uid] = (image.shape[0], image.shape[1])
-
-    # cast into object
-    prepped_data = MosaicData(
-        site_uid_list=site_uid_list,
-        timestamps=expected_timestamps,
-        images=images_dict,
-        images_dimensions=dimensions_dict,
-    )
-
-    # return
-    return prepped_data</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.tools.mosaic.prep_skymaps"><code class="name flex">
-<span>def <span class="ident">prep_skymaps</span></span>(<span>skymaps: List[pyucalgarysrs.data.classes.Skymap], height_km: int, site_uid_order: Optional[List[str]] = None, progress_bar_disable: bool = False, n_parallel: int = 1) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a></span>
+<span>def <span class="ident">prep_skymaps</span></span>(<span>skymaps: List[pyucalgarysrs.data.classes.Skymap],<br>height_km: int,<br>site_uid_order: List[str] | None = None,<br>progress_bar_disable: bool = False,<br>n_parallel: int = 1) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prepare skymap data for use by the mosaic routine. This is not time-dependent, so it
@@ -641,132 +152,6 @@ consistent with the order of the <code>skymaps</code> parameter.</dd>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def prep_skymaps(skymaps: List[Skymap],
-                 height_km: int,
-                 site_uid_order: Optional[List[str]] = None,
-                 progress_bar_disable: bool = False,
-                 n_parallel: int = 1) -&gt; MosaicSkymap:
-    &#34;&#34;&#34;
-    Prepare skymap data for use by the mosaic routine. This is not time-dependent, so it 
-    would only need to be done once.
-
-    Allows for plotting multiple images on a map, masking the boundaries between 
-    images by elevation angle.
-
-    Args:
-        skymaps (List[pyaurorax.data.ucalgary.Skymap]): 
-            The skymaps to prep.
-        
-        height_km (int): 
-            The altitude to utilize, in kilometers.
-        
-        site_uid_order (List[str]): 
-            The site list order. The order of this list is not important for plotting, but must be
-            consistent with the order of the `skymaps` parameter.
-        
-        progress_bar_disable (bool): 
-            Disable the progress bar. Defaults to `False`.
-
-        n_parallel (int): 
-            Number of skymaps to prepare in parallel using multiprocessing. Default is `1`. 
-
-    Returns:
-        The prepared skymap data as a `pyaurorax.tools.MosaicSkymap` object.
-        
-    Raises:
-        ValueError: issues encountered with supplied parameters.
-    &#34;&#34;&#34;
-    # reorder the skymap list based on the site_uid_list supplied
-    skymaps_sorted = []
-    site_uid_list = []
-    if (site_uid_order is not None):
-        # need to specifically order the skymaps
-        #
-        # NOTE: can do an optimization here, but with only a few items
-        # ever in this list, it doesn&#39;t matter. A O(N)^2 routine is
-        # good enough.
-        for site_uid in site_uid_order:
-            for skymap in skymaps:
-                if (site_uid == skymap.site_uid):
-                    skymaps_sorted.append(skymap)
-                    site_uid_list.append(site_uid)
-        if (len(skymaps_sorted) != len(skymaps)):
-            raise ValueError(&#34;Number of items in supplied skymaps and site_uid_order lists do not match, or &#34; +
-                             &#34;some site_uids specified in the order were not found. Unable to flatten skymaps due to this mismatch.&#34;)
-    else:
-        site_uid_list = [x.site_uid for x in skymaps]
-        skymaps_sorted = skymaps
-
-    # define empty numpy arrays for the lats, lons, and elevation angles of all of
-    # the sites. Also define numpy arrays for &#39;filling&#39; the pixel coordinates, which
-    # will contain polygons vertices in lat/lon.
-    elevation = [np.zeros((skymap.full_azimuth.shape[0] * skymap.full_azimuth.shape[1])) for skymap in skymaps_sorted]
-    polyfill_lat = [np.zeros((5, skymap.full_azimuth.shape[0] * skymap.full_azimuth.shape[1])) for skymap in skymaps_sorted]
-    polyfill_lon = [np.zeros((5, skymap.full_azimuth.shape[0] * skymap.full_azimuth.shape[1])) for skymap in skymaps_sorted]
-
-    # set up processing objects
-    processing_dicts = []
-    for i in range(0, len(skymaps_sorted)):
-        processing_dicts.append({
-            &#34;skymap&#34;: skymaps_sorted[i],
-            &#34;height_km&#34;: height_km,
-            &#34;i&#34;: i,
-        })
-
-    if (n_parallel == 1):
-        # don&#39;t do anything special, just a basic loop
-        if (progress_bar_disable is True):
-            # no progress bar
-            for processing_dict in processing_dicts:
-                results_dict = __flatten_skymap(processing_dict)
-                elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-        else:
-            # with progress bar
-            for processing_dict in tqdm(processing_dicts, desc=&#34;Preparing skymaps: &#34;, unit=&#34;skymap&#34;):
-                results_dict = __flatten_skymap(processing_dict)
-                elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-    else:
-        # multiple workers, do it in a multiprocessing loop
-        if (progress_bar_disable is True):
-            with ProcessPoolExecutor(max_workers=n_parallel) as executor:
-                for results_dict in executor.map(__flatten_skymap, processing_dicts):
-                    elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                    polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                    polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-        else:
-            results_dicts = tqdm_process_map(
-                __flatten_skymap,
-                processing_dicts,
-                max_workers=n_parallel,
-                chunksize=1,
-                desc=&#34;Preparing skymaps: &#34;,
-                unit=&#34;skymap&#34;,
-                tqdm_class=tqdm,
-            )
-            for results_dict in results_dicts:
-                elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-
-    # cast data into object
-    flattened_skymap = MosaicSkymap(
-        elevation=elevation,
-        polyfill_lat=polyfill_lat,
-        polyfill_lon=polyfill_lon,
-        site_uid_list=site_uid_list,
-    )
-
-    # return
-    return flattened_skymap</code></pre>
-</details>
 </dd>
 </dl>
 </section>
@@ -778,8 +163,8 @@ consistent with the order of the <code>skymaps</code> parameter.</dd>
 <input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
 disabled minlength="2">
 </form>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
 <style>
 .modal-dialog iframe {
 width: 100vw;
@@ -820,7 +205,6 @@ setTimeout(() => input.focus(), 100);
 }).setContent('<iframe src="' + url + '"></iframe>').open();
 }
 </script>
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -841,7 +225,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>

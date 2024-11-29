@@ -2,19 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>pyaurorax API documentation</title>
 <meta name="description" content="The PyAuroraX package provides a way to interact with the [AuroraX Data Platform](https://aurorax.space),
-facilitating programmatic usage of …" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+facilitating programmatic usage of …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 <style>
 @media screen and (max-width: 699px) {
 #content {
@@ -53,82 +56,6 @@ in the Github repository <a href="https://github.com/aurorax-space/pyaurorax/tre
 <pre><code class="language-python">import pyaurorax
 aurorax = pyaurorax.PyAuroraX()
 </code></pre>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># Copyright 2024 University of Calgary
-#
-# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-&#34;&#34;&#34;
-The PyAuroraX package provides a way to interact with the [AuroraX Data Platform](https://aurorax.space), 
-facilitating programmatic usage of AuroraX&#39;s search engine and data analysis tools.
-
-For an overview of usage and examples, visit the
-[AuroraX Developer Zone website](https://docs.aurorax.space/code/overview), or explore the examples contained
-in the Github repository [here](https://github.com/aurorax-space/pyaurorax/tree/main/examples).
-
-Installation:
-```console
-pip install pyaurorax
-```
-
-Basic usage:
-```python
-import pyaurorax
-aurorax = pyaurorax.PyAuroraX()
-```
-&#34;&#34;&#34;
-
-# versioning info
-__version__ = &#34;1.3.0&#34;
-
-# documentation excludes
-__pdoc__ = {&#34;cli&#34;: False, &#34;pyaurorax&#34;: False}
-__all__ = [&#34;PyAuroraX&#34;]
-
-# pull in top level class
-from .pyaurorax import PyAuroraX
-
-# pull in top-level submodules
-#
-# NOTE: we do this only so that we can access classes within the
-# submodules, like `pyaurorax.search.EphemerisSearch`. Without this,
-# they are selectively addressable, such as within ipython, but not
-# vscode. Currently, this is ONLY included for VSCode&#39;s sake. Will
-# take more testing to explore other use-cases.
-from . import search
-from . import data
-from . import models
-
-# pull in exceptions
-from .exceptions import (
-    AuroraXError,
-    AuroraXInitializationError,
-    AuroraXPurgeError,
-    AuroraXAPIError,
-    AuroraXNotFoundError,
-    AuroraXDuplicateError,
-    AuroraXUnauthorizedError,
-    AuroraXConflictError,
-    AuroraXDataRetrievalError,
-    AuroraXSearchError,
-    AuroraXUploadError,
-    AuroraXMaintenanceError,
-    AuroraXUnsupportedReadError,
-    AuroraXDownloadError,
-)</code></pre>
-</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
@@ -168,7 +95,7 @@ AuroraX platform …</p></div>
 <dl>
 <dt id="pyaurorax.PyAuroraX"><code class="flex name class">
 <span>class <span class="ident">PyAuroraX</span></span>
-<span>(</span><span>download_output_root_path: Optional[str] = None, read_tar_temp_path: Optional[str] = None, api_base_url: Optional[str] = None, api_timeout: Optional[int] = None, api_headers: Optional[Dict] = None, api_key: Optional[str] = None, srs_obj: Optional[pyucalgarysrs.pyucalgarysrs.PyUCalgarySRS] = None)</span>
+<span>(</span><span>download_output_root_path: str | None = None,<br>read_tar_temp_path: str | None = None,<br>api_base_url: str | None = None,<br>api_timeout: int | None = None,<br>api_headers: Dict | None = None,<br>api_key: str | None = None,<br>srs_obj: pyucalgarysrs.pyucalgarysrs.PyUCalgarySRS | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>The <code><a title="pyaurorax.PyAuroraX" href="#pyaurorax.PyAuroraX">PyAuroraX</a></code> class is the primary entry point for utilizing
@@ -198,7 +125,7 @@ For faster performance when reading tar-based data, one option on Linux is
 to set this to use RAM directly at <code>/dev/shm/pyaurorax_tar_temp_working</code>.</dd>
 <dt><strong><code>api_base_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>URL prefix to use when interacting with the AuroraX API. By default this is set to
-<code>https://api.phys.ucalgary.ca</code>. This parameter is primarily used by the development
+<code>https://api.aurorax.space</code>. This parameter is primarily used by the development
 team to test and build new functions using the private staging API.</dd>
 <dt><strong><code>api_timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>The timeout used when communicating with the Aurorax API. This value is represented in
@@ -276,7 +203,7 @@ of the paths</dd>
 
             api_base_url (str): 
                 URL prefix to use when interacting with the AuroraX API. By default this is set to 
-                `https://api.phys.ucalgary.ca`. This parameter is primarily used by the development 
+                `https://api.aurorax.space`. This parameter is primarily used by the development 
                 team to test and build new functions using the private staging API.
 
             api_timeout (int): 
@@ -675,7 +602,7 @@ of the paths</dd>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pyaurorax.PyAuroraX.api_base_url"><code class="name">var <span class="ident">api_base_url</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.api_base_url"><code class="name">prop <span class="ident">api_base_url</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the API base URL. See above for details.</p></div>
 <details class="source">
@@ -690,7 +617,7 @@ def api_base_url(self):
     return self.__api_base_url</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.api_headers"><code class="name">var <span class="ident">api_headers</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.api_headers"><code class="name">prop <span class="ident">api_headers</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the API headers. See above for details.</p></div>
 <details class="source">
@@ -705,7 +632,7 @@ def api_headers(self):
     return self.__api_headers</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.api_key"><code class="name">var <span class="ident">api_key</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.api_key"><code class="name">prop <span class="ident">api_key</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the API key. See above for details.</p></div>
 <details class="source">
@@ -720,7 +647,7 @@ def api_key(self):
     return self.__api_key</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.api_timeout"><code class="name">var <span class="ident">api_timeout</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.api_timeout"><code class="name">prop <span class="ident">api_timeout</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the API timeout. See above for details.</p></div>
 <details class="source">
@@ -735,7 +662,7 @@ def api_timeout(self):
     return self.__api_timeout</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.data"><code class="name">prop <span class="ident">data</span></code></dt>
 <dd>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.data" href="data/index.html">pyaurorax.data</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
@@ -750,7 +677,7 @@ def data(self):
     return self.__data</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.download_output_root_path"><code class="name">var <span class="ident">download_output_root_path</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.download_output_root_path"><code class="name">prop <span class="ident">download_output_root_path</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the download output root path. See above for details.</p></div>
 <details class="source">
@@ -765,7 +692,7 @@ def download_output_root_path(self):
     return str(self.__download_output_root_path)</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.models"><code class="name">var <span class="ident">models</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.models"><code class="name">prop <span class="ident">models</span></code></dt>
 <dd>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.models" href="models/index.html">pyaurorax.models</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
@@ -780,7 +707,7 @@ def models(self):
     return self.__models</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.read_tar_temp_path"><code class="name">var <span class="ident">read_tar_temp_path</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.read_tar_temp_path"><code class="name">prop <span class="ident">read_tar_temp_path</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the read tar temp path. See above for details.</p></div>
 <details class="source">
@@ -795,7 +722,7 @@ def read_tar_temp_path(self):
     return str(self.__read_tar_temp_path)</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.search"><code class="name">var <span class="ident">search</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.search"><code class="name">prop <span class="ident">search</span></code></dt>
 <dd>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.search" href="search/index.html">pyaurorax.search</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
@@ -810,7 +737,7 @@ def search(self):
     return self.__search</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.srs_obj"><code class="name">var <span class="ident">srs_obj</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.srs_obj"><code class="name">prop <span class="ident">srs_obj</span></code></dt>
 <dd>
 <div class="desc"><p>Property for the PyUCalgarySRS object. See above for details.</p></div>
 <details class="source">
@@ -825,7 +752,7 @@ def srs_obj(self):
     return self.__srs_obj</code></pre>
 </details>
 </dd>
-<dt id="pyaurorax.PyAuroraX.tools"><code class="name">var <span class="ident">tools</span></code></dt>
+<dt id="pyaurorax.PyAuroraX.tools"><code class="name">prop <span class="ident">tools</span></code></dt>
 <dd>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.tools" href="tools/index.html">pyaurorax.tools</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
@@ -859,38 +786,6 @@ same, but it can be different if the user specifically changes it. </p>
 <dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>
 <dd>an error was encountered during the purge operation</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def purge_download_output_root_path(self):
-    &#34;&#34;&#34;
-    Delete all files in the `download_output_root_path` directory. Since the
-    library downloads data to this directory, over time it can grow too large
-    and the user can risk running out of space. This method is here to assist
-    with easily clearing out this directory.
-
-    Note that it also deletes all files in the PyUCalgarySRS object&#39;s 
-    download_output_root_path path as well. Normally, these two paths are the 
-    same, but it can be different if the user specifically changes it. 
-
-    Raises:
-        pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
-    &#34;&#34;&#34;
-    try:
-        # purge pyaurorax path
-        for item in os.listdir(self.download_output_root_path):
-            item = Path(self.download_output_root_path) / item
-            if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
-                shutil.rmtree(item)
-            elif (os.path.isfile(item) is True):
-                os.remove(item)
-
-        # purge pyucalgarysrs path
-        self.__srs_obj.purge_download_output_root_path()
-    except Exception as e:  # pragma: nocover
-        raise AuroraXPurgeError(&#34;Error while purging download output root path: %s&#34; % (str(e))) from e</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.PyAuroraX.purge_read_tar_temp_path"><code class="name flex">
 <span>def <span class="ident">purge_read_tar_temp_path</span></span>(<span>self)</span>
@@ -910,40 +805,6 @@ same, but it can be different if the user specifically changes it. </p>
 <dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>
 <dd>an error was encountered during the purge operation</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def purge_read_tar_temp_path(self):
-    &#34;&#34;&#34;
-    Delete all files in the `read_tar_temp_path` directory. Since the library 
-    extracts temporary data to this directory, sometime issues during reading 
-    can cause this directory to contain residual files that aren&#39;t deleted during 
-    the normal read routine. Though this is very rare, it is still possible. 
-    Therefore, this method is here to assist with easily clearing out this 
-    directory.
-
-    Note that it also deletes all files in the PyUCalgarySRS object&#39;s 
-    read_tar_temp_path path as well. Normally, these two paths are the 
-    same, but it can be different if the user specifically changes it. 
-
-    Raises:
-        pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
-    &#34;&#34;&#34;
-    try:
-        # purge pyaurorax path
-        for item in os.listdir(self.read_tar_temp_path):
-            item = Path(self.read_tar_temp_path) / item
-            if (os.path.isdir(item) is True and self.download_output_root_path not in str(item)):
-                shutil.rmtree(item)
-            elif (os.path.isfile(item) is True):
-                os.remove(item)
-
-        # purge pyucalgarysrs path
-        self.__srs_obj.purge_read_tar_temp_path()
-    except Exception as e:  # pragma: nocover
-        raise AuroraXPurgeError(&#34;Error while purging read tar temp path: %s&#34; % (str(e))) from e</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.PyAuroraX.show_data_usage"><code class="name flex">
 <span>def <span class="ident">show_data_usage</span></span>(<span>self, order: Literal['name', 'size'] = 'size', return_dict: bool = False) ‑> Any</span>
@@ -966,114 +827,6 @@ disk usage information.</p>
 <p>Note that size on disk may differ slightly from the values determined by this
 routine. For example, the results here will be slightly different than the output
 of a 'du' command on *nix systems.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def show_data_usage(self, order: Literal[&#34;name&#34;, &#34;size&#34;] = &#34;size&#34;, return_dict: bool = False) -&gt; Any:
-    &#34;&#34;&#34;
-    Print the volume of data existing in the download_output_root_path, broken down
-    by dataset. Alternatively return the information in a dictionary.
-    
-    This can be a helpful tool for managing your disk space.
-
-    Args:
-        order (bool): 
-            Order results by either `size` or `name`. Default is `size`.
-
-        return_dict (bool): 
-            Instead of printing the data usage information, return the information as a dictionary.
-
-    Returns:
-        Printed output. If `return_dict` is True, then it will instead return a dictionary with the
-        disk usage information.
-    
-    Notes:
-        Note that size on disk may differ slightly from the values determined by this 
-        routine. For example, the results here will be slightly different than the output
-        of a &#39;du&#39; command on *nix systems.
-    &#34;&#34;&#34;
-    # init
-    total_size = 0
-    download_pathlib_path = Path(self.download_output_root_path)
-
-    # get list of dataset paths
-    dataset_paths = []
-    for f in os.listdir(download_pathlib_path):
-        path_f = download_pathlib_path / f
-        if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
-            dataset_paths.append(path_f)
-
-    # get size of each dataset path
-    dataset_dict = {}
-    longest_path_len = 0
-    for dataset_path in dataset_paths:
-        # get size
-        dataset_size = 0
-        for dirpath, _, filenames in os.walk(dataset_path):
-            for filename in filenames:
-                filepath = os.path.join(dirpath, filename)
-                if (os.path.isfile(filepath) is True):
-                    dataset_size += os.path.getsize(filepath)
-
-        # check if this is the longest path name
-        path_basename = os.path.basename(dataset_path)
-        if (longest_path_len == 0):
-            longest_path_len = len(path_basename)
-        elif (len(path_basename) &gt; longest_path_len):
-            longest_path_len = len(path_basename)
-
-        # set dict
-        dataset_dict[path_basename] = {
-            &#34;path_obj&#34;: dataset_path,
-            &#34;size_bytes&#34;: dataset_size,
-            &#34;size_str&#34;: humanize.naturalsize(dataset_size),
-        }
-
-        # add to total
-        total_size += dataset_size
-
-    # return dictionary
-    if (return_dict is True):
-        return dataset_dict
-
-    # print table
-    #
-    # order into list
-    order_key = &#34;size_bytes&#34; if order == &#34;size&#34; else order
-    ordered_list = []
-    for path, p_dict in dataset_dict.items():
-        this_dict = p_dict
-        this_dict[&#34;name&#34;] = path
-        ordered_list.append(this_dict)
-    if (order == &#34;size&#34;):
-        ordered_list = reversed(sorted(ordered_list, key=lambda x: x[order_key]))
-    else:
-        ordered_list = sorted(ordered_list, key=lambda x: x[order_key])
-
-    # set column data
-    table_names = []
-    table_sizes = []
-    for item in ordered_list:
-        table_names.append(item[&#34;name&#34;])
-        table_sizes.append(item[&#34;size_str&#34;])
-
-    # set header values
-    table_headers = [&#34;Dataset name&#34;, &#34;Size&#34;]
-
-    # print as table
-    table = Texttable()
-    table.set_deco(Texttable.HEADER)
-    table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
-    table.set_header_align([&#34;l&#34;] * len(table_headers))
-    table.set_cols_align([&#34;l&#34;] * len(table_headers))
-    table.header(table_headers)
-    for i in range(0, len(table_names)):
-        table.add_row([table_names[i], table_sizes[i]])
-    print(table.draw())
-
-    print(&#34;\nTotal size: %s&#34; % (humanize.naturalsize(total_size)))</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
@@ -1085,8 +838,8 @@ of a 'du' command on *nix systems.</p></div>
 <input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
 disabled minlength="2">
 </form>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
 <style>
 .modal-dialog iframe {
 width: 100vw;
@@ -1127,7 +880,6 @@ setTimeout(() => input.focus(), 100);
 }).setContent('<iframe src="' + url + '"></iframe>').open();
 }
 </script>
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -1168,7 +920,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>

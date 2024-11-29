@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>pyaurorax.tools.bounding_box.extract_metric API documentation</title>
-<meta name="description" content="Extract various metrics from a given bounding box." />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="Extract various metrics from a given bounding box.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 <style>
 @media screen and (max-width: 699px) {
 #content {
@@ -41,41 +44,6 @@ border-left: 1px solid #ddd;
 </header>
 <section id="section-intro">
 <p>Extract various metrics from a given bounding box.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># Copyright 2024 University of Calgary
-#
-# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-&#34;&#34;&#34;
-Extract various metrics from a given bounding box.
-&#34;&#34;&#34;
-
-from ._geo import geo
-from ._ccd import ccd
-from ._mag import mag
-from ._elevation import elevation
-from ._azimuth import azimuth
-
-__all__ = [
-    &#34;geo&#34;,
-    &#34;ccd&#34;,
-    &#34;mag&#34;,
-    &#34;elevation&#34;,
-    &#34;azimuth&#34;,
-]</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -85,7 +53,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pyaurorax.tools.bounding_box.extract_metric.azimuth"><code class="name flex">
-<span>def <span class="ident">azimuth</span></span>(<span>images: numpy.ndarray, skymap: pyucalgarysrs.data.classes.Skymap, azimuth_bounds: Sequence[Union[float, int]], metric: Literal['mean', 'median', 'sum'] = 'median', n_channels: Optional[int] = None, show_preview: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">azimuth</span></span>(<span>images: numpy.ndarray,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>azimuth_bounds: Sequence[float | int],<br>metric: Literal['mean', 'median', 'sum'] = 'median',<br>n_channels: int | None = None,<br>show_preview: bool = False) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Compute a metric of image data within an azimuthal boundary.</p>
@@ -118,131 +86,9 @@ Plot a preview of the bounded area.</p>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def azimuth(images: np.ndarray,
-            skymap: Skymap,
-            azimuth_bounds: Sequence[Union[int, float]],
-            metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
-            n_channels: Optional[int] = None,
-            show_preview: bool = False) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Compute a metric of image data within an azimuthal boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the image data.
-
-        azimuth_bounds (Sequence[int | float]: 
-            A 2-element sequence specifying the azimuthal bounds from which to extract the metric. 
-            Anticipated order is [az_min, az_max].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Default is `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-
-        show_preview (bool):
-            Plot a preview of the bounded area.
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within azimuth range, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    &#34;&#34;&#34;
-
-    # Select individual azimuths from list
-    az_0 = azimuth_bounds[0]
-    az_1 = azimuth_bounds[1]
-
-    # Determine if we are using single or 3 channel
-    images = np.squeeze(images)
-    if n_channels is not None:
-        n_channels = n_channels
-    else:
-        n_channels = 1
-        if (len(images.shape) == 3):
-            # single channel
-            n_channels = 1
-        elif (len(images.shape) == 4):
-            # three channel
-            n_channels = 3
-
-    # Ensure that coordinates are valid
-    if az_0 &gt; 360 or az_0 &lt; 0:
-        raise ValueError(&#34;Invalid Azimuth: &#34; + str(az_0))
-    elif az_1 &gt; 360 or az_1 &lt; 0:
-        raise ValueError(&#34;Invalid Azimuth: &#34; + str(az_1))
-
-    # Ensure that azimuths are properly ordered
-    if az_0 &gt; az_1:
-        az_0, az_1 = az_1, az_0
-
-    # Ensure that this is a valid polygon
-    if (az_0 == az_1):
-        raise ValueError(&#34;Azimuth bounds defined with zero area.&#34;)
-
-    # Obtain azimuth array from skymap
-    az = np.squeeze(skymap.full_azimuth)
-
-    # Obtain indices into skymap within azimuth range
-    bound_idx = np.where(np.logical_and(az &gt; float(az_0), az &lt; float(az_1)))
-
-    # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
-        raise ValueError(&#34;No data within desired bounds. Try a larger area.&#34;)
-
-    # Slice out the bounded data, and plot preview if requested
-    if n_channels == 1:
-        bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1]] = 255
-            plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    elif n_channels == 3:
-        bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1], 0] = 255
-            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
-            plt.figure()
-            plt.imshow(preview_img, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    else:
-        raise ValueError(&#34;Unrecognized image format with shape: &#34; + str(images.shape))
-
-    # Compute metric of interest
-    if metric == &#39;median&#39;:
-        result = np.median(bound_data, axis=0)
-    elif metric == &#39;mean&#39;:
-        result = np.mean(bound_data, axis=0)
-    elif metric == &#39;sum&#39;:
-        result = np.sum(bound_data, axis=0)
-    else:
-        raise ValueError(&#34;Metric &#34; + str(metric) + &#34; is not recognized.&#34;)
-
-    return result</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.tools.bounding_box.extract_metric.ccd"><code class="name flex">
-<span>def <span class="ident">ccd</span></span>(<span>images: numpy.ndarray, ccd_bounds: Sequence[int], metric: Literal['mean', 'median', 'sum'] = 'median', n_channels: Optional[int] = None, show_preview: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">ccd</span></span>(<span>images: numpy.ndarray,<br>ccd_bounds: Sequence[int],<br>metric: Literal['mean', 'median', 'sum'] = 'median',<br>n_channels: int | None = None,<br>show_preview: bool = False) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Compute a metric of image data within a CCD boundary.</p>
@@ -271,128 +117,9 @@ Plot a preview of the bounded area.</p>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def ccd(images: np.ndarray,
-        ccd_bounds: Sequence[int],
-        metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
-        n_channels: Optional[int] = None,
-        show_preview: bool = False) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Compute a metric of image data within a CCD boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        ccd_bounds (List[int]): 
-            A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric. 
-            Anticipated order is [x_0, x_1, y_0, y_1].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Defaults to `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-        
-        show_preview (bool):
-            Plot a preview of the bounded area.
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within CCD bounds, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    &#34;&#34;&#34;
-
-    # Select individual ccd x/y from list
-    x_0 = ccd_bounds[0]
-    x_1 = ccd_bounds[1]
-    y_0 = ccd_bounds[2]
-    y_1 = ccd_bounds[3]
-
-    # Determine if we are using single or 3 channel
-    images = np.squeeze(images)
-    if n_channels is not None:
-        n_channels = n_channels
-    else:
-        n_channels = 1
-        if (len(images.shape) == 3):
-            # single channel
-            n_channels = 1
-        elif (len(images.shape) == 4):
-            # three channel
-            n_channels = 3
-
-    # Ensure that coordinates are valid
-    max_x = images.shape[0]
-    max_y = images.shape[1]
-
-    if y_0 &gt; max_y or y_0 &lt; 0:
-        raise ValueError(&#34;CCD Y Coordinate &#34; + str(y_0) + &#34; out of range for image of shape &#34; + str((max_y, max_x)) + &#34;.&#34;)
-    elif y_1 &gt; max_y or y_1 &lt; 0:
-        raise ValueError(&#34;CCD Y Coordinate &#34; + str(y_1) + &#34; out of range for image of shape &#34; + str((max_y, max_x)) + &#34;.&#34;)
-    elif x_0 &gt; max_x or x_0 &lt; 0:
-        raise ValueError(&#34;CCD Y Coordinate &#34; + str(x_0) + &#34; out of range for image of shape &#34; + str((max_y, max_x)) + &#34;.&#34;)
-    elif x_1 &gt; max_x or x_1 &lt; 0:
-        raise ValueError(&#34;CCD Y Coordinate &#34; + str(x_1) + &#34; out of range for image of shape &#34; + str((max_y, max_x)) + &#34;.&#34;)
-
-    # Ensure that coordinates are properly ordered
-    if y_0 &gt; y_1:
-        y_0, y_1 = y_1, y_0
-    if x_0 &gt; x_1:
-        x_0, x_1 = x_1, x_0
-
-    # Ensure that this is a valid polygon
-    if (y_0 == y_1) or (x_0 == x_1):
-        raise ValueError(&#34;Polygon defined with zero area.&#34;)
-
-    # Slice out the bounded data
-    if n_channels == 1:
-        bound_data = images[y_0:y_1, x_0:x_1, :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
-            preview_img[y_0:y_1, x_0:x_1] = 255
-            plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    elif n_channels == 3:
-        bound_data = images[y_0:y_1, x_0:x_1, :, :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
-            preview_img[y_0:y_1, x_0:x_1, 0] = 255
-            preview_img[y_0:y_1, x_0:x_1, 1:] = 0
-            plt.figure()
-            plt.imshow(preview_img, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    else:
-        raise ValueError(&#34;Unrecognized image format with shape: &#34; + str(images.shape))
-
-    # Compute metric of interest
-    if metric == &#39;median&#39;:
-        result = np.median(bound_data, axis=(0, 1))
-    elif metric == &#39;mean&#39;:
-        result = np.mean(bound_data, axis=(0, 1))
-    elif metric == &#39;sum&#39;:
-        result = np.sum(bound_data, axis=(0, 1))
-    else:
-        raise ValueError(&#34;Metric &#34; + str(metric) + &#34; is not recognized.&#34;)
-
-    return result</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.tools.bounding_box.extract_metric.elevation"><code class="name flex">
-<span>def <span class="ident">elevation</span></span>(<span>images: numpy.ndarray, skymap: pyucalgarysrs.data.classes.Skymap, elevation_bounds: Sequence[Union[float, int]], metric: Literal['mean', 'median', 'sum'] = 'median', n_channels: Optional[int] = None, show_preview: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">elevation</span></span>(<span>images: numpy.ndarray,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>elevation_bounds: Sequence[float | int],<br>metric: Literal['mean', 'median', 'sum'] = 'median',<br>n_channels: int | None = None,<br>show_preview: bool = False) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Compute a metric of image data within an elevation boundary.</p>
@@ -423,132 +150,9 @@ Plot a preview of the bounded area.</p>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def elevation(images: np.ndarray,
-              skymap: Skymap,
-              elevation_bounds: Sequence[Union[int, float]],
-              metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
-              n_channels: Optional[int] = None,
-              show_preview: bool = False) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Compute a metric of image data within an elevation boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the image data.
-
-        elevation_bounds (Sequence): 
-            A 2-element sequence specifying the elevation bounds from which to extract the metric. 
-            Anticipated order is [el_min, el_max].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Default is `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-        
-        show_preview (bool):
-            Plot a preview of the bounded area.
-
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    &#34;&#34;&#34;
-
-    # Select individual elevations from list
-    elev_0 = elevation_bounds[0]
-    elev_1 = elevation_bounds[1]
-
-    # Determine if we are using single or 3 channel
-    images = np.squeeze(images)
-    if n_channels is not None:
-        n_channels = n_channels
-    else:
-        n_channels = 1
-        if (len(images.shape) == 3):
-            # single channel
-            n_channels = 1
-        elif (len(images.shape) == 4):
-            # three channel
-            n_channels = 3
-
-    # Ensure that coordinates are valid
-    if elev_0 &gt; 90 or elev_0 &lt; 0:
-        raise ValueError(&#34;Invalid Elevation: &#34; + str(elev_0))
-    elif elev_1 &gt; 90 or elev_1 &lt; 0:
-        raise ValueError(&#34;Invalid Elevation: &#34; + str(elev_1))
-
-    # Ensure that elevations are properly ordered
-    if elev_0 &gt; elev_1:
-        elev_0, elev_1 = elev_1, elev_0
-
-    # Ensure that this is a valid bounded area
-    if (elev_0 == elev_1):
-        raise ValueError(&#34;Elevation bounds defined with zero area.&#34;)
-
-    # Obtain elevation array from skymap
-    elev = np.squeeze(skymap.full_elevation)
-
-    # Obtain indices into skymap within elevation range
-    bound_idx = np.where(np.logical_and(elev &gt;= float(elev_0), elev &lt;= float(elev_1)))
-
-    # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
-        raise ValueError(&#34;No data within desired bounds. Try a larger area.&#34;)
-
-    # Slice out the bounded data
-    if n_channels == 1:
-        bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1]] = 255
-            plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    elif n_channels == 3:
-        bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1], 0] = 255
-            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
-            plt.figure()
-            plt.imshow(preview_img, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    else:
-        raise ValueError(&#34;Unrecognized image format with shape: &#34; + str(images.shape))
-
-    # Compute metric of interest
-    if metric == &#39;median&#39;:
-        result = np.median(bound_data, axis=0)
-    elif metric == &#39;mean&#39;:
-        result = np.mean(bound_data, axis=0)
-    elif metric == &#39;sum&#39;:
-        result = np.sum(bound_data, axis=0)
-    else:
-        raise ValueError(&#34;Metric &#34; + str(metric) + &#34; is not recognized.&#34;)
-
-    return result</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.tools.bounding_box.extract_metric.geo"><code class="name flex">
-<span>def <span class="ident">geo</span></span>(<span>images: numpy.ndarray, skymap: pyucalgarysrs.data.classes.Skymap, altitude_km: Union[float, int], lonlat_bounds: Sequence[Union[float, int]], metric: Literal['mean', 'median', 'sum'] = 'median', n_channels: Optional[int] = None, show_preview: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">geo</span></span>(<span>images: numpy.ndarray,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>altitude_km: float | int,<br>lonlat_bounds: Sequence[float | int],<br>metric: Literal['mean', 'median', 'sum'] = 'median',<br>n_channels: int | None = None,<br>show_preview: bool = False) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Compute a metric of image data within a geographic lat/lon boundary.</p>
@@ -581,190 +185,9 @@ Plot a preview of the bounded area.</p>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def geo(images: np.ndarray,
-        skymap: Skymap,
-        altitude_km: Union[int, float],
-        lonlat_bounds: Sequence[Union[int, float]],
-        metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
-        n_channels: Optional[int] = None,
-        show_preview: bool = False) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Compute a metric of image data within a geographic lat/lon boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the image data.
-        
-        altitude_km (int or float): 
-            The altitude of the image data in kilometers.
-
-        lonlat_bounds (Sequence): 
-            A 4-element sequence specifying the lat/lon bounds from which to extract the metric. 
-            Anticipated order is [lon_0, lon_1, lat_0, lat_1].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Default is `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-        
-        show_preview (bool):
-            Plot a preview of the bounded area.
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    &#34;&#34;&#34;
-
-    # Select individual lats/lons from list
-    lon_0 = lonlat_bounds[0]
-    lon_1 = lonlat_bounds[1]
-    lat_0 = lonlat_bounds[2]
-    lat_1 = lonlat_bounds[3]
-
-    # Determine if we are using single or 3 channel
-    images = np.squeeze(images)
-    if n_channels is not None:
-        n_channels = n_channels
-    else:
-        n_channels = 1
-        if (len(images.shape) == 3):
-            # single channel
-            n_channels = 1
-        elif (len(images.shape) == 4):
-            # three channel
-            n_channels = 3
-
-    # Ensure that coordinates are valid
-    if lat_0 &gt; 90 or lat_0 &lt; -90:
-        raise ValueError(&#34;Invalid Latitude: &#34; + str(lat_0))
-    elif lat_1 &gt; 90 or lat_1 &lt; -90:
-        raise ValueError(&#34;Invalid Latitude: &#34; + str(lat_1))
-    elif lon_0 &gt; 360 or lon_0 &lt; -180:
-        raise ValueError(&#34;Invalid Longitude: &#34; + str(lon_0))
-    elif lon_1 &gt; 360 or lon_1 &lt; -180:
-        raise ValueError(&#34;Invalid Longitude: &#34; + str(lon_1))
-
-    # Convert(0,360) longitudes to (-180,180) if entered as such
-    if lon_0 &gt; 180:
-        lon_0 -= 360.0
-    if lon_1 &gt; 180:
-        lon_1 -= 360.0
-
-    # Ensure that coordinates are properly ordered
-    if lat_0 &gt; lat_1:
-        lat_0, lat_1 = lat_1, lat_0
-    if lon_0 &gt; lon_1:
-        lon_0, lon_1 = lon_1, lon_0
-
-    # Ensure that this is a valid polygon
-    if (lat_0 == lat_1) or (lon_0 == lon_1):
-        raise ValueError(&#34;Polygon defined with zero area.&#34;)
-
-    # Obtain lat/lon arrays from skymap
-    interp_alts = skymap.full_map_altitude / 1000.0
-    if (altitude_km in interp_alts):
-        altitude_idx = np.where(altitude_km == interp_alts)
-
-        lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
-        lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    else:
-        # Make sure altitude is in range that can be interpolated
-        if (altitude_km &lt; interp_alts[0]) or (altitude_km &gt; interp_alts[2]):
-            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; + str((interp_alts[0], interp_alts[2])))
-
-        # Initialze empty lat/lon arrays
-        lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-        lons = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-
-        # Interpolate lats and lons at desired altitude
-        for i in range(skymap.full_map_latitude.shape[1]):
-            for j in range(skymap.full_map_latitude.shape[2]):
-                pixel_lats = skymap.full_map_latitude[:, i, j]
-                pixel_lons = skymap.full_map_longitude[:, i, j]
-                if np.isnan(pixel_lats).any() or np.isnan(pixel_lons).any():
-                    continue
-                lats[i, j] = np.interp(altitude_km, interp_alts, pixel_lats)
-                lons[i, j] = np.interp(altitude_km, interp_alts, pixel_lons)
-
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    # Check that lat/lon range is reasonable
-    min_skymap_lat = np.nanmin(lats)
-    max_skymap_lat = np.nanmax(lats)
-    min_skymap_lon = np.nanmin(lons)
-    max_skymap_lon = np.nanmax(lons)
-    if (lat_0 &lt;= min_skymap_lat) or (lat_1 &gt;= max_skymap_lat):
-        raise ValueError(f&#34;Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.&#34;)
-    if (lon_0 &lt;= min_skymap_lon) or (lon_1 &gt;= max_skymap_lon):
-        raise ValueError(f&#34;Longitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.&#34;)
-
-    # Obtain indices into skymap within lat/lon range
-    bound_idx = np.where(np.logical_and.reduce((lats &gt;= float(lat_0), lats &lt;= float(lat_1), lons &gt;= float(lon_0), lons &lt;= float(lon_1))))
-
-    # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
-        raise ValueError(&#34;No data within desired bounds. Try a larger area.&#34;)
-
-    # Convert from skymap coords to image coords
-    bound_idx = tuple(i - 1 for i in bound_idx)
-    bound_idx = tuple(np.maximum(idx, 0) for idx in bound_idx)
-
-    # Slice out the bounded data
-    if n_channels == 1:
-        bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1]] = 255
-            plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    elif n_channels == 3:
-        bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1], 0] = 255
-            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
-            plt.figure()
-            plt.imshow(preview_img, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    else:
-        raise ValueError(&#34;Unrecognized image format with shape: &#34; + str(images.shape))
-
-    # Compute metric of interest
-    if metric == &#39;median&#39;:
-        result = np.median(bound_data, axis=0)
-    elif metric == &#39;mean&#39;:
-        result = np.mean(bound_data, axis=0)
-    elif metric == &#39;sum&#39;:
-        result = np.sum(bound_data, axis=0)
-    else:
-        raise ValueError(&#34;Metric &#34; + str(metric) + &#34; is not recognized.&#34;)
-
-    return result</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.tools.bounding_box.extract_metric.mag"><code class="name flex">
-<span>def <span class="ident">mag</span></span>(<span>images: numpy.ndarray, timestamp: datetime.datetime, skymap: pyucalgarysrs.data.classes.Skymap, altitude_km: Union[float, int], lonlat_bounds: Sequence[Union[float, int]], metric: Literal['mean', 'median', 'sum'] = 'median', n_channels: Optional[int] = None, show_preview: bool = False) ‑> numpy.ndarray</span>
+<span>def <span class="ident">mag</span></span>(<span>images: numpy.ndarray,<br>timestamp: datetime.datetime,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>altitude_km: float | int,<br>lonlat_bounds: Sequence[float | int],<br>metric: Literal['mean', 'median', 'sum'] = 'median',<br>n_channels: int | None = None,<br>show_preview: bool = False) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Compute a metric of image data within a magnetic lat/lon boundary.</p>
@@ -797,199 +220,6 @@ Plot a preview of the bounded area.</p>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def mag(images: np.ndarray,
-        timestamp: datetime.datetime,
-        skymap: Skymap,
-        altitude_km: Union[int, float],
-        lonlat_bounds: Sequence[Union[int, float]],
-        metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
-        n_channels: Optional[int] = None,
-        show_preview: bool = False) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Compute a metric of image data within a magnetic lat/lon boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the image data.
-        
-        altitude_km (int or float): 
-            The altitude of the image data in kilometers.
-
-        lonlat_bounds (Sequence): 
-            A 4-element sequence specifying the magnetic lat/lon bounds from which to extract the metric. 
-            Anticipated order is [lon_0, lon_1, lat_0, lat_1].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Default is `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-
-        show_preview (bool):
-            Plot a preview of the bounded area.
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    &#34;&#34;&#34;
-
-    # Select individual lats/lons from list
-    lon_0 = lonlat_bounds[0]
-    lon_1 = lonlat_bounds[1]
-    lat_0 = lonlat_bounds[2]
-    lat_1 = lonlat_bounds[3]
-
-    # Determine if we are using single or 3 channel
-    images = np.squeeze(images)
-    if n_channels is not None:
-        n_channels = n_channels
-    else:
-        n_channels = 1
-        if (len(images.shape) == 3):
-            # single channel
-            n_channels = 1
-        elif (len(images.shape) == 4):
-            # three channel
-            n_channels = 3
-
-    # Ensure that coordinates are valid
-    if lat_0 &gt; 90 or lat_0 &lt; -90:
-        raise ValueError(&#34;Invalid Latitude: &#34; + str(lat_0))
-    elif lat_1 &gt; 90 or lat_1 &lt; -90:
-        raise ValueError(&#34;Invalid Latitude: &#34; + str(lat_1))
-    elif lon_0 &gt; 360 or lon_0 &lt; -180:
-        raise ValueError(&#34;Invalid Longitude: &#34; + str(lon_0))
-    elif lon_1 &gt; 360 or lon_1 &lt; -180:
-        raise ValueError(&#34;Invalid Longitude: &#34; + str(lon_1))
-
-    # Convert(0,360) longitudes to (-180,180) if entered as such
-    if lon_0 &gt; 180:
-        lon_0 -= 360.0
-    if lon_1 &gt; 180:
-        lon_1 -= 360.0
-
-    # Ensure that coordinates are properly ordered
-    if lat_0 &gt; lat_1:
-        lat_0, lat_1 = lat_1, lat_0
-    if lon_0 &gt; lon_1:
-        lon_0, lon_1 = lon_1, lon_0
-
-    # Ensure that this is a valid polygon
-    if (lat_0 == lat_1) or (lon_0 == lon_1):
-        raise ValueError(&#34;Polygon defined with zero area.&#34;)
-
-    # Obtain lat/lon arrays from skymap
-    interp_alts = skymap.full_map_altitude / 1000.0
-    if (altitude_km in interp_alts):
-        altitude_idx = np.where(altitude_km == interp_alts)
-
-        lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
-        lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    else:
-        # Make sure altitude is in range that can be interpolated
-        if (altitude_km &lt; interp_alts[0]) or (altitude_km &gt; interp_alts[2]):
-            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; + str((interp_alts[0], interp_alts[2])))
-
-        # Initialze empty lat/lon arrays
-        lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-        lons = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-
-        # Interpolate lats and lons at desired altitude
-        for i in range(skymap.full_map_latitude.shape[1]):
-            for j in range(skymap.full_map_latitude.shape[2]):
-                pixel_lats = skymap.full_map_latitude[:, i, j]
-                pixel_lons = skymap.full_map_longitude[:, i, j]
-                if np.isnan(pixel_lats).any() or np.isnan(pixel_lons).any():
-                    continue
-                lats[i, j] = np.interp(altitude_km, interp_alts, pixel_lats)
-                lons[i, j] = np.interp(altitude_km, interp_alts, pixel_lons)
-
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    # Convert skymap to magnetic coords
-    mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code=&#39;G2A&#39;)
-    mag_lats = np.reshape(mag_lats, lats.shape)
-    mag_lons = np.reshape(mag_lons, lons.shape)
-
-    # Check that lat/lon range is reasonable
-    min_skymap_lat = np.nanmin(mag_lats)
-    max_skymap_lat = np.nanmax(mag_lats)
-    min_skymap_lon = np.nanmin(mag_lons)
-    max_skymap_lon = np.nanmax(mag_lons)
-    if (lat_0 &lt;= min_skymap_lat) or (lat_1 &gt;= max_skymap_lat):
-        raise ValueError(f&#34;Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.&#34;)
-    if (lon_0 &lt;= min_skymap_lon) or (lon_1 &gt;= max_skymap_lon):
-        raise ValueError(f&#34;Latitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.&#34;)
-
-    # Obtain indices into skymap within lat/lon range
-    bound_idx = np.where(
-        np.logical_and.reduce((
-            mag_lats &gt;= float(lat_0),
-            mag_lats &lt;= float(lat_1),
-            mag_lons &gt;= float(lon_0),
-            mag_lons &lt;= float(lon_1),
-        )))
-
-    # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
-        raise ValueError(&#34;No data within desired bounds. Try a larger area.&#34;)
-
-    # Convert from skymap coords to image coords
-    bound_idx = tuple(i - 1 for i in bound_idx)
-    bound_idx = tuple(np.maximum(idx, 0) for idx in bound_idx)
-
-    # Slice out the bounded data
-    if n_channels == 1:
-        bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1]] = 255
-            plt.figure()
-            plt.imshow(preview_img, cmap=&#34;grey&#34;, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    elif n_channels == 3:
-        bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
-            preview_img[bound_idx[0], bound_idx[1], 0] = 255
-            preview_img[bound_idx[0], bound_idx[1], 1:] = 0
-            plt.figure()
-            plt.imshow(preview_img, origin=&#34;lower&#34;)
-            plt.title(&#34;Bounded Area Preview&#34;)
-            plt.axis(&#34;off&#34;)
-            plt.show()
-    else:
-        raise ValueError(&#34;Unrecognized image format with shape: &#34; + str(images.shape))
-
-    # Compute metric of interest
-    if metric == &#39;median&#39;:
-        result = np.median(bound_data, axis=0)
-    elif metric == &#39;mean&#39;:
-        result = np.mean(bound_data, axis=0)
-    elif metric == &#39;sum&#39;:
-        result = np.sum(bound_data, axis=0)
-    else:
-        raise ValueError(&#34;Metric &#34; + str(metric) + &#34; is not recognized.&#34;)
-
-    return result</code></pre>
-</details>
 </dd>
 </dl>
 </section>
@@ -1001,8 +231,8 @@ Plot a preview of the bounded area.</p>
 <input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
 disabled minlength="2">
 </form>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
 <style>
 .modal-dialog iframe {
 width: 100vw;
@@ -1043,7 +273,6 @@ setTimeout(() => input.focus(), 100);
 }).setContent('<iframe src="' + url + '"></iframe>').open();
 }
 </script>
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -1066,7 +295,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>

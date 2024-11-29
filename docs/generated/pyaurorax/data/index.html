@@ -2,19 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.3">
 <title>pyaurorax.data API documentation</title>
 <meta name="description" content="Instrument data downloading and reading module. This module presently has support
-for data provided by the University of Calgary, such as THEMIS ASI, …" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+for data provided by the University of Calgary, such as THEMIS ASI, …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 <style>
 @media screen and (max-width: 699px) {
 #content {
@@ -44,280 +47,6 @@ border-left: 1px solid #ddd;
 <p>Instrument data downloading and reading module. This module presently has support
 for data provided by the University of Calgary, such as THEMIS ASI, REGO, and the
 Transition Region Explorer (TREx) instruments.</p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python"># Copyright 2024 University of Calgary
-#
-# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-&#34;&#34;&#34;
-Instrument data downloading and reading module. This module presently has support 
-for data provided by the University of Calgary, such as THEMIS ASI, REGO, and the 
-Transition Region Explorer (TREx) instruments.
-&#34;&#34;&#34;
-
-from typing import List, Literal, Optional
-from pyucalgarysrs.data import Dataset, Observatory
-from texttable import Texttable
-from .ucalgary import UCalgaryManager
-
-__all__ = [&#34;DataManager&#34;]
-
-
-class DataManager:
-    &#34;&#34;&#34;
-    The DataManager object is initialized within every PyAuroraX object. It acts as a way to access 
-    the submodules and carry over configuration information in the super class.
-    &#34;&#34;&#34;
-
-    def __init__(self, aurorax_obj):
-        self.__aurorax_obj = aurorax_obj
-
-        # initialize sub-modules
-        self.__ucalgary = UCalgaryManager(self.__aurorax_obj)
-
-    # ------------------------------------------
-    # properties for submodule managers
-    # ------------------------------------------
-    @property
-    def ucalgary(self):
-        &#34;&#34;&#34;
-        Access to the `ucalgary` submodule from within a PyAuroraX object.
-        &#34;&#34;&#34;
-        return self.__ucalgary
-
-    def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
-        &#34;&#34;&#34;
-        List available datasets from all providers
-
-        Args:
-            name (str): 
-                Supply a name used for filtering. If that name is found in the available dataset 
-                names received from the API, it will be included in the results. This parameter is
-                optional.
-            
-            timeout (int): 
-                Represents how many seconds to wait for the API to send data before giving up. The 
-                default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-                object. This parameter is optional.
-            
-        Returns:
-            A list of [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
-            objects.
-        
-        Raises:
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-        &#34;&#34;&#34;
-        # init
-        datasets = []
-
-        # get ucalgary datasets
-        ucalgary_datasets = self.__ucalgary.list_datasets(name=name, timeout=timeout)
-
-        # merge
-        datasets = datasets + ucalgary_datasets
-
-        # sort by name
-        datasets = sorted(datasets, key=lambda x: x.name)
-
-        # return
-        return datasets
-
-    def list_datasets_in_table(self, name: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) -&gt; None:
-        &#34;&#34;&#34;
-        Print available datasets from all providers in a table
-
-        Args:
-            name (str): 
-                Supply a name used for filtering. If that name is found in the available dataset 
-                names received from the API, it will be included in the results. This parameter is
-                optional.
-            
-            max_width (int): 
-                Maximum width of the table. Default is `200`. This parameter is optional.
-
-            timeout (int): 
-                Represents how many seconds to wait for the API to send data before giving up. The 
-                default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-                object. This parameter is optional.
-            
-        Returns:
-            Printed table.
-
-        Raises:
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-        &#34;&#34;&#34;
-        # get datasets
-        datasets = self.list_datasets(name=name, timeout=timeout)
-
-        # set table lists
-        table_names = []
-        table_providers = []
-        table_levels = []
-        table_doi_details = []
-        table_short_descriptions = []
-        for d in datasets:
-            table_names.append(d.name)
-            table_providers.append(d.provider)
-            table_levels.append(d.level)
-            table_doi_details.append(d.doi_details)
-            table_short_descriptions.append(d.short_description)
-
-        # set header values
-        table_headers = [
-            &#34;Name&#34;,
-            &#34;Provider&#34;,
-            &#34;Level&#34;,
-            &#34;DOI Details&#34;,
-            &#34;Short Description&#34;,
-        ]
-
-        # print as table
-        table = Texttable(max_width=max_width)
-        table.set_deco(Texttable.HEADER)
-        table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
-        table.set_header_align([&#34;l&#34;] * len(table_headers))
-        table.set_cols_align([&#34;l&#34;] * len(table_headers))
-        table.header(table_headers)
-        for i in range(0, len(table_names)):
-            table.add_row([
-                table_names[i],
-                table_providers[i],
-                table_levels[i],
-                table_doi_details[i],
-                table_short_descriptions[i],
-            ])
-        print(table.draw())
-
-    def list_observatories(self,
-                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
-                           uid: Optional[str] = None,
-                           timeout: Optional[int] = None) -&gt; List[Observatory]:
-        &#34;&#34;&#34;
-        List information about observatories utilized by all providers.
-
-        Args:
-            instrument_array (str): 
-                The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
-
-            uid (str): 
-                Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
-                is found in the available observatories received from the API, it will be included in the results. This 
-                parameter is optional.
-            
-            timeout (int): 
-                Represents how many seconds to wait for the API to send data before giving up. The 
-                default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-                object. This parameter is optional.
-            
-        Returns:
-            A list of [`Observatory`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory)
-            objects.
-        
-        Raises:
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-        &#34;&#34;&#34;
-        # init
-        observatories = []
-
-        # get ucalgary datasets
-        ucalgary_observatories = self.__ucalgary.list_observatories(instrument_array, uid=uid, timeout=timeout)
-
-        # merge
-        observatories = observatories + ucalgary_observatories
-
-        # sort by name
-        observatories = sorted(observatories, key=lambda x: x.uid)
-
-        # return
-        return observatories
-
-    def list_observatories_in_table(self,
-                                    instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
-                                    uid: Optional[str] = None,
-                                    max_width: int = 200,
-                                    timeout: Optional[int] = None) -&gt; None:
-        &#34;&#34;&#34;
-        Print available observatories for a given instrument array in a table
-
-        Args:
-            instrument_array (str): 
-                The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
-
-            uid (str): 
-                Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
-                is found in the available observatories received from the API, it will be included in the results. This 
-                parameter is optional.
-            
-            max_width (int): 
-                Maximum width of the table. Default is `200`. This parameter is optional.
-
-            timeout (int): 
-                Represents how many seconds to wait for the API to send data before giving up. The 
-                default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-                object. This parameter is optional.
-            
-        Returns:
-            Printed table.
-        
-        Raises:
-            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-        &#34;&#34;&#34;
-        # get observatories
-        observatories = self.list_observatories(instrument_array, uid=uid, timeout=timeout)
-
-        # set table lists
-        table_uids = []
-        table_full_names = []
-        table_geo_lats = []
-        table_geo_lons = []
-        table_providers = []
-        for o in observatories:
-            table_uids.append(o.uid)
-            table_full_names.append(o.full_name)
-            table_geo_lats.append(o.geodetic_latitude)
-            table_geo_lons.append(o.geodetic_longitude)
-            table_providers.append(o.provider)
-
-        # set header values
-        table_headers = [
-            &#34;UID&#34;,
-            &#34;Full Name&#34;,
-            &#34;Geodetic Latitude&#34;,
-            &#34;Geodetic Longitude&#34;,
-            &#34;Provider&#34;,
-        ]
-
-        # print as table
-        table = Texttable(max_width=max_width)
-        table.set_deco(Texttable.HEADER)
-        table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
-        table.set_header_align([&#34;l&#34;] * len(table_headers))
-        table.set_cols_align([&#34;l&#34;] * len(table_headers))
-        table.header(table_headers)
-        for i in range(0, len(table_uids)):
-            table.add_row([
-                table_uids[i],
-                table_full_names[i],
-                table_geo_lats[i],
-                table_geo_lons[i],
-                table_providers[i],
-            ])
-        print(table.draw())</code></pre>
-</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
@@ -591,7 +320,7 @@ the submodules and carry over configuration information in the super class.</p><
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pyaurorax.data.DataManager.ucalgary"><code class="name">var <span class="ident">ucalgary</span></code></dt>
+<dt id="pyaurorax.data.DataManager.ucalgary"><code class="name">prop <span class="ident">ucalgary</span></code></dt>
 <dd>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.data.ucalgary" href="ucalgary/index.html">pyaurorax.data.ucalgary</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
@@ -610,7 +339,7 @@ def ucalgary(self):
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.data.DataManager.list_datasets"><code class="name flex">
-<span>def <span class="ident">list_datasets</span></span>(<span>self, name: Optional[str] = None, timeout: Optional[int] = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
+<span>def <span class="ident">list_datasets</span></span>(<span>self, name: str | None = None, timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>List available datasets from all providers</p>
@@ -633,50 +362,9 @@ objects.</p>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
-    &#34;&#34;&#34;
-    List available datasets from all providers
-
-    Args:
-        name (str): 
-            Supply a name used for filtering. If that name is found in the available dataset 
-            names received from the API, it will be included in the results. This parameter is
-            optional.
-        
-        timeout (int): 
-            Represents how many seconds to wait for the API to send data before giving up. The 
-            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-            object. This parameter is optional.
-        
-    Returns:
-        A list of [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
-        objects.
-    
-    Raises:
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-    &#34;&#34;&#34;
-    # init
-    datasets = []
-
-    # get ucalgary datasets
-    ucalgary_datasets = self.__ucalgary.list_datasets(name=name, timeout=timeout)
-
-    # merge
-    datasets = datasets + ucalgary_datasets
-
-    # sort by name
-    datasets = sorted(datasets, key=lambda x: x.name)
-
-    # return
-    return datasets</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_datasets_in_table"><code class="name flex">
-<span>def <span class="ident">list_datasets_in_table</span></span>(<span>self, name: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) ‑> None</span>
+<span>def <span class="ident">list_datasets_in_table</span></span>(<span>self, name: str | None = None, max_width: int = 200, timeout: int | None = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Print available datasets from all providers in a table</p>
@@ -700,79 +388,9 @@ object. This parameter is optional.</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def list_datasets_in_table(self, name: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) -&gt; None:
-    &#34;&#34;&#34;
-    Print available datasets from all providers in a table
-
-    Args:
-        name (str): 
-            Supply a name used for filtering. If that name is found in the available dataset 
-            names received from the API, it will be included in the results. This parameter is
-            optional.
-        
-        max_width (int): 
-            Maximum width of the table. Default is `200`. This parameter is optional.
-
-        timeout (int): 
-            Represents how many seconds to wait for the API to send data before giving up. The 
-            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-            object. This parameter is optional.
-        
-    Returns:
-        Printed table.
-
-    Raises:
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-    &#34;&#34;&#34;
-    # get datasets
-    datasets = self.list_datasets(name=name, timeout=timeout)
-
-    # set table lists
-    table_names = []
-    table_providers = []
-    table_levels = []
-    table_doi_details = []
-    table_short_descriptions = []
-    for d in datasets:
-        table_names.append(d.name)
-        table_providers.append(d.provider)
-        table_levels.append(d.level)
-        table_doi_details.append(d.doi_details)
-        table_short_descriptions.append(d.short_description)
-
-    # set header values
-    table_headers = [
-        &#34;Name&#34;,
-        &#34;Provider&#34;,
-        &#34;Level&#34;,
-        &#34;DOI Details&#34;,
-        &#34;Short Description&#34;,
-    ]
-
-    # print as table
-    table = Texttable(max_width=max_width)
-    table.set_deco(Texttable.HEADER)
-    table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
-    table.set_header_align([&#34;l&#34;] * len(table_headers))
-    table.set_cols_align([&#34;l&#34;] * len(table_headers))
-    table.header(table_headers)
-    for i in range(0, len(table_names)):
-        table.add_row([
-            table_names[i],
-            table_providers[i],
-            table_levels[i],
-            table_doi_details[i],
-            table_short_descriptions[i],
-        ])
-    print(table.draw())</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_observatories"><code class="name flex">
-<span>def <span class="ident">list_observatories</span></span>(<span>self, instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'], uid: Optional[str] = None, timeout: Optional[int] = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
+<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>List information about observatories utilized by all providers.</p>
@@ -798,57 +416,9 @@ objects.</p>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def list_observatories(self,
-                       instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
-                       uid: Optional[str] = None,
-                       timeout: Optional[int] = None) -&gt; List[Observatory]:
-    &#34;&#34;&#34;
-    List information about observatories utilized by all providers.
-
-    Args:
-        instrument_array (str): 
-            The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-            trex_rgb, trex_nir, and trex_blue.
-
-        uid (str): 
-            Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
-            is found in the available observatories received from the API, it will be included in the results. This 
-            parameter is optional.
-        
-        timeout (int): 
-            Represents how many seconds to wait for the API to send data before giving up. The 
-            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-            object. This parameter is optional.
-        
-    Returns:
-        A list of [`Observatory`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory)
-        objects.
-    
-    Raises:
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-    &#34;&#34;&#34;
-    # init
-    observatories = []
-
-    # get ucalgary datasets
-    ucalgary_observatories = self.__ucalgary.list_observatories(instrument_array, uid=uid, timeout=timeout)
-
-    # merge
-    observatories = observatories + ucalgary_observatories
-
-    # sort by name
-    observatories = sorted(observatories, key=lambda x: x.uid)
-
-    # return
-    return observatories</code></pre>
-</details>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_observatories_in_table"><code class="name flex">
-<span>def <span class="ident">list_observatories_in_table</span></span>(<span>self, instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'], uid: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) ‑> None</span>
+<span>def <span class="ident">list_observatories_in_table</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'],<br>uid: str | None = None,<br>max_width: int = 200,<br>timeout: int | None = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Print available observatories for a given instrument array in a table</p>
@@ -875,84 +445,6 @@ object. This parameter is optional.</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def list_observatories_in_table(self,
-                                instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
-                                uid: Optional[str] = None,
-                                max_width: int = 200,
-                                timeout: Optional[int] = None) -&gt; None:
-    &#34;&#34;&#34;
-    Print available observatories for a given instrument array in a table
-
-    Args:
-        instrument_array (str): 
-            The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-            trex_rgb, trex_nir, and trex_blue.
-
-        uid (str): 
-            Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
-            is found in the available observatories received from the API, it will be included in the results. This 
-            parameter is optional.
-        
-        max_width (int): 
-            Maximum width of the table. Default is `200`. This parameter is optional.
-
-        timeout (int): 
-            Represents how many seconds to wait for the API to send data before giving up. The 
-            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
-            object. This parameter is optional.
-        
-    Returns:
-        Printed table.
-    
-    Raises:
-        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
-    &#34;&#34;&#34;
-    # get observatories
-    observatories = self.list_observatories(instrument_array, uid=uid, timeout=timeout)
-
-    # set table lists
-    table_uids = []
-    table_full_names = []
-    table_geo_lats = []
-    table_geo_lons = []
-    table_providers = []
-    for o in observatories:
-        table_uids.append(o.uid)
-        table_full_names.append(o.full_name)
-        table_geo_lats.append(o.geodetic_latitude)
-        table_geo_lons.append(o.geodetic_longitude)
-        table_providers.append(o.provider)
-
-    # set header values
-    table_headers = [
-        &#34;UID&#34;,
-        &#34;Full Name&#34;,
-        &#34;Geodetic Latitude&#34;,
-        &#34;Geodetic Longitude&#34;,
-        &#34;Provider&#34;,
-    ]
-
-    # print as table
-    table = Texttable(max_width=max_width)
-    table.set_deco(Texttable.HEADER)
-    table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
-    table.set_header_align([&#34;l&#34;] * len(table_headers))
-    table.set_cols_align([&#34;l&#34;] * len(table_headers))
-    table.header(table_headers)
-    for i in range(0, len(table_uids)):
-        table.add_row([
-            table_uids[i],
-            table_full_names[i],
-            table_geo_lats[i],
-            table_geo_lons[i],
-            table_providers[i],
-        ])
-    print(table.draw())</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
@@ -964,8 +456,8 @@ object. This parameter is optional.</dd>
 <input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
 disabled minlength="2">
 </form>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.css" integrity="sha512-j1u8eUJ4f23xPPxwOrLUPQaCD2dwzNqqmDDcWS4deWsMv2ohLqmXXuP3hU7g8TyzbMSakP/mMqoNBYWj8AEIFg==" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.3/tingle.min.js" integrity="sha512-plGUER9JkeEWPPqQBE4sdLqBoQug5Ap+BCGMc7bJ8BXkm+VVj6QzkpBz5Yv2yPkkq+cqg9IpkBaGCas6uDbW8g==" crossorigin></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
 <style>
 .modal-dialog iframe {
 width: 100vw;
@@ -1006,7 +498,6 @@ setTimeout(() => input.focus(), 100);
 }).setContent('<iframe src="' + url + '"></iframe>').open();
 }
 </script>
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -1039,7 +530,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
 </footer>
 </body>
 </html>
