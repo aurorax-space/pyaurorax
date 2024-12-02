@@ -98,6 +98,31 @@ class UCalgaryManager:
         except SRSAPIError as e:
             raise AuroraXAPIError(e) from e
 
+    def get_dataset(self, name: str, timeout: Optional[int] = None) -> Dataset:
+        """
+        Get a specific dataset
+
+        Args:
+            name (str): 
+                The dataset name to get. Case is insensitive.
+            
+            timeout (int): 
+                Represents how many seconds to wait for the API to send data before giving up. The 
+                default is 10 seconds, or the `api_timeout` value in the super class' `pyaurorax.PyAuroraX`
+                object. This parameter is optional.
+            
+        Returns:
+            The found [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
+            object. Raises an exception if not found.
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+        """
+        try:
+            return self.__aurorax_obj.srs_obj.data.get_dataset(name, timeout=timeout)
+        except Exception as e:
+            raise AuroraXAPIError(e) from e
+
     def list_observatories(self,
                            instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue"],
                            uid: Optional[str] = None,

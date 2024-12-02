@@ -21,6 +21,7 @@ from typing import List, Literal, Optional
 from pyucalgarysrs.data import Dataset, Observatory
 from texttable import Texttable
 from .ucalgary import UCalgaryManager
+from ..exceptions import AuroraXAPIError
 
 __all__ = ["DataManager"]
 
@@ -149,6 +150,43 @@ class DataManager:
                 table_short_descriptions[i],
             ])
         print(table.draw())
+
+    def get_dataset(self, name: str, timeout: Optional[int] = None) -> Dataset:
+        """
+        Get a specific dataset
+
+        Args:
+            name (str): 
+                The dataset name to get. Case is insensitive.
+
+            timeout (int): 
+                Represents how many seconds to wait for the API to send data before giving up. The 
+                default is 10 seconds, or the `api_timeout` value in the super class' `pyaurorax.PyAuroraX`
+                object. This parameter is optional.
+            
+        Returns:
+            The found [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
+            object. Raises an exception if not found.
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+        """
+        # init
+        dataset = None
+
+        # search ucalgary datasets
+        try:
+            ucalgary_dataset = self.__ucalgary.get_dataset(name, timeout=timeout)
+            dataset = ucalgary_dataset
+        except Exception:  # nosec
+            pass
+
+        # return
+        if (dataset is None):
+            # never could find it
+            raise AuroraXAPIError("Dataset not found")
+        else:
+            return dataset
 
     def list_observatories(self,
                            instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue"],

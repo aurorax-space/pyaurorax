@@ -1434,13 +1434,13 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pyucalgarysrs"
-version = "1.5.0"
+version = "1.5.1"
 description = "Tools for interacting with UCalgary Space Remote Sensing data"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pyucalgarysrs-1.5.0-py3-none-any.whl", hash = "sha256:fcd9c5dcc76a6587cbe729948936b4d7caf178c51d81ffe28d9032f4ac7a55fa"},
-    {file = "pyucalgarysrs-1.5.0.tar.gz", hash = "sha256:8b417fcc1bb88713254d2d7d4b42926591be30cad1f0800d9eeffdb9e5153f60"},
+    {file = "pyucalgarysrs-1.5.1-py3-none-any.whl", hash = "sha256:fcbc5c78e5412f1f3e6c7959fe679fedeb272d1b3c7146210699c0389f749324"},
+    {file = "pyucalgarysrs-1.5.1.tar.gz", hash = "sha256:849c499eea54199b973f5d822bbab4cd406348d45620e0593579b17df011d1fd"},
 ]
 
 [package.dependencies]
@@ -1874,4 +1874,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "ecf5f9f6866675d9bae84139f9ac839f618f2da1f212fca4f26cd9b48b9da0f1"
+content-hash = "2c0c5ca9373989535850543724879c2f6c719d75c253551babd017119e31c3d4"

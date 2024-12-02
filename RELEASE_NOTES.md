@@ -1,7 +1,8 @@
 Version 1.5.0
 -------------------
 
-- added support for working with TREx Spectrograph data
+- added support for downloading, reading, and analysis of the TREx Spectrograph data
+- added `get_dataset()` function for retrieving a specific single dataset
 
 
 Version 1.4.0
