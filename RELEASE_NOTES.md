@@ -1,3 +1,15 @@
+Version 1.5.0
+-------------------
+
+- added support for working with TREx Spectrograph data
+
+
+Version 1.4.0
+-------------------
+
+- updates for filtering datasets specifically supported by this library
+
+
 Version 1.3.3
 -------------------
 
