@@ -189,7 +189,7 @@ class DataManager:
             return dataset
 
     def list_observatories(self,
-                           instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue"],
+                           instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph"],
                            uid: Optional[str] = None,
                            timeout: Optional[int] = None) -> List[Observatory]:
         """
@@ -198,7 +198,7 @@ class DataManager:
         Args:
             instrument_array (str): 
                 The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
+                trex_rgb, trex_nir, trex_blue, and trex_spectrograph.
 
             uid (str): 
                 Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
@@ -233,7 +233,7 @@ class DataManager:
         return observatories
 
     def list_observatories_in_table(self,
-                                    instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue"],
+                                    instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph"],
                                     uid: Optional[str] = None,
                                     max_width: int = 200,
                                     timeout: Optional[int] = None) -> None:
@@ -243,7 +243,7 @@ class DataManager:
         Args:
             instrument_array (str): 
                 The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
+                trex_rgb, trex_nir, trex_blue, and trex_spectrograph.
 
             uid (str): 
                 Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 

@@ -300,7 +300,7 @@ class Data:
         elif (len(self.metadata) == 1):
             metadata_str = &#34;[1 dictionary]&#34;
         else:
-            metadata_str = &#34;[%d dictionaries]&#34; % (len(self.timestamp))
+            metadata_str = &#34;[%d dictionaries]&#34; % (len(self.metadata))
 
         # set rest of values
         problematic_files_str = &#34;[]&#34; if len(self.problematic_files) == 0 else &#34;[%d problematic files]&#34; % (len(self.problematic_files))
@@ -1141,8 +1141,33 @@ the submodules and carry over configuration information in the super class.</p><
         except SRSAPIError as e:
             raise AuroraXAPIError(e) from e
 
+    def get_dataset(self, name: str, timeout: Optional[int] = None) -&gt; Dataset:
+        &#34;&#34;&#34;
+        Get a specific dataset
+
+        Args:
+            name (str): 
+                The dataset name to get. Case is insensitive.
+            
+            timeout (int): 
+                Represents how many seconds to wait for the API to send data before giving up. The 
+                default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+                object. This parameter is optional.
+            
+        Returns:
+            The found [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
+            object. Raises an exception if not found.
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+        &#34;&#34;&#34;
+        try:
+            return self.__aurorax_obj.srs_obj.data.get_dataset(name, timeout=timeout)
+        except Exception as e:
+            raise AuroraXAPIError(e) from e
+
     def list_observatories(self,
-                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
+                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;],
                            uid: Optional[str] = None,
                            timeout: Optional[int] = None) -&gt; List[Observatory]:
         &#34;&#34;&#34;
@@ -1151,7 +1176,7 @@ the submodules and carry over configuration information in the super class.</p><
         Args:
             instrument_array (str): 
                 The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
+                trex_rgb, trex_nir, trex_blue, and trex_spectrograph.
 
             uid (str): 
                 Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
@@ -2074,6 +2099,29 @@ aurorax.data_download_root_path = &quot;some_new_path&quot;
 aurorax.data.download(dataset_name, start, end)
 </code></pre></div>
 </dd>
+<dt id="pyaurorax.data.ucalgary.UCalgaryManager.get_dataset"><code class="name flex">
+<span>def <span class="ident">get_dataset</span></span>(<span>self, name: str, timeout: int | None = None) ‑> pyucalgarysrs.data.classes.Dataset</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get a specific dataset</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The dataset name to get. Case is insensitive.</dd>
+<dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
+<dd>Represents how many seconds to wait for the API to send data before giving up. The
+default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
+object. This parameter is optional.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The found <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
+object. Raises an exception if not found.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
+<dd>An API error was encountered.</dd>
+</dl></div>
+</dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.get_urls"><code class="name flex">
 <span>def <span class="ident">get_urls</span></span>(<span>self,<br>dataset_name: str,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>site_uid: str | None = None,<br>device_uid: str | None = None,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileListingResponse</span>
 </code></dt>
@@ -2170,7 +2218,7 @@ objects.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.list_observatories"><code class="name flex">
-<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
+<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue', 'trex_spectrograph'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>List information about observatories</p>
@@ -2178,7 +2226,7 @@ objects.</p>
 <dl>
 <dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
 <dd>The instrument array to list observatories for. Valid values are: themis_asi, rego,
-trex_rgb, trex_nir, and trex_blue.</dd>
+trex_rgb, trex_nir, trex_blue, and trex_spectrograph.</dd>
 <dt><strong><code>uid</code></strong> :&ensp;<code>str</code></dt>
 <dd>Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID
 is found in the available observatories received from the API, it will be included in the results. This
@@ -2410,6 +2458,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.download_best_rayleighs_calibration" href="#pyaurorax.data.ucalgary.UCalgaryManager.download_best_rayleighs_calibration">download_best_rayleighs_calibration</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.download_best_skymap" href="#pyaurorax.data.ucalgary.UCalgaryManager.download_best_skymap">download_best_skymap</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.download_using_urls" href="#pyaurorax.data.ucalgary.UCalgaryManager.download_using_urls">download_using_urls</a></code></li>
+<li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.get_dataset" href="#pyaurorax.data.ucalgary.UCalgaryManager.get_dataset">get_dataset</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.get_urls" href="#pyaurorax.data.ucalgary.UCalgaryManager.get_urls">get_urls</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.is_read_supported" href="#pyaurorax.data.ucalgary.UCalgaryManager.is_read_supported">is_read_supported</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.UCalgaryManager.list_datasets" href="#pyaurorax.data.ucalgary.UCalgaryManager.list_datasets">list_datasets</a></code></li>

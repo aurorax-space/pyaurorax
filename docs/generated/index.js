@@ -161,15 +161,21 @@ INDEX=[
 "func":1
 },
 {
+"ref":"pyaurorax.data.DataManager.get_dataset",
+"url":1,
+"doc":"Get a specific dataset Args: name (str): The dataset name to get. Case is insensitive. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: The found [ Dataset ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Dataset) object. Raises an exception if not found. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
+"func":1
+},
+{
 "ref":"pyaurorax.data.DataManager.list_observatories",
 "url":1,
-"doc":"List information about observatories utilized by all providers. Args: instrument_array (str): The instrument array to list observatories for. Valid values are: themis_asi, rego, trex_rgb, trex_nir, and trex_blue. uid (str): Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID is found in the available observatories received from the API, it will be included in the results. This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: A list of [ Observatory ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Observatory) objects. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
+"doc":"List information about observatories utilized by all providers. Args: instrument_array (str): The instrument array to list observatories for. Valid values are: themis_asi, rego, trex_rgb, trex_nir, trex_blue, and trex_spectrograph. uid (str): Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID is found in the available observatories received from the API, it will be included in the results. This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: A list of [ Observatory ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Observatory) objects. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
 "func":1
 },
 {
 "ref":"pyaurorax.data.DataManager.list_observatories_in_table",
 "url":1,
-"doc":"Print available observatories for a given instrument array in a table Args: instrument_array (str): The instrument array to list observatories for. Valid values are: themis_asi, rego, trex_rgb, trex_nir, and trex_blue. uid (str): Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID is found in the available observatories received from the API, it will be included in the results. This parameter is optional. max_width (int): Maximum width of the table. Default is  200 . This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: Printed table. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
+"doc":"Print available observatories for a given instrument array in a table Args: instrument_array (str): The instrument array to list observatories for. Valid values are: themis_asi, rego, trex_rgb, trex_nir, trex_blue, and trex_spectrograph. uid (str): Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID is found in the available observatories received from the API, it will be included in the results. This parameter is optional. max_width (int): Maximum width of the table. Default is  200 . This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: Printed table. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
 "func":1
 },
 {
@@ -194,9 +200,15 @@ INDEX=[
 "func":1
 },
 {
+"ref":"pyaurorax.data.ucalgary.UCalgaryManager.get_dataset",
+"url":2,
+"doc":"Get a specific dataset Args: name (str): The dataset name to get. Case is insensitive. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: The found [ Dataset ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Dataset) object. Raises an exception if not found. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
+"func":1
+},
+{
 "ref":"pyaurorax.data.ucalgary.UCalgaryManager.list_observatories",
 "url":2,
-"doc":"List information about observatories Args: instrument_array (str): The instrument array to list observatories for. Valid values are: themis_asi, rego, trex_rgb, trex_nir, and trex_blue. uid (str): Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID is found in the available observatories received from the API, it will be included in the results. This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: A list of [ Observatory ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Observatory) objects. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
+"doc":"List information about observatories Args: instrument_array (str): The instrument array to list observatories for. Valid values are: themis_asi, rego, trex_rgb, trex_nir, trex_blue, and trex_spectrograph. uid (str): Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID is found in the available observatories received from the API, it will be included in the results. This parameter is optional. timeout (int): Represents how many seconds to wait for the API to send data before giving up. The default is 10 seconds, or the  api_timeout value in the super class'  pyaurorax.PyAuroraX object. This parameter is optional. Returns: A list of [ Observatory ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Observatory) objects. Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.",
 "func":1
 },
 {

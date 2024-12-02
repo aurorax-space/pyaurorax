@@ -200,8 +200,45 @@ the submodules and carry over configuration information in the super class.</p><
             ])
         print(table.draw())
 
+    def get_dataset(self, name: str, timeout: Optional[int] = None) -&gt; Dataset:
+        &#34;&#34;&#34;
+        Get a specific dataset
+
+        Args:
+            name (str): 
+                The dataset name to get. Case is insensitive.
+
+            timeout (int): 
+                Represents how many seconds to wait for the API to send data before giving up. The 
+                default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+                object. This parameter is optional.
+            
+        Returns:
+            The found [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
+            object. Raises an exception if not found.
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+        &#34;&#34;&#34;
+        # init
+        dataset = None
+
+        # search ucalgary datasets
+        try:
+            ucalgary_dataset = self.__ucalgary.get_dataset(name, timeout=timeout)
+            dataset = ucalgary_dataset
+        except Exception:  # nosec
+            pass
+
+        # return
+        if (dataset is None):
+            # never could find it
+            raise AuroraXAPIError(&#34;Dataset not found&#34;)
+        else:
+            return dataset
+
     def list_observatories(self,
-                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
+                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;],
                            uid: Optional[str] = None,
                            timeout: Optional[int] = None) -&gt; List[Observatory]:
         &#34;&#34;&#34;
@@ -210,7 +247,7 @@ the submodules and carry over configuration information in the super class.</p><
         Args:
             instrument_array (str): 
                 The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
+                trex_rgb, trex_nir, trex_blue, and trex_spectrograph.
 
             uid (str): 
                 Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
@@ -245,7 +282,7 @@ the submodules and carry over configuration information in the super class.</p><
         return observatories
 
     def list_observatories_in_table(self,
-                                    instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;],
+                                    instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;],
                                     uid: Optional[str] = None,
                                     max_width: int = 200,
                                     timeout: Optional[int] = None) -&gt; None:
@@ -255,7 +292,7 @@ the submodules and carry over configuration information in the super class.</p><
         Args:
             instrument_array (str): 
                 The instrument array to list observatories for. Valid values are: themis_asi, rego, 
-                trex_rgb, trex_nir, and trex_blue.
+                trex_rgb, trex_nir, trex_blue, and trex_spectrograph.
 
             uid (str): 
                 Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
@@ -338,6 +375,29 @@ def ucalgary(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.data.DataManager.get_dataset"><code class="name flex">
+<span>def <span class="ident">get_dataset</span></span>(<span>self, name: str, timeout: int | None = None) ‑> pyucalgarysrs.data.classes.Dataset</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get a specific dataset</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The dataset name to get. Case is insensitive.</dd>
+<dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
+<dd>Represents how many seconds to wait for the API to send data before giving up. The
+default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
+object. This parameter is optional.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The found <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
+object. Raises an exception if not found.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
+<dd>An API error was encountered.</dd>
+</dl></div>
+</dd>
 <dt id="pyaurorax.data.DataManager.list_datasets"><code class="name flex">
 <span>def <span class="ident">list_datasets</span></span>(<span>self, name: str | None = None, timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
 </code></dt>
@@ -390,7 +450,7 @@ object. This parameter is optional.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_observatories"><code class="name flex">
-<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
+<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue', 'trex_spectrograph'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>List information about observatories utilized by all providers.</p>
@@ -398,7 +458,7 @@ object. This parameter is optional.</dd>
 <dl>
 <dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
 <dd>The instrument array to list observatories for. Valid values are: themis_asi, rego,
-trex_rgb, trex_nir, and trex_blue.</dd>
+trex_rgb, trex_nir, trex_blue, and trex_spectrograph.</dd>
 <dt><strong><code>uid</code></strong> :&ensp;<code>str</code></dt>
 <dd>Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID
 is found in the available observatories received from the API, it will be included in the results. This
@@ -418,7 +478,7 @@ objects.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_observatories_in_table"><code class="name flex">
-<span>def <span class="ident">list_observatories_in_table</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue'],<br>uid: str | None = None,<br>max_width: int = 200,<br>timeout: int | None = None) ‑> None</span>
+<span>def <span class="ident">list_observatories_in_table</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue', 'trex_spectrograph'],<br>uid: str | None = None,<br>max_width: int = 200,<br>timeout: int | None = None) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Print available observatories for a given instrument array in a table</p>
@@ -426,7 +486,7 @@ objects.</p>
 <dl>
 <dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
 <dd>The instrument array to list observatories for. Valid values are: themis_asi, rego,
-trex_rgb, trex_nir, and trex_blue.</dd>
+trex_rgb, trex_nir, trex_blue, and trex_spectrograph.</dd>
 <dt><strong><code>uid</code></strong> :&ensp;<code>str</code></dt>
 <dd>Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID
 is found in the available observatories received from the API, it will be included in the results. This
@@ -517,6 +577,7 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.data.DataManager" href="#pyaurorax.data.DataManager">DataManager</a></code></h4>
 <ul class="">
+<li><code><a title="pyaurorax.data.DataManager.get_dataset" href="#pyaurorax.data.DataManager.get_dataset">get_dataset</a></code></li>
 <li><code><a title="pyaurorax.data.DataManager.list_datasets" href="#pyaurorax.data.DataManager.list_datasets">list_datasets</a></code></li>
 <li><code><a title="pyaurorax.data.DataManager.list_datasets_in_table" href="#pyaurorax.data.DataManager.list_datasets_in_table">list_datasets_in_table</a></code></li>
 <li><code><a title="pyaurorax.data.DataManager.list_observatories" href="#pyaurorax.data.DataManager.list_observatories">list_observatories</a></code></li>
