@@ -14,9 +14,9 @@ pyaurorax/cli/search/helpers.py                                  158    158     
 pyaurorax/cli/search/sources/commands.py                         315    315     0%   15-544
 pyaurorax/cli/search/util/commands.py                            124    124     0%   15-294
 pyaurorax/cli/templates.py                                         3      3     0%   19-90
-pyaurorax/data/__init__.py                                        70     55    21%   48, 73-85, 112-151, 183-195, 230-269
-pyaurorax/data/ucalgary/__init__.py                              105     77    27%   35, 68, 92-99, 130-133, 142, 163, 276-294, 379-393, 454-464, 526, 573-609, 649-685, 725-761
-pyaurorax/data/ucalgary/read/__init__.py                          40     20    50%   21, 40, 61, 120-132, 181-191, 240, 296, 353, 410, 466, 512, 556
+pyaurorax/data/__init__.py                                        81     64    21%   49, 74-86, 113-152, 175-189, 221-233, 268-307
+pyaurorax/data/ucalgary/__init__.py                              110     81    26%   35, 68, 92-99, 121-124, 155-158, 167, 188, 301-319, 404-418, 479-489, 571, 620-656, 696-732, 772-808
+pyaurorax/data/ucalgary/read/__init__.py                          43     21    51%   22, 41, 62, 141-155, 206-218, 287, 365, 444, 523, 601, 649, 693, 768
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      1    90%   49
 pyaurorax/models/atm/__init__.py                                  22      9    59%   38, 168-189, 279-297
@@ -89,7 +89,7 @@ pyaurorax/tools/mosaic/_create.py                                136    123    1
 pyaurorax/tools/mosaic/_prep_images.py                            98     90     8%   31-52, 74-213
 pyaurorax/tools/mosaic/_prep_skymaps.py                           90     81    10%   26-89, 133-217
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5161   3503    32%
+TOTAL                                                           5180   3517    32%
 
 13 empty files skipped.
 ```
