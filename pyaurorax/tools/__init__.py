@@ -49,6 +49,7 @@ from . import bounding_box
 from . import mosaic
 from . import ccd_contour
 from . import grid_files
+from . import spectra
 
 __all__ = [
     # sub-modules
@@ -59,6 +60,7 @@ __all__ = [
     "mosaic",
     "ccd_contour",
     "grid_files",
+    "spectra",
 
     # top level functions
     "display",
