@@ -91,6 +91,8 @@ def azimuth(images: np.ndarray,
         raise ValueError("Azimuth bounds defined with zero area.")
 
     # Obtain azimuth array from skymap
+    if (skymap.full_azimuth is None):
+        raise ValueError("Skymap 'full_azimuth' value is None. Unable to perform function")
     az = np.squeeze(skymap.full_azimuth)
 
     # Obtain indices into skymap within azimuth range

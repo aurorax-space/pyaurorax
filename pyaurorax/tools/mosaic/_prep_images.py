@@ -46,19 +46,17 @@ def __determine_cadence(timestamp_arr: List[datetime.datetime]):
         checked_timestamps += 1
 
     # identify the most common diff second
-    most_frequent_diff_second = max(diff_seconds_list,
-                                    key=diff_seconds_list.count)
+    most_frequent_diff_second = max(diff_seconds_list, key=diff_seconds_list.count)
 
     # return
     return most_frequent_diff_second
 
 
-def prep_images(
-        image_list: List[Data],
-        data_attribute: Literal["data", "calibrated_data"] = "data",
-        spect_emission: Literal["green", "red", "blue", "hbeta"] = "green",
-        spect_band: Optional[Tuple[float, float]] = None,
-        spect_band_bg: Optional[Tuple[float, float]] = None) -> MosaicData:
+def prep_images(image_list: List[Data],
+                data_attribute: Literal["data", "calibrated_data"] = "data",
+                spect_emission: Literal["green", "red", "blue", "hbeta"] = "green",
+                spect_band: Optional[Tuple[float, float]] = None,
+                spect_band_bg: Optional[Tuple[float, float]] = None) -> MosaicData:
     """
     Prepare the image data for use in a mosaic.
 
@@ -93,29 +91,24 @@ def prep_images(
         # check that the timestamp and calibrated data match in size
         for i in range(0, len(image_list)):
             if (image_list[i].data.shape[-1] != len(image_list[i].timestamp)):
-                raise ValueError((
-                    "Number of frames does not match number of timestamp records. There are %d timestamp "
-                    + "records, and %d images for list index %d") % (
-                        len(image_list[i].timestamp),
-                        image_list[i].data.shape[-1],
-                        i,
-                    ))
+                raise ValueError(("Number of frames does not match number of timestamp records. There are %d timestamp " +
+                                  "records, and %d images for list index %d") % (
+                                      len(image_list[i].timestamp),
+                                      image_list[i].data.shape[-1],
+                                      i,
+                                  ))
     elif (data_attribute == "calibrated_data"):
         # check that the timestamp and calibrated data match in size
         for i in range(0, len(image_list)):
-            if (image_list[i].calibrated_data.shape[-1]
-                    != len(image_list[i].timestamp)):
-                raise ValueError((
-                    "Number of frames does not match number of timestamp records. There are %d timestamp "
-                    + "records, and %d images for list index %d") % (
-                        len(image_list[i].timestamp),
-                        image_list[i].calibrated_data.shape[-1],
-                        i,
-                    ))
+            if (image_list[i].calibrated_data.shape[-1] != len(image_list[i].timestamp)):
+                raise ValueError(("Number of frames does not match number of timestamp records. There are %d timestamp " +
+                                  "records, and %d images for list index %d") % (
+                                      len(image_list[i].timestamp),
+                                      image_list[i].calibrated_data.shape[-1],
+                                      i,
+                                  ))
     else:
-        raise ValueError(
-            "Invalid 'data_attribute' parameter. Must be either 'data' or 'calibrated_data'."
-        )
+        raise ValueError("Invalid 'data_attribute' parameter. Must be either 'data' or 'calibrated_data'.")
 
     # Determine integration bounds for spectrograph data
     wavelength_range = {
@@ -214,11 +207,9 @@ def prep_images(
 
             # Extract wavelength from metadata, and get integration indices
             wavelength = site_image_data.metadata[0]['wavelength']
-            int_w = np.where((wavelength >= wavelength_range[0])
-                             & (wavelength <= wavelength_range[1]))
+            int_w = np.where((wavelength >= wavelength_range[0]) & (wavelength <= wavelength_range[1]))
             if wavelength_bg_range is not None:
-                int_bg_w = np.where((wavelength >= wavelength_bg_range[0])
-                                    & (wavelength <= wavelength_bg_range[1]))
+                int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
         else:
             current_data_type = 'asi'
             data_type_list.append(current_data_type)
@@ -231,32 +222,27 @@ def prep_images(
                 site_uid = site_image_data.metadata[0]["Site unique ID"]
             except KeyError:
                 try:
-                    site_uid = site_image_data.metadata[0]["site_uid"].decode(
-                        'utf-8')
+                    site_uid = site_image_data.metadata[0]["site_uid"].decode('utf-8')
                 except KeyError as e:
-                    raise KeyError(
-                        "Unable to find site UID in Metadata") from e
+                    raise KeyError("Unable to find site UID in Metadata") from e
 
         # We don't attempt to handle the same site being passed in for multiple networks
         if site_uid in images_dict.keys():
 
             d_keys = np.array(list(images_dict.keys()))
-            if data_type_list[np.where(
-                    d_keys == site_uid)[0][0]] != current_data_type:
+            if data_type_list[np.where(d_keys == site_uid)[0][0]] != current_data_type:
                 site_uid = site_uid + '_' + current_data_type
 
             else:
                 warnings.warn(
-                    "Same site between differing networks detected. Omitting additional '%s' data"
-                    % (site_uid),
+                    "Same site between differing networks detected. Omitting additional '%s' data" % (site_uid),
                     stacklevel=1,
                 )
                 continue
         site_uid_list.append(site_uid)
 
         # initialize this site's data destination variables
-        images_dict[site_uid] = np.squeeze(
-            np.full((height, width, n_channels, expected_num_frames), np.nan))
+        images_dict[site_uid] = np.squeeze(np.full((height, width, n_channels, expected_num_frames), np.nan))
 
         # use binary search to find the index in the data corresponding to each
         # expected timestamp (we assume it is already sorted)
@@ -288,25 +274,17 @@ def prep_images(
                     # Integrate over wavelengths to get Rayleighs
                     spectra = site_data[:, :, found_idx]
 
-                    if (int_w is None) or (wavelength is None) or (int_bg_w
-                                                                   is None):
+                    if (int_w is None) or (wavelength is None) or (int_bg_w is None):
                         wavelength = site_image_data.metadata[0]['wavelength']
-                        int_w = np.where((wavelength >= wavelength_range[0])
-                                         & (wavelength <= wavelength_range[1]))
+                        int_w = np.where((wavelength >= wavelength_range[0]) & (wavelength <= wavelength_range[1]))
                         if wavelength_bg_range is not None:
-                            int_bg_w = np.where(
-                                (wavelength >= wavelength_bg_range[0])
-                                & (wavelength <= wavelength_bg_range[1]))
+                            int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
 
-                    rayleighs = np.trapz(spectra[int_w[0], :],
-                                         x=wavelength[int_w[0]],
-                                         axis=0)
+                    rayleighs = np.trapz(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
 
                     if wavelength_bg_range is not None:
                         if int_bg_w is not None:
-                            rayleighs -= np.trapz(spectra[int_bg_w[0], :],
-                                                  x=wavelength[int_bg_w[0]],
-                                                  axis=0)
+                            rayleighs -= np.trapz(spectra[int_bg_w[0], :], x=wavelength[int_bg_w[0]], axis=0)
 
                     rayleighs = np.nan_to_num(rayleighs, nan=0.0)
                     rayleighs[np.where(rayleighs < 0.0)] = 0.0
@@ -315,12 +293,9 @@ def prep_images(
 
                 else:
                     if n_channels != 1:
-                        images_dict[site_uid][:, :, :,
-                                              i] = site_data[:, :, :,
-                                                             found_idx]
+                        images_dict[site_uid][:, :, :, i] = site_data[:, :, :, found_idx]
                     else:
-                        images_dict[site_uid][:, :, i] = site_data[:, :,
-                                                                   found_idx]
+                        images_dict[site_uid][:, :, i] = site_data[:, :, found_idx]
 
     dimensions_dict = {}
     for site_uid, image in images_dict.items():

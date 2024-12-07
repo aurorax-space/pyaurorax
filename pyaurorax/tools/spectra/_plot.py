@@ -116,19 +116,14 @@ def plot(spect_data: Data,
     # check return mode
     if (returnfig is True and savefig is True):
         raise ValueError("Only one of returnfig or savefig can be set to True")
-    if (returnfig is True
-            and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(
-            "The figure will be returned, but a savefig option parameter was supplied. Consider "
-            +
-            "removing the savefig option parameter(s) as they will be ignored.",
-            stacklevel=1)
-    elif (savefig is False
-          and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(
-            "A savefig option parameter was supplied, but the savefig parameter is False. The "
-            + "savefig option parameters will be ignored.",
-            stacklevel=1)
+    if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
+        warnings.warn("The figure will be returned, but a savefig option parameter was supplied. Consider " +
+                      "removing the savefig option parameter(s) as they will be ignored.",
+                      stacklevel=1)
+    elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
+        warnings.warn("A savefig option parameter was supplied, but the savefig parameter is False. The " +
+                      "savefig option parameters will be ignored.",
+                      stacklevel=1)
 
     # init figure
     fig = plt.figure(figsize=figsize)
@@ -153,13 +148,10 @@ def plot(spect_data: Data,
     # Plot the requested lines if any
     if plot_line is not None:
         for i, line in enumerate(plot_line):
-            ax.plot([line, line], [-5000.0, 5000000.0],
-                    color=plot_line_color[i],
-                    linestyle='--')
+            ax.plot([line, line], [-5000.0, 5000000.0], color=plot_line_color[i], linestyle='--')
 
     # Set up color cycle
-    color_cycle = itertools.cycle(color) if isinstance(
-        color, list) else itertools.cycle([color])
+    color_cycle = itertools.cycle(color) if isinstance(color, list) else itertools.cycle([color])
 
     # Convert input timestamps to list if required
     if not isinstance(timestamp, list):
@@ -171,16 +163,12 @@ def plot(spect_data: Data,
 
     # Automatically generate a default title, as
     # well as default legend labels to use
-    auto_title = (
-        f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} - "
-        f"{timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC (Spatial Bin {spect_loc[0]})"
-    )
+    auto_title = (f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} - "
+                  f"{timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC (Spatial Bin {spect_loc[0]})")
     auto_legend = [None]
     if len(timestamp) != len(spect_loc):
         if (len(timestamp) != 1) and (len(spect_loc) != 1):
-            raise ValueError(
-                "Inputs 'timestamp' and 'spect_loc' must have the same number of elements (or one must be of length 1)."
-            )
+            raise ValueError("Inputs 'timestamp' and 'spect_loc' must have the same number of elements (or one must be of length 1).")
 
         elif (len(timestamp) > 1):
             single_spect_loc = spect_loc[0]
@@ -190,8 +178,7 @@ def plot(spect_data: Data,
             auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} - Spatial Bin {spect_loc[0]}"
             auto_legend = []
             for i in range(len(timestamp)):
-                auto_legend.append(
-                    f"{timestamp[i].strftime('%Y-%m-%d %H:%M:%S')} UTC")
+                auto_legend.append(f"{timestamp[i].strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
         elif (len(spect_loc) > 1):
             single_timestamp = timestamp[0]
@@ -207,9 +194,7 @@ def plot(spect_data: Data,
             auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} Spectrograph"
             auto_legend = []
             for _i in range(len(timestamp)):
-                auto_legend.append(
-                    f"{timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC (spatial bin {spect_loc[0]})"
-                )
+                auto_legend.append(f"{timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC (spatial bin {spect_loc[0]})")
 
     # Extract spectrograph data from Data object
     spectra = spect_data.data
@@ -233,13 +218,9 @@ def plot(spect_data: Data,
 
         # Check for issues with supplied location / time
         if len(epoch_idx) == 0:
-            raise ValueError(
-                f"Input does not contain data for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}."
-            )
+            raise ValueError(f"Input does not contain data for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}.")
         if len(epoch_idx) > 1:
-            raise ValueError(
-                f"Input contains multiple data points for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}."
-            )
+            raise ValueError(f"Input contains multiple data points for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}.")
 
         # Get the wavelength array
         wavelength = metadata[epoch_idx[0]]['wavelength']
@@ -251,10 +232,7 @@ def plot(spect_data: Data,
             spectrum[np.where(spectrum < 0)] = 0
 
         # Add this spectrum to the plot
-        plt.plot(wavelength,
-                 spectrum,
-                 label=auto_legend[i],
-                 color=spectra_color)
+        plt.plot(wavelength, spectrum, label=auto_legend[i], color=spectra_color)
 
         # Update max intensity
         if np.max(spectrum) > max_intensity:
@@ -296,28 +274,22 @@ def plot(spect_data: Data,
     if (savefig is True):
         # check that filename has been set
         if (savefig_filename is None):
-            raise ValueError(
-                "The savefig_filename parameter is missing, but required since savefig was set to True."
-            )
+            raise ValueError("The savefig_filename parameter is missing, but required since savefig was set to True.")
 
         # save the figure
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (".jpg" == f_extension or ".jpeg" == f_extension):
             # check quality setting
             if (savefig_quality is not None):
-                plt.savefig(savefig_filename,
-                            quality=savefig_quality,
-                            bbox_inches="tight")
+                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
             else:
                 plt.savefig(savefig_filename, bbox_inches="tight")
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(
-                    "The savefig_quality parameter was specified, but is only used for saving JPG files. The "
-                    +
-                    "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
-                    stacklevel=1)
+                warnings.warn("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
+                              "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
+                              stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches="tight")
 
         # clean up by closing the figure

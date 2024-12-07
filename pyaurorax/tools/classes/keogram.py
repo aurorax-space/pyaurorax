@@ -69,23 +69,15 @@ class Keogram:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        data_str = "array(dims=%s, dtype=%s)" % (self.data.shape,
-                                                 self.data.dtype)
+        data_str = "array(dims=%s, dtype=%s)" % (self.data.shape, self.data.dtype)
         timestamp_str = "[%d datetime objects]" % (len(self.timestamp))
-        ccd_y_str = "None" if self.ccd_y is None else "array(%d values)" % (
-            self.ccd_y.shape[0])
-        mag_y_str = "None" if self.mag_y is None else "array(%d values)" % (
-            self.mag_y.shape[0])
-        geo_y_str = "None" if self.geo_y is None else "array(%d values)" % (
-            self.geo_y.shape[0])
+        ccd_y_str = "None" if self.ccd_y is None else "array(%d values)" % (self.ccd_y.shape[0])
+        mag_y_str = "None" if self.mag_y is None else "array(%d values)" % (self.mag_y.shape[0])
+        geo_y_str = "None" if self.geo_y is None else "array(%d values)" % (self.geo_y.shape[0])
 
-        return "Keogram(data=%s, timestamp=%s, ccd_y=%s, mag_y=%s, geo_y=%s)" % (
-            data_str, timestamp_str, ccd_y_str, mag_y_str, geo_y_str)
+        return "Keogram(data=%s, timestamp=%s, ccd_y=%s, mag_y=%s, geo_y=%s)" % (data_str, timestamp_str, ccd_y_str, mag_y_str, geo_y_str)
 
-    def set_geographic_latitudes(
-            self,
-            skymap: Skymap,
-            altitude_km: Optional[Union[int, float]] = None) -> None:
+    def set_geographic_latitudes(self, skymap: Skymap, altitude_km: Optional[Union[int, float]] = None) -> None:
         """
         Set the geographic latitude values for this keogram, using the specified skymap 
         data. The data will be set to the geo_y attribute of this Keogram object, which
@@ -107,59 +99,37 @@ class Keogram:
         """
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError(
-                "Unable to set the geographic latitudes since the slice_idx is None. If this keogram "
-                +
-                "object was created as part of the custom_keogram routines or is a spectrogaph keogram, "
-                +
-                "this is expected and performing this action is not supported at this time."
-            )
+            raise ValueError("Unable to set the geographic latitudes since the slice_idx is None. If this keogram " +
+                             "object was created as part of the custom_keogram routines or is a spectrogaph keogram, " +
+                             "this is expected and performing this action is not supported at this time.")
 
         # determine altitude index to use
         if (altitude_km is not None):
             # Obtain lat/lon arrays from skymap
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
-                altitude_idx = np.where(altitude_km *
-                                        1000.0 == skymap.full_map_altitude)
+                altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
-                self.geo_y = np.squeeze(
-                    skymap.full_map_latitude[altitude_idx, :,
-                                             self.__slice_idx]).copy()
+                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
             else:
                 # Make sure altitude is in range that can be interpolated
-                if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (
-                        altitude_km * 1000.0 > skymap.full_map_altitude[2]):
-                    raise ValueError("Altitude " + str(altitude_km) +
-                                     " outside valid range of " +
-                                     str((skymap.full_map_altitude[0] / 1000.0,
-                                          skymap.full_map_altitude[2] /
-                                          1000.0)))
+                if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
+                    raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
+                                     str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
 
                 # Initialze empty lat/lon arrays
-                lats = np.full(np.squeeze(
-                    skymap.full_map_latitude[0, :, :]).shape,
-                               np.nan,
-                               dtype=skymap.full_map_latitude[0, :, :].dtype)
+                lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
 
                 # Interpolate lats and lons at desired altitude
                 for i in range(skymap.full_map_latitude.shape[1]):
                     for j in range(skymap.full_map_latitude.shape[2]):
-                        lats[i,
-                             j] = np.interp(altitude_km * 1000.0,
-                                            skymap.full_map_altitude,
-                                            skymap.full_map_latitude[:, i, j])
+                        lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
 
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
-            self.geo_y = np.squeeze(
-                skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
 
-    def set_magnetic_latitudes(
-            self,
-            skymap: Skymap,
-            timestamp: datetime.datetime,
-            altitude_km: Optional[Union[int, float]] = None) -> None:
+    def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -> None:
         """
         Set the magnetic latitude values for this keogram, using the specified skymap 
         data. AACGMv2 will be utilized to perform the calculations. The resulting data
@@ -186,63 +156,43 @@ class Keogram:
         """
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError(
-                "Unable to set the geographic latitudes since the slice_idx is None. If this keogram "
-                +
-                "object was created as part of the custom_keogram routines or is a spectrogaph keogram, "
-                +
-                "this is expected and performing this action is not supported at this time."
-            )
+            raise ValueError("Unable to set the geographic latitudes since the slice_idx is None. If this keogram " +
+                             "object was created as part of the custom_keogram routines or is a spectrogaph keogram, " +
+                             "this is expected and performing this action is not supported at this time.")
 
         # determine altitude index to use
         if (altitude_km is not None):
             # Obtain lat/lon arrays from skymap
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
-                altitude_idx = np.where(altitude_km *
-                                        1000.0 == skymap.full_map_altitude)
+                altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
                 lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
-                lons = np.squeeze(
-                    skymap.full_map_longitude[altitude_idx, :, :])
+                lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
                 lons[np.where(lons > 180)] -= 360.0
 
             else:
                 # Make sure altitude is in range that can be interpolated
-                if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (
-                        altitude_km * 1000.0 > skymap.full_map_altitude[2]):
-                    raise ValueError("Altitude " + str(altitude_km) +
-                                     " outside valid range of " +
-                                     str((skymap.full_map_altitude[0] / 1000.0,
-                                          skymap.full_map_altitude[2] /
-                                          1000.0)))
+                if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
+                    raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
+                                     str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
 
                 # Initialze empty lat/lon arrays
-                lats = np.full(np.squeeze(
-                    skymap.full_map_latitude[0, :, :]).shape,
-                               np.nan,
-                               dtype=skymap.full_map_latitude[0, :, :].dtype)
+                lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
                 lons = lats.copy()
 
                 # Interpolate lats and lons at desired altitude
                 for i in range(skymap.full_map_latitude.shape[1]):
                     for j in range(skymap.full_map_latitude.shape[2]):
-                        lats[i,
-                             j] = np.interp(altitude_km * 1000.0,
-                                            skymap.full_map_altitude,
-                                            skymap.full_map_latitude[:, i, j])
-                        lons[i,
-                             j] = np.interp(altitude_km * 1000.0,
-                                            skymap.full_map_altitude,
-                                            skymap.full_map_longitude[:, i, j])
+                        lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
+                        lons[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_longitude[:, i, j])
 
                 lons[np.where(lons > 180)] -= 360.0
 
             # Convert lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(
-                lats.flatten(),
-                lons.flatten(), (lons * 0.0).flatten(),
-                timestamp,
-                method_code='G2A')
+            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
+                                                                      lons.flatten(), (lons * 0.0).flatten(),
+                                                                      timestamp,
+                                                                      method_code='G2A')
             mag_lats = np.reshape(mag_lats, lats.shape)
             mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -250,18 +200,13 @@ class Keogram:
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
         else:
             # Convert middle altitude lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(
-                np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
-                np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
-                (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
-                timestamp,
-                method_code='G2A')
-            mag_lats = np.reshape(
-                mag_lats,
-                np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
-            mag_lons = np.reshape(
-                mag_lons,
-                np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
+            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
+                                                                      np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
+                                                                      (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
+                                                                      timestamp,
+                                                                      method_code='G2A')
+            mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
+            mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
 
             # Set the y axis to the desired slice index of the magnetic latitudes
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
@@ -360,21 +305,15 @@ class Keogram:
         """
         # check return mode
         if (returnfig is True and savefig is True):
-            raise ValueError(
-                "Only one of returnfig or savefig can be set to True")
-        if returnfig is True and (savefig_filename is not None
-                                  or savefig_quality is not None):
-            warnings.warn(
-                "The figure will be returned, but a savefig option parameter was supplied. Consider "
-                +
-                "removing the savefig option parameter(s) as they will be ignored.",
-                stacklevel=1)
-        elif savefig is False and (savefig_filename is not None
-                                   or savefig_quality is not None):
-            warnings.warn(
-                "A savefig option parameter was supplied, but the savefig parameter is False. The "
-                + "savefig option parameters will be ignored.",
-                stacklevel=1)
+            raise ValueError("Only one of returnfig or savefig can be set to True")
+        if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
+            warnings.warn("The figure will be returned, but a savefig option parameter was supplied. Consider " +
+                          "removing the savefig option parameter(s) as they will be ignored.",
+                          stacklevel=1)
+        elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
+            warnings.warn("A savefig option parameter was supplied, but the savefig parameter is False. The " +
+                          "savefig option parameters will be ignored.",
+                          stacklevel=1)
 
         # init figure and plot data
         fig = plt.figure(figsize=figsize)
@@ -389,15 +328,11 @@ class Keogram:
         if (axes_visible is True):
             # do checks for y-axis that was chosen
             if (y_type == "geo" and self.geo_y is None):
-                raise ValueError(
-                    "Unable to plot using geo_y data. The geo_y attribute is currently None, so either populate "
-                    "it with data using the set_geographic_latitudes() function, or choose a different y_type"
-                )
+                raise ValueError("Unable to plot using geo_y data. The geo_y attribute is currently None, so either populate "
+                                 "it with data using the set_geographic_latitudes() function, or choose a different y_type")
             elif (y_type == "mag" and self.mag_y is None):
-                raise ValueError(
-                    "Unable to plot using mag_y data. The mag_y attribute is currently None, so either populate "
-                    "it with data using the set_magnetic_latitudes() function, or choose a different y_type"
-                )
+                raise ValueError("Unable to plot using mag_y data. The mag_y attribute is currently None, so either populate "
+                                 "it with data using the set_magnetic_latitudes() function, or choose a different y_type")
 
             # set y axis data, and y label
             y_axis_data = self.ccd_y
@@ -431,8 +366,7 @@ class Keogram:
             # do check for ccd_y
             if (self.ccd_y is None):
                 warnings.warn(
-                    "Unable to plot y-axis. If this keogram object was create as part of the custom_keogram "
-                    +
+                    "Unable to plot y-axis. If this keogram object was create as part of the custom_keogram " +
                     "routines, this is expected and plotting a custom keogram with axes is not supported at this time.",
                     stacklevel=1,
                 )
@@ -449,8 +383,7 @@ class Keogram:
 
                     # apply yticks
                     ax.set_yticks(y_ticks, y_labels)  # type: ignore
-                elif (y_type == "geo" and self.geo_y is not None) or (
-                        y_type == "mag" and self.mag_y is not None):
+                elif (y_type == "geo" and self.geo_y is not None) or (y_type == "mag" and self.mag_y is not None):
                     # set tick increments
                     if (ytick_increment is None):
                         ytick_increment = 50
@@ -458,8 +391,8 @@ class Keogram:
                     # generate y ticks and labels
                     y_ticks = self.ccd_y[25::ytick_increment]
                     y_labels = np.round(
-                        y_axis_data,    # type: ignore
-                        1).astype(str)[25::ytick_increment]  
+                        y_axis_data,  # type: ignore
+                        1).astype(str)[25::ytick_increment]
                     y_labels[np.where(y_labels == 'nan')] = ''
 
                     # apply yticks
@@ -472,28 +405,22 @@ class Keogram:
         if (savefig is True):
             # check that filename has been set
             if (savefig_filename is None):
-                raise ValueError(
-                    "The savefig_filename parameter is missing, but required since savefig was set to True."
-                )
+                raise ValueError("The savefig_filename parameter is missing, but required since savefig was set to True.")
 
             # save the figure
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (".jpg" == f_extension or ".jpeg" == f_extension):
                 # check quality setting
                 if (savefig_quality is not None):
-                    plt.savefig(savefig_filename,
-                                quality=savefig_quality,
-                                bbox_inches="tight")
+                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
                 else:
                     plt.savefig(savefig_filename, bbox_inches="tight")
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(
-                        "The savefig_quality parameter was specified, but is only used for saving JPG files. The "
-                        +
-                        "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
-                        stacklevel=1)
+                    warnings.warn("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
+                                  "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
+                                  stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches="tight")
 
             # clean up by closing the figure

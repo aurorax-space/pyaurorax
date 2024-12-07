@@ -77,6 +77,10 @@ def azimuth(skymap: Skymap,
     azimuth = skymap.full_azimuth
     elevation = skymap.full_elevation
 
+    # Check if azimuth is None (in case someone tries this with a spectrograph skymap)
+    if (azimuth is None):
+        raise ValueError("Skymap's 'azimuth' value is None, cannot perform this function")
+
     # 360 degrees is just zero in skymap
     if constant_azimuth == 360:
         constant_azimuth = 0

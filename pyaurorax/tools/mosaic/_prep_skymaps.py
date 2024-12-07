@@ -59,8 +59,7 @@ def __flatten_skymap(processing_dict):
 
             # Get estimates of pixel corners based on spectrograph width in degrees
             pix_lons = np.array([
-                lon1 - (SPECT_WIDTH_DEG / 2.0), lon2 - (SPECT_WIDTH_DEG / 2.0),
-                lon2 + (SPECT_WIDTH_DEG / 2.0), lon1 + (SPECT_WIDTH_DEG / 2.0),
+                lon1 - (SPECT_WIDTH_DEG / 2.0), lon2 - (SPECT_WIDTH_DEG / 2.0), lon2 + (SPECT_WIDTH_DEG / 2.0), lon1 + (SPECT_WIDTH_DEG / 2.0),
                 lon1 - (SPECT_WIDTH_DEG / 2.0)
             ])
             pix_lats = np.array([lat1, lat2, lat2, lat1, lat1])
@@ -115,8 +114,7 @@ def __flatten_skymap(processing_dict):
                 # coordinates (polygon) to the filling array.
                 lon1 = np.interp(height_km, interpol_alts, lons[:, ii, jj])
                 lon2 = np.interp(height_km, interpol_alts, lons[:, ii, jj + 1])
-                lon3 = np.interp(height_km, interpol_alts, lons[:, ii + 1,
-                                                                jj + 1])
+                lon3 = np.interp(height_km, interpol_alts, lons[:, ii + 1, jj + 1])
                 lon4 = np.interp(height_km, interpol_alts, lons[:, ii + 1, jj])
                 pix_lons = np.array([lon1, lon2, lon3, lon4, lon1])
                 if np.isnan(pix_lons).any():
@@ -126,8 +124,7 @@ def __flatten_skymap(processing_dict):
                 # repeat the above for latitudes.
                 lat1 = np.interp(height_km, interpol_alts, lats[:, ii, jj])
                 lat2 = np.interp(height_km, interpol_alts, lats[:, ii, jj + 1])
-                lat3 = np.interp(height_km, interpol_alts, lats[:, ii + 1,
-                                                                jj + 1])
+                lat3 = np.interp(height_km, interpol_alts, lats[:, ii + 1, jj + 1])
                 lat4 = np.interp(height_km, interpol_alts, lats[:, ii + 1, jj])
                 pix_lats = np.array([lat1, lat2, lat3, lat4, lat1])
                 if np.isnan(np.array(pix_lats)).any():
@@ -201,11 +198,8 @@ def prep_skymaps(skymaps: List[Skymap],
                     skymaps_sorted.append(skymap)
                     site_uid_list.append(site_uid)
         if (len(skymaps_sorted) != len(skymaps)):
-            raise ValueError(
-                "Number of items in supplied skymaps and site_uid_order lists do not match, or "
-                +
-                "some site_uids specified in the order were not found. Unable to flatten skymaps due to this mismatch."
-            )
+            raise ValueError("Number of items in supplied skymaps and site_uid_order lists do not match, or " +
+                             "some site_uids specified in the order were not found. Unable to flatten skymaps due to this mismatch.")
     else:
         site_uid_list = [x.site_uid for x in skymaps]
         skymaps_sorted = skymaps
@@ -222,15 +216,9 @@ def prep_skymaps(skymaps: List[Skymap],
             polyfill_lat.append(np.zeros((5, skymap.full_elevation.shape[0])))
             polyfill_lon.append(np.zeros((5, skymap.full_elevation.shape[0])))
         else:
-            elevation.append(
-                np.zeros((skymap.full_elevation.shape[0] *
-                          skymap.full_elevation.shape[1])))
-            polyfill_lat.append(
-                np.zeros((5, skymap.full_elevation.shape[0] *
-                          skymap.full_elevation.shape[1])))
-            polyfill_lon.append(
-                np.zeros((5, skymap.full_elevation.shape[0] *
-                          skymap.full_elevation.shape[1])))
+            elevation.append(np.zeros((skymap.full_elevation.shape[0] * skymap.full_elevation.shape[1])))
+            polyfill_lat.append(np.zeros((5, skymap.full_elevation.shape[0] * skymap.full_elevation.shape[1])))
+            polyfill_lon.append(np.zeros((5, skymap.full_elevation.shape[0] * skymap.full_elevation.shape[1])))
 
     # set up processing objects
     processing_dicts = []
@@ -252,9 +240,7 @@ def prep_skymaps(skymaps: List[Skymap],
                 polyfill_lat[results_dict["i"]] = results_dict["polyfill_lat"]
         else:
             # with progress bar
-            for processing_dict in tqdm(processing_dicts,
-                                        desc="Preparing skymaps: ",
-                                        unit="skymap"):
+            for processing_dict in tqdm(processing_dicts, desc="Preparing skymaps: ", unit="skymap"):
                 results_dict = __flatten_skymap(processing_dict)
                 elevation[results_dict["i"]] = results_dict["elevation"]
                 polyfill_lon[results_dict["i"]] = results_dict["polyfill_lon"]
@@ -263,13 +249,10 @@ def prep_skymaps(skymaps: List[Skymap],
         # multiple workers, do it in a multiprocessing loop
         if (progress_bar_disable is True):
             with ProcessPoolExecutor(max_workers=n_parallel) as executor:
-                for results_dict in executor.map(__flatten_skymap,
-                                                 processing_dicts):
+                for results_dict in executor.map(__flatten_skymap, processing_dicts):
                     elevation[results_dict["i"]] = results_dict["elevation"]
-                    polyfill_lon[
-                        results_dict["i"]] = results_dict["polyfill_lon"]
-                    polyfill_lat[
-                        results_dict["i"]] = results_dict["polyfill_lat"]
+                    polyfill_lon[results_dict["i"]] = results_dict["polyfill_lon"]
+                    polyfill_lat[results_dict["i"]] = results_dict["polyfill_lat"]
         else:
             results_dicts = tqdm_process_map(
                 __flatten_skymap,

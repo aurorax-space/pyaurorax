@@ -76,13 +76,9 @@ def create(images: np.ndarray,
         middle_column_idx = None
 
         if axis != 0:
-            raise ValueError(
-                f"Cannot create keogram for spectrograph data along axis other than 0, received axis: {axis}."
-            )
+            raise ValueError(f"Cannot create keogram for spectrograph data along axis other than 0, received axis: {axis}.")
         if wavelength is None:
-            raise ValueError(
-                "Parameter 'wavelength' must be supplied when using spectrograph data."
-            )
+            raise ValueError("Parameter 'wavelength' must be supplied when using spectrograph data.")
 
         # Determine integration bounds for spectrograph data
         wavelength_range = {
@@ -112,11 +108,9 @@ def create(images: np.ndarray,
                 wavelength_bg_range = spect_band_bg
 
         # Extract wavelength from metadata, and get integration indices
-        int_w = np.where((wavelength >= wavelength_range[0])
-                         & (wavelength <= wavelength_range[1]))
+        int_w = np.where((wavelength >= wavelength_range[0]) & (wavelength <= wavelength_range[1]))
         if wavelength_bg_range is not None:
-            int_bg_w = np.where((wavelength >= wavelength_bg_range[0])
-                                & (wavelength <= wavelength_bg_range[1]))
+            int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
 
         # Integrate all spectrograph pixels to get emission
         n_wavelengths_in_spectra = images.shape[0]
@@ -126,24 +120,18 @@ def create(images: np.ndarray,
         n_timestamps = len(timestamp)
 
         if n_timestamps != n_timestamps_in_spectra:
-            raise ValueError(
-                f"Mismatched timestamp dimensions. Received {n_timestamps} "
-                f"timestamps for spectrograph data with {n_timestamps_in_spectra} timestamps."
-            )
+            raise ValueError(f"Mismatched timestamp dimensions. Received {n_timestamps} "
+                             f"timestamps for spectrograph data with {n_timestamps_in_spectra} timestamps.")
 
         if n_wavelengths != n_wavelengths_in_spectra:
-            raise ValueError(
-                f"Mismatched wavelength dimensions. Received {n_wavelengths} "
-                f"wavelengths for spectrograph data with {n_wavelengths_in_spectra} wavelengths."
-            )
+            raise ValueError(f"Mismatched wavelength dimensions. Received {n_wavelengths} "
+                             f"wavelengths for spectrograph data with {n_wavelengths_in_spectra} wavelengths.")
 
         # set y-axis
         ccd_y = np.arange(0, n_spatial_bins)
 
         # Initialize keogram array
-        keo_arr = np.full([n_spatial_bins, n_timestamps],
-                          0,
-                          dtype=images.dtype)
+        keo_arr = np.full([n_spatial_bins, n_timestamps], 0, dtype=images.dtype)
 
         # Iterate through each timestamp and compute emissions for all spatial bins
         for i in range(0, n_timestamps):
@@ -151,9 +139,7 @@ def create(images: np.ndarray,
             # Integrate over wavelengths to get Rayleighs
             iter_spectra = images[:, :, i]
 
-            rayleighs = np.trapz(iter_spectra[int_w[0], :],
-                                 x=wavelength[int_w[0]],
-                                 axis=0)
+            rayleighs = np.trapz(iter_spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
 
             if wavelength_bg_range is not None:
                 if int_bg_w is not None:  #type: ignore
@@ -183,11 +169,8 @@ def create(images: np.ndarray,
             # three channel
             n_channels = 3
         else:
-            ValueError(
-                "Unable to determine number of channels based on the supplied images. Make sure you are supplying a "
-                +
-                "[rows,cols,images] or [rows,cols,channels,images] sized array."
-            )
+            ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
+                       "[rows,cols,images] or [rows,cols,channels,images] sized array.")
 
         # initialize keogram data
         n_rows = images.shape[0]
@@ -195,9 +178,7 @@ def create(images: np.ndarray,
         if (n_channels == 1):
             keo_arr = np.full([n_rows, n_imgs], 0, dtype=images.dtype)
         else:
-            keo_arr = np.full([n_rows, n_imgs, n_channels],
-                              0,
-                              dtype=images.dtype)
+            keo_arr = np.full([n_rows, n_imgs, n_channels], 0, dtype=images.dtype)
 
         # extract the keogram slices
         middle_column_idx = int(np.floor((images.shape[1]) / 2 - 1))
@@ -214,11 +195,7 @@ def create(images: np.ndarray,
                 keo_arr[:, img_idx, :] = frame_middle_slice
 
     # create the keogram object
-    keo_obj = Keogram(data=keo_arr,
-                      slice_idx=middle_column_idx,
-                      timestamp=timestamp,
-                      ccd_y=ccd_y,
-                      instrument_type=instrument_type)
+    keo_obj = Keogram(data=keo_arr, slice_idx=middle_column_idx, timestamp=timestamp, ccd_y=ccd_y, instrument_type=instrument_type)
 
     # return
     return keo_obj

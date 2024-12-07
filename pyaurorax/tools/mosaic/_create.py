@@ -102,9 +102,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
     # of cartopy's native transformations. This is an optimization.
     pyproj_src_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
     pyproj_des_proj = pyproj.CRS.from_user_input(cartopy_projection)
-    transformer = pyproj.Transformer.from_crs(pyproj_src_proj,
-                                              pyproj_des_proj,
-                                              always_xy=True)
+    transformer = pyproj.Transformer.from_crs(pyproj_src_proj, pyproj_des_proj, always_xy=True)
 
     # Convert data, skymaps, colormap indicators to lists for iteration purposed
     if not isinstance(prepped_data, list):
@@ -124,19 +122,13 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             tmp.append(min_elevation)
         min_elevation = tmp
     if spect_intensity_scales is None:
-        spect_intensity_scales = (__DEFAULT_SPECT_SCALE_MIN,
-                                  __DEFAULT_SPECT_SCALE_MAX)
+        spect_intensity_scales = (__DEFAULT_SPECT_SCALE_MIN, __DEFAULT_SPECT_SCALE_MAX)
 
     # Make sure all lists are same length
     if (len(prepped_data) != len(prepped_skymap)):
-        raise ValueError(
-            "When passing lists of prepped data and prepped skymap, they must be of the same length."
-        )
-    if (len(prepped_data) != len(colormap)) or (len(prepped_skymap)
-                                                != len(colormap)):
-        raise ValueError(
-            "List of colormaps must have same length as lists of prepped data and prepped skymaps."
-        )
+        raise ValueError("When passing lists of prepped data and prepped skymap, they must be of the same length.")
+    if (len(prepped_data) != len(colormap)) or (len(prepped_skymap) != len(colormap)):
+        raise ValueError("List of colormaps must have same length as lists of prepped data and prepped skymaps.")
 
     # Itarate through each set of prepped data, prepped skymap
     img_poly_list = []
@@ -162,9 +154,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             # defaults to scaling all sites between 0-20000
             image_intensity_scales = {}
             for site_uid in skymap.site_uid_list:
-                image_intensity_scales[site_uid] = [
-                    __DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX
-                ]
+                image_intensity_scales[site_uid] = [__DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX]
         elif (isinstance(image_intensity_scales, list) is True):
             image_intensity_scales_dict = {}
             for site_uid in site_list:
@@ -174,9 +164,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             # no action needed
             pass
         else:
-            raise ValueError(
-                "Invalid image_intensity_scales format. Please refer to the documentation for this function."
-            )
+            raise ValueError("Invalid image_intensity_scales format. Please refer to the documentation for this function.")
 
         # We need a numpy array of the sites requested, that will be used to make sure any sites
         # that don't have data for the requested frame are not plotted. Also empty dict for images..
@@ -196,17 +184,12 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
         datatypes_with_data = []
 
         # Determine the frame index of data the corresponds to the requested timestamp
-        minimum_timestamp = (np.array(data.timestamps))[np.argmin(
-            np.array(data.timestamps))]
-        maximum_timestamp = (np.array(data.timestamps))[np.argmax(
-            np.array(data.timestamps))]
+        minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
+        maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
         if timestamp < minimum_timestamp or timestamp > maximum_timestamp:
-            raise ValueError(
-                "Could not create mosaic for timestamp" +
-                timestamp.strftime("%Y/%m/%d %H:%M:%S") +
-                " as image data was only supplied for the timestamp range: " +
-                minimum_timestamp.strftime("%Y/%m/%d %H:%M:%S") + " to " +
-                maximum_timestamp.strftime("%Y/%m/%d %H:%M:%S"))
+            raise ValueError("Could not create mosaic for timestamp" + timestamp.strftime("%Y/%m/%d %H:%M:%S") +
+                             " as image data was only supplied for the timestamp range: " + minimum_timestamp.strftime("%Y/%m/%d %H:%M:%S") + " to " +
+                             maximum_timestamp.strftime("%Y/%m/%d %H:%M:%S"))
 
         # Get the frame index of the timestamp closest to desired mosaic frame
         frame_idx = np.argmin(np.abs(np.array(data.timestamps) - timestamp))
@@ -259,8 +242,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                     flattened_img = np.reshape(img, (width * height))
                 else:
                     img = data.images[site][:, :, :, frame_idx]
-                    flattened_img = np.reshape(img,
-                                               (width * height, n_channels))
+                    flattened_img = np.reshape(img, (width * height, n_channels))
 
                 tmp = flattened_img
 
@@ -318,9 +300,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                 n_channels = n_channels_dict[site_id]
 
                 # Get all pixels within current elevation threshold
-                el_idx = np.nonzero(
-                    np.logical_and(elev[site_idx] > el, elev[site_idx]
-                                   <= el + elev_delta))[0]
+                el_idx = np.nonzero(np.logical_and(elev[site_idx] > el, elev[site_idx] <= el + elev_delta))[0]
                 if len(el_idx) == 0:
                     continue
 
@@ -335,8 +315,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                     el_lvl_cmap_vals = all_images[site_id][el_idx, :]
 
                 # # Mask any nans that may have slipped through - done as a precaution
-                nan_mask = ~np.isnan(el_lvl_fill_lats).any(
-                    axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
+                nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
 
                 el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
                 el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
@@ -378,9 +357,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                 n_channels = n_channels_dict[site_id]
 
                 # Get all pixels within current elevation threshold
-                el_idx = np.nonzero(
-                    np.logical_and(elev[site_idx] > el, elev[site_idx]
-                                   <= el + elev_delta))[0]
+                el_idx = np.nonzero(np.logical_and(elev[site_idx] > el, elev[site_idx] <= el + elev_delta))[0]
                 if len(el_idx) == 0:
                     continue
 
@@ -395,8 +372,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                     el_lvl_cmap_vals = all_images[site_id][el_idx, :]
 
                 # # Mask any nans that may have slipped through - done as a precaution
-                nan_mask = ~np.isnan(el_lvl_fill_lats).any(
-                    axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
+                nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
 
                 el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
                 el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
@@ -424,8 +400,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             el += elev_delta
 
         # Use our transformer object to convert the lat/lon polygons into projection coordinates.
-        lons, lats = transformer.transform(np.array(lon_list),
-                                           np.array(lat_list))
+        lons, lats = transformer.transform(np.array(lon_list), np.array(lat_list))
 
         # Format polygons for creation of PolyCollection object
         lonlat_polygons = np.empty((lons.shape[0], 5, 2))
@@ -462,10 +437,8 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
                             spect_intensity_scale=spect_intensity_scales)
     else:
         if len(img_poly_list) == 1:
-            mosaic = Mosaic(polygon_data=img_poly_list[0],
-                            cartopy_projection=cartopy_projection)
+            mosaic = Mosaic(polygon_data=img_poly_list[0], cartopy_projection=cartopy_projection)
         else:
-            mosaic = Mosaic(polygon_data=img_poly_list,
-                            cartopy_projection=cartopy_projection)
+            mosaic = Mosaic(polygon_data=img_poly_list, cartopy_projection=cartopy_projection)
     # return
     return mosaic
