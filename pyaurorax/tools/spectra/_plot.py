@@ -31,6 +31,7 @@ def plot(spect_data: Data,
          title: Optional[str] = None,
          figsize: Optional[Tuple[int, int]] = None,
          color: Optional[str] = None,
+         ylog: bool = False,
          xlabel: str = "Wavelength (nm)",
          ylabel: str = "Intensity (R/nm)",
          ylim: Optional[Tuple[int, int]] = None,
@@ -246,6 +247,9 @@ def plot(spect_data: Data,
         # Slice out the spectrum of interest
         spectrum = spectra[:, spect_idx, epoch_idx]
 
+        if ylog:
+            spectrum[np.where(spectrum < 0)] = 0
+
         # Add this spectrum to the plot
         plt.plot(wavelength,
                  spectrum,
@@ -278,9 +282,15 @@ def plot(spect_data: Data,
 
     # Set y-limit, by default 1.2 times max spectrum data
     if ylim is None:
-        ax.set_ylim(0.0, max_intensity * 1.2)
+        if ylog:
+            ax.set_ylim(1.0, max_intensity * 2.0)
+        else:
+            ax.set_ylim(0.0, max_intensity * 1.2)
     else:
         ax.set_ylim(ylim)
+
+    if ylog:
+        ax.set_yscale('log', base=10)
 
     # save figure or show it
     if (savefig is True):
