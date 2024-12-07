@@ -61,17 +61,28 @@ class MosaicSkymap:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                          for fill_arr in self.polyfill_lat))).replace("[", "").replace("]",
-                                                                                                                        "").replace("), (", "),(")
-        unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                          for fill_arr in self.polyfill_lon))).replace("[", "").replace("]",
-                                                                                                                        "").replace("), (", "),(")
-        unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace("[", "").replace("]", "").replace("), (", "),(")
+        unique_polyfill_lat_dims = str(
+            list(
+                dict.fromkeys(fill_arr.shape
+                              for fill_arr in self.polyfill_lat))).replace(
+                                  "[", "").replace("]",
+                                                   "").replace("), (", "),(")
+        unique_polyfill_lon_dims = str(
+            list(
+                dict.fromkeys(fill_arr.shape
+                              for fill_arr in self.polyfill_lon))).replace(
+                                  "[", "").replace("]",
+                                                   "").replace("), (", "),(")
+        unique_elevation_dims = str(
+            list(dict.fromkeys(el.shape for el in self.elevation))).replace(
+                "[", "").replace("]", "").replace("), (", "),(")
 
-        polyfill_lat_str = "array(dims=%s, dtype=%s)" % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
-        polyfill_lon_str = "array(dims=%s, dtype=%s)" % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
-        elevation_str = "array(dims=%s, dtype=%s)" % (unique_elevation_dims, self.elevation[0].dtype)
+        polyfill_lat_str = "array(dims=%s, dtype=%s)" % (
+            unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
+        polyfill_lon_str = "array(dims=%s, dtype=%s)" % (
+            unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
+        elevation_str = "array(dims=%s, dtype=%s)" % (unique_elevation_dims,
+                                                      self.elevation[0].dtype)
 
         return "MosaicSkymap(polyfill_lat=%s, polyfill_lon=%s, elevation=%s, site_uid_list=%s)" % (
             polyfill_lat_str,
@@ -95,23 +106,30 @@ class MosaicData:
             Image data prepared into the necessary format; a dictionary. Keys are the site UID, 
             ndarray is the prepared data.
         images_dimensions (Dict[str, Tuple]): 
-            The image dimensions.    
+            The image dimensions.
+        data_types (List[str]): 
+            The data types for each data object.    
     """
 
     site_uid_list: List[str]
     timestamps: List[datetime.datetime]
     images: Dict[str, ndarray]
     images_dimensions: Dict[str, Tuple]
+    data_types: List[str]
 
     def __str__(self) -> str:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        unique_dimensions = str(list(dict.fromkeys(self.images_dimensions.values()))).replace("[", "").replace("]", "").replace("), (", "),(")
-        images_str = "Dict[%d sites of array(dims=%s)]" % (len(self.images.keys()), unique_dimensions)
+        unique_dimensions = str(
+            list(dict.fromkeys(self.images_dimensions.values()))).replace(
+                "[", "").replace("]", "").replace("), (", "),(")
+        images_str = "Dict[%d sites of array(dims=%s)]" % (len(
+            self.images.keys()), unique_dimensions)
         timestamps_str = "[%d timestamps]" % (len(self.timestamps))
 
-        return "MosaicData(images=%s, timestamps=%s, site_uid_list=%s)" % (images_str, timestamps_str, self.site_uid_list.__repr__())
+        return "MosaicData(images=%s, timestamps=%s, site_uid_list=%s)" % (
+            images_str, timestamps_str, self.site_uid_list.__repr__())
 
 
 @dataclass
@@ -126,10 +144,17 @@ class Mosaic:
             Cartopy projection to utilize.
         contour_data (Dict[str, List[Any]]): 
             Generated contour data.
+        spect_cmap (str): 
+            String giving the cmap to use for spect legend.
+        spect_intensity_scale (Tuple[int]): 
+            The min and max values that spectrograph data
+            is scaled to in the mosaic, if any is present.
     """
     polygon_data: Union[PolyCollection, List[PolyCollection]]
     cartopy_projection: Projection
     contour_data: Optional[Dict[str, List[Any]]] = None
+    spect_cmap: Optional[str] = None
+    spect_intensity_scale: Optional[Tuple[int, int]] = None
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -146,7 +171,8 @@ class Mosaic:
                 len(self.contour_data.get("x", [])),
             )
         else:
-            return "Mosaic(polygon_data="+polycollection_str+", cartopy_projection=Projection(%s))" % (self.cartopy_projection.to_string())
+            return "Mosaic(polygon_data=" + polycollection_str + ", cartopy_projection=Projection(%s))" % (
+                self.cartopy_projection.to_string())
 
     def plot(self,
              map_extent: Sequence[Union[float, int]],
@@ -154,12 +180,13 @@ class Mosaic:
              rayleighs: bool = False,
              max_rayleighs: int = 20000,
              title: Optional[str] = None,
+             colorbar_title: Optional[str] = None,
              ocean_color: Optional[str] = None,
              land_color: str = "gray",
              land_edgecolor: str = "#8A8A8A",
              borders_color: str = "#AEAEAE",
              borders_disable: bool = False,
-             cbar_colormap: str = "gray",
+             cbar_colormap: str = "",
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -204,7 +231,9 @@ class Mosaic:
                 Disbale rendering of the borders. Default is `False`.
 
             cbar_colorcmap (str): 
-                The matplotlib colormap to use for the plotted color bar. Default is `gray`.
+                The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
+                mosaic was created with spectrograph data, in which case defaults to the colormap
+                used for spectrograph data..
 
                 Commonly used colormaps are:
 
@@ -245,15 +274,25 @@ class Mosaic:
         """
         # check return mode
         if (returnfig is True and savefig is True):
-            raise ValueError("Only one of returnfig or savefig can be set to True")
-        if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn("The figure will be returned, but a savefig option parameter was supplied. Consider " +
-                          "removing the savefig option parameter(s) as they will be ignored.",
-                          stacklevel=1)
-        elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn("A savefig option parameter was supplied, but the savefig parameter is False. The " +
-                          "savefig option parameters will be ignored.",
-                          stacklevel=1)
+            raise ValueError(
+                "Only one of returnfig or savefig can be set to True")
+        if returnfig is True and (savefig_filename is not None
+                                  or savefig_quality is not None):
+            warnings.warn(
+                "The figure will be returned, but a savefig option parameter was supplied. Consider "
+                +
+                "removing the savefig option parameter(s) as they will be ignored.",
+                stacklevel=1)
+        elif (savefig is False and
+              (savefig_filename is not None or savefig_quality is not None)):
+            warnings.warn(
+                "A savefig option parameter was supplied, but the savefig parameter is False. The "
+                + "savefig option parameters will be ignored.",
+                stacklevel=1)
+
+        # Get colormap if there is spectrograph data
+        if self.spect_cmap is not None:
+            cbar_colormap = self.spect_cmap
 
         # initialize figure
         fig = plt.figure(figsize=figsize)
@@ -264,16 +303,26 @@ class Mosaic:
         #
         # NOTE: we use the default ocean color
         if (ocean_color is not None):
-            ax.add_feature(cartopy.feature.OCEAN, facecolor=ocean_color, zorder=0)  # type: ignore
+            ax.add_feature(  # type: ignore
+                cartopy.feature.OCEAN,
+                facecolor=ocean_color,
+                zorder=0)
         else:
             ax.add_feature(cartopy.feature.OCEAN, zorder=0)  # type: ignore
 
         # add land
-        ax.add_feature(cartopy.feature.LAND, facecolor=land_color, edgecolor=land_edgecolor, zorder=0)  # type: ignore
+        ax.add_feature(  # type: ignore
+            cartopy.feature.LAND,
+            facecolor=land_color,
+            edgecolor=land_edgecolor,
+            zorder=0)
 
         # add borders
         if (borders_disable is False):
-            ax.add_feature(cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)  # type: ignore
+            ax.add_feature(  # type: ignore
+                cartopy.feature.BORDERS,
+                edgecolor=borders_color,
+                zorder=0)
 
         # add polygon data
         #
@@ -302,16 +351,23 @@ class Mosaic:
         # add text
         if (rayleighs is True):
             if isinstance(self.polygon_data, list):
-                raise ValueError("Rayleighs Keyword is currently not available for mosaics with multiple sets of data.")
-            
+                raise ValueError(
+                    "Rayleighs Keyword is currently not available for mosaics with multiple sets of data."
+                )
+
             # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
             cbar_ticks = [float(j) / 5. for j in range(0, 6)]
-            cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]
+            cbar_ticknames = [
+                str(int(max_rayleighs / 5) * j) for j in range(0, 6)
+            ]
 
             # Any pixels with the max Rayleigh value could be greater than it, so we include the plus sign
             cbar_ticknames[-1] += "+"
             self.polygon_data.set_cmap(cbar_colormap)
-            cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
+            cbar = plt.colorbar(self.polygon_data,
+                                shrink=0.5,
+                                ticks=cbar_ticks,
+                                ax=ax)
             cbar.ax.set_yticklabels(cbar_ticknames)
             plt.text(1.025,
                      0.5,
@@ -323,26 +379,86 @@ class Mosaic:
                      weight="bold",
                      style="oblique")
 
+        if (self.spect_cmap) is not None:
+
+            if (self.spect_intensity_scale) is None:
+                intensity_max = np.nan
+                intensity_min = np.nan
+            else:
+                intensity_max = self.spect_intensity_scale[1]
+                intensity_min = self.spect_intensity_scale[0]
+
+            # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
+            cbar_ticks = [float(j) / 5. for j in range(0, 6)]
+            cbar_ticknames = [
+                str(int((intensity_max / 5) + intensity_min) * j)
+                for j in range(0, 6)
+            ]
+
+            # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
+            cbar_ticknames[-1] += "+"
+            if isinstance(self.polygon_data, list):
+                self.polygon_data[0].set_cmap(cbar_colormap)
+            else:
+                self.polygon_data.set_cmap(cbar_colormap)
+            if isinstance(self.polygon_data, list):
+                cbar = plt.colorbar(self.polygon_data[0],
+                                    shrink=0.5,
+                                    ticks=cbar_ticks,
+                                    ax=ax)
+            else:
+                cbar = plt.colorbar(self.polygon_data,
+                                    shrink=0.5,
+                                    ticks=cbar_ticks,
+                                    ax=ax)
+            cbar.ax.set_yticklabels(cbar_ticknames)
+            if colorbar_title is None:
+                plt.text(1.025,
+                         0.5,
+                         "Spectrograph Intensity (Rayleighs)",
+                         fontsize=10,
+                         transform=ax.transAxes,
+                         va="center",
+                         rotation="vertical",
+                         weight="bold",
+                         style="oblique")
+            else:
+                plt.text(1.025,
+                         0.5,
+                         colorbar_title,
+                         fontsize=10,
+                         transform=ax.transAxes,
+                         va="center",
+                         rotation="vertical",
+                         weight="bold",
+                         style="oblique")
+
         # save figure or show it
         if (savefig is True):
             # check that filename has been set
             if (savefig_filename is None):
-                raise ValueError("The savefig_filename parameter is missing, but required since savefig was set to True.")
+                raise ValueError(
+                    "The savefig_filename parameter is missing, but required since savefig was set to True."
+                )
 
             # save the figure
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (".jpg" == f_extension or ".jpeg" == f_extension):
                 # check quality setting
                 if (savefig_quality is not None):
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
+                    plt.savefig(savefig_filename,
+                                quality=savefig_quality,
+                                bbox_inches="tight")
                 else:
                     plt.savefig(savefig_filename, bbox_inches="tight")
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
-                                  "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
-                                  stacklevel=1)
+                    warnings.warn(
+                        "The savefig_quality parameter was specified, but is only used for saving JPG files. The "
+                        +
+                        "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
+                        stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches="tight")
 
             # clean up by closing the figure
@@ -363,8 +479,14 @@ class Mosaic:
     def add_geo_contours(self,
                          lats: Optional[Union[ndarray, list]] = None,
                          lons: Optional[Union[ndarray, list]] = None,
-                         constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                         constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                         constant_lats: Optional[Union[float, int,
+                                                       Sequence[Union[float,
+                                                                      int]],
+                                                       ndarray]] = None,
+                         constant_lons: Optional[Union[float, int,
+                                                       Sequence[Union[float,
+                                                                      int]],
+                                                       ndarray]] = None,
                          color: str = "black",
                          linewidth: Union[float, int] = 1,
                          linestyle: str = "solid",
@@ -405,20 +527,27 @@ class Mosaic:
             ValueError: issues encountered with supplied parameters.
         """
         # Make sure some form of lat/lon is provided
-        if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
+        if (constant_lats
+                is None) and (constant_lons
+                              is None) and (lats is None) and (lons is None):
             raise ValueError("No latitudes or longitudes provided.")
 
         # If manually passing in lats & lons, make sure both are provided
-        if (lats is not None or lons is not None) and (lats is None or lons is None):
-            raise (ValueError("Manually supplying contour requires both lats and lons."))
+        if (lats is not None or lons is not None) and (lats is None
+                                                       or lons is None):
+            raise (ValueError(
+                "Manually supplying contour requires both lats and lons."))
 
         # Check that color exists in matplotlib
         if color not in matplotlib.colors.CSS4_COLORS:
             raise ValueError(f"Color '{color}' not recognized by matplotlib.")
 
         # Check that linestyle is valid
-        if linestyle not in ["-", "--", "-.", ":", "solid", "dashed", "dashdot", "dotted"]:
-            raise ValueError(f"Linestyle '{linestyle}' not recognized by matplotlib.")
+        if linestyle not in [
+                "-", "--", "-.", ":", "solid", "dashed", "dashdot", "dotted"
+        ]:
+            raise ValueError(
+                f"Linestyle '{linestyle}' not recognized by matplotlib.")
 
         # Check that linewidth is valid
         if linewidth <= 0:
@@ -427,7 +556,7 @@ class Mosaic:
         # Check that marker is valid
         if marker not in ["", "o", ".", "p", "*", "x", "+", "X"]:
             raise ValueError(f"Marker '{marker}' is not currently supported.")
-        
+
         # Convert numerics to lists if necessary
         if constant_lats is not None:
             if isinstance(constant_lats, (float, int)):
@@ -438,12 +567,22 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn't exist yet
         if self.contour_data is None:
-            self.contour_data = {"x": [], "y": [], "color": [], "linewidth": [], "linestyle": [], "marker": [], "zorder": []}
+            self.contour_data = {
+                "x": [],
+                "y": [],
+                "color": [],
+                "linewidth": [],
+                "linestyle": [],
+                "marker": [],
+                "zorder": []
+            }
 
         # Obtain the mosaic's projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
         mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
-        transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
+        transformer = pyproj.Transformer.from_crs(source_proj,
+                                                  mosaic_proj,
+                                                  always_xy=True)
 
         # First handling manually supplied lat/lon arrays
         if (lats is not None) and (lons is not None):
@@ -479,7 +618,8 @@ class Mosaic:
                 sort_idx = np.argsort(const_lat_x)
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
-                const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+                const_lat_x, const_lat_y = transformer.transform(
+                    const_lat_x, const_lat_y)
                 # Add contour to dict, along with color and linewidth
                 self.contour_data["x"].append(const_lat_x)
                 self.contour_data["y"].append(const_lat_y)
@@ -501,7 +641,8 @@ class Mosaic:
                 sort_idx = np.argsort(const_lon_y)
                 const_lon_x = const_lon_x[sort_idx]
                 const_lon_y = const_lon_y[sort_idx]
-                const_lon_x, const_lon_y = transformer.transform(const_lon_x, const_lon_y)
+                const_lon_x, const_lon_y = transformer.transform(
+                    const_lon_x, const_lon_y)
 
                 # Add contour to dict, along with color and linewidth
                 self.contour_data["x"].append(const_lon_x)
@@ -514,8 +655,14 @@ class Mosaic:
 
     def add_mag_contours(self,
                          timestamp: datetime.datetime,
-                         constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                         constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                         constant_lats: Optional[Union[float, int,
+                                                       Sequence[Union[float,
+                                                                      int]],
+                                                       ndarray]] = None,
+                         constant_lons: Optional[Union[float, int,
+                                                       Sequence[Union[float,
+                                                                      int]],
+                                                       ndarray]] = None,
                          lats: Optional[Union[ndarray, list]] = None,
                          lons: Optional[Union[ndarray, list]] = None,
                          color: str = "black",
@@ -561,20 +708,27 @@ class Mosaic:
             ValueError: issues encountered with supplied parameters.
         """
         # Make sure some form of lat/lon is provided
-        if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
+        if (constant_lats
+                is None) and (constant_lons
+                              is None) and (lats is None) and (lons is None):
             raise ValueError("No latitudes or longitudes provided.")
 
         # If manually passing in lats & lons, make sure both are provided
-        if (lats is not None or lons is not None) and (lats is None or lons is None):
-            raise (ValueError("Manually supplying contour requires both lats and lons."))
+        if (lats is not None or lons is not None) and (lats is None
+                                                       or lons is None):
+            raise (ValueError(
+                "Manually supplying contour requires both lats and lons."))
 
         # Check that color exists in matplotlib
         if color not in matplotlib.colors.CSS4_COLORS:
             raise ValueError(f"Color '{color}' not recognized by matplotlib.")
 
         # Check that linestyle is valid
-        if linestyle not in ["-", "--", "-.", ":", "solid", "dashed", "dashdot", "dotted"]:
-            raise ValueError(f"Linestyle '{linestyle}' not recognized by matplotlib.")
+        if linestyle not in [
+                "-", "--", "-.", ":", "solid", "dashed", "dashdot", "dotted"
+        ]:
+            raise ValueError(
+                f"Linestyle '{linestyle}' not recognized by matplotlib.")
 
         # Check that linewidth is valid
         if linewidth <= 0:
@@ -590,12 +744,22 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn't exist yet
         if self.contour_data is None:
-            self.contour_data = {"x": [], "y": [], "color": [], "linewidth": [], "linestyle": [], "marker": [], "zorder": []}
+            self.contour_data = {
+                "x": [],
+                "y": [],
+                "color": [],
+                "linewidth": [],
+                "linestyle": [],
+                "marker": [],
+                "zorder": []
+            }
 
         # Obtain the mosaic's projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
         mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
-        transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
+        transformer = pyproj.Transformer.from_crs(source_proj,
+                                                  mosaic_proj,
+                                                  always_xy=True)
 
         # First handling manually supplied lat/lon arrays
         if (lats is not None) and (lons is not None):
@@ -609,7 +773,11 @@ class Mosaic:
                 raise ValueError("Lat/Lon data must be of the same size.")
 
             # Create specified contour from magnetic coords
-            y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code="A2G")
+            y, x, alt = aacgmv2.convert_latlon_arr(lats,
+                                                   lons,
+                                                   lats * 0.0,
+                                                   timestamp,
+                                                   method_code="A2G")
             x, y = transformer.transform(x, y)
             # Add contour to dict, along with color and linewidth
             self.contour_data["x"].append(x)
@@ -629,11 +797,17 @@ class Mosaic:
             for lat in constant_lats:
                 # Create line of constant lat from magnetic coords
                 const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
-                const_lat_y, const_lat_x, alt = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code="A2G")
+                const_lat_y, const_lat_x, alt = aacgmv2.convert_latlon_arr(
+                    const_lat_y,
+                    const_lat_x,
+                    const_lat_x * 0.0,
+                    timestamp,
+                    method_code="A2G")
                 sort_idx = np.argsort(const_lat_x)
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
-                const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+                const_lat_x, const_lat_y = transformer.transform(
+                    const_lat_x, const_lat_y)
 
                 # Add contour to dict, along with color and linewidth
                 self.contour_data["x"].append(const_lat_x)
@@ -653,11 +827,17 @@ class Mosaic:
             for lon in constant_lons:
                 # Create line of constant lon from magnetic coords
                 const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
-                const_lon_y, const_lon_x, alt = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code="A2G")
+                const_lon_y, const_lon_x, alt = aacgmv2.convert_latlon_arr(
+                    const_lon_y,
+                    const_lon_x,
+                    const_lon_x * 0.0,
+                    timestamp,
+                    method_code="A2G")
                 sort_idx = np.argsort(const_lon_y)
                 const_lon_x = const_lon_x[sort_idx]
                 const_lon_y = const_lon_y[sort_idx]
-                const_lon_x, const_lon_y = transformer.transform(const_lon_x, const_lon_y)
+                const_lon_x, const_lon_y = transformer.transform(
+                    const_lon_x, const_lon_y)
 
                 # Add contour to dict, along with color and linewidth
                 self.contour_data["x"].append(const_lon_x)
