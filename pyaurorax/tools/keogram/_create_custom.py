@@ -370,7 +370,7 @@ def create_custom(
                          "try increasing 'width' or decreasing number of points in input coordinates.")
 
     # Create keogram object
-    keo_obj = Keogram(data=keo_arr, timestamp=timestamp)
+    keo_obj = Keogram(data=keo_arr, timestamp=timestamp, instrument_type='asi')
 
     if preview:
         plt.figure()
