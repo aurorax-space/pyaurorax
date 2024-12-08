@@ -56,7 +56,7 @@ border-left: 1px solid #ddd;
 <dl>
 <dt id="pyaurorax.tools.classes.keogram.Keogram"><code class="flex name class">
 <span>class <span class="ident">Keogram</span></span>
-<span>(</span><span>data: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>slice_idx: int | None = None,<br>ccd_y: numpy.ndarray | None = None,<br>mag_y: numpy.ndarray | None = None,<br>geo_y: numpy.ndarray | None = None)</span>
+<span>(</span><span>data: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>instrument_type: str,<br>slice_idx: int | None = None,<br>ccd_y: numpy.ndarray | None = None,<br>mag_y: numpy.ndarray | None = None,<br>geo_y: numpy.ndarray | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class representation for a keogram</p>
@@ -66,6 +66,8 @@ border-left: 1px solid #ddd;
 <dd>The derived keogram data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
 <dd>Timestamps corresponding to each keogram slice.</dd>
+<dt>instrument_type (str):</dt>
+<dt>String giving instrument type, either 'asi' or 'spectrograph'.</dt>
 <dt><strong><code>ccd_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The y-axis representing CCD Y coordinates for the keogram.</dd>
 <dt><strong><code>mag_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
@@ -87,6 +89,8 @@ class Keogram:
             The derived keogram data.
         timestamp (List[datetime.datetime]): 
             Timestamps corresponding to each keogram slice.
+        instrument_type (str):
+            String giving instrument type, either &#39;asi&#39; or &#39;spectrograph&#39;.
         ccd_y (numpy.ndarray): 
             The y-axis representing CCD Y coordinates for the keogram.
         mag_y (numpy.ndarray): 
@@ -98,6 +102,7 @@ class Keogram:
     def __init__(self,
                  data: np.ndarray,
                  timestamp: List[datetime.datetime],
+                 instrument_type: str,
                  slice_idx: Optional[int] = None,
                  ccd_y: Optional[np.ndarray] = None,
                  mag_y: Optional[np.ndarray] = None,
@@ -105,6 +110,7 @@ class Keogram:
         # public vars
         self.data = data
         self.timestamp = timestamp
+        self.instrument_type = instrument_type
         self.ccd_y = ccd_y
         self.mag_y = mag_y
         self.geo_y = geo_y
@@ -147,8 +153,8 @@ class Keogram:
         # check for slice idx
         if (self.__slice_idx is None):
             raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
-                             &#34;object was create as part of the custom_keogram routines, this is expected and performing &#34; +
-                             &#34;this action not supported at this time.&#34;)
+                             &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
+                             &#34;this is expected and performing this action is not supported at this time.&#34;)
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -174,7 +180,7 @@ class Keogram:
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
-            self.geo_y = np.squeeze(skymap.full_map_latitude[1,:, self.__slice_idx]).copy()
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
 
     def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -204,8 +210,8 @@ class Keogram:
         # check for slice idx
         if (self.__slice_idx is None):
             raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
-                             &#34;object was create as part of the custom_keogram routines, this is expected and performing &#34; +
-                             &#34;this action not supported at this time.&#34;)
+                             &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
+                             &#34;this is expected and performing this action is not supported at this time.&#34;)
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -353,11 +359,11 @@ class Keogram:
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
-        if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
+        if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
             warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
                           &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
                           stacklevel=1)
-        elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
+        elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
             warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
                           &#34;savefig option parameters will be ignored.&#34;,
                           stacklevel=1)
@@ -437,7 +443,9 @@ class Keogram:
 
                     # generate y ticks and labels
                     y_ticks = self.ccd_y[25::ytick_increment]
-                    y_labels = np.round(y_axis_data, 1).astype(str)[25::ytick_increment]  # type: ignore
+                    y_labels = np.round(
+                        y_axis_data,  # type: ignore
+                        1).astype(str)[25::ytick_increment]
                     y_labels[np.where(y_labels == &#39;nan&#39;)] = &#39;&#39;
 
                     # apply yticks

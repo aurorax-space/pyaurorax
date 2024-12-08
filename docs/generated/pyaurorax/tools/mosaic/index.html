@@ -53,7 +53,7 @@ border-left: 1px solid #ddd;
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pyaurorax.tools.mosaic.create"><code class="name flex">
-<span>def <span class="ident">create</span></span>(<span>prepped_data: <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>],<br>prepped_skymap: <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>],<br>timestamp: datetime.datetime,<br>cartopy_projection: cartopy.crs.Projection,<br>min_elevation: int | List[int] = 5,<br>colormap: str | List[str] | None = None,<br>image_intensity_scales: List | Dict | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
+<span>def <span class="ident">create</span></span>(<span>prepped_data: <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>],<br>prepped_skymap: <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>],<br>timestamp: datetime.datetime,<br>cartopy_projection: cartopy.crs.Projection,<br>min_elevation: int | List[int] = 5,<br>colormap: str | List[str] | None = None,<br>spect_colormap: str | List[str] | None = None,<br>image_intensity_scales: List | Dict | None = None,<br>spect_intensity_scales: Tuple[int, int] | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create a mosaic object.</p>
@@ -70,7 +70,7 @@ for which image data was prepped and provided.</dd>
 <dd>The cartopy projection to use when creating the mosaic.</dd>
 <dt><strong><code>min_elevation</code></strong> :&ensp;<code>int</code></dt>
 <dd>The minimum elevation cutoff when projecting images on the map, in degrees. Default is <code>5</code>.</dd>
-<dt><strong><code>cbar_colorcmap</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>colormap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>The matplotlib colormap to use for the rendered image data. Default is <code>gray</code>.</p>
 <p>Commonly used colormaps are:</p>
@@ -84,6 +84,11 @@ for which image data was prepped and provided.</dd>
 <p>A list of all available colormaps can be found on the
 <a href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">matplotlib documentation</a>.</p>
 </dd>
+</dl>
+<p>spect_cmap (str):
+The matplotlib colormap to use for the colorbar if working with spectrograph
+data. Default is <code>gnuplot</code>.</p>
+<dl>
 <dt><strong><code>image_intensity_scaled</code></strong> :&ensp;<code>List</code> or <code>Dict</code></dt>
 <dd>
 <p>Ranges for scaling images. Either a a list with 2 elements which will scale all sites with
@@ -93,6 +98,8 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <p>Example of scaling each site differently:
 <code>image_intensity_scales = {"fsmi": [1000, 10000], "gill": [2000, 8000]}</code></p>
 </dd>
+<dt><strong><code>spect_intensity_scaled</code></strong> :&ensp;<code>Tuple[int]</code></dt>
+<dd>Min and max values, in Rayleighs, to scale ALL spectrograph data.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The generated <code><a title="pyaurorax.tools.Mosaic" href="../index.html#pyaurorax.tools.Mosaic">Mosaic</a></code> object.</p>
@@ -103,7 +110,7 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.mosaic.prep_images"><code class="name flex">
-<span>def <span class="ident">prep_images</span></span>(<span>image_list: List[pyucalgarysrs.data.classes.Data],<br>data_attribute: Literal['data', 'calibrated_data'] = 'data') ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></span>
+<span>def <span class="ident">prep_images</span></span>(<span>image_list: List[pyucalgarysrs.data.classes.Data],<br>data_attribute: Literal['data', 'calibrated_data'] = 'data',<br>spect_emission: Literal['green', 'red', 'blue', 'hbeta'] = 'green',<br>spect_band: Tuple[float, float] | None = None,<br>spect_band_bg: Tuple[float, float] | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prepare the image data for use in a mosaic.</p>
@@ -115,12 +122,21 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <dd>The data attribute to use when prepping the images. Either <code>data</code> or <code>calibrated_data</code>.
 Default is <code>data</code>.</dd>
 </dl>
+<p>spect_emission (str):
+The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is
+'green' (557.7 nm emission).</p>
+<p>spect_band (Tuple[float]):
+Manual selection of the wavelength region to integrate for obtaining emissions. Use this
+to prepare emissions that are not available in spect_emission.</p>
+<p>spect_band_bg (Tuple[float]):
+Manual selection of the wavelength region to subtract from integration for manually
+chosen emissions, via the spect_band argument.</p>
 <h2 id="returns">Returns</h2>
 <p>The prepared data, as a <code><a title="pyaurorax.tools.MosaicData" href="../index.html#pyaurorax.tools.MosaicData">MosaicData</a></code> object.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues encountered with supplied paramters.</dd>
+<dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.mosaic.prep_skymaps"><code class="name flex">

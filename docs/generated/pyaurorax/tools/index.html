@@ -92,6 +92,10 @@ at = aurorax.tools
 <dd>
 <div class="desc"><p>Prepare data and create mosaics.</p></div>
 </dd>
+<dt><code class="name"><a title="pyaurorax.tools.spectra" href="spectra/index.html">pyaurorax.tools.spectra</a></code></dt>
+<dd>
+<div class="desc"><p>Work with spectrograph data.</p></div>
+</dd>
 </dl>
 </section>
 <section>
@@ -243,7 +247,7 @@ matplotlib theme settings will be fully reset to their defaults.</p>
 <dl>
 <dt id="pyaurorax.tools.Keogram"><code class="flex name class">
 <span>class <span class="ident">Keogram</span></span>
-<span>(</span><span>data: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>slice_idx: int | None = None,<br>ccd_y: numpy.ndarray | None = None,<br>mag_y: numpy.ndarray | None = None,<br>geo_y: numpy.ndarray | None = None)</span>
+<span>(</span><span>data: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>instrument_type: str,<br>slice_idx: int | None = None,<br>ccd_y: numpy.ndarray | None = None,<br>mag_y: numpy.ndarray | None = None,<br>geo_y: numpy.ndarray | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class representation for a keogram</p>
@@ -253,6 +257,8 @@ matplotlib theme settings will be fully reset to their defaults.</p>
 <dd>The derived keogram data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
 <dd>Timestamps corresponding to each keogram slice.</dd>
+<dt>instrument_type (str):</dt>
+<dt>String giving instrument type, either 'asi' or 'spectrograph'.</dt>
 <dt><strong><code>ccd_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The y-axis representing CCD Y coordinates for the keogram.</dd>
 <dt><strong><code>mag_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
@@ -274,6 +280,8 @@ class Keogram:
             The derived keogram data.
         timestamp (List[datetime.datetime]): 
             Timestamps corresponding to each keogram slice.
+        instrument_type (str):
+            String giving instrument type, either &#39;asi&#39; or &#39;spectrograph&#39;.
         ccd_y (numpy.ndarray): 
             The y-axis representing CCD Y coordinates for the keogram.
         mag_y (numpy.ndarray): 
@@ -285,6 +293,7 @@ class Keogram:
     def __init__(self,
                  data: np.ndarray,
                  timestamp: List[datetime.datetime],
+                 instrument_type: str,
                  slice_idx: Optional[int] = None,
                  ccd_y: Optional[np.ndarray] = None,
                  mag_y: Optional[np.ndarray] = None,
@@ -292,6 +301,7 @@ class Keogram:
         # public vars
         self.data = data
         self.timestamp = timestamp
+        self.instrument_type = instrument_type
         self.ccd_y = ccd_y
         self.mag_y = mag_y
         self.geo_y = geo_y
@@ -334,8 +344,8 @@ class Keogram:
         # check for slice idx
         if (self.__slice_idx is None):
             raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
-                             &#34;object was create as part of the custom_keogram routines, this is expected and performing &#34; +
-                             &#34;this action not supported at this time.&#34;)
+                             &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
+                             &#34;this is expected and performing this action is not supported at this time.&#34;)
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -361,7 +371,7 @@ class Keogram:
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
-            self.geo_y = np.squeeze(skymap.full_map_latitude[1,:, self.__slice_idx]).copy()
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
 
     def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -391,8 +401,8 @@ class Keogram:
         # check for slice idx
         if (self.__slice_idx is None):
             raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
-                             &#34;object was create as part of the custom_keogram routines, this is expected and performing &#34; +
-                             &#34;this action not supported at this time.&#34;)
+                             &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
+                             &#34;this is expected and performing this action is not supported at this time.&#34;)
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -540,11 +550,11 @@ class Keogram:
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
-        if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
+        if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
             warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
                           &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
                           stacklevel=1)
-        elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
+        elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
             warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
                           &#34;savefig option parameters will be ignored.&#34;,
                           stacklevel=1)
@@ -624,7 +634,9 @@ class Keogram:
 
                     # generate y ticks and labels
                     y_ticks = self.ccd_y[25::ytick_increment]
-                    y_labels = np.round(y_axis_data, 1).astype(str)[25::ytick_increment]  # type: ignore
+                    y_labels = np.round(
+                        y_axis_data,  # type: ignore
+                        1).astype(str)[25::ytick_increment]
                     y_labels[np.where(y_labels == &#39;nan&#39;)] = &#39;&#39;
 
                     # apply yticks
@@ -1037,7 +1049,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 </dd>
 <dt id="pyaurorax.tools.Mosaic"><code class="flex name class">
 <span>class <span class="ident">Mosaic</span></span>
-<span>(</span><span>polygon_data: matplotlib.collections.PolyCollection | List[matplotlib.collections.PolyCollection],<br>cartopy_projection: cartopy.crs.Projection,<br>contour_data: Dict[str, List[Any]] | None = None)</span>
+<span>(</span><span>polygon_data: matplotlib.collections.PolyCollection | List[matplotlib.collections.PolyCollection],<br>cartopy_projection: cartopy.crs.Projection,<br>contour_data: Dict[str, List[Any]] | None = None,<br>spect_cmap: str | None = None,<br>spect_intensity_scale: Tuple[int, int] | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class representation for a generated mosaic.</p>
@@ -1049,6 +1061,11 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <dd>Cartopy projection to utilize.</dd>
 <dt><strong><code>contour_data</code></strong> :&ensp;<code>Dict[str, List[Any]]</code></dt>
 <dd>Generated contour data.</dd>
+<dt><strong><code>spect_cmap</code></strong> :&ensp;<code>str</code></dt>
+<dd>String giving the cmap to use for spect legend.</dd>
+<dt><strong><code>spect_intensity_scale</code></strong> :&ensp;<code>Tuple[int]</code></dt>
+<dd>The min and max values that spectrograph data
+is scaled to in the mosaic, if any is present.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1066,10 +1083,17 @@ class Mosaic:
             Cartopy projection to utilize.
         contour_data (Dict[str, List[Any]]): 
             Generated contour data.
+        spect_cmap (str): 
+            String giving the cmap to use for spect legend.
+        spect_intensity_scale (Tuple[int]): 
+            The min and max values that spectrograph data
+            is scaled to in the mosaic, if any is present.
     &#34;&#34;&#34;
     polygon_data: Union[PolyCollection, List[PolyCollection]]
     cartopy_projection: Projection
     contour_data: Optional[Dict[str, List[Any]]] = None
+    spect_cmap: Optional[str] = None
+    spect_intensity_scale: Optional[Tuple[int, int]] = None
 
     def __str__(self) -&gt; str:
         return self.__repr__()
@@ -1086,7 +1110,7 @@ class Mosaic:
                 len(self.contour_data.get(&#34;x&#34;, [])),
             )
         else:
-            return &#34;Mosaic(polygon_data=&#34;+polycollection_str+&#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
+            return &#34;Mosaic(polygon_data=&#34; + polycollection_str + &#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
 
     def plot(self,
              map_extent: Sequence[Union[float, int]],
@@ -1094,12 +1118,13 @@ class Mosaic:
              rayleighs: bool = False,
              max_rayleighs: int = 20000,
              title: Optional[str] = None,
+             colorbar_title: Optional[str] = None,
              ocean_color: Optional[str] = None,
              land_color: str = &#34;gray&#34;,
              land_edgecolor: str = &#34;#8A8A8A&#34;,
              borders_color: str = &#34;#AEAEAE&#34;,
              borders_disable: bool = False,
-             cbar_colormap: str = &#34;gray&#34;,
+             cbar_colormap: str = &#34;&#34;,
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -1144,7 +1169,9 @@ class Mosaic:
                 Disbale rendering of the borders. Default is `False`.
 
             cbar_colorcmap (str): 
-                The matplotlib colormap to use for the plotted color bar. Default is `gray`.
+                The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
+                mosaic was created with spectrograph data, in which case defaults to the colormap
+                used for spectrograph data..
 
                 Commonly used colormaps are:
 
@@ -1186,7 +1213,7 @@ class Mosaic:
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
-        if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
+        if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
             warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
                           &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
                           stacklevel=1)
@@ -1194,6 +1221,10 @@ class Mosaic:
             warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
                           &#34;savefig option parameters will be ignored.&#34;,
                           stacklevel=1)
+
+        # Get colormap if there is spectrograph data
+        if self.spect_cmap is not None:
+            cbar_colormap = self.spect_cmap
 
         # initialize figure
         fig = plt.figure(figsize=figsize)
@@ -1204,16 +1235,19 @@ class Mosaic:
         #
         # NOTE: we use the default ocean color
         if (ocean_color is not None):
-            ax.add_feature(cartopy.feature.OCEAN, facecolor=ocean_color, zorder=0)  # type: ignore
+            ax.add_feature(  # type: ignore
+                cartopy.feature.OCEAN, facecolor=ocean_color, zorder=0)
         else:
             ax.add_feature(cartopy.feature.OCEAN, zorder=0)  # type: ignore
 
         # add land
-        ax.add_feature(cartopy.feature.LAND, facecolor=land_color, edgecolor=land_edgecolor, zorder=0)  # type: ignore
+        ax.add_feature(  # type: ignore
+            cartopy.feature.LAND, facecolor=land_color, edgecolor=land_edgecolor, zorder=0)
 
         # add borders
         if (borders_disable is False):
-            ax.add_feature(cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)  # type: ignore
+            ax.add_feature(  # type: ignore
+                cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)
 
         # add polygon data
         #
@@ -1243,7 +1277,7 @@ class Mosaic:
         if (rayleighs is True):
             if isinstance(self.polygon_data, list):
                 raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
-            
+
             # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
             cbar_ticks = [float(j) / 5. for j in range(0, 6)]
             cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]
@@ -1262,6 +1296,51 @@ class Mosaic:
                      rotation=&#34;vertical&#34;,
                      weight=&#34;bold&#34;,
                      style=&#34;oblique&#34;)
+
+        if (self.spect_cmap) is not None:
+
+            if (self.spect_intensity_scale) is None:
+                intensity_max = np.nan
+                intensity_min = np.nan
+            else:
+                intensity_max = self.spect_intensity_scale[1]
+                intensity_min = self.spect_intensity_scale[0]
+
+            # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
+            cbar_ticks = [float(j) / 5. for j in range(0, 6)]
+            cbar_ticknames = [str(int((intensity_max / 5) + intensity_min) * j) for j in range(0, 6)]
+
+            # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
+            cbar_ticknames[-1] += &#34;+&#34;
+            if isinstance(self.polygon_data, list):
+                self.polygon_data[0].set_cmap(cbar_colormap)
+            else:
+                self.polygon_data.set_cmap(cbar_colormap)
+            if isinstance(self.polygon_data, list):
+                cbar = plt.colorbar(self.polygon_data[0], shrink=0.5, ticks=cbar_ticks, ax=ax)
+            else:
+                cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
+            cbar.ax.set_yticklabels(cbar_ticknames)
+            if colorbar_title is None:
+                plt.text(1.025,
+                         0.5,
+                         &#34;Spectrograph Intensity (Rayleighs)&#34;,
+                         fontsize=10,
+                         transform=ax.transAxes,
+                         va=&#34;center&#34;,
+                         rotation=&#34;vertical&#34;,
+                         weight=&#34;bold&#34;,
+                         style=&#34;oblique&#34;)
+            else:
+                plt.text(1.025,
+                         0.5,
+                         colorbar_title,
+                         fontsize=10,
+                         transform=ax.transAxes,
+                         va=&#34;center&#34;,
+                         rotation=&#34;vertical&#34;,
+                         weight=&#34;bold&#34;,
+                         style=&#34;oblique&#34;)
 
         # save figure or show it
         if (savefig is True):
@@ -1367,7 +1446,7 @@ class Mosaic:
         # Check that marker is valid
         if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
             raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
-        
+
         # Convert numerics to lists if necessary
         if constant_lats is not None:
             if isinstance(constant_lats, (float, int)):
@@ -1622,6 +1701,14 @@ class Mosaic:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="pyaurorax.tools.Mosaic.spect_cmap"><code class="name">var <span class="ident">spect_cmap</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pyaurorax.tools.Mosaic.spect_intensity_scale"><code class="name">var <span class="ident">spect_intensity_scale</span> : Tuple[int, int] | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 </dl>
 <h3>Methods</h3>
 <dl>
@@ -1688,7 +1775,7 @@ The matplotlib marker used for the contour(s).</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.Mosaic.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>cbar_colormap: str = 'gray',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>colorbar_title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>cbar_colormap: str = '',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Generate a plot of the mosaic data. </p>
@@ -1721,7 +1808,9 @@ hexcode prefixed with a '#' character.</dd>
 <dd>Disbale rendering of the borders. Default is <code>False</code>.</dd>
 <dt><strong><code>cbar_colorcmap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
-<p>The matplotlib colormap to use for the plotted color bar. Default is <code>gray</code>.</p>
+<p>The matplotlib colormap to use for the plotted color bar. Default is <code>gray</code>, unless
+mosaic was created with spectrograph data, in which case defaults to the colormap
+used for spectrograph data..</p>
 <p>Commonly used colormaps are:</p>
 <ul>
 <li>REGO: <code>gist_heat</code></li>
@@ -1759,7 +1848,7 @@ Raises:</p></div>
 </dd>
 <dt id="pyaurorax.tools.MosaicData"><code class="flex name class">
 <span>class <span class="ident">MosaicData</span></span>
-<span>(</span><span>site_uid_list: List[str],<br>timestamps: List[datetime.datetime],<br>images: Dict[str, numpy.ndarray],<br>images_dimensions: Dict[str, Tuple])</span>
+<span>(</span><span>site_uid_list: List[str],<br>timestamps: List[datetime.datetime],<br>images: Dict[str, numpy.ndarray],<br>images_dimensions: Dict[str, Tuple],<br>data_types: List[str])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prepared image data for use by mosaic routines.</p>
@@ -1774,6 +1863,8 @@ Raises:</p></div>
 ndarray is the prepared data.</dd>
 <dt><strong><code>images_dimensions</code></strong> :&ensp;<code>Dict[str, Tuple]</code></dt>
 <dd>The image dimensions.</dd>
+<dt><strong><code>data_types</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>The data types for each data object.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1793,13 +1884,16 @@ class MosaicData:
             Image data prepared into the necessary format; a dictionary. Keys are the site UID, 
             ndarray is the prepared data.
         images_dimensions (Dict[str, Tuple]): 
-            The image dimensions.    
+            The image dimensions.
+        data_types (List[str]): 
+            The data types for each data object.    
     &#34;&#34;&#34;
 
     site_uid_list: List[str]
     timestamps: List[datetime.datetime]
     images: Dict[str, ndarray]
     images_dimensions: Dict[str, Tuple]
+    data_types: List[str]
 
     def __str__(self) -&gt; str:
         return self.__repr__()
@@ -1813,6 +1907,10 @@ class MosaicData:
 </details>
 <h3>Class variables</h3>
 <dl>
+<dt id="pyaurorax.tools.MosaicData.data_types"><code class="name">var <span class="ident">data_types</span> : List[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="pyaurorax.tools.MosaicData.images"><code class="name">var <span class="ident">images</span> : Dict[str, numpy.ndarray]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -1991,6 +2089,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.keogram" href="keogram/index.html">pyaurorax.tools.keogram</a></code></li>
 <li><code><a title="pyaurorax.tools.montage" href="montage/index.html">pyaurorax.tools.montage</a></code></li>
 <li><code><a title="pyaurorax.tools.mosaic" href="mosaic/index.html">pyaurorax.tools.mosaic</a></code></li>
+<li><code><a title="pyaurorax.tools.spectra" href="spectra/index.html">pyaurorax.tools.spectra</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
@@ -2019,18 +2118,21 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li>
 <h4><code><a title="pyaurorax.tools.Mosaic" href="#pyaurorax.tools.Mosaic">Mosaic</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="pyaurorax.tools.Mosaic.add_geo_contours" href="#pyaurorax.tools.Mosaic.add_geo_contours">add_geo_contours</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.add_mag_contours" href="#pyaurorax.tools.Mosaic.add_mag_contours">add_mag_contours</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.cartopy_projection" href="#pyaurorax.tools.Mosaic.cartopy_projection">cartopy_projection</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.contour_data" href="#pyaurorax.tools.Mosaic.contour_data">contour_data</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.plot" href="#pyaurorax.tools.Mosaic.plot">plot</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.polygon_data" href="#pyaurorax.tools.Mosaic.polygon_data">polygon_data</a></code></li>
+<li><code><a title="pyaurorax.tools.Mosaic.spect_cmap" href="#pyaurorax.tools.Mosaic.spect_cmap">spect_cmap</a></code></li>
+<li><code><a title="pyaurorax.tools.Mosaic.spect_intensity_scale" href="#pyaurorax.tools.Mosaic.spect_intensity_scale">spect_intensity_scale</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pyaurorax.tools.MosaicData" href="#pyaurorax.tools.MosaicData">MosaicData</a></code></h4>
 <ul class="">
+<li><code><a title="pyaurorax.tools.MosaicData.data_types" href="#pyaurorax.tools.MosaicData.data_types">data_types</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.images" href="#pyaurorax.tools.MosaicData.images">images</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.images_dimensions" href="#pyaurorax.tools.MosaicData.images_dimensions">images_dimensions</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.site_uid_list" href="#pyaurorax.tools.MosaicData.site_uid_list">site_uid_list</a></code></li>

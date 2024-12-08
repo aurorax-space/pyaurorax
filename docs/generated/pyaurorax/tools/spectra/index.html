@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.3">
-<title>pyaurorax.tools.keogram API documentation</title>
-<meta name="description" content="Generate keograms.">
+<title>pyaurorax.tools.spectra API documentation</title>
+<meta name="description" content="Work with spectrograph data.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -40,10 +40,10 @@ border-left: 1px solid #ddd;
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>pyaurorax.tools.keogram</code></h1>
+<h1 class="title">Module <code>pyaurorax.tools.spectra</code></h1>
 </header>
 <section id="section-intro">
-<p>Generate keograms.</p>
+<p>Work with spectrograph data.</p>
 </section>
 <section>
 </section>
@@ -52,85 +52,69 @@ border-left: 1px solid #ddd;
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="pyaurorax.tools.keogram.create"><code class="name flex">
-<span>def <span class="ident">create</span></span>(<span>images: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>axis: int = 0,<br>spectra: bool = False,<br>wavelength: numpy.ndarray | None = None,<br>spect_emission: Literal['green', 'red', 'blue', 'hbeta'] = 'green',<br>spect_band: Tuple[float, float] | None = None,<br>spect_band_bg: Tuple[float, float] | None = None) ‑> <a title="pyaurorax.tools.classes.keogram.Keogram" href="../classes/keogram.html#pyaurorax.tools.classes.keogram.Keogram">Keogram</a></span>
+<dt id="pyaurorax.tools.spectra.plot"><code class="name flex">
+<span>def <span class="ident">plot</span></span>(<span>spect_data: pyucalgarysrs.data.classes.Data,<br>timestamp: datetime.datetime | List[datetime.datetime],<br>spect_loc: int | List[int],<br>title: str | None = None,<br>figsize: Tuple[int, int] | None = None,<br>color: str | None = None,<br>ylog: bool = False,<br>xlabel: str = 'Wavelength (nm)',<br>ylabel: str = 'Intensity (R/nm)',<br>ylim: Tuple[int, int] | None = None,<br>xlim: Tuple[int, int] | None = None,<br>plot_line: float | List[float] | None = None,<br>plot_line_color: str | List[str] | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Create a keogram from a set of images.</p>
+<div class="desc"><p>Generate a plot of one or more spectra from spectrograph data. </p>
+<p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
+return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
 <h2 id="args">Args</h2>
+<p>spect_data (pyaurorax.data.ucalgary.Data):
+The data object containing spectrograph data.</p>
+<p>timestamp (datetime.datetime):
+A timestamp or list of timestamps for which to plot spectra from.</p>
+<p>spect_loc (int):
+An int or list of ints giving the spectrograph spatial bin indices to plot.</p>
 <dl>
-<dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
-<dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
-be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-or [row, cols, channels, num_images]. If it is not, then be sure to specify the <code>axis</code> parameter
-accordingly.</dd>
-<dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
-<dd>A list of timestamps corresponding to each image.</dd>
-<dt><strong><code>axis</code></strong> :&ensp;<code>int</code></dt>
-<dd>The axis to extract the keogram slice from. Default is <code>0</code>, meaning the rows (or Y) axis.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>The title to display above the plotted spectra.</dd>
+<dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
 </dl>
-<p>spectra (bool):
-Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data).</p>
-<p>wavelength (numpy.ndarray):
-The wavelength array corresponding to spectrograph data. If spectra=True, this parameter
-must be supplied.</p>
-<p>spect_emission (str):
-The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is
-'green' (557.7 nm emission).</p>
-<p>spect_band (Tuple[float]):
-Manual selection of the wavelength region to integrate for obtaining emissions. Use this
-to prepare emissions that are not available in spect_emission.</p>
-<p>spect_band_bg (Tuple[float]):
-Manual selection of the wavelength region to subtract from integration for manually
-chosen emissions, via the spect_band argument.</p>
+<p>color (str):
+A string or list of strings giving the matplotlib color names to use for plotting spectra.</p>
+<dl>
+<dt><strong><code>xlabel</code></strong> :&ensp;<code>str</code></dt>
+<dd>The x-axis label to use. Default is <code>Wavelength (nm)</code>.</dd>
+<dt><strong><code>ylabel</code></strong> :&ensp;<code>str</code></dt>
+<dd>The y-axis label to use. Default is 'Intensity (Rayleighs)'.</dd>
+</dl>
+<p>ylim (Tuple[int]):
+The min and max values to display on the y-axis, in units of Rayleighs/nm.</p>
+<p>xlim (Tuple[int]):
+The min and max values to display on the x-axis, in units of nm.</p>
+<p>plot_line (float):
+A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing
+to known emission wavelengths (e.g. 557.7).</p>
+<p>plot_line_color (str):
+A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'.</p>
+<dl>
+<dt><strong><code>returnfig</code></strong> :&ensp;<code>bool</code></dt>
+<dd>
+<p>Instead of displaying the image, return the matplotlib figure object. This allows for further plot
+manipulation, for example, adding labels or a title in a different location than the default. </p>
+<p>Remember - if this parameter is supplied, be sure that you close your plot after finishing work
+with it. This can be achieved by doing <code>plt.close(fig)</code>. </p>
+<p>Note that this method cannot be used in combination with <code>savefig</code>.</p>
+</dd>
+<dt><strong><code>savefig</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if
+this parameter is set to True. Defaults to <code>False</code>.</dd>
+<dt><strong><code>savefig_filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Filename to save the image to. Must be specified if the savefig parameter is set to True.</dd>
+<dt><strong><code>savefig_quality</code></strong> :&ensp;<code>int</code></dt>
+<dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
+<p>The displayed spectra, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issue with supplied parameters.</dd>
+<dd>Issues with the y-axis choice.</dd>
 </dl></div>
-</dd>
-<dt id="pyaurorax.tools.keogram.create_custom"><code class="name flex">
-<span>def <span class="ident">create_custom</span></span>(<span>images: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>coordinate_system: Literal['ccd', 'mag', 'geo'],<br>width: int,<br>x_locs: List[float | int] | numpy.ndarray,<br>y_locs: List[float | int] | numpy.ndarray,<br>preview: bool = False,<br>skymap: pyucalgarysrs.data.classes.Skymap | None = None,<br>altitude_km: int | float | None = None,<br>metric: Literal['mean', 'median', 'sum'] = 'median') ‑> <a title="pyaurorax.tools.classes.keogram.Keogram" href="../classes/keogram.html#pyaurorax.tools.classes.keogram.Keogram">Keogram</a></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points,
-in CCD, geographic, or geomagnetic coordinates, within the bounds of the image data. Keogram is created
-from the bottom up, meaning the first point will correspond to the bottom of the keogram data.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
-<dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
-be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-or [row, cols, channels, num_images]. If it is not, then be sure to specify the <code>axis</code> parameter
-accordingly.</dd>
-<dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
-<dd>A list of timestamps corresponding to each image.</dd>
-</dl>
-<p>coordinate_system (str):
-The coordinate system in which input points are defined. Valid options are "ccd", "geo", or "mag".</p>
-<p>width (int):
-Width of the desired keogram slice, in CCD pixel units.</p>
-<p>x_locs (Sequence[float | int]):
-Sequence of points giving the x-coordinates that define a path through the image data, from
-which to build the keogram.</p>
-<p>y_locs (Sequence[float | int]):
-Sequence of points giving the y-coordinates that define a path through the image data, from
-which to build the keogram.</p>
-<p>preview (Optional[bool]):
-When True, the first frame in images will be displayed, with the keogram slice plotted.</p>
-<p>skymap (Skymap):
-The skymap to use in georeferencing when working in geographic or magnetic coordinates.</p>
-<p>altitude_km (float | int):
-The altitude of the image data, in km, to use in georeferencing when working in goegraphic
-or magnetic coordinates.</p>
-<p>metric (str):
-The metric used to compute values for each keogram pixel. Valid options are "median", "mean",
-and "sum". Defaults to "median".</p>
-<h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.
-Raises:</p></div>
 </dd>
 </dl>
 </section>
@@ -195,8 +179,7 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="pyaurorax.tools.keogram.create" href="#pyaurorax.tools.keogram.create">create</a></code></li>
-<li><code><a title="pyaurorax.tools.keogram.create_custom" href="#pyaurorax.tools.keogram.create_custom">create_custom</a></code></li>
+<li><code><a title="pyaurorax.tools.spectra.plot" href="#pyaurorax.tools.spectra.plot">plot</a></code></li>
 </ul>
 </li>
 </ul>

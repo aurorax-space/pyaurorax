@@ -42,12 +42,13 @@ URLS=[
 "pyaurorax/tools/ccd_contour/index.html",
 "pyaurorax/tools/classes/index.html",
 "pyaurorax/tools/classes/montage.html",
-"pyaurorax/tools/classes/mosaic.html",
 "pyaurorax/tools/classes/keogram.html",
+"pyaurorax/tools/classes/mosaic.html",
 "pyaurorax/tools/keogram/index.html",
 "pyaurorax/tools/montage/index.html",
 "pyaurorax/tools/mosaic/index.html",
-"pyaurorax/tools/grid_files/index.html"
+"pyaurorax/tools/grid_files/index.html",
+"pyaurorax/tools/spectra/index.html"
 ];
 INDEX=[
 {
@@ -244,7 +245,7 @@ INDEX=[
 {
 "ref":"pyaurorax.data.ucalgary.UCalgaryManager.read",
 "url":2,
-"doc":"Read in data files for a given dataset. Note that only one type of dataset's data should be read in using a single call. Args: dataset (Dataset): The dataset object for which the files are associated with. This parameter is required. file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXUnsupportedReadError: an unsupported dataset was used when trying to read files. pyaurorax.exceptions.AuroraXError: a generic read error was encountered Notes:     - For users who are familiar with the themis-imager-readfile and trex-imager-readfile libraries, the read function provides a near-identical usage. Further improvements have been integrated, and those libraries are anticipated to be deprecated at some point in the future.",
+"doc":"Read in data files for a given dataset. Note that only one type of dataset's data should be read in using a single call. Args: dataset (Dataset): The dataset object for which the files are associated with. This parameter is required. file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXUnsupportedReadError: an unsupported dataset was used when trying to read files. pyaurorax.exceptions.AuroraXError: a generic read error was encountered Notes:     - For users who are familiar with the themis-imager-readfile and trex-imager-readfile libraries, the read function provides a near-identical usage. Further improvements have been integrated, and those libraries are anticipated to be deprecated at some point in the future.",
 "func":1
 },
 {
@@ -279,7 +280,7 @@ INDEX=[
 {
 "ref":"pyaurorax.data.ucalgary.Dataset",
 "url":2,
-"doc":"A dataset available from the UCalgary Space Remote Sensing API, with possibly support for downloading and/or reading. Attributes: name (str): Dataset name short_description (str): A short description about the dataset long_description (str): A longer description about the dataset data_tree_url (str): The data tree URL prefix. Used for saving data locally with a similar data tree structure compared to the UCalgary Open Data archive. file_listing_supported (bool): Flag indicating if file listing (downloading) is supported for this dataset. file_reading_supported (bool): Flag indicating if file reading is supported for this dataset. level (str): Dataset level as per L0/L1/L2/etc standards. doi (str): Dataset DOI unique identifier. doi_details (str): Further details about the DOI. citation (str): String to use when citing usage of the dataset. provider (str): Data provider. supported_libraries (List[str]): Libraries that support usage of this dataset."
+"doc":"A dataset available from the UCalgary Space Remote Sensing API, with possibly support for downloading and/or reading. Attributes: name (str): Dataset name short_description (str): A short description about the dataset long_description (str): A longer description about the dataset data_tree_url (str): The data tree URL prefix. Used for saving data locally with a similar data tree structure compared to the UCalgary Open Data archive. file_listing_supported (bool): Flag indicating if file listing (downloading) is supported for this dataset. file_reading_supported (bool): Flag indicating if file reading is supported for this dataset. file_time_resolution (str): Time resolution of the files for this dataset, represented as a string. Possible values are: 1min, 1hr, 1day, not_applicable. level (str): Dataset level as per L0/L1/L2/etc standards. doi (str): Dataset DOI unique identifier. doi_details (str): Further details about the DOI. citation (str): String to use when citing usage of the dataset. provider (str): Data provider. supported_libraries (List[str]): Libraries that support usage of this dataset."
 },
 {
 "ref":"pyaurorax.data.ucalgary.Dataset.pretty_print",
@@ -403,7 +404,7 @@ INDEX=[
 {
 "ref":"pyaurorax.data.ucalgary.Skymap",
 "url":2,
-"doc":"Representation for a skymap file. Attributes: filename (str): Filename for the skymap file, as an absolute path of its location on the local machine. project_uid (str): Project unique identifier site_uid (str): Site unique identifier imager_uid (str): Imager/device unique identifier site_map_latitude (float): Geodetic latitude of instrument site_map_longitude (float): Geodetic longitude of instrument site_map_altitude (float): Altitude of the instrument (in meters) full_elevation (ndarray): Elevation angle from horizon, for each image pixel (in degrees) full_azimuth (ndarray): Local azimuth angle from 0 degrees north, positive moving east (in degrees) full_map_altitude (ndarray): Altitudes that image coordinates are mapped to (in kilometers) full_map_latitude (ndarray): Geodetic latitudes of pixel corners, mapped to various altitudes (specified by  full_map_altitude ) full_map_longitude (ndarray): Geodetic longitudes of pixel corners, mapped to various altitudes (specified by  full_map_altitude ) generation_info (SkymapGenerationInfo): Metadata describing details about this skymap's generation process version (str): Version of the skymap dataset (Dataset): The  Dataset object for this data."
+"doc":"Representation for a skymap file. Attributes: filename (str): Filename for the skymap file, as an absolute path of its location on the local machine. project_uid (str): Project unique identifier site_uid (str): Site unique identifier imager_uid (str): Imager/device unique identifier site_map_latitude (float): Geodetic latitude of instrument site_map_longitude (float): Geodetic longitude of instrument site_map_altitude (float): Altitude of the instrument (in meters) full_elevation (ndarray): Elevation angle from horizon, for each image pixel (in degrees) full_azimuth (ndarray | None): Local azimuth angle from 0 degrees north, positive moving east (in degrees). None for TREx Spectrograph. full_map_altitude (ndarray): Altitudes that image coordinates are mapped to (in kilometers) full_map_latitude (ndarray): Geodetic latitudes of pixel corners, mapped to various altitudes (specified by  full_map_altitude ) full_map_longitude (ndarray): Geodetic longitudes of pixel corners, mapped to various altitudes (specified by  full_map_altitude ) generation_info (SkymapGenerationInfo): Metadata describing details about this skymap's generation process version (str): Version of the skymap dataset (Dataset): The  Dataset object for this data."
 },
 {
 "ref":"pyaurorax.data.ucalgary.Skymap.filename",
@@ -558,7 +559,7 @@ INDEX=[
 {
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read",
 "url":3,
-"doc":"Read in data files for a given dataset. Note that only one type of dataset's data should be read in using a single call. Args: dataset (Dataset): The dataset object for which the files are associated with. This parameter is required. file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXUnsupportedReadError: an unsupported dataset was used when trying to read files. pyaurorax.exceptions.AuroraXError: a generic read error was encountered Notes:     - For users who are familiar with the themis-imager-readfile and trex-imager-readfile libraries, the read function provides a near-identical usage. Further improvements have been integrated, and those libraries are anticipated to be deprecated at some point in the future.",
+"doc":"Read in data files for a given dataset. Note that only one type of dataset's data should be read in using a single call. Args: dataset (Dataset): The dataset object for which the files are associated with. This parameter is required. file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXUnsupportedReadError: an unsupported dataset was used when trying to read files. pyaurorax.exceptions.AuroraXError: a generic read error was encountered Notes:     - For users who are familiar with the themis-imager-readfile and trex-imager-readfile libraries, the read function provides a near-identical usage. Further improvements have been integrated, and those libraries are anticipated to be deprecated at some point in the future.",
 "func":1
 },
 {
@@ -570,31 +571,31 @@ INDEX=[
 {
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read_rego",
 "url":3,
-"doc":"Read in REGO raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
+"doc":"Read in REGO raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read_trex_nir",
 "url":3,
-"doc":"Read in TREx near-infrared (NIR) raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
+"doc":"Read in TREx near-infrared (NIR) raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read_trex_blue",
 "url":3,
-"doc":"Read in TREx Blueline raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
+"doc":"Read in TREx Blueline raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read_trex_rgb",
 "url":3,
-"doc":"Read in TREx RGB raw data (stream0 h5, stream0.burst png.tar, unstable stream0 and stream0.colour pgm and png ). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
+"doc":"Read in TREx RGB raw data (stream0 h5, stream0.burst png.tar, unstable stream0 and stream0.colour pgm and png ). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read_trex_spectrograph",
 "url":3,
-"doc":"Read in TREx Spectrograph raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
+"doc":"Read in TREx Spectrograph raw data (stream0 pgm files). Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Data object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
 "func":1
 },
 {
@@ -607,6 +608,12 @@ INDEX=[
 "ref":"pyaurorax.data.ucalgary.read.ReadManager.read_calibration",
 "url":3,
 "doc":"Read in UCalgary calibration files. Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. quiet (bool): Do not print out errors while reading calibration files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  Calibration object. This parameter is optional. dataset (Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A [ Data ](https: docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html pyucalgarysrs.data.classes.Data) object containing the data read in, among other values. Raises: pyaurorax.exceptions.AuroraXError: a generic read error was encountered",
+"func":1
+},
+{
+"ref":"pyaurorax.data.ucalgary.read.ReadManager.read_grid",
+"url":3,
+"doc":"Read in grid files. Args: file_list (List[str], List[Path], str, Path): The files to read in. Absolute paths are recommended, but not technically necessary. This can be a single string for a file, or a list of strings to read in multiple files. This parameter is required. n_parallel (int): Number of data files to read in parallel using multiprocessing. Default value is 1. Adjust according to your computer's available resources. This parameter is optional. first_record (bool): Only read in the first record in each file. This is the same as the first_frame parameter in the themis-imager-readfile and trex-imager-readfile libraries, and is a read optimization if you only need one image per minute, as opposed to the full temporal resolution of data (e.g., 3sec cadence). This parameter is optional. no_metadata (bool): Skip reading of metadata. This is a minor optimization if the metadata is not needed. Default is  False . This parameter is optional. start_time (datetime.datetime): The start timestamp to read data onwards from (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  end_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will assume the start time is the timestamp of the first record in the first file supplied (ie. beginning of the supplied data). This parameter is optional. end_time (datetime.datetime): The end timestamp to read data up to (inclusive). This can be utilized to read a portion of a data file, and could be paired with the  start_time parameter. This tends to be utilized for datasets that are hour or day-long files where it is possible to only read a smaller bit of that file. An example is the TREx Spectrograph processed data (1 hour files), or the riometer data (1 day files). If not supplied, it will it will assume the end time is the timestamp of the last record in the last file supplied (ie. end of the supplied data). This parameter is optional. quiet (bool): Do not print out errors while reading data files, if any are encountered. Any files that encounter errors will be, as usual, accessible via the  problematic_files attribute of the returned  pyucalgarysrs.data.classes.Data object. This parameter is optional. dataset (pyucalgarysrs.data.classes.Dataset): The dataset object for which the files are associated with. This parameter is optional. Returns: A  pyucalgarysrs.data.classes.Data object containing the data read in, among other values. Raises: pyucalgarysrs.exceptions.SRSError: a generic read error was encountered",
 "func":1
 },
 {
@@ -2105,7 +2112,7 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.Keogram",
 "url":36,
-"doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
+"doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. instrument_type (str): String giving instrument type, either 'asi' or 'spectrograph'. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
 },
 {
 "ref":"pyaurorax.tools.Keogram.set_geographic_latitudes",
@@ -2139,7 +2146,7 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.Mosaic",
 "url":36,
-"doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data."
+"doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data. spect_cmap (str): String giving the cmap to use for spect legend. spect_intensity_scale (Tuple[int]): The min and max values that spectrograph data is scaled to in the mosaic, if any is present."
 },
 {
 "ref":"pyaurorax.tools.Mosaic.polygon_data",
@@ -2157,9 +2164,19 @@ INDEX=[
 "doc":""
 },
 {
+"ref":"pyaurorax.tools.Mosaic.spect_cmap",
+"url":36,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.Mosaic.spect_intensity_scale",
+"url":36,
+"doc":""
+},
+{
 "ref":"pyaurorax.tools.Mosaic.plot",
 "url":36,
-"doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_colorcmap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
+"doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_colorcmap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray , unless mosaic was created with spectrograph data, in which case defaults to the colormap used for spectrograph data Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
 "func":1
 },
 {
@@ -2177,7 +2194,7 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.MosaicData",
 "url":36,
-"doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions."
+"doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions. data_types (List[str]): The data types for each data object."
 },
 {
 "ref":"pyaurorax.tools.MosaicData.site_uid_list",
@@ -2196,6 +2213,11 @@ INDEX=[
 },
 {
 "ref":"pyaurorax.tools.MosaicData.images_dimensions",
+"url":36,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.MosaicData.data_types",
 "url":36,
 "doc":""
 },
@@ -2332,124 +2354,139 @@ INDEX=[
 "func":1
 },
 {
-"ref":"pyaurorax.tools.classes.mosaic",
-"url":43,
-"doc":"Class representation for a mosaic."
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap",
-"url":43,
-"doc":"Prepared skymap data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. elevation (List[numpy.ndarray]): List of elevation data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lat (List[numpy.ndarray]): List of latitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lon (List[numpy.ndarray]): List of longitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute."
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicData",
-"url":43,
-"doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions."
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicData.timestamps",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicData.images",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic",
-"url":43,
-"doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data."
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic.polygon_data",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic.contour_data",
-"url":43,
-"doc":""
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic.plot",
-"url":43,
-"doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_colorcmap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
-"func":1
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours",
-"url":43,
-"doc":"Add geographic contours to a mosaic. Args: lats (ndarray or list): Sequence of geographic latitudes defining a contour. lons (ndarray or list): Sequence of geographic longitudes defining a contour. constant_lats (float, int, or Sequence): Geographic Latitude(s) at which to add line(s) of constant latitude. constant_lons (float, int, or Sequence): Geographic Longitude(s) at which to add line(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
-"func":1
-},
-{
-"ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours",
-"url":43,
-"doc":"Add geomagnetic contours to a mosaic. Args: timestamp (datetime.datetime): The timestamp used in computing AACGM coordinates. lats (ndarray or list): Sequence of geomagnetic latitudes defining a contour. lons (ndarray or list): Sequence of geomagnetic longitudes defining a contour. constant_lats (float, int, Sequence): Geomagnetic latitude(s) at which to add contour(s) of constant latitude. constant_lons (float, int, Sequence): Geomagnetic longitude(s) at which to add contours(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
-"func":1
-},
-{
 "ref":"pyaurorax.tools.classes.keogram",
-"url":44,
+"url":43,
 "doc":"Class representation for a keogram."
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram",
-"url":44,
-"doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
+"url":43,
+"doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. instrument_type (str): String giving instrument type, either 'asi' or 'spectrograph'. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes",
-"url":44,
+"url":43,
 "doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude_km (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.set_magnetic_latitudes",
-"url":44,
+"url":43,
 "doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude_km (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.plot",
-"url":44,
+"url":43,
 "doc":"Generate a plot of the keogram data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: y_type (str): Type of y-axis to use when plotting. Options are  ccd ,  mag , or  geo . The default is  ccd . This parameter is required. title (str): The title to display above the plotted keogram. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). aspect (str or float): The matplotlib imshow aspect ration to use. A common value for this is  auto . All valid values can be found on the [matplotlib documentation](https: matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). axes_visible (bool): Display the axes. Default is  True . xlabel (str): The x-axis label to use. Default is  Time (UTC) . ylabel (str): The y-axis label to use. Default is based on y_type. xtick_increment (int): The x-axis tick increment to use. Default is 100. ytick_increment (int): The y-axis tick increment to use. Default is 50. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed keogram, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: Issues with the y-axis choice.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic",
+"url":44,
+"doc":"Class representation for a mosaic."
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap",
+"url":44,
+"doc":"Prepared skymap data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. elevation (List[numpy.ndarray]): List of elevation data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lat (List[numpy.ndarray]): List of latitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lon (List[numpy.ndarray]): List of longitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute."
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicData",
+"url":44,
+"doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions. data_types (List[str]): The data types for each data object."
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicData.timestamps",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicData.images",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.MosaicData.data_types",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic",
+"url":44,
+"doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data. spect_cmap (str): String giving the cmap to use for spect legend. spect_intensity_scale (Tuple[int]): The min and max values that spectrograph data is scaled to in the mosaic, if any is present."
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.polygon_data",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.contour_data",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale",
+"url":44,
+"doc":""
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.plot",
+"url":44,
+"doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_colorcmap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray , unless mosaic was created with spectrograph data, in which case defaults to the colormap used for spectrograph data Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours",
+"url":44,
+"doc":"Add geographic contours to a mosaic. Args: lats (ndarray or list): Sequence of geographic latitudes defining a contour. lons (ndarray or list): Sequence of geographic longitudes defining a contour. constant_lats (float, int, or Sequence): Geographic Latitude(s) at which to add line(s) of constant latitude. constant_lons (float, int, or Sequence): Geographic Longitude(s) at which to add line(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours",
+"url":44,
+"doc":"Add geomagnetic contours to a mosaic. Args: timestamp (datetime.datetime): The timestamp used in computing AACGM coordinates. lats (ndarray or list): Sequence of geomagnetic latitudes defining a contour. lons (ndarray or list): Sequence of geomagnetic longitudes defining a contour. constant_lats (float, int, Sequence): Geomagnetic latitude(s) at which to add contour(s) of constant latitude. constant_lons (float, int, Sequence): Geomagnetic longitude(s) at which to add contours(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
@@ -2460,7 +2497,7 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.keogram.create",
 "url":45,
-"doc":"Create a keogram from a set of images. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. If it is not, then be sure to specify the  axis parameter accordingly. timestamp (List[datetime.datetime]): A list of timestamps corresponding to each image. axis (int): The axis to extract the keogram slice from. Default is  0 , meaning the rows (or Y) axis. Returns: A  pyaurorax.tools.Keogram object. Raises: ValueError: issue with supplied parameters.",
+"doc":"Create a keogram from a set of images. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. If it is not, then be sure to specify the  axis parameter accordingly. timestamp (List[datetime.datetime]): A list of timestamps corresponding to each image. axis (int): The axis to extract the keogram slice from. Default is  0 , meaning the rows (or Y) axis. spectra (bool): Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data). wavelength (numpy.ndarray): The wavelength array corresponding to spectrograph data. If spectra=True, this parameter must be supplied. spect_emission (str): The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 'green' (557.7 nm emission). spect_band (Tuple[float]): Manual selection of the wavelength region to integrate for obtaining emissions. Use this to prepare emissions that are not available in spect_emission. spect_band_bg (Tuple[float]): Manual selection of the wavelength region to subtract from integration for manually chosen emissions, via the spect_band argument. Returns: A  pyaurorax.tools.Keogram object. Raises: ValueError: issue with supplied parameters.",
 "func":1
 },
 {
@@ -2494,13 +2531,13 @@ INDEX=[
 {
 "ref":"pyaurorax.tools.mosaic.prep_images",
 "url":47,
-"doc":"Prepare the image data for use in a mosaic. Args: image_list (List[pyaurorax.data.ucalgary.Data]): List of image data. Each element of the list is the data for each site. data_attribute (str): The data attribute to use when prepping the images. Either  data or  calibrated_data . Default is  data . Returns: The prepared data, as a  pyaurorax.tools.MosaicData object. Raises: ValueError: issues encountered with supplied paramters.",
+"doc":"Prepare the image data for use in a mosaic. Args: image_list (List[pyaurorax.data.ucalgary.Data]): List of image data. Each element of the list is the data for each site. data_attribute (str): The data attribute to use when prepping the images. Either  data or  calibrated_data . Default is  data . spect_emission (str): The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 'green' (557.7 nm emission). spect_band (Tuple[float]): Manual selection of the wavelength region to integrate for obtaining emissions. Use this to prepare emissions that are not available in spect_emission. spect_band_bg (Tuple[float]): Manual selection of the wavelength region to subtract from integration for manually chosen emissions, via the spect_band argument. Returns: The prepared data, as a  pyaurorax.tools.MosaicData object. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.mosaic.create",
 "url":47,
-"doc":"Create a mosaic object. Args: prepped_data (pyaurorax.tools.MosaicData): The prepared mosaic data. Generated from a prior  prep_images() function call. prepped_skymap (pyaurorax.tools.MosaicSkymap): The prepared skymap data. Generated from a prior  prep_skymaps() function call. timestamp (datetime.datetime): The timestamp to generate a mosaic for. Must be within the range of timestamps for which image data was prepped and provided. cartopy_projection (cartopy.crs.Projection): The cartopy projection to use when creating the mosaic. min_elevation (int): The minimum elevation cutoff when projecting images on the map, in degrees. Default is  5 . cbar_colorcmap (str): The matplotlib colormap to use for the rendered image data. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). image_intensity_scaled (List or Dict): Ranges for scaling images. Either a a list with 2 elements which will scale all sites with the same range, or as a dictionary which can be used for scaling each site differently. Example of uniform scaling across all sites:  image_intensity_scales = [2000, 8000] Example of scaling each site differently:  image_intensity_scales = {\"fsmi\": [1000, 10000], \"gill\": [2000, 8000]} Returns: The generated  pyaurorax.tools.Mosaic object. Raises: ValueError: issues with supplied parameters.",
+"doc":"Create a mosaic object. Args: prepped_data (pyaurorax.tools.MosaicData): The prepared mosaic data. Generated from a prior  prep_images() function call. prepped_skymap (pyaurorax.tools.MosaicSkymap): The prepared skymap data. Generated from a prior  prep_skymaps() function call. timestamp (datetime.datetime): The timestamp to generate a mosaic for. Must be within the range of timestamps for which image data was prepped and provided. cartopy_projection (cartopy.crs.Projection): The cartopy projection to use when creating the mosaic. min_elevation (int): The minimum elevation cutoff when projecting images on the map, in degrees. Default is  5 . colormap (str): The matplotlib colormap to use for the rendered image data. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). spect_cmap (str): The matplotlib colormap to use for the colorbar if working with spectrograph data. Default is  gnuplot . image_intensity_scaled (List or Dict): Ranges for scaling images. Either a a list with 2 elements which will scale all sites with the same range, or as a dictionary which can be used for scaling each site differently. Example of uniform scaling across all sites:  image_intensity_scales = [2000, 8000] Example of scaling each site differently:  image_intensity_scales = {\"fsmi\": [1000, 10000], \"gill\": [2000, 8000]} spect_intensity_scaled (Tuple[int]): Min and max values, in Rayleighs, to scale ALL spectrograph data. Returns: The generated  pyaurorax.tools.Mosaic object. Raises: ValueError: issues with supplied parameters.",
 "func":1
 },
 {
@@ -2512,6 +2549,17 @@ INDEX=[
 "ref":"pyaurorax.tools.grid_files.prep_grid_image",
 "url":48,
 "doc":"Takes a grid array, and converts it to RGBA format, masking all empty cells with max transparency, so that it can be plotted overtop of a map. Args: grid (numpy.ndarray): The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file. fill_val (int or float): The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file's metadata. scale (list or numpy.ndarray): A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max). cmap (str): A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to \"Greys_r\"). Returns: The prepared RGBA grid array. Raises: ValueError: issues encountered with supplied parameters.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.spectra",
+"url":49,
+"doc":"Work with spectrograph data."
+},
+{
+"ref":"pyaurorax.tools.spectra.plot",
+"url":49,
+"doc":"Generate a plot of one or more spectra from spectrograph data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: spect_data (pyaurorax.data.ucalgary.Data): The data object containing spectrograph data. timestamp (datetime.datetime): A timestamp or list of timestamps for which to plot spectra from. spect_loc (int): An int or list of ints giving the spectrograph spatial bin indices to plot. title (str): The title to display above the plotted spectra. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . color (str): A string or list of strings giving the matplotlib color names to use for plotting spectra. xlabel (str): The x-axis label to use. Default is  Wavelength (nm) . ylabel (str): The y-axis label to use. Default is 'Intensity (Rayleighs)'. ylim (Tuple[int]): The min and max values to display on the y-axis, in units of Rayleighs/nm. xlim (Tuple[int]): The min and max values to display on the x-axis, in units of nm. plot_line (float): A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing to known emission wavelengths (e.g. 557.7). plot_line_color (str): A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed spectra, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: Issues with the y-axis choice.",
 "func":1
 }
 ]
