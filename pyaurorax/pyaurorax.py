@@ -313,7 +313,7 @@ class PyAuroraX:
     # -----------------------------
     # public methods
     # -----------------------------
-    def purge_download_output_root_path(self):
+    def purge_download_output_root_path(self, dataset_name: Optional[str] = None):
         """
         Delete all files in the `download_output_root_path` directory. Since the
         library downloads data to this directory, over time it can grow too large
@@ -324,6 +324,10 @@ class PyAuroraX:
         download_output_root_path path as well. Normally, these two paths are the 
         same, but it can be different if the user specifically changes it. 
 
+        Args:
+            dataset_name (str): 
+                Delete only files for a specific dataset name. This parameter is optional.
+
         Raises:
             pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
         """
@@ -331,13 +335,13 @@ class PyAuroraX:
             # purge pyaurorax path
             for item in os.listdir(self.download_output_root_path):
                 item = Path(self.download_output_root_path) / item
-                if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
-                    shutil.rmtree(item)
-                elif (os.path.isfile(item) is True):
-                    os.remove(item)
 
-            # purge pyucalgarysrs path
-            self.__srs_obj.purge_download_output_root_path()
+                # check if this is the dataset we want to delete
+                if (dataset_name is None or item.name == dataset_name.upper()):
+                    if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
+                        shutil.rmtree(item)
+                    elif (os.path.isfile(item) is True):
+                        os.remove(item)
         except Exception as e:  # pragma: nocover
             raise AuroraXPurgeError("Error while purging download output root path: %s" % (str(e))) from e
 

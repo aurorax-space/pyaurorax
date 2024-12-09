@@ -1,3 +1,9 @@
+Version 1.6.0
+-------------------
+
+- added dataset_name optional parameter to the `purge_download_output_root_path()` function
+
+
 Version 1.5.0
 -------------------
 
