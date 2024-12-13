@@ -16,6 +16,7 @@ Manage AuroraX data sources utilized by the search engine.
 """
 
 from typing import Optional, List, Dict
+from texttable import Texttable
 from ._sources import list as func_list
 from ._sources import search as func_search
 from ._sources import get as func_get
@@ -118,6 +119,102 @@ class SourcesManager:
             order,
             include_stats,
         )
+
+    def list_in_table(self,
+                      program: Optional[str] = None,
+                      platform: Optional[str] = None,
+                      instrument_type: Optional[str] = None,
+                      source_type: Optional[str] = None,
+                      owner: Optional[str] = None,
+                      order: Optional[str] = "identifier",
+                      table_max_width: int = 200) -> None:
+        """
+        Display all data source records in a table. Parameters can be used to filter as desired.
+
+        Args:
+            program (str): 
+                the program to filter for, defaults to `None`
+            platform (str): 
+                the platform to filter for, defaults to `None`
+            instrument_type (str): 
+                the instrument type to filter for, defaults to `None`
+            source_type (str): 
+                the data source type to filter for, defaults to `None`. Options are in 
+                the pyaurorax.search.sources module, or at the top level using the 
+                pyaurorax.search.SOURCE_TYPE_* variables.
+            owner (str): 
+                the owner's email address to filter for, defaults to `None`
+            format (str): 
+                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                Other options are in the pyaurorax.search.sources module, or at the top level using 
+                the pyaurorax.search.FORMAT_* variables.
+            order (str): 
+                the category to order results by. Valid values are identifier, program, platform,
+                instrument_type, display_name, or owner. Defaults to `identifier`
+            table_max_width (int): 
+                table maximum width, defaults to 200
+
+        Returns:
+            No return, only prints a table
+
+        Raises:
+            pyaurorax.exceptions.AuroraXAPIError: error during API call
+        """
+        # get datasets
+        datasets = func_list(
+            self.__aurorax_obj,
+            program,
+            platform,
+            instrument_type,
+            source_type,
+            owner,
+            FORMAT_BASIC_INFO,
+            order,
+            False,
+        )
+
+        # set table lists
+        table_identifiers = []
+        table_programs = []
+        table_platforms = []
+        table_instrument_types = []
+        table_source_types = []
+        table_display_names = []
+        for d in datasets:
+            table_identifiers.append(d.identifier)
+            table_programs.append(d.program)
+            table_platforms.append(d.platform)
+            table_instrument_types.append(d.instrument_type)
+            table_source_types.append(d.source_type)
+            table_display_names.append(d.display_name)
+
+        # set header values
+        table_headers = [
+            "Identifier",
+            "Program",
+            "Platform",
+            "Instrument Type",
+            "Source Type",
+            "Display Name",
+        ]
+
+        # print as table
+        table = Texttable(max_width=table_max_width)
+        table.set_deco(Texttable.HEADER)
+        table.set_cols_dtype(["t"] * len(table_headers))
+        table.set_header_align(["l"] * len(table_headers))
+        table.set_cols_align(["l"] * len(table_headers))
+        table.header(table_headers)
+        for i in range(0, len(table_identifiers)):
+            table.add_row([
+                table_identifiers[i],
+                table_programs[i],
+                table_platforms[i],
+                table_instrument_types[i],
+                table_source_types[i],
+                table_display_names[i],
+            ])
+        print(table.draw())
 
     def search(self,
                programs: Optional[List[str]] = [],
