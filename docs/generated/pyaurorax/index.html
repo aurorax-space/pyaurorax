@@ -438,7 +438,7 @@ of the paths</dd>
     # -----------------------------
     # public methods
     # -----------------------------
-    def purge_download_output_root_path(self):
+    def purge_download_output_root_path(self, dataset_name: Optional[str] = None):
         &#34;&#34;&#34;
         Delete all files in the `download_output_root_path` directory. Since the
         library downloads data to this directory, over time it can grow too large
@@ -449,6 +449,10 @@ of the paths</dd>
         download_output_root_path path as well. Normally, these two paths are the 
         same, but it can be different if the user specifically changes it. 
 
+        Args:
+            dataset_name (str): 
+                Delete only files for a specific dataset name. This parameter is optional.
+
         Raises:
             pyaurorax.exceptions.AuroraXPurgeError: an error was encountered during the purge operation
         &#34;&#34;&#34;
@@ -456,13 +460,13 @@ of the paths</dd>
             # purge pyaurorax path
             for item in os.listdir(self.download_output_root_path):
                 item = Path(self.download_output_root_path) / item
-                if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
-                    shutil.rmtree(item)
-                elif (os.path.isfile(item) is True):
-                    os.remove(item)
 
-            # purge pyucalgarysrs path
-            self.__srs_obj.purge_download_output_root_path()
+                # check if this is the dataset we want to delete
+                if (dataset_name is None or item.name == dataset_name.upper()):
+                    if (os.path.isdir(item) is True and self.read_tar_temp_path not in str(item)):
+                        shutil.rmtree(item)
+                    elif (os.path.isfile(item) is True):
+                        os.remove(item)
         except Exception as e:  # pragma: nocover
             raise AuroraXPurgeError(&#34;Error while purging download output root path: %s&#34; % (str(e))) from e
 
@@ -771,7 +775,7 @@ def tools(self):
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.PyAuroraX.purge_download_output_root_path"><code class="name flex">
-<span>def <span class="ident">purge_download_output_root_path</span></span>(<span>self)</span>
+<span>def <span class="ident">purge_download_output_root_path</span></span>(<span>self, dataset_name: str | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Delete all files in the <code>download_output_root_path</code> directory. Since the
@@ -781,6 +785,11 @@ with easily clearing out this directory.</p>
 <p>Note that it also deletes all files in the PyUCalgarySRS object's
 download_output_root_path path as well. Normally, these two paths are the
 same, but it can be different if the user specifically changes it. </p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Delete only files for a specific dataset name. This parameter is optional.</dd>
+</dl>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>

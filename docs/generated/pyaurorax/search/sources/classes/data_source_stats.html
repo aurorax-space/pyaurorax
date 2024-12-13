@@ -79,8 +79,7 @@ border-left: 1px solid #ddd;
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@dataclass
-class DataSourceStatistics:
+<pre><code class="python">class DataSourceStatistics:
     &#34;&#34;&#34;
     Data source statistics information
 
@@ -92,38 +91,49 @@ class DataSourceStatistics:
         earliest_data_product_loaded (datetime.datetime): timestamp of the earliest data_product record
         latest_data_product_loaded (datetime.datetime): timestamp of the latest data product record
     &#34;&#34;&#34;
-    ephemeris_count: int
-    data_product_count: int
-    earliest_ephemeris_loaded: Optional[datetime.datetime] = None
-    latest_ephemeris_loaded: Optional[datetime.datetime] = None
-    earliest_data_product_loaded: Optional[datetime.datetime] = None
-    latest_data_product_loaded: Optional[datetime.datetime] = None</code></pre>
+
+    def __init__(self,
+                 ephemeris_count: int,
+                 data_product_count: int,
+                 earliest_ephemeris_loaded: Optional[datetime.datetime] = None,
+                 latest_ephemeris_loaded: Optional[datetime.datetime] = None,
+                 earliest_data_product_loaded: Optional[datetime.datetime] = None,
+                 latest_data_product_loaded: Optional[datetime.datetime] = None):
+        self.ephemeris_count = ephemeris_count
+        self.data_product_count = data_product_count
+        self.earliest_ephemeris_loaded = earliest_ephemeris_loaded
+        self.latest_ephemeris_loaded = latest_ephemeris_loaded
+        self.earliest_data_product_loaded = earliest_data_product_loaded
+        self.latest_data_product_loaded = latest_data_product_loaded
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;DataSourceStatistics(ephemeris_count=%d, data_product_count=%d, ...)&#34; % (
+            self.ephemeris_count,
+            self.data_product_count,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        print(&#34;DataSourceStatistics:&#34;)
+        print(&#34;  %-30s: %d&#34; % (&#34;ephemeris_count&#34;, self.ephemeris_count))
+        print(&#34;  %-30s: %d&#34; % (&#34;data_product_count&#34;, self.data_product_count))
+        print(&#34;  %-30s: %s&#34; % (&#34;earliest_ephemeris_loaded&#34;, self.earliest_ephemeris_loaded))
+        print(&#34;  %-30s: %s&#34; % (&#34;latest_ephemeris_loaded&#34;, self.latest_ephemeris_loaded))
+        print(&#34;  %-30s: %s&#34; % (&#34;earliest_data_product_loaded&#34;, self.earliest_data_product_loaded))
+        print(&#34;  %-30s: %s&#34; % (&#34;latest_data_product_loaded&#34;, self.latest_data_product_loaded))</code></pre>
 </details>
-<h3>Class variables</h3>
+<h3>Methods</h3>
 <dl>
-<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.data_product_count"><code class="name">var <span class="ident">data_product_count</span> : int</code></dt>
+<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.earliest_data_product_loaded"><code class="name">var <span class="ident">earliest_data_product_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.earliest_ephemeris_loaded"><code class="name">var <span class="ident">earliest_ephemeris_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.ephemeris_count"><code class="name">var <span class="ident">ephemeris_count</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.latest_data_product_loaded"><code class="name">var <span class="ident">latest_data_product_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.latest_ephemeris_loaded"><code class="name">var <span class="ident">latest_ephemeris_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -191,12 +201,7 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics">DataSourceStatistics</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.data_product_count" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.data_product_count">data_product_count</a></code></li>
-<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.earliest_data_product_loaded" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.earliest_data_product_loaded">earliest_data_product_loaded</a></code></li>
-<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.earliest_ephemeris_loaded" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.earliest_ephemeris_loaded">earliest_ephemeris_loaded</a></code></li>
-<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.ephemeris_count" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.ephemeris_count">ephemeris_count</a></code></li>
-<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.latest_data_product_loaded" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.latest_data_product_loaded">latest_data_product_loaded</a></code></li>
-<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.latest_ephemeris_loaded" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.latest_ephemeris_loaded">latest_ephemeris_loaded</a></code></li>
+<li><code><a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.pretty_print" href="#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 </ul>

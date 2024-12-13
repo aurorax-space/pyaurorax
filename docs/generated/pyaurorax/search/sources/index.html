@@ -107,8 +107,7 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@dataclass
-class DataSource:
+<pre><code class="python">class DataSource:
     &#34;&#34;&#34;
     AuroraX data source record
 
@@ -135,73 +134,87 @@ class DataSource:
             &#34;full_record&#34;. Other options are in the pyaurorax.search.sources module, or
             at the top level using the pyaurorax.search.FORMAT_* variables.
     &#34;&#34;&#34;
-    identifier: Optional[int] = None
-    program: Optional[str] = None
-    platform: Optional[str] = None
-    instrument_type: Optional[str] = None
-    source_type: Optional[str] = None
-    display_name: Optional[str] = None
-    metadata: Optional[Dict] = None
-    owner: Optional[str] = None
-    maintainers: Optional[List[str]] = None
-    ephemeris_metadata_schema: Optional[List[Dict]] = None
-    data_product_metadata_schema: Optional[List[Dict]] = None
-    stats: Optional[DataSourceStatistics] = None
-    format: str = FORMAT_FULL_RECORD</code></pre>
+
+    def __init__(self,
+                 identifier: Optional[int] = None,
+                 program: Optional[str] = None,
+                 platform: Optional[str] = None,
+                 instrument_type: Optional[str] = None,
+                 source_type: Optional[str] = None,
+                 display_name: Optional[str] = None,
+                 metadata: Optional[Dict] = None,
+                 owner: Optional[str] = None,
+                 maintainers: Optional[List[str]] = None,
+                 ephemeris_metadata_schema: Optional[List[Dict]] = None,
+                 data_product_metadata_schema: Optional[List[Dict]] = None,
+                 stats: Optional[DataSourceStatistics] = None,
+                 format: str = FORMAT_FULL_RECORD):
+        self.identifier = identifier
+        self.program = program
+        self.platform = platform
+        self.instrument_type = instrument_type
+        self.source_type = source_type
+        self.display_name = display_name
+        self.metadata = metadata
+        self.owner = owner
+        self.maintainers = maintainers
+        self.ephemeris_metadata_schema = ephemeris_metadata_schema
+        self.data_product_metadata_schema = data_product_metadata_schema
+        self.stats = stats
+        self.format = format
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;DataSource(identifier=%s, program=&#39;%s&#39;, platform=&#39;%s&#39;, instrument_type=&#39;%s&#39;, source_type=&#39;%s&#39;, display_name=&#39;%s&#39;, ...)&#34; % (
+            self.identifier,
+            self.program,
+            self.platform,
+            self.instrument_type,
+            self.source_type,
+            self.display_name,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        max_len = 80
+        print(&#34;DataSource:&#34;)
+        print(&#34;  %-30s: %d&#34; % (&#34;identifier&#34;, self.identifier))
+        print(&#34;  %-30s: %s&#34; % (&#34;program&#34;, self.program))
+        print(&#34;  %-30s: %s&#34; % (&#34;platform&#34;, self.platform))
+        print(&#34;  %-30s: %s&#34; % (&#34;instrument_type&#34;, self.instrument_type))
+        print(&#34;  %-30s: %s&#34; % (&#34;source_type&#34;, self.source_type))
+        print(&#34;  %-30s: %s&#34; % (&#34;display_name&#34;, self.display_name))
+        print(&#34;  %-30s: %s&#34; % (&#34;metadata&#34;, self.metadata))
+        print(&#34;  %-30s: %s&#34; % (&#34;owner&#34;, self.owner))
+        print(&#34;  %-30s: %s&#34; % (&#34;maintainers&#34;, self.maintainers))
+        if (self.ephemeris_metadata_schema is not None and len(str(self.ephemeris_metadata_schema)) &gt; max_len):
+            ephemeris_metadata_schema_str = &#34;%s...&#34; % (str(self.ephemeris_metadata_schema)[0:max_len])
+        else:
+            ephemeris_metadata_schema_str = self.ephemeris_metadata_schema
+        print(&#34;  %-30s: %s&#34; % (&#34;ephemeris_metadata_schema&#34;, ephemeris_metadata_schema_str))
+        if (self.data_product_metadata_schema is not None and len(str(self.data_product_metadata_schema)) &gt; max_len):
+            data_product_metadata_schema_str = &#34;%s...&#34; % (str(self.data_product_metadata_schema)[0:max_len])
+        else:
+            data_product_metadata_schema_str = self.data_product_metadata_schema
+        print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
+        if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+            stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
+        else:
+            stats_str = self.data_product_metadata_schema
+        print(&#34;  %-30s: %s&#34; % (&#34;stats&#34;, stats_str))
+        print(&#34;  %-30s: %s&#34; % (&#34;format&#34;, self.format))</code></pre>
 </details>
-<h3>Class variables</h3>
+<h3>Methods</h3>
 <dl>
-<dt id="pyaurorax.search.sources.DataSource.data_product_metadata_schema"><code class="name">var <span class="ident">data_product_metadata_schema</span> : List[Dict] | None</code></dt>
+<dt id="pyaurorax.search.sources.DataSource.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.display_name"><code class="name">var <span class="ident">display_name</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.ephemeris_metadata_schema"><code class="name">var <span class="ident">ephemeris_metadata_schema</span> : List[Dict] | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.format"><code class="name">var <span class="ident">format</span> : str</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.identifier"><code class="name">var <span class="ident">identifier</span> : int | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.instrument_type"><code class="name">var <span class="ident">instrument_type</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.maintainers"><code class="name">var <span class="ident">maintainers</span> : List[str] | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.metadata"><code class="name">var <span class="ident">metadata</span> : Dict | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.owner"><code class="name">var <span class="ident">owner</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.platform"><code class="name">var <span class="ident">platform</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.program"><code class="name">var <span class="ident">program</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.source_type"><code class="name">var <span class="ident">source_type</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSource.stats"><code class="name">var <span class="ident">stats</span> : <a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics" href="classes/data_source_stats.html#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics">DataSourceStatistics</a> | None</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -230,8 +243,7 @@ class DataSource:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@dataclass
-class DataSourceStatistics:
+<pre><code class="python">class DataSourceStatistics:
     &#34;&#34;&#34;
     Data source statistics information
 
@@ -243,38 +255,49 @@ class DataSourceStatistics:
         earliest_data_product_loaded (datetime.datetime): timestamp of the earliest data_product record
         latest_data_product_loaded (datetime.datetime): timestamp of the latest data product record
     &#34;&#34;&#34;
-    ephemeris_count: int
-    data_product_count: int
-    earliest_ephemeris_loaded: Optional[datetime.datetime] = None
-    latest_ephemeris_loaded: Optional[datetime.datetime] = None
-    earliest_data_product_loaded: Optional[datetime.datetime] = None
-    latest_data_product_loaded: Optional[datetime.datetime] = None</code></pre>
+
+    def __init__(self,
+                 ephemeris_count: int,
+                 data_product_count: int,
+                 earliest_ephemeris_loaded: Optional[datetime.datetime] = None,
+                 latest_ephemeris_loaded: Optional[datetime.datetime] = None,
+                 earliest_data_product_loaded: Optional[datetime.datetime] = None,
+                 latest_data_product_loaded: Optional[datetime.datetime] = None):
+        self.ephemeris_count = ephemeris_count
+        self.data_product_count = data_product_count
+        self.earliest_ephemeris_loaded = earliest_ephemeris_loaded
+        self.latest_ephemeris_loaded = latest_ephemeris_loaded
+        self.earliest_data_product_loaded = earliest_data_product_loaded
+        self.latest_data_product_loaded = latest_data_product_loaded
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;DataSourceStatistics(ephemeris_count=%d, data_product_count=%d, ...)&#34; % (
+            self.ephemeris_count,
+            self.data_product_count,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        print(&#34;DataSourceStatistics:&#34;)
+        print(&#34;  %-30s: %d&#34; % (&#34;ephemeris_count&#34;, self.ephemeris_count))
+        print(&#34;  %-30s: %d&#34; % (&#34;data_product_count&#34;, self.data_product_count))
+        print(&#34;  %-30s: %s&#34; % (&#34;earliest_ephemeris_loaded&#34;, self.earliest_ephemeris_loaded))
+        print(&#34;  %-30s: %s&#34; % (&#34;latest_ephemeris_loaded&#34;, self.latest_ephemeris_loaded))
+        print(&#34;  %-30s: %s&#34; % (&#34;earliest_data_product_loaded&#34;, self.earliest_data_product_loaded))
+        print(&#34;  %-30s: %s&#34; % (&#34;latest_data_product_loaded&#34;, self.latest_data_product_loaded))</code></pre>
 </details>
-<h3>Class variables</h3>
+<h3>Methods</h3>
 <dl>
-<dt id="pyaurorax.search.sources.DataSourceStatistics.data_product_count"><code class="name">var <span class="ident">data_product_count</span> : int</code></dt>
+<dt id="pyaurorax.search.sources.DataSourceStatistics.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSourceStatistics.earliest_data_product_loaded"><code class="name">var <span class="ident">earliest_data_product_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSourceStatistics.earliest_ephemeris_loaded"><code class="name">var <span class="ident">earliest_ephemeris_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSourceStatistics.ephemeris_count"><code class="name">var <span class="ident">ephemeris_count</span> : int</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSourceStatistics.latest_data_product_loaded"><code class="name">var <span class="ident">latest_data_product_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.search.sources.DataSourceStatistics.latest_ephemeris_loaded"><code class="name">var <span class="ident">latest_ephemeris_loaded</span> : datetime.datetime | None</code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -350,6 +373,102 @@ the submodules and carry over configuration information in the super class.</p><
             order,
             include_stats,
         )
+
+    def list_in_table(self,
+                      program: Optional[str] = None,
+                      platform: Optional[str] = None,
+                      instrument_type: Optional[str] = None,
+                      source_type: Optional[str] = None,
+                      owner: Optional[str] = None,
+                      order: Optional[str] = &#34;identifier&#34;,
+                      table_max_width: int = 200) -&gt; None:
+        &#34;&#34;&#34;
+        Display all data source records in a table. Parameters can be used to filter as desired.
+
+        Args:
+            program (str): 
+                the program to filter for, defaults to `None`
+            platform (str): 
+                the platform to filter for, defaults to `None`
+            instrument_type (str): 
+                the instrument type to filter for, defaults to `None`
+            source_type (str): 
+                the data source type to filter for, defaults to `None`. Options are in 
+                the pyaurorax.search.sources module, or at the top level using the 
+                pyaurorax.search.SOURCE_TYPE_* variables.
+            owner (str): 
+                the owner&#39;s email address to filter for, defaults to `None`
+            format (str): 
+                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                Other options are in the pyaurorax.search.sources module, or at the top level using 
+                the pyaurorax.search.FORMAT_* variables.
+            order (str): 
+                the category to order results by. Valid values are identifier, program, platform,
+                instrument_type, display_name, or owner. Defaults to `identifier`
+            table_max_width (int): 
+                table maximum width, defaults to 200
+
+        Returns:
+            No return, only prints a table
+
+        Raises:
+            pyaurorax.exceptions.AuroraXAPIError: error during API call
+        &#34;&#34;&#34;
+        # get datasets
+        datasets = func_list(
+            self.__aurorax_obj,
+            program,
+            platform,
+            instrument_type,
+            source_type,
+            owner,
+            FORMAT_BASIC_INFO,
+            order,
+            False,
+        )
+
+        # set table lists
+        table_identifiers = []
+        table_programs = []
+        table_platforms = []
+        table_instrument_types = []
+        table_source_types = []
+        table_display_names = []
+        for d in datasets:
+            table_identifiers.append(d.identifier)
+            table_programs.append(d.program)
+            table_platforms.append(d.platform)
+            table_instrument_types.append(d.instrument_type)
+            table_source_types.append(d.source_type)
+            table_display_names.append(d.display_name)
+
+        # set header values
+        table_headers = [
+            &#34;Identifier&#34;,
+            &#34;Program&#34;,
+            &#34;Platform&#34;,
+            &#34;Instrument Type&#34;,
+            &#34;Source Type&#34;,
+            &#34;Display Name&#34;,
+        ]
+
+        # print as table
+        table = Texttable(max_width=table_max_width)
+        table.set_deco(Texttable.HEADER)
+        table.set_cols_dtype([&#34;t&#34;] * len(table_headers))
+        table.set_header_align([&#34;l&#34;] * len(table_headers))
+        table.set_cols_align([&#34;l&#34;] * len(table_headers))
+        table.header(table_headers)
+        for i in range(0, len(table_identifiers)):
+            table.add_row([
+                table_identifiers[i],
+                table_programs[i],
+                table_platforms[i],
+                table_instrument_types[i],
+                table_source_types[i],
+                table_display_names[i],
+            ])
+        print(table.draw())
 
     def search(self,
                programs: Optional[List[str]] = [],
@@ -792,6 +911,43 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <dd>error during API call</dd>
 </dl></div>
 </dd>
+<dt id="pyaurorax.search.sources.SourcesManager.list_in_table"><code class="name flex">
+<span>def <span class="ident">list_in_table</span></span>(<span>self,<br>program: str | None = None,<br>platform: str | None = None,<br>instrument_type: str | None = None,<br>source_type: str | None = None,<br>owner: str | None = None,<br>order: str | None = 'identifier',<br>table_max_width: int = 200) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Display all data source records in a table. Parameters can be used to filter as desired.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
+<dd>the program to filter for, defaults to <code>None</code></dd>
+<dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
+<dd>the platform to filter for, defaults to <code>None</code></dd>
+<dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the instrument type to filter for, defaults to <code>None</code></dd>
+<dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the data source type to filter for, defaults to <code>None</code>. Options are in
+the pyaurorax.search.sources module, or at the top level using the
+pyaurorax.search.SOURCE_TYPE_* variables.</dd>
+<dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
+<dd>the owner's email address to filter for, defaults to <code>None</code></dd>
+<dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
+<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+Other options are in the pyaurorax.search.sources module, or at the top level using
+the pyaurorax.search.FORMAT_* variables.</dd>
+<dt><strong><code>order</code></strong> :&ensp;<code>str</code></dt>
+<dd>the category to order results by. Valid values are identifier, program, platform,
+instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd>
+<dt><strong><code>table_max_width</code></strong> :&ensp;<code>int</code></dt>
+<dd>table maximum width, defaults to 200</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>No return, only prints a table</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
+<dd>error during API call</dd>
+</dl></div>
+</dd>
 <dt id="pyaurorax.search.sources.SourcesManager.search"><code class="name flex">
 <span>def <span class="ident">search</span></span>(<span>self,<br>programs: List[str] | None = [],<br>platforms: List[str] | None = [],<br>instrument_types: List[str] | None = [],<br>format: str | None = 'full_record',<br>order: str | None = 'identifier',<br>include_stats: bool | None = False) ‑> List[<a title="pyaurorax.search.sources.classes.data_source.DataSource" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>]</span>
 </code></dt>
@@ -944,30 +1100,13 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.search.sources.DataSource.data_product_metadata_schema" href="#pyaurorax.search.sources.DataSource.data_product_metadata_schema">data_product_metadata_schema</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.display_name" href="#pyaurorax.search.sources.DataSource.display_name">display_name</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.ephemeris_metadata_schema" href="#pyaurorax.search.sources.DataSource.ephemeris_metadata_schema">ephemeris_metadata_schema</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.format" href="#pyaurorax.search.sources.DataSource.format">format</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.identifier" href="#pyaurorax.search.sources.DataSource.identifier">identifier</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.instrument_type" href="#pyaurorax.search.sources.DataSource.instrument_type">instrument_type</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.maintainers" href="#pyaurorax.search.sources.DataSource.maintainers">maintainers</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.metadata" href="#pyaurorax.search.sources.DataSource.metadata">metadata</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.owner" href="#pyaurorax.search.sources.DataSource.owner">owner</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.platform" href="#pyaurorax.search.sources.DataSource.platform">platform</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.program" href="#pyaurorax.search.sources.DataSource.program">program</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.source_type" href="#pyaurorax.search.sources.DataSource.source_type">source_type</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSource.stats" href="#pyaurorax.search.sources.DataSource.stats">stats</a></code></li>
+<li><code><a title="pyaurorax.search.sources.DataSource.pretty_print" href="#pyaurorax.search.sources.DataSource.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pyaurorax.search.sources.DataSourceStatistics" href="#pyaurorax.search.sources.DataSourceStatistics">DataSourceStatistics</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.data_product_count" href="#pyaurorax.search.sources.DataSourceStatistics.data_product_count">data_product_count</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.earliest_data_product_loaded" href="#pyaurorax.search.sources.DataSourceStatistics.earliest_data_product_loaded">earliest_data_product_loaded</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.earliest_ephemeris_loaded" href="#pyaurorax.search.sources.DataSourceStatistics.earliest_ephemeris_loaded">earliest_ephemeris_loaded</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.ephemeris_count" href="#pyaurorax.search.sources.DataSourceStatistics.ephemeris_count">ephemeris_count</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.latest_data_product_loaded" href="#pyaurorax.search.sources.DataSourceStatistics.latest_data_product_loaded">latest_data_product_loaded</a></code></li>
-<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.latest_ephemeris_loaded" href="#pyaurorax.search.sources.DataSourceStatistics.latest_ephemeris_loaded">latest_ephemeris_loaded</a></code></li>
+<li><code><a title="pyaurorax.search.sources.DataSourceStatistics.pretty_print" href="#pyaurorax.search.sources.DataSourceStatistics.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 <li>
@@ -979,6 +1118,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.search.sources.SourcesManager.get_using_filters" href="#pyaurorax.search.sources.SourcesManager.get_using_filters">get_using_filters</a></code></li>
 <li><code><a title="pyaurorax.search.sources.SourcesManager.get_using_identifier" href="#pyaurorax.search.sources.SourcesManager.get_using_identifier">get_using_identifier</a></code></li>
 <li><code><a title="pyaurorax.search.sources.SourcesManager.list" href="#pyaurorax.search.sources.SourcesManager.list">list</a></code></li>
+<li><code><a title="pyaurorax.search.sources.SourcesManager.list_in_table" href="#pyaurorax.search.sources.SourcesManager.list_in_table">list_in_table</a></code></li>
 <li><code><a title="pyaurorax.search.sources.SourcesManager.search" href="#pyaurorax.search.sources.SourcesManager.search">search</a></code></li>
 <li><code><a title="pyaurorax.search.sources.SourcesManager.update" href="#pyaurorax.search.sources.SourcesManager.update">update</a></code></li>
 </ul>
