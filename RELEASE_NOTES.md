@@ -1,3 +1,8 @@
+Version 1.7.0
+-------------------
+
+- added `pretty_print()` classes for `DataSource` and `DataSourceStatistics` objects
+
 Version 1.6.0
 -------------------
 
