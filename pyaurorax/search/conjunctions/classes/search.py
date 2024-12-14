@@ -153,7 +153,48 @@ class ConjunctionSearch:
         return self.__repr__()
 
     def __repr__(self):
-        return f"ConjunctionSearch(executed={self.executed}, completed={self.completed}, request_id='{self.request_id}')"
+        return "ConjunctionSearch(executed=%s, completed=%s, request_id='%s')" % (
+            self.executed,
+            self.completed,
+            self.request_id,
+        )
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set specific strings
+        max_len = 80
+        status_str = str(self.status)
+        query_str = str(self.query)
+        if (len(status_str) > max_len):
+            status_str = "%s..." % (status_str[0:max_len])
+        if (len(query_str) > max_len):
+            query_str = "%s..." % (query_str[0:max_len])
+        if (len(self.data) == 0):
+            data_str = "[0 conjunction results]"
+        elif (len(self.data) == 1):
+            data_str = "[1 conjunction result]"
+        else:
+            data_str = "[%d conjunction results]" % (len(self.data))
+        if (len(self.logs) == 0):
+            logs_str = "[0 log messages]"
+        elif (len(self.logs) == 1):
+            logs_str = "[1 log message]"
+        else:
+            logs_str = "[%d log messages]" % (len(self.logs))
+
+        print("ConjunctionSearch:")
+        print("  %-13s: %s" % ("executed", self.executed))
+        print("  %-13s: %s" % ("completed", self.completed))
+        print("  %-13s: %s" % ("request_id", self.request_id))
+        print("  %-13s: %s" % ("request", self.request))
+        print("  %-13s: %s" % ("request_url", self.request_url))
+        print("  %-13s: %s" % ("data_url", self.data_url))
+        print("  %-13s: %s" % ("query", query_str))
+        print("  %-13s: %s" % ("status", status_str))
+        print("  %-13s: %s" % ("data", data_str))
+        print("  %-13s: %s" % ("logs", logs_str))
 
     def __fill_in_missing_distances(self, curr_distances: Dict) -> Dict:
         # get all distances possible

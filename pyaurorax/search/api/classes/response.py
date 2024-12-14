@@ -16,6 +16,7 @@ Class definition for an AuroraX API response
 """
 
 from typing import Any
+from http.client import responses
 
 
 class AuroraXAPIResponse:
@@ -37,4 +38,4 @@ class AuroraXAPIResponse:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"AuroraXAPIResponse [{self.status_code}]"
+        return f"AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})"

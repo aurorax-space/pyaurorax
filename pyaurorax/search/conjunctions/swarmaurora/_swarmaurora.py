@@ -22,7 +22,7 @@ from ....exceptions import AuroraXError
 
 
 def get_url(search_obj):
-    return "https://swarm-aurora.com/conjunctionFinder/?aurorax_request_id=%s" % (search_obj.request_id)
+    return "https://swarm-aurora.com/conjunctionFinder?aurorax_request_id=%s" % (search_obj.request_id)
 
 
 def open_in_browser(search_obj, browser):
