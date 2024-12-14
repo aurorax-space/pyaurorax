@@ -163,7 +163,7 @@ class ConjunctionSearch:
         """
         A special print output for this class.
         """
-        # set specific strings
+        # set status and query strings
         max_len = 80
         status_str = str(self.status)
         query_str = str(self.query)
@@ -171,19 +171,30 @@ class ConjunctionSearch:
             status_str = "%s..." % (status_str[0:max_len])
         if (len(query_str) > max_len):
             query_str = "%s..." % (query_str[0:max_len])
-        if (len(self.data) == 0):
-            data_str = "[0 conjunction results]"
-        elif (len(self.data) == 1):
-            data_str = "[1 conjunction result]"
-        else:
-            data_str = "[%d conjunction results]" % (len(self.data))
-        if (len(self.logs) == 0):
-            logs_str = "[0 log messages]"
-        elif (len(self.logs) == 1):
-            logs_str = "[1 log message]"
-        else:
-            logs_str = "[%d log messages]" % (len(self.logs))
 
+        # set results string
+        if (self.executed is True):
+            if (len(self.data) == 0):
+                data_str = "[0 conjunction results]"
+            elif (len(self.data) == 1):
+                data_str = "[1 conjunction result]"
+            else:
+                data_str = "[%d conjunction results]" % (len(self.data))
+        else:
+            data_str = ""
+
+        # set logs string
+        if (self.executed is True):
+            if (len(self.logs) == 0):
+                logs_str = "[0 log messages]"
+            elif (len(self.logs) == 1):
+                logs_str = "[1 log message]"
+            else:
+                logs_str = "[%d log messages]" % (len(self.logs))
+        else:
+            logs_str = ""
+
+        # print
         print("ConjunctionSearch:")
         print("  %-13s: %s" % ("executed", self.executed))
         print("  %-13s: %s" % ("completed", self.completed))
