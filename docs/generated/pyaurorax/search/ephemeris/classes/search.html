@@ -196,7 +196,59 @@ to "AND"</dd>
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
-        return f&#34;EphemerisSearch(executed={self.executed}, completed={self.completed}, request_id=&#39;{self.request_id}&#39;)&#34;
+        return &#34;EphemerisSearch(executed=%s, completed=%s, request_id=&#39;%s&#39;)&#34; % (
+            self.executed,
+            self.completed,
+            self.request_id,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set status and query strings
+        max_len = 80
+        status_str = str(self.status)
+        query_str = str(self.query)
+        if (len(status_str) &gt; max_len):
+            status_str = &#34;%s...&#34; % (status_str[0:max_len])
+        if (len(query_str) &gt; max_len):
+            query_str = &#34;%s...&#34; % (query_str[0:max_len])
+
+        # set results string
+        if (self.executed is True):
+            if (len(self.data) == 0):
+                data_str = &#34;[0 ephemeris results]&#34;
+            elif (len(self.data) == 1):
+                data_str = &#34;[1 ephemeris result]&#34;
+            else:
+                data_str = &#34;[%d ephemeris results]&#34; % (len(self.data))
+        else:
+            data_str = &#34;&#34;
+
+        # set logs string
+        if (self.executed is True):
+            if (len(self.logs) == 0):
+                logs_str = &#34;[0 log messages]&#34;
+            elif (len(self.logs) == 1):
+                logs_str = &#34;[1 log message]&#34;
+            else:
+                logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
+        else:
+            logs_str = &#34;&#34;
+
+        # print
+        print(&#34;EphemerisSearch:&#34;)
+        print(&#34;  %-13s: %s&#34; % (&#34;executed&#34;, self.executed))
+        print(&#34;  %-13s: %s&#34; % (&#34;completed&#34;, self.completed))
+        print(&#34;  %-13s: %s&#34; % (&#34;request_id&#34;, self.request_id))
+        print(&#34;  %-13s: %s&#34; % (&#34;request&#34;, self.request))
+        print(&#34;  %-13s: %s&#34; % (&#34;request_url&#34;, self.request_url))
+        print(&#34;  %-13s: %s&#34; % (&#34;data_url&#34;, self.data_url))
+        print(&#34;  %-13s: %s&#34; % (&#34;query&#34;, query_str))
+        print(&#34;  %-13s: %s&#34; % (&#34;status&#34;, status_str))
+        print(&#34;  %-13s: %s&#34; % (&#34;data&#34;, data_str))
+        print(&#34;  %-13s: %s&#34; % (&#34;logs&#34;, logs_str))
 
     @property
     def query(self):
@@ -440,6 +492,12 @@ search request</p>
 <dd>
 <div class="desc"><p>Retrieve the data available for this ephemeris search request</p></div>
 </dd>
+<dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
 <dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.update_status"><code class="name flex">
 <span>def <span class="ident">update_status</span></span>(<span>self, status: Optional[Dict] = None) ‑> None</span>
 </code></dt>
@@ -538,6 +596,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.check_for_data" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.check_for_data">check_for_data</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.execute" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.execute">execute</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.get_data" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.get_data">get_data</a></code></li>
+<li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.pretty_print" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.query" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.query">query</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.update_status" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.update_status">update_status</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.wait" href="#pyaurorax.search.ephemeris.classes.search.EphemerisSearch.wait">wait</a></code></li>
