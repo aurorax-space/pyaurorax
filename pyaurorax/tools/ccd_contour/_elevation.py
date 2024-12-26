@@ -28,10 +28,10 @@ def elevation(skymap: Skymap,
         skymap (pyaurorax.data.ucalgary.Skymap): 
             The skymap corresponding to the CCD image data to generate contours for.
 
-        constant_elevation (int, float): 
+        constant_elevation (int or float): 
             The elevation angle, in degrees from the horizon, to create contour of.
 
-        n_points (int, float): 
+        n_points (int or float): 
             Optionally specify the number of points used to define a contour. By default
             a reasonable value is selected automatically.
 
