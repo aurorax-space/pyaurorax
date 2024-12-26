@@ -388,23 +388,30 @@ the submodules and carry over configuration information in the super class.</p><
         Args:
             program (str): 
                 the program to filter for, defaults to `None`
+
             platform (str): 
                 the platform to filter for, defaults to `None`
+
             instrument_type (str): 
                 the instrument type to filter for, defaults to `None`
+
             source_type (str): 
                 the data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
+
             owner (str): 
                 the owner&#39;s email address to filter for, defaults to `None`
+
             format (str): 
                 the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             order (str): 
                 the category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
+                
             table_max_width (int): 
                 table maximum width, defaults to 200
 

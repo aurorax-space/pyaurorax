@@ -109,21 +109,19 @@ accordingly.</dd>
 <dd>A list of timestamps corresponding to each image.</dd>
 <dt><strong><code>coordinate_system</code></strong> :&ensp;<code>str</code></dt>
 <dd>The coordinate system in which input points are defined. Valid options are "ccd", "geo", or "mag".</dd>
-</dl>
-<p>width (int):
-Width of the desired keogram slice, in CCD pixel units.</p>
-<dl>
-<dt><strong><code>x_locs</code></strong> :&ensp;<code>Sequence[float | int]</code></dt>
+<dt><strong><code>width</code></strong> :&ensp;<code>int</code></dt>
+<dd>Width of the desired keogram slice, in CCD pixel units.</dd>
+<dt><strong><code>x_locs</code></strong> :&ensp;<code>Sequence[float, int]</code></dt>
 <dd>Sequence of points giving the x-coordinates that define a path through the image data, from
 which to build the keogram.</dd>
-<dt><strong><code>y_locs</code></strong> :&ensp;<code>Sequence[float | int]</code></dt>
+<dt><strong><code>y_locs</code></strong> :&ensp;<code>Sequence[float, int]</code></dt>
 <dd>Sequence of points giving the y-coordinates that define a path through the image data, from
 which to build the keogram.</dd>
 <dt><strong><code>preview</code></strong> :&ensp;<code>Optional[bool]</code></dt>
 <dd>When True, the first frame in images will be displayed, with the keogram slice plotted.</dd>
 <dt><strong><code>skymap</code></strong> :&ensp;<code>Skymap</code></dt>
 <dd>The skymap to use in georeferencing when working in geographic or magnetic coordinates.</dd>
-<dt><strong><code>altitude_km</code></strong> :&ensp;<code>float | int</code></dt>
+<dt><strong><code>altitude_km</code></strong> :&ensp;<code>float, int</code></dt>
 <dd>The altitude of the image data, in km, to use in georeferencing when working in goegraphic
 or magnetic coordinates.</dd>
 <dt><strong><code>metric</code></strong> :&ensp;<code>str</code></dt>
