@@ -56,7 +56,7 @@ def mag(images: np.ndarray,
             By default, function will assume the type of data passed as input - this argument can be used
             to manually specify the number of channels contained in image data.
 
-        show_preview (bool):
+        show_preview (bool): 
             Plot a preview of the bounded area.
 
     Returns:
