@@ -68,21 +68,21 @@ accordingly.</dd>
 <dd>A list of timestamps corresponding to each image.</dd>
 <dt><strong><code>axis</code></strong> :&ensp;<code>int</code></dt>
 <dd>The axis to extract the keogram slice from. Default is <code>0</code>, meaning the rows (or Y) axis.</dd>
+<dt><strong><code>spectra</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data).</dd>
+<dt><strong><code>wavelength</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
+<dd>The wavelength array corresponding to spectrograph data. If spectra=True, this parameter
+must be supplied.</dd>
+<dt><strong><code>spect_emission</code></strong> :&ensp;<code>str</code></dt>
+<dd>The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is
+'green' (557.7 nm emission).</dd>
+<dt><strong><code>spect_band</code></strong> :&ensp;<code>Tuple[float]</code></dt>
+<dd>Manual selection of the wavelength region to integrate for obtaining emissions. Use this
+to prepare emissions that are not available in spect_emission.</dd>
+<dt><strong><code>spect_band_bg</code></strong> :&ensp;<code>Tuple[float]</code></dt>
+<dd>Manual selection of the wavelength region to subtract from integration for manually
+chosen emissions, via the spect_band argument.</dd>
 </dl>
-<p>spectra (bool):
-Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data).</p>
-<p>wavelength (numpy.ndarray):
-The wavelength array corresponding to spectrograph data. If spectra=True, this parameter
-must be supplied.</p>
-<p>spect_emission (str):
-The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is
-'green' (557.7 nm emission).</p>
-<p>spect_band (Tuple[float]):
-Manual selection of the wavelength region to integrate for obtaining emissions. Use this
-to prepare emissions that are not available in spect_emission.</p>
-<p>spect_band_bg (Tuple[float]):
-Manual selection of the wavelength region to subtract from integration for manually
-chosen emissions, via the spect_band argument.</p>
 <h2 id="returns">Returns</h2>
 <p>A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
 <h2 id="raises">Raises</h2>

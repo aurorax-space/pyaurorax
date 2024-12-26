@@ -43,22 +43,22 @@ def create(images: np.ndarray,
         axis (int): 
             The axis to extract the keogram slice from. Default is `0`, meaning the rows (or Y) axis.
 
-        spectra (bool):
+        spectra (bool): 
             Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data).
 
-        wavelength (numpy.ndarray):
+        wavelength (numpy.ndarray): 
             The wavelength array corresponding to spectrograph data. If spectra=True, this parameter
             must be supplied.
 
-        spect_emission (str):
+        spect_emission (str): 
             The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 
             'green' (557.7 nm emission).
 
-        spect_band (Tuple[float]):
+        spect_band (Tuple[float]): 
             Manual selection of the wavelength region to integrate for obtaining emissions. Use this
             to prepare emissions that are not available in spect_emission.
 
-        spect_band_bg (Tuple[float]):
+        spect_band_bg (Tuple[float]): 
             Manual selection of the wavelength region to subtract from integration for manually
             chosen emissions, via the spect_band argument.
 
