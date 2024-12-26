@@ -65,20 +65,18 @@ be any arbitrary set of images. It is anticipated that the order of axes is [row
 or [row, cols, channels, num_images].</dd>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the image data.</dd>
-</dl>
-<p>azimuth_bounds (Sequence[int | float]:
-A 2-element sequence specifying the azimuthal bounds from which to extract the metric.
-Anticipated order is [az_min, az_max].</p>
-<dl>
+<dt><strong><code>azimuth_bounds</code></strong> :&ensp;<code>Sequence[int | float]</code></dt>
+<dd>A 2-element sequence specifying the azimuthal bounds from which to extract the metric.
+Anticipated order is [az_min, az_max].</dd>
 <dt><strong><code>metric</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the metric that is to be computed for the bounded area. Valid metrics are <code>mean</code>,
 <code>median</code>, <code>sum</code>. Default is <code>median</code>.</dd>
 <dt><strong><code>n_channels</code></strong> :&ensp;<code>int</code></dt>
 <dd>By default, function will assume the type of data passed as input - this argument can be used
 to manually specify the number of channels contained in image data.</dd>
+<dt><strong><code>show_preview</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plot a preview of the bounded area.</dd>
 </dl>
-<p>show_preview (bool):
-Plot a preview of the bounded area.</p>
 <h2 id="returns">Returns</h2>
 <p>A numpy.ndarray containing the metrics computed within azimuth range, for all image frames.</p>
 <h2 id="raises">Raises</h2>

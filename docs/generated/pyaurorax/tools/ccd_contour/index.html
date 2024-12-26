@@ -63,20 +63,20 @@ border-left: 1px solid #ddd;
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>constant_elevation</code></strong> :&ensp;<code>int | float</code></dt>
 <dd>The elevation angle, in degrees from the horizon, to create contour of.</dd>
-</dl>
-<p>min_elevation (int | float):
-Optionally specify the elevation angle at which contour begins. Defaults to 5.</p>
-<p>min_elevation (int | float):
-Optionally specify the elevation angle at which contour begins. Defaults to 90.</p>
-<p>n_points (int | float):
-Optionally specify the number of points used to define a contour. By default
-a reasonable value is selected automatically.</p>
-<p>remove_edge_cases (bool):
-Due to the nature of skymaps, often, around the edge of CCD data, contours will
+<dt><strong><code>min_elevation</code></strong> :&ensp;<code>int | float</code></dt>
+<dd>Optionally specify the elevation angle at which contour begins. Defaults to 5.</dd>
+<dt><strong><code>min_elevation</code></strong> :&ensp;<code>int | float</code></dt>
+<dd>Optionally specify the elevation angle at which contour begins. Defaults to 90.</dd>
+<dt><strong><code>n_points</code></strong> :&ensp;<code>int | float</code></dt>
+<dd>Optionally specify the number of points used to define a contour. By default
+a reasonable value is selected automatically.</dd>
+<dt><strong><code>remove_edge_cases</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Due to the nature of skymaps, often, around the edge of CCD data, contours will
 have often undesired behaviour due to being bounded within the CCD range. The result
 is flattened contours along the edge of CCD boundaries. This is completely expected,
 and these points are removed by default, completely for aesthetic choices. Set this
-keyword to False to keep all points in the contour.</p>
+keyword to False to keep all points in the contour.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the azimuth contour.</p>
@@ -97,16 +97,16 @@ the azimuth contour.</p>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>constant_elevation</code></strong> :&ensp;<code>int | float</code></dt>
 <dd>The elevation angle, in degrees from the horizon, to create contour of.</dd>
-</dl>
-<p>n_points (int | float):
-Optionally specify the number of points used to define a contour. By default
-a reasonable value is selected automatically.</p>
-<p>remove_edge_cases (bool):
-Due to the nature of skymaps, often, around the edge of CCD data, contours will
+<dt><strong><code>n_points</code></strong> :&ensp;<code>int | float</code></dt>
+<dd>Optionally specify the number of points used to define a contour. By default
+a reasonable value is selected automatically.</dd>
+<dt><strong><code>remove_edge_cases</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Due to the nature of skymaps, often, around the edge of CCD data, contours will
 have often undesired behaviour due to being bounded within the CCD range. The result
 is flattened contours along the edge of CCD boundaries. This is completely expected,
 and these points are removed by default, completely for aesthetic choices. Set this
-keyword to False to keep all points in the contour.</p>
+keyword to False to keep all points in the contour.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the elevation contour.</p>
@@ -128,24 +128,26 @@ defined in geographic coordinates.</p>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The altitude of the image data to create contours for, in kilometers.</dd>
-</dl>
-<p>lats (ndarray or list):
-Sequence of geographic latitudes defining a contour.</p>
-<p>lons (ndarray or list):
-Sequence of geographic longitudes defining a contour.</p>
-<p>constant_lats (float or int):
-Geographic Latitude at which to create line of constant latitude.</p>
-<p>constant_lons (float or int):
-Geographic Longitude at which to create line of constant longitude.</p>
-<p>n_points (int or float):
-Optionally specify the number of points used to define a contour. By default
-a reasonable value is selected automatically.</p>
-<p>remove_edge_cases (bool):
-Due to the nature of skymaps, often, around the edge of CCD data, contours will
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>
+<p>Sequence of geographic latitudes defining a contour.</p>
+</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>Geographic Latitude at which to create line of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>Geographic Longitude at which to create line of constant longitude.</dd>
+<dt><strong><code>n_points</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
+<dd>Optionally specify the number of points used to define a contour. By default
+a reasonable value is selected automatically.</dd>
+<dt><strong><code>remove_edge_cases</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Due to the nature of skymaps, often, around the edge of CCD data, contours will
 have often undesired behaviour due to being bounded within the CCD range. The result
 is flattened contours along the edge of CCD boundaries. This is completely expected,
 and these points are removed by default, completely for aesthetic choices. Set this
-keyword to False to keep all points in the contour.</p>
+keyword to False to keep all points in the contour.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the elevation contour.</p>
@@ -165,30 +167,30 @@ defined in magnetic coordinates.</p>
 <dl>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
-</dl>
-<p>timestamp (datetime.datetime):
-The timestamp used for AACGM Conversions.</p>
-<dl>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The timestamp used for AACGM Conversions.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The altitude of the image data to create contours for, in kilometers.</dd>
-</dl>
-<p>lats (ndarray or list):
-Sequence of magnetic latitudes defining a contour.</p>
-<p>lons (ndarray or list):
-Sequence of magnetic longitudes defining a contour.</p>
-<p>constant_lats (float or int):
-Magnetic Latitude at which to create line of constant latitude.</p>
-<p>constant_lons (float or int):
-Magnetic Longitude at which to create line of constant longitude.</p>
-<p>n_points (int or float):
-Optionally specify the number of points used to define a contour. By default
-a reasonable value is selected automatically.</p>
-<p>remove_edge_cases (bool):
-Due to the nature of skymaps, often, around the edge of CCD data, contours will
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>
+<p>Sequence of magnetic latitudes defining a contour.</p>
+</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of magnetic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>Magnetic Latitude at which to create line of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>Magnetic Longitude at which to create line of constant longitude.</dd>
+<dt><strong><code>n_points</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
+<dd>Optionally specify the number of points used to define a contour. By default
+a reasonable value is selected automatically.</dd>
+<dt><strong><code>remove_edge_cases</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Due to the nature of skymaps, often, around the edge of CCD data, contours will
 have often undesired behaviour due to being bounded within the CCD range. The result
 is flattened contours along the edge of CCD boundaries. This is completely expected,
 and these points are removed by default, completely for aesthetic choices. Set this
-keyword to False to keep all points in the contour.</p>
+keyword to False to keep all points in the contour.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the elevation contour.</p>

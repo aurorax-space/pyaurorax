@@ -31,11 +31,11 @@ def elevation(skymap: Skymap,
         constant_elevation (int | float): 
             The elevation angle, in degrees from the horizon, to create contour of.
 
-        n_points (int | float):
+        n_points (int | float): 
             Optionally specify the number of points used to define a contour. By default
             a reasonable value is selected automatically.
 
-        remove_edge_cases (bool):
+        remove_edge_cases (bool): 
             Due to the nature of skymaps, often, around the edge of CCD data, contours will
             have often undesired behaviour due to being bounded within the CCD range. The result
             is flattened contours along the edge of CCD boundaries. This is completely expected,

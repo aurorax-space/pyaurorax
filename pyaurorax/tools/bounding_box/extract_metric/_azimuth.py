@@ -37,7 +37,7 @@ def azimuth(images: np.ndarray,
         skymap (pyaurorax.data.ucalgary.Skymap): 
             The skymap corresponding to the image data.
 
-        azimuth_bounds (Sequence[int | float]: 
+        azimuth_bounds (Sequence[int | float]): 
             A 2-element sequence specifying the azimuthal bounds from which to extract the metric. 
             Anticipated order is [az_min, az_max].
 
@@ -49,7 +49,7 @@ def azimuth(images: np.ndarray,
             By default, function will assume the type of data passed as input - this argument can be used
             to manually specify the number of channels contained in image data.
 
-        show_preview (bool):
+        show_preview (bool): 
             Plot a preview of the bounded area.
 
     Returns:

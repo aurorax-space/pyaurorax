@@ -173,31 +173,31 @@ def create_custom(
         timestamp (List[datetime.datetime]): 
             A list of timestamps corresponding to each image.
         
-        coordinate_system (str):
+        coordinate_system (str): 
             The coordinate system in which input points are defined. Valid options are "ccd", "geo", or "mag".
         
         width (int):
             Width of the desired keogram slice, in CCD pixel units.
 
-        x_locs (Sequence[float | int]):
+        x_locs (Sequence[float | int]): 
             Sequence of points giving the x-coordinates that define a path through the image data, from
             which to build the keogram.
 
-        y_locs (Sequence[float | int]):
+        y_locs (Sequence[float | int]): 
             Sequence of points giving the y-coordinates that define a path through the image data, from
             which to build the keogram.
 
-        preview (Optional[bool]):
+        preview (Optional[bool]): 
             When True, the first frame in images will be displayed, with the keogram slice plotted.
 
-        skymap (Skymap):
+        skymap (Skymap): 
             The skymap to use in georeferencing when working in geographic or magnetic coordinates.
 
-        altitude_km (float | int):
+        altitude_km (float | int): 
             The altitude of the image data, in km, to use in georeferencing when working in goegraphic
             or magnetic coordinates.
 
-        metric (str):
+        metric (str): 
             The metric used to compute values for each keogram pixel. Valid options are "median", "mean",
             and "sum". Defaults to "median".
         

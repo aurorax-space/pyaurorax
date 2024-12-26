@@ -57,29 +57,29 @@ def mag(skymap: Skymap,
         skymap (pyaurorax.data.ucalgary.Skymap): 
             The skymap corresponding to the CCD image data to generate contours for.
 
-        timestamp (datetime.datetime):
+        timestamp (datetime.datetime): 
             The timestamp used for AACGM Conversions.
 
         altitude_km (int or float): 
             The altitude of the image data to create contours for, in kilometers.
 
-        lats (ndarray or list):
+        lats (ndarray or list): 
                 Sequence of magnetic latitudes defining a contour.
             
-        lons (ndarray or list):
+        lons (ndarray or list): 
             Sequence of magnetic longitudes defining a contour.
 
-        constant_lats (float or int):
+        constant_lats (float or int): 
             Magnetic Latitude at which to create line of constant latitude.
         
-        constant_lons (float or int):
+        constant_lons (float or int): 
             Magnetic Longitude at which to create line of constant longitude.
 
-        n_points (int or float):
+        n_points (int or float): 
             Optionally specify the number of points used to define a contour. By default
             a reasonable value is selected automatically.
         
-        remove_edge_cases (bool):
+        remove_edge_cases (bool): 
             Due to the nature of skymaps, often, around the edge of CCD data, contours will
             have often undesired behaviour due to being bounded within the CCD range. The result
             is flattened contours along the edge of CCD boundaries. This is completely expected,
