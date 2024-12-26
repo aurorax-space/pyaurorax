@@ -1079,12 +1079,16 @@ class Mosaic:
     Attributes:
         polygon_data (matplotlib.collections.PolyCollection): 
             Generated polygons containing rendered data.
+
         cartopy_projection (cartopy.crs.Projection): 
             Cartopy projection to utilize.
+
         contour_data (Dict[str, List[Any]]): 
             Generated contour data.
+
         spect_cmap (str): 
             String giving the cmap to use for spect legend.
+            
         spect_intensity_scale (Tuple[int]): 
             The min and max values that spectrograph data
             is scaled to in the mosaic, if any is present.

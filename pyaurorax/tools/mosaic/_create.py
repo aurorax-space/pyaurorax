@@ -73,7 +73,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             A list of all available colormaps can be found on the 
             [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
 
-        spect_cmap (str):
+        spect_cmap (str): 
             The matplotlib colormap to use for the colorbar if working with spectrograph
             data. Default is `gnuplot`.
 

@@ -60,36 +60,32 @@ border-left: 1px solid #ddd;
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
 <h2 id="args">Args</h2>
-<p>spect_data (pyaurorax.data.ucalgary.Data):
-The data object containing spectrograph data.</p>
-<p>timestamp (datetime.datetime):
-A timestamp or list of timestamps for which to plot spectra from.</p>
-<p>spect_loc (int):
-An int or list of ints giving the spectrograph spatial bin indices to plot.</p>
 <dl>
+<dt><strong><code>spect_data</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Data" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Data">Data</a></code></dt>
+<dd>The data object containing spectrograph data.</dd>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>A timestamp or list of timestamps for which to plot spectra from.</dd>
+<dt><strong><code>spect_loc</code></strong> :&ensp;<code>int</code></dt>
+<dd>An int or list of ints giving the spectrograph spatial bin indices to plot.</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
 <dd>The title to display above the plotted spectra.</dd>
 <dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
 <dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
-</dl>
-<p>color (str):
-A string or list of strings giving the matplotlib color names to use for plotting spectra.</p>
-<dl>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>A string or list of strings giving the matplotlib color names to use for plotting spectra.</dd>
 <dt><strong><code>xlabel</code></strong> :&ensp;<code>str</code></dt>
 <dd>The x-axis label to use. Default is <code>Wavelength (nm)</code>.</dd>
 <dt><strong><code>ylabel</code></strong> :&ensp;<code>str</code></dt>
 <dd>The y-axis label to use. Default is 'Intensity (Rayleighs)'.</dd>
-</dl>
-<p>ylim (Tuple[int]):
-The min and max values to display on the y-axis, in units of Rayleighs/nm.</p>
-<p>xlim (Tuple[int]):
-The min and max values to display on the x-axis, in units of nm.</p>
-<p>plot_line (float):
-A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing
-to known emission wavelengths (e.g. 557.7).</p>
-<p>plot_line_color (str):
-A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'.</p>
-<dl>
+<dt><strong><code>ylim</code></strong> :&ensp;<code>Tuple[int]</code></dt>
+<dd>The min and max values to display on the y-axis, in units of Rayleighs/nm.</dd>
+<dt><strong><code>xlim</code></strong> :&ensp;<code>Tuple[int]</code></dt>
+<dd>The min and max values to display on the x-axis, in units of nm.</dd>
+<dt><strong><code>plot_line</code></strong> :&ensp;<code>float</code></dt>
+<dd>A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing
+to known emission wavelengths (e.g. 557.7).</dd>
+<dt><strong><code>plot_line_color</code></strong> :&ensp;<code>str</code></dt>
+<dd>A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'.</dd>
 <dt><strong><code>returnfig</code></strong> :&ensp;<code>bool</code></dt>
 <dd>
 <p>Instead of displaying the image, return the matplotlib figure object. This allows for further plot

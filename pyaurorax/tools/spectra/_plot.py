@@ -49,13 +49,13 @@ def plot(spect_data: Data,
         return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
         Args:
-            spect_data (pyaurorax.data.ucalgary.Data):
+            spect_data (pyaurorax.data.ucalgary.Data): 
                 The data object containing spectrograph data.
 
-            timestamp (datetime.datetime):
+            timestamp (datetime.datetime): 
                 A timestamp or list of timestamps for which to plot spectra from.
 
-            spect_loc (int):
+            spect_loc (int): 
                 An int or list of ints giving the spectrograph spatial bin indices to plot.
 
             title (str): 
@@ -64,7 +64,7 @@ def plot(spect_data: Data,
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
-            color (str):
+            color (str): 
                 A string or list of strings giving the matplotlib color names to use for plotting spectra.
 
             xlabel (str): 
@@ -73,17 +73,17 @@ def plot(spect_data: Data,
             ylabel (str): 
                 The y-axis label to use. Default is 'Intensity (Rayleighs)'.
 
-            ylim (Tuple[int]):
+            ylim (Tuple[int]): 
                 The min and max values to display on the y-axis, in units of Rayleighs/nm.
 
-            xlim (Tuple[int]):
+            xlim (Tuple[int]): 
                 The min and max values to display on the x-axis, in units of nm.
 
-            plot_line (float):
+            plot_line (float): 
                 A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing
                 to known emission wavelengths (e.g. 557.7).
 
-            plot_line_color (str):
+            plot_line_color (str): 
                 A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'.
 
             returnfig (bool): 
