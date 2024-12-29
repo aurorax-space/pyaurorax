@@ -1,3 +1,9 @@
+Version 1.8.0
+-------------------
+
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.7.0
 -------------------
 

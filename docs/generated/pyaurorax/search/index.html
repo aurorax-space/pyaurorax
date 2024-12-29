@@ -3,20 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>pyaurorax.search API documentation</title>
 <meta name="description" content="Interact with the AuroraX search engine. This includes finding data sources, searching
 for conjunctions or ephemeris data, and uploading/managing …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 <style>
 @media screen and (max-width: 699px) {
@@ -108,16 +119,6 @@ B-trace geographic locations.</p></div>
 <span>(</span><span>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>,<br>available_data_products: Dict | None = None,<br>available_ephemeris: Dict | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class definition for data availability information</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.DataSource" href="#pyaurorax.search.DataSource">DataSource</a></code></dt>
-<dd>the data source that the records are associated with</dd>
-<dt><strong><code>available_ephemeris</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the ephemeris availability information</dd>
-<dt><strong><code>available_data_products</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the data product availability information</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -139,6 +140,16 @@ class AvailabilityResult:
     available_data_products: Optional[Dict] = None
     available_ephemeris: Optional[Dict] = None</code></pre>
 </details>
+<div class="desc"><p>Class definition for data availability information</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.DataSource" href="#pyaurorax.search.DataSource">DataSource</a></code></dt>
+<dd>the data source that the records are associated with</dd>
+<dt><strong><code>available_ephemeris</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>the ephemeris availability information</dd>
+<dt><strong><code>available_data_products</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>the data product availability information</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="pyaurorax.search.AvailabilityResult.available_data_products"><code class="name">var <span class="ident">available_data_products</span> : Dict | None</code></dt>
@@ -160,31 +171,6 @@ class AvailabilityResult:
 <span>(</span><span>conjunction_type: str,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>data_sources: List[<a title="pyaurorax.search.sources.classes.data_source.DataSource" href="sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>],<br>min_distance: float,<br>max_distance: float,<br>events: List[Dict],<br>closest_epoch: datetime.datetime,<br>farthest_epoch: datetime.datetime)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Conjunction object</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>conjunction_type</code></strong></dt>
-<dd>the type of location data used when the
-conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic')</dd>
-<dt><strong><code>start</code></strong></dt>
-<dd>start timestamp of the conjunction</dd>
-<dt><strong><code>end</code></strong></dt>
-<dd>end timestamp of the conjunction</dd>
-<dt><strong><code>data_sources</code></strong></dt>
-<dd>data sources in the conjunction</dd>
-<dt><strong><code>min_distance</code></strong></dt>
-<dd>minimum kilometer distance of the conjunction</dd>
-<dt><strong><code>max_distance</code></strong></dt>
-<dd>maximum kilometer distance of the conjunction</dd>
-<dt><strong><code>events</code></strong></dt>
-<dd>the sub-conjunctions that make up this over-arching
-conjunction (the conjunctions between each set of two data
-sources)</dd>
-<dt><strong><code>closest_epoch</code></strong></dt>
-<dd>timestamp for when data sources were closest</dd>
-<dt><strong><code>farthest_epoch</code></strong></dt>
-<dd>timestamp for when data sources were farthest</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -237,109 +223,37 @@ sources)</dd>
         return f&#34;Conjunction(start={repr(self.start)}, end={repr(self.end)}, min_distance={self.min_distance:.2f}, &#34; \
             f&#34;max_distance={self.max_distance:.2f}, data_sources=[...], events=[...])&#34;</code></pre>
 </details>
+<div class="desc"><p>Conjunction object</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>conjunction_type</code></strong></dt>
+<dd>the type of location data used when the
+conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic')</dd>
+<dt><strong><code>start</code></strong></dt>
+<dd>start timestamp of the conjunction</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>end timestamp of the conjunction</dd>
+<dt><strong><code>data_sources</code></strong></dt>
+<dd>data sources in the conjunction</dd>
+<dt><strong><code>min_distance</code></strong></dt>
+<dd>minimum kilometer distance of the conjunction</dd>
+<dt><strong><code>max_distance</code></strong></dt>
+<dd>maximum kilometer distance of the conjunction</dd>
+<dt><strong><code>events</code></strong></dt>
+<dd>the sub-conjunctions that make up this over-arching
+conjunction (the conjunctions between each set of two data
+sources)</dd>
+<dt><strong><code>closest_epoch</code></strong></dt>
+<dd>timestamp for when data sources were closest</dd>
+<dt><strong><code>farthest_epoch</code></strong></dt>
+<dd>timestamp for when data sources were farthest</dd>
+</dl></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch"><code class="flex name class">
 <span>class <span class="ident">ConjunctionSearch</span></span>
 <span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Optional[List[Dict]] = None,<br>space: Optional[List[Dict]] = None,<br>events: Optional[List[Dict]] = None,<br>conjunction_types: Optional[List[str]] = None,<br>epoch_search_precision: Optional[int] = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class representing a conjunction search</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>start</code></strong></dt>
-<dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
-<dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>distance</code></strong></dt>
-<dd>the maximum distance allowed between data sources when searching for
-conjunctions. This can either be a number (int or float), or a dictionary
-modified from the output of the "get_advanced_distances_combos()" function.</dd>
-<dt><strong><code>ground</code></strong></dt>
-<dd>
-<p>list of ground instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi"],
-    "platforms": ["gillam", "rabbit lake"],
-    "instrument_types": ["RGB"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "calgary_apa_ml_v1",
-                "operator": "in",
-                "values": [ "classified as APA" ]
-            }
-        ]
-    }
-}]
-</code></pre>
-</dd>
-<dt><strong><code>space</code></strong></dt>
-<dd>
-<p>list of one or more space instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi", "swarm"],
-    "platforms": ["themisa", "swarma"],
-    "instrument_types": ["footprint"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "nbtrace_region",
-                "operator": "in",
-                "values": [ "north auroral oval" ]
-            }
-        ]
-    },
-    "hemisphere": [
-        "northern"
-    ]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>events</code></strong></dt>
-<dd>
-<p>list of one or more events search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": [ "events" ],
-    "instrument_types": [ "substorm onsets" ]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>conjunction_types</code></strong></dt>
-<dd>list of conjunction types, defaults to ["nbtrace"]. Options are
-in the pyaurorax.conjunctions module, or at the top level using the
-pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
-<dt><strong><code>epoch_search_precision</code></strong></dt>
-<dd>the time precision to which conjunctions are calculated. Can be
-30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-development and still considered "alpha".</dd>
-<dt><strong><code>response_format</code></strong></dt>
-<dd>JSON representation of desired data response format</dd>
-<dt><strong><code>request</code></strong></dt>
-<dd>AuroraXResponse object returned when the search is executed</dd>
-<dt><strong><code>request_id</code></strong></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
-<dt><strong><code>request_url</code></strong></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
-<dt><strong><code>executed</code></strong></dt>
-<dd>indicates if the search has been executed/started</dd>
-<dt><strong><code>completed</code></strong></dt>
-<dd>indicates if the search has finished</dd>
-<dt><strong><code>data_url</code></strong></dt>
-<dd>the URL where data is accessed</dd>
-<dt><strong><code>query</code></strong></dt>
-<dd>the query for this request as JSON</dd>
-<dt><strong><code>status</code></strong></dt>
-<dd>the status of the query</dd>
-<dt><strong><code>data</code></strong></dt>
-<dd>the conjunctions found</dd>
-<dt><strong><code>logs</code></strong></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -768,13 +682,107 @@ development and still considered "alpha".</dd>
         url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
         return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
 </details>
+<div class="desc"><p>Class representing a conjunction search</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>start</code></strong></dt>
+<dd>start timestamp of the search (inclusive)</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>end timestamp of the search (inclusive)</dd>
+<dt><strong><code>distance</code></strong></dt>
+<dd>the maximum distance allowed between data sources when searching for
+conjunctions. This can either be a number (int or float), or a dictionary
+modified from the output of the "get_advanced_distances_combos()" function.</dd>
+<dt><strong><code>ground</code></strong></dt>
+<dd>
+<p>list of ground instrument search parameters, defaults to []</p>
+<p>Example:</p>
+<pre><code>[{
+    "programs": ["themis-asi"],
+    "platforms": ["gillam", "rabbit lake"],
+    "instrument_types": ["RGB"],
+    "ephemeris_metadata_filters": {
+        "logical_operator": "AND",
+        "expressions": [
+            {
+                "key": "calgary_apa_ml_v1",
+                "operator": "in",
+                "values": [ "classified as APA" ]
+            }
+        ]
+    }
+}]
+</code></pre>
+</dd>
+<dt><strong><code>space</code></strong></dt>
+<dd>
+<p>list of one or more space instrument search parameters, defaults to []</p>
+<p>Example:</p>
+<pre><code>[{
+    "programs": ["themis-asi", "swarm"],
+    "platforms": ["themisa", "swarma"],
+    "instrument_types": ["footprint"],
+    "ephemeris_metadata_filters": {
+        "logical_operator": "AND",
+        "expressions": [
+            {
+                "key": "nbtrace_region",
+                "operator": "in",
+                "values": [ "north auroral oval" ]
+            }
+        ]
+    },
+    "hemisphere": [
+        "northern"
+    ]
+}]
+</code></pre>
+</dd>
+<dt><strong><code>events</code></strong></dt>
+<dd>
+<p>list of one or more events search parameters, defaults to []</p>
+<p>Example:</p>
+<pre><code>[{
+    "programs": [ "events" ],
+    "instrument_types": [ "substorm onsets" ]
+}]
+</code></pre>
+</dd>
+<dt><strong><code>conjunction_types</code></strong></dt>
+<dd>list of conjunction types, defaults to ["nbtrace"]. Options are
+in the pyaurorax.conjunctions module, or at the top level using the
+pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
+<dt><strong><code>epoch_search_precision</code></strong></dt>
+<dd>the time precision to which conjunctions are calculated. Can be
+30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
+development and still considered "alpha".</dd>
+<dt><strong><code>response_format</code></strong></dt>
+<dd>JSON representation of desired data response format</dd>
+<dt><strong><code>request</code></strong></dt>
+<dd>AuroraXResponse object returned when the search is executed</dd>
+<dt><strong><code>request_id</code></strong></dt>
+<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>unique URL assigned to the request by the AuroraX API</dd>
+<dt><strong><code>executed</code></strong></dt>
+<dd>indicates if the search has been executed/started</dd>
+<dt><strong><code>completed</code></strong></dt>
+<dd>indicates if the search has finished</dd>
+<dt><strong><code>data_url</code></strong></dt>
+<dd>the URL where data is accessed</dd>
+<dt><strong><code>query</code></strong></dt>
+<dd>the query for this request as JSON</dd>
+<dt><strong><code>status</code></strong></dt>
+<dd>the status of the query</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>the conjunctions found</dd>
+<dt><strong><code>logs</code></strong></dt>
+<dd>all log messages outputted by the AuroraX API for this request</dd>
+</dl></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.search.ConjunctionSearch.distance"><code class="name">prop <span class="ident">distance</span> : Union[int, float, Dict[str, Union[int, float]]]</code></dt>
 <dd>
-<div class="desc"><p>Property for the distance parameter</p>
-<h2 id="returns">Returns</h2>
-<p>the distance dictionary with all combinations</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -789,12 +797,12 @@ def distance(self) -&gt; Union[int, float, Dict[str, Union[int, float]]]:
     &#34;&#34;&#34;
     return self.__distance</code></pre>
 </details>
+<div class="desc"><p>Property for the distance parameter</p>
+<h2 id="returns">Returns</h2>
+<p>the distance dictionary with all combinations</p></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch.query"><code class="name">prop <span class="ident">query</span> : Dict</code></dt>
 <dd>
-<div class="desc"><p>Property for the query value</p>
-<h2 id="returns">Returns</h2>
-<p>the query parameter</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -819,6 +827,9 @@ def query(self) -&gt; Dict:
     }
     return self._query</code></pre>
 </details>
+<div class="desc"><p>Property for the query value</p>
+<h2 id="returns">Returns</h2>
+<p>the query parameter</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -827,6 +838,36 @@ def query(self) -&gt; Dict:
 <span>def <span class="ident">cancel</span></span>(<span>self, wait: bool = False, poll_interval: float = 1.0, verbose: bool = False) ‑> int</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; int:
+    &#34;&#34;&#34;
+    Cancel the conjunction search request
+
+    This method returns immediately by default since the API processes
+    this request asynchronously. If you would prefer to wait for it
+    to be completed, set the &#39;wait&#39; parameter to True. You can adjust
+    the polling time using the &#39;poll_interval&#39; parameter.
+
+    Args:
+        wait: wait until the cancellation request has been
+            completed (may wait for several minutes)
+        poll_interval: seconds to wait between polling
+            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        verbose: output poll times and other progress messages, defaults
+            to False
+
+    Returns:
+        1 on success
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
+    return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+</details>
 <div class="desc"><p>Cancel the conjunction search request</p>
 <p>This method returns immediately by default since the API processes
 this request asynchronously. If you would prefer to wait for it
@@ -856,6 +897,32 @@ to False</dd>
 <span>def <span class="ident">check_criteria_block_count_validity</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_criteria_block_count_validity(self) -&gt; None:
+    &#34;&#34;&#34;
+    Check the number of of criteria blocks to see if there
+    is too many. A max of 10 is allowed by the AuroraX
+    conjunction search engine. An exception is raised if
+    it was determined to have too many.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXError: too many criteria blocks are found
+    &#34;&#34;&#34;
+    count_ground = 0
+    count_space = 0
+    count_events = 0
+    if (self.ground is not None):
+        count_ground = len(self.ground)
+    if (self.space is not None):
+        count_space = len(self.space)
+    if (self.events is not None):
+        count_events = len(self.events)
+    if ((count_ground + count_space + count_events) &gt; 10):
+        raise AuroraXError(&#34;Number of criteria blocks exceeds 10, please reduce the count&#34;)</code></pre>
+</details>
 <div class="desc"><p>Check the number of of criteria blocks to see if there
 is too many. A max of 10 is allowed by the AuroraX
 conjunction search engine. An exception is raised if
@@ -870,6 +937,24 @@ it was determined to have too many.</p>
 <span>def <span class="ident">check_for_data</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_for_data(self) -&gt; bool:
+    &#34;&#34;&#34;
+    Check to see if data is available for this conjunction
+    search request
+
+    Returns:
+        True if data is available, else False
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    self.update_status()
+    return self.completed</code></pre>
+</details>
 <div class="desc"><p>Check to see if data is available for this conjunction
 search request</p>
 <h2 id="returns">Returns</h2>
@@ -884,6 +969,36 @@ search request</p>
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self) -&gt; None:
+    &#34;&#34;&#34;
+    Initiate a conjunction search request
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    # check number of criteria blocks
+    self.check_criteria_block_count_validity()
+
+    # do request
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_SEARCH)
+    req = AuroraXAPIRequest(self.aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
+    res = req.execute()
+
+    # set request ID, request_url, executed
+    self.executed = True
+    if res.status_code == 202:
+        # request successfully dispatched
+        self.executed = True
+        self.request_url = res.request.headers[&#34;location&#34;]
+        self.request_id = self.request_url.rsplit(&#34;/&#34;, 1)[-1]
+
+    # set request variable
+    self.request = res</code></pre>
+</details>
 <div class="desc"><p>Initiate a conjunction search request</p>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -895,6 +1010,40 @@ search request</p>
 <span>def <span class="ident">get_advanced_distances_combos</span></span>(<span>self, default_distance: Optional[Union[int, float]] = None) ‑> Dict</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_advanced_distances_combos(self, default_distance: Optional[Union[int, float]] = None) -&gt; Dict:
+    &#34;&#34;&#34;
+    Get the advanced distances combinations for this search
+
+    Args:
+        default_distance: the default distance to use, defaults to None
+
+    Returns:
+        the advanced distances combinations
+    &#34;&#34;&#34;
+    # set input arrays
+    options = []
+    if (self.ground is not None):
+        for i in range(0, len(self.ground)):
+            options.append(&#34;ground%d&#34; % (i + 1))
+    if (self.space is not None):
+        for i in range(0, len(self.space)):
+            options.append(&#34;space%d&#34; % (i + 1))
+    if (self.events is not None):
+        for i in range(0, len(self.events)):
+            options.append(&#34;events%d&#34; % (i + 1))
+
+    # derive all combinations of options of size 2
+    combinations = {}
+    for element in itertools.combinations(options, r=2):
+        combinations[&#34;%s-%s&#34; % (element[0], element[1])] = default_distance
+
+    # return
+    return combinations</code></pre>
+</details>
 <div class="desc"><p>Get the advanced distances combinations for this search</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -908,6 +1057,38 @@ search request</p>
 <span>def <span class="ident">get_data</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data(self) -&gt; None:
+    &#34;&#34;&#34;
+    Retrieve the data available for this conjunction search request
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    # check if completed yet
+    if (self.completed is False):
+        print(&#34;No data available, update status or check for data first&#34;)
+        return
+
+    # get data
+    raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+
+    # set data variable
+    if (self.response_format is not None):
+        self.data = raw_data
+    else:
+        # cast data source objects
+        for i in range(0, len(raw_data)):
+            for j in range(0, len(raw_data[i][&#34;data_sources&#34;])):
+                ds = DataSource(**raw_data[i][&#34;data_sources&#34;][j], format=FORMAT_BASIC_INFO)
+                raw_data[i][&#34;data_sources&#34;][j] = ds
+
+        # cast conjunctions
+        self.data = [Conjunction(**c) for c in raw_data]</code></pre>
+</details>
 <div class="desc"><p>Retrieve the data available for this conjunction search request</p>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -919,12 +1100,96 @@ search request</p>
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set status and query strings
+    max_len = 80
+    status_str = str(self.status)
+    query_str = str(self.query)
+    if (len(status_str) &gt; max_len):
+        status_str = &#34;%s...&#34; % (status_str[0:max_len])
+    if (len(query_str) &gt; max_len):
+        query_str = &#34;%s...&#34; % (query_str[0:max_len])
+
+    # set results string
+    if (self.executed is True):
+        if (len(self.data) == 0):
+            data_str = &#34;[0 conjunction results]&#34;
+        elif (len(self.data) == 1):
+            data_str = &#34;[1 conjunction result]&#34;
+        else:
+            data_str = &#34;[%d conjunction results]&#34; % (len(self.data))
+    else:
+        data_str = &#34;&#34;
+
+    # set logs string
+    if (self.executed is True):
+        if (len(self.logs) == 0):
+            logs_str = &#34;[0 log messages]&#34;
+        elif (len(self.logs) == 1):
+            logs_str = &#34;[1 log message]&#34;
+        else:
+            logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
+    else:
+        logs_str = &#34;&#34;
+
+    # print
+    print(&#34;ConjunctionSearch:&#34;)
+    print(&#34;  %-13s: %s&#34; % (&#34;executed&#34;, self.executed))
+    print(&#34;  %-13s: %s&#34; % (&#34;completed&#34;, self.completed))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_id&#34;, self.request_id))
+    print(&#34;  %-13s: %s&#34; % (&#34;request&#34;, self.request))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_url&#34;, self.request_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;data_url&#34;, self.data_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;query&#34;, query_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;status&#34;, status_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;logs&#34;, logs_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch.update_status"><code class="name flex">
 <span>def <span class="ident">update_status</span></span>(<span>self, status: Optional[Dict] = None) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_status(self, status: Optional[Dict] = None) -&gt; None:
+    &#34;&#34;&#34;
+    Update the status of this conjunction search request
+
+    Args:
+        status: the previously-retrieved status of this request (include
+            to avoid requesting it from the API again), defaults to None
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    # get the status if it isn&#39;t passed in
+    if (status is None):
+        status = requests_get_status(self.aurorax_obj, self.request_url)
+
+    # check response
+    if (status is None):
+        raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
+
+    # update request status by checking if data URI is set
+    if (status[&#34;search_result&#34;][&#34;data_uri&#34;] is not None):
+        self.completed = True
+        self.data_url = &#34;%s/data&#34; % (self.request_url)
+
+    # set class variable &#34;status&#34; and &#34;logs&#34;
+    self.status = status
+    self.logs = status[&#34;logs&#34;]</code></pre>
+</details>
 <div class="desc"><p>Update the status of this conjunction search request</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -942,6 +1207,26 @@ to avoid requesting it from the API again), defaults to None</dd>
 <span>def <span class="ident">wait</span></span>(<span>self, poll_interval: float = 1.0, verbose: bool = False) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; None:
+    &#34;&#34;&#34;
+    Block and wait until the request is complete and data is
+    available for retrieval
+
+    Args:
+        poll_interval: time in seconds to wait between polling attempts, defaults
+            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times and other progress messages, defaults to False
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
+    self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))</code></pre>
+</details>
 <div class="desc"><p>Block and wait until the request is complete and data is
 available for retrieval</p>
 <h2 id="args">Args</h2>
@@ -965,22 +1250,6 @@ to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
 <span>(</span><span>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>,<br>data_product_type: str,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>url: str,<br>metadata: Dict | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Data product object</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>data_source</code></strong></dt>
-<dd>data source that the ephemeris record is associated with</dd>
-<dt><strong><code>data_product_type</code></strong></dt>
-<dd>data product type ("keogram", "movie", "summary_plot")</dd>
-<dt><strong><code>start</code></strong></dt>
-<dd>starting timestamp for the record (assumed it is in UTC), inclusive</dd>
-<dt><strong><code>end</code></strong></dt>
-<dd>ending timestamp for the record (assumed it is in UTC), inclusive</dd>
-<dt><strong><code>url</code></strong></dt>
-<dd>the URL of data product</dd>
-<dt><strong><code>metadata</code></strong></dt>
-<dd>metadata for this record (arbitrary keys and values)</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1065,12 +1334,66 @@ to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
         return f&#34;DataProductData(start={repr(self.start)}, end={repr(self.end)}, data_product_type=&#39;{self.data_product_type}&#39;, &#34; \
             f&#34;url=&#39;{attr_url}&#39;, metadata={attr_metadata}, data_source=DataSource(...))&#34;</code></pre>
 </details>
+<div class="desc"><p>Data product object</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>data_source</code></strong></dt>
+<dd>data source that the ephemeris record is associated with</dd>
+<dt><strong><code>data_product_type</code></strong></dt>
+<dd>data product type ("keogram", "movie", "summary_plot")</dd>
+<dt><strong><code>start</code></strong></dt>
+<dd>starting timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>ending timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dt><strong><code>url</code></strong></dt>
+<dd>the URL of data product</dd>
+<dt><strong><code>metadata</code></strong></dt>
+<dd>metadata for this record (arbitrary keys and values)</dd>
+</dl></div>
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.search.DataProductData.to_json_serializable"><code class="name flex">
 <span>def <span class="ident">to_json_serializable</span></span>(<span>self) ‑> Dict</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_json_serializable(self) -&gt; Dict:
+    &#34;&#34;&#34;
+    Convert object to a JSON-serializable object (ie. translate
+    datetime objects to strings)
+
+    Returns:
+        a dictionary object that is JSON-serializable
+    &#34;&#34;&#34;
+    # init
+    d = self.__dict__
+
+    # format epoch as str
+    if (type(d[&#34;start&#34;]) is datetime.datetime):
+        d[&#34;start&#34;] = d[&#34;start&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+    if (type(d[&#34;end&#34;]) is datetime.datetime):
+        d[&#34;end&#34;] = d[&#34;end&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000&#34;)
+
+    # format metadata
+    if (self.metadata is not None):
+        for key, value in self.metadata.items():
+            if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
+                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
+    # if (isinstance(self.metadata, list) is True):
+    #     self.metadata = {}
+
+    # format data source fields for query
+    d[&#34;program&#34;] = self.data_source.program
+    d[&#34;platform&#34;] = self.data_source.platform
+    d[&#34;instrument_type&#34;] = self.data_source.instrument_type
+    del d[&#34;data_source&#34;]
+
+    # return
+    return d</code></pre>
+</details>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
@@ -1083,63 +1406,6 @@ datetime objects to strings)</p>
 <span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: Optional[List[str]] = None,<br>metadata_filters: Optional[List[Dict]] = None,<br>metadata_filters_logical_operator: Optional[str] = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class representing a data product search</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>start</code></strong></dt>
-<dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
-<dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>programs</code></strong></dt>
-<dd>list of program names to search</dd>
-<dt><strong><code>platforms</code></strong></dt>
-<dd>list of platform names to search</dd>
-<dt><strong><code>instrument_types</code></strong></dt>
-<dd>list of instrument types to search</dd>
-<dt><strong><code>data_product_types</code></strong></dt>
-<dd>list of dictionaries describing data product
-types to filter on e.g. "keogram", defaults to None. Options are in the
-pyaurorax.data_products module, or at the top level using the
-pyaurorax.DATA_PRODUCT_TYPE* variables.</dd>
-<dt><strong><code>metadata_filters</code></strong></dt>
-<dd>
-<p>list of dictionaries describing metadata keys and
-values to filter on, defaults to None</p>
-<p>Example:</p>
-<pre><code>[{
-    "key": "nbtrace_region",
-    "operator": "in",
-    "values": ["north polar cap"]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>metadata_filters_logical_operator</code></strong></dt>
-<dd>the logical operator to use when
-evaluating metadata filters (either 'AND' or 'OR'), defaults
-to "AND"</dd>
-<dt><strong><code>response_format</code></strong></dt>
-<dd>JSON representation of desired data response format</dd>
-<dt><strong><code>request</code></strong></dt>
-<dd>AuroraXResponse object returned when the search is executed</dd>
-<dt><strong><code>request_id</code></strong></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
-<dt><strong><code>request_url</code></strong></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
-<dt><strong><code>executed</code></strong></dt>
-<dd>indicates if the search has been executed/started</dd>
-<dt><strong><code>completed</code></strong></dt>
-<dd>indicates if the search has finished</dd>
-<dt><strong><code>data_url</code></strong></dt>
-<dd>the URL where data is accessed</dd>
-<dt><strong><code>query</code></strong></dt>
-<dd>the query for this request as JSON</dd>
-<dt><strong><code>status</code></strong></dt>
-<dd>the status of the query</dd>
-<dt><strong><code>data</code></strong></dt>
-<dd>the data product records found</dd>
-<dt><strong><code>logs</code></strong></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1426,11 +1692,67 @@ to "AND"</dd>
         url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
         return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
 </details>
+<div class="desc"><p>Class representing a data product search</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>start</code></strong></dt>
+<dd>start timestamp of the search (inclusive)</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>end timestamp of the search (inclusive)</dd>
+<dt><strong><code>programs</code></strong></dt>
+<dd>list of program names to search</dd>
+<dt><strong><code>platforms</code></strong></dt>
+<dd>list of platform names to search</dd>
+<dt><strong><code>instrument_types</code></strong></dt>
+<dd>list of instrument types to search</dd>
+<dt><strong><code>data_product_types</code></strong></dt>
+<dd>list of dictionaries describing data product
+types to filter on e.g. "keogram", defaults to None. Options are in the
+pyaurorax.data_products module, or at the top level using the
+pyaurorax.DATA_PRODUCT_TYPE* variables.</dd>
+<dt><strong><code>metadata_filters</code></strong></dt>
+<dd>
+<p>list of dictionaries describing metadata keys and
+values to filter on, defaults to None</p>
+<p>Example:</p>
+<pre><code>[{
+    "key": "nbtrace_region",
+    "operator": "in",
+    "values": ["north polar cap"]
+}]
+</code></pre>
+</dd>
+<dt><strong><code>metadata_filters_logical_operator</code></strong></dt>
+<dd>the logical operator to use when
+evaluating metadata filters (either 'AND' or 'OR'), defaults
+to "AND"</dd>
+<dt><strong><code>response_format</code></strong></dt>
+<dd>JSON representation of desired data response format</dd>
+<dt><strong><code>request</code></strong></dt>
+<dd>AuroraXResponse object returned when the search is executed</dd>
+<dt><strong><code>request_id</code></strong></dt>
+<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>unique URL assigned to the request by the AuroraX API</dd>
+<dt><strong><code>executed</code></strong></dt>
+<dd>indicates if the search has been executed/started</dd>
+<dt><strong><code>completed</code></strong></dt>
+<dd>indicates if the search has finished</dd>
+<dt><strong><code>data_url</code></strong></dt>
+<dd>the URL where data is accessed</dd>
+<dt><strong><code>query</code></strong></dt>
+<dd>the query for this request as JSON</dd>
+<dt><strong><code>status</code></strong></dt>
+<dd>the status of the query</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>the data product records found</dd>
+<dt><strong><code>logs</code></strong></dt>
+<dd>all log messages outputted by the AuroraX API for this request</dd>
+</dl></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.search.DataProductSearch.query"><code class="name">prop <span class="ident">query</span></code></dt>
 <dd>
-<div class="desc"><p>Property for the query value</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1456,6 +1778,7 @@ def query(self):
     }
     return self._query</code></pre>
 </details>
+<div class="desc"><p>Property for the query value</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1464,6 +1787,37 @@ def query(self):
 <span>def <span class="ident">cancel</span></span>(<span>self, wait: bool = False, poll_interval: float = 1.0, verbose: bool = False) ‑> int</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; int:
+    &#34;&#34;&#34;
+    Cancel the data product search request
+
+    This method returns immediately by default since the API processes
+    this request asynchronously. If you would prefer to wait for it
+    to be completed, set the &#39;wait&#39; parameter to True. You can adjust
+    the polling time using the &#39;poll_interval&#39; parameter.
+
+    Args:
+        wait: wait until the cancellation request has been
+            completed (may wait for several minutes)
+        poll_interval: seconds to wait between polling
+            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        verbose: output poll times and other progress messages, defaults
+            to False
+
+    Returns:
+        1 on success
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
+    return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+</details>
 <div class="desc"><p>Cancel the data product search request</p>
 <p>This method returns immediately by default since the API processes
 this request asynchronously. If you would prefer to wait for it
@@ -1495,6 +1849,21 @@ to False</dd>
 <span>def <span class="ident">check_for_data</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_for_data(self) -&gt; bool:
+    &#34;&#34;&#34;
+    Check to see if data is available for this data product
+    search request
+
+    Returns:
+        True if data is available, else False
+    &#34;&#34;&#34;
+    self.update_status()
+    return self.completed</code></pre>
+</details>
 <div class="desc"><p>Check to see if data is available for this data product
 search request</p>
 <h2 id="returns">Returns</h2>
@@ -1504,24 +1873,157 @@ search request</p>
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self) -&gt; None:
+    &#34;&#34;&#34;
+    Initiate a data product search request
+    &#34;&#34;&#34;
+    # do request
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_SEARCH)
+    req = AuroraXAPIRequest(self.aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
+    res = req.execute()
+
+    # set request ID, request_url, executed
+    self.executed = True
+    if (res.status_code == 202):
+        # request successfully dispatched
+        self.executed = True
+        self.request_url = res.request.headers[&#34;location&#34;]
+        self.request_id = self.request_url.rsplit(&#34;/&#34;, 1)[-1]
+
+    # set request variable
+    self.request = res</code></pre>
+</details>
 <div class="desc"><p>Initiate a data product search request</p></div>
 </dd>
 <dt id="pyaurorax.search.DataProductSearch.get_data"><code class="name flex">
 <span>def <span class="ident">get_data</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data(self) -&gt; None:
+    &#34;&#34;&#34;
+    Retrieve the data available for this data product search request
+    &#34;&#34;&#34;
+    # check if completed yet
+    if (self.completed is False):
+        print(&#34;No data available, update status or check for data first&#34;)
+        return
+
+    # get data
+    raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+
+    # set data variable
+    if (self.response_format is not None):
+        self.data = raw_data
+    else:
+        # cast data source objects
+        for i in range(0, len(raw_data)):
+            ds = DataSource(**raw_data[i][&#34;data_source&#34;], format=FORMAT_BASIC_INFO)
+            raw_data[i][&#34;data_source&#34;] = ds
+
+        # cast data product objects
+        self.data = [DataProductData(**dp) for dp in raw_data]</code></pre>
+</details>
 <div class="desc"><p>Retrieve the data available for this data product search request</p></div>
 </dd>
 <dt id="pyaurorax.search.DataProductSearch.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set status and query strings
+    max_len = 80
+    status_str = str(self.status)
+    query_str = str(self.query)
+    if (len(status_str) &gt; max_len):
+        status_str = &#34;%s...&#34; % (status_str[0:max_len])
+    if (len(query_str) &gt; max_len):
+        query_str = &#34;%s...&#34; % (query_str[0:max_len])
+
+    # set results string
+    if (self.executed is True):
+        if (len(self.data) == 0):
+            data_str = &#34;[0 data product results]&#34;
+        elif (len(self.data) == 1):
+            data_str = &#34;[1 data product result]&#34;
+        else:
+            data_str = &#34;[%d data product results]&#34; % (len(self.data))
+    else:
+        data_str = &#34;&#34;
+
+    # set logs string
+    if (self.executed is True):
+        if (len(self.logs) == 0):
+            logs_str = &#34;[0 log messages]&#34;
+        elif (len(self.logs) == 1):
+            logs_str = &#34;[1 log message]&#34;
+        else:
+            logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
+    else:
+        logs_str = &#34;&#34;
+
+    # print
+    print(&#34;DataProductSearch:&#34;)
+    print(&#34;  %-13s: %s&#34; % (&#34;executed&#34;, self.executed))
+    print(&#34;  %-13s: %s&#34; % (&#34;completed&#34;, self.completed))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_id&#34;, self.request_id))
+    print(&#34;  %-13s: %s&#34; % (&#34;request&#34;, self.request))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_url&#34;, self.request_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;data_url&#34;, self.data_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;query&#34;, query_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;status&#34;, status_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;logs&#34;, logs_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 <dt id="pyaurorax.search.DataProductSearch.update_status"><code class="name flex">
 <span>def <span class="ident">update_status</span></span>(<span>self, status: Optional[Dict] = None) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_status(self, status: Optional[Dict] = None) -&gt; None:
+    &#34;&#34;&#34;
+    Update the status of this data product search request
+
+    Args:
+        status: the previously-retrieved status of this request (include
+            to avoid requesting it from the API again), defaults to None
+    &#34;&#34;&#34;
+    # get the status if it isn&#39;t passed in
+    if (status is None):
+        status = requests_get_status(self.aurorax_obj, self.request_url)
+
+    # check response
+    if (status is None):
+        raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
+
+    # update request status by checking if data URI is set
+    if (status[&#34;search_result&#34;][&#34;data_uri&#34;] is not None):
+        self.completed = True
+        self.data_url = &#34;%s/data&#34; % (self.request_url)
+
+    # set class variable &#34;status&#34; and &#34;logs&#34;
+    self.status = status
+    self.logs = status[&#34;logs&#34;]</code></pre>
+</details>
 <div class="desc"><p>Update the status of this data product search request</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1534,6 +2036,24 @@ to avoid requesting it from the API again), defaults to None</dd>
 <span>def <span class="ident">wait</span></span>(<span>self, poll_interval: float = 1.0, verbose: bool = False) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; None:
+    &#34;&#34;&#34;
+    Block and wait for the request to complete and data is available
+    for retrieval
+
+    Args:
+        poll_interval: time in seconds to wait between polling attempts,
+            defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times and other progress messages, defaults
+            to False
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
+    self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))</code></pre>
+</details>
 <div class="desc"><p>Block and wait for the request to complete and data is available
 for retrieval</p>
 <h2 id="args">Args</h2>
@@ -1553,43 +2073,6 @@ to False</dd>
 <span>(</span><span>identifier: int | None = None,<br>program: str | None = None,<br>platform: str | None = None,<br>instrument_type: str | None = None,<br>source_type: str | None = None,<br>display_name: str | None = None,<br>metadata: Dict | None = None,<br>owner: str | None = None,<br>maintainers: List[str] | None = None,<br>ephemeris_metadata_schema: List[Dict] | None = None,<br>data_product_metadata_schema: List[Dict] | None = None,<br>stats: <a title="pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics" href="sources/classes/data_source_stats.html#pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics">DataSourceStatistics</a> | None = None,<br>format: str = 'full_record')</span>
 </code></dt>
 <dd>
-<div class="desc"><p>AuroraX data source record</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the unique AuroraX data source identifier</dd>
-<dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program for this data source</dd>
-<dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform for this data source</dd>
-<dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type for this data source</dd>
-<dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type for this data source. Options are
-in the pyaurorax.search.sources module, or at the top level using the
-pyaurorax.search.SOURCE_TYPE_* variables.</dd>
-<dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
-<dd>the display name for this data source</dd>
-<dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this data source (arbitrary keys and values)</dd>
-<dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the owner's email address of this data source</dd>
-<dt><strong><code>maintainers</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the email addresses of AuroraX accounts that can alter
-this data source and its associated records</dd>
-<dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata
-keys and values that can appear in ephemeris records associated with
-this data source</dd>
-<dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata
-keys and values that can appear in data product records associated with
-this data source</dd>
-<dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format used when printing the data source, defaults to
-"full_record". Other options are in the pyaurorax.search.sources module, or
-at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1695,12 +2178,85 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         print(&#34;  %-30s: %s&#34; % (&#34;stats&#34;, stats_str))
         print(&#34;  %-30s: %s&#34; % (&#34;format&#34;, self.format))</code></pre>
 </details>
+<div class="desc"><p>AuroraX data source record</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
+<dd>the unique AuroraX data source identifier</dd>
+<dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
+<dd>the program for this data source</dd>
+<dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
+<dd>the platform for this data source</dd>
+<dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the instrument type for this data source</dd>
+<dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the data source type for this data source. Options are
+in the pyaurorax.search.sources module, or at the top level using the
+pyaurorax.search.SOURCE_TYPE_* variables.</dd>
+<dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>the display name for this data source</dd>
+<dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>metadata for this data source (arbitrary keys and values)</dd>
+<dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
+<dd>the owner's email address of this data source</dd>
+<dt><strong><code>maintainers</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>the email addresses of AuroraX accounts that can alter
+this data source and its associated records</dd>
+<dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>a list of dictionaries capturing the metadata
+keys and values that can appear in ephemeris records associated with
+this data source</dd>
+<dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>a list of dictionaries capturing the metadata
+keys and values that can appear in data product records associated with
+this data source</dd>
+<dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
+<dd>the format used when printing the data source, defaults to
+"full_record". Other options are in the pyaurorax.search.sources module, or
+at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
+</dl></div>
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.search.DataSource.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    max_len = 80
+    print(&#34;DataSource:&#34;)
+    print(&#34;  %-30s: %d&#34; % (&#34;identifier&#34;, self.identifier))
+    print(&#34;  %-30s: %s&#34; % (&#34;program&#34;, self.program))
+    print(&#34;  %-30s: %s&#34; % (&#34;platform&#34;, self.platform))
+    print(&#34;  %-30s: %s&#34; % (&#34;instrument_type&#34;, self.instrument_type))
+    print(&#34;  %-30s: %s&#34; % (&#34;source_type&#34;, self.source_type))
+    print(&#34;  %-30s: %s&#34; % (&#34;display_name&#34;, self.display_name))
+    print(&#34;  %-30s: %s&#34; % (&#34;metadata&#34;, self.metadata))
+    print(&#34;  %-30s: %s&#34; % (&#34;owner&#34;, self.owner))
+    print(&#34;  %-30s: %s&#34; % (&#34;maintainers&#34;, self.maintainers))
+    if (self.ephemeris_metadata_schema is not None and len(str(self.ephemeris_metadata_schema)) &gt; max_len):
+        ephemeris_metadata_schema_str = &#34;%s...&#34; % (str(self.ephemeris_metadata_schema)[0:max_len])
+    else:
+        ephemeris_metadata_schema_str = self.ephemeris_metadata_schema
+    print(&#34;  %-30s: %s&#34; % (&#34;ephemeris_metadata_schema&#34;, ephemeris_metadata_schema_str))
+    if (self.data_product_metadata_schema is not None and len(str(self.data_product_metadata_schema)) &gt; max_len):
+        data_product_metadata_schema_str = &#34;%s...&#34; % (str(self.data_product_metadata_schema)[0:max_len])
+    else:
+        data_product_metadata_schema_str = self.data_product_metadata_schema
+    print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
+    if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+        stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
+    else:
+        stats_str = self.data_product_metadata_schema
+    print(&#34;  %-30s: %s&#34; % (&#34;stats&#34;, stats_str))
+    print(&#34;  %-30s: %s&#34; % (&#34;format&#34;, self.format))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -1710,25 +2266,6 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
 <span>(</span><span>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>,<br>epoch: datetime.datetime,<br>location_geo: <a title="pyaurorax.search.location.Location" href="location.html#pyaurorax.search.location.Location">Location</a> | None = None,<br>nbtrace: <a title="pyaurorax.search.location.Location" href="location.html#pyaurorax.search.location.Location">Location</a> | None = None,<br>sbtrace: <a title="pyaurorax.search.location.Location" href="location.html#pyaurorax.search.location.Location">Location</a> | None = None,<br>location_gsm: <a title="pyaurorax.search.location.Location" href="location.html#pyaurorax.search.location.Location">Location</a> | None = None,<br>metadata: Dict | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Ephemeris object</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>data_source</code></strong></dt>
-<dd>data source that the ephemeris record is associated with</dd>
-<dt><strong><code>epoch</code></strong></dt>
-<dd>timestamp for the record (assumed it is in UTC)</dd>
-<dt><strong><code>location_geo</code></strong></dt>
-<dd>Location object containing geographic latitude and longitude</dd>
-<dt><strong><code>location_gsm</code></strong></dt>
-<dd>Location object containing GSM latitude and longitude (leave
-empty for data sources with a type of 'ground')</dd>
-<dt><strong><code>nbtrace</code></strong></dt>
-<dd>Location object with north B-trace geographic latitude and longitude</dd>
-<dt><strong><code>sbtrace</code></strong></dt>
-<dd>Location object with south B-trace geographic latitude and longitude</dd>
-<dt><strong><code>metadata</code></strong></dt>
-<dd>metadata for this record (arbitrary keys and values)</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1821,12 +2358,77 @@ empty for data sources with a type of 'ground')</dd>
             f&#34;location_gsm={repr(self.location_gsm)}, nbtrace={repr(self.nbtrace)}, sbtrace={repr(self.sbtrace)}, &#34; \
             f&#34;metadata={attr_metadata}, data_source=DataSource(...))&#34;</code></pre>
 </details>
+<div class="desc"><p>Ephemeris object</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>data_source</code></strong></dt>
+<dd>data source that the ephemeris record is associated with</dd>
+<dt><strong><code>epoch</code></strong></dt>
+<dd>timestamp for the record (assumed it is in UTC)</dd>
+<dt><strong><code>location_geo</code></strong></dt>
+<dd>Location object containing geographic latitude and longitude</dd>
+<dt><strong><code>location_gsm</code></strong></dt>
+<dd>Location object containing GSM latitude and longitude (leave
+empty for data sources with a type of 'ground')</dd>
+<dt><strong><code>nbtrace</code></strong></dt>
+<dd>Location object with north B-trace geographic latitude and longitude</dd>
+<dt><strong><code>sbtrace</code></strong></dt>
+<dd>Location object with south B-trace geographic latitude and longitude</dd>
+<dt><strong><code>metadata</code></strong></dt>
+<dd>metadata for this record (arbitrary keys and values)</dd>
+</dl></div>
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.search.EphemerisData.to_json_serializable"><code class="name flex">
 <span>def <span class="ident">to_json_serializable</span></span>(<span>self) ‑> Dict</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_json_serializable(self) -&gt; Dict:
+    &#34;&#34;&#34;
+    Convert object to a JSON-serializable object (ie. translate
+    datetime objects to strings)
+
+    Returns:
+        a dictionary object that is JSON-serializable
+    &#34;&#34;&#34;
+    # init
+    d = self.__dict__
+
+    # format epoch as str
+    if (isinstance(d[&#34;epoch&#34;], datetime.datetime) is True):
+        d[&#34;epoch&#34;] = d[&#34;epoch&#34;].strftime(&#34;%Y-%m-%dT%H:%M:00.000Z&#34;)
+
+    # format location
+    if (isinstance(d[&#34;location_geo&#34;], Location) is True):
+        d[&#34;location_geo&#34;] = d[&#34;location_geo&#34;].to_json_serializable()
+    if (isinstance(d[&#34;location_gsm&#34;], Location) is True):
+        d[&#34;location_gsm&#34;] = d[&#34;location_gsm&#34;].to_json_serializable()
+    if (isinstance(d[&#34;nbtrace&#34;], Location) is True):
+        d[&#34;nbtrace&#34;] = d[&#34;nbtrace&#34;].to_json_serializable()
+    if (isinstance(d[&#34;sbtrace&#34;], Location) is True):
+        d[&#34;sbtrace&#34;] = d[&#34;sbtrace&#34;].to_json_serializable()
+
+    # format metadata
+    if (self.metadata is not None):
+        for key, value in self.metadata.items():
+            if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
+                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
+    # if (isinstance(self.metadata, list) is True):
+    #     self.metadata = {}
+
+    # format data source fields for query
+    d[&#34;program&#34;] = self.data_source.program
+    d[&#34;platform&#34;] = self.data_source.platform
+    d[&#34;instrument_type&#34;] = self.data_source.instrument_type
+    del d[&#34;data_source&#34;]
+
+    # return
+    return d</code></pre>
+</details>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
@@ -1839,60 +2441,6 @@ datetime objects to strings)</p>
 <span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>metadata_filters: Optional[List[Dict]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class representing an ephemeris search</p>
-<p>Note: At least one search criteria from programs, platforms, or instrument_types
-must be specified.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>start</code></strong></dt>
-<dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
-<dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>programs</code></strong></dt>
-<dd>list of programs to search through, defaults to None</dd>
-<dt><strong><code>platforms</code></strong></dt>
-<dd>list of platforms to search through, defaults to None</dd>
-<dt><strong><code>instrument_types</code></strong></dt>
-<dd>list of instrument types to search through, defaults to None</dd>
-<dt><strong><code>metadata_filters</code></strong></dt>
-<dd>
-<p>list of dictionaries describing metadata keys and
-values to filter on, defaults to None</p>
-<p>e.g. {
-"key": "string",
-"operator": "=",
-"values": [
-"string"
-]
-}</p>
-</dd>
-<dt><strong><code>metadata_filters_logical_operator</code></strong></dt>
-<dd>the logical operator to use when
-evaluating metadata filters (either 'AND' or 'OR'), defaults
-to "AND"</dd>
-<dt><strong><code>response_format</code></strong></dt>
-<dd>JSON representation of desired data response format</dd>
-<dt><strong><code>request</code></strong></dt>
-<dd>AuroraXResponse object returned when the search is executed</dd>
-<dt><strong><code>request_id</code></strong></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
-<dt><strong><code>request_url</code></strong></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
-<dt><strong><code>executed</code></strong></dt>
-<dd>indicates if the search has been executed/started</dd>
-<dt><strong><code>completed</code></strong></dt>
-<dd>indicates if the search has finished</dd>
-<dt><strong><code>data_url</code></strong></dt>
-<dd>the URL where data is accessed</dd>
-<dt><strong><code>query</code></strong></dt>
-<dd>the query for this request as JSON</dd>
-<dt><strong><code>status</code></strong></dt>
-<dd>the status of the query</dd>
-<dt><strong><code>data</code></strong></dt>
-<dd>the ephemeris records found</dd>
-<dt><strong><code>logs</code></strong></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2182,11 +2730,64 @@ to "AND"</dd>
         url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
         return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
 </details>
+<div class="desc"><p>Class representing an ephemeris search</p>
+<p>Note: At least one search criteria from programs, platforms, or instrument_types
+must be specified.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>start</code></strong></dt>
+<dd>start timestamp of the search (inclusive)</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>end timestamp of the search (inclusive)</dd>
+<dt><strong><code>programs</code></strong></dt>
+<dd>list of programs to search through, defaults to None</dd>
+<dt><strong><code>platforms</code></strong></dt>
+<dd>list of platforms to search through, defaults to None</dd>
+<dt><strong><code>instrument_types</code></strong></dt>
+<dd>list of instrument types to search through, defaults to None</dd>
+<dt><strong><code>metadata_filters</code></strong></dt>
+<dd>
+<p>list of dictionaries describing metadata keys and
+values to filter on, defaults to None</p>
+<p>e.g. {
+"key": "string",
+"operator": "=",
+"values": [
+"string"
+]
+}</p>
+</dd>
+<dt><strong><code>metadata_filters_logical_operator</code></strong></dt>
+<dd>the logical operator to use when
+evaluating metadata filters (either 'AND' or 'OR'), defaults
+to "AND"</dd>
+<dt><strong><code>response_format</code></strong></dt>
+<dd>JSON representation of desired data response format</dd>
+<dt><strong><code>request</code></strong></dt>
+<dd>AuroraXResponse object returned when the search is executed</dd>
+<dt><strong><code>request_id</code></strong></dt>
+<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>unique URL assigned to the request by the AuroraX API</dd>
+<dt><strong><code>executed</code></strong></dt>
+<dd>indicates if the search has been executed/started</dd>
+<dt><strong><code>completed</code></strong></dt>
+<dd>indicates if the search has finished</dd>
+<dt><strong><code>data_url</code></strong></dt>
+<dd>the URL where data is accessed</dd>
+<dt><strong><code>query</code></strong></dt>
+<dd>the query for this request as JSON</dd>
+<dt><strong><code>status</code></strong></dt>
+<dd>the status of the query</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>the ephemeris records found</dd>
+<dt><strong><code>logs</code></strong></dt>
+<dd>all log messages outputted by the AuroraX API for this request</dd>
+</dl></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.search.EphemerisSearch.query"><code class="name">prop <span class="ident">query</span></code></dt>
 <dd>
-<div class="desc"><p>Property for the query value</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2211,6 +2812,7 @@ def query(self):
     }
     return self._query</code></pre>
 </details>
+<div class="desc"><p>Property for the query value</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -2219,6 +2821,37 @@ def query(self):
 <span>def <span class="ident">cancel</span></span>(<span>self, wait: bool = False, poll_interval: float = 1.0, verbose: bool = False) ‑> int</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; int:
+    &#34;&#34;&#34;
+    Cancel the ephemeris search request
+
+    This method returns immediately by default since the API processes
+    this request asynchronously. If you would prefer to wait for it
+    to be completed, set the &#39;wait&#39; parameter to True. You can adjust
+    the polling time using the &#39;poll_interval&#39; parameter.
+
+    Args:
+        wait: wait until the cancellation request has been
+            completed (may wait for several minutes)
+        poll_interval: seconds to wait between polling
+            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        verbose: output poll times and other progress messages, defaults
+            to False
+
+    Returns:
+        1 on success
+
+    Raises:
+        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+    return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+</details>
 <div class="desc"><p>Cancel the ephemeris search request</p>
 <p>This method returns immediately by default since the API processes
 this request asynchronously. If you would prefer to wait for it
@@ -2250,6 +2883,21 @@ to False</dd>
 <span>def <span class="ident">check_for_data</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_for_data(self) -&gt; bool:
+    &#34;&#34;&#34;
+    Check to see if data is available for this ephemeris
+    search request
+
+    Returns:
+        True if data is available, else False
+    &#34;&#34;&#34;
+    self.update_status()
+    return self.completed</code></pre>
+</details>
 <div class="desc"><p>Check to see if data is available for this ephemeris
 search request</p>
 <h2 id="returns">Returns</h2>
@@ -2259,6 +2907,37 @@ search request</p>
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self) -&gt; None:
+    &#34;&#34;&#34;
+    Initiate ephemeris search request
+
+    Raises:
+        pyaurorax.exceptions.AuroraXError: invalid request parameters are set
+    &#34;&#34;&#34;
+    # check for at least one filter criteria
+    if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+        raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
+
+    # do request
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
+    req = AuroraXAPIRequest(self.aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
+    res = req.execute()
+
+    # set request ID, request_url, executed
+    self.executed = True
+    if (res.status_code == 202):
+        # request successfully dispatched
+        self.executed = True
+        self.request_url = res.request.headers[&#34;location&#34;]
+        self.request_id = self.request_url.rsplit(&#34;/&#34;, 1)[-1]
+
+    # set the request variable
+    self.request = res</code></pre>
+</details>
 <div class="desc"><p>Initiate ephemeris search request</p>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -2270,18 +2949,127 @@ search request</p>
 <span>def <span class="ident">get_data</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data(self) -&gt; None:
+    &#34;&#34;&#34;
+    Retrieve the data available for this ephemeris search request
+    &#34;&#34;&#34;
+    # check if completed yet
+    if (self.completed is False):
+        print(&#34;No data available, update status or check for data first&#34;)
+        return
+
+    # get data
+    raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+
+    # set data variable
+    if (self.response_format is not None):
+        self.data = raw_data
+    else:
+        # cast data source objects
+        for i in range(0, len(raw_data)):
+            ds = DataSource(**raw_data[i][&#34;data_source&#34;], format=FORMAT_BASIC_INFO)
+            raw_data[i][&#34;data_source&#34;] = ds
+
+        # cast ephemeris objects
+        self.data = [EphemerisData(**e) for e in raw_data]</code></pre>
+</details>
 <div class="desc"><p>Retrieve the data available for this ephemeris search request</p></div>
 </dd>
 <dt id="pyaurorax.search.EphemerisSearch.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set status and query strings
+    max_len = 80
+    status_str = str(self.status)
+    query_str = str(self.query)
+    if (len(status_str) &gt; max_len):
+        status_str = &#34;%s...&#34; % (status_str[0:max_len])
+    if (len(query_str) &gt; max_len):
+        query_str = &#34;%s...&#34; % (query_str[0:max_len])
+
+    # set results string
+    if (self.executed is True):
+        if (len(self.data) == 0):
+            data_str = &#34;[0 ephemeris results]&#34;
+        elif (len(self.data) == 1):
+            data_str = &#34;[1 ephemeris result]&#34;
+        else:
+            data_str = &#34;[%d ephemeris results]&#34; % (len(self.data))
+    else:
+        data_str = &#34;&#34;
+
+    # set logs string
+    if (self.executed is True):
+        if (len(self.logs) == 0):
+            logs_str = &#34;[0 log messages]&#34;
+        elif (len(self.logs) == 1):
+            logs_str = &#34;[1 log message]&#34;
+        else:
+            logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
+    else:
+        logs_str = &#34;&#34;
+
+    # print
+    print(&#34;EphemerisSearch:&#34;)
+    print(&#34;  %-13s: %s&#34; % (&#34;executed&#34;, self.executed))
+    print(&#34;  %-13s: %s&#34; % (&#34;completed&#34;, self.completed))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_id&#34;, self.request_id))
+    print(&#34;  %-13s: %s&#34; % (&#34;request&#34;, self.request))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_url&#34;, self.request_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;data_url&#34;, self.data_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;query&#34;, query_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;status&#34;, status_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;logs&#34;, logs_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 <dt id="pyaurorax.search.EphemerisSearch.update_status"><code class="name flex">
 <span>def <span class="ident">update_status</span></span>(<span>self, status: Optional[Dict] = None) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_status(self, status: Optional[Dict] = None) -&gt; None:
+    &#34;&#34;&#34;
+    Update the status of this ephemeris search request
+
+    Args:
+        status: the previously-retrieved status of this request (include
+            to avoid requesting it from the API again), defaults to None
+    &#34;&#34;&#34;
+    # get the status if it isn&#39;t passed in
+    if (status is None):
+        status = requests_get_status(self.aurorax_obj, self.request_url)
+
+    # check response
+    if (status is None):
+        raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
+
+    # update request status by checking if data URI is set
+    if (status[&#34;search_result&#34;][&#34;data_uri&#34;] is not None):
+        self.completed = True
+        self.data_url = &#34;%s/data&#34; % (self.request_url)
+
+    # set class variable &#34;status&#34; and &#34;logs&#34;
+    self.status = status
+    self.logs = status[&#34;logs&#34;]</code></pre>
+</details>
 <div class="desc"><p>Update the status of this ephemeris search request</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2294,6 +3082,24 @@ to avoid requesting it from the API again), defaults to None</dd>
 <span>def <span class="ident">wait</span></span>(<span>self, poll_interval: float = 1.0, verbose: bool = False) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; None:
+    &#34;&#34;&#34;
+    Block and wait for the request to complete and data is
+    available for retrieval
+
+    Args:
+        poll_interval: time in seconds to wait between polling attempts,
+            defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times and other progress messages, defaults
+            to False
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+    self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))</code></pre>
+</details>
 <div class="desc"><p>Block and wait for the request to complete and data is
 available for retrieval</p>
 <h2 id="args">Args</h2>
@@ -2313,23 +3119,6 @@ to False</dd>
 <span>(</span><span>lat: float | None = None, lon: float | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
-or northern/southern B-trace magnetic footprints.</p>
-<p>Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
-for latitude and -180 to 180 for longitude.</p>
-<p>Note that latitude and longitude must both be numbers, or both be None.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>lat</code></strong> :&ensp;<code>float</code></dt>
-<dd>latitude value</dd>
-<dt><strong><code>lon</code></strong> :&ensp;<code>float</code></dt>
-<dd>longitude value</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>if both latitude and longitude are not real numbers, or not both None.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2397,11 +3186,27 @@ for latitude and -180 to 180 for longitude.</p>
     def __repr__(self) -&gt; str:
         return &#34;%s(lat=%s, lon=%s)&#34; % (self.__class__.__name__, str(self.lat), str(self.lon))</code></pre>
 </details>
+<div class="desc"><p>Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
+or northern/southern B-trace magnetic footprints.</p>
+<p>Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
+for latitude and -180 to 180 for longitude.</p>
+<p>Note that latitude and longitude must both be numbers, or both be None.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>lat</code></strong> :&ensp;<code>float</code></dt>
+<dd>latitude value</dd>
+<dt><strong><code>lon</code></strong> :&ensp;<code>float</code></dt>
+<dd>longitude value</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>if both latitude and longitude are not real numbers, or not both None.</dd>
+</dl></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.search.Location.lat"><code class="name">prop <span class="ident">lat</span></code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2410,10 +3215,10 @@ for latitude and -180 to 180 for longitude.</p>
 def lat(self):
     return self.__lat</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 <dt id="pyaurorax.search.Location.lon"><code class="name">prop <span class="ident">lon</span></code></dt>
 <dd>
-<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2422,6 +3227,7 @@ def lat(self):
 def lon(self):
     return self.__lon</code></pre>
 </details>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -2430,6 +3236,20 @@ def lon(self):
 <span>def <span class="ident">to_json_serializable</span></span>(<span>self) ‑> Dict</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_json_serializable(self) -&gt; Dict:
+    &#34;&#34;&#34;
+    Convert object to a JSON-serializable object (ie. translate
+    datetime objects to strings)
+
+    Returns:
+        a dictionary object that is JSON-serializable
+    &#34;&#34;&#34;
+    return {&#34;lat&#34;: self.lat, &#34;lon&#34;: self.lon}</code></pre>
+</details>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
@@ -2442,8 +3262,6 @@ datetime objects to strings)</p>
 <span>(</span><span>aurorax_obj)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>The SearchManager object is initialized within every PyAuroraX object. It acts as a way to access
-the submodules and carry over configuration information in the super class.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2534,11 +3352,12 @@ the submodules and carry over configuration information in the super class.</p><
         &#34;&#34;&#34;
         return self.__conjunctions</code></pre>
 </details>
+<div class="desc"><p>The SearchManager object is initialized within every PyAuroraX object. It acts as a way to access
+the submodules and carry over configuration information in the super class.</p></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.search.SearchManager.api"><code class="name">prop <span class="ident">api</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.api" href="api/index.html">pyaurorax.search.api</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2550,10 +3369,10 @@ def api(self):
     &#34;&#34;&#34;
     return self.__api</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.api" href="api/index.html">pyaurorax.search.api</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.availability"><code class="name">prop <span class="ident">availability</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.availability" href="availability/index.html">pyaurorax.search.availability</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2565,10 +3384,10 @@ def availability(self):
     &#34;&#34;&#34;
     return self.__availability</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.availability" href="availability/index.html">pyaurorax.search.availability</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.conjunctions"><code class="name">prop <span class="ident">conjunctions</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.conjunctions" href="conjunctions/index.html">pyaurorax.search.conjunctions</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2580,10 +3399,10 @@ def conjunctions(self):
     &#34;&#34;&#34;
     return self.__conjunctions</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.conjunctions" href="conjunctions/index.html">pyaurorax.search.conjunctions</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.data_products"><code class="name">prop <span class="ident">data_products</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.data_products" href="data_products/index.html">pyaurorax.search.data_products</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2595,10 +3414,10 @@ def data_products(self):
     &#34;&#34;&#34;
     return self.__data_products</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.data_products" href="data_products/index.html">pyaurorax.search.data_products</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.ephemeris"><code class="name">prop <span class="ident">ephemeris</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.ephemeris" href="ephemeris/index.html">pyaurorax.search.ephemeris</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2610,10 +3429,10 @@ def ephemeris(self):
     &#34;&#34;&#34;
     return self.__ephemeris</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.ephemeris" href="ephemeris/index.html">pyaurorax.search.ephemeris</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.metadata"><code class="name">prop <span class="ident">metadata</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.metadata" href="metadata/index.html">pyaurorax.search.metadata</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2625,10 +3444,10 @@ def metadata(self):
     &#34;&#34;&#34;
     return self.__metadata</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.metadata" href="metadata/index.html">pyaurorax.search.metadata</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.requests"><code class="name">prop <span class="ident">requests</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.requests" href="requests/index.html">pyaurorax.search.requests</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2640,10 +3459,10 @@ def requests(self):
     &#34;&#34;&#34;
     return self.__requests</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.requests" href="requests/index.html">pyaurorax.search.requests</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.sources"><code class="name">prop <span class="ident">sources</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.sources" href="sources/index.html">pyaurorax.search.sources</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2655,10 +3474,10 @@ def sources(self):
     &#34;&#34;&#34;
     return self.__sources</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.sources" href="sources/index.html">pyaurorax.search.sources</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.search.SearchManager.util"><code class="name">prop <span class="ident">util</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.search.util" href="util/index.html">pyaurorax.search.util</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2670,6 +3489,7 @@ def util(self):
     &#34;&#34;&#34;
     return self.__util</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.search.util" href="util/index.html">pyaurorax.search.util</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 </dl>
 </dd>
@@ -2847,7 +3667,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

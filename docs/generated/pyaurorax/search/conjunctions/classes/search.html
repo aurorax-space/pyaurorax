@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>pyaurorax.search.conjunctions.classes.search API documentation</title>
 <meta name="description" content="Class definition for a conjunction search">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 <style>
 @media screen and (max-width: 699px) {
@@ -59,103 +70,6 @@ border-left: 1px solid #ddd;
 <span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Optional[List[Dict]] = None,<br>space: Optional[List[Dict]] = None,<br>events: Optional[List[Dict]] = None,<br>conjunction_types: Optional[List[str]] = None,<br>epoch_search_precision: Optional[int] = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class representing a conjunction search</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>start</code></strong></dt>
-<dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
-<dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>distance</code></strong></dt>
-<dd>the maximum distance allowed between data sources when searching for
-conjunctions. This can either be a number (int or float), or a dictionary
-modified from the output of the "get_advanced_distances_combos()" function.</dd>
-<dt><strong><code>ground</code></strong></dt>
-<dd>
-<p>list of ground instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi"],
-    "platforms": ["gillam", "rabbit lake"],
-    "instrument_types": ["RGB"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "calgary_apa_ml_v1",
-                "operator": "in",
-                "values": [ "classified as APA" ]
-            }
-        ]
-    }
-}]
-</code></pre>
-</dd>
-<dt><strong><code>space</code></strong></dt>
-<dd>
-<p>list of one or more space instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi", "swarm"],
-    "platforms": ["themisa", "swarma"],
-    "instrument_types": ["footprint"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "nbtrace_region",
-                "operator": "in",
-                "values": [ "north auroral oval" ]
-            }
-        ]
-    },
-    "hemisphere": [
-        "northern"
-    ]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>events</code></strong></dt>
-<dd>
-<p>list of one or more events search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": [ "events" ],
-    "instrument_types": [ "substorm onsets" ]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>conjunction_types</code></strong></dt>
-<dd>list of conjunction types, defaults to ["nbtrace"]. Options are
-in the pyaurorax.conjunctions module, or at the top level using the
-pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
-<dt><strong><code>epoch_search_precision</code></strong></dt>
-<dd>the time precision to which conjunctions are calculated. Can be
-30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-development and still considered "alpha".</dd>
-<dt><strong><code>response_format</code></strong></dt>
-<dd>JSON representation of desired data response format</dd>
-<dt><strong><code>request</code></strong></dt>
-<dd>AuroraXResponse object returned when the search is executed</dd>
-<dt><strong><code>request_id</code></strong></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
-<dt><strong><code>request_url</code></strong></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
-<dt><strong><code>executed</code></strong></dt>
-<dd>indicates if the search has been executed/started</dd>
-<dt><strong><code>completed</code></strong></dt>
-<dd>indicates if the search has finished</dd>
-<dt><strong><code>data_url</code></strong></dt>
-<dd>the URL where data is accessed</dd>
-<dt><strong><code>query</code></strong></dt>
-<dd>the query for this request as JSON</dd>
-<dt><strong><code>status</code></strong></dt>
-<dd>the status of the query</dd>
-<dt><strong><code>data</code></strong></dt>
-<dd>the conjunctions found</dd>
-<dt><strong><code>logs</code></strong></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -584,13 +498,107 @@ development and still considered "alpha".</dd>
         url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
         return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
 </details>
+<div class="desc"><p>Class representing a conjunction search</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>start</code></strong></dt>
+<dd>start timestamp of the search (inclusive)</dd>
+<dt><strong><code>end</code></strong></dt>
+<dd>end timestamp of the search (inclusive)</dd>
+<dt><strong><code>distance</code></strong></dt>
+<dd>the maximum distance allowed between data sources when searching for
+conjunctions. This can either be a number (int or float), or a dictionary
+modified from the output of the "get_advanced_distances_combos()" function.</dd>
+<dt><strong><code>ground</code></strong></dt>
+<dd>
+<p>list of ground instrument search parameters, defaults to []</p>
+<p>Example:</p>
+<pre><code>[{
+    "programs": ["themis-asi"],
+    "platforms": ["gillam", "rabbit lake"],
+    "instrument_types": ["RGB"],
+    "ephemeris_metadata_filters": {
+        "logical_operator": "AND",
+        "expressions": [
+            {
+                "key": "calgary_apa_ml_v1",
+                "operator": "in",
+                "values": [ "classified as APA" ]
+            }
+        ]
+    }
+}]
+</code></pre>
+</dd>
+<dt><strong><code>space</code></strong></dt>
+<dd>
+<p>list of one or more space instrument search parameters, defaults to []</p>
+<p>Example:</p>
+<pre><code>[{
+    "programs": ["themis-asi", "swarm"],
+    "platforms": ["themisa", "swarma"],
+    "instrument_types": ["footprint"],
+    "ephemeris_metadata_filters": {
+        "logical_operator": "AND",
+        "expressions": [
+            {
+                "key": "nbtrace_region",
+                "operator": "in",
+                "values": [ "north auroral oval" ]
+            }
+        ]
+    },
+    "hemisphere": [
+        "northern"
+    ]
+}]
+</code></pre>
+</dd>
+<dt><strong><code>events</code></strong></dt>
+<dd>
+<p>list of one or more events search parameters, defaults to []</p>
+<p>Example:</p>
+<pre><code>[{
+    "programs": [ "events" ],
+    "instrument_types": [ "substorm onsets" ]
+}]
+</code></pre>
+</dd>
+<dt><strong><code>conjunction_types</code></strong></dt>
+<dd>list of conjunction types, defaults to ["nbtrace"]. Options are
+in the pyaurorax.conjunctions module, or at the top level using the
+pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
+<dt><strong><code>epoch_search_precision</code></strong></dt>
+<dd>the time precision to which conjunctions are calculated. Can be
+30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
+development and still considered "alpha".</dd>
+<dt><strong><code>response_format</code></strong></dt>
+<dd>JSON representation of desired data response format</dd>
+<dt><strong><code>request</code></strong></dt>
+<dd>AuroraXResponse object returned when the search is executed</dd>
+<dt><strong><code>request_id</code></strong></dt>
+<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dt><strong><code>request_url</code></strong></dt>
+<dd>unique URL assigned to the request by the AuroraX API</dd>
+<dt><strong><code>executed</code></strong></dt>
+<dd>indicates if the search has been executed/started</dd>
+<dt><strong><code>completed</code></strong></dt>
+<dd>indicates if the search has finished</dd>
+<dt><strong><code>data_url</code></strong></dt>
+<dd>the URL where data is accessed</dd>
+<dt><strong><code>query</code></strong></dt>
+<dd>the query for this request as JSON</dd>
+<dt><strong><code>status</code></strong></dt>
+<dd>the status of the query</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>the conjunctions found</dd>
+<dt><strong><code>logs</code></strong></dt>
+<dd>all log messages outputted by the AuroraX API for this request</dd>
+</dl></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.distance"><code class="name">prop <span class="ident">distance</span> : Union[int, float, Dict[str, Union[int, float]]]</code></dt>
 <dd>
-<div class="desc"><p>Property for the distance parameter</p>
-<h2 id="returns">Returns</h2>
-<p>the distance dictionary with all combinations</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -605,12 +613,12 @@ def distance(self) -&gt; Union[int, float, Dict[str, Union[int, float]]]:
     &#34;&#34;&#34;
     return self.__distance</code></pre>
 </details>
+<div class="desc"><p>Property for the distance parameter</p>
+<h2 id="returns">Returns</h2>
+<p>the distance dictionary with all combinations</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.query"><code class="name">prop <span class="ident">query</span> : Dict</code></dt>
 <dd>
-<div class="desc"><p>Property for the query value</p>
-<h2 id="returns">Returns</h2>
-<p>the query parameter</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -635,6 +643,9 @@ def query(self) -&gt; Dict:
     }
     return self._query</code></pre>
 </details>
+<div class="desc"><p>Property for the query value</p>
+<h2 id="returns">Returns</h2>
+<p>the query parameter</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -643,6 +654,36 @@ def query(self) -&gt; Dict:
 <span>def <span class="ident">cancel</span></span>(<span>self, wait: bool = False, poll_interval: float = 1.0, verbose: bool = False) ‑> int</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; int:
+    &#34;&#34;&#34;
+    Cancel the conjunction search request
+
+    This method returns immediately by default since the API processes
+    this request asynchronously. If you would prefer to wait for it
+    to be completed, set the &#39;wait&#39; parameter to True. You can adjust
+    the polling time using the &#39;poll_interval&#39; parameter.
+
+    Args:
+        wait: wait until the cancellation request has been
+            completed (may wait for several minutes)
+        poll_interval: seconds to wait between polling
+            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        verbose: output poll times and other progress messages, defaults
+            to False
+
+    Returns:
+        1 on success
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
+    return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+</details>
 <div class="desc"><p>Cancel the conjunction search request</p>
 <p>This method returns immediately by default since the API processes
 this request asynchronously. If you would prefer to wait for it
@@ -672,6 +713,32 @@ to False</dd>
 <span>def <span class="ident">check_criteria_block_count_validity</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_criteria_block_count_validity(self) -&gt; None:
+    &#34;&#34;&#34;
+    Check the number of of criteria blocks to see if there
+    is too many. A max of 10 is allowed by the AuroraX
+    conjunction search engine. An exception is raised if
+    it was determined to have too many.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXError: too many criteria blocks are found
+    &#34;&#34;&#34;
+    count_ground = 0
+    count_space = 0
+    count_events = 0
+    if (self.ground is not None):
+        count_ground = len(self.ground)
+    if (self.space is not None):
+        count_space = len(self.space)
+    if (self.events is not None):
+        count_events = len(self.events)
+    if ((count_ground + count_space + count_events) &gt; 10):
+        raise AuroraXError(&#34;Number of criteria blocks exceeds 10, please reduce the count&#34;)</code></pre>
+</details>
 <div class="desc"><p>Check the number of of criteria blocks to see if there
 is too many. A max of 10 is allowed by the AuroraX
 conjunction search engine. An exception is raised if
@@ -686,6 +753,24 @@ it was determined to have too many.</p>
 <span>def <span class="ident">check_for_data</span></span>(<span>self) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_for_data(self) -&gt; bool:
+    &#34;&#34;&#34;
+    Check to see if data is available for this conjunction
+    search request
+
+    Returns:
+        True if data is available, else False
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    self.update_status()
+    return self.completed</code></pre>
+</details>
 <div class="desc"><p>Check to see if data is available for this conjunction
 search request</p>
 <h2 id="returns">Returns</h2>
@@ -700,6 +785,36 @@ search request</p>
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self) -&gt; None:
+    &#34;&#34;&#34;
+    Initiate a conjunction search request
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    # check number of criteria blocks
+    self.check_criteria_block_count_validity()
+
+    # do request
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_SEARCH)
+    req = AuroraXAPIRequest(self.aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
+    res = req.execute()
+
+    # set request ID, request_url, executed
+    self.executed = True
+    if res.status_code == 202:
+        # request successfully dispatched
+        self.executed = True
+        self.request_url = res.request.headers[&#34;location&#34;]
+        self.request_id = self.request_url.rsplit(&#34;/&#34;, 1)[-1]
+
+    # set request variable
+    self.request = res</code></pre>
+</details>
 <div class="desc"><p>Initiate a conjunction search request</p>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -711,6 +826,40 @@ search request</p>
 <span>def <span class="ident">get_advanced_distances_combos</span></span>(<span>self, default_distance: Optional[Union[int, float]] = None) ‑> Dict</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_advanced_distances_combos(self, default_distance: Optional[Union[int, float]] = None) -&gt; Dict:
+    &#34;&#34;&#34;
+    Get the advanced distances combinations for this search
+
+    Args:
+        default_distance: the default distance to use, defaults to None
+
+    Returns:
+        the advanced distances combinations
+    &#34;&#34;&#34;
+    # set input arrays
+    options = []
+    if (self.ground is not None):
+        for i in range(0, len(self.ground)):
+            options.append(&#34;ground%d&#34; % (i + 1))
+    if (self.space is not None):
+        for i in range(0, len(self.space)):
+            options.append(&#34;space%d&#34; % (i + 1))
+    if (self.events is not None):
+        for i in range(0, len(self.events)):
+            options.append(&#34;events%d&#34; % (i + 1))
+
+    # derive all combinations of options of size 2
+    combinations = {}
+    for element in itertools.combinations(options, r=2):
+        combinations[&#34;%s-%s&#34; % (element[0], element[1])] = default_distance
+
+    # return
+    return combinations</code></pre>
+</details>
 <div class="desc"><p>Get the advanced distances combinations for this search</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -724,6 +873,38 @@ search request</p>
 <span>def <span class="ident">get_data</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_data(self) -&gt; None:
+    &#34;&#34;&#34;
+    Retrieve the data available for this conjunction search request
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    # check if completed yet
+    if (self.completed is False):
+        print(&#34;No data available, update status or check for data first&#34;)
+        return
+
+    # get data
+    raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+
+    # set data variable
+    if (self.response_format is not None):
+        self.data = raw_data
+    else:
+        # cast data source objects
+        for i in range(0, len(raw_data)):
+            for j in range(0, len(raw_data[i][&#34;data_sources&#34;])):
+                ds = DataSource(**raw_data[i][&#34;data_sources&#34;][j], format=FORMAT_BASIC_INFO)
+                raw_data[i][&#34;data_sources&#34;][j] = ds
+
+        # cast conjunctions
+        self.data = [Conjunction(**c) for c in raw_data]</code></pre>
+</details>
 <div class="desc"><p>Retrieve the data available for this conjunction search request</p>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -735,12 +916,96 @@ search request</p>
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set status and query strings
+    max_len = 80
+    status_str = str(self.status)
+    query_str = str(self.query)
+    if (len(status_str) &gt; max_len):
+        status_str = &#34;%s...&#34; % (status_str[0:max_len])
+    if (len(query_str) &gt; max_len):
+        query_str = &#34;%s...&#34; % (query_str[0:max_len])
+
+    # set results string
+    if (self.executed is True):
+        if (len(self.data) == 0):
+            data_str = &#34;[0 conjunction results]&#34;
+        elif (len(self.data) == 1):
+            data_str = &#34;[1 conjunction result]&#34;
+        else:
+            data_str = &#34;[%d conjunction results]&#34; % (len(self.data))
+    else:
+        data_str = &#34;&#34;
+
+    # set logs string
+    if (self.executed is True):
+        if (len(self.logs) == 0):
+            logs_str = &#34;[0 log messages]&#34;
+        elif (len(self.logs) == 1):
+            logs_str = &#34;[1 log message]&#34;
+        else:
+            logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
+    else:
+        logs_str = &#34;&#34;
+
+    # print
+    print(&#34;ConjunctionSearch:&#34;)
+    print(&#34;  %-13s: %s&#34; % (&#34;executed&#34;, self.executed))
+    print(&#34;  %-13s: %s&#34; % (&#34;completed&#34;, self.completed))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_id&#34;, self.request_id))
+    print(&#34;  %-13s: %s&#34; % (&#34;request&#34;, self.request))
+    print(&#34;  %-13s: %s&#34; % (&#34;request_url&#34;, self.request_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;data_url&#34;, self.data_url))
+    print(&#34;  %-13s: %s&#34; % (&#34;query&#34;, query_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;status&#34;, status_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;logs&#34;, logs_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.update_status"><code class="name flex">
 <span>def <span class="ident">update_status</span></span>(<span>self, status: Optional[Dict] = None) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_status(self, status: Optional[Dict] = None) -&gt; None:
+    &#34;&#34;&#34;
+    Update the status of this conjunction search request
+
+    Args:
+        status: the previously-retrieved status of this request (include
+            to avoid requesting it from the API again), defaults to None
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    # get the status if it isn&#39;t passed in
+    if (status is None):
+        status = requests_get_status(self.aurorax_obj, self.request_url)
+
+    # check response
+    if (status is None):
+        raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
+
+    # update request status by checking if data URI is set
+    if (status[&#34;search_result&#34;][&#34;data_uri&#34;] is not None):
+        self.completed = True
+        self.data_url = &#34;%s/data&#34; % (self.request_url)
+
+    # set class variable &#34;status&#34; and &#34;logs&#34;
+    self.status = status
+    self.logs = status[&#34;logs&#34;]</code></pre>
+</details>
 <div class="desc"><p>Update the status of this conjunction search request</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -758,6 +1023,26 @@ to avoid requesting it from the API again), defaults to None</dd>
 <span>def <span class="ident">wait</span></span>(<span>self, poll_interval: float = 1.0, verbose: bool = False) ‑> None</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; None:
+    &#34;&#34;&#34;
+    Block and wait until the request is complete and data is
+    available for retrieval
+
+    Args:
+        poll_interval: time in seconds to wait between polling attempts, defaults
+            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+        verbose: output poll times and other progress messages, defaults to False
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+    &#34;&#34;&#34;
+    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
+    self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))</code></pre>
+</details>
 <div class="desc"><p>Block and wait until the request is complete and data is
 available for retrieval</p>
 <h2 id="args">Args</h2>
@@ -859,7 +1144,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

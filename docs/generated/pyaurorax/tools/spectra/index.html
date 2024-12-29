@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>pyaurorax.tools.spectra API documentation</title>
 <meta name="description" content="Work with spectrograph data.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 <style>
 @media screen and (max-width: 699px) {
@@ -56,6 +67,294 @@ border-left: 1px solid #ddd;
 <span>def <span class="ident">plot</span></span>(<span>spect_data: pyucalgarysrs.data.classes.Data,<br>timestamp: datetime.datetime | List[datetime.datetime],<br>spect_loc: int | List[int],<br>title: str | None = None,<br>figsize: Tuple[int, int] | None = None,<br>color: str | None = None,<br>ylog: bool = False,<br>xlabel: str = 'Wavelength (nm)',<br>ylabel: str = 'Intensity (R/nm)',<br>ylim: Tuple[int, int] | None = None,<br>xlim: Tuple[int, int] | None = None,<br>plot_line: float | List[float] | None = None,<br>plot_line_color: str | List[str] | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot(spect_data: Data,
+         timestamp: Union[datetime.datetime, List[
+             datetime.datetime,
+         ]],
+         spect_loc: Union[int, List[int]],
+         title: Optional[str] = None,
+         figsize: Optional[Tuple[int, int]] = None,
+         color: Optional[str] = None,
+         ylog: bool = False,
+         xlabel: str = &#34;Wavelength (nm)&#34;,
+         ylabel: str = &#34;Intensity (R/nm)&#34;,
+         ylim: Optional[Tuple[int, int]] = None,
+         xlim: Optional[Tuple[int, int]] = None,
+         plot_line: Optional[Union[float, List[float]]] = None,
+         plot_line_color: Optional[Union[str, List[str]]] = None,
+         returnfig: bool = False,
+         savefig: bool = False,
+         savefig_filename: Optional[str] = None,
+         savefig_quality: Optional[int] = None) -&gt; Any:
+    &#34;&#34;&#34;
+        Generate a plot of one or more spectra from spectrograph data. 
+        
+        Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
+        return the matplotlib plot object for further usage (using the `returnfig` parameter).
+
+        Args:
+            spect_data (pyaurorax.data.ucalgary.Data): 
+                The data object containing spectrograph data.
+
+            timestamp (datetime.datetime): 
+                A timestamp or list of timestamps for which to plot spectra from.
+
+            spect_loc (int): 
+                An int or list of ints giving the spectrograph spatial bin indices to plot.
+
+            title (str): 
+                The title to display above the plotted spectra.
+
+            figsize (tuple): 
+                The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+            color (str): 
+                A string or list of strings giving the matplotlib color names to use for plotting spectra.
+
+            xlabel (str): 
+                The x-axis label to use. Default is `Wavelength (nm)`.
+
+            ylabel (str): 
+                The y-axis label to use. Default is &#39;Intensity (Rayleighs)&#39;.
+
+            ylim (Tuple[int]): 
+                The min and max values to display on the y-axis, in units of Rayleighs/nm.
+
+            xlim (Tuple[int]): 
+                The min and max values to display on the x-axis, in units of nm.
+
+            plot_line (float): 
+                A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing
+                to known emission wavelengths (e.g. 557.7).
+
+            plot_line_color (str): 
+                A string or list of strings giving the colors to use for plotting lines specified by &#39;plot_lines&#39;.
+
+            returnfig (bool): 
+                Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
+                manipulation, for example, adding labels or a title in a different location than the default. 
+                
+                Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
+                with it. This can be achieved by doing `plt.close(fig)`. 
+                
+                Note that this method cannot be used in combination with `savefig`.
+
+            savefig (bool): 
+                Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
+                this parameter is set to True. Defaults to `False`.
+
+            savefig_filename (str): 
+                Filename to save the image to. Must be specified if the savefig parameter is set to True.
+
+            savefig_quality (int): 
+                Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+                is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
+
+        Returns:
+            The displayed spectra, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+            set to True, the plotting variables `(fig, ax)` will be returned.
+
+        Raises:
+            ValueError: Issues with the y-axis choice.
+        &#34;&#34;&#34;
+    # check return mode
+    if (returnfig is True and savefig is True):
+        raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
+    if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
+        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                      stacklevel=1)
+    elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
+        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                      &#34;savefig option parameters will be ignored.&#34;,
+                      stacklevel=1)
+
+    # init figure
+    fig = plt.figure(figsize=figsize)
+    ax = fig.add_axes((0, 0, 1, 1))
+
+    # Convert plot lines to list if required
+    if plot_line is not None:
+        if not isinstance(plot_line, list):
+            plot_line = [plot_line]
+
+    # Convert plot line colors to list if required
+    if plot_line_color is not None:
+        if not isinstance(plot_line_color, list):
+            plot_line_color = [plot_line_color]
+    else:
+        # default plot lines to gray
+        plot_line_color = []
+        if plot_line is not None:
+            for _i in range(len(plot_line)):
+                plot_line_color = &#39;gray&#39;
+
+    # Plot the requested lines if any
+    if plot_line is not None:
+        for i, line in enumerate(plot_line):
+            ax.plot([line, line], [-5000.0, 5000000.0], color=plot_line_color[i], linestyle=&#39;--&#39;)
+
+    # Set up color cycle
+    color_cycle = itertools.cycle(color) if isinstance(color, list) else itertools.cycle([color])
+
+    # Convert input timestamps to list if required
+    if not isinstance(timestamp, list):
+        timestamp = [timestamp]
+
+    # Convert input spatial bins to list if required
+    if not isinstance(spect_loc, list):
+        spect_loc = [spect_loc]
+
+    # Automatically generate a default title, as
+    # well as default legend labels to use
+    auto_title = (f&#34;{spect_data.metadata[0][&#39;site_uid&#39;].decode(&#39;utf-8&#39;).upper()} - &#34;
+                  f&#34;{timestamp[0].strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)} UTC (Spatial Bin {spect_loc[0]})&#34;)
+    auto_legend = [None]
+    if len(timestamp) != len(spect_loc):
+        if (len(timestamp) != 1) and (len(spect_loc) != 1):
+            raise ValueError(&#34;Inputs &#39;timestamp&#39; and &#39;spect_loc&#39; must have the same number of elements (or one must be of length 1).&#34;)
+
+        elif (len(timestamp) &gt; 1):
+            single_spect_loc = spect_loc[0]
+            spect_loc = []
+            for _i in range(len(timestamp)):
+                spect_loc.append(single_spect_loc)
+            auto_title = f&#34;{spect_data.metadata[0][&#39;site_uid&#39;].decode(&#39;utf-8&#39;).upper()} - Spatial Bin {spect_loc[0]}&#34;
+            auto_legend = []
+            for i in range(len(timestamp)):
+                auto_legend.append(f&#34;{timestamp[i].strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)} UTC&#34;)
+
+        elif (len(spect_loc) &gt; 1):
+            single_timestamp = timestamp[0]
+            timestamp = []
+            for _i in range(len(spect_loc)):
+                timestamp.append(single_timestamp)
+            auto_title = f&#34;{spect_data.metadata[0][&#39;site_uid&#39;].decode(&#39;utf-8&#39;).upper()} - {timestamp[0].strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)} UTC&#34;
+            auto_legend = []
+            for i in range(len(timestamp)):
+                auto_legend.append(f&#34;spatial bin {spect_loc[i]}&#34;)
+
+        else:
+            auto_title = f&#34;{spect_data.metadata[0][&#39;site_uid&#39;].decode(&#39;utf-8&#39;).upper()} Spectrograph&#34;
+            auto_legend = []
+            for _i in range(len(timestamp)):
+                auto_legend.append(f&#34;{timestamp[0].strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)} UTC (spatial bin {spect_loc[0]})&#34;)
+
+    # Extract spectrograph data from Data object
+    spectra = spect_data.data
+    spect_data_timestamps = np.array(spect_data.timestamp)
+    metadata = spect_data.metadata
+    wavelength = spect_data.metadata[0][&#39;wavelength&#39;]
+
+    # Initialize max intensity to zero. This will be used
+    # to dynamically determine plotting range
+    max_intensity = 0.0
+
+    # Iterate through all requested spectra
+    for i in range(len(timestamp)):
+
+        spectra_color = next(color_cycle)
+
+        # Get the spect spatial bin index and timestamp idx
+        ts = timestamp[i]
+        spect_idx = spect_loc[i]
+        epoch_idx = (np.where(spect_data_timestamps == ts))[0]
+
+        # Check for issues with supplied location / time
+        if len(epoch_idx) == 0:
+            raise ValueError(f&#34;Input does not contain data for requested timestamp: {ts.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)}.&#34;)
+        if len(epoch_idx) &gt; 1:
+            raise ValueError(f&#34;Input contains multiple data points for requested timestamp: {ts.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)}.&#34;)
+
+        # Get the wavelength array
+        wavelength = metadata[epoch_idx[0]][&#39;wavelength&#39;]
+
+        # Slice out the spectrum of interest
+        spectrum = spectra[:, spect_idx, epoch_idx]
+
+        if ylog:
+            spectrum[np.where(spectrum &lt; 0)] = 0
+
+        # Add this spectrum to the plot
+        plt.plot(wavelength, spectrum, label=auto_legend[i], color=spectra_color)
+
+        # Update max intensity
+        if np.max(spectrum) &gt; max_intensity:
+            max_intensity = np.max(spectrum)
+
+    # Add legend if more than one spectrum is plotted
+    if auto_legend[0] is not None:
+        ax.legend()
+
+    # Set the title
+    if title is not None:
+        ax.set_title(title)
+    else:
+        ax.set_title(auto_title)
+
+    # Set x and y labels
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel(xlabel)
+
+    # Set x-limits, by default to wavelength range
+    if xlim is None:
+        ax.set_xlim(min(wavelength), max(wavelength))
+    else:
+        ax.set_xlim(xlim)
+
+    # Set y-limit, by default 1.2 times max spectrum data
+    if ylim is None:
+        if ylog:
+            ax.set_ylim(1.0, max_intensity * 2.0)
+        else:
+            ax.set_ylim(0.0, max_intensity * 1.2)
+    else:
+        ax.set_ylim(ylim)
+
+    if ylog:
+        ax.set_yscale(&#39;log&#39;, base=10)
+
+    # save figure or show it
+    if (savefig is True):
+        # check that filename has been set
+        if (savefig_filename is None):
+            raise ValueError(&#34;The savefig_filename parameter is missing, but required since savefig was set to True.&#34;)
+
+        # save the figure
+        f_extension = os.path.splitext(savefig_filename)[-1].lower()
+        if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
+            # check quality setting
+            if (savefig_quality is not None):
+                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+            else:
+                plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
+        else:
+            if (savefig_quality is not None):
+                # quality specified, but output filename is not a JPG, so show a warning
+                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                              stacklevel=1)
+            plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
+
+        # clean up by closing the figure
+        plt.close(fig)
+    elif (returnfig is True):
+        # return the figure and axis objects
+        return (fig, ax)
+    else:
+        # show the figure
+        plt.show(fig)
+
+        # cleanup by closing the figure
+        plt.close(fig)
+
+    # return
+    return None</code></pre>
+</details>
 <div class="desc"><p>Generate a plot of one or more spectra from spectrograph data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
@@ -182,7 +481,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

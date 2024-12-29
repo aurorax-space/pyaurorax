@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.3">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>pyaurorax.data.ucalgary API documentation</title>
 <meta name="description" content="Data downloading and reading routines for data provided by the University of Calgary.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 <style>
 @media screen and (max-width: 699px) {
@@ -66,26 +77,6 @@ border-left: 1px solid #ddd;
 <span>(</span><span>filename: str,<br>detector_uid: str,<br>version: str,<br>generation_info: pyucalgarysrs.data.classes.CalibrationGenerationInfo,<br>rayleighs_perdn_persecond: float | None = None,<br>flat_field_multiplier: numpy.ndarray | None = None,<br>dataset: pyucalgarysrs.data.classes.Dataset | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation for a calibration file.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
-<dd>Filename for the calibration file, as an absolute path of its location on the local machine.</dd>
-<dt><strong><code>detector_uid</code></strong> :&ensp;<code>str</code></dt>
-<dd>Detector/imager/camera unique identifier</dd>
-<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
-<dd>Version number of the calibration file</dd>
-<dt><strong><code>generation_info</code></strong> :&ensp;<code>CalibrationGenerationInfo</code></dt>
-<dd>Metadata describing details about this calibration's generation process</dd>
-<dt><strong><code>rayleighs_perdn_persecond</code></strong> :&ensp;<code>float</code></dt>
-<dd>Calibrated value for Rayleighs per data number per second (R/dn/s). This value will be None
-if a flatfield calibration file was read instead of a rayleighs calibration file.</dd>
-<dt><strong><code>flat_field_multiplier</code></strong> :&ensp;<code>ndarray</code></dt>
-<dd>Calibrated flat field array. This value will be None if a rayleighs calibration file was
-read instead of a flatfield calibration file.</dd>
-<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
-<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -153,6 +144,26 @@ class Calibration:
             # print string for this var
             print(&#34;  %-27s: %s&#34; % (var_name, var_str))</code></pre>
 </details>
+<div class="desc"><p>Representation for a calibration file.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Filename for the calibration file, as an absolute path of its location on the local machine.</dd>
+<dt><strong><code>detector_uid</code></strong> :&ensp;<code>str</code></dt>
+<dd>Detector/imager/camera unique identifier</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Version number of the calibration file</dd>
+<dt><strong><code>generation_info</code></strong> :&ensp;<code>CalibrationGenerationInfo</code></dt>
+<dd>Metadata describing details about this calibration's generation process</dd>
+<dt><strong><code>rayleighs_perdn_persecond</code></strong> :&ensp;<code>float</code></dt>
+<dd>Calibrated value for Rayleighs per data number per second (R/dn/s). This value will be None
+if a flatfield calibration file was read instead of a rayleighs calibration file.</dd>
+<dt><strong><code>flat_field_multiplier</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Calibrated flat field array. This value will be None if a rayleighs calibration file was
+read instead of a flatfield calibration file.</dd>
+<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
+<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Calibration.dataset"><code class="name">var <span class="ident">dataset</span> : pyucalgarysrs.data.classes.Dataset | None</code></dt>
@@ -190,6 +201,36 @@ class Calibration:
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;Calibration:&#34;)
+    for var_name in dir(self):
+        # exclude methods
+        if (var_name.startswith(&#34;__&#34;) or var_name == &#34;pretty_print&#34;):
+            continue
+
+        # convert var to string format we want
+        var_value = getattr(self, var_name)
+        var_str = &#34;None&#34;
+        if (var_name == &#34;generation_info&#34;):
+            var_str = &#34;CalibrationGenerationInfo(...)&#34;
+        elif (var_name == &#34;dataset&#34; and var_value is not None):
+            var_str = &#34;Dataset(...)&#34;
+        elif (var_value is not None):
+            if (isinstance(var_value, ndarray)):
+                var_str = &#34;array(dims=%s, dtype=%s)&#34; % (var_value.shape, var_value.dtype)
+            else:
+                var_str = str(var_value)
+
+        # print string for this var
+        print(&#34;  %-27s: %s&#34; % (var_name, var_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -199,23 +240,6 @@ class Calibration:
 <span>(</span><span>data: Any,<br>timestamp: List[datetime.datetime],<br>metadata: List[Dict],<br>problematic_files: List[pyucalgarysrs.data.classes.ProblematicFile],<br>calibrated_data: Any,<br>dataset: pyucalgarysrs.data.classes.Dataset | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation of the data read in from a <code><a title="pyaurorax.data.ucalgary.read" href="read/index.html">pyaurorax.data.ucalgary.read</a></code> call.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>data</code></strong> :&ensp;<code>Any</code></dt>
-<dd>The loaded data. This can be one of the following types: ndarray, List[Skymap], List[Calibration].</dd>
-<dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
-<dd>List of timestamps for the read in data.</dd>
-<dt><strong><code>metadata</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>List of dictionaries containing metadata specific to each timestamp/image/record.</dd>
-<dt><strong><code>problematic_files</code></strong> :&ensp;<code>List[ProblematicFiles]</code></dt>
-<dd>A list detailing any files that encountered issues during reading.</dd>
-<dt><strong><code>calibrated_data</code></strong> :&ensp;<code>Any</code></dt>
-<dd>A calibrated version of the data. Populated and utilized by data analysis libraries. Has a <code>None</code> value
-until calibrated data is inserted manually.</dd>
-<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
-<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -386,6 +410,23 @@ class Data:
         print(&#34;  %-19s: %s&#34; % (&#34;calibrated_data&#34;, calibrated_data_str))
         print(&#34;  %-19s: %s&#34; % (&#34;dataset&#34;, dataset_str))</code></pre>
 </details>
+<div class="desc"><p>Representation of the data read in from a <code><a title="pyaurorax.data.ucalgary.read" href="read/index.html">pyaurorax.data.ucalgary.read</a></code> call.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>Any</code></dt>
+<dd>The loaded data. This can be one of the following types: ndarray, List[Skymap], List[Calibration].</dd>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
+<dd>List of timestamps for the read in data.</dd>
+<dt><strong><code>metadata</code></strong> :&ensp;<code>List[Dict]</code></dt>
+<dd>List of dictionaries containing metadata specific to each timestamp/image/record.</dd>
+<dt><strong><code>problematic_files</code></strong> :&ensp;<code>List[ProblematicFiles]</code></dt>
+<dd>A list detailing any files that encountered issues during reading.</dd>
+<dt><strong><code>calibrated_data</code></strong> :&ensp;<code>Any</code></dt>
+<dd>A calibrated version of the data. Populated and utilized by data analysis libraries. Has a <code>None</code> value
+until calibrated data is inserted manually.</dd>
+<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
+<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Data.calibrated_data"><code class="name">var <span class="ident">calibrated_data</span> : Any</code></dt>
@@ -419,6 +460,78 @@ class Data:
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set data value
+    if (isinstance(self.data, ndarray) is True):
+        data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+    elif (isinstance(self.data, list) is True):
+        if (len(self.data) == 0):
+            data_str = &#34;[0 items]&#34;
+        elif (isinstance(self.data[0], Skymap) is True):
+            if (len(self.data) == 1):
+                data_str = &#34;[1 Skymap object]&#34;
+            else:
+                data_str = &#34;[%d Skymap objects]&#34; % (len(self.data))
+        elif (isinstance(self.data[0], Calibration) is True):
+            if (len(self.data) == 1):
+                data_str = &#34;[1 Calibration object]&#34;
+            else:
+                data_str = &#34;[%d Calibration objects]&#34; % (len(self.data))
+        elif (isinstance(self.data[0], RiometerData) is True):
+            if (len(self.data) == 1):
+                data_str = &#34;[1 RiometerData object]&#34;
+            else:
+                data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
+        elif (isinstance(self.data[0], HSRData) is True):
+            if (len(self.data) == 1):
+                data_str = &#34;[1 HSRData object]&#34;
+            else:
+                data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
+        elif (len(self.data) == 1):
+            data_str = &#34;[1 item]&#34;
+        else:
+            data_str = &#34;[%d items]&#34; % (len(self.data))
+    else:
+        data_str = self.data.__repr__()
+
+    # set timestamp string
+    if (len(self.timestamp) == 0):
+        timestamp_str = &#34;[]&#34;
+    elif (len(self.timestamp) == 1):
+        timestamp_str = &#34;[1 datetime]&#34;
+    else:
+        timestamp_str = &#34;[%d datetimes]&#34; % (len(self.timestamp))
+
+    # set metadata string
+    if (len(self.metadata) == 0):
+        metadata_str = &#34;[]&#34;
+    elif (len(self.metadata) == 1):
+        metadata_str = &#34;[1 dictionary]&#34;
+    else:
+        metadata_str = &#34;[%d dictionaries]&#34; % (len(self.metadata))
+
+    # set rest of values
+    problematic_files_str = &#34;[]&#34; if len(self.problematic_files) == 0 else &#34;[%d problematic files]&#34; % (len(self.problematic_files))
+    calibrated_data_str = &#34;None&#34; if self.calibrated_data is None else &#34;array(dims=%s, dtype=%s)&#34; % (self.calibrated_data.shape,
+                                                                                                    self.calibrated_data.dtype)
+    dataset_str = &#34;None&#34; if self.dataset is None else self.dataset.__repr__()[0:75] + &#34;...)&#34;
+
+    # print
+    print(&#34;Data:&#34;)
+    print(&#34;  %-19s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;metadata&#34;, metadata_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;problematic_files&#34;, problematic_files_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;calibrated_data&#34;, calibrated_data_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;dataset&#34;, dataset_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -428,39 +541,6 @@ class Data:
 <span>(</span><span>name: str,<br>short_description: str,<br>long_description: str,<br>data_tree_url: str,<br>file_listing_supported: bool,<br>file_reading_supported: bool,<br>level: str,<br>supported_libraries: List[str],<br>file_time_resolution: str,<br>doi: str | None = None,<br>doi_details: str | None = None,<br>citation: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A dataset available from the UCalgary Space Remote Sensing API, with possibly
-support for downloading and/or reading.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
-<dd>Dataset name</dd>
-<dt><strong><code>short_description</code></strong> :&ensp;<code>str</code></dt>
-<dd>A short description about the dataset</dd>
-<dt><strong><code>long_description</code></strong> :&ensp;<code>str</code></dt>
-<dd>A longer description about the dataset</dd>
-<dt><strong><code>data_tree_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>The data tree URL prefix. Used for saving data locally with a similar data tree
-structure compared to the UCalgary Open Data archive.</dd>
-<dt><strong><code>file_listing_supported</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Flag indicating if file listing (downloading) is supported for this dataset.</dd>
-<dt><strong><code>file_reading_supported</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Flag indicating if file reading is supported for this dataset.</dd>
-<dt><strong><code>file_time_resolution</code></strong> :&ensp;<code>str</code></dt>
-<dd>Time resolution of the files for this dataset, represented as a string. Possible values
-are: 1min, 1hr, 1day, not_applicable.</dd>
-<dt><strong><code>level</code></strong> :&ensp;<code>str</code></dt>
-<dd>Dataset level as per L0/L1/L2/etc standards.</dd>
-<dt><strong><code>doi</code></strong> :&ensp;<code>str</code></dt>
-<dd>Dataset DOI unique identifier.</dd>
-<dt><strong><code>doi_details</code></strong> :&ensp;<code>str</code></dt>
-<dd>Further details about the DOI.</dd>
-<dt><strong><code>citation</code></strong> :&ensp;<code>str</code></dt>
-<dd>String to use when citing usage of the dataset.</dd>
-<dt><strong><code>provider</code></strong> :&ensp;<code>str</code></dt>
-<dd>Data provider.</dd>
-<dt><strong><code>supported_libraries</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>Libraries that support usage of this dataset.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -566,12 +646,63 @@ are: 1min, 1hr, 1day, not_applicable.</dd>
             var_value = getattr(self, var_name)
             print(&#34;  %-24s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
+<div class="desc"><p>A dataset available from the UCalgary Space Remote Sensing API, with possibly
+support for downloading and/or reading.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset name</dd>
+<dt><strong><code>short_description</code></strong> :&ensp;<code>str</code></dt>
+<dd>A short description about the dataset</dd>
+<dt><strong><code>long_description</code></strong> :&ensp;<code>str</code></dt>
+<dd>A longer description about the dataset</dd>
+<dt><strong><code>data_tree_url</code></strong> :&ensp;<code>str</code></dt>
+<dd>The data tree URL prefix. Used for saving data locally with a similar data tree
+structure compared to the UCalgary Open Data archive.</dd>
+<dt><strong><code>file_listing_supported</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Flag indicating if file listing (downloading) is supported for this dataset.</dd>
+<dt><strong><code>file_reading_supported</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Flag indicating if file reading is supported for this dataset.</dd>
+<dt><strong><code>file_time_resolution</code></strong> :&ensp;<code>str</code></dt>
+<dd>Time resolution of the files for this dataset, represented as a string. Possible values
+are: 1min, 1hr, 1day, not_applicable.</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset level as per L0/L1/L2/etc standards.</dd>
+<dt><strong><code>doi</code></strong> :&ensp;<code>str</code></dt>
+<dd>Dataset DOI unique identifier.</dd>
+<dt><strong><code>doi_details</code></strong> :&ensp;<code>str</code></dt>
+<dd>Further details about the DOI.</dd>
+<dt><strong><code>citation</code></strong> :&ensp;<code>str</code></dt>
+<dd>String to use when citing usage of the dataset.</dd>
+<dt><strong><code>provider</code></strong> :&ensp;<code>str</code></dt>
+<dd>Data provider.</dd>
+<dt><strong><code>supported_libraries</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>Libraries that support usage of this dataset.</dd>
+</dl></div>
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Dataset.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;Dataset:&#34;)
+    for var_name in dir(self):
+        # exclude methods
+        if (var_name.startswith(&#34;__&#34;) or var_name == &#34;pretty_print&#34;):
+            continue
+
+        # convert var to string format we want
+        var_value = getattr(self, var_name)
+        print(&#34;  %-24s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -581,20 +712,6 @@ are: 1min, 1hr, 1day, not_applicable.</dd>
 <span>(</span><span>filenames: List[str],<br>count: int,<br>total_bytes: int,<br>output_root_path: str,<br>dataset: pyucalgarysrs.data.classes.Dataset)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation of the results from a data download call.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>filenames</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>List of downloaded files, as absolute paths of their location on the local machine.</dd>
-<dt><strong><code>count</code></strong> :&ensp;<code>int</code></dt>
-<dd>Number of files downloaded</dd>
-<dt><strong><code>total_bytes</code></strong> :&ensp;<code>int</code></dt>
-<dd>Cumulative amount of bytes saved on the local machine.</dd>
-<dt><strong><code>output_root_path</code></strong> :&ensp;<code>str</code></dt>
-<dd>The root path of where the data was saved to on the local machine.</dd>
-<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
-<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -643,6 +760,20 @@ class FileDownloadResult:
             else:
                 print(&#34;  %-18s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
+<div class="desc"><p>Representation of the results from a data download call.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>filenames</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of downloaded files, as absolute paths of their location on the local machine.</dd>
+<dt><strong><code>count</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of files downloaded</dd>
+<dt><strong><code>total_bytes</code></strong> :&ensp;<code>int</code></dt>
+<dd>Cumulative amount of bytes saved on the local machine.</dd>
+<dt><strong><code>output_root_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root path of where the data was saved to on the local machine.</dd>
+<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
+<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
@@ -672,6 +803,27 @@ class FileDownloadResult:
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;FileListingResponse:&#34;)
+    for var_name in dir(self):
+        # exclude methods
+        if (var_name.startswith(&#34;__&#34;) or var_name == &#34;pretty_print&#34;):
+            continue
+
+        # convert var to string format we want
+        var_value = getattr(self, var_name)
+        if (var_name == &#34;filenames&#34;):
+            print(&#34;  %-18s: [%d filenames]&#34; % (var_name, len(var_value)))
+        else:
+            print(&#34;  %-18s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -681,21 +833,6 @@ class FileDownloadResult:
 <span>(</span><span>urls: List[str],<br>path_prefix: str,<br>count: int,<br>dataset: pyucalgarysrs.data.classes.Dataset,<br>total_bytes: int | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation of the file listing response from the UCalgary Space Remote Sensing API.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>urls</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>A list of URLs for available data files.</dd>
-<dt><strong><code>path_prefix</code></strong> :&ensp;<code>str</code></dt>
-<dd>The URL prefix, which is sed for saving data locally with a similar data tree
-structure compared to the UCalgary Open Data archive.</dd>
-<dt><strong><code>count</code></strong> :&ensp;<code>int</code></dt>
-<dd>The number of URLs available.</dd>
-<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
-<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
-<dt><strong><code>total_bytes</code></strong> :&ensp;<code>int</code></dt>
-<dd>The cumulative amount of bytes for the available URLs.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -745,6 +882,21 @@ class FileListingResponse:
             else:
                 print(&#34;  %-13s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
+<div class="desc"><p>Representation of the file listing response from the UCalgary Space Remote Sensing API.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>urls</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>A list of URLs for available data files.</dd>
+<dt><strong><code>path_prefix</code></strong> :&ensp;<code>str</code></dt>
+<dd>The URL prefix, which is sed for saving data locally with a similar data tree
+structure compared to the UCalgary Open Data archive.</dd>
+<dt><strong><code>count</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of URLs available.</dd>
+<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
+<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
+<dt><strong><code>total_bytes</code></strong> :&ensp;<code>int</code></dt>
+<dd>The cumulative amount of bytes for the available URLs.</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
@@ -774,6 +926,27 @@ class FileListingResponse:
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;FileListingResponse:&#34;)
+    for var_name in dir(self):
+        # exclude methods
+        if (var_name.startswith(&#34;__&#34;) or var_name == &#34;pretty_print&#34;):
+            continue
+
+        # convert var to string format we want
+        var_value = getattr(self, var_name)
+        if (var_name == &#34;urls&#34;):
+            print(&#34;  %-13s: [%d URLs]&#34; % (var_name, len(var_value)))
+        else:
+            print(&#34;  %-13s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -783,20 +956,6 @@ class FileListingResponse:
 <span>(</span><span>uid: str, full_name: str, geodetic_latitude: float, geodetic_longitude: float)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation for an observatory.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>uid</code></strong> :&ensp;<code>str</code></dt>
-<dd>4-letter unique identifier (traditionally referred to as the site UID)</dd>
-<dt><strong><code>full_name</code></strong> :&ensp;<code>str</code></dt>
-<dd>full location string for the observatory</dd>
-<dt><strong><code>geodetic_latitude</code></strong> :&ensp;<code>float</code></dt>
-<dd>geodetic latitude for the observatory, in decimal format (-90 to 90)</dd>
-<dt><strong><code>geodetic_longitude</code></strong> :&ensp;<code>float</code></dt>
-<dd>geodetic longitude for the observatory, in decimal format (-180 to 180)</dd>
-<dt><strong><code>provider</code></strong> :&ensp;<code>str</code></dt>
-<dd>Data provider.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -855,12 +1014,44 @@ class FileListingResponse:
             var_value = getattr(self, var_name)
             print(&#34;  %-19s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
+<div class="desc"><p>Representation for an observatory.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>uid</code></strong> :&ensp;<code>str</code></dt>
+<dd>4-letter unique identifier (traditionally referred to as the site UID)</dd>
+<dt><strong><code>full_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>full location string for the observatory</dd>
+<dt><strong><code>geodetic_latitude</code></strong> :&ensp;<code>float</code></dt>
+<dd>geodetic latitude for the observatory, in decimal format (-90 to 90)</dd>
+<dt><strong><code>geodetic_longitude</code></strong> :&ensp;<code>float</code></dt>
+<dd>geodetic longitude for the observatory, in decimal format (-180 to 180)</dd>
+<dt><strong><code>provider</code></strong> :&ensp;<code>str</code></dt>
+<dd>Data provider.</dd>
+</dl></div>
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Observatory.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;Observatory:&#34;)
+    for var_name in dir(self):
+        # exclude methods
+        if (var_name.startswith(&#34;__&#34;) or var_name == &#34;pretty_print&#34;):
+            continue
+
+        # convert var to string format we want
+        var_value = getattr(self, var_name)
+        print(&#34;  %-19s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -870,40 +1061,6 @@ class FileListingResponse:
 <span>(</span><span>filename: str,<br>project_uid: str,<br>site_uid: str,<br>imager_uid: str,<br>site_map_latitude: float,<br>site_map_longitude: float,<br>site_map_altitude: float,<br>full_elevation: numpy.ndarray,<br>full_azimuth: numpy.ndarray | None,<br>full_map_altitude: numpy.ndarray,<br>full_map_latitude: numpy.ndarray,<br>full_map_longitude: numpy.ndarray,<br>generation_info: pyucalgarysrs.data.classes.SkymapGenerationInfo,<br>version: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Representation for a skymap file.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
-<dd>Filename for the skymap file, as an absolute path of its location on the local machine.</dd>
-<dt><strong><code>project_uid</code></strong> :&ensp;<code>str</code></dt>
-<dd>Project unique identifier</dd>
-<dt><strong><code>site_uid</code></strong> :&ensp;<code>str</code></dt>
-<dd>Site unique identifier</dd>
-<dt><strong><code>imager_uid</code></strong> :&ensp;<code>str</code></dt>
-<dd>Imager/device unique identifier</dd>
-<dt><strong><code>site_map_latitude</code></strong> :&ensp;<code>float</code></dt>
-<dd>Geodetic latitude of instrument</dd>
-<dt><strong><code>site_map_longitude</code></strong> :&ensp;<code>float</code></dt>
-<dd>Geodetic longitude of instrument</dd>
-<dt><strong><code>site_map_altitude</code></strong> :&ensp;<code>float</code></dt>
-<dd>Altitude of the instrument (in meters)</dd>
-<dt><strong><code>full_elevation</code></strong> :&ensp;<code>ndarray</code></dt>
-<dd>Elevation angle from horizon, for each image pixel (in degrees)</dd>
-<dt><strong><code>full_azimuth</code></strong> :&ensp;<code>ndarray | None</code></dt>
-<dd>Local azimuth angle from 0 degrees north, positive moving east (in degrees). None for TREx Spectrograph.</dd>
-<dt><strong><code>full_map_altitude</code></strong> :&ensp;<code>ndarray</code></dt>
-<dd>Altitudes that image coordinates are mapped to (in kilometers)</dd>
-<dt><strong><code>full_map_latitude</code></strong> :&ensp;<code>ndarray</code></dt>
-<dd>Geodetic latitudes of pixel corners, mapped to various altitudes (specified by <code>full_map_altitude</code>)</dd>
-<dt><strong><code>full_map_longitude</code></strong> :&ensp;<code>ndarray</code></dt>
-<dd>Geodetic longitudes of pixel corners, mapped to various altitudes (specified by <code>full_map_altitude</code>)</dd>
-<dt><strong><code>generation_info</code></strong> :&ensp;<code>SkymapGenerationInfo</code></dt>
-<dd>Metadata describing details about this skymap's generation process</dd>
-<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
-<dd>Version of the skymap</dd>
-<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
-<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1017,6 +1174,40 @@ class Skymap:
         alts_km = [float(x / 1000.) for x in self.full_map_altitude]
         return alts_km</code></pre>
 </details>
+<div class="desc"><p>Representation for a skymap file.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Filename for the skymap file, as an absolute path of its location on the local machine.</dd>
+<dt><strong><code>project_uid</code></strong> :&ensp;<code>str</code></dt>
+<dd>Project unique identifier</dd>
+<dt><strong><code>site_uid</code></strong> :&ensp;<code>str</code></dt>
+<dd>Site unique identifier</dd>
+<dt><strong><code>imager_uid</code></strong> :&ensp;<code>str</code></dt>
+<dd>Imager/device unique identifier</dd>
+<dt><strong><code>site_map_latitude</code></strong> :&ensp;<code>float</code></dt>
+<dd>Geodetic latitude of instrument</dd>
+<dt><strong><code>site_map_longitude</code></strong> :&ensp;<code>float</code></dt>
+<dd>Geodetic longitude of instrument</dd>
+<dt><strong><code>site_map_altitude</code></strong> :&ensp;<code>float</code></dt>
+<dd>Altitude of the instrument (in meters)</dd>
+<dt><strong><code>full_elevation</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Elevation angle from horizon, for each image pixel (in degrees)</dd>
+<dt><strong><code>full_azimuth</code></strong> :&ensp;<code>ndarray | None</code></dt>
+<dd>Local azimuth angle from 0 degrees north, positive moving east (in degrees). None for TREx Spectrograph.</dd>
+<dt><strong><code>full_map_altitude</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Altitudes that image coordinates are mapped to (in kilometers)</dd>
+<dt><strong><code>full_map_latitude</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Geodetic latitudes of pixel corners, mapped to various altitudes (specified by <code>full_map_altitude</code>)</dd>
+<dt><strong><code>full_map_longitude</code></strong> :&ensp;<code>ndarray</code></dt>
+<dd>Geodetic longitudes of pixel corners, mapped to various altitudes (specified by <code>full_map_altitude</code>)</dd>
+<dt><strong><code>generation_info</code></strong> :&ensp;<code>SkymapGenerationInfo</code></dt>
+<dd>Metadata describing details about this skymap's generation process</dd>
+<dt><strong><code>version</code></strong> :&ensp;<code>str</code></dt>
+<dd>Version of the skymap</dd>
+<dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
+<dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
+</dl></div>
 <h3>Class variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Skymap.filename"><code class="name">var <span class="ident">filename</span> : str</code></dt>
@@ -1082,12 +1273,51 @@ class Skymap:
 <span>def <span class="ident">get_precalculated_altitudes</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_precalculated_altitudes(self):
+    &#34;&#34;&#34;
+    Get the altitudes that have been precalculated in this skymap. Units are kilometers.
+    &#34;&#34;&#34;
+    alts_km = [float(x / 1000.) for x in self.full_map_altitude]
+    return alts_km</code></pre>
+</details>
 <div class="desc"><p>Get the altitudes that have been precalculated in this skymap. Units are kilometers.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;Skymap:&#34;)
+    for var_name in dir(self):
+        # exclude methods
+        if (var_name.startswith(&#34;__&#34;) or var_name == &#34;pretty_print&#34; or var_name == &#34;get_precalculated_altitudes&#34;):
+            continue
+
+        # convert var to string format we want
+        var_value = getattr(self, var_name)
+        var_str = &#34;None&#34;
+        if (var_name == &#34;generation_info&#34;):
+            var_str = &#34;SkymapGenerationInfo(...)&#34;
+        elif (var_value is not None):
+            if (isinstance(var_value, ndarray)):
+                var_str = &#34;array(dims=%s, dtype=%s)&#34; % (var_value.shape, var_value.dtype)
+            else:
+                var_str = str(var_value)
+
+        # print string for this var
+        print(&#34;  %-20s: %s&#34; % (var_name, var_str))</code></pre>
+</details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
@@ -1097,8 +1327,6 @@ class Skymap:
 <span>(</span><span>aurorax_obj)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>The UCalgaryManager object is initialized within every PyAuroraX object. It acts as a way to access
-the submodules and carry over configuration information in the super class.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1864,11 +2092,12 @@ the submodules and carry over configuration information in the super class.</p><
         # return
         return download_obj</code></pre>
 </details>
+<div class="desc"><p>The UCalgaryManager object is initialized within every PyAuroraX object. It acts as a way to access
+the submodules and carry over configuration information in the super class.</p></div>
 <h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.readers"><code class="name">prop <span class="ident">readers</span></code></dt>
 <dd>
-<div class="desc"><p>Access to the <code><a title="pyaurorax.data.ucalgary.read" href="read/index.html">pyaurorax.data.ucalgary.read</a></code> submodule from within a PyAuroraX object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1880,6 +2109,7 @@ def readers(self):
     &#34;&#34;&#34;
     return self.__readers</code></pre>
 </details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.data.ucalgary.read" href="read/index.html">pyaurorax.data.ucalgary.read</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1888,6 +2118,141 @@ def readers(self):
 <span>def <span class="ident">download</span></span>(<span>self,<br>dataset_name: str,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>site_uid: str | None = None,<br>device_uid: str | None = None,<br>n_parallel: int = 5,<br>overwrite: bool = False,<br>progress_bar_disable: bool = False,<br>progress_bar_ncols: int | None = None,<br>progress_bar_ascii: str | None = None,<br>progress_bar_desc: str | None = None,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download(self,
+             dataset_name: str,
+             start: datetime.datetime,
+             end: datetime.datetime,
+             site_uid: Optional[str] = None,
+             device_uid: Optional[str] = None,
+             n_parallel: int = __DEFAULT_DOWNLOAD_N_PARALLEL,
+             overwrite: bool = False,
+             progress_bar_disable: bool = False,
+             progress_bar_ncols: Optional[int] = None,
+             progress_bar_ascii: Optional[str] = None,
+             progress_bar_desc: Optional[str] = None,
+             timeout: Optional[int] = None) -&gt; FileDownloadResult:
+    &#34;&#34;&#34;
+    Download data from the UCalgary Space Remote Sensing Open Data Platform.
+
+    The parameters `dataset_name`, `start`, and `end` are required. All other parameters
+    are optional.
+
+    Note that usage of the site and device UID filters applies differently to some datasets.
+    For example, both fields can be used for most raw and keogram data, but only site UID can
+    be used for skymap datasets, and only device UID can be used for calibration datasets. If 
+    fields are specified during a call in which site or device UID is not used, a UserWarning
+    is display to provide the user with feedback about this detail.
+
+    Args:
+        dataset_name (str): 
+            Name of the dataset to download data for. Use the `list_datasets()` function
+            to get the possible values for this parameter. One example is &#34;THEMIS_ASI_RAW&#34;. 
+            Note that dataset names are case sensitive. This parameter is required.
+
+        start (datetime.datetime): 
+            Start timestamp to use (inclusive), expected to be in UTC. Any timezone data 
+            will be ignored. This parameter is required.
+
+        end (datetime.datetime): 
+            End timestamp to use (inclusive), expected to be in UTC. Any timezone data 
+            will be ignored. This parameter is required.
+
+        site_uid (str): 
+            The site UID to filter for. If specified, data will be downloaded for only the 
+            site matching the given value. If excluded, data for all available sites will 
+            be downloaded. An example value could be &#39;atha&#39;, meaning all data from the 
+            Athabasca observatory will be downloaded for the given dataset name, start, and 
+            end times. This parameter is optional.
+
+        device_uid (str): 
+            The device UID to filter for. If specified, data will be downloaded for only the
+            device matching the given value. If excluded, data for all available devices will
+            be downloaded. An example value could be &#39;themis02&#39;, meaning all data matching that
+            device will be downloaded for the given dataset name, start, and end times. This
+            parameter is optional.
+
+        n_parallel (int): 
+            Number of data files to download in parallel. Default value is 5. Adjust as needed 
+            for your internet connection. This parameter is optional.
+
+        overwrite (bool): 
+            By default, data will not be re-downloaded if it already exists locally. Use 
+            the `overwrite` parameter to force re-downloading. Default is `False`. This 
+            parameter is optional.
+
+        progress_bar_disable (bool): 
+            Disable the progress bar. Default is `False`. This parameter is optional.
+
+        progress_bar_ncols (int): 
+            Number of columns for the progress bar (straight passthrough of the `ncols` 
+            parameter in a tqdm progress bar). This parameter is optional. See Notes section
+            below for further information.
+        
+        progress_bar_ascii (str): 
+            ASCII value to use when constructing the visual aspect of the progress bar (straight 
+            passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
+            optional. See Notes section below for further details.
+
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+
+    Returns:
+        A [`FileDownloadResult`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult) 
+        object containing details about what data files were downloaded.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXDownloadError: an error was encountered while downloading a 
+            specific file
+        pyaurorax.exceptions.AuroraXAPIError: an API error was encountered
+
+    Notes:
+    --------
+    The `progress_bar_*` parameters can be used to enable/disable/adjust the progress bar. 
+    Excluding the `progress_bar_disable` parameter, all others are straight pass-throughs 
+    to the tqdm progress bar function. The `progress_bar_ncols` parameter allows for 
+    adjusting the width. The `progress_bar_ascii` parameter allows for adjusting the appearance 
+    of the progress bar. And the `progress_bar_desc` parameter allows for adjusting the 
+    description at the beginning of the progress bar. Further details can be found on the
+    [tqdm documentation](https://tqdm.github.io/docs/tqdm/#tqdm-objects).
+
+    Data downloading will use the `download_data_root_path` variable within the super class&#39;
+    object ([`PyAuroraX`](../../index.html#pyaurorax.PyAuroraX)) to determine where to save data to. If 
+    you&#39;d like to change this path to somewhere else you can change that variable before your
+    download() call, like so:
+
+    ```python
+    import pyaurorax
+    aurorax = pyaurorax.PyAuroraX()
+    aurorax.data_download_root_path = &#34;some_new_path&#34;
+    aurorax.data.download(dataset_name, start, end)
+    ```
+    &#34;&#34;&#34;
+    try:
+        return self.__aurorax_obj.srs_obj.data.download(
+            dataset_name,
+            start,
+            end,
+            site_uid=site_uid,
+            device_uid=device_uid,
+            n_parallel=n_parallel,
+            overwrite=overwrite,
+            progress_bar_disable=progress_bar_disable,
+            progress_bar_ncols=progress_bar_ncols,
+            progress_bar_ascii=progress_bar_ascii,
+            progress_bar_desc=progress_bar_desc,
+            timeout=timeout,
+        )
+    except SRSDownloadError as e:
+        raise AuroraXDownloadError(e) from e
+    except SRSAPIError as e:
+        raise AuroraXAPIError(e) from e</code></pre>
+</details>
 <div class="desc"><p>Download data from the UCalgary Space Remote Sensing Open Data Platform.</p>
 <p>The parameters <code>dataset_name</code>, <code>start</code>, and <code>end</code> are required. All other parameters
 are optional.</p>
@@ -1975,6 +2340,86 @@ aurorax.data.download(dataset_name, start, end)
 <span>def <span class="ident">download_best_flatfield_calibration</span></span>(<span>self,<br>dataset_name: str,<br>device_uid: str,<br>timestamp: datetime.datetime,<br>timeout: int | None = None,<br>overwrite: bool = False) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_best_flatfield_calibration(
+    self,
+    dataset_name: str,
+    device_uid: str,
+    timestamp: datetime.datetime,
+    timeout: Optional[int] = None,
+    overwrite: bool = False,
+) -&gt; FileDownloadResult:
+    &#34;&#34;&#34;
+    Download the flatfield calibration file that best matches the parameters supplied.
+
+    Args:
+        dataset_name (str): 
+            Name of the dataset to download data for. Use the `list_datasets()` function
+            to get the possible values for this parameter. One example is &#34;THEMIS_ASI_SKYMAP_IDLSAV&#34;. 
+            Note that dataset names are case sensitive. This parameter is required.
+
+        device_uid (str): 
+            The device UID to evaluate.
+
+        timestamp (datetime.datetime): 
+            The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
+            data will be ignored. This parameter is required.
+
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+
+    Returns:
+        A [`FileDownloadResult`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult) 
+        object containing details about what data files were downloaded.
+
+    Raises:
+        ValueError: issue with supplied timestamp
+        pyaurorax.exceptions.AuroraXAPIError: an API error was encountered        
+    &#34;&#34;&#34;
+    # get list of all flatfield urls for the dataset and device
+    start_dt = datetime.datetime(2000, 1, 1)
+    end_dt = datetime.datetime.now() + datetime.timedelta(days=5)
+    file_listing_obj = self.get_urls(dataset_name, start_dt, end_dt, device_uid=device_uid, timeout=timeout)
+
+    # filter down and find the best skymap for the timestamp supplied
+    best_cal_filename = None
+    for url in file_listing_obj.urls:
+        # extract start date for this skymap
+        url_short = url.replace(file_listing_obj.path_prefix + &#34;/&#34;, &#34;&#34;)
+
+        # parse filename into several values
+        filename_split = os.path.basename(url_short).split(&#39;_&#39;)
+        filename_times_split = filename_split[3].split(&#39;-&#39;)
+        valid_interval_start_dt = datetime.datetime.strptime(filename_times_split[0], &#34;%Y%m%d&#34;)
+
+        # check start time
+        if (timestamp &gt;= valid_interval_start_dt):
+            # valid
+            #
+            # NOTE: this works because of the order that the list is in already
+            best_cal_filename = url
+
+    # check if we found a skymap
+    if (best_cal_filename is None):
+        raise ValueError(&#34;Unable to determine a flatfield calibration recommendation&#34;)
+
+    # set the filename
+    file_listing_obj.urls = [best_cal_filename]
+    download_obj = self.download_using_urls(
+        file_listing_obj,
+        progress_bar_disable=True,
+        overwrite=overwrite,
+        timeout=timeout,
+    )
+
+    # return
+    return download_obj</code></pre>
+</details>
 <div class="desc"><p>Download the flatfield calibration file that best matches the parameters supplied.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2007,6 +2452,86 @@ object containing details about what data files were downloaded.</p>
 <span>def <span class="ident">download_best_rayleighs_calibration</span></span>(<span>self,<br>dataset_name: str,<br>device_uid: str,<br>timestamp: datetime.datetime,<br>timeout: int | None = None,<br>overwrite: bool = False) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_best_rayleighs_calibration(
+    self,
+    dataset_name: str,
+    device_uid: str,
+    timestamp: datetime.datetime,
+    timeout: Optional[int] = None,
+    overwrite: bool = False,
+) -&gt; FileDownloadResult:
+    &#34;&#34;&#34;
+    Download the Rayleighs calibration file that best matches the parameters supplied.
+
+    Args:
+        dataset_name (str): 
+            Name of the dataset to download data for. Use the `list_datasets()` function
+            to get the possible values for this parameter. One example is &#34;REGO_CALIBRATION_RAYLEIGHS_IDLSAV&#34;. 
+            Note that dataset names are case sensitive. This parameter is required.
+
+        device_uid (str): 
+            The device UID to evaluate.
+
+        timestamp (datetime.datetime): 
+            The timestamp to use for deciding the best calibration file, expected to be in 
+            UTC. Any timezone data will be ignored. This parameter is required.
+
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+
+    Returns:
+        A [`FileDownloadResult`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult) 
+        object containing details about what data files were downloaded.
+
+    Raises:
+        ValueError: issue with supplied timestamp
+        pyaurorax.exceptions.AuroraXAPIError: an API error was encountered        
+    &#34;&#34;&#34;
+    # get list of all rayleighs urls for the dataset and device
+    start_dt = datetime.datetime(2000, 1, 1)
+    end_dt = datetime.datetime.now() + datetime.timedelta(days=5)
+    file_listing_obj = self.get_urls(dataset_name, start_dt, end_dt, device_uid=device_uid, timeout=timeout)
+
+    # filter down and find the best skymap for the timestamp supplied
+    best_cal_filename = None
+    for url in file_listing_obj.urls:
+        # extract start date for this skymap
+        url_short = url.replace(file_listing_obj.path_prefix + &#34;/&#34;, &#34;&#34;)
+
+        # parse filename into several values
+        filename_split = os.path.basename(url_short).split(&#39;_&#39;)
+        filename_times_split = filename_split[3].split(&#39;-&#39;)
+        valid_interval_start_dt = datetime.datetime.strptime(filename_times_split[0], &#34;%Y%m%d&#34;)
+
+        # check start time
+        if (timestamp &gt;= valid_interval_start_dt):
+            # valid
+            #
+            # NOTE: this works because of the order that the list is in already
+            best_cal_filename = url
+
+    # check if we found a skymap
+    if (best_cal_filename is None):
+        raise ValueError(&#34;Unable to determine a Rayleighs calibration recommendation&#34;)
+
+    # set the filename
+    file_listing_obj.urls = [best_cal_filename]
+    download_obj = self.download_using_urls(
+        file_listing_obj,
+        progress_bar_disable=True,
+        overwrite=overwrite,
+        timeout=timeout,
+    )
+
+    # return
+    return download_obj</code></pre>
+</details>
 <div class="desc"><p>Download the Rayleighs calibration file that best matches the parameters supplied.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2039,6 +2564,86 @@ object containing details about what data files were downloaded.</p>
 <span>def <span class="ident">download_best_skymap</span></span>(<span>self,<br>dataset_name: str,<br>site_uid: str,<br>timestamp: datetime.datetime,<br>timeout: int | None = None,<br>overwrite: bool = False) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_best_skymap(
+    self,
+    dataset_name: str,
+    site_uid: str,
+    timestamp: datetime.datetime,
+    timeout: Optional[int] = None,
+    overwrite: bool = False,
+) -&gt; FileDownloadResult:
+    &#34;&#34;&#34;
+    Download the skymap file that best matches the parameters supplied.
+
+    Args:
+        dataset_name (str): 
+            Name of the dataset to download data for. Use the `list_datasets()` function
+            to get the possible values for this parameter. One example is &#34;THEMIS_ASI_SKYMAP_IDLSAV&#34;. 
+            Note that dataset names are case sensitive. This parameter is required.
+
+        site_uid (str): 
+            The site UID to evaluate.
+
+        timestamp (datetime.datetime): 
+            The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
+            data will be ignored. This parameter is required.
+
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+
+    Returns:
+        A [`FileDownloadResult`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult) 
+        object containing details about what data files were downloaded.
+
+    Raises:
+        ValueError: issue with supplied timestamp
+        pyaurorax.exceptions.AuroraXAPIError: an API error was encountered        
+    &#34;&#34;&#34;
+    # get list of all skymap urls for the dataset and site
+    start_dt = datetime.datetime(2000, 1, 1)
+    end_dt = datetime.datetime.now() + datetime.timedelta(days=5)
+    file_listing_obj = self.get_urls(dataset_name, start_dt, end_dt, site_uid=site_uid, timeout=timeout)
+
+    # filter down and find the best skymap for the timestamp supplied
+    best_skymap_filename = None
+    for url in file_listing_obj.urls:
+        # extract start date for this skymap
+        url_short = url.replace(file_listing_obj.path_prefix + &#34;/&#34;, &#34;&#34;)
+
+        # parse filename into several values
+        filename_split = os.path.basename(url_short).split(&#39;_&#39;)
+        filename_times_split = filename_split[3].split(&#39;-&#39;)
+        valid_interval_start_dt = datetime.datetime.strptime(filename_times_split[0], &#34;%Y%m%d&#34;)
+
+        # check start time
+        if (timestamp &gt;= valid_interval_start_dt):
+            # valid
+            #
+            # NOTE: this works because of the order that the list is in already
+            best_skymap_filename = url
+
+    # check if we found a skymap
+    if (best_skymap_filename is None):
+        raise ValueError(&#34;Unable to determine a skymap recommendation&#34;)
+
+    # set the filename
+    file_listing_obj.urls = [best_skymap_filename]
+    download_obj = self.download_using_urls(
+        file_listing_obj,
+        progress_bar_disable=True,
+        overwrite=overwrite,
+        timeout=timeout,
+    )
+
+    # return
+    return download_obj</code></pre>
+</details>
 <div class="desc"><p>Download the skymap file that best matches the parameters supplied.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2071,6 +2676,109 @@ object containing details about what data files were downloaded.</p>
 <span>def <span class="ident">download_using_urls</span></span>(<span>self,<br>file_listing_response: pyucalgarysrs.data.classes.FileListingResponse,<br>n_parallel: int = 5,<br>overwrite: bool = False,<br>progress_bar_disable: bool = False,<br>progress_bar_ncols: int | None = None,<br>progress_bar_ascii: str | None = None,<br>progress_bar_desc: str | None = None,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_using_urls(self,
+                        file_listing_response: FileListingResponse,
+                        n_parallel: int = __DEFAULT_DOWNLOAD_N_PARALLEL,
+                        overwrite: bool = False,
+                        progress_bar_disable: bool = False,
+                        progress_bar_ncols: Optional[int] = None,
+                        progress_bar_ascii: Optional[str] = None,
+                        progress_bar_desc: Optional[str] = None,
+                        timeout: Optional[int] = None) -&gt; FileDownloadResult:
+    &#34;&#34;&#34;
+    Download data from the UCalgary Space Remote Sensing Open Data Platform using 
+    a FileListingResponse object. This would be used in cases where more customization 
+    is needed than the generic `download()` function. 
+    
+    One example of using this function would start by using `get_urls()` to retrieve the
+    list of URLs available for download, then further process this list to fewer files
+    based on some other requirement (ie. time down-sampling such as one file per hour). 
+    Lastly using this function to download the new custom set URLs.
+
+    Args:
+        file_listing_response (FileListingResponse): 
+            A [`FileListingResponse`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileListingResponse) 
+            object returned from a `get_urls()` call, which contains a list of URLs to download 
+            for a specific dataset. This parameter is required.
+
+        n_parallel (int): 
+            Number of data files to download in parallel. Default value is 5. Adjust as needed 
+            for your internet connection. This parameter is optional.
+
+        overwrite (bool): 
+            By default, data will not be re-downloaded if it already exists locally. Use 
+            the `overwrite` parameter to force re-downloading. Default is `False`. This 
+            parameter is optional.
+
+        progress_bar_disable (bool): 
+            Disable the progress bar. Default is `False`. This parameter is optional.
+
+        progress_bar_ncols (int): 
+            Number of columns for the progress bar (straight passthrough of the `ncols` 
+            parameter in a tqdm progress bar). This parameter is optional. See Notes section
+            below for further information.
+        
+        progress_bar_ascii (str): 
+            ASCII value to use when constructing the visual aspect of the progress bar (straight 
+            passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
+            optional. See Notes section below for further details.
+
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+
+    Returns:
+        A [`FileDownloadResult`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult) 
+        object containing details about what data files were downloaded.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXDownloadError: an error was encountered while downloading a 
+            specific file
+        pyaurorax.exceptions.AuroraXAPIError: an API error was encountered
+
+    Notes:
+    --------
+    The `progress_bar_*` parameters can be used to enable/disable/adjust the progress bar. 
+    Excluding the `progress_bar_disable` parameter, all others are straight pass-throughs 
+    to the tqdm progress bar function. The `progress_bar_ncols` parameter allows for 
+    adjusting the width. The `progress_bar_ascii` parameter allows for adjusting the appearance 
+    of the progress bar. And the `progress_bar_desc` parameter allows for adjusting the 
+    description at the beginning of the progress bar. Further details can be found on the
+    [tqdm documentation](https://tqdm.github.io/docs/tqdm/#tqdm-objects).
+
+    Data downloading will use the `download_data_root_path` variable within the super class&#39;
+    object ([`PyAuroraX`](../../index.html#pyaurorax.PyAuroraX)) to determine where to save data to. If 
+    you&#39;d like to change this path to somewhere else you can change that variable before your
+    download() call, like so:
+
+    ```python
+    import pyaurorax
+    aurorax = pyaurorax.PyAuroraX()
+    aurorax.data_download_root_path = &#34;some_new_path&#34;
+    aurorax.data.download(dataset_name, start, end)
+    ```
+    &#34;&#34;&#34;
+    try:
+        return self.__aurorax_obj.srs_obj.data.download_using_urls(
+            file_listing_response,
+            n_parallel=n_parallel,
+            overwrite=overwrite,
+            progress_bar_disable=progress_bar_disable,
+            progress_bar_ncols=progress_bar_ncols,
+            progress_bar_ascii=progress_bar_ascii,
+            progress_bar_desc=progress_bar_desc,
+            timeout=timeout,
+        )
+    except SRSDownloadError as e:
+        raise AuroraXDownloadError(e) from e
+    except SRSAPIError as e:
+        raise AuroraXAPIError(e) from e</code></pre>
+</details>
 <div class="desc"><p>Download data from the UCalgary Space Remote Sensing Open Data Platform using
 a FileListingResponse object. This would be used in cases where more customization
 is needed than the generic <code>download()</code> function. </p>
@@ -2139,6 +2847,35 @@ aurorax.data.download(dataset_name, start, end)
 <span>def <span class="ident">get_dataset</span></span>(<span>self, name: str, timeout: int | None = None) ‑> pyucalgarysrs.data.classes.Dataset</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dataset(self, name: str, timeout: Optional[int] = None) -&gt; Dataset:
+    &#34;&#34;&#34;
+    Get a specific dataset
+
+    Args:
+        name (str): 
+            The dataset name to get. Case is insensitive.
+        
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+        
+    Returns:
+        The found [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
+        object. Raises an exception if not found.
+    
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+    &#34;&#34;&#34;
+    try:
+        return self.__aurorax_obj.srs_obj.data.get_dataset(name, timeout=timeout)
+    except Exception as e:
+        raise AuroraXAPIError(e) from e</code></pre>
+</details>
 <div class="desc"><p>Get a specific dataset</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2162,6 +2899,81 @@ object. Raises an exception if not found.</p>
 <span>def <span class="ident">get_urls</span></span>(<span>self,<br>dataset_name: str,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>site_uid: str | None = None,<br>device_uid: str | None = None,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileListingResponse</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_urls(self,
+             dataset_name: str,
+             start: datetime.datetime,
+             end: datetime.datetime,
+             site_uid: Optional[str] = None,
+             device_uid: Optional[str] = None,
+             timeout: Optional[int] = None) -&gt; FileListingResponse:
+    &#34;&#34;&#34;
+    Get URLs of data files
+
+    The parameters `dataset_name`, `start`, and `end` are required. All other parameters
+    are optional.
+
+    Note that usage of the site and device UID filters applies differently to some datasets.
+    For example, both fields can be used for most raw and keogram data, but only site UID can
+    be used for skymap datasets, and only device UID can be used for calibration datasets. If 
+    fields are specified during a call in which site or device UID is not used, a UserWarning
+    is display to provide the user with feedback about this detail.
+
+    Args:
+        dataset_name (str): 
+            Name of the dataset to download data for. Use the `list_datasets()` function
+            to get the possible values for this parameter. One example is &#34;THEMIS_ASI_RAW&#34;. 
+            Note that dataset names are case sensitive. This parameter is required.
+
+        start (datetime.datetime): 
+            Start timestamp to use (inclusive), expected to be in UTC. Any timezone data 
+            will be ignored. This parameter is required.
+
+        end (datetime.datetime): 
+            End timestamp to use (inclusive), expected to be in UTC. Any timezone data 
+            will be ignored. This parameter is required.
+
+        site_uid (str): 
+            The site UID to filter for. If specified, data will be downloaded for only the 
+            site matching the given value. If excluded, data for all available sites will 
+            be downloaded. An example value could be &#39;atha&#39;, meaning all data from the 
+            Athabasca observatory will be downloaded for the given dataset name, start, and 
+            end times. This parameter is optional.
+
+        device_uid (str): 
+            The device UID to filter for. If specified, data will be downloaded for only the
+            device matching the given value. If excluded, data for all available devices will
+            be downloaded. An example value could be &#39;themis02&#39;, meaning all data matching that
+            device will be downloaded for the given dataset name, start, and end times. This
+            parameter is optional.
+
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+
+    Returns:
+        A [`FileListingResponse`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileListingResponse)
+        object containing a list of the available URLs, among other values.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: an API error was encountered
+    &#34;&#34;&#34;
+    try:
+        return self.__aurorax_obj.srs_obj.data.get_urls(
+            dataset_name,
+            start,
+            end,
+            site_uid=site_uid,
+            device_uid=device_uid,
+            timeout=timeout,
+        )
+    except SRSAPIError as e:
+        raise AuroraXAPIError(e) from e</code></pre>
+</details>
 <div class="desc"><p>Get URLs of data files</p>
 <p>The parameters <code>dataset_name</code>, <code>start</code>, and <code>end</code> are required. All other parameters
 are optional.</p>
@@ -2212,6 +3024,31 @@ object containing a list of the available URLs, among other values.</p>
 <span>def <span class="ident">is_read_supported</span></span>(<span>self, dataset_name: str) ‑> bool</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_read_supported(self, dataset_name: str) -&gt; bool:
+    &#34;&#34;&#34;
+    Check if a given dataset has file reading support. 
+    
+    Not all datasets available in the UCalgary Space Remote Sensing Open Data Platform 
+    have special readfile routines in this library. This is because some datasets are 
+    in basic formats such as JPG or PNG, so unique functions aren&#39;t necessary. We leave 
+    it up to the user to open these basic files in whichever way they prefer. Use the 
+    `list_supported_read_datasets()` function to see all datasets that have special
+    file reading functionality in this library.
+
+    Args:
+        dataset_name (str): 
+            The dataset name to check if file reading is supported. This parameter 
+            is required.
+    
+    Returns:
+        Boolean indicating if file reading is supported.
+    &#34;&#34;&#34;
+    return self.__aurorax_obj.srs_obj.data.is_read_supported(dataset_name)</code></pre>
+</details>
 <div class="desc"><p>Check if a given dataset has file reading support. </p>
 <p>Not all datasets available in the UCalgary Space Remote Sensing Open Data Platform
 have special readfile routines in this library. This is because some datasets are
@@ -2232,6 +3069,41 @@ is required.</dd>
 <span>def <span class="ident">list_datasets</span></span>(<span>self, name: str | None = None, timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
+    &#34;&#34;&#34;
+    List available datasets
+
+    Args:
+        name (str): 
+            Supply a name used for filtering. If that name is found in the available dataset 
+            names received from the API, it will be included in the results. This parameter is
+            optional.
+        
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+        
+    Returns:
+        A list of [`Dataset`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset)
+        objects.
+    
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+    &#34;&#34;&#34;
+    try:
+        return self.__aurorax_obj.srs_obj.data.list_datasets(
+            name=name,
+            timeout=timeout,
+            supported_library=&#34;pyaurorax&#34;,
+        )
+    except SRSAPIError as e:
+        raise AuroraXAPIError(e) from e</code></pre>
+</details>
 <div class="desc"><p>List available datasets</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2257,6 +3129,44 @@ objects.</p>
 <span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue', 'trex_spectrograph'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_observatories(self,
+                       instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;],
+                       uid: Optional[str] = None,
+                       timeout: Optional[int] = None) -&gt; List[Observatory]:
+    &#34;&#34;&#34;
+    List information about observatories
+
+    Args:
+        instrument_array (str): 
+            The instrument array to list observatories for. Valid values are: themis_asi, rego, 
+            trex_rgb, trex_nir, trex_blue, and trex_spectrograph.
+
+        uid (str): 
+            Supply a observatory unique identifier used for filtering (usually 4-letter site code). If that UID 
+            is found in the available observatories received from the API, it will be included in the results. This 
+            parameter is optional.
+        
+        timeout (int): 
+            Represents how many seconds to wait for the API to send data before giving up. The 
+            default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
+            object. This parameter is optional.
+        
+    Returns:
+        A list of [`Observatory`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory)
+        objects.
+    
+    Raises:
+        pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
+    &#34;&#34;&#34;
+    try:
+        return self.__aurorax_obj.srs_obj.data.list_observatories(instrument_array, uid=uid, timeout=timeout)
+    except SRSAPIError as e:
+        raise AuroraXAPIError(e) from e</code></pre>
+</details>
 <div class="desc"><p>List information about observatories</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -2285,6 +3195,19 @@ objects.</p>
 <span>def <span class="ident">list_supported_read_datasets</span></span>(<span>self) ‑> List[str]</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_supported_read_datasets(self) -&gt; List[str]:
+    &#34;&#34;&#34;
+    List the datasets which have file reading capabilities supported.
+
+    Returns:
+        A list of the dataset names with file reading support.
+    &#34;&#34;&#34;
+    return self.__aurorax_obj.srs_obj.data.list_supported_read_datasets()</code></pre>
+</details>
 <div class="desc"><p>List the datasets which have file reading capabilities supported.</p>
 <h2 id="returns">Returns</h2>
 <p>A list of the dataset names with file reading support.</p></div>
@@ -2293,6 +3216,101 @@ objects.</p>
 <span>def <span class="ident">read</span></span>(<span>self,<br>dataset: pyucalgarysrs.data.classes.Dataset,<br>file_list: List[str] | List[pathlib.Path] | str | pathlib.Path,<br>n_parallel: int = 1,<br>first_record: bool = False,<br>no_metadata: bool = False,<br>start_time: datetime.datetime | None = None,<br>end_time: datetime.datetime | None = None,<br>quiet: bool = False) ‑> pyucalgarysrs.data.classes.Data</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read(self,
+         dataset: Dataset,
+         file_list: Union[List[str], List[Path], str, Path],
+         n_parallel: int = 1,
+         first_record: bool = False,
+         no_metadata: bool = False,
+         start_time: Optional[datetime.datetime] = None,
+         end_time: Optional[datetime.datetime] = None,
+         quiet: bool = False) -&gt; Data:
+    &#34;&#34;&#34;
+    Read in data files for a given dataset. Note that only one type of dataset&#39;s data
+    should be read in using a single call.
+
+    Args:
+        dataset (Dataset): 
+            The dataset object for which the files are associated with. This parameter is
+            required.
+        
+        file_list (List[str], List[Path], str, Path): 
+            The files to read in. Absolute paths are recommended, but not technically
+            necessary. This can be a single string for a file, or a list of strings to read
+            in multiple files. This parameter is required.
+
+        n_parallel (int): 
+            Number of data files to read in parallel using multiprocessing. Default value 
+            is 1. Adjust according to your computer&#39;s available resources. This parameter 
+            is optional.
+        
+        first_record (bool): 
+            Only read in the first record in each file. This is the same as the first_frame
+            parameter in the themis-imager-readfile and trex-imager-readfile libraries, and
+            is a read optimization if you only need one image per minute, as opposed to the
+            full temporal resolution of data (e.g., 3sec cadence). This parameter is optional.
+        
+        no_metadata (bool): 
+            Skip reading of metadata. This is a minor optimization if the metadata is not needed.
+            Default is `False`. This parameter is optional.
+
+        start_time (datetime.datetime): 
+            The start timestamp to read data onwards from (inclusive). This can be utilized to 
+            read a portion of a data file, and could be paired with the `end_time` parameter. 
+            This tends to be utilized for datasets that are hour or day-long files where it is 
+            possible to only read a smaller bit of that file. An example is the TREx Spectrograph 
+            processed data (1 hour files), or the riometer data (1 day files). If not supplied, 
+            it will assume the start time is the timestamp of the first record in the first 
+            file supplied (ie. beginning of the supplied data). This parameter is optional.
+
+        end_time (datetime.datetime): 
+            The end timestamp to read data up to (inclusive). This can be utilized to read a 
+            portion of a data file, and could be paired with the `start_time` parameter. This 
+            tends to be utilized for datasets that are hour or day-long files where it is possible 
+            to only read a smaller bit of that file. An example is the TREx Spectrograph processed 
+            data (1 hour files), or the riometer data (1 day files). If not supplied, it will
+            it will assume the end time is the timestamp of the last record in the last file
+            supplied (ie. end of the supplied data). This parameter is optional.
+
+        quiet (bool): 
+            Do not print out errors while reading data files, if any are encountered. Any files
+            that encounter errors will be, as usual, accessible via the `problematic_files` 
+            attribute of the returned `Data` object. This parameter is optional.
+    
+    Returns:
+        A [`Data`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Data) 
+        object containing the data read in, among other values.
+    
+    Raises:
+        pyaurorax.exceptions.AuroraXUnsupportedReadError: an unsupported dataset was used when
+            trying to read files.
+        pyaurorax.exceptions.AuroraXError: a generic read error was encountered
+
+    Notes:
+    ---------
+    For users who are familiar with the themis-imager-readfile and trex-imager-readfile
+    libraries, the read function provides a near-identical usage. Further improvements have 
+    been integrated, and those libraries are anticipated to be deprecated at some point in the
+    future.
+    &#34;&#34;&#34;
+    # NOTE: we do not wrap the exceptions here, instead we pass the call along
+    # to the ReadManager object since the method and exception catching is
+    # implemented there. No need to duplicate the exception handling logic.
+    return self.__readers.read(
+        dataset,
+        file_list,
+        n_parallel=n_parallel,
+        first_record=first_record,
+        no_metadata=no_metadata,
+        start_time=start_time,
+        end_time=end_time,
+        quiet=quiet,
+    )</code></pre>
+</details>
 <div class="desc"><p>Read in data files for a given dataset. Note that only one type of dataset's data
 should be read in using a single call.</p>
 <h2 id="args">Args</h2>
@@ -2526,7 +3544,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.3</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>
