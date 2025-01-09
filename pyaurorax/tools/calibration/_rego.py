@@ -47,7 +47,8 @@ def apply_calibration(
             Calibration object containing the Rayleighs data to utilize. This field is required if 
             the `step_rayleighs_calibration` is set to True.
         step_dark_frame_correction (bool): 
-            Perform the dark frame correction step. Defaults to `True`.
+            Perform the dark frame correction step by subtracting an average of a bottom corner grid from 
+            the image (ie. 4x4.). Defaults to `True`.
         step_flatfield_calibration (bool): 
             Perform the flatfield correction step. Defaults to `True`. Note that the `cal_flatfield` parameter
             must be supplied if this is True.
