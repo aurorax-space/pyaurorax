@@ -61,6 +61,7 @@ class MosaicSkymap:
         return self.__repr__()
 
     def __repr__(self) -> str:
+        # set special strings
         unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
                                                           for fill_arr in self.polyfill_lat))).replace("[", "").replace("]",
                                                                                                                         "").replace("), (", "),(")
@@ -73,12 +74,36 @@ class MosaicSkymap:
         polyfill_lon_str = "array(dims=%s, dtype=%s)" % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
         elevation_str = "array(dims=%s, dtype=%s)" % (unique_elevation_dims, self.elevation[0].dtype)
 
+        # return
         return "MosaicSkymap(polyfill_lat=%s, polyfill_lon=%s, elevation=%s, site_uid_list=%s)" % (
             polyfill_lat_str,
             polyfill_lon_str,
             elevation_str,
             self.site_uid_list.__repr__(),
         )
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                          for fill_arr in self.polyfill_lat))).replace("[", "").replace("]",
+                                                                                                                        "").replace("), (", "),(")
+        unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                          for fill_arr in self.polyfill_lon))).replace("[", "").replace("]",
+                                                                                                                        "").replace("), (", "),(")
+        unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace("[", "").replace("]", "").replace("), (", "),(")
+
+        polyfill_lat_str = "array(dims=%s, dtype=%s)" % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
+        polyfill_lon_str = "array(dims=%s, dtype=%s)" % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
+        elevation_str = "array(dims=%s, dtype=%s)" % (unique_elevation_dims, self.elevation[0].dtype)
+
+        # print
+        print("MosaicSkymap:")
+        print("  %-15s: %s" % ("polyfill_lat", polyfill_lat_str))
+        print("  %-15s: %s" % ("polyfill_lon", polyfill_lon_str))
+        print("  %-15s: %s" % ("elevation", elevation_str))
+        print("  %-15s: %s" % ("site_uid_list", self.site_uid_list))
 
 
 @dataclass
@@ -110,11 +135,30 @@ class MosaicData:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        unique_dimensions = str(list(dict.fromkeys(self.images_dimensions.values()))).replace("[", "").replace("]", "").replace("), (", "),(")
-        images_str = "Dict[%d sites of array(dims=%s)]" % (len(self.images.keys()), unique_dimensions)
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace("[", "").replace("]", "").replace("), (", "),(")
+        images_str = "Dict[%d sites of array(dims=%s)]" % (len(self.images.keys()), unique_dimensions_str)
         timestamps_str = "[%d timestamps]" % (len(self.timestamps))
 
+        # return
         return "MosaicData(images=%s, timestamps=%s, site_uid_list=%s)" % (images_str, timestamps_str, self.site_uid_list.__repr__())
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace("[", "").replace("]", "").replace("), (", "),(")
+        images_str = "Dict[%d sites of array(dims=%s)]" % (len(self.images.keys()), unique_dimensions_str)
+        timestamps_str = "[%d timestamps]" % (len(self.timestamps))
+
+        # print
+        print("MosaicData:")
+        print("  %-19s: %s" % ("site_uid_list", self.site_uid_list))
+        print("  %-19s: %s" % ("timestamps", timestamps_str))
+        print("  %-19s: %s" % ("images", images_str))
+        print("  %-19s: %s" % ("images_dimensions", self.images_dimensions))
+        print("  %-19s: %s" % ("data_types", self.data_types))
 
 
 @dataclass
@@ -155,12 +199,35 @@ class Mosaic:
             polycollection_str = "PolyCollection(...)"
 
         if self.contour_data is not None:
-            return "Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %s Contours)" % (
+            return "Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)" % (
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get("x", [])),
             )
         else:
             return "Mosaic(polygon_data=" + polycollection_str + ", cartopy_projection=Projection(%s))" % (self.cartopy_projection.to_string())
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+        if isinstance(self.polygon_data, list):
+            polycollection_str = "[PolyCollection(...), ...]"
+        else:
+            polycollection_str = "PolyCollection(...)"
+        cartopy_projection_str = "Projection(%s)" % (self.cartopy_projection.to_string())
+        if self.contour_data is not None:
+            contour_data_str = "%d Contours" % (len(self.contour_data.get("x", [])), )
+        else:
+            contour_data_str = "None"
+
+        # print
+        print("Mosaic:")
+        print("  %-23s: %s" % ("polygon_data", polycollection_str))
+        print("  %-23s: %s" % ("cartopy_projection", cartopy_projection_str))
+        print("  %-23s: %s" % ("contour_data", contour_data_str))
+        print("  %-23s: %s" % ("spect_cmap", self.spect_cmap))
+        print("  %-23s: %s" % ("spect_intensity_scale", self.spect_intensity_scale))
 
     def plot(self,
              map_extent: Sequence[Union[float, int]],
