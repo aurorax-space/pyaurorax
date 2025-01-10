@@ -34,7 +34,7 @@ def ccd(images: np.ndarray,
         
         ccd_bounds (List[int]): 
             A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric. 
-            Anticipated order is [x_0, x_1, y_0, y_1].
+            Anticipated order is [x0, x1, y0, y1].
 
         metric (str): 
             The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
