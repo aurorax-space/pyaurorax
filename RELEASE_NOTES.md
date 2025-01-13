@@ -2,12 +2,13 @@ Version 1.8.0
 -------------------
 
 - bump PyUCalgarySRS dependency to latest
+- added `pretty_print()` functions to all `at.tools` classes
 
 
 Version 1.7.0
 -------------------
 
-- added `pretty_print()` functions several classes: `DataSource`, `DataSourceStatistics`, `ConjunctionSearch`, `DataProductSearch`, `EphemerisSearch`
+- added `pretty_print()` functions to several classes: `DataSource`, `DataSourceStatistics`, `ConjunctionSearch`, `DataProductSearch`, `EphemerisSearch`
 
 
 Version 1.6.0

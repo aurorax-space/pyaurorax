@@ -30,7 +30,7 @@ def plot(spect_data: Data,
          spect_loc: Union[int, List[int]],
          title: Optional[str] = None,
          figsize: Optional[Tuple[int, int]] = None,
-         color: Optional[str] = None,
+         color: Optional[Union[str, List]] = None,
          ylog: bool = False,
          xlabel: str = "Wavelength (nm)",
          ylabel: str = "Intensity (R/nm)",
@@ -64,7 +64,7 @@ def plot(spect_data: Data,
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
-            color (str): 
+            color (str, List): 
                 A string or list of strings giving the matplotlib color names to use for plotting spectra.
 
             xlabel (str): 

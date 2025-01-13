@@ -54,6 +54,19 @@ class Montage:
 
         return "Montage(data=%s, timestamp=%s)" % (data_str, timestamp_str)
 
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+        data_str = "array(dims=%s, dtype=%s)" % (self.data.shape, self.data.dtype)
+        timestamp_str = "[%d datetime objects]" % (len(self.timestamp))
+
+        # print
+        print("Montage:")
+        print("  %-11s: %s" % ("data", data_str))
+        print("  %-11s: %s" % ("timestamp", timestamp_str))
+
     def plot(self,
              rows: int,
              cols: int,

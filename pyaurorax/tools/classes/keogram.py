@@ -77,6 +77,26 @@ class Keogram:
 
         return "Keogram(data=%s, timestamp=%s, ccd_y=%s, mag_y=%s, geo_y=%s)" % (data_str, timestamp_str, ccd_y_str, mag_y_str, geo_y_str)
 
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+        data_str = "array(dims=%s, dtype=%s)" % (self.data.shape, self.data.dtype)
+        timestamp_str = "[%d datetime objects]" % (len(self.timestamp))
+        ccd_y_str = "None" if self.ccd_y is None else "array(%d values)" % (self.ccd_y.shape[0])
+        mag_y_str = "None" if self.mag_y is None else "array(%d values)" % (self.mag_y.shape[0])
+        geo_y_str = "None" if self.geo_y is None else "array(%d values)" % (self.geo_y.shape[0])
+
+        # print
+        print("Keogram:")
+        print("  %-17s: %s" % ("data", data_str))
+        print("  %-17s: %s" % ("timestamp", timestamp_str))
+        print("  %-17s: %s" % ("instrument_type", self.instrument_type))
+        print("  %-17s: %s" % ("ccd_y", ccd_y_str))
+        print("  %-17s: %s" % ("geo_y", geo_y_str))
+        print("  %-17s: %s" % ("mag_y", mag_y_str))
+
     def set_geographic_latitudes(self, skymap: Skymap, altitude_km: Optional[Union[int, float]] = None) -> None:
         """
         Set the geographic latitude values for this keogram, using the specified skymap 

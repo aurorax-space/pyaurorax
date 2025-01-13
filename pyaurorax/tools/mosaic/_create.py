@@ -429,12 +429,12 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             mosaic = Mosaic(polygon_data=img_poly_list[0],
                             cartopy_projection=cartopy_projection,
                             spect_cmap=spect_colormap,
-                            spect_intensity_scale=spect_intensity_scales)
+                            spect_intensity_scale=spect_intensity_scales)  # type: ignore
         else:
             mosaic = Mosaic(polygon_data=img_poly_list,
                             cartopy_projection=cartopy_projection,
                             spect_cmap=spect_colormap,
-                            spect_intensity_scale=spect_intensity_scales)
+                            spect_intensity_scale=spect_intensity_scales)  # type: ignore
     else:
         if len(img_poly_list) == 1:
             mosaic = Mosaic(polygon_data=img_poly_list[0], cartopy_projection=cartopy_projection)

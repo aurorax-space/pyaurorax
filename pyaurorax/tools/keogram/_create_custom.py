@@ -87,7 +87,7 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
             raise ValueError("Altitude " + str(altitude_km) + " outside valid range of " +
                              str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
 
-        # Initialze empty lat/lon arrays
+        # Initialize empty lat/lon arrays
         lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
         lons = lats.copy()
 
@@ -101,10 +101,13 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
 
     # Convert skymap to magnetic coords if necessary
     if magnetic:
-        mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
-                                                                  lons.flatten(), (lons * 0.0).flatten(),
-                                                                  timestamp[0],
-                                                                  method_code='G2A')
+        mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(
+            lats.flatten(),
+            lons.flatten(),
+            (lons * 0.0).flatten(),
+            timestamp[0],
+            method_code="G2A",
+        )
         lats = np.reshape(mag_lats, lats.shape)
         lons = np.reshape(mag_lons, lons.shape)
 
@@ -116,10 +119,10 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
         # Make sure lat/lon falls within skymap
         if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):
             continue
-            raise ValueError(f"Latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
+            # raise ValueError(f"Latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
         if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):
             continue
-            raise ValueError(f"Longitude {target_lon} is outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
+            # raise ValueError(f"Longitude {target_lon} is outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
 
         # Compute haversine distance between all points in skymap
         haversine_diff = __haversine_distances(target_lat, target_lon, lats, lons)
@@ -208,8 +211,8 @@ def create_custom(
     """
 
     # If using CCD coordinates we don't need a skymao or altitude
-    if (coordinate_system == 'ccd') and (skymap is not None or altitude_km is not None):
-        raise ValueError("Confliction in passing a Skymap in when working in CCD coordinates. Skymap is obsolete.")
+    if (coordinate_system == "ccd") and (skymap is not None or altitude_km is not None):
+        raise ValueError("Conflict in passing a Skymap in when working in CCD coordinates. Skymap is obsolete.")
 
     # convert any lists to np.arrays  and check shape
     x_locs = np.array(x_locs)
@@ -238,11 +241,11 @@ def create_custom(
         raise ValueError(f"X and Y coordinates must have same length. Sequences passed with shapes {x_locs.shape} and {y_locs.shape}")
 
     # Convert lat/lon coordinates to CCD
-    if coordinate_system == 'mag':
+    if coordinate_system == "mag":
         if (skymap is None or altitude_km is None):
             raise ValueError("When magnetic coordinates, a Skymap object and Altitude must be passed in through the skymap argument.")
         x_locs, y_locs = __convert_latlon_to_ccd(x_locs, y_locs, timestamp, skymap, altitude_km, magnetic=True)
-    elif coordinate_system == 'geo':
+    elif coordinate_system == "geo":
         if (skymap is None or altitude_km is None):
             raise ValueError("When geographic coordinates, a Skymap object and Altitude must be passed in through the skymap argument.")
         x_locs, y_locs = __convert_latlon_to_ccd(x_locs, y_locs, timestamp, skymap, altitude_km, magnetic=False)
@@ -334,11 +337,11 @@ def create_custom(
             preview_img[row_idx, col_idx] = np.iinfo(preview_img.dtype).max
 
             # Extract metric from all images and add to keogram
-            if metric == 'median':
+            if metric == "median":
                 pixel_keogram = np.median(images[row_idx, col_idx, :], axis=0)
-            elif metric == 'mean':
+            elif metric == "mean":
                 pixel_keogram = np.mean(images[row_idx, col_idx, :], axis=0)
-            elif metric == 'sum':
+            elif metric == "sum":
                 pixel_keogram = np.sum(images[row_idx, col_idx, :], axis=0)
             keo_arr[i, :] = pixel_keogram
         elif n_channels == 3:
@@ -346,15 +349,15 @@ def create_custom(
             preview_img[row_idx, col_idx, :] = np.iinfo(preview_img.dtype).max
 
             # Extract metric from all images and add to keogram
-            if metric == 'median':
+            if metric == "median":
                 r_pixel_keogram = np.floor(np.median(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.median(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.median(images[row_idx, col_idx, 2, :], axis=0))
-            elif metric == 'mean':
+            elif metric == "mean":
                 r_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 2, :], axis=0))
-            elif metric == 'sum':
+            elif metric == "sum":
                 r_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 2, :], axis=0))
@@ -370,13 +373,15 @@ def create_custom(
                          "try increasing 'width' or decreasing number of points in input coordinates.")
 
     # Create keogram object
-    keo_obj = Keogram(data=keo_arr, timestamp=timestamp, instrument_type='asi')
+    keo_obj = Keogram(data=keo_arr, timestamp=timestamp, instrument_type="asi")
 
+    # show preview
     if preview:
         plt.figure()
-        plt.imshow(preview_img, cmap='gray', origin='lower')
+        plt.imshow(preview_img, cmap="gray", origin="lower")
         plt.axis("off")
         plt.title("Keogram Domain Preview")
         plt.show()
 
+    # return
     return keo_obj
