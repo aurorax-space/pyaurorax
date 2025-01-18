@@ -584,8 +584,8 @@ class UCalgaryManager:
         dataset_name: str,
         site_uid: str,
         timestamp: datetime.datetime,
-        timeout: Optional[int] = None,
         overwrite: bool = False,
+        timeout: Optional[int] = None,
     ) -> FileDownloadResult:
         """
         Download the skymap file that best matches the parameters supplied.
@@ -602,6 +602,10 @@ class UCalgaryManager:
             timestamp (datetime.datetime): 
                 The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
                 data will be ignored. This parameter is required.
+
+            overwrite (bool): 
+                If the skymap file exists locally, download the file and overwrite it. Default is False. This
+                parameter is optional.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -660,8 +664,8 @@ class UCalgaryManager:
         dataset_name: str,
         device_uid: str,
         timestamp: datetime.datetime,
-        timeout: Optional[int] = None,
         overwrite: bool = False,
+        timeout: Optional[int] = None,
     ) -> FileDownloadResult:
         """
         Download the flatfield calibration file that best matches the parameters supplied.
@@ -678,6 +682,10 @@ class UCalgaryManager:
             timestamp (datetime.datetime): 
                 The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
                 data will be ignored. This parameter is required.
+
+            overwrite (bool): 
+                If the calibration file exists locally, download the file and overwrite it. Default is False. This
+                parameter is optional.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -736,8 +744,8 @@ class UCalgaryManager:
         dataset_name: str,
         device_uid: str,
         timestamp: datetime.datetime,
-        timeout: Optional[int] = None,
         overwrite: bool = False,
+        timeout: Optional[int] = None,
     ) -> FileDownloadResult:
         """
         Download the Rayleighs calibration file that best matches the parameters supplied.
@@ -754,6 +762,10 @@ class UCalgaryManager:
             timestamp (datetime.datetime): 
                 The timestamp to use for deciding the best calibration file, expected to be in 
                 UTC. Any timezone data will be ignored. This parameter is required.
+
+            overwrite (bool): 
+                If the calibration file exists locally, download the file and overwrite it. Default is False. This
+                parameter is optional.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
