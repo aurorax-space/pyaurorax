@@ -70,11 +70,11 @@ class Montage:
     def plot(self,
              rows: int,
              cols: int,
-             figsize: Optional[Tuple[int, int]] = None,
-             cmap: Optional[str] = None,
              timestamps_display: bool = True,
              timestamps_format: str = "%Y-%m-%d %H:%M:%S",
              timestamps_fontsize: int = 11,
+             figsize: Optional[Tuple[int, int]] = None,
+             cmap: Optional[str] = None,
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -86,6 +86,31 @@ class Montage:
         return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
         Args:
+            rows (int): 
+                The number of rows to use when displaying the images as a montage. The product of 
+                the `rows` and `cols` parameters must match the number of images supplied when creating 
+                the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+            cols (int): 
+                The number of columns to use when displaying the images as a montage. The product of 
+                the `rows` and `cols` parameters must match the number of images supplied when creating 
+                the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+            timestamps_display (bool): 
+                Display the timestamps on each montage image. Defaults to True. This parameter is
+                optional.
+
+            timestamps_format (str): 
+                The format of the timestamps when being displayed. This is the same format string
+                as when using the `strftime()` function for a `datetime` object. Default format 
+                string is `%Y-%m-%d %H:%M:%S`. Refer to the 
+                [Python documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes)
+                for further information. This parameter is optional.
+            
+            timestamps_fontsize (int): 
+                The font size for the displayed timestamps. Default is size 11. This parameter is 
+                optional.
+
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
@@ -128,8 +153,20 @@ class Montage:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice.
+            ValueError: Issues with the y-axis choice, or rows/cols choice.
         """
+        # check rows and cols
+        if (rows * cols != self.data.shape[-1]):
+            raise ValueError(("Invalid choice of rows and columns. The %d images in this Montage object " +
+                              "cannot be organized into a %dx%d grid (%d * %d != %d)") % (
+                                  self.data.shape[-1],
+                                  rows,
+                                  cols,
+                                  rows,
+                                  cols,
+                                  self.data.shape[-1],
+                              ))
+
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError("Only one of returnfig or savefig can be set to True")
