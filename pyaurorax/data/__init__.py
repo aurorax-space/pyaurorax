@@ -48,7 +48,7 @@ class DataManager:
         """
         return self.__ucalgary
 
-    def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -> List[Dataset]:
+    def list_datasets(self, name: Optional[str] = None, level: Optional[str] = None, timeout: Optional[int] = None) -> List[Dataset]:
         """
         List available datasets from all providers
 
@@ -57,6 +57,10 @@ class DataManager:
                 Supply a name used for filtering. If that name is found in the available dataset 
                 names received from the API, it will be included in the results. This parameter is
                 optional.
+
+            level (str): 
+                Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+                is optional.
             
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -74,7 +78,7 @@ class DataManager:
         datasets = []
 
         # get ucalgary datasets
-        ucalgary_datasets = self.__ucalgary.list_datasets(name=name, timeout=timeout)
+        ucalgary_datasets = self.__ucalgary.list_datasets(name=name, level=level, timeout=timeout)
 
         # merge
         datasets = datasets + ucalgary_datasets
@@ -85,7 +89,11 @@ class DataManager:
         # return
         return datasets
 
-    def list_datasets_in_table(self, name: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) -> None:
+    def list_datasets_in_table(self,
+                               name: Optional[str] = None,
+                               level: Optional[str] = None,
+                               max_width: int = 200,
+                               timeout: Optional[int] = None) -> None:
         """
         Print available datasets from all providers in a table
 
@@ -94,7 +102,11 @@ class DataManager:
                 Supply a name used for filtering. If that name is found in the available dataset 
                 names received from the API, it will be included in the results. This parameter is
                 optional.
-            
+
+            level (str): 
+                Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+                is optional.
+
             max_width (int): 
                 Maximum width of the table. Default is `200`. This parameter is optional.
 
@@ -110,7 +122,7 @@ class DataManager:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
         """
         # get datasets
-        datasets = self.list_datasets(name=name, timeout=timeout)
+        datasets = self.list_datasets(name=name, level=level, timeout=timeout)
 
         # set table lists
         table_names = []

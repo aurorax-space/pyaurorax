@@ -67,7 +67,7 @@ class UCalgaryManager:
         """
         return self.__readers
 
-    def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -> List[Dataset]:
+    def list_datasets(self, name: Optional[str] = None, level: Optional[str] = None, timeout: Optional[int] = None) -> List[Dataset]:
         """
         List available datasets
 
@@ -77,6 +77,10 @@ class UCalgaryManager:
                 names received from the API, it will be included in the results. This parameter is
                 optional.
             
+            level (str): 
+                Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+                is optional.
+
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
                 default is 10 seconds, or the `api_timeout` value in the super class' `pyaurorax.PyAuroraX`
@@ -92,6 +96,7 @@ class UCalgaryManager:
         try:
             return self.__aurorax_obj.srs_obj.data.list_datasets(
                 name=name,
+                level=level,
                 timeout=timeout,
                 supported_library="pyaurorax",
             )

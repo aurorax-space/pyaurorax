@@ -1,25 +1,22 @@
 Version 1.8.0
 -------------------
-
 - bump PyUCalgarySRS dependency to latest
 - added `pretty_print()` functions to all `at.tools` classes
+- added level filtering for dataset listing functions
 
 
 Version 1.7.0
 -------------------
-
 - added `pretty_print()` functions to several classes: `DataSource`, `DataSourceStatistics`, `ConjunctionSearch`, `DataProductSearch`, `EphemerisSearch`
 
 
 Version 1.6.0
 -------------------
-
 - added dataset_name optional parameter to the `purge_download_output_root_path()` function
 
 
 Version 1.5.0
 -------------------
-
 - added support for downloading, reading, and analysis of the TREx Spectrograph data
 - added support for `start_time` and `end_time` parameters to all read functions
 - added `get_dataset()` function for retrieving a specific single dataset
@@ -27,56 +24,47 @@ Version 1.5.0
 
 Version 1.4.0
 -------------------
-
 - updates for filtering datasets specifically supported by this library
 
 
 Version 1.3.3
 -------------------
-
 - pinned PyUCalgarySRS dependency
 
 
 Version 1.3.2
 --------------------
-
 - bugfix to `scale_intensity()` function to handle scaling a single RGB image
 
 
 Version 1.3.1
 --------------------
-
 - increase PyUCalgarySRS dependency version
 
 
 Version 1.3.0
 --------------------
-
 - adjustment to ATM `forward()` function `timescale_transport` default value. Changed from 5 minutes to 10 minutes.
 
 
 Version 1.2.0
 --------------------
-
 - addition of `prep_grid_image()` function for turning grid data to RGBA for plotting
 - added examples for plotting various gridded data
 
 
 Version 1.1.0
 --------------------
-
 - increase PyUCalgarySRS dependency version to support new grid file datasets
 
 
 Version 1.0.2
 --------------------
-
 - bugfix for search engine `get_data` calls where an extra slash in the URL was causing errors
 
 
 Version 1.0.1
 --------------------
-
 - bugfix for TREx RGB mosaic scaling
 - added ATM inverse `atmospheric_attenuation_correction` flag
 - forced PyUCalgarySRS version 1.0.8 or higher to support the above two fixes
@@ -84,7 +72,6 @@ Version 1.0.1
 
 Version 1.0.0
 --------------------
-
 Please note that this release contains major breaking changes.
 
 - Major codebase refactor. All functions are now accessed via a PyAuroraX object which must be instantiated. This was done in support of the new submodules.
@@ -113,31 +100,26 @@ functionality.
 
 Version 0.13.3
 --------------------
-
 Bugfix for `pyaurorax.Location` class validator
 
 
 Version 0.13.2
 --------------------
-
 Updated data source retrieval to handle new adhoc sources
 
 
 Version 0.13.1
 --------------------
-
 Minor bugfix for Ephemeris class output string
 
 
 Version 0.13.0
 --------------------
-
 Additional error handling for search requests.
 
 
 Version 0.12.0
 --------------------
-
 - Add search request listing to CLI program (#65)
 - Remove search_async functions (#49)
 - Remove data sources 'partial_update' function (#64)
@@ -146,13 +128,11 @@ Version 0.12.0
 
 Version 0.11.0
 --------------------
-
 Dropped support for Python 3.6 and added support for Python 3.10. Updated various dependency versions.
 
 
 Version 0.10.0
 --------------------
-
 - Add functions for interacting with Swarm-Aurora using conjunction searches (#73)
 - Remove default conjunction types of only nbtrace (#72)
 - Add functions for getting the request URL (#74)
@@ -160,7 +140,6 @@ Version 0.10.0
 
 Version 0.9.0
 --------------------
-
 - Final updates for 0.9.0 release (#69)
 - Switch data products delete and delete_daterange functions (#68)
 - Add aurorax-cli command line application (#30)
@@ -195,5 +174,4 @@ Version 0.9.0
 
 Version 0.8.0 or earlier
 --------------------
-
 Active development. Changes not documented.
