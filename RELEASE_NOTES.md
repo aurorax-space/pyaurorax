@@ -1,9 +1,13 @@
+Version 1.9.0
+-------------------
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.8.0
 -------------------
 - bump PyUCalgarySRS dependency to latest
 - added `pretty_print()` functions to all `at.tools` classes
 - added level filtering for dataset listing functions
-
 
 Version 1.7.0
 -------------------
