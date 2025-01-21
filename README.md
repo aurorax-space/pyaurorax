@@ -26,8 +26,11 @@ Futhermore, if you want the most bleeding edge version of PyAuroraX, you can ins
 
 ```console
 $ pip install pyaurorax@git+https://github.com/aurorax-space/pyaurorax
+```
 
-[OR]
+Or 
+
+```
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
 $ pip install .
