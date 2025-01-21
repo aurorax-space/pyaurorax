@@ -1,3 +1,10 @@
+Version 1.10.0
+-------------------
+- refactor `tools` modules to be integrated with `PyAuroraX()` object
+- added `progress_bar_backend` parameter to `PyAuroraX()` object
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.9.0
 -------------------
 - bump PyUCalgarySRS dependency to latest
