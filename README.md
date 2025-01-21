@@ -24,13 +24,11 @@ $ pip install pyaurorax
 
 Futhermore, if you want the most bleeding edge version of PyAuroraX, you can install it directly from the Github repository:
 
-```console
+```
 $ pip install pyaurorax@git+https://github.com/aurorax-space/pyaurorax
-```
 
-Or 
+Or, alternatively
 
-```
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
 $ pip install .
