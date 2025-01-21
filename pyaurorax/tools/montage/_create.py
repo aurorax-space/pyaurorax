@@ -15,29 +15,10 @@
 Routines for creating and manipulating montages
 """
 
-import datetime
-import numpy as np
-from typing import List
 from ..classes.montage import Montage
 
 
-def create(images: np.ndarray, timestamp: List[datetime.datetime]) -> Montage:
-    """
-    Create a montage from a set of images.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also 
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images]. If it is not, then be sure to specify the `axis` parameter
-            accordingly.
-
-        timestamp (List[datetime.datetime]): 
-            A list of timestamps corresponding to each image.
-
-    Returns:
-        A `pyaurorax.tools.Montage` object.
-    """
+def create(images, timestamp):
     # determine if we are single or 3 channel
     n_channels = 1
     if (len(images.shape) == 3):

@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import aacgmv2
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
-from typing import List, Literal, Union, Optional
 from ..classes.keogram import Keogram
 from ...data.ucalgary import Skymap
 
@@ -149,67 +147,7 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
     return x_locs, y_locs
 
 
-def create_custom(
-    images: np.ndarray,
-    timestamp: List[datetime.datetime],
-    coordinate_system: Literal["ccd", "geo", "mag"],
-    width: int,
-    x_locs: Union[List[Union[float, int]], np.ndarray],
-    y_locs: Union[List[Union[float, int]], np.ndarray],
-    preview: bool = False,
-    skymap: Optional[Skymap] = None,
-    altitude_km: Optional[Union[float, int]] = None,
-    metric: Literal["mean", "median", "sum"] = "median",
-) -> Keogram:
-    """
-    Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points, 
-    in CCD, geographic, or geomagnetic coordinates, within the bounds of the image data. Keogram is created
-    from the bottom up, meaning the first point will correspond to the bottom of the keogram data.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also 
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images]. If it is not, then be sure to specify the `axis` parameter
-            accordingly.
-
-        timestamp (List[datetime.datetime]): 
-            A list of timestamps corresponding to each image.
-        
-        coordinate_system (str): 
-            The coordinate system in which input points are defined. Valid options are "ccd", "geo", or "mag".
-        
-        width (int): 
-            Width of the desired keogram slice, in CCD pixel units.
-
-        x_locs (Sequence[float, int]): 
-            Sequence of points giving the x-coordinates that define a path through the image data, from
-            which to build the keogram.
-
-        y_locs (Sequence[float, int]): 
-            Sequence of points giving the y-coordinates that define a path through the image data, from
-            which to build the keogram.
-
-        preview (Optional[bool]): 
-            When True, the first frame in images will be displayed, with the keogram slice plotted.
-
-        skymap (Skymap): 
-            The skymap to use in georeferencing when working in geographic or magnetic coordinates.
-
-        altitude_km (float, int): 
-            The altitude of the image data, in km, to use in georeferencing when working in goegraphic
-            or magnetic coordinates.
-
-        metric (str): 
-            The metric used to compute values for each keogram pixel. Valid options are "median", "mean",
-            and "sum". Defaults to "median".
-        
-    Returns:
-        A `pyaurorax.tools.Keogram` object.
-
-    Raises:
-    """
-
+def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric):
     # If using CCD coordinates we don't need a skymao or altitude
     if (coordinate_system == "ccd") and (skymap is not None or altitude_km is not None):
         raise ValueError("Conflict in passing a Skymap in when working in CCD coordinates. Skymap is obsolete.")
@@ -338,10 +276,13 @@ def create_custom(
 
             # Extract metric from all images and add to keogram
             if metric == "median":
+                # median metric
                 pixel_keogram = np.median(images[row_idx, col_idx, :], axis=0)
             elif metric == "mean":
+                # mean metric
                 pixel_keogram = np.mean(images[row_idx, col_idx, :], axis=0)
-            elif metric == "sum":
+            else:
+                # sum metric
                 pixel_keogram = np.sum(images[row_idx, col_idx, :], axis=0)
             keo_arr[i, :] = pixel_keogram
         elif n_channels == 3:
@@ -357,7 +298,8 @@ def create_custom(
                 r_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 2, :], axis=0))
-            elif metric == "sum":
+            else:
+                # sum metric
                 r_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 2, :], axis=0))

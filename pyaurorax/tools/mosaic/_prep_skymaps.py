@@ -13,13 +13,11 @@
 # limitations under the License.
 
 import numpy as np
-from tqdm.auto import tqdm
 from tqdm.contrib.concurrent import process_map as tqdm_process_map
 from concurrent.futures import ProcessPoolExecutor
-from typing import List, Optional
-from ...data.ucalgary import Skymap
 from ..classes.mosaic import MosaicSkymap
 
+# globals
 SPECT_WIDTH_DEG = 1.0
 
 
@@ -148,41 +146,7 @@ def __flatten_skymap(processing_dict):
         }
 
 
-def prep_skymaps(skymaps: List[Skymap],
-                 height_km: int,
-                 site_uid_order: Optional[List[str]] = None,
-                 progress_bar_disable: bool = False,
-                 n_parallel: int = 1) -> MosaicSkymap:
-    """
-    Prepare skymap data for use by the mosaic routine. This is not time-dependent, so it 
-    would only need to be done once.
-
-    Allows for plotting multiple images on a map, masking the boundaries between 
-    images by elevation angle.
-
-    Args:
-        skymaps (List[pyaurorax.data.ucalgary.Skymap]): 
-            The skymaps to prep.
-        
-        height_km (int): 
-            The altitude to utilize, in kilometers.
-        
-        site_uid_order (List[str]): 
-            The site list order. The order of this list is not important for plotting, but must be
-            consistent with the order of the `skymaps` parameter.
-        
-        progress_bar_disable (bool): 
-            Disable the progress bar. Defaults to `False`.
-
-        n_parallel (int): 
-            Number of skymaps to prepare in parallel using multiprocessing. Default is `1`. 
-
-    Returns:
-        The prepared skymap data as a `pyaurorax.tools.MosaicSkymap` object.
-        
-    Raises:
-        ValueError: issues encountered with supplied parameters.
-    """
+def prep_skymaps(aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_disable, n_parallel):
     # reorder the skymap list based on the site_uid_list supplied
     skymaps_sorted = []
     site_uid_list = []
@@ -211,7 +175,7 @@ def prep_skymaps(skymaps: List[Skymap],
     polyfill_lat = []
     polyfill_lon = []
     for skymap in skymaps_sorted:
-        if skymap.project_uid == 'spect':
+        if skymap.project_uid == "spect":
             elevation.append(np.zeros((skymap.full_elevation.shape[0])))
             polyfill_lat.append(np.zeros((5, skymap.full_elevation.shape[0])))
             polyfill_lon.append(np.zeros((5, skymap.full_elevation.shape[0])))
@@ -240,7 +204,7 @@ def prep_skymaps(skymaps: List[Skymap],
                 polyfill_lat[results_dict["i"]] = results_dict["polyfill_lat"]
         else:
             # with progress bar
-            for processing_dict in tqdm(processing_dicts, desc="Preparing skymaps: ", unit="skymap"):
+            for processing_dict in aurorax_obj._tqdm(processing_dicts, desc="Preparing skymaps: ", unit="skymap"):
                 results_dict = __flatten_skymap(processing_dict)
                 elevation[results_dict["i"]] = results_dict["elevation"]
                 polyfill_lon[results_dict["i"]] = results_dict["polyfill_lon"]
@@ -261,7 +225,7 @@ def prep_skymaps(skymaps: List[Skymap],
                 chunksize=1,
                 desc="Preparing skymaps: ",
                 unit="skymap",
-                tqdm_class=tqdm,
+                tqdm_class=aurorax_obj._tqdm,
             )
             for results_dict in results_dicts:
                 elevation[results_dict["i"]] = results_dict["elevation"]

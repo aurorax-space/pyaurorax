@@ -16,19 +16,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
-def set_theme(theme: str) -> None:
-    """
-    A handy wrapper for setting the matplotlib global theme. Common choices are `light`, 
-    `dark`, or `default`.
-
-    Args:
-        theme (str): 
-            Theme name. Common choices are `light`, `dark`, or `default`. If default, then
-            matplotlib theme settings will be fully reset to their defaults.
-
-            Additional themes can be found on the 
-            [matplotlib documentation](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)
-    """
+def set_theme(theme):
     if ("theme" == "default"):
         mpl.rcParams.update(mpl.rcParamsDefault)
     elif (theme == "light"):

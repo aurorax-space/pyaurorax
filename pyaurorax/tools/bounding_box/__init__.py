@@ -15,8 +15,31 @@
 Methods for working with data in a specific bounding box.
 """
 
-from . import extract_metric
+# imports for this file
+from .extract_metric import ExtractMetricManager
 
-__all__ = [
-    "extract_metric",
-]
+__all__ = ["BoundingBoxManager"]
+
+
+class BoundingBoxManager:
+    """
+    The BoundingBoxManager object is initialized within every PyAuroraX object. It acts as a way to access 
+    the submodules and carry over configuration information in the super class.
+    """
+
+    def __init__(self, aurorax_obj):
+        # initialize super class object
+        self.__aurorax_obj = aurorax_obj
+
+        # initialize sub-modules
+        self.__extract_metric = ExtractMetricManager(self.__aurorax_obj)
+
+    # ------------------------------------------
+    # properties for submodule managers
+    # ------------------------------------------
+    @property
+    def extract_metric(self):
+        """
+        Access to the `extract_metric` submodule from within a PyAuroraX object.
+        """
+        return self.__extract_metric

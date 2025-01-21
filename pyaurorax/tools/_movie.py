@@ -13,8 +13,6 @@
 # limitations under the License.
 
 import cv2
-from typing import List
-from tqdm.auto import tqdm
 from tqdm.contrib.concurrent import process_map as tqdm_process_map
 from concurrent.futures import ProcessPoolExecutor
 
@@ -26,37 +24,7 @@ def __process_frame(fname):
     }
 
 
-def movie(
-    input_filenames: List[str],
-    output_filename: str,
-    n_parallel: int = 1,
-    fps: int = 25,
-    progress_bar_disable: bool = False,
-) -> None:
-    """
-    Generate a movie file from a list of filenames. Note that the codec used is "mp4v".
-
-    Args:
-        input_filenames (List[str]): 
-            Filenames of frames to use for movie generation. No sorting is applied, so it is 
-            assumed the list is in the desired order. This parameter is required.
-        
-        output_filename (str): 
-            Filename for the created movie file. This parameter is required.
-
-        n_parallel (int): 
-            Number of multiprocessing workers to use. Default is `1`, which does not use
-            multiprocessing.
-
-        fps (int): 
-            Frames per second (FPS) for the movie file. Default is `25`.
-
-        progress_bar_disable (bool): 
-            Toggle the progress bars off. Default is `False`.        
-
-    Raises:
-        IOError: I/O related issue while generating movie
-    """
+def movie(aurorax_obj, input_filenames, output_filename, n_parallel, fps, progress_bar_disable):
     # read in all frames
     #
     # NOTE: we do with using multiprocessing, but we need to be very
@@ -73,7 +41,7 @@ def movie(
                 frame_list.append(img)
         else:
             # with progress bar
-            for fname in tqdm(input_filenames, desc="Reading files: ", unit="files"):
+            for fname in aurorax_obj._tqdm(input_filenames, desc="Reading files: ", unit="files"):
                 img = cv2.imread(fname)
                 frame_list.append(img)
     else:
@@ -90,7 +58,7 @@ def movie(
                 chunksize=1,
                 desc="Reading files: ",
                 unit="files",
-                tqdm_class=tqdm,
+                tqdm_class=aurorax_obj._tqdm,
             )
             for result in results:
                 frame_list.append(result["img"])
@@ -120,7 +88,7 @@ def movie(
             writer.write(frame_list[i])
     else:
         # with progress bar
-        for i in tqdm(range(0, len(frame_list)), desc="Encoding frames: ", unit="frames"):
+        for i in aurorax_obj._tqdm(range(0, len(frame_list)), desc="Encoding frames: ", unit="frames"):
             writer.write(frame_list[i])
 
     # close the writer

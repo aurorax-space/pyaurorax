@@ -13,10 +13,7 @@
 # limitations under the License.
 
 import numpy as np
-import datetime
 import aacgmv2
-from typing import Union, Tuple, Optional
-from ...data.ucalgary import Skymap
 
 
 def __haversine_distances(target_lat, target_lon, lat_array, lon_array):
@@ -40,60 +37,7 @@ def __haversine_distances(target_lat, target_lon, lat_array, lon_array):
     return r * c
 
 
-def mag(skymap: Skymap,
-        timestamp: datetime.datetime,
-        altitude_km: Union[int, float],
-        contour_lats: Optional[Union[np.ndarray, list]] = None,
-        contour_lons: Optional[Union[np.ndarray, list]] = None,
-        constant_lat: Optional[Union[float, int]] = None,
-        constant_lon: Optional[Union[float, int]] = None,
-        n_points: Optional[int] = None,
-        remove_edge_cases: bool = True) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Obtain CCD Coordinates of a line of constant magnetic latitude, constant magnetic longitude, or a custom contour
-    defined in magnetic coordinates.
-
-    Args:
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the CCD image data to generate contours for.
-
-        timestamp (datetime.datetime): 
-            The timestamp used for AACGM Conversions.
-
-        altitude_km (int or float): 
-            The altitude of the image data to create contours for, in kilometers.
-
-        lats (ndarray or list): 
-                Sequence of magnetic latitudes defining a contour.
-            
-        lons (ndarray or list): 
-            Sequence of magnetic longitudes defining a contour.
-
-        constant_lats (float or int): 
-            Magnetic Latitude at which to create line of constant latitude.
-        
-        constant_lons (float or int): 
-            Magnetic Longitude at which to create line of constant longitude.
-
-        n_points (int or float): 
-            Optionally specify the number of points used to define a contour. By default
-            a reasonable value is selected automatically.
-        
-        remove_edge_cases (bool): 
-            Due to the nature of skymaps, often, around the edge of CCD data, contours will
-            have often undesired behaviour due to being bounded within the CCD range. The result
-            is flattened contours along the edge of CCD boundaries. This is completely expected,
-            and these points are removed by default, completely for aesthetic choices. Set this 
-            keyword to False to keep all points in the contour.
-            
-    Returns:
-        A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
-        the elevation contour.
-
-    Raises:
-        ValueError: invalid elevation supplied.
-    """
-
+def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat, constant_lon, n_points, remove_edge_cases):
     # Check that multiple contours are not defined based on arguments passed
     if (contour_lats is None) != (contour_lons is None):
         raise ValueError("When defining a custom contour, both 'contour_lats' and 'contour_lons' must be supplied.")

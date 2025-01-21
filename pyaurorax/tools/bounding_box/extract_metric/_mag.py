@@ -12,60 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import aacgmv2
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Union, Optional, Literal, Sequence
-from ....data.ucalgary import Skymap
-from ....tools import scale_intensity
 
 
-def mag(images: np.ndarray,
-        timestamp: datetime.datetime,
-        skymap: Skymap,
-        altitude_km: Union[int, float],
-        lonlat_bounds: Sequence[Union[int, float]],
-        metric: Literal["mean", "median", "sum"] = "median",
-        n_channels: Optional[int] = None,
-        show_preview: bool = False) -> np.ndarray:
-    """
-    Compute a metric of image data within a magnetic lat/lon boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the image data.
-        
-        altitude_km (int or float): 
-            The altitude of the image data in kilometers.
-
-        lonlat_bounds (Sequence): 
-            A 4-element sequence specifying the magnetic lat/lon bounds from which to extract the metric. 
-            Anticipated order is [lon_0, lon_1, lat_0, lat_1].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Default is `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-
-        show_preview (bool): 
-            Plot a preview of the bounded area.
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    """
-
+def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metric, n_channels, show_preview):
     # Select individual lats/lons from list
     lon_0 = lonlat_bounds[0]
     lon_1 = lonlat_bounds[1]
@@ -142,7 +94,7 @@ def mag(images: np.ndarray,
         lons[np.where(lons > 180)] -= 360.0  # Fix skymap to be in (-180,180) format
 
     # Convert skymap to magnetic coords
-    mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code='G2A')
+    mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code="G2A")
     mag_lats = np.reshape(mag_lats, lats.shape)
     mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -177,7 +129,7 @@ def mag(images: np.ndarray,
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
+            preview_img = aurorax_obj.tools.scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap="grey", origin="lower")
@@ -187,7 +139,7 @@ def mag(images: np.ndarray,
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img = aurorax_obj.tools.scale_intensity(images[:, :, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1], 0] = 255
             preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
@@ -199,11 +151,11 @@ def mag(images: np.ndarray,
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
     # Compute metric of interest
-    if metric == 'median':
+    if metric == "median":
         result = np.median(bound_data, axis=0)
-    elif metric == 'mean':
+    elif metric == "mean":
         result = np.mean(bound_data, axis=0)
-    elif metric == 'sum':
+    elif metric == "sum":
         result = np.sum(bound_data, axis=0)
     else:
         raise ValueError("Metric " + str(metric) + " is not recognized.")

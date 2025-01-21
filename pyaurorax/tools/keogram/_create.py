@@ -12,63 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
-import warnings
 import numpy as np
-from typing import List, Literal, Optional, Tuple
 from ..classes.keogram import Keogram
+from ..._util import show_warning
 
 
-def create(images: np.ndarray,
-           timestamp: List[datetime.datetime],
-           axis: int = 0,
-           spectra: bool = False,
-           wavelength: Optional[np.ndarray] = None,
-           spect_emission: Literal["green", "red", "blue", "hbeta"] = "green",
-           spect_band: Optional[Tuple[float, float]] = None,
-           spect_band_bg: Optional[Tuple[float, float]] = None) -> Keogram:
-    """
-    Create a keogram from a set of images.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also 
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images]. If it is not, then be sure to specify the `axis` parameter
-            accordingly.
-
-        timestamp (List[datetime.datetime]): 
-            A list of timestamps corresponding to each image.
-
-        axis (int): 
-            The axis to extract the keogram slice from. Default is `0`, meaning the rows (or Y) axis.
-
-        spectra (bool): 
-            Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data).
-
-        wavelength (numpy.ndarray): 
-            The wavelength array corresponding to spectrograph data. If spectra=True, this parameter
-            must be supplied.
-
-        spect_emission (str): 
-            The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 
-            'green' (557.7 nm emission).
-
-        spect_band (Tuple[float]): 
-            Manual selection of the wavelength region to integrate for obtaining emissions. Use this
-            to prepare emissions that are not available in spect_emission.
-
-        spect_band_bg (Tuple[float]): 
-            Manual selection of the wavelength region to subtract from integration for manually
-            chosen emissions, via the spect_band argument.
-
-    Returns:
-        A `pyaurorax.tools.Keogram` object.
-
-    Raises:
-        ValueError: issue with supplied parameters.
-    """
-
+def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_band, spect_band_bg):
     # First check if we are dealing with spectrograph data
     if spectra:
 
@@ -99,7 +48,7 @@ def create(images: np.ndarray,
         if spect_band is not None:
             wavelength_range = spect_band
             if spect_band_bg is None:
-                warnings.warn(
+                show_warning(
                     "Wavelength band supplied without background band. No background subtraction will be performed.",
                     stacklevel=1,
                 )

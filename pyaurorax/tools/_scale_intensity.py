@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import numpy as np
-from typing import Optional
 
 
 def __scale_data(data, min, max, top):
@@ -64,46 +63,7 @@ def __scale_data(data, min, max, top):
     return scaled_data
 
 
-def scale_intensity(
-    data: np.ndarray,
-    min: Optional[float] = None,
-    max: Optional[float] = None,
-    top: Optional[float] = None,
-    memory_saver: bool = True,
-) -> np.ndarray:
-    """
-    Scale all values of an array that lie in the range min<=x<=max in to 
-    the range 0<=x<=high.
-    
-    Args:
-        data (numpy.ndarray): 
-            Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of 
-            images. Also assumed that the first 2 dimensions are the image's x and y 
-            coordinates, and the following dimensions are some combination of the number of 
-            images, and/or the colour channel.
-
-        min (float): 
-            Minimum value of array to be considered
-
-        max (float): 
-            Maximum value of array to be considered
-
-        top (float): 
-            Maximum value of the scaled result. If not supplied, the max value
-            of the data array's dtype is used.
-
-        memory_saver (bool): 
-            Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
-            the scaling routine will be faster, but will utilize significantly more RAM.
-
-    Returns:
-        A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
-        with the scaling applied.
-
-    Raises:
-        ValueError: Issues with the supplied min, max, or top
-    """
-
+def scale_intensity(data, min, max, top, memory_saver):
     if (memory_saver is True):
         # Save original data shape
         input_shape = data.shape
@@ -119,11 +79,8 @@ def scale_intensity(
             # three channel
             n_channels = 3
         else:
-            raise ValueError(
-                "Unable to determine number of channels based on the supplied images. Make sure you are supplying a "
-                +
-                "[rows,cols,images] or [rows,cols,channels,images] sized array."
-            )
+            raise ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
+                             "[rows,cols,images] or [rows,cols,channels,images] sized array.")
 
         # init destination array
         images_scaled = np.empty((data.shape), dtype=data.dtype)
@@ -131,12 +88,9 @@ def scale_intensity(
         # cycle through each image
         for i in range(0, data.shape[-1]):
             if (n_channels == 1):
-                images_scaled[:, :, i] = __scale_data(data[:, :, i], min, max,
-                                                      top)
+                images_scaled[:, :, i] = __scale_data(data[:, :, i], min, max, top)
             else:
-                images_scaled[:, :, :,
-                              i] = __scale_data(data[:, :, :, i], min, max,
-                                                top)
+                images_scaled[:, :, :, i] = __scale_data(data[:, :, :, i], min, max, top)
 
         # Reshape to confirm output is the same shape as input
         images_scaled = np.reshape(images_scaled, input_shape)

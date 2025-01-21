@@ -14,18 +14,18 @@
 
 import os
 import shutil
-import warnings
 import humanize
 import pyucalgarysrs
 from texttable import Texttable
 from pathlib import Path
 from typing import Optional, Dict, Any, Literal
+from ._util import show_warning
 from . import __version__
 from .exceptions import AuroraXInitializationError, AuroraXPurgeError
 from .search import SearchManager
 from .data import DataManager
 from .models import ModelsManager
-from . import tools as tools_module
+from .tools import ToolsManager
 
 
 class PyAuroraX:
@@ -55,14 +55,17 @@ class PyAuroraX:
         "user-agent": "python-pyaurorax/%s" % (__version__),
     }  # NOTE: these MUST be lowercase so that the decorator logic cannot be overridden
 
-    def __init__(self,
-                 download_output_root_path: Optional[str] = None,
-                 read_tar_temp_path: Optional[str] = None,
-                 api_base_url: Optional[str] = None,
-                 api_timeout: Optional[int] = None,
-                 api_headers: Optional[Dict] = None,
-                 api_key: Optional[str] = None,
-                 srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None):
+    def __init__(
+        self,
+        download_output_root_path: Optional[str] = None,
+        read_tar_temp_path: Optional[str] = None,
+        api_base_url: Optional[str] = None,
+        api_timeout: Optional[int] = None,
+        api_headers: Optional[Dict] = None,
+        api_key: Optional[str] = None,
+        progress_bar_backend: Literal["auto", "standard", "notebook"] = "auto",
+        srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None,
+    ):
         """
         Attributes:
             download_output_root_path (str): 
@@ -95,6 +98,10 @@ class PyAuroraX:
                 that an API key is only required for write operations to the AuroraX search API, such as
                 creating data sources or uploading ephemeris data.
         
+            progress_bar_backend (str): 
+                The progress bar backend to use. Valid choices are 'auto', 'standard', or 'notebook'. 
+                Default is 'auto'. This parameter is optional.
+
             srs_obj (pyucalgarysrs.PyUCalgarySRS): 
                 A [PyUCalgarySRS](https://docs-pyucalgarysrs.phys.ucalgary.ca/#pyucalgarysrs.PyUCalgarySRS) object. 
                 If not supplied, it will create the object with some settings carried over from the PyAuroraX 
@@ -120,6 +127,10 @@ class PyAuroraX:
             self.__api_timeout = self.__DEFAULT_API_TIMEOUT
         self.__api_key = api_key
 
+        # initialize progress bar parameters
+        self.__progress_bar_backend = progress_bar_backend
+        self._tqdm = None
+
         # initialize paths
         self.__initialize_paths()
 
@@ -130,15 +141,19 @@ class PyAuroraX:
                 api_timeout=self.__api_timeout,
                 download_output_root_path=self.download_output_root_path,
                 read_tar_temp_path=self.read_tar_temp_path,
+                progress_bar_backend=progress_bar_backend,
             )
         else:
             self.__srs_obj = srs_obj
+
+        # initialize progress bar tqdm object (by pulling it from srs_obj)
+        self._tqdm = self.__srs_obj._tqdm
 
         # initialize sub-modules
         self.__search = SearchManager(self)
         self.__data = DataManager(self)
         self.__models = ModelsManager(self)
-        self.__tools = tools_module
+        self.__tools = ToolsManager(self)
 
     # ------------------------------------------
     # properties for submodule managers
@@ -210,7 +225,7 @@ class PyAuroraX:
             for k, v in value.items():
                 k = k.lower()
                 if (k in new_headers):
-                    warnings.warn("Cannot override default '%s' header" % (k), UserWarning, stacklevel=1)
+                    show_warning("Cannot override default '%s' header" % (k), stacklevel=1)
                 else:
                     new_headers[k] = v
         self.__api_headers = new_headers
@@ -270,6 +285,22 @@ class PyAuroraX:
         self.__srs_obj.read_tar_temp_path = self.__read_tar_temp_path
 
     @property
+    def progress_bar_backend(self):
+        """
+        Property for the progress bar backend. See above for details.
+        """
+        return self.__progress_bar_backend
+
+    @progress_bar_backend.setter
+    def progress_bar_backend(self, value: str):
+        value = value.lower()
+        if (value != "auto" and value != "standard" and value != "notebook"):
+            raise AuroraXInitializationError("Invalid progress bar backend. Allowed values are 'auto', 'standard' or 'notebook'.")
+        self.__progress_bar_backend = value
+        self.__srs_obj.progress_bar_backend = value
+        self._tqdm = self.__srs_obj._tqdm
+
+    @property
     def srs_obj(self):
         """
         Property for the PyUCalgarySRS object. See above for details.
@@ -288,14 +319,32 @@ class PyAuroraX:
 
     def __repr__(self) -> str:
         return ("PyAuroraX(download_output_root_path='%s', read_tar_temp_path='%s', api_base_url='%s', " +
-                "api_headers=%s, api_timeout=%s, api_key='%s', srs_obj=PyUCalgarySRS(...))") % (
+                "api_headers=%s, api_timeout=%s, api_key='%s', progress_bar_backend='%s', srs_obj=PyUCalgarySRS(...))") % (
                     self.__download_output_root_path,
                     self.__read_tar_temp_path,
                     self.api_base_url,
                     self.api_headers,
                     self.api_timeout,
+                    self.progress_bar_backend,
                     self.api_key,
                 )
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+
+        # print
+        print("PyAuroraX:")
+        print("  %-27s: %s" % ("download_output_root_path", self.download_output_root_path))
+        print("  %-27s: %s" % ("read_tar_temp_path", self.read_tar_temp_path))
+        print("  %-27s: %s" % ("api_base_url", self.api_base_url))
+        print("  %-27s: %s" % ("api_headers", self.api_headers))
+        print("  %-27s: %s" % ("api_timeout", self.api_timeout))
+        print("  %-27s: %s" % ("api_key", self.api_key))
+        print("  %-27s: %s" % ("progress_bar_backend", self.progress_bar_backend))
+        print("  %-27s: %s" % ("srs_obj", "PyUCalgarySRS(...)"))
 
     # -----------------------------
     # private methods

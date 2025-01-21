@@ -12,15 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import numpy as np
 import pyproj
-import datetime
 import cartopy.crs
 import cartopy.feature
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.collections
-from typing import Optional, Union, Dict, List, Tuple
-from ..classes.mosaic import Mosaic, MosaicData, MosaicSkymap
+from ..classes.mosaic import Mosaic
 from .._scale_intensity import scale_intensity
 
 # globals
@@ -30,72 +28,8 @@ __DEFAULT_SPECT_SCALE_MIN = 0
 __DEFAULT_SPECT_SCALE_MAX = 5000
 
 
-def create(prepped_data: Union[MosaicData, List[MosaicData]],
-           prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
-           timestamp: datetime.datetime,
-           cartopy_projection: cartopy.crs.Projection,
-           min_elevation: Union[int, List[int]] = 5,
-           colormap: Optional[Union[str, List[str]]] = None,
-           spect_colormap: Optional[Union[str, List[str]]] = None,
-           image_intensity_scales: Optional[Union[List, Dict]] = None,
-           spect_intensity_scales: Optional[Tuple[int, int]] = None) -> Mosaic:
-    """
-    Create a mosaic object.
-
-    Args:
-        prepped_data (pyaurorax.tools.MosaicData): 
-            The prepared mosaic data. Generated from a prior `prep_images()` function call.
-
-        prepped_skymap (pyaurorax.tools.MosaicSkymap): 
-            The prepared skymap data. Generated from a prior `prep_skymaps()` function call.
-
-        timestamp (datetime.datetime): 
-            The timestamp to generate a mosaic for. Must be within the range of timestamps
-            for which image data was prepped and provided.
-
-        cartopy_projection (cartopy.crs.Projection): 
-            The cartopy projection to use when creating the mosaic.
-
-        min_elevation (int): 
-            The minimum elevation cutoff when projecting images on the map, in degrees. Default is `5`.
-
-        colormap (str): 
-            The matplotlib colormap to use for the rendered image data. Default is `gray`.
-
-            Commonly used colormaps are:
-
-            - REGO: `gist_heat`
-            - THEMIS ASI: `gray`
-            - TREx Blue: `Blues_r`
-            - TREx NIR: `gray`
-            - TREx RGB: `None`
-
-            A list of all available colormaps can be found on the 
-            [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
-
-        spect_cmap (str): 
-            The matplotlib colormap to use for the colorbar if working with spectrograph
-            data. Default is `gnuplot`.
-
-        image_intensity_scaled (List or Dict): 
-            Ranges for scaling images. Either a a list with 2 elements which will scale all sites with 
-            the same range, or as a dictionary which can be used for scaling each site differently. 
-
-            Example of uniform scaling across all sites: 
-            `image_intensity_scales = [2000, 8000]`
-
-            Example of scaling each site differently:
-            `image_intensity_scales = {"fsmi": [1000, 10000], "gill": [2000, 8000]}`
-
-        spect_intensity_scaled (Tuple[int]): 
-            Min and max values, in Rayleighs, to scale ALL spectrograph data.
-
-    Returns:
-        The generated `pyaurorax.tools.Mosaic` object.
-
-    Raises:
-        ValueError: issues with supplied parameters.
-    """
+def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, colormap, spect_colormap, image_intensity_scales,
+           spect_intensity_scales):
     # init coordinates transformer
     #
     # To convert from geodetic coordinates onto the map projection, we use pyproj instead
@@ -130,7 +64,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
     if (len(prepped_data) != len(colormap)) or (len(prepped_skymap) != len(colormap)):
         raise ValueError("List of colormaps must have same length as lists of prepped data and prepped skymaps.")
 
-    # Itarate through each set of prepped data, prepped skymap
+    # Iterate through each set of prepped data, prepped skymap
     img_poly_list = []
     any_spect_data = False
     for mosaic_data_idx in range(len(prepped_data)):
@@ -167,9 +101,8 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             raise ValueError("Invalid image_intensity_scales format. Please refer to the documentation for this function.")
 
         # We need a numpy array of the sites requested, that will be used to make sure any sites
-        # that don't have data for the requested frame are not plotted. Also empty dict for images..
+        # that don't have data for the requested frame are not plotted. Also empty dict for images.
         site_list_arr = np.array(site_list)
-        # all_images = np.zeros([len(site_list), width * height, __N_CHANNELS], dtype=np.int32)
         all_images = {}
 
         # Grab the elevation, and filling lats/lons
@@ -290,7 +223,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
 
                 # Skip spectrograph data for now as that should always be plotted last
-                if datatypes_with_data[site_idx] == 'spect':
+                if datatypes_with_data[site_idx] == "spect":
                     continue
 
                 if spect_colormap is None:
@@ -350,7 +283,7 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
 
                 # Skip spectrograph data for now as that should always be plotted last
-                if datatypes_with_data[site_idx] != 'spect':
+                if datatypes_with_data[site_idx] != "spect":
                     continue
 
                 # Get this sites number of channels
@@ -440,5 +373,6 @@ def create(prepped_data: Union[MosaicData, List[MosaicData]],
             mosaic = Mosaic(polygon_data=img_poly_list[0], cartopy_projection=cartopy_projection)
         else:
             mosaic = Mosaic(polygon_data=img_poly_list, cartopy_projection=cartopy_projection)
+
     # return
     return mosaic

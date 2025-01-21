@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import warnings
 import datetime
 from .classes.data_source import DataSource, FORMAT_FULL_RECORD
 from .classes.data_source_stats import DataSourceStatistics
@@ -23,6 +22,7 @@ from ...exceptions import (
     AuroraXConflictError,
     AuroraXAPIError,
 )
+from ..._util import show_warning
 
 
 def __serialize_data_source_stats(stats):
@@ -151,7 +151,7 @@ def get(aurorax_obj, program, platform, instrument_type, format, include_stats):
     if (len(sources) == 1):
         return sources[0]
     elif (len(sources) > 1):
-        warnings.warn("Found more than one data source matching this criteria, returning the first (found %d)" % (len(sources)), stacklevel=1)
+        show_warning("Found more than one data source matching this criteria, returning the first (found %d)" % (len(sources)), stacklevel=1)
         return sources[0]
     else:
         raise AuroraXNotFoundError("No matching data source found")

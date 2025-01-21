@@ -14,52 +14,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Union, Optional, Literal, Sequence
-from ....data.ucalgary import Skymap
-from ....tools import scale_intensity
 
 
-def elevation(images: np.ndarray,
-              skymap: Skymap,
-              elevation_bounds: Sequence[Union[int, float]],
-              metric: Literal["mean", "median", "sum"] = "median",
-              n_channels: Optional[int] = None,
-              show_preview: bool = False) -> np.ndarray:
-    """
-    Compute a metric of image data within an elevation boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the image data.
-
-        elevation_bounds (Sequence): 
-            A 2-element sequence specifying the elevation bounds from which to extract the metric. 
-            Anticipated order is [el_min, el_max].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Default is `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-        
-        show_preview (bool): 
-            Plot a preview of the bounded area.
-
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within elevation range, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    """
-
+def elevation(aurorax_obj, images, skymap, elevation_bounds, metric, n_channels, show_preview):
     # Select individual elevations from list
     elev_0 = elevation_bounds[0]
     elev_1 = elevation_bounds[1]
@@ -105,7 +62,7 @@ def elevation(images: np.ndarray,
     if n_channels == 1:
         bound_data = images[bound_idx[0], bound_idx[1], :]
         if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
+            preview_img = aurorax_obj.tools.scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
             plt.imshow(preview_img, cmap="grey", origin="lower")
@@ -115,7 +72,7 @@ def elevation(images: np.ndarray,
     elif n_channels == 3:
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img = aurorax_obj.tools.scale_intensity(images[:, :, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1], 0] = 255
             preview_img[bound_idx[0], bound_idx[1], 1:] = 0
             plt.figure()
@@ -127,13 +84,14 @@ def elevation(images: np.ndarray,
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
     # Compute metric of interest
-    if metric == 'median':
+    if metric == "median":
         result = np.median(bound_data, axis=0)
-    elif metric == 'mean':
+    elif metric == "mean":
         result = np.mean(bound_data, axis=0)
-    elif metric == 'sum':
+    elif metric == "sum":
         result = np.sum(bound_data, axis=0)
     else:
         raise ValueError("Metric " + str(metric) + " is not recognized.")
 
+    # return
     return result

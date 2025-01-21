@@ -17,7 +17,7 @@ Functions for interacting with AuroraX requests
 
 import datetime
 import time
-import warnings
+from ..._util import show_warning
 from ..api.classes.request import AuroraXAPIRequest
 from ..location import Location
 from ...exceptions import (
@@ -139,9 +139,9 @@ def cancel(aurorax_obj, request_url, wait, poll_interval, verbose):
 def list(aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition):
     # check the search request type
     if (search_type is not None and search_type not in __ALLOWED_SEARCH_LISTING_TYPES):
-        warnings.warn("The search type value '%s' is not one that PyAuroraX knows about. Supported values are: "
-                      "%s. Aborting request." % (search_type, ', '.join(__ALLOWED_SEARCH_LISTING_TYPES)),
-                      stacklevel=1)
+        show_warning("The search type value '%s' is not one that PyAuroraX knows about. Supported values are: "
+                     "%s. Aborting request." % (search_type, ', '.join(__ALLOWED_SEARCH_LISTING_TYPES)),
+                     stacklevel=1)
         return []
 
     # set params

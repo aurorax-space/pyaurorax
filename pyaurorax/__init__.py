@@ -32,7 +32,7 @@ aurorax = pyaurorax.PyAuroraX()
 """
 
 # versioning info
-__version__ = "1.9.0"
+__version__ = "1.10.0"
 
 # documentation excludes
 __pdoc__ = {"cli": False, "pyaurorax": False}
@@ -51,6 +51,7 @@ from .pyaurorax import PyAuroraX
 from . import search
 from . import data
 from . import models
+from . import tools
 
 # pull in exceptions
 from .exceptions import (

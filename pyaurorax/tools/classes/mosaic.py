@@ -17,7 +17,6 @@ Class representation for a mosaic.
 
 import os
 import datetime
-import warnings
 import pyproj
 import aacgmv2
 import matplotlib.colors
@@ -31,6 +30,7 @@ from typing import List, Dict, Tuple, Sequence, Union, Optional, Any
 from numpy import ndarray
 from matplotlib.collections import PolyCollection
 from cartopy.crs import Projection
+from ..._util import show_warning
 
 
 @dataclass
@@ -331,13 +331,13 @@ class Mosaic:
         if (returnfig is True and savefig is True):
             raise ValueError("Only one of returnfig or savefig can be set to True")
         if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn("The figure will be returned, but a savefig option parameter was supplied. Consider " +
-                          "removing the savefig option parameter(s) as they will be ignored.",
-                          stacklevel=1)
+            show_warning("The figure will be returned, but a savefig option parameter was supplied. Consider " +
+                         "removing the savefig option parameter(s) as they will be ignored.",
+                         stacklevel=1)
         elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn("A savefig option parameter was supplied, but the savefig parameter is False. The " +
-                          "savefig option parameters will be ignored.",
-                          stacklevel=1)
+            show_warning("A savefig option parameter was supplied, but the savefig parameter is False. The " +
+                         "savefig option parameters will be ignored.",
+                         stacklevel=1)
 
         # Get colormap if there is spectrograph data
         if self.spect_cmap is not None:
@@ -476,9 +476,9 @@ class Mosaic:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
-                                  "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
-                                  stacklevel=1)
+                    show_warning("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
+                                 "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches="tight")
 
             # clean up by closing the figure

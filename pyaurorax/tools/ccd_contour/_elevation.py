@@ -13,43 +13,9 @@
 # limitations under the License.
 
 import numpy as np
-from typing import Union, Tuple, Optional
-from ...data.ucalgary import Skymap
 
 
-def elevation(skymap: Skymap,
-              constant_elevation: Union[int, float],
-              n_points: Optional[int] = None,
-              remove_edge_cases: bool = True) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Obtain CCD Coordinates of a line of constant elevation.
-
-    Args:
-        skymap (pyaurorax.data.ucalgary.Skymap): 
-            The skymap corresponding to the CCD image data to generate contours for.
-
-        constant_elevation (int or float): 
-            The elevation angle, in degrees from the horizon, to create contour of.
-
-        n_points (int or float): 
-            Optionally specify the number of points used to define a contour. By default
-            a reasonable value is selected automatically.
-
-        remove_edge_cases (bool): 
-            Due to the nature of skymaps, often, around the edge of CCD data, contours will
-            have often undesired behaviour due to being bounded within the CCD range. The result
-            is flattened contours along the edge of CCD boundaries. This is completely expected,
-            and these points are removed by default, completely for aesthetic choices. Set this 
-            keyword to False to keep all points in the contour.
-            
-    Returns:
-        A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
-        the elevation contour.
-
-    Raises:
-        ValueError: invalid elevation supplied.
-    """
-
+def elevation(skymap, constant_elevation, n_points, remove_edge_cases):
     # First check that elevation is valid
     if constant_elevation < 0 or constant_elevation > 90:
         raise ValueError(f"Elevation of {constant_elevation} is outside of valid range (0,90).")

@@ -13,11 +13,10 @@
 # limitations under the License.
 
 import datetime
-import warnings
 import numpy as np
-from typing import List, Literal, Optional, Tuple
-from ...data.ucalgary import Data
+from typing import List
 from ..classes.mosaic import MosaicData
+from ..._util import show_warning
 
 
 def __determine_cadence(timestamp_arr: List[datetime.datetime]):
@@ -52,40 +51,7 @@ def __determine_cadence(timestamp_arr: List[datetime.datetime]):
     return most_frequent_diff_second
 
 
-def prep_images(image_list: List[Data],
-                data_attribute: Literal["data", "calibrated_data"] = "data",
-                spect_emission: Literal["green", "red", "blue", "hbeta"] = "green",
-                spect_band: Optional[Tuple[float, float]] = None,
-                spect_band_bg: Optional[Tuple[float, float]] = None) -> MosaicData:
-    """
-    Prepare the image data for use in a mosaic.
-
-    Args:
-        image_list (List[pyaurorax.data.ucalgary.Data]): 
-            List of image data. Each element of the list is the data for each site.
-        
-        data_attribute (str): 
-            The data attribute to use when prepping the images. Either `data` or `calibrated_data`. 
-            Default is `data`.
-
-        spect_emission (str):
-            The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 
-            'green' (557.7 nm emission).
-
-        spect_band (Tuple[float]):
-            Manual selection of the wavelength region to integrate for obtaining emissions. Use this
-            to prepare emissions that are not available in spect_emission.
-
-        spect_band_bg (Tuple[float]):
-            Manual selection of the wavelength region to subtract from integration for manually
-            chosen emissions, via the spect_band argument.
-
-    Returns:
-        The prepared data, as a `pyaurorax.tools.MosaicData` object.
-
-    Raises:
-        ValueError: issues encountered with supplied parameters.
-    """
+def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg):
     # set image dimensions and number of sites
     if (data_attribute == "data"):
         # check that the timestamp and calibrated data match in size
@@ -112,24 +78,24 @@ def prep_images(image_list: List[Data],
 
     # Determine integration bounds for spectrograph data
     wavelength_range = {
-        'green': [557.0 - 1.5, 557.0 + 1.5],
-        'red': [630.0 - 1.5, 630.0 + 1.5],
-        'blue': [427.8 - 3.0, 427.8 + 0.5],
-        'hbeta': [486.1 - 1.5, 486.1 + 1.5]
+        "green": [557.0 - 1.5, 557.0 + 1.5],
+        "red": [630.0 - 1.5, 630.0 + 1.5],
+        "blue": [427.8 - 3.0, 427.8 + 0.5],
+        "hbeta": [486.1 - 1.5, 486.1 + 1.5]
     }[spect_emission]
 
     wavelength_bg_range = {
-        'green': [552.0 - 1.5, 552.0 + 1.5],
-        'red': [625.0 - 1.5, 625.0 + 1.5],
-        'blue': [430.0 - 1.0, 430.0 + 1.0],
-        'hbeta': [480.0 - 1.0, 480.0 + 1.0]
+        "green": [552.0 - 1.5, 552.0 + 1.5],
+        "red": [625.0 - 1.5, 625.0 + 1.5],
+        "blue": [430.0 - 1.0, 430.0 + 1.0],
+        "hbeta": [480.0 - 1.0, 480.0 + 1.0]
     }[spect_emission]
 
     # Check if manual integration bands were supplied
     if spect_band is not None:
         wavelength_range = spect_band
         if spect_band_bg is None:
-            warnings.warn(
+            show_warning(
                 "Wavelength band supplied without background band. No background subtraction will be performed.",
                 stacklevel=1,
             )
@@ -173,18 +139,16 @@ def prep_images(image_list: List[Data],
 
         if (data_attribute == "data"):
             site_data = site_image_data.data
-        elif (data_attribute == "calibrated_data"):
+        else:
+            # data attribute can only be "calibrated_data"
             site_data = site_image_data.calibrated_data
 
         if site_image_data.dataset is None:
-            warnings.warn(
-                "Skipping data objects with missing datasets.",
-                stacklevel=1,
-            )
+            show_warning("Skipping data objects with missing datasets.", stacklevel=1)
             continue
 
         # set image dimensions
-        if 'SPECT' in site_image_data.dataset.name:
+        if "SPECT" in site_image_data.dataset.name:
             height = site_data.shape[1]
             width = 1
         else:
@@ -200,13 +164,13 @@ def prep_images(image_list: List[Data],
         int_w = None
         int_bg_w = None
         wavelength = None
-        if 'SPECT' in site_image_data.dataset.name:
+        if "spect" in site_image_data.dataset.name.lower():
             n_channels = 1
-            current_data_type = 'spect'
+            current_data_type = "spect"
             data_type_list.append(current_data_type)
 
             # Extract wavelength from metadata, and get integration indices
-            wavelength = site_image_data.metadata[0]['wavelength']
+            wavelength = site_image_data.metadata[0]["wavelength"]
             int_w = np.where((wavelength >= wavelength_range[0]) & (wavelength <= wavelength_range[1]))
             if wavelength_bg_range is not None:
                 int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
@@ -234,10 +198,7 @@ def prep_images(image_list: List[Data],
                 site_uid = site_uid + '_' + current_data_type
 
             else:
-                warnings.warn(
-                    "Same site between differing networks detected. Omitting additional '%s' data" % (site_uid),
-                    stacklevel=1,
-                )
+                show_warning("Same site between differing networks detected. Omitting additional '%s' data" % (site_uid), stacklevel=1)
                 continue
         site_uid_list.append(site_uid)
 
@@ -269,13 +230,13 @@ def prep_images(image_list: List[Data],
                 continue
             else:
                 # found data for this timestamp
-                if current_data_type == 'spect':
+                if current_data_type == "spect":
 
                     # Integrate over wavelengths to get Rayleighs
                     spectra = site_data[:, :, found_idx]
 
                     if (int_w is None) or (wavelength is None) or (int_bg_w is None):
-                        wavelength = site_image_data.metadata[0]['wavelength']
+                        wavelength = site_image_data.metadata[0]["wavelength"]
                         int_w = np.where((wavelength >= wavelength_range[0]) & (wavelength <= wavelength_range[1]))
                         if wavelength_bg_range is not None:
                             int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))

@@ -17,11 +17,11 @@ Class representation for a montage.
 
 import os
 import datetime
-import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 from dataclasses import dataclass
 from typing import List, Optional, Tuple, Any
+from ..._util import show_warning
 
 
 @dataclass
@@ -171,13 +171,13 @@ class Montage:
         if (returnfig is True and savefig is True):
             raise ValueError("Only one of returnfig or savefig can be set to True")
         if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn("The figure will be returned, but a savefig option parameter was supplied. Consider " +
-                          "removing the savefig option parameter(s) as they will be ignored.",
-                          stacklevel=1)
+            show_warning("The figure will be returned, but a savefig option parameter was supplied. Consider " +
+                         "removing the savefig option parameter(s) as they will be ignored.",
+                         stacklevel=1)
         elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn("A savefig option parameter was supplied, but the savefig parameter is False. The " +
-                          "savefig option parameters will be ignored.",
-                          stacklevel=1)
+            show_warning("A savefig option parameter was supplied, but the savefig parameter is False. The " +
+                         "savefig option parameters will be ignored.",
+                         stacklevel=1)
 
         # init figure
         fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
@@ -224,9 +224,9 @@ class Montage:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
-                                  "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
-                                  stacklevel=1)
+                    show_warning("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
+                                 "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches="tight")
 
             # clean up by closing the figure

@@ -14,46 +14,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Optional, Literal, Sequence
-from ....tools import scale_intensity
 
 
-def ccd(images: np.ndarray,
-        ccd_bounds: Sequence[int],
-        metric: Literal["mean", "median", "sum"] = "median",
-        n_channels: Optional[int] = None,
-        show_preview: bool = False) -> np.ndarray:
-    """
-    Compute a metric of image data within a CCD boundary.
-
-    Args:
-        images (numpy.ndarray): 
-            A set of images. Normally this would come directly from a data `read` call, but can also
-            be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
-            or [row, cols, channels, num_images].
-        
-        ccd_bounds (List[int]): 
-            A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric. 
-            Anticipated order is [x0, x1, y0, y1].
-
-        metric (str): 
-            The name of the metric that is to be computed for the bounded area. Valid metrics are `mean`,
-            `median`, `sum`. Defaults to `median`.
-
-        n_channels (int): 
-            By default, function will assume the type of data passed as input - this argument can be used
-            to manually specify the number of channels contained in image data.
-        
-        show_preview (bool): 
-            Plot a preview of the bounded area.
-
-    Returns:
-        A numpy.ndarray containing the metrics computed within CCD bounds, for all image frames.
-
-    Raises:
-        ValueError: issue encountered with value supplied in parameter
-    """
-
+def ccd(aurorax_obj, images, ccd_bounds, metric, n_channels, show_preview):
     # Select individual ccd x/y from list
     x_0 = ccd_bounds[0]
     x_1 = ccd_bounds[1]
@@ -100,7 +63,7 @@ def ccd(images: np.ndarray,
     if n_channels == 1:
         bound_data = images[y_0:y_1, x_0:x_1, :]
         if show_preview:
-            preview_img = scale_intensity(images[:, :, 0], top=230)
+            preview_img = aurorax_obj.tools.scale_intensity(images[:, :, 0], top=230)
             preview_img[y_0:y_1, x_0:x_1] = 255
             plt.figure()
             plt.imshow(preview_img, cmap="grey", origin="lower")
@@ -110,7 +73,7 @@ def ccd(images: np.ndarray,
     elif n_channels == 3:
         bound_data = images[y_0:y_1, x_0:x_1, :, :]
         if show_preview:
-            preview_img = scale_intensity(images[:, :, :, 0], top=230)
+            preview_img = aurorax_obj.tools.scale_intensity(images[:, :, :, 0], top=230)
             preview_img[y_0:y_1, x_0:x_1, 0] = 255
             preview_img[y_0:y_1, x_0:x_1, 1:] = 0
             plt.figure()
@@ -131,4 +94,5 @@ def ccd(images: np.ndarray,
     else:
         raise ValueError("Metric " + str(metric) + " is not recognized.")
 
+    # return
     return result

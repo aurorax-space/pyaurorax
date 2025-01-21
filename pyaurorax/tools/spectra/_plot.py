@@ -14,116 +14,41 @@
 
 import os
 import itertools
-import datetime
-import warnings
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List, Union, Optional, Tuple, Any
-from pyucalgarysrs.data.classes import Data
+from ..._util import show_warning
 
 
-# plot a single or multiple spectra from spect data
-def plot(spect_data: Data,
-         timestamp: Union[datetime.datetime, List[
-             datetime.datetime,
-         ]],
-         spect_loc: Union[int, List[int]],
-         title: Optional[str] = None,
-         figsize: Optional[Tuple[int, int]] = None,
-         color: Optional[Union[str, List]] = None,
-         ylog: bool = False,
-         xlabel: str = "Wavelength (nm)",
-         ylabel: str = "Intensity (R/nm)",
-         ylim: Optional[Tuple[int, int]] = None,
-         xlim: Optional[Tuple[int, int]] = None,
-         plot_line: Optional[Union[float, List[float]]] = None,
-         plot_line_color: Optional[Union[str, List[str]]] = None,
-         returnfig: bool = False,
-         savefig: bool = False,
-         savefig_filename: Optional[str] = None,
-         savefig_quality: Optional[int] = None) -> Any:
-    """
-        Generate a plot of one or more spectra from spectrograph data. 
-        
-        Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
-        return the matplotlib plot object for further usage (using the `returnfig` parameter).
-
-        Args:
-            spect_data (pyaurorax.data.ucalgary.Data): 
-                The data object containing spectrograph data.
-
-            timestamp (datetime.datetime): 
-                A timestamp or list of timestamps for which to plot spectra from.
-
-            spect_loc (int): 
-                An int or list of ints giving the spectrograph spatial bin indices to plot.
-
-            title (str): 
-                The title to display above the plotted spectra.
-
-            figsize (tuple): 
-                The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
-
-            color (str, List): 
-                A string or list of strings giving the matplotlib color names to use for plotting spectra.
-
-            xlabel (str): 
-                The x-axis label to use. Default is `Wavelength (nm)`.
-
-            ylabel (str): 
-                The y-axis label to use. Default is 'Intensity (Rayleighs)'.
-
-            ylim (Tuple[int]): 
-                The min and max values to display on the y-axis, in units of Rayleighs/nm.
-
-            xlim (Tuple[int]): 
-                The min and max values to display on the x-axis, in units of nm.
-
-            plot_line (float): 
-                A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing
-                to known emission wavelengths (e.g. 557.7).
-
-            plot_line_color (str): 
-                A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'.
-
-            returnfig (bool): 
-                Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
-                manipulation, for example, adding labels or a title in a different location than the default. 
-                
-                Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
-                with it. This can be achieved by doing `plt.close(fig)`. 
-                
-                Note that this method cannot be used in combination with `savefig`.
-
-            savefig (bool): 
-                Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
-                this parameter is set to True. Defaults to `False`.
-
-            savefig_filename (str): 
-                Filename to save the image to. Must be specified if the savefig parameter is set to True.
-
-            savefig_quality (int): 
-                Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
-                is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.
-
-        Returns:
-            The displayed spectra, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
-            set to True, the plotting variables `(fig, ax)` will be returned.
-
-        Raises:
-            ValueError: Issues with the y-axis choice.
-        """
+def plot(
+    spect_data,
+    timestamp,
+    spect_loc,
+    title,
+    figsize,
+    color,
+    ylog,
+    xlabel,
+    ylabel,
+    ylim,
+    xlim,
+    plot_line,
+    plot_line_color,
+    returnfig,
+    savefig,
+    savefig_filename,
+    savefig_quality,
+):
     # check return mode
     if (returnfig is True and savefig is True):
         raise ValueError("Only one of returnfig or savefig can be set to True")
     if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn("The figure will be returned, but a savefig option parameter was supplied. Consider " +
-                      "removing the savefig option parameter(s) as they will be ignored.",
-                      stacklevel=1)
+        show_warning("The figure will be returned, but a savefig option parameter was supplied. Consider " +
+                     "removing the savefig option parameter(s) as they will be ignored.",
+                     stacklevel=1)
     elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn("A savefig option parameter was supplied, but the savefig parameter is False. The " +
-                      "savefig option parameters will be ignored.",
-                      stacklevel=1)
+        show_warning("A savefig option parameter was supplied, but the savefig parameter is False. The " +
+                     "savefig option parameters will be ignored.",
+                     stacklevel=1)
 
     # init figure
     fig = plt.figure(figsize=figsize)
@@ -287,9 +212,9 @@ def plot(spect_data: Data,
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
-                              "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
-                              stacklevel=1)
+                show_warning("The savefig_quality parameter was specified, but is only used for saving JPG files. The " +
+                             "savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored",
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches="tight")
 
         # clean up by closing the figure
