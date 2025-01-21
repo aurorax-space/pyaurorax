@@ -18,7 +18,7 @@ Some links to help:
 
 PyAuroraX is available on PyPI so pip can be used to install it:
 
-```console
+```
 $ pip install pyaurorax
 ```
 
@@ -27,7 +27,7 @@ Futhermore, if you want the most bleeding edge version of PyAuroraX, you can ins
 ```
 $ pip install pyaurorax@git+https://github.com/aurorax-space/pyaurorax
 
-Or, alternatively
+Alternatively, you can clone the repo and installing locally
 
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
