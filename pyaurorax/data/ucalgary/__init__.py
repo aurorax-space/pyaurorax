@@ -267,6 +267,11 @@ class UCalgaryManager:
                 passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
                 optional. See Notes section below for further details.
 
+            progress_bar_desc (str): 
+                Description value to use when constructing the visual aspect of the progress bar (straight 
+                passthrough of the `desc` parameter in a tqdm progress bar). This parameter is optional. 
+                See notes section below for further details.
+
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
                 default is 10 seconds, or the `api_timeout` value in the super class' `pyaurorax.PyAuroraX`
@@ -369,6 +374,11 @@ class UCalgaryManager:
                 ASCII value to use when constructing the visual aspect of the progress bar (straight 
                 passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
                 optional. See Notes section below for further details.
+
+            progress_bar_desc (str): 
+                Description value to use when constructing the visual aspect of the progress bar (straight 
+                passthrough of the `desc` parameter in a tqdm progress bar). This parameter is optional. 
+                See notes section below for further details.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 

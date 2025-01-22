@@ -186,7 +186,25 @@ class ReadManager:
             no_metadata (bool): 
                 Skip reading of metadata. This is a minor optimization if the metadata is not needed.
                 Default is `False`. This parameter is optional.
-            
+
+            start_time (datetime.datetime): 
+                The start timestamp to read data onwards from (inclusive). This can be utilized to 
+                read a portion of a data file, and could be paired with the `end_time` parameter. 
+                This tends to be utilized for datasets that are hour or day-long files where it is 
+                possible to only read a smaller bit of that file. An example is the TREx Spectrograph 
+                processed data (1 hour files), or the riometer data (1 day files). If not supplied, 
+                it will assume the start time is the timestamp of the first record in the first 
+                file supplied (ie. beginning of the supplied data). This parameter is optional.
+
+            end_time (datetime.datetime): 
+                The end timestamp to read data up to (inclusive). This can be utilized to read a 
+                portion of a data file, and could be paired with the `start_time` parameter. This 
+                tends to be utilized for datasets that are hour or day-long files where it is possible 
+                to only read a smaller bit of that file. An example is the TREx Spectrograph processed 
+                data (1 hour files), or the riometer data (1 day files). If not supplied, it will
+                it will assume the end time is the timestamp of the last record in the last file
+                supplied (ie. end of the supplied data). This parameter is optional.
+
             quiet (bool): 
                 Do not print out errors while reading data files, if any are encountered. Any files
                 that encounter errors will be, as usual, accessible via the `problematic_files` 

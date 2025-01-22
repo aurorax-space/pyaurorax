@@ -23,8 +23,15 @@ import sys
 import os
 from termcolor import colored
 
+# globals
+return_success = True
+
 
 def process_file(f, license_file_lines):
+    # init
+    global return_success
+
+    # process the file
     try:
         # open
         fp = open(f, 'r')
@@ -43,7 +50,6 @@ def process_file(f, license_file_lines):
                 if (file_line[0:2] == "#!"):
                     file_line = fp.readline()
                     file_line = fp.readline()
-                # print("'%s' ----- '%s'" % (file_line.strip(), license_line.strip()))
                 if (file_line.strip() != license_line.strip()):
                     success = False
                     break
@@ -51,14 +57,17 @@ def process_file(f, license_file_lines):
             # check success
             if (success is False):
                 print(colored("Error: license file line mismatch: %s" % (f), "red"))
+                return_success = False
         else:
             # license does not exist
             print(colored("Error: license does not exist: %s" % (f), "red"))
+            return_success = False
 
         # close
         fp.close()
     except IOError:
         print(colored("Error processing file: %s" % (f), "red"))
+        return_success = False
 
 
 def main():
@@ -101,6 +110,12 @@ def main():
         # process files
         for f in file_list:
             process_file(f, license_file_lines)
+
+    # return
+    if (return_success is False):
+        return 1
+    else:
+        return 0
 
 
 # -----------------

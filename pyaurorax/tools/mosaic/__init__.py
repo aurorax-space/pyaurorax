@@ -157,15 +157,15 @@ class MosaicManager:
                 The data attribute to use when prepping the images. Either `data` or `calibrated_data`. 
                 Default is `data`.
 
-            spect_emission (str):
+            spect_emission (str): 
                 The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 
                 'green' (557.7 nm emission).
 
-            spect_band (Tuple[float]):
+            spect_band (Tuple[float]): 
                 Manual selection of the wavelength region to integrate for obtaining emissions. Use this
                 to prepare emissions that are not available in spect_emission.
 
-            spect_band_bg (Tuple[float]):
+            spect_band_bg (Tuple[float]): 
                 Manual selection of the wavelength region to subtract from integration for manually
                 chosen emissions, via the spect_band argument.
 

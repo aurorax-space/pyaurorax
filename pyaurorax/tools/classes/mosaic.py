@@ -41,15 +41,19 @@ class MosaicSkymap:
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
+
         elevation (List[numpy.ndarray]): 
             List of elevation data, with each element corresponding to each site. Order 
             matches that of the `site_uid_list` attribute.
+
         polyfoll_lat (List[numpy.ndarray]): 
             List of latitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
+
         polyfoll_lon (List[numpy.ndarray]): 
             List of longitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
+
     """
 
     site_uid_list: List[str]
@@ -114,13 +118,17 @@ class MosaicData:
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
+
         timestamps (List[datetime.datetime]): 
             Timestamps of corresponding images.
+
         images (Dict[str, numpy.ndarray]): 
             Image data prepared into the necessary format; a dictionary. Keys are the site UID, 
             ndarray is the prepared data.
+
         images_dimensions (Dict[str, Tuple]): 
             The image dimensions.
+
         data_types (List[str]): 
             The data types for each data object.    
     """
@@ -229,23 +237,25 @@ class Mosaic:
         print("  %-23s: %s" % ("spect_cmap", self.spect_cmap))
         print("  %-23s: %s" % ("spect_intensity_scale", self.spect_intensity_scale))
 
-    def plot(self,
-             map_extent: Sequence[Union[float, int]],
-             figsize: Optional[Tuple[int, int]] = None,
-             rayleighs: bool = False,
-             max_rayleighs: int = 20000,
-             title: Optional[str] = None,
-             colorbar_title: Optional[str] = None,
-             ocean_color: Optional[str] = None,
-             land_color: str = "gray",
-             land_edgecolor: str = "#8A8A8A",
-             borders_color: str = "#AEAEAE",
-             borders_disable: bool = False,
-             cbar_colormap: str = "",
-             returnfig: bool = False,
-             savefig: bool = False,
-             savefig_filename: Optional[str] = None,
-             savefig_quality: Optional[int] = None) -> Any:
+    def plot(
+            self,
+            map_extent: Sequence[Union[float, int]],
+            figsize: Optional[Tuple[int, int]] = None,
+            rayleighs: bool = False,
+            max_rayleighs: int = 20000,
+            title: Optional[str] = None,
+            ocean_color: Optional[str] = None,
+            land_color: str = "gray",
+            land_edgecolor: str = "#8A8A8A",
+            borders_color: str = "#AEAEAE",
+            borders_disable: bool = False,
+            colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
+            cbar_title: Optional[str] = None,
+            cbar_colormap: str = "",
+            returnfig: bool = False,
+            savefig: bool = False,
+            savefig_filename: Optional[str] = None,
+            savefig_quality: Optional[int] = None) -> Any:
         """
         Generate a plot of the mosaic data. 
         
@@ -266,6 +276,9 @@ class Mosaic:
             max_rayleighs (int): 
                 Max intensity scale for Rayleighs. Defaults to `20000`.
 
+            title (str): 
+                The title to display above the plotted mosaic. Default is no title.
+
             ocean_color (str): 
                 Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
                 as a word, or hexcode prefixed with a '#' character (ie. `#55AADD`).
@@ -285,7 +298,13 @@ class Mosaic:
             borders_disable (bool): 
                 Disbale rendering of the borders. Default is `False`.
 
-            cbar_colorcmap (str): 
+            cbar_title (str): 
+                Title for the colorbar. Default is no title.
+
+            colorbar_title (str): 
+                Deprecated as of v1.10.0. Use 'cbar_title' instead in the exact same way.
+
+            cbar_colormap (str): 
                 The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
                 mosaic was created with spectrograph data, in which case defaults to the colormap
                 used for spectrograph data..
@@ -327,6 +346,12 @@ class Mosaic:
 
         Raises:
         """
+        # handle deprecation warnings
+        if (colorbar_title is not None):
+            show_warning("The parameter 'colorbar_title' was deprecated in v1.11.0. Please use 'cbar_title' instead (usage is identical).",
+                         stacklevel=1)
+            cbar_title = colorbar_title
+
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError("Only one of returnfig or savefig can be set to True")
@@ -339,7 +364,7 @@ class Mosaic:
                          "savefig option parameters will be ignored.",
                          stacklevel=1)
 
-        # Get colormap if there is spectrograph data
+        # get colormap if there is spectrograph data
         if self.spect_cmap is not None:
             cbar_colormap = self.spect_cmap
 
@@ -438,7 +463,7 @@ class Mosaic:
             else:
                 cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
             cbar.ax.set_yticklabels(cbar_ticknames)
-            if colorbar_title is None:
+            if (cbar_title is None):
                 plt.text(1.025,
                          0.5,
                          "Spectrograph Intensity (Rayleighs)",
@@ -451,7 +476,7 @@ class Mosaic:
             else:
                 plt.text(1.025,
                          0.5,
-                         colorbar_title,
+                         cbar_title,
                          fontsize=10,
                          transform=ax.transAxes,
                          va="center",
@@ -510,28 +535,28 @@ class Mosaic:
         Add geographic contours to a mosaic.
 
         Args:
-            lats (ndarray or list):
+            lats (ndarray or list): 
                 Sequence of geographic latitudes defining a contour.
             
-            lons (ndarray or list):
+            lons (ndarray or list): 
                 Sequence of geographic longitudes defining a contour.
 
-            constant_lats (float, int, or Sequence):
+            constant_lats (float, int, or Sequence): 
                 Geographic Latitude(s) at which to add line(s) of constant latitude.
             
-            constant_lons (float, int, or Sequence):
+            constant_lons (float, int, or Sequence): 
                 Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-            color (str):
+            color (str): 
                 The matplotlib color used for the contour(s).
 
-            linewidth (float or int):
+            linewidth (float or int): 
                 The contour thickness.
             
-            linestyle (str):
+            linestyle (str): 
                 The matplotlib linestyle used for the contour(s).
 
-            marker (str):
+            marker (str): 
                 The matplotlib marker used for the contour(s).
 
         Returns:
@@ -616,6 +641,7 @@ class Mosaic:
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
                 const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
                 # Add contour to dict, along with color and linewidth
                 self.contour_data["x"].append(const_lat_x)
                 self.contour_data["y"].append(const_lat_y)
@@ -663,31 +689,31 @@ class Mosaic:
         Add geomagnetic contours to a mosaic.
 
         Args:
-            timestamp (datetime.datetime):
+            timestamp (datetime.datetime): 
                 The timestamp used in computing AACGM coordinates.
 
-            lats (ndarray or list):
+            lats (ndarray or list): 
                 Sequence of geomagnetic latitudes defining a contour.
             
-            lons (ndarray or list):
+            lons (ndarray or list): 
                 Sequence of geomagnetic longitudes defining a contour.
 
-            constant_lats (float, int, Sequence):
+            constant_lats (float, int, Sequence): 
                 Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
             
-            constant_lons (float, int, Sequence):
+            constant_lons (float, int, Sequence): 
                 Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-            color (str):
+            color (str): 
                 The matplotlib color used for the contour(s).
 
-            linewidth (float or int):
+            linewidth (float or int): 
                 The contour thickness.
 
-            linestyle (str):
+            linestyle (str): 
                 The matplotlib linestyle used for the contour(s).
 
-            marker (str):
+            marker (str): 
                 The matplotlib marker used for the contour(s).
 
         Returns:
@@ -747,6 +773,7 @@ class Mosaic:
             # Create specified contour from magnetic coords
             y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code="A2G")
             x, y = transformer.transform(x, y)
+
             # Add contour to dict, along with color and linewidth
             self.contour_data["x"].append(x)
             self.contour_data["y"].append(y)

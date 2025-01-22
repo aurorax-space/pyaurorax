@@ -1,4 +1,4 @@
-.PHONY: install update test test-linting test-pycodestyle test-bandit test-pytest test-pytest-search test-coverage show-outdated docs publish
+.PHONY: install update test test-linting test-pycodestyle test-bandit test-pytest test-pytest-search test-coverage show-outdated docs tool-checks publish
 
 all:
 
@@ -56,8 +56,13 @@ show-outdated:
 docs:
 	poetry run pdoc3 --html --force --output-dir docs/generated pyaurorax --config "lunr_search={'fuzziness': 1}" --template-dir docs/templates
 
+tool-checks:
+	@./tools/check_for_license.py
+	@./tools/check_docstrings.py
+
 publish:
 	${MAKE} test
+	${MAKE} tool-checks
 	poetry build
 	poetry publish
 	@rm -rf pyaurorax.egg-info build dist

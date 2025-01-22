@@ -34,14 +34,19 @@ class Keogram:
     Attributes:
         data (numpy.ndarray): 
             The derived keogram data.
+
         timestamp (List[datetime.datetime]): 
             Timestamps corresponding to each keogram slice.
-        instrument_type (str):
+
+        instrument_type (str): 
             String giving instrument type, either 'asi' or 'spectrograph'.
+
         ccd_y (numpy.ndarray): 
             The y-axis representing CCD Y coordinates for the keogram.
+
         mag_y (numpy.ndarray): 
             The y-axis representing magnetic latitude for the keogram.
+
         geo_y (numpy.ndarray): 
             The y-axis representing geographic latitude for the keogram.
     """
@@ -258,7 +263,7 @@ class Keogram:
                 default is `ccd`. This parameter is required.
 
             title (str): 
-                The title to display above the plotted keogram.
+                The title to display above the plotted keogram. Default is no title.
 
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.

@@ -134,16 +134,16 @@ class CCDContourManager:
             altitude_km (int or float): 
                 The altitude of the image data to create contours for, in kilometers.
 
-            lats (ndarray or list): 
+            contour_lats (ndarray or list): 
                     Sequence of geographic latitudes defining a contour.
                 
-            lons (ndarray or list): 
+            contour_lons (ndarray or list): 
                 Sequence of geographic longitudes defining a contour.
 
-            constant_lats (float or int): 
+            constant_lat (float or int): 
                 Geographic Latitude at which to create line of constant latitude.
             
-            constant_lons (float or int): 
+            constant_lon (float or int): 
                 Geographic Longitude at which to create line of constant longitude.
 
             n_points (int or float): 
@@ -190,16 +190,16 @@ class CCDContourManager:
             altitude_km (int or float): 
                 The altitude of the image data to create contours for, in kilometers.
 
-            lats (ndarray or list): 
+            contour_lats (ndarray or list): 
                     Sequence of magnetic latitudes defining a contour.
                 
-            lons (ndarray or list): 
+            contour_lons (ndarray or list): 
                 Sequence of magnetic longitudes defining a contour.
 
-            constant_lats (float or int): 
+            constant_lat (float or int): 
                 Magnetic Latitude at which to create line of constant latitude.
             
-            constant_lons (float or int): 
+            constant_lon (float or int): 
                 Magnetic Longitude at which to create line of constant longitude.
 
             n_points (int or float): 

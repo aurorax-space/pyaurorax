@@ -1,3 +1,9 @@
+Version 1.11.0
+-------------------
+- updates to docstrings
+- added `title` parameter to montage `create()` function
+
+
 Version 1.10.0
 -------------------
 - refactor `tools` modules to be integrated with `PyAuroraX()` object

@@ -74,6 +74,7 @@ class Montage:
              timestamps_format: str = "%Y-%m-%d %H:%M:%S",
              timestamps_fontsize: int = 11,
              figsize: Optional[Tuple[int, int]] = None,
+             title: Optional[str] = None,
              cmap: Optional[str] = None,
              returnfig: bool = False,
              savefig: bool = False,
@@ -113,6 +114,9 @@ class Montage:
 
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+            title (str): 
+                The title to display above the plotted montage. Default is no title.
 
             cmap (str): 
                 The matplotlib colormap to use.
@@ -181,6 +185,10 @@ class Montage:
 
         # init figure
         fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
+
+        # set title
+        if (title is not None):
+            fig.suptitle(title)
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
