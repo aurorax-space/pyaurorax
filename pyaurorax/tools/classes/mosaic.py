@@ -559,6 +559,9 @@ class Mosaic:
             marker (str): 
                 The matplotlib marker used for the contour(s).
 
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
+
         Returns:
             The object's contour_data parameter is populated appropriately.
 
@@ -715,6 +718,9 @@ class Mosaic:
 
             marker (str): 
                 The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
 
         Returns:
             The object's contour_data parameter is populated appropriately.

@@ -77,6 +77,9 @@ class SpectraManager:
             color (str, List): 
                 A string or list of strings giving the matplotlib color names to use for plotting spectra.
 
+            ylog (bool): 
+                Plot on a logarithmic axis. Default is linear.
+
             xlabel (str): 
                 The x-axis label to use. Default is `Wavelength (nm)`.
 

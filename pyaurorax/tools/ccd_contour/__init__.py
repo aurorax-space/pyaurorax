@@ -50,13 +50,13 @@ class CCDContourManager:
             skymap (pyaurorax.data.ucalgary.Skymap): 
                 The skymap corresponding to the CCD image data to generate contours for.
 
-            constant_elevation (int or float): 
-                The elevation angle, in degrees from the horizon, to create contour of.
+            constant_azimuth (int or float): 
+                The azimuth angle, in degrees, to create contour of.
 
             min_elevation (int or float): 
                 Optionally specify the elevation angle at which contour begins. Defaults to 5.
             
-            min_elevation (int or float): 
+            max_elevation (int or float): 
                 Optionally specify the elevation angle at which contour begins. Defaults to 90.
 
             n_points (int or float): 

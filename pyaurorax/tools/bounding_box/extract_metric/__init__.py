@@ -224,6 +224,9 @@ class ExtractMetricManager:
                 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
                 or [row, cols, channels, num_images].
             
+            timestamp (List[datetime.datetime]): 
+                A list of timestamps corresponding to each image.
+            
             skymap (pyaurorax.data.ucalgary.Skymap): 
                 The skymap corresponding to the image data.
             

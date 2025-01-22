@@ -92,7 +92,7 @@ class MosaicManager:
                 The matplotlib colormap to use for the colorbar if working with spectrograph
                 data. Default is `gnuplot`.
 
-            image_intensity_scaled (List or Dict): 
+            image_intensity_scales (List or Dict): 
                 Ranges for scaling images. Either a a list with 2 elements which will scale all sites with 
                 the same range, or as a dictionary which can be used for scaling each site differently. 
 
@@ -102,8 +102,11 @@ class MosaicManager:
                 Example of scaling each site differently:
                 `image_intensity_scales = {"fsmi": [1000, 10000], "gill": [2000, 8000]}`
 
-            spect_intensity_scaled (Tuple[int]): 
+            spect_intensity_scales (Tuple[int]): 
                 Min and max values, in Rayleighs, to scale ALL spectrograph data.
+
+            spect_colormap (str): 
+                The name of a matplotlib colormap to use for plotting spectrograph data.
 
         Returns:
             The generated `pyaurorax.tools.Mosaic` object.
