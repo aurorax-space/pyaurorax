@@ -191,7 +191,7 @@ def main():
     if (len(issues) == 0):
         print("[%s] Found 0 issues" % (datetime.datetime.now()))
     else:
-        print("[%s] Found %d issues, printing the report\n\n" % (datetime.datetime.now(), len(issues)))
+        print("[%s] Found %d issues, printing the report\n" % (datetime.datetime.now(), len(issues)))
         display_issues_table(issues)
 
     # return

@@ -2,6 +2,7 @@ Version 1.11.0
 -------------------
 - updates to docstrings
 - added `title` parameter to montage `create()` function
+- bump PyUCalgarySRS dependency to latest
 
 
 Version 1.10.0
