@@ -28,12 +28,23 @@ class AuroraXAPIRequest:
     Class definition for an AuroraX API request
 
     Attributes:
-        url (str): API endpoint URL for the request
-        method (str): the HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
-        params (Dict): URL parameters to send in the request, defaults to `{}`
-        body (Dict): the body of the request (ie. post data), defaults to `{}`
-        headers (Dict): any headers to send as part of the request (in addition to the default ones), defaults to `{}`
-        null_response (bool): signifies if we expect a response from the API that has no body/data in it (ie. 
+        url (str): 
+            API endpoint URL for the request
+
+        method (str): 
+            the HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
+
+        params (Dict): 
+            URL parameters to send in the request, defaults to `{}`
+
+        body (Dict): 
+            the body of the request (ie. post data), defaults to `{}`
+
+        headers (Dict): 
+            any headers to send as part of the request (in addition to the default ones), defaults to `{}`
+            
+        null_response (bool): 
+            signifies if we expect a response from the API that has no body/data in it (ie. 
             requests to upload data that respond with just a 202 status code), defaults to `False`
     """
 

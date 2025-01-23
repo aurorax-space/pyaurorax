@@ -70,13 +70,24 @@ class EphemerisManager:
         instrument_types, must be specified.
 
         Args:
-            start: start timestamp of the search (inclusive)
-            end: end timestamp of the search (inclusive)
-            programs: list of programs to search through, defaults to None
-            platforms: list of platforms to search through, defaults to None
-            instrument_types: list of instrument types to search through, defaults to None
-            metadata_filters: list of dictionaries describing metadata keys and
-                values to filter on, defaults to None
+            start (datetime.datetime): 
+                start timestamp of the search (inclusive)
+
+            end (datetime.datetime): 
+                end timestamp of the search (inclusive)
+
+            programs (List[str]): 
+                list of programs to search through, defaults to None
+
+            platforms (List[str]): 
+                list of platforms to search through, defaults to None
+
+            instrument_types (List[str]): 
+                list of instrument types to search through, defaults to None
+
+            metadata_filters (List[Dict]): 
+                list of dictionaries describing metadata keys and values to filter 
+                on, defaults to None
 
                 Example:
 
@@ -85,15 +96,22 @@ class EphemerisManager:
                         "operator": "in",
                         "values": ["north polar cap"]
                     }]
-            metadata_filters_logical_operator: the logical operator to use when
-                evaluating metadata filters (either 'AND' or 'OR'), defaults
-                to "AND"
-            response_format: JSON representation of desired data response format
-            poll_interval: time in seconds to wait between polling attempts, defaults
-                to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            return_immediately: initiate the search and return without waiting for data to
-                be received, defaults to False
-            verbose: output poll times and other progress messages, defaults to False
+
+            metadata_filters_logical_operator (str): 
+                the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+                defaults to `AND`
+
+            response_format (Dict): 
+                JSON representation of desired data response format
+
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+
+            return_immediately (bool): 
+                initiate the search and return without waiting for data to be received, defaults to False
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             A `pyaurorax..search.EphemerisSearch` object
@@ -121,10 +139,17 @@ class EphemerisManager:
         Upload ephemeris records to AuroraX
 
         Args:
-            identifier: AuroraX data source ID
-            records: ephemeris records to upload
-            validate_source: validate all records before uploading, defaults to False
-            chunk_size: number of records to upload in a single call, defaults to 500
+            identifier (int): 
+                AuroraX data source ID
+
+            records (List[EphemerisData]): 
+                ephemeris records to upload
+
+            validate_source (bool): 
+                validate all records before uploading, defaults to False
+
+            chunk_size (int): 
+                number of records to upload in a single call, defaults to 500
 
         Returns:
             0 for success, raises exception on error
@@ -143,10 +168,15 @@ class EphemerisManager:
         immediately whether or not the data has already been deleted.
 
         Args:
-            data_source: data source associated with the data product records (note that
+            data_source (DataSource): 
+                data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
-            start: timestamp marking beginning of range to delete records for, inclusive
-            end: timestamp marking end of range to delete records for, inclusive
+
+            start (datetime.datetime): 
+                timestamp marking beginning of range to delete records for, inclusive
+            
+            end (datetime.datetime): 
+                timestamp marking end of range to delete records for, inclusive
 
         Returns:
             0 on success
@@ -164,8 +194,11 @@ class EphemerisManager:
         object can be supplied, or a dictionary of the raw JSON query.
 
         Args:
-            search_obj: the ephemeris search to describe, optional
-            query_dict: the ephemeris search query represented as a raw dictionary, optional
+            search_obj (EphemerisSearch): 
+                the ephemeris search to describe, optional
+
+            query_dict (Dict): 
+                the ephemeris search query represented as a raw dictionary, optional
 
         Returns:
             the "SQL-like" string describing the ephemeris search object
@@ -174,14 +207,14 @@ class EphemerisManager:
 
     def get_request_url(self, request_id: str) -> str:
         """
-        Get the ephemeris search request URL for a given
-        request ID. This URL can be used for subsequent
-        pyaurorax.requests function calls. Primarily this method
-        facilitates delving into details about a set of already-submitted
-        ephemeris searches.
+        Get the ephemeris search request URL for a given request ID. This URL can be 
+        used for subsequent pyaurorax.requests function calls. Primarily this method 
+        facilitates delving into details about a set of already-submitted ephemeris 
+        searches.
 
         Args:
-            request_id: the request identifier
+            request_id (str): 
+                the request identifier
 
         Returns:
             the request URL

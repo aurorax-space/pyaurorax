@@ -72,17 +72,28 @@ class DataProductsManager:
         must be specified.
 
         Args:
-            start: start timestamp of the search (inclusive)
-            end: end timestamp of the search (inclusive)
-            programs: list of programs to search through, defaults to None
-            platforms: list of platforms to search through, defaults to None
-            instrument_types: list of instrument types to search through, defaults to None
-            data_product_types: list of dictionaries describing data product
-                types to filter on e.g. "keogram", defaults to None. Options are in the
-                pyaurorax.data_products module, or at the top level using the
-                pyaurorax.DATA_PRODUCT_TYPE* variables.
-            metadata_filters: list of dictionaries describing metadata keys and
-                values to filter on, defaults to None
+            start (datetime.datetime): 
+                start timestamp of the search (inclusive)
+         
+            end (datetime.datetime): 
+                end timestamp of the search (inclusive)
+         
+            programs (List[str]): 
+                list of programs to search through, defaults to None
+        
+            platforms (List[str]): 
+                list of platforms to search through, defaults to None
+        
+            instrument_types (List[str]): 
+                list of instrument types to search through, defaults to None
+        
+            data_product_types (List[str]): 
+                list of strings describing data product types to filter on e.g. "keogram", defaults 
+                to None. Options are in the pyaurorax.data_products module, or at the top level using 
+                the pyaurorax.DATA_PRODUCT_TYPE* variables.
+        
+            metadata_filters (List[Dict]): 
+                list of dictionaries describing metadata keys and values to filter on, defaults to None
 
                 Example:
 
@@ -91,15 +102,23 @@ class DataProductsManager:
                         "operator": "in",
                         "values": ["north polar cap"]
                     }]
-            metadata_filters_logical_operator: the logical operator to use when
-                evaluating metadata filters (either 'AND' or 'OR'), defaults
-                to "AND"
-            response_format: JSON representation of desired data response format
-            poll_interval: time in seconds to wait between polling attempts, defaults
-                to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            return_immediately: initiate the search and return without waiting for data to
-                be received, defaults to False
-            verbose: output poll times and other progress messages, defaults to False
+           
+            metadata_filters_logical_operator (str): 
+                the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+                defaults to `AND`
+            
+            response_format (Dict): 
+                JSON representation of desired data response format
+            
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+            
+            return_immediately (bool): 
+                initiate the search and return without waiting for data to be received, 
+                defaults to False
+            
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             a `pyaurorax.search.DataProductSearch` object
@@ -125,10 +144,17 @@ class DataProductsManager:
         Upload data product records to AuroraX
 
         Args:
-            identifier: the AuroraX data source ID
-            records: data product records to upload
-            validate_source: validate all records before uploading, defaults to False
-            chunk_size: number of records to upload in a single call, defaults to 500
+            identifier (int): 
+                the AuroraX data source ID
+
+            records (List[DataProductData]): 
+                data product records to upload
+
+            validate_source (bool): 
+                validate all records before uploading, defaults to False
+
+            chunk_size (int): 
+                number of records to upload in a single call, defaults to 500
 
         Returns:
             0 for success, raises exception on error
@@ -147,9 +173,12 @@ class DataProductsManager:
         immediately whether or not the data has already been deleted.
 
         Args:
-            data_source: data source associated with the data product records (note that
+            data_source (DataSource): 
+                data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
-            urls: URLs of data product records to delete
+
+            urls (List[str]): 
+                URLs of data product records to delete
 
         Returns:
             0 on success
@@ -172,11 +201,18 @@ class DataProductsManager:
         immediately whether or not the data has already been deleted.
 
         Args:
-            data_source: data source associated with the data product records (note that
+            data_source (DataSource): 
+                data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
-            start: timestamp marking beginning of range to delete records for, inclusive
-            end: timestamp marking end of range to delete records for, inclusive
-            data_product_types: specific types of data product to delete, e.g.
+            
+            start (datetime.datetime): 
+                timestamp marking beginning of range to delete records for, inclusive
+            
+            end (datetime.datetime): 
+                timestamp marking end of range to delete records for, inclusive
+            
+            data_product_types (List[str]): 
+                specific types of data product to delete, e.g.
                 ["keogram", "movie"]. If omitted, all data product types will be deleted.
 
         Returns:
@@ -194,8 +230,11 @@ class DataProductsManager:
         object can be supplied, or a dictionary of the raw JSON query.
 
         Args:
-            search_obj: the data product search to describe, optional
-            query_dict: the data product search query represented as a raw dictionary, optional
+            search_obj (DataProductSearch): 
+                the data product search to describe, optional
+
+            query_dict (Dict): 
+                the data product search query represented as a raw dictionary, optional
 
         Returns:
             the "SQL-like" string describing the data product search object
@@ -211,7 +250,8 @@ class DataProductsManager:
         data product searches.
 
         Args:
-            request_id: the request identifier
+            request_id (str): 
+                the request identifier
 
         Returns:
             the request URL

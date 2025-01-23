@@ -38,12 +38,19 @@ class ConjunctionSearch:
     Class representing a conjunction search
 
     Attributes:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        distance: the maximum distance allowed between data sources when searching for
+        start (datetime.datetime): 
+            start timestamp of the search (inclusive)
+
+        end (datetime.datetime): 
+            end timestamp of the search (inclusive)
+
+        distance (int or float or Dict): 
+            the maximum distance allowed between data sources when searching for
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the "get_advanced_distances_combos()" function.
-        ground: list of ground instrument search parameters, defaults to []
+
+        ground (List[Dict]): 
+            list of ground instrument search parameters, defaults to []
 
             Example:
 
@@ -62,7 +69,9 @@ class ConjunctionSearch:
                         ]
                     }
                 }]
-        space: list of one or more space instrument search parameters, defaults to []
+
+        space (List[Dict]): 
+            list of one or more space instrument search parameters, defaults to []
 
             Example:
 
@@ -84,7 +93,9 @@ class ConjunctionSearch:
                         "northern"
                     ]
                 }]
-        events: list of one or more events search parameters, defaults to []
+
+        events (List[Dict]): 
+            list of one or more events search parameters, defaults to []
 
             Example:
 
@@ -92,23 +103,49 @@ class ConjunctionSearch:
                     "programs": [ "events" ],
                     "instrument_types": [ "substorm onsets" ]
                 }]
-        conjunction_types: list of conjunction types, defaults to ["nbtrace"]. Options are
+
+        conjunction_types (List[str]): 
+            list of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-        epoch_search_precision: the time precision to which conjunctions are calculated. Can be
+
+        epoch_search_precision (int): 
+            the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered "alpha".
-        response_format: JSON representation of desired data response format
-        request: AuroraXResponse object returned when the search is executed
-        request_id: unique ID assigned to the request by the AuroraX API
-        request_url: unique URL assigned to the request by the AuroraX API
-        executed: indicates if the search has been executed/started
-        completed: indicates if the search has finished
-        data_url: the URL where data is accessed
-        query: the query for this request as JSON
-        status: the status of the query
-        data: the conjunctions found
-        logs: all log messages outputted by the AuroraX API for this request
+
+        response_format (Dict): 
+            JSON representation of desired data response format
+
+        request (AuroraXResponse): 
+            AuroraXResponse object returned when the search is executed
+
+        request_id (str): 
+            unique ID assigned to the request by the AuroraX API
+
+        request_url (str): 
+            unique URL assigned to the request by the AuroraX API
+
+        executed (bool): 
+            indicates if the search has been executed/started
+
+        completed (bool): 
+            indicates if the search has finished
+
+        data_url (str): 
+            the URL where data is accessed
+
+        query (Dict): 
+            the query for this request as JSON
+
+        status (Dict): 
+            the status of the query
+
+        data (List[Conjunction]): 
+            the conjunctions found
+
+        logs (List[Dict]): 
+            all log messages outputted by the AuroraX API for this request
     """
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -126,7 +163,7 @@ class ConjunctionSearch:
                  response_format: Optional[Dict] = None):
 
         # set variables using passed in args
-        self.aurorax_obj = aurorax_obj
+        self.__aurorax_obj = aurorax_obj
         self.start = start
         self.end = end
         self.ground = [] if ground is None else ground
@@ -144,7 +181,7 @@ class ConjunctionSearch:
         self.executed = False
         self.completed = False
         self.data_url = ""
-        self.query = {}
+        self.__query = {}
         self.status = {}
         self.data = []
         self.logs = []
@@ -251,7 +288,8 @@ class ConjunctionSearch:
         Get the advanced distances combinations for this search
 
         Args:
-            default_distance: the default distance to use, defaults to None
+            default_distance (int): 
+                the default distance to use, defaults to None
 
         Returns:
             the advanced distances combinations
@@ -303,7 +341,7 @@ class ConjunctionSearch:
         Returns:
             the query parameter
         """
-        self._query = {
+        self.__query = {
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
             "ground": self.ground,
@@ -313,11 +351,11 @@ class ConjunctionSearch:
             "max_distances": self.distance,
             "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
         }
-        return self._query
+        return self.__query
 
     @query.setter
     def query(self, query: Dict) -> None:
-        self._query = query
+        self.__query = query
 
     def execute(self) -> None:
         """
@@ -330,8 +368,8 @@ class ConjunctionSearch:
         self.check_criteria_block_count_validity()
 
         # do request
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_SEARCH)
-        req = AuroraXAPIRequest(self.aurorax_obj, method="post", url=url, body=self.query, null_response=True)
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_SEARCH)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method="post", url=url, body=self.query, null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -350,7 +388,8 @@ class ConjunctionSearch:
         Update the status of this conjunction search request
 
         Args:
-            status: the previously-retrieved status of this request (include
+            status (Dict): 
+                the previously-retrieved status of this request (include
                 to avoid requesting it from the API again), defaults to None
 
         Raises:
@@ -358,7 +397,7 @@ class ConjunctionSearch:
         """
         # get the status if it isn't passed in
         if (status is None):
-            status = requests_get_status(self.aurorax_obj, self.request_url)
+            status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
         if (status is None):
@@ -400,7 +439,7 @@ class ConjunctionSearch:
             return
 
         # get data
-        raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+        raw_data = requests_get_data(self.__aurorax_obj, self.data_url, self.response_format, False)
 
         # set data variable
         if (self.response_format is not None):
@@ -421,15 +460,17 @@ class ConjunctionSearch:
         available for retrieval
 
         Args:
-            poll_interval: time in seconds to wait between polling attempts, defaults
-                to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times and other progress messages, defaults to False
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
-        self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
+        self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
 
     def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> int:
         """
@@ -441,12 +482,14 @@ class ConjunctionSearch:
         the polling time using the 'poll_interval' parameter.
 
         Args:
-            wait: wait until the cancellation request has been
-                completed (may wait for several minutes)
-            poll_interval: seconds to wait between polling
-                calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-            verbose: output poll times and other progress messages, defaults
-                to False
+            wait (bool): 
+                wait until the cancellation request has been completed (may wait for several minutes)
+
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
@@ -454,5 +497,5 @@ class ConjunctionSearch:
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
-        return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
+        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)

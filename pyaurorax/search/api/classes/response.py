@@ -24,9 +24,14 @@ class AuroraXAPIResponse:
     Class definition for an AuroraX API response
 
     Attributes:
-        request (Any): the request object
-        data (Any): the data received as part of the request
-        status_code (int): the HTTP status code received when making the request
+        request (Any): 
+            the request object
+
+        data (Any): 
+            the data received as part of the request
+
+        status_code (int): 
+            the HTTP status code received when making the request
     """
 
     def __init__(self, request: Any, data: Any, status_code: int):

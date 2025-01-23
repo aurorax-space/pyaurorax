@@ -95,13 +95,13 @@ class EphemerisSearch:
         query (Dict): 
             the query for this request as JSON
       
-        status (): 
+        status (Dict): 
             the status of the query
       
-        data: 
+        data (List[EphemerisData]): 
             the ephemeris records found
       
-        logs: 
+        logs (List[Dict]): 
             all log messages outputted by the AuroraX API for this request
     """
 
@@ -119,7 +119,7 @@ class EphemerisSearch:
                  response_format: Optional[Dict] = None) -> None:
 
         # set variables using passed in args
-        self.aurorax_obj = aurorax_obj
+        self.__aurorax_obj = aurorax_obj
         self.start = start
         self.end = end
         self.programs = programs
@@ -136,7 +136,7 @@ class EphemerisSearch:
         self.executed = False
         self.completed = False
         self.data_url = ""
-        self.query = {}
+        self.__query = {}
         self.status = {}
         self.data = []
         self.logs = []
@@ -204,7 +204,7 @@ class EphemerisSearch:
         """
         Property for the query value
         """
-        self._query = {
+        self.__query = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
@@ -217,11 +217,11 @@ class EphemerisSearch:
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
         }
-        return self._query
+        return self.__query
 
     @query.setter
     def query(self, query):
-        self._query = query
+        self.__query = query
 
     def execute(self) -> None:
         """
@@ -235,8 +235,8 @@ class EphemerisSearch:
             raise AuroraXError("At least one filter criteria parameter besides 'start' and 'end' must be specified")
 
         # do request
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
-        req = AuroraXAPIRequest(self.aurorax_obj, method="post", url=url, body=self.query, null_response=True)
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method="post", url=url, body=self.query, null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -261,7 +261,7 @@ class EphemerisSearch:
         """
         # get the status if it isn't passed in
         if (status is None):
-            status = requests_get_status(self.aurorax_obj, self.request_url)
+            status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
         if (status is None):
@@ -296,7 +296,7 @@ class EphemerisSearch:
             return
 
         # get data
-        raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+        raw_data = requests_get_data(self.__aurorax_obj, self.data_url, self.response_format, False)
 
         # set data variable
         if (self.response_format is not None):
@@ -321,8 +321,8 @@ class EphemerisSearch:
             verbose (bool): 
                 output poll times and other progress messages, defaults to False
         """
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
-        self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+        self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
 
     def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> int:
         """
@@ -351,5 +351,5 @@ class EphemerisSearch:
             pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
-        return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)

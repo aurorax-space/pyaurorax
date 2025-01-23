@@ -75,12 +75,19 @@ class ConjunctionsManager:
         data when it's done.
 
         Args:
-            start: start timestamp of the search (inclusive)
-            end: end timestamp of the search (inclusive)
-            distance: the maximum distance allowed between data sources when searching for
+            start (datetime.datetime): 
+                start timestamp of the search (inclusive)
+
+            end (datetime.datetime): 
+                end timestamp of the search (inclusive)
+
+            distance (int or float or Dict): 
+                the maximum distance allowed between data sources when searching for
                 conjunctions. This can either be a number (int or float), or a dictionary
                 modified from the output of the "get_advanced_distances_combos()" function.
-            ground: list of ground instrument search parameters, defaults to []
+
+            ground (List[str]): 
+                list of ground instrument search parameters, defaults to []
 
                 Example:
 
@@ -99,7 +106,9 @@ class ConjunctionsManager:
                             ]
                         }
                     }]
-            space: list of one or more space instrument search parameters, defaults to []
+
+            space (List[str]): 
+                list of one or more space instrument search parameters, defaults to []
 
                 Example:
 
@@ -121,7 +130,9 @@ class ConjunctionsManager:
                             "northern"
                         ]
                     }]
-            events: list of one or more events search parameters, defaults to []
+
+            events (List[str]): 
+                list of one or more events search parameters, defaults to []
 
                 Example:
 
@@ -129,18 +140,30 @@ class ConjunctionsManager:
                         "programs": [ "events" ],
                         "instrument_types": [ "substorm onsets" ]
                     }]
-            conjunction_types: list of conjunction types, defaults to [] (meaning all conjunction
-                types). Options are in the pyaurorax.conjunctions module, or at the top level using
-                the pyaurorax.CONJUNCTION_TYPE_* variables.
-            epoch_search_precision: the time precision to which conjunctions are calculated. Can be
+
+            conjunction_types (List[str]): 
+                list of conjunction types, defaults to [] (meaning all conjunction types). Options 
+                are in the pyaurorax.conjunctions module, or at the top level using the 
+                pyaurorax.CONJUNCTION_TYPE_* variables.
+
+            epoch_search_precision (int): 
+                the time precision to which conjunctions are calculated. Can be
                 30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
                 development and still considered "alpha".
-            response_format: JSON representation of desired data response format
-            poll_interval: seconds to wait between polling calls, defaults to
+
+            response_format (Dict): 
+                JSON representation of desired data response format
+
+            poll_interval (bool): 
+                seconds to wait between polling calls, defaults to
                 pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            return_immediately: initiate the search and return without waiting for data to
+
+            return_immediately (bool): 
+                initiate the search and return without waiting for data to
                 be received, defaults to False
-            verbose: show the progress of the request using the request log, defaults
+
+            verbose (bool): 
+                show the progress of the request using the request log, defaults
 
         Returns:
             a `pyaurorax.search.ConjunctionSearch` object
@@ -167,8 +190,11 @@ class ConjunctionsManager:
         object can be supplied, or a dictionary of the raw JSON query.
 
         Args:
-            search_obj: the conjunction search to describe, optional
-            query_dict: the conjunction search query represented as a raw dictionary, optional
+            search_obj (ConjunctionSearch): 
+                the conjunction search to describe, optional
+
+            query_dict (Dict): 
+                the conjunction search query represented as a raw dictionary, optional
 
         Returns:
             the "SQL-like" string describing the conjunction search object
@@ -177,14 +203,14 @@ class ConjunctionsManager:
 
     def get_request_url(self, request_id: str) -> str:
         """
-        Get the conjunction search request URL for a given
-        request ID. This URL can be used for subsequent
-        pyaurorax.requests function calls. Primarily this method
-        facilitates delving into details about a set of already-submitted
+        Get the conjunction search request URL for a given request ID. This URL 
+        can be used for subsequent pyaurorax.requests function calls. Primarily 
+        this method facilitates delving into details about a set of already-submitted 
         conjunction searches.
 
         Args:
-            request_id: the request identifier
+            request_id (str): 
+                the request identifier
 
         Returns:
             the request URL

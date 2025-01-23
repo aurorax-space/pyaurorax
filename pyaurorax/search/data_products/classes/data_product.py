@@ -73,23 +73,32 @@ class DataProductData:
     Data product object
 
     Attributes:
-        data_source: data source that the ephemeris record is associated with
-        data_product_type: data product type ("keogram", "movie", "summary_plot")
-        start: starting timestamp for the record (assumed it is in UTC), inclusive
-        end: ending timestamp for the record (assumed it is in UTC), inclusive
-        url: the URL of data product
-        metadata: metadata for this record (arbitrary keys and values)
+        data_source (DataSource): 
+            data source that the ephemeris record is associated with
+
+        data_product_type (str): 
+            data product type ("keogram", "movie", "summary_plot")
+
+        start (datetime.datetime): 
+            starting timestamp for the record (assumed it is in UTC), inclusive
+
+        end (datetime.datetime): 
+            ending timestamp for the record (assumed it is in UTC), inclusive
+
+        url (str): 
+            the URL of data product
+
+        metadata (Dict): 
+            metadata for this record (arbitrary keys and values)
     """
 
-    def __init__(
-        self,
-        data_source: DataSource,
-        data_product_type: str,
-        start: datetime.datetime,
-        end: datetime.datetime,
-        url: str,
-        metadata: Optional[Dict] = None,
-    ):
+    def __init__(self,
+                 data_source: DataSource,
+                 data_product_type: str,
+                 start: datetime.datetime,
+                 end: datetime.datetime,
+                 url: str,
+                 metadata: Optional[Dict] = None):
         self.data_source = data_source
         self.data_product_type = data_product_type
         self.start = start

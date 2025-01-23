@@ -26,14 +26,27 @@ class EphemerisData:
     Ephemeris object
 
     Attributes:
-        data_source: data source that the ephemeris record is associated with
-        epoch: timestamp for the record (assumed it is in UTC)
-        location_geo: Location object containing geographic latitude and longitude
-        location_gsm: Location object containing GSM latitude and longitude (leave
-            empty for data sources with a type of 'ground')
-        nbtrace: Location object with north B-trace geographic latitude and longitude
-        sbtrace: Location object with south B-trace geographic latitude and longitude
-        metadata: metadata for this record (arbitrary keys and values)
+        data_source (DataSource): 
+            data source that the ephemeris record is associated with
+
+        epoch (datetime.datetime): 
+            timestamp for the record (assumed it is in UTC)
+
+        location_geo (Location): 
+            Location object containing geographic latitude and longitude
+
+        location_gsm (Location): 
+            Location object containing GSM latitude and longitude (leave empty for data 
+            sources with a type of 'ground')
+
+        nbtrace (Location): 
+            Location object with north B-trace geographic latitude and longitude
+
+        sbtrace (Location): 
+            Location object with south B-trace geographic latitude and longitude
+
+        metadata (Dict): 
+            metadata for this record (arbitrary keys and values)
     """
 
     def __init__(self,

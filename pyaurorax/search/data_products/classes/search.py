@@ -37,17 +37,29 @@ class DataProductSearch:
     Class representing a data product search
 
     Attributes:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of program names to search
-        platforms: list of platform names to search
-        instrument_types: list of instrument types to search
-        data_product_types: list of dictionaries describing data product
-            types to filter on e.g. "keogram", defaults to None. Options are in the
-            pyaurorax.data_products module, or at the top level using the
-            pyaurorax.DATA_PRODUCT_TYPE* variables.
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
+        start (datetime.datetime): 
+            start timestamp of the search (inclusive)
+
+        end (datetime.datetime): 
+            end timestamp of the search (inclusive)
+
+        programs (List[str]): 
+            list of program names to search
+
+        platforms (List[str]): 
+            list of platform names to search
+
+        instrument_types (List[str]): 
+            list of instrument types to search
+
+        data_product_types (List[str]): 
+            list of strings describing data product on e.g. "keogram", defaults to 
+            None. Options are in the pyaurorax.data_products module, or at the top 
+            level using the pyaurorax.DATA_PRODUCT_TYPE* variables.
+
+        metadata_filters (List[Dict]): 
+            list of dictionaries describing metadata keys and values to filter on, 
+            defaults to None
 
             Example:
 
@@ -56,20 +68,43 @@ class DataProductSearch:
                     "operator": "in",
                     "values": ["north polar cap"]
                 }]
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either 'AND' or 'OR'), defaults
-            to "AND"
-        response_format: JSON representation of desired data response format
-        request: AuroraXResponse object returned when the search is executed
-        request_id: unique ID assigned to the request by the AuroraX API
-        request_url: unique URL assigned to the request by the AuroraX API
-        executed: indicates if the search has been executed/started
-        completed: indicates if the search has finished
-        data_url: the URL where data is accessed
-        query: the query for this request as JSON
-        status: the status of the query
-        data: the data product records found
-        logs: all log messages outputted by the AuroraX API for this request
+
+        metadata_filters_logical_operator (str): 
+            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+            defaults to `AND`
+
+        response_format (Dict): 
+            JSON representation of desired data response format
+
+        request (AuroraXResponse): 
+            AuroraXResponse object returned when the search is executed
+
+        request_id (str): 
+            unique ID assigned to the request by the AuroraX API
+
+        request_url (str): 
+            unique URL assigned to the request by the AuroraX API
+
+        executed (bool): 
+            indicates if the search has been executed/started
+
+        completed (bool): 
+            indicates if the search has finished
+
+        data_url (str): 
+            the URL where data is accessed
+
+        query (Dict): 
+            the query for this request as JSON
+
+        status (Dict): 
+            the status of the query
+
+        data (List[DataProductData]): 
+            the data product records found
+
+        logs (List[Dict]): 
+            all log messages outputted by the AuroraX API for this request
     """
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -87,7 +122,7 @@ class DataProductSearch:
                  response_format: Optional[Dict] = None) -> None:
 
         # set variables using passed in args
-        self.aurorax_obj = aurorax_obj
+        self.__aurorax_obj = aurorax_obj
         self.start = start
         self.end = end
         self.programs = programs
@@ -105,7 +140,7 @@ class DataProductSearch:
         self.executed = False
         self.completed = False
         self.data_url = ""
-        self.query = {}
+        self.__query = {}
         self.status = {}
         self.data = []
         self.logs = []
@@ -173,7 +208,7 @@ class DataProductSearch:
         """
         Property for the query value
         """
-        self._query = {
+        self.__query = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
@@ -187,19 +222,19 @@ class DataProductSearch:
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
             "data_product_type_filters": [] if not self.data_product_types else self.data_product_types,
         }
-        return self._query
+        return self.__query
 
     @query.setter
     def query(self, query):
-        self._query = query
+        self.__query = query
 
     def execute(self) -> None:
         """
         Initiate a data product search request
         """
         # do request
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_SEARCH)
-        req = AuroraXAPIRequest(self.aurorax_obj, method="post", url=url, body=self.query, null_response=True)
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_SEARCH)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method="post", url=url, body=self.query, null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -218,12 +253,13 @@ class DataProductSearch:
         Update the status of this data product search request
 
         Args:
-            status: the previously-retrieved status of this request (include
+            status (Dict): 
+                the previously-retrieved status of this request (include
                 to avoid requesting it from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if (status is None):
-            status = requests_get_status(self.aurorax_obj, self.request_url)
+            status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
         if (status is None):
@@ -259,7 +295,7 @@ class DataProductSearch:
             return
 
         # get data
-        raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+        raw_data = requests_get_data(self.__aurorax_obj, self.data_url, self.response_format, False)
 
         # set data variable
         if (self.response_format is not None):
@@ -279,13 +315,14 @@ class DataProductSearch:
         for retrieval
 
         Args:
-            poll_interval: time in seconds to wait between polling attempts,
-                defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times and other progress messages, defaults
-                to False
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
         """
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
-        self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
+        self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
 
     def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> int:
         """
@@ -297,12 +334,15 @@ class DataProductSearch:
         the polling time using the 'poll_interval' parameter.
 
         Args:
-            wait: wait until the cancellation request has been
-                completed (may wait for several minutes)
-            poll_interval: seconds to wait between polling
-                calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-            verbose: output poll times and other progress messages, defaults
-                to False
+            wait (bool): 
+                wait until the cancellation request has been completed (may wait 
+                for several minutes)
+            
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to 1 second.
+            
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
@@ -311,5 +351,5 @@ class DataProductSearch:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
             pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
         """
-        url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
-        return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
+        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)
