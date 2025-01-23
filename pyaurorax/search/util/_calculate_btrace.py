@@ -36,23 +36,6 @@ def __calculate_btrace(geo_location: Location, dt: datetime.datetime) -> Locatio
 
 
 def ground_geo_to_nbtrace(geo_location: Location, timestamp: datetime.datetime) -> Location:
-    """
-    Convert geographic location to North B-Trace geographic
-    location
-
-    The timestamp is required because when calculating the B-trace
-    values, the location is converted into geomagnetic coordinates.
-    This conversion is different based on the timestamp since the
-    magnetic coordinates change over time.
-
-    Args:
-        geo_location: a Location object representing the
-            geographic location
-        dt: timestamp for this set of lat and lons
-
-    Returns:
-        the north B-trace location as a Location object
-    """
     # check if location is in northern hemisphere
     if (geo_location.lat is not None and geo_location.lat >= 0.0):
         # northern hemisphere, north b-trace is the same as geographic location
@@ -64,23 +47,6 @@ def ground_geo_to_nbtrace(geo_location: Location, timestamp: datetime.datetime) 
 
 
 def ground_geo_to_sbtrace(geo_location: Location, timestamp: datetime.datetime) -> Location:
-    """
-    Convert geographic location to South B-Trace geographic
-    location
-
-    The timestamp is required because when calculating the B-trace
-    values, the location is converted into geomagnetic coordinates.
-    This conversion is different based on the timestamp since the
-    magnetic coordinates change over time.
-
-    Args:
-        geo_location: a Location object representing the
-            geographic location
-        dt: timestamp for this set of lat and lons
-
-    Returns:
-        the south B-trace location as a Location object
-    """
     # check if location is in southern hemisphere
     if (geo_location.lat is not None and geo_location.lat < 0.0):
         # southern hemisphere, south b-trace is the same as geographic location

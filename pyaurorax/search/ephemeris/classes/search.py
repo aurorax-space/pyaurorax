@@ -39,14 +39,25 @@ class EphemerisSearch:
     Note: At least one search criteria from programs, platforms, or instrument_types
     must be specified.
 
-    Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
+    Attributes:
+        start (datetime.datetime): 
+            start timestamp of the search (inclusive)
+
+        end (datetime.datetime): 
+            end timestamp of the search (inclusive)
+
+        programs (List[str]): 
+            list of programs to search through, defaults to None
+
+        platforms (List[str]): 
+            list of platforms to search through, defaults to None
+
+        instrument_types (List[str]): 
+            list of instrument types to search through, defaults to None
+
+        metadata_filters (List[Dict]): 
+            list of dictionaries describing metadata keys and values to filter on, defaults 
+            to None
 
             e.g. {
                 "key": "string",
@@ -55,20 +66,43 @@ class EphemerisSearch:
                     "string"
                 ]
             }
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either 'AND' or 'OR'), defaults
-            to "AND"
-        response_format: JSON representation of desired data response format
-        request: AuroraXResponse object returned when the search is executed
-        request_id: unique ID assigned to the request by the AuroraX API
-        request_url: unique URL assigned to the request by the AuroraX API
-        executed: indicates if the search has been executed/started
-        completed: indicates if the search has finished
-        data_url: the URL where data is accessed
-        query: the query for this request as JSON
-        status: the status of the query
-        data: the ephemeris records found
-        logs: all log messages outputted by the AuroraX API for this request
+
+        metadata_filters_logical_operator (str): 
+            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+            defaults to `AND`
+
+        response_format (Dict): 
+            JSON representation of desired data response format
+        
+        request (AuroraXResponse): 
+            AuroraXResponse object returned when the search is executed
+        
+        request_id (str): 
+            unique ID assigned to the request by the AuroraX API
+       
+        request_url (str): 
+            unique URL assigned to the request by the AuroraX API
+     
+        executed (bool): 
+            indicates if the search has been executed/started
+     
+        completed (bool): 
+            indicates if the search has finished
+       
+        data_url (str): 
+            the URL where data is accessed
+      
+        query (Dict): 
+            the query for this request as JSON
+      
+        status (): 
+            the status of the query
+      
+        data: 
+            the ephemeris records found
+      
+        logs: 
+            all log messages outputted by the AuroraX API for this request
     """
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -221,8 +255,9 @@ class EphemerisSearch:
         Update the status of this ephemeris search request
 
         Args:
-            status: the previously-retrieved status of this request (include
-                to avoid requesting it from the API again), defaults to None
+            status (Dict): 
+                the previously-retrieved status of this request (include to avoid requesting it 
+                from the API again), defaults to None
         """
         # get the status if it isn't passed in
         if (status is None):
@@ -243,8 +278,7 @@ class EphemerisSearch:
 
     def check_for_data(self) -> bool:
         """
-        Check to see if data is available for this ephemeris
-        search request
+        Check to see if data is available for this ephemeris search request
 
         Returns:
             True if data is available, else False
@@ -278,14 +312,14 @@ class EphemerisSearch:
 
     def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -> None:
         """
-        Block and wait for the request to complete and data is
-        available for retrieval
+        Block and wait for the request to complete and data is available for retrieval
 
         Args:
-            poll_interval: time in seconds to wait between polling attempts,
-                defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times and other progress messages, defaults
-                to False
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
         """
         url = "%s/%s" % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
         self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))
@@ -300,12 +334,15 @@ class EphemerisSearch:
         the polling time using the 'poll_interval' parameter.
 
         Args:
-            wait: wait until the cancellation request has been
-                completed (may wait for several minutes)
-            poll_interval: seconds to wait between polling
-                calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-            verbose: output poll times and other progress messages, defaults
-                to False
+            wait (bool): 
+                wait until the cancellation request has been completed (may wait for 
+                several minutes)
+
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to 1 second.
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success

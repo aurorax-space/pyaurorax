@@ -40,8 +40,11 @@ class UtilManager:
         is different  based on the timestamp since the magnetic coordinates change over time.
 
         Args:
-            geo_location (Location): a Location object representing the geographic location
-            dt (datetime.datetime): timestamp for this set of latitudes and longitudes
+            geo_location (Location): 
+                a Location object representing the geographic location
+
+            timestamp (datetime.datetime): 
+                timestamp for this set of latitudes and longitudes
 
         Returns:
             the north B-trace location as a `Location` object
@@ -57,8 +60,11 @@ class UtilManager:
         is different  based on the timestamp since the magnetic coordinates change over time.
 
         Args:
-            geo_location (Location): a Location object representing the geographic location
-            dt (datetime.datetime): timestamp for this set of latitudes and longitudes
+            geo_location (Location): 
+                a Location object representing the geographic location
+
+            timestamp (datetime.datetime): 
+                timestamp for this set of latitudes and longitudes
 
         Returns:
             the south B-trace location as a `Location` object

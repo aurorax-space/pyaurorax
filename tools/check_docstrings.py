@@ -64,7 +64,7 @@ def check_function_docstring(node, filename):
 
     # process file
     docstring = ast.get_docstring(node)
-    if docstring and "Args:" in docstring:
+    if (docstring and "Args:" in docstring):
         # split the docstring into lines
         doc_lines = docstring.splitlines()
 
@@ -75,7 +75,7 @@ def check_function_docstring(node, filename):
         for param in param_names:
             param_found = False
             for line in doc_lines:
-                if line.strip().startswith(f"{param} ("):
+                if (line.strip().startswith(f"{param} (") or line.strip().startswith(f"{param}:")):
                     param_found = True
 
                     # check if type hints (brackets) are present
@@ -121,7 +121,7 @@ def check_class_docstring(node, filename):
         for attr in instance_attributes:
             attr_found = False
             for line in doc_lines:
-                if line.strip().startswith(f"{attr} ("):
+                if (line.strip().startswith(f"{attr} (") or line.strip().startswith(f"{attr}:")):
                     attr_found = True
 
                     # check if type hints (brackets) are present

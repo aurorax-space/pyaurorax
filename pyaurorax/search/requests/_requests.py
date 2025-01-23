@@ -75,15 +75,6 @@ def get_data(aurorax_obj, data_url, response_format, skip_serializing):
 
 
 def get_logs(aurorax_obj, request_url):
-    """
-    Retrieve the logs for a request
-
-    Args:
-        request_url: the URL of the request information
-
-    Returns:
-        the log messages for the request
-    """
     # get status
     status = get_status(aurorax_obj, request_url)
 

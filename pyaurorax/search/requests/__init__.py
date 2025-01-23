@@ -49,7 +49,8 @@ class RequestsManager:
         Retrieve the status of a request
 
         Args:
-            request_url: the URL of the request information
+            request_url (str): 
+                the URL of the request information
 
         Returns:
             the status information for the request
@@ -61,10 +62,14 @@ class RequestsManager:
         Retrieve the data for a request
 
         Args:
-            data_url: the URL for the data of a request,
-            response_format: the response format to send as post data, defaults
-                to None
-            skip_serializing: skip any object serializing, defaults to False
+            data_url (str): 
+                the URL for the data of a request,
+            
+            response_format (Dict): 
+                the response format to send as post data, defaults to None
+            
+            skip_serializing (bool): 
+                skip any object serializing, defaults to False
 
         Raises:
             pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
@@ -79,7 +84,8 @@ class RequestsManager:
         Retrieve the logs for a request
 
         Args:
-            request_url: the URL of the request information
+            request_url (str): 
+                the URL of the request information
 
         Returns:
             the log messages for the request
@@ -91,10 +97,14 @@ class RequestsManager:
         Block and wait for the data to be made available for a request
 
         Args:
-            request_url: the URL of the request information
-            poll_interval: seconds to wait between polling calls, defaults
-                to STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times and other progress messages, defaults to False
+            request_url (str): 
+                the URL of the request information
+            
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+            
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             the status information for the request
@@ -111,13 +121,18 @@ class RequestsManager:
         the polling time using the 'poll_interval' parameter.
 
         Args:
-            request_url: the URL string of the request to be canceled
-            wait: set to True to block until the cancellation request
-                has been completed (may wait for several minutes)
-            poll_interval: seconds to wait between polling
-                calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-            verbose: if True then output poll times and other
-                progress, defaults to False
+            request_url (str): 
+                the URL string of the request to be canceled
+            
+            wait (bool): 
+                set to True to block until the cancellation request has been completed (may 
+                wait for several minutes)
+            
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+            
+            verbose (bool): 
+                if True then output poll times and other progress, defaults to False
 
         Returns:
             0 on success
@@ -141,19 +156,31 @@ class RequestsManager:
         Retrieve a list of search requests matching certain criteria.  Administrators only.
 
         Args:
-            search_type: the type of search request, valid values are 'conjunction',
-                'ephemeris', or 'data_product'. Exclusion of value will return all
-                search requests of any type, defaults to None
-            active: return searches that are currently active or not, exclude for
-                both, defaults to None
-            start: start timestamp for narrowing down search timeframes, defaults to None
-            end: end timestamp for narrowing down search timeframes, defaults to None
-            file_size: filter by result file size, measured in KB, defaults to None
-            result_count: filter by result count, defaults to None
-            query_duration: filter by query duration, measured in milliseconds, defaults
-                to None
-            error_condition: filter by if an error occurred or not, exclude for both,
-                defaults to None
+            search_type (str): 
+                the type of search request, valid values are 'conjunction', 'ephemeris', or 
+                'data_product'. Exclusion of value will return all search requests of any 
+                type, defaults to None
+
+            active (bool): 
+                return searches that are currently active or not, exclude for both, defaults to None
+
+            start (datetime.datetime): 
+                start timestamp for narrowing down search timeframes, defaults to None
+
+            end (datetime.datetime): 
+                end timestamp for narrowing down search timeframes, defaults to None
+
+            file_size (int): 
+                filter by result file size, measured in KB, defaults to None
+
+            result_count (int): 
+                filter by result count, defaults to None
+
+            query_duration (int): 
+                filter by query duration, measured in milliseconds, defaults to None
+
+            error_condition (bool): 
+                filter by if an error occurred or not, exclude for both, defaults to None
 
         Returns:
             list of matching search requests
@@ -165,11 +192,11 @@ class RequestsManager:
 
     def delete(self, request_id: str) -> int:
         """
-        Entirely remove a search request from the AuroraX
-        database. Administrators only.
+        Entirely remove a search request from the AuroraX database. Administrators only.
 
         Args:
-            request_id: search request UUID
+            request_id (str): 
+                search request UUID
 
         Returns:
             0 on success, raises error on failure

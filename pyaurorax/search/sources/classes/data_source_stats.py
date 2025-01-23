@@ -24,12 +24,23 @@ class DataSourceStatistics:
     Data source statistics information
 
     Attributes:
-        ephemeris_count (int): total number of ephemeris records for this data source
-        data_product_count (int): total number of ephemeris records for this data source
-        earliest_ephemeris_loaded (datetime.datetime): timestamp of the earliest ephemeris record
-        latest_ephemeris_loaded (datetime.datetime): timestamp of the latest ephemeris record
-        earliest_data_product_loaded (datetime.datetime): timestamp of the earliest data_product record
-        latest_data_product_loaded (datetime.datetime): timestamp of the latest data product record
+        ephemeris_count (int): 
+            total number of ephemeris records for this data source
+
+        data_product_count (int): 
+            total number of ephemeris records for this data source
+
+        earliest_ephemeris_loaded (datetime.datetime): 
+            timestamp of the earliest ephemeris record
+
+        latest_ephemeris_loaded (datetime.datetime): 
+            timestamp of the latest ephemeris record
+
+        earliest_data_product_loaded (datetime.datetime): 
+            timestamp of the earliest data_product record
+            
+        latest_data_product_loaded (datetime.datetime): 
+            timestamp of the latest data product record
     """
 
     def __init__(self,

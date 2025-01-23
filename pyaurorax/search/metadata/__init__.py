@@ -42,8 +42,14 @@ class MetadataManager:
         key names match and there aren't fewer or more keys than expected.
 
         Args:
-            schema: the metadata schema to validate against
-            record: metadata record to validate
+            schema (List[Dict]): 
+                the metadata schema to validate against
+
+            record (Dict): 
+                metadata record to validate
+
+            quiet (bool): 
+                suppress any stdout output
 
         Returns:
             True if the metadata record is valid, False if it is not
@@ -55,7 +61,8 @@ class MetadataManager:
         Retrieve the ephemeris metadata schema for a data source
 
         Args:
-            identifier: the AuroraX data source ID
+            identifier (int): 
+                the AuroraX data source ID
 
         Returns:
             the ephemeris metadata schema for the data source
@@ -67,7 +74,8 @@ class MetadataManager:
         Retrieve the data products metadata schema for a data source
 
         Args:
-            identifier: the AuroraX data source ID
+            identifier (int): 
+                the AuroraX data source ID
 
         Returns:
             the data products metadata schema for the data source
