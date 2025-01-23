@@ -88,8 +88,9 @@ border-left: 1px solid #ddd;
         Conjunction Finder
 
         Args:
-            search_obj: a conjunction search object, must be a completed
-                        search with the &#39;request_id&#39; value populated
+            search_obj (ConjunctionSearch): 
+                a conjunction search object, must be a completed search with 
+                the &#39;request_id&#39; value populated
 
         Returns:
             the Swarm-Aurora Conjunction Finder URL for this conjunction search
@@ -101,12 +102,14 @@ border-left: 1px solid #ddd;
         In a browser, open a conjunction search in the Swarm-Aurora Conjunction Finder.
 
         Args:
-            search_obj: a conjunction search object, must be a completed
-                        search with the &#39;request_id&#39; value populated
-            browser: the browser type to load using. Default is your
-                    default browser. Some common other options are
-                    &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available
-                    options, refer to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
+            search_obj (ConjunctionSearch): 
+                a conjunction search object, must be a completed search with 
+                the &#39;request_id&#39; value populated
+
+            browser (str)): 
+                the browser type to load using. Default is your default browser. Some common other 
+                options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
+                to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
         &#34;&#34;&#34;
         return func_open_in_browser(search_obj, browser)
 
@@ -115,15 +118,20 @@ border-left: 1px solid #ddd;
         Generate a Swarm-Aurora custom import file for a given conjunction search
 
         Args:
-            search_obj: a conjunction search object, must be a completed
-                        search with the &#39;request_id&#39; value populated
-            filename: the output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
-            return_dict: return the custom import file contents as a dictionary
-                        instead of saving a file, default is False
+            search_obj (ConjunctionSearch): 
+                a conjunction search object, must be a completed search with 
+                the &#39;request_id&#39; value populated
+
+            filename (str): 
+                the output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
+            
+            return_dict (bool): 
+                return the custom import file contents as a dictionary instead of saving 
+                a file, default is False
 
         Returns:
-            the filename of the saved custom import file, or a dictionary with the
-            file contents if `return_dict` is set to True
+            the filename of the saved custom import file, or a dictionary with the file contents 
+            if `return_dict` is set to True
         &#34;&#34;&#34;
         return func_create_custom_import_file(self.__aurorax_obj, search_obj, filename, return_dict)</code></pre>
 </details>
@@ -144,33 +152,38 @@ the submodules and carry over configuration information in the super class.</p><
     Generate a Swarm-Aurora custom import file for a given conjunction search
 
     Args:
-        search_obj: a conjunction search object, must be a completed
-                    search with the &#39;request_id&#39; value populated
-        filename: the output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
-        return_dict: return the custom import file contents as a dictionary
-                    instead of saving a file, default is False
+        search_obj (ConjunctionSearch): 
+            a conjunction search object, must be a completed search with 
+            the &#39;request_id&#39; value populated
+
+        filename (str): 
+            the output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
+        
+        return_dict (bool): 
+            return the custom import file contents as a dictionary instead of saving 
+            a file, default is False
 
     Returns:
-        the filename of the saved custom import file, or a dictionary with the
-        file contents if `return_dict` is set to True
+        the filename of the saved custom import file, or a dictionary with the file contents 
+        if `return_dict` is set to True
     &#34;&#34;&#34;
     return func_create_custom_import_file(self.__aurorax_obj, search_obj, filename, return_dict)</code></pre>
 </details>
 <div class="desc"><p>Generate a Swarm-Aurora custom import file for a given conjunction search</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>search_obj</code></strong></dt>
-<dd>a conjunction search object, must be a completed
-search with the 'request_id' value populated</dd>
-<dt><strong><code>filename</code></strong></dt>
+<dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
+<dd>a conjunction search object, must be a completed search with
+the 'request_id' value populated</dd>
+<dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
 <dd>the output filename, default is 'swarmaurora_custom_import_file_{requestID}.json'</dd>
-<dt><strong><code>return_dict</code></strong></dt>
-<dd>return the custom import file contents as a dictionary
-instead of saving a file, default is False</dd>
+<dt><strong><code>return_dict</code></strong> :&ensp;<code>bool</code></dt>
+<dd>return the custom import file contents as a dictionary instead of saving
+a file, default is False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the filename of the saved custom import file, or a dictionary with the
-file contents if <code>return_dict</code> is set to True</p></div>
+<p>the filename of the saved custom import file, or a dictionary with the file contents
+if <code>return_dict</code> is set to True</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.get_url"><code class="name flex">
 <span>def <span class="ident">get_url</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="../classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a>) ‑> str</span>
@@ -186,8 +199,9 @@ file contents if <code>return_dict</code> is set to True</p></div>
     Conjunction Finder
 
     Args:
-        search_obj: a conjunction search object, must be a completed
-                    search with the &#39;request_id&#39; value populated
+        search_obj (ConjunctionSearch): 
+            a conjunction search object, must be a completed search with 
+            the &#39;request_id&#39; value populated
 
     Returns:
         the Swarm-Aurora Conjunction Finder URL for this conjunction search
@@ -198,9 +212,9 @@ file contents if <code>return_dict</code> is set to True</p></div>
 Conjunction Finder</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>search_obj</code></strong></dt>
-<dd>a conjunction search object, must be a completed
-search with the 'request_id' value populated</dd>
+<dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
+<dd>a conjunction search object, must be a completed search with
+the 'request_id' value populated</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>the Swarm-Aurora Conjunction Finder URL for this conjunction search</p></div>
@@ -218,27 +232,28 @@ search with the 'request_id' value populated</dd>
     In a browser, open a conjunction search in the Swarm-Aurora Conjunction Finder.
 
     Args:
-        search_obj: a conjunction search object, must be a completed
-                    search with the &#39;request_id&#39; value populated
-        browser: the browser type to load using. Default is your
-                default browser. Some common other options are
-                &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available
-                options, refer to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
+        search_obj (ConjunctionSearch): 
+            a conjunction search object, must be a completed search with 
+            the &#39;request_id&#39; value populated
+
+        browser (str)): 
+            the browser type to load using. Default is your default browser. Some common other 
+            options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
+            to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
     &#34;&#34;&#34;
     return func_open_in_browser(search_obj, browser)</code></pre>
 </details>
 <div class="desc"><p>In a browser, open a conjunction search in the Swarm-Aurora Conjunction Finder.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>search_obj</code></strong></dt>
-<dd>a conjunction search object, must be a completed
-search with the 'request_id' value populated</dd>
-<dt><strong><code>browser</code></strong></dt>
-<dd>the browser type to load using. Default is your
-default browser. Some common other options are
-"google-chrome", "firefox", or "safari". For all available
-options, refer to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></dd>
-</dl></div>
+<dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
+<dd>a conjunction search object, must be a completed search with
+the 'request_id' value populated</dd>
+</dl>
+<p>browser (str)):
+the browser type to load using. Default is your default browser. Some common other
+options are "google-chrome", "firefox", or "safari". For all available options, refer
+to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></p></div>
 </dd>
 </dl>
 </dd>

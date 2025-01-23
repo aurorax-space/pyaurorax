@@ -104,14 +104,28 @@ class Montage:
 
         return &#34;Montage(data=%s, timestamp=%s)&#34; % (data_str, timestamp_str)
 
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+        timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+
+        # print
+        print(&#34;Montage:&#34;)
+        print(&#34;  %-11s: %s&#34; % (&#34;data&#34;, data_str))
+        print(&#34;  %-11s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+
     def plot(self,
              rows: int,
              cols: int,
-             figsize: Optional[Tuple[int, int]] = None,
-             cmap: Optional[str] = None,
              timestamps_display: bool = True,
              timestamps_format: str = &#34;%Y-%m-%d %H:%M:%S&#34;,
              timestamps_fontsize: int = 11,
+             figsize: Optional[Tuple[int, int]] = None,
+             title: Optional[str] = None,
+             cmap: Optional[str] = None,
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -123,8 +137,36 @@ class Montage:
         return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
         Args:
+            rows (int): 
+                The number of rows to use when displaying the images as a montage. The product of 
+                the `rows` and `cols` parameters must match the number of images supplied when creating 
+                the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+            cols (int): 
+                The number of columns to use when displaying the images as a montage. The product of 
+                the `rows` and `cols` parameters must match the number of images supplied when creating 
+                the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+            timestamps_display (bool): 
+                Display the timestamps on each montage image. Defaults to True. This parameter is
+                optional.
+
+            timestamps_format (str): 
+                The format of the timestamps when being displayed. This is the same format string
+                as when using the `strftime()` function for a `datetime` object. Default format 
+                string is `%Y-%m-%d %H:%M:%S`. Refer to the 
+                [Python documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes)
+                for further information. This parameter is optional.
+            
+            timestamps_fontsize (int): 
+                The font size for the displayed timestamps. Default is size 11. This parameter is 
+                optional.
+
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+            title (str): 
+                The title to display above the plotted montage. Default is no title.
 
             cmap (str): 
                 The matplotlib colormap to use.
@@ -165,22 +207,38 @@ class Montage:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice.
+            ValueError: Issues with the y-axis choice, or rows/cols choice.
         &#34;&#34;&#34;
+        # check rows and cols
+        if (rows * cols != self.data.shape[-1]):
+            raise ValueError((&#34;Invalid choice of rows and columns. The %d images in this Montage object &#34; +
+                              &#34;cannot be organized into a %dx%d grid (%d * %d != %d)&#34;) % (
+                                  self.data.shape[-1],
+                                  rows,
+                                  cols,
+                                  rows,
+                                  cols,
+                                  self.data.shape[-1],
+                              ))
+
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
         if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                          &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
         elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                          &#34;savefig option parameters will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
 
         # init figure
         fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
+
+        # set title
+        if (title is not None):
+            fig.suptitle(title)
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
@@ -224,9 +282,9 @@ class Montage:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                                  &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                                  stacklevel=1)
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
             # clean up by closing the figure
@@ -255,7 +313,7 @@ class Montage:
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.tools.classes.montage.Montage.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self,<br>rows: int,<br>cols: int,<br>figsize: Tuple[int, int] | None = None,<br>cmap: str | None = None,<br>timestamps_display: bool = True,<br>timestamps_format: str = '%Y-%m-%d %H:%M:%S',<br>timestamps_fontsize: int = 11,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+<span>def <span class="ident">plot</span></span>(<span>self,<br>rows: int,<br>cols: int,<br>timestamps_display: bool = True,<br>timestamps_format: str = '%Y-%m-%d %H:%M:%S',<br>timestamps_fontsize: int = 11,<br>figsize: Tuple[int, int] | None = None,<br>title: str | None = None,<br>cmap: str | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -265,11 +323,12 @@ class Montage:
 <pre><code class="python">def plot(self,
          rows: int,
          cols: int,
-         figsize: Optional[Tuple[int, int]] = None,
-         cmap: Optional[str] = None,
          timestamps_display: bool = True,
          timestamps_format: str = &#34;%Y-%m-%d %H:%M:%S&#34;,
          timestamps_fontsize: int = 11,
+         figsize: Optional[Tuple[int, int]] = None,
+         title: Optional[str] = None,
+         cmap: Optional[str] = None,
          returnfig: bool = False,
          savefig: bool = False,
          savefig_filename: Optional[str] = None,
@@ -281,8 +340,36 @@ class Montage:
     return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
     Args:
+        rows (int): 
+            The number of rows to use when displaying the images as a montage. The product of 
+            the `rows` and `cols` parameters must match the number of images supplied when creating 
+            the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+        cols (int): 
+            The number of columns to use when displaying the images as a montage. The product of 
+            the `rows` and `cols` parameters must match the number of images supplied when creating 
+            the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+        timestamps_display (bool): 
+            Display the timestamps on each montage image. Defaults to True. This parameter is
+            optional.
+
+        timestamps_format (str): 
+            The format of the timestamps when being displayed. This is the same format string
+            as when using the `strftime()` function for a `datetime` object. Default format 
+            string is `%Y-%m-%d %H:%M:%S`. Refer to the 
+            [Python documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes)
+            for further information. This parameter is optional.
+        
+        timestamps_fontsize (int): 
+            The font size for the displayed timestamps. Default is size 11. This parameter is 
+            optional.
+
         figsize (tuple): 
             The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+        title (str): 
+            The title to display above the plotted montage. Default is no title.
 
         cmap (str): 
             The matplotlib colormap to use.
@@ -323,22 +410,38 @@ class Montage:
         set to True, the plotting variables `(fig, ax)` will be returned.
 
     Raises:
-        ValueError: Issues with the y-axis choice.
+        ValueError: Issues with the y-axis choice, or rows/cols choice.
     &#34;&#34;&#34;
+    # check rows and cols
+    if (rows * cols != self.data.shape[-1]):
+        raise ValueError((&#34;Invalid choice of rows and columns. The %d images in this Montage object &#34; +
+                          &#34;cannot be organized into a %dx%d grid (%d * %d != %d)&#34;) % (
+                              self.data.shape[-1],
+                              rows,
+                              cols,
+                              rows,
+                              cols,
+                              self.data.shape[-1],
+                          ))
+
     # check return mode
     if (returnfig is True and savefig is True):
         raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
     if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
     elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
 
     # init figure
     fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
+
+    # set title
+    if (title is not None):
+        fig.suptitle(title)
 
     # for each image
     for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
@@ -382,9 +485,9 @@ class Montage:
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
         # clean up by closing the figure
@@ -407,8 +510,30 @@ class Montage:
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
 <h2 id="args">Args</h2>
 <dl>
+<dt><strong><code>rows</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of rows to use when displaying the images as a montage. The product of
+the <code>rows</code> and <code>cols</code> parameters must match the number of images supplied when creating
+the <code><a title="pyaurorax.tools.classes.montage.Montage" href="#pyaurorax.tools.classes.montage.Montage">Montage</a></code> object. If not, a ValueError will be raised. This parameter is required.</dd>
+<dt><strong><code>cols</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of columns to use when displaying the images as a montage. The product of
+the <code>rows</code> and <code>cols</code> parameters must match the number of images supplied when creating
+the <code><a title="pyaurorax.tools.classes.montage.Montage" href="#pyaurorax.tools.classes.montage.Montage">Montage</a></code> object. If not, a ValueError will be raised. This parameter is required.</dd>
+<dt><strong><code>timestamps_display</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Display the timestamps on each montage image. Defaults to True. This parameter is
+optional.</dd>
+<dt><strong><code>timestamps_format</code></strong> :&ensp;<code>str</code></dt>
+<dd>The format of the timestamps when being displayed. This is the same format string
+as when using the <code>strftime()</code> function for a <code>datetime</code> object. Default format
+string is <code>%Y-%m-%d %H:%M:%S</code>. Refer to the
+<a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes">Python documentation</a>
+for further information. This parameter is optional.</dd>
+<dt><strong><code>timestamps_fontsize</code></strong> :&ensp;<code>int</code></dt>
+<dd>The font size for the displayed timestamps. Default is size 11. This parameter is
+optional.</dd>
 <dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
 <dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>The title to display above the plotted montage. Default is no title.</dd>
 <dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>The matplotlib colormap to use.</p>
@@ -446,8 +571,31 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>Issues with the y-axis choice.</dd>
+<dd>Issues with the y-axis choice, or rows/cols choice.</dd>
 </dl></div>
+</dd>
+<dt id="pyaurorax.tools.classes.montage.Montage.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+    timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+
+    # print
+    print(&#34;Montage:&#34;)
+    print(&#34;  %-11s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-11s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -516,6 +664,7 @@ setTimeout(() => input.focus(), 100);
 <h4><code><a title="pyaurorax.tools.classes.montage.Montage" href="#pyaurorax.tools.classes.montage.Montage">Montage</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.tools.classes.montage.Montage.plot" href="#pyaurorax.tools.classes.montage.Montage.plot">plot</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.montage.Montage.pretty_print" href="#pyaurorax.tools.classes.montage.Montage.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 </ul>

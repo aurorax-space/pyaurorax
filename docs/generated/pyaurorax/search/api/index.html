@@ -88,12 +88,23 @@ not needed for most use-cases.</p>
     Class definition for an AuroraX API request
 
     Attributes:
-        url (str): API endpoint URL for the request
-        method (str): the HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
-        params (Dict): URL parameters to send in the request, defaults to `{}`
-        body (Dict): the body of the request (ie. post data), defaults to `{}`
-        headers (Dict): any headers to send as part of the request (in addition to the default ones), defaults to `{}`
-        null_response (bool): signifies if we expect a response from the API that has no body/data in it (ie. 
+        url (str): 
+            API endpoint URL for the request
+
+        method (str): 
+            the HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
+
+        params (Dict): 
+            URL parameters to send in the request, defaults to `{}`
+
+        body (Dict): 
+            the body of the request (ie. post data), defaults to `{}`
+
+        headers (Dict): 
+            any headers to send as part of the request (in addition to the default ones), defaults to `{}`
+            
+        null_response (bool): 
+            signifies if we expect a response from the API that has no body/data in it (ie. 
             requests to upload data that respond with just a 202 status code), defaults to `False`
     &#34;&#34;&#34;
 
@@ -368,9 +379,14 @@ requests to upload data that respond with just a 202 status code), defaults to <
     Class definition for an AuroraX API response
 
     Attributes:
-        request (Any): the request object
-        data (Any): the data received as part of the request
-        status_code (int): the HTTP status code received when making the request
+        request (Any): 
+            the request object
+
+        data (Any): 
+            the data received as part of the request
+
+        status_code (int): 
+            the HTTP status code received when making the request
     &#34;&#34;&#34;
 
     def __init__(self, request: Any, data: Any, status_code: int):

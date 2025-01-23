@@ -134,12 +134,19 @@ here instead of digging in deeper to the submodules.</p>
         data when it&#39;s done.
 
         Args:
-            start: start timestamp of the search (inclusive)
-            end: end timestamp of the search (inclusive)
-            distance: the maximum distance allowed between data sources when searching for
+            start (datetime.datetime): 
+                start timestamp of the search (inclusive)
+
+            end (datetime.datetime): 
+                end timestamp of the search (inclusive)
+
+            distance (int or float or Dict): 
+                the maximum distance allowed between data sources when searching for
                 conjunctions. This can either be a number (int or float), or a dictionary
                 modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
-            ground: list of ground instrument search parameters, defaults to []
+
+            ground (List[str]): 
+                list of ground instrument search parameters, defaults to []
 
                 Example:
 
@@ -158,7 +165,9 @@ here instead of digging in deeper to the submodules.</p>
                             ]
                         }
                     }]
-            space: list of one or more space instrument search parameters, defaults to []
+
+            space (List[str]): 
+                list of one or more space instrument search parameters, defaults to []
 
                 Example:
 
@@ -180,7 +189,9 @@ here instead of digging in deeper to the submodules.</p>
                             &#34;northern&#34;
                         ]
                     }]
-            events: list of one or more events search parameters, defaults to []
+
+            events (List[str]): 
+                list of one or more events search parameters, defaults to []
 
                 Example:
 
@@ -188,18 +199,30 @@ here instead of digging in deeper to the submodules.</p>
                         &#34;programs&#34;: [ &#34;events&#34; ],
                         &#34;instrument_types&#34;: [ &#34;substorm onsets&#34; ]
                     }]
-            conjunction_types: list of conjunction types, defaults to [] (meaning all conjunction
-                types). Options are in the pyaurorax.conjunctions module, or at the top level using
-                the pyaurorax.CONJUNCTION_TYPE_* variables.
-            epoch_search_precision: the time precision to which conjunctions are calculated. Can be
+
+            conjunction_types (List[str]): 
+                list of conjunction types, defaults to [] (meaning all conjunction types). Options 
+                are in the pyaurorax.conjunctions module, or at the top level using the 
+                pyaurorax.CONJUNCTION_TYPE_* variables.
+
+            epoch_search_precision (int): 
+                the time precision to which conjunctions are calculated. Can be
                 30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
                 development and still considered &#34;alpha&#34;.
-            response_format: JSON representation of desired data response format
-            poll_interval: seconds to wait between polling calls, defaults to
+
+            response_format (Dict): 
+                JSON representation of desired data response format
+
+            poll_interval (bool): 
+                seconds to wait between polling calls, defaults to
                 pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            return_immediately: initiate the search and return without waiting for data to
+
+            return_immediately (bool): 
+                initiate the search and return without waiting for data to
                 be received, defaults to False
-            verbose: show the progress of the request using the request log, defaults
+
+            verbose (bool): 
+                show the progress of the request using the request log, defaults
 
         Returns:
             a `pyaurorax.search.ConjunctionSearch` object
@@ -226,8 +249,11 @@ here instead of digging in deeper to the submodules.</p>
         object can be supplied, or a dictionary of the raw JSON query.
 
         Args:
-            search_obj: the conjunction search to describe, optional
-            query_dict: the conjunction search query represented as a raw dictionary, optional
+            search_obj (ConjunctionSearch): 
+                the conjunction search to describe, optional
+
+            query_dict (Dict): 
+                the conjunction search query represented as a raw dictionary, optional
 
         Returns:
             the &#34;SQL-like&#34; string describing the conjunction search object
@@ -236,14 +262,14 @@ here instead of digging in deeper to the submodules.</p>
 
     def get_request_url(self, request_id: str) -&gt; str:
         &#34;&#34;&#34;
-        Get the conjunction search request URL for a given
-        request ID. This URL can be used for subsequent
-        pyaurorax.requests function calls. Primarily this method
-        facilitates delving into details about a set of already-submitted
+        Get the conjunction search request URL for a given request ID. This URL 
+        can be used for subsequent pyaurorax.requests function calls. Primarily 
+        this method facilitates delving into details about a set of already-submitted 
         conjunction searches.
 
         Args:
-            request_id: the request identifier
+            request_id (str): 
+                the request identifier
 
         Returns:
             the request URL
@@ -286,8 +312,11 @@ def swarmaurora(self):
     object can be supplied, or a dictionary of the raw JSON query.
 
     Args:
-        search_obj: the conjunction search to describe, optional
-        query_dict: the conjunction search query represented as a raw dictionary, optional
+        search_obj (ConjunctionSearch): 
+            the conjunction search to describe, optional
+
+        query_dict (Dict): 
+            the conjunction search query represented as a raw dictionary, optional
 
     Returns:
         the &#34;SQL-like&#34; string describing the conjunction search object
@@ -298,9 +327,9 @@ def swarmaurora(self):
 object can be supplied, or a dictionary of the raw JSON query.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>search_obj</code></strong></dt>
+<dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
 <dd>the conjunction search to describe, optional</dd>
-<dt><strong><code>query_dict</code></strong></dt>
+<dt><strong><code>query_dict</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>the conjunction search query represented as a raw dictionary, optional</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -316,28 +345,27 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 </summary>
 <pre><code class="python">def get_request_url(self, request_id: str) -&gt; str:
     &#34;&#34;&#34;
-    Get the conjunction search request URL for a given
-    request ID. This URL can be used for subsequent
-    pyaurorax.requests function calls. Primarily this method
-    facilitates delving into details about a set of already-submitted
+    Get the conjunction search request URL for a given request ID. This URL 
+    can be used for subsequent pyaurorax.requests function calls. Primarily 
+    this method facilitates delving into details about a set of already-submitted 
     conjunction searches.
 
     Args:
-        request_id: the request identifier
+        request_id (str): 
+            the request identifier
 
     Returns:
         the request URL
     &#34;&#34;&#34;
     return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
 </details>
-<div class="desc"><p>Get the conjunction search request URL for a given
-request ID. This URL can be used for subsequent
-pyaurorax.requests function calls. Primarily this method
-facilitates delving into details about a set of already-submitted
+<div class="desc"><p>Get the conjunction search request URL for a given request ID. This URL
+can be used for subsequent pyaurorax.requests function calls. Primarily
+this method facilitates delving into details about a set of already-submitted
 conjunction searches.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_id</code></strong></dt>
+<dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>the request identifier</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -374,12 +402,19 @@ conjunction searches.</p>
     data when it&#39;s done.
 
     Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        distance: the maximum distance allowed between data sources when searching for
+        start (datetime.datetime): 
+            start timestamp of the search (inclusive)
+
+        end (datetime.datetime): 
+            end timestamp of the search (inclusive)
+
+        distance (int or float or Dict): 
+            the maximum distance allowed between data sources when searching for
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
-        ground: list of ground instrument search parameters, defaults to []
+
+        ground (List[str]): 
+            list of ground instrument search parameters, defaults to []
 
             Example:
 
@@ -398,7 +433,9 @@ conjunction searches.</p>
                         ]
                     }
                 }]
-        space: list of one or more space instrument search parameters, defaults to []
+
+        space (List[str]): 
+            list of one or more space instrument search parameters, defaults to []
 
             Example:
 
@@ -420,7 +457,9 @@ conjunction searches.</p>
                         &#34;northern&#34;
                     ]
                 }]
-        events: list of one or more events search parameters, defaults to []
+
+        events (List[str]): 
+            list of one or more events search parameters, defaults to []
 
             Example:
 
@@ -428,18 +467,30 @@ conjunction searches.</p>
                     &#34;programs&#34;: [ &#34;events&#34; ],
                     &#34;instrument_types&#34;: [ &#34;substorm onsets&#34; ]
                 }]
-        conjunction_types: list of conjunction types, defaults to [] (meaning all conjunction
-            types). Options are in the pyaurorax.conjunctions module, or at the top level using
-            the pyaurorax.CONJUNCTION_TYPE_* variables.
-        epoch_search_precision: the time precision to which conjunctions are calculated. Can be
+
+        conjunction_types (List[str]): 
+            list of conjunction types, defaults to [] (meaning all conjunction types). Options 
+            are in the pyaurorax.conjunctions module, or at the top level using the 
+            pyaurorax.CONJUNCTION_TYPE_* variables.
+
+        epoch_search_precision (int): 
+            the time precision to which conjunctions are calculated. Can be
             30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
             development and still considered &#34;alpha&#34;.
-        response_format: JSON representation of desired data response format
-        poll_interval: seconds to wait between polling calls, defaults to
+
+        response_format (Dict): 
+            JSON representation of desired data response format
+
+        poll_interval (bool): 
+            seconds to wait between polling calls, defaults to
             pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        return_immediately: initiate the search and return without waiting for data to
+
+        return_immediately (bool): 
+            initiate the search and return without waiting for data to
             be received, defaults to False
-        verbose: show the progress of the request using the request log, defaults
+
+        verbose (bool): 
+            show the progress of the request using the request log, defaults
 
     Returns:
         a `pyaurorax.search.ConjunctionSearch` object
@@ -468,15 +519,15 @@ started, and you can use the helper functions as part of that object to get the
 data when it's done.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>distance</code></strong></dt>
+<dt><strong><code>distance</code></strong> :&ensp;<code>int</code> or <code>float</code> or <code>Dict</code></dt>
 <dd>the maximum distance allowed between data sources when searching for
 conjunctions. This can either be a number (int or float), or a dictionary
 modified from the output of the "get_advanced_distances_combos()" function.</dd>
-<dt><strong><code>ground</code></strong></dt>
+<dt><strong><code>ground</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>
 <p>list of ground instrument search parameters, defaults to []</p>
 <p>Example:</p>
@@ -497,7 +548,7 @@ modified from the output of the "get_advanced_distances_combos()" function.</dd>
 }]
 </code></pre>
 </dd>
-<dt><strong><code>space</code></strong></dt>
+<dt><strong><code>space</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>
 <p>list of one or more space instrument search parameters, defaults to []</p>
 <p>Example:</p>
@@ -521,7 +572,7 @@ modified from the output of the "get_advanced_distances_combos()" function.</dd>
 }]
 </code></pre>
 </dd>
-<dt><strong><code>events</code></strong></dt>
+<dt><strong><code>events</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>
 <p>list of one or more events search parameters, defaults to []</p>
 <p>Example:</p>
@@ -531,23 +582,23 @@ modified from the output of the "get_advanced_distances_combos()" function.</dd>
 }]
 </code></pre>
 </dd>
-<dt><strong><code>conjunction_types</code></strong></dt>
-<dd>list of conjunction types, defaults to [] (meaning all conjunction
-types). Options are in the pyaurorax.conjunctions module, or at the top level using
-the pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
-<dt><strong><code>epoch_search_precision</code></strong></dt>
+<dt><strong><code>conjunction_types</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>list of conjunction types, defaults to [] (meaning all conjunction types). Options
+are in the pyaurorax.conjunctions module, or at the top level using the
+pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
+<dt><strong><code>epoch_search_precision</code></strong> :&ensp;<code>int</code></dt>
 <dd>the time precision to which conjunctions are calculated. Can be
 30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
 development and still considered "alpha".</dd>
-<dt><strong><code>response_format</code></strong></dt>
+<dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
-<dt><strong><code>poll_interval</code></strong></dt>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>bool</code></dt>
 <dd>seconds to wait between polling calls, defaults to
 pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
-<dt><strong><code>return_immediately</code></strong></dt>
+<dt><strong><code>return_immediately</code></strong> :&ensp;<code>bool</code></dt>
 <dd>initiate the search and return without waiting for data to
 be received, defaults to False</dd>
-<dt><strong><code>verbose</code></strong></dt>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>show the progress of the request using the request log, defaults</dd>
 </dl>
 <h2 id="returns">Returns</h2>

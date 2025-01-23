@@ -94,18 +94,35 @@ border-left: 1px solid #ddd;
     Conjunction object
 
     Attributes:
-        conjunction_type: the type of location data used when the
-            conjunction was found (either &#39;nbtrace&#39;, &#39;sbtrace&#39;, or &#39;geographic&#39;)
-        start: start timestamp of the conjunction
-        end: end timestamp of the conjunction
-        data_sources: data sources in the conjunction
-        min_distance: minimum kilometer distance of the conjunction
-        max_distance: maximum kilometer distance of the conjunction
-        events: the sub-conjunctions that make up this over-arching
+        conjunction_type (str): 
+            the type of location data used when the conjunction was found (either 
+            &#39;nbtrace&#39;, &#39;sbtrace&#39;, or &#39;geographic&#39;)
+            
+        start (datetime.datetime): 
+            start timestamp of the conjunction
+
+        end (datetime.datetime): 
+            end timestamp of the conjunction
+
+        data_sources (List[DataSource]): 
+            data sources in the conjunction
+
+        min_distance (float): 
+            minimum kilometer distance of the conjunction
+
+        max_distance (float): 
+            maximum kilometer distance of the conjunction
+
+        events (List[Dict]): 
+            the sub-conjunctions that make up this over-arching
             conjunction (the conjunctions between each set of two data
             sources)
-        closest_epoch: timestamp for when data sources were closest
-        farthest_epoch: timestamp for when data sources were farthest
+
+        closest_epoch (datetime.datetime): 
+            timestamp for when data sources were closest
+
+        farthest_epoch (datetime.datetime): 
+            timestamp for when data sources were farthest
     &#34;&#34;&#34;
 
     def __init__(
@@ -140,26 +157,26 @@ border-left: 1px solid #ddd;
 <div class="desc"><p>Conjunction object</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>conjunction_type</code></strong></dt>
-<dd>the type of location data used when the
-conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic')</dd>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>conjunction_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the type of location data used when the conjunction was found (either
+'nbtrace', 'sbtrace', or 'geographic')</dd>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>start timestamp of the conjunction</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>end timestamp of the conjunction</dd>
-<dt><strong><code>data_sources</code></strong></dt>
+<dt><strong><code>data_sources</code></strong> :&ensp;<code>List[DataSource]</code></dt>
 <dd>data sources in the conjunction</dd>
-<dt><strong><code>min_distance</code></strong></dt>
+<dt><strong><code>min_distance</code></strong> :&ensp;<code>float</code></dt>
 <dd>minimum kilometer distance of the conjunction</dd>
-<dt><strong><code>max_distance</code></strong></dt>
+<dt><strong><code>max_distance</code></strong> :&ensp;<code>float</code></dt>
 <dd>maximum kilometer distance of the conjunction</dd>
-<dt><strong><code>events</code></strong></dt>
+<dt><strong><code>events</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>the sub-conjunctions that make up this over-arching
 conjunction (the conjunctions between each set of two data
 sources)</dd>
-<dt><strong><code>closest_epoch</code></strong></dt>
+<dt><strong><code>closest_epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>timestamp for when data sources were closest</dd>
-<dt><strong><code>farthest_epoch</code></strong></dt>
+<dt><strong><code>farthest_epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>timestamp for when data sources were farthest</dd>
 </dl></div>
 </dd>

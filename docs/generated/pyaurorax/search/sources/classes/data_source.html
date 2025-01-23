@@ -127,27 +127,51 @@ program, platform, instrument type, source type, and display name</p></div>
     AuroraX data source record
 
     Attributes:
-        identifier (int): the unique AuroraX data source identifier
-        program (str): the program for this data source
-        platform (str): the platform for this data source
-        instrument_type (str): the instrument type for this data source
-        source_type (str): the data source type for this data source. Options are
-            in the pyaurorax.search.sources module, or at the top level using the
+        identifier (int): 
+            the unique AuroraX data source identifier
+
+        program (str): 
+            the program for this data source
+
+        platform (str): 
+            the platform for this data source
+
+        instrument_type (str): 
+            the instrument type for this data source
+
+        source_type (str): 
+            the data source type for this data source. Options are in the 
+            pyaurorax.search.sources module, or at the top level using the
             pyaurorax.search.SOURCE_TYPE_* variables.
-        display_name (str): the display name for this data source
-        metadata (Dict): metadata for this data source (arbitrary keys and values)
-        owner (str): the owner&#39;s email address of this data source
-        maintainers (List[str]): the email addresses of AuroraX accounts that can alter
-            this data source and its associated records
-        ephemeris_metadata_schema (Dict): a list of dictionaries capturing the metadata
-            keys and values that can appear in ephemeris records associated with
-            this data source
-        data_product_metadata_schema (Dict): a list of dictionaries capturing the metadata
-            keys and values that can appear in data product records associated with
-            this data source
-        format (str): the format used when printing the data source, defaults to
-            &#34;full_record&#34;. Other options are in the pyaurorax.search.sources module, or
-            at the top level using the pyaurorax.search.FORMAT_* variables.
+
+        display_name (str): 
+            the display name for this data source
+
+        metadata (Dict): 
+            metadata for this data source (arbitrary keys and values)
+
+        owner (str): 
+            the owner&#39;s email address of this data source
+
+        maintainers (List[str]): 
+            the email addresses of AuroraX accounts that can alter this data source and 
+            its associated records
+
+        ephemeris_metadata_schema (Dict): 
+            a list of dictionaries capturing the metadata keys and values that can appear 
+            in ephemeris records associated with this data source
+
+        data_product_metadata_schema (Dict): 
+            a list of dictionaries capturing the metadata keys and values that can appear 
+            in data product records associated with this data source
+
+        stats (DataSourceStatistics): 
+            data source statistics information
+            
+        format (str): 
+            the format used when printing the data source, defaults to `full_record`. Other 
+            options are in the pyaurorax.search.sources module, or at the top level using 
+            the pyaurorax.search.FORMAT_* variables.
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -235,8 +259,8 @@ program, platform, instrument type, source type, and display name</p></div>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>the instrument type for this data source</dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type for this data source. Options are
-in the pyaurorax.search.sources module, or at the top level using the
+<dd>the data source type for this data source. Options are in the
+pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>the display name for this data source</dd>
@@ -245,20 +269,20 @@ pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
 <dd>the owner's email address of this data source</dd>
 <dt><strong><code>maintainers</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the email addresses of AuroraX accounts that can alter
-this data source and its associated records</dd>
+<dd>the email addresses of AuroraX accounts that can alter this data source and
+its associated records</dd>
 <dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata
-keys and values that can appear in ephemeris records associated with
-this data source</dd>
+<dd>a list of dictionaries capturing the metadata keys and values that can appear
+in ephemeris records associated with this data source</dd>
 <dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata
-keys and values that can appear in data product records associated with
-this data source</dd>
+<dd>a list of dictionaries capturing the metadata keys and values that can appear
+in data product records associated with this data source</dd>
+<dt><strong><code>stats</code></strong> :&ensp;<code>DataSourceStatistics</code></dt>
+<dd>data source statistics information</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format used when printing the data source, defaults to
-"full_record". Other options are in the pyaurorax.search.sources module, or
-at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
+<dd>the format used when printing the data source, defaults to <code>full_record</code>. Other
+options are in the pyaurorax.search.sources module, or at the top level using
+the pyaurorax.search.FORMAT_* variables.</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>

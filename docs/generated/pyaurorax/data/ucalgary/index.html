@@ -743,6 +743,21 @@ class FileDownloadResult:
     output_root_path: str
     dataset: Dataset
 
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        filenames_str = &#34;%s filenames&#34; % (len(self.filenames))
+
+        return &#34;FileDownloadResult(filenames=[%s], count=%d, total_bytes=%d, output_root_path=&#39;%s&#39;, dataset=%s&#34; % (
+            filenames_str,
+            self.count,
+            self.total_bytes,
+            self.output_root_path,
+            self.dataset,
+        )
+
     def pretty_print(self):
         &#34;&#34;&#34;
         A special print output for this class.
@@ -864,6 +879,21 @@ class FileListingResponse:
     count: int
     dataset: Dataset
     total_bytes: Optional[int] = None
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        urls_str = &#34;%s URLs&#34; % (len(self.urls))
+
+        return &#34;FileListingResponse(urls=[%s], path_prefix=&#39;%s&#39;, count=%d, total_bytes=%s, dataset=%s&#34; % (
+            urls_str,
+            self.path_prefix,
+            self.count,
+            str(self.total_bytes),
+            self.dataset,
+        )
 
     def pretty_print(self):
         &#34;&#34;&#34;
@@ -1352,7 +1382,7 @@ class Skymap:
         &#34;&#34;&#34;
         return self.__readers
 
-    def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
+    def list_datasets(self, name: Optional[str] = None, level: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
         &#34;&#34;&#34;
         List available datasets
 
@@ -1362,6 +1392,10 @@ class Skymap:
                 names received from the API, it will be included in the results. This parameter is
                 optional.
             
+            level (str): 
+                Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+                is optional.
+
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
                 default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
@@ -1377,6 +1411,7 @@ class Skymap:
         try:
             return self.__aurorax_obj.srs_obj.data.list_datasets(
                 name=name,
+                level=level,
                 timeout=timeout,
                 supported_library=&#34;pyaurorax&#34;,
             )
@@ -1547,6 +1582,11 @@ class Skymap:
                 passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
                 optional. See Notes section below for further details.
 
+            progress_bar_desc (str): 
+                Description value to use when constructing the visual aspect of the progress bar (straight 
+                passthrough of the `desc` parameter in a tqdm progress bar). This parameter is optional. 
+                See notes section below for further details.
+
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
                 default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
@@ -1649,6 +1689,11 @@ class Skymap:
                 ASCII value to use when constructing the visual aspect of the progress bar (straight 
                 passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
                 optional. See Notes section below for further details.
+
+            progress_bar_desc (str): 
+                Description value to use when constructing the visual aspect of the progress bar (straight 
+                passthrough of the `desc` parameter in a tqdm progress bar). This parameter is optional. 
+                See notes section below for further details.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -1869,8 +1914,8 @@ class Skymap:
         dataset_name: str,
         site_uid: str,
         timestamp: datetime.datetime,
-        timeout: Optional[int] = None,
         overwrite: bool = False,
+        timeout: Optional[int] = None,
     ) -&gt; FileDownloadResult:
         &#34;&#34;&#34;
         Download the skymap file that best matches the parameters supplied.
@@ -1887,6 +1932,10 @@ class Skymap:
             timestamp (datetime.datetime): 
                 The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
                 data will be ignored. This parameter is required.
+
+            overwrite (bool): 
+                If the skymap file exists locally, download the file and overwrite it. Default is False. This
+                parameter is optional.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -1945,8 +1994,8 @@ class Skymap:
         dataset_name: str,
         device_uid: str,
         timestamp: datetime.datetime,
-        timeout: Optional[int] = None,
         overwrite: bool = False,
+        timeout: Optional[int] = None,
     ) -&gt; FileDownloadResult:
         &#34;&#34;&#34;
         Download the flatfield calibration file that best matches the parameters supplied.
@@ -1963,6 +2012,10 @@ class Skymap:
             timestamp (datetime.datetime): 
                 The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
                 data will be ignored. This parameter is required.
+
+            overwrite (bool): 
+                If the calibration file exists locally, download the file and overwrite it. Default is False. This
+                parameter is optional.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -2021,8 +2074,8 @@ class Skymap:
         dataset_name: str,
         device_uid: str,
         timestamp: datetime.datetime,
-        timeout: Optional[int] = None,
         overwrite: bool = False,
+        timeout: Optional[int] = None,
     ) -&gt; FileDownloadResult:
         &#34;&#34;&#34;
         Download the Rayleighs calibration file that best matches the parameters supplied.
@@ -2039,6 +2092,10 @@ class Skymap:
             timestamp (datetime.datetime): 
                 The timestamp to use for deciding the best calibration file, expected to be in 
                 UTC. Any timezone data will be ignored. This parameter is required.
+
+            overwrite (bool): 
+                If the calibration file exists locally, download the file and overwrite it. Default is False. This
+                parameter is optional.
 
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -2197,6 +2254,11 @@ def readers(self):
             passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
             optional. See Notes section below for further details.
 
+        progress_bar_desc (str): 
+            Description value to use when constructing the visual aspect of the progress bar (straight 
+            passthrough of the `desc` parameter in a tqdm progress bar). This parameter is optional. 
+            See notes section below for further details.
+
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
             default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
@@ -2302,6 +2364,10 @@ below for further information.</dd>
 <dd>ASCII value to use when constructing the visual aspect of the progress bar (straight
 passthrough of the <code>ascii</code> parameter in a tqdm progress bar). This parameter is
 optional. See Notes section below for further details.</dd>
+<dt><strong><code>progress_bar_desc</code></strong> :&ensp;<code>str</code></dt>
+<dd>Description value to use when constructing the visual aspect of the progress bar (straight
+passthrough of the <code>desc</code> parameter in a tqdm progress bar). This parameter is optional.
+See notes section below for further details.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
@@ -2337,7 +2403,7 @@ aurorax.data.download(dataset_name, start, end)
 </code></pre></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.download_best_flatfield_calibration"><code class="name flex">
-<span>def <span class="ident">download_best_flatfield_calibration</span></span>(<span>self,<br>dataset_name: str,<br>device_uid: str,<br>timestamp: datetime.datetime,<br>timeout: int | None = None,<br>overwrite: bool = False) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
+<span>def <span class="ident">download_best_flatfield_calibration</span></span>(<span>self,<br>dataset_name: str,<br>device_uid: str,<br>timestamp: datetime.datetime,<br>overwrite: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -2349,8 +2415,8 @@ aurorax.data.download(dataset_name, start, end)
     dataset_name: str,
     device_uid: str,
     timestamp: datetime.datetime,
-    timeout: Optional[int] = None,
     overwrite: bool = False,
+    timeout: Optional[int] = None,
 ) -&gt; FileDownloadResult:
     &#34;&#34;&#34;
     Download the flatfield calibration file that best matches the parameters supplied.
@@ -2367,6 +2433,10 @@ aurorax.data.download(dataset_name, start, end)
         timestamp (datetime.datetime): 
             The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
             data will be ignored. This parameter is required.
+
+        overwrite (bool): 
+            If the calibration file exists locally, download the file and overwrite it. Default is False. This
+            parameter is optional.
 
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
@@ -2432,6 +2502,9 @@ Note that dataset names are case sensitive. This parameter is required.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone
 data will be ignored. This parameter is required.</dd>
+<dt><strong><code>overwrite</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If the calibration file exists locally, download the file and overwrite it. Default is False. This
+parameter is optional.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
@@ -2449,7 +2522,7 @@ object containing details about what data files were downloaded.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.download_best_rayleighs_calibration"><code class="name flex">
-<span>def <span class="ident">download_best_rayleighs_calibration</span></span>(<span>self,<br>dataset_name: str,<br>device_uid: str,<br>timestamp: datetime.datetime,<br>timeout: int | None = None,<br>overwrite: bool = False) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
+<span>def <span class="ident">download_best_rayleighs_calibration</span></span>(<span>self,<br>dataset_name: str,<br>device_uid: str,<br>timestamp: datetime.datetime,<br>overwrite: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -2461,8 +2534,8 @@ object containing details about what data files were downloaded.</p>
     dataset_name: str,
     device_uid: str,
     timestamp: datetime.datetime,
-    timeout: Optional[int] = None,
     overwrite: bool = False,
+    timeout: Optional[int] = None,
 ) -&gt; FileDownloadResult:
     &#34;&#34;&#34;
     Download the Rayleighs calibration file that best matches the parameters supplied.
@@ -2479,6 +2552,10 @@ object containing details about what data files were downloaded.</p>
         timestamp (datetime.datetime): 
             The timestamp to use for deciding the best calibration file, expected to be in 
             UTC. Any timezone data will be ignored. This parameter is required.
+
+        overwrite (bool): 
+            If the calibration file exists locally, download the file and overwrite it. Default is False. This
+            parameter is optional.
 
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
@@ -2544,6 +2621,9 @@ Note that dataset names are case sensitive. This parameter is required.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>The timestamp to use for deciding the best calibration file, expected to be in
 UTC. Any timezone data will be ignored. This parameter is required.</dd>
+<dt><strong><code>overwrite</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If the calibration file exists locally, download the file and overwrite it. Default is False. This
+parameter is optional.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
@@ -2561,7 +2641,7 @@ object containing details about what data files were downloaded.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.download_best_skymap"><code class="name flex">
-<span>def <span class="ident">download_best_skymap</span></span>(<span>self,<br>dataset_name: str,<br>site_uid: str,<br>timestamp: datetime.datetime,<br>timeout: int | None = None,<br>overwrite: bool = False) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
+<span>def <span class="ident">download_best_skymap</span></span>(<span>self,<br>dataset_name: str,<br>site_uid: str,<br>timestamp: datetime.datetime,<br>overwrite: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.data.classes.FileDownloadResult</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -2573,8 +2653,8 @@ object containing details about what data files were downloaded.</p>
     dataset_name: str,
     site_uid: str,
     timestamp: datetime.datetime,
-    timeout: Optional[int] = None,
     overwrite: bool = False,
+    timeout: Optional[int] = None,
 ) -&gt; FileDownloadResult:
     &#34;&#34;&#34;
     Download the skymap file that best matches the parameters supplied.
@@ -2591,6 +2671,10 @@ object containing details about what data files were downloaded.</p>
         timestamp (datetime.datetime): 
             The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone 
             data will be ignored. This parameter is required.
+
+        overwrite (bool): 
+            If the skymap file exists locally, download the file and overwrite it. Default is False. This
+            parameter is optional.
 
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
@@ -2656,6 +2740,9 @@ Note that dataset names are case sensitive. This parameter is required.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>The timestamp to use for deciding the best skymap, expected to be in UTC. Any timezone
 data will be ignored. This parameter is required.</dd>
+<dt><strong><code>overwrite</code></strong> :&ensp;<code>bool</code></dt>
+<dd>If the skymap file exists locally, download the file and overwrite it. Default is False. This
+parameter is optional.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
@@ -2726,6 +2813,11 @@ object containing details about what data files were downloaded.</p>
             ASCII value to use when constructing the visual aspect of the progress bar (straight 
             passthrough of the `ascii` parameter in a tqdm progress bar). This parameter is 
             optional. See Notes section below for further details.
+
+        progress_bar_desc (str): 
+            Description value to use when constructing the visual aspect of the progress bar (straight 
+            passthrough of the `desc` parameter in a tqdm progress bar). This parameter is optional. 
+            See notes section below for further details.
 
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
@@ -2809,6 +2901,10 @@ below for further information.</dd>
 <dd>ASCII value to use when constructing the visual aspect of the progress bar (straight
 passthrough of the <code>ascii</code> parameter in a tqdm progress bar). This parameter is
 optional. See Notes section below for further details.</dd>
+<dt><strong><code>progress_bar_desc</code></strong> :&ensp;<code>str</code></dt>
+<dd>Description value to use when constructing the visual aspect of the progress bar (straight
+passthrough of the <code>desc</code> parameter in a tqdm progress bar). This parameter is optional.
+See notes section below for further details.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
@@ -3066,14 +3162,14 @@ is required.</dd>
 <p>Boolean indicating if file reading is supported.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.list_datasets"><code class="name flex">
-<span>def <span class="ident">list_datasets</span></span>(<span>self, name: str | None = None, timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
+<span>def <span class="ident">list_datasets</span></span>(<span>self,<br>name: str | None = None,<br>level: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
+<pre><code class="python">def list_datasets(self, name: Optional[str] = None, level: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
     &#34;&#34;&#34;
     List available datasets
 
@@ -3083,6 +3179,10 @@ is required.</dd>
             names received from the API, it will be included in the results. This parameter is
             optional.
         
+        level (str): 
+            Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+            is optional.
+
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
             default is 10 seconds, or the `api_timeout` value in the super class&#39; `pyaurorax.PyAuroraX`
@@ -3098,6 +3198,7 @@ is required.</dd>
     try:
         return self.__aurorax_obj.srs_obj.data.list_datasets(
             name=name,
+            level=level,
             timeout=timeout,
             supported_library=&#34;pyaurorax&#34;,
         )
@@ -3111,6 +3212,9 @@ is required.</dd>
 <dd>Supply a name used for filtering. If that name is found in the available dataset
 names received from the API, it will be included in the results. This parameter is
 optional.</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code></dt>
+<dd>Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+is optional.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>

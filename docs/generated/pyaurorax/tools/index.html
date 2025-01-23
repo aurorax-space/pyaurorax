@@ -112,506 +112,6 @@ at = aurorax.tools
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="pyaurorax.tools.display"><code class="name flex">
-<span>def <span class="ident">display</span></span>(<span>image: numpy.ndarray,<br>cmap: str | None = None,<br>figsize: Tuple[int, int] | None = None,<br>aspect: Literal['equal', 'auto'] | float | None = None,<br>colorbar: bool = False,<br>title: str | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def display(image: np.ndarray,
-            cmap: Optional[str] = None,
-            figsize: Optional[Tuple[int, int]] = None,
-            aspect: Optional[Union[Literal[&#34;equal&#34;, &#34;auto&#34;], float]] = None,
-            colorbar: bool = False,
-            title: Optional[str] = None,
-            returnfig: bool = False,
-            savefig: bool = False,
-            savefig_filename: Optional[str] = None,
-            savefig_quality: Optional[int] = None) -&gt; Any:
-    &#34;&#34;&#34;
-    Render a visualization of a single image.
-
-    Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
-    return the matplotlib plot object for further usage (using the `returnfig` parameter).
-
-    Args:
-        image (numpy.ndarray): 
-            The image to display, represented as a numpy array.
-
-        cmap (str): 
-            The matplotlib colormap to use.
-
-            Commonly used colormaps are:
-
-            - REGO: `gist_heat`
-            - THEMIS ASI: `gray`
-            - TREx Blue: `Blues_r`
-            - TREx NIR: `gray`
-            - TREx RGB: `None`
-
-            A list of all available colormaps can be found on the 
-            [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
-
-        figsize (tuple): 
-            The matplotlib figure size to use when displaying, tuple of two integers (ie. `figsize=(14, 4)`)
-    
-        aspect (str or float): 
-            The matplotlib imshow aspect ration to use. A common value for this is `auto`. All valid values 
-            can be found on the [matplotlib documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html).
-
-        colorbar (bool): 
-            Display a colorbar. Default is `False`.
-
-        title (str): 
-            A title to display above the rendered image. Defaults to no title.
-
-        returnfig (bool): 
-            Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
-            manipulation, for example, adding labels or a title in a different location than the default. 
-            
-            Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
-            with it. This can be achieved by doing `plt.close(fig)`. 
-            
-            Note that this method cannot be used in combination with `savefig`.
-
-        savefig (bool): 
-            Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
-            this parameter is set to True. Defaults to `False`.
-
-        savefig_filename (str): 
-            Filename to save the image to. Must be specified if the savefig parameter is set to True.
-
-        savefig_quality (int): 
-            Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
-            is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
-
-    Returns:
-        The displayed image, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
-        set to True, the plotting variables `(fig, ax)` will be returned.
-
-    Raises:
-        ValueError: issues with supplied parameters.
-    &#34;&#34;&#34;
-    # check return mode
-    if (returnfig is True and savefig is True):
-        raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
-    if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
-    elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
-
-    # init figure
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_axes((0, 0, 1, 1))
-    ax.set_axis_off()
-
-    # plot data
-    im = ax.imshow(image, cmap=cmap, origin=&#34;lower&#34;, aspect=aspect)
-
-    # show colour bar
-    if (colorbar is True):
-        fig.colorbar(im, ax=ax)
-
-    # show title
-    if (title is not None):
-        ax.set_title(title)
-
-    # save figure or show it
-    if (savefig is True):
-        # check that filename has been set
-        if (savefig_filename is None):
-            raise ValueError(&#34;The savefig_filename parameter is missing, but required since savefig was set to True.&#34;)
-
-        # save the figure
-        f_extension = os.path.splitext(savefig_filename)[-1].lower()
-        if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
-            # check quality setting
-            if (savefig_quality is not None):
-                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
-            else:
-                plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
-        else:
-            if (savefig_quality is not None):
-                # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
-            plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
-
-        # clean up by closing the figure
-        plt.close(fig)
-    elif (returnfig is True):
-        # return the figure and axis objects
-        return (fig, ax)
-    else:
-        # show the figure
-        plt.show(fig)
-
-        # cleanup by closing the figure
-        plt.close(fig)
-
-    # return
-    return None</code></pre>
-</details>
-<div class="desc"><p>Render a visualization of a single image.</p>
-<p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
-return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>image</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
-<dd>The image to display, represented as a numpy array.</dd>
-<dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
-<dd>
-<p>The matplotlib colormap to use.</p>
-<p>Commonly used colormaps are:</p>
-<ul>
-<li>REGO: <code>gist_heat</code></li>
-<li>THEMIS ASI: <code>gray</code></li>
-<li>TREx Blue: <code>Blues_r</code></li>
-<li>TREx NIR: <code>gray</code></li>
-<li>TREx RGB: <code>None</code></li>
-</ul>
-<p>A list of all available colormaps can be found on the
-<a href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">matplotlib documentation</a>.</p>
-</dd>
-<dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
-<dd>The matplotlib figure size to use when displaying, tuple of two integers (ie. <code>figsize=(14, 4)</code>)</dd>
-<dt><strong><code>aspect</code></strong> :&ensp;<code>str</code> or <code>float</code></dt>
-<dd>The matplotlib imshow aspect ration to use. A common value for this is <code>auto</code>. All valid values
-can be found on the <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html">matplotlib documentation</a>.</dd>
-<dt><strong><code>colorbar</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Display a colorbar. Default is <code>False</code>.</dd>
-<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
-<dd>A title to display above the rendered image. Defaults to no title.</dd>
-<dt><strong><code>returnfig</code></strong> :&ensp;<code>bool</code></dt>
-<dd>
-<p>Instead of displaying the image, return the matplotlib figure object. This allows for further plot
-manipulation, for example, adding labels or a title in a different location than the default. </p>
-<p>Remember - if this parameter is supplied, be sure that you close your plot after finishing work
-with it. This can be achieved by doing <code>plt.close(fig)</code>. </p>
-<p>Note that this method cannot be used in combination with <code>savefig</code>.</p>
-</dd>
-<dt><strong><code>savefig</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if
-this parameter is set to True. Defaults to <code>False</code>.</dd>
-<dt><strong><code>savefig_filename</code></strong> :&ensp;<code>str</code></dt>
-<dd>Filename to save the image to. Must be specified if the savefig parameter is set to True.</dd>
-<dt><strong><code>savefig_quality</code></strong> :&ensp;<code>int</code></dt>
-<dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
-is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>The displayed image, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
-set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>issues with supplied parameters.</dd>
-</dl></div>
-</dd>
-<dt id="pyaurorax.tools.movie"><code class="name flex">
-<span>def <span class="ident">movie</span></span>(<span>input_filenames: List[str],<br>output_filename: str,<br>n_parallel: int = 1,<br>fps: int = 25,<br>progress_bar_disable: bool = False) ‑> None</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def movie(
-    input_filenames: List[str],
-    output_filename: str,
-    n_parallel: int = 1,
-    fps: int = 25,
-    progress_bar_disable: bool = False,
-) -&gt; None:
-    &#34;&#34;&#34;
-    Generate a movie file from a list of filenames. Note that the codec used is &#34;mp4v&#34;.
-
-    Args:
-        input_filenames (List[str]): 
-            Filenames of frames to use for movie generation. No sorting is applied, so it is 
-            assumed the list is in the desired order. This parameter is required.
-        
-        output_filename (str): 
-            Filename for the created movie file. This parameter is required.
-
-        n_parallel (int): 
-            Number of multiprocessing workers to use. Default is `1`, which does not use
-            multiprocessing.
-
-        fps (int): 
-            Frames per second (FPS) for the movie file. Default is `25`.
-
-        progress_bar_disable (bool): 
-            Toggle the progress bars off. Default is `False`.        
-
-    Raises:
-        IOError: I/O related issue while generating movie
-    &#34;&#34;&#34;
-    # read in all frames
-    #
-    # NOTE: we do with using multiprocessing, but we need to be very
-    # careful to ensure that the frames are being added to the list
-    # in order. This preserves the order of the file list that was
-    # supplied.
-    frame_list = []
-    if (n_parallel == 1):
-        # don&#39;t do anything special, just a basic loop
-        if (progress_bar_disable is True):
-            # no progress bar
-            for fname in input_filenames:
-                img = cv2.imread(fname)
-                frame_list.append(img)
-        else:
-            # with progress bar
-            for fname in tqdm(input_filenames, desc=&#34;Reading files: &#34;, unit=&#34;files&#34;):
-                img = cv2.imread(fname)
-                frame_list.append(img)
-    else:
-        # multiple workers, do it in a multiprocessing loop
-        if (progress_bar_disable is True):
-            with ProcessPoolExecutor(max_workers=n_parallel) as executor:
-                for result in executor.map(__process_frame, input_filenames):
-                    frame_list.append(result[&#34;img&#34;])
-        else:
-            results = tqdm_process_map(
-                __process_frame,
-                input_filenames,
-                max_workers=n_parallel,
-                chunksize=1,
-                desc=&#34;Reading files: &#34;,
-                unit=&#34;files&#34;,
-                tqdm_class=tqdm,
-            )
-            for result in results:
-                frame_list.append(result[&#34;img&#34;])
-
-    # get dimensions of images so we can initialize the video writer
-    #
-    # NOTE: we assume that all images are the same size. Perhaps we can
-    # put a check in while we read all the images in?
-    if (len(frame_list) == 0):
-        raise IOError(&#34;No images read in. Check that filenames were indeed supplied.&#34;)
-    elif (len(frame_list[0].shape) == 2 or len(frame_list[0].shape) == 3):
-        width = frame_list[0].shape[0]
-        height = frame_list[0].shape[1]
-    else:
-        # some unexpected image shape
-        raise IOError(&#34;Unexpected shape of image data. Found shape %s, but was expecting only 2 or 3 dimensions.&#34; % (frame_list[0].shape))
-
-    # initialize videowriter object
-    fourcc = cv2.VideoWriter_fourcc(*&#34;mp4v&#34;)  # type: ignore
-    frame_size = (height, width)
-    writer = cv2.VideoWriter(output_filename, fourcc, fps, frame_size)
-
-    # write the frames
-    if (progress_bar_disable is True):
-        # no progress bar
-        for i in range(0, len(frame_list)):
-            writer.write(frame_list[i])
-    else:
-        # with progress bar
-        for i in tqdm(range(0, len(frame_list)), desc=&#34;Encoding frames: &#34;, unit=&#34;frames&#34;):
-            writer.write(frame_list[i])
-
-    # close the writer
-    writer.release()</code></pre>
-</details>
-<div class="desc"><p>Generate a movie file from a list of filenames. Note that the codec used is "mp4v".</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>input_filenames</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>Filenames of frames to use for movie generation. No sorting is applied, so it is
-assumed the list is in the desired order. This parameter is required.</dd>
-<dt><strong><code>output_filename</code></strong> :&ensp;<code>str</code></dt>
-<dd>Filename for the created movie file. This parameter is required.</dd>
-<dt><strong><code>n_parallel</code></strong> :&ensp;<code>int</code></dt>
-<dd>Number of multiprocessing workers to use. Default is <code>1</code>, which does not use
-multiprocessing.</dd>
-<dt><strong><code>fps</code></strong> :&ensp;<code>int</code></dt>
-<dd>Frames per second (FPS) for the movie file. Default is <code>25</code>.</dd>
-<dt><strong><code>progress_bar_disable</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Toggle the progress bars off. Default is <code>False</code>.
-</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>IOError</code></dt>
-<dd>I/O related issue while generating movie</dd>
-</dl></div>
-</dd>
-<dt id="pyaurorax.tools.scale_intensity"><code class="name flex">
-<span>def <span class="ident">scale_intensity</span></span>(<span>data: numpy.ndarray,<br>min: float | None = None,<br>max: float | None = None,<br>top: float | None = None,<br>memory_saver: bool = True) ‑> numpy.ndarray</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def scale_intensity(
-    data: np.ndarray,
-    min: Optional[float] = None,
-    max: Optional[float] = None,
-    top: Optional[float] = None,
-    memory_saver: bool = True,
-) -&gt; np.ndarray:
-    &#34;&#34;&#34;
-    Scale all values of an array that lie in the range min&lt;=x&lt;=max in to 
-    the range 0&lt;=x&lt;=high.
-    
-    Args:
-        data (numpy.ndarray): 
-            Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of 
-            images. Also assumed that the first 2 dimensions are the image&#39;s x and y 
-            coordinates, and the following dimensions are some combination of the number of 
-            images, and/or the colour channel.
-
-        min (float): 
-            Minimum value of array to be considered
-
-        max (float): 
-            Maximum value of array to be considered
-
-        top (float): 
-            Maximum value of the scaled result. If not supplied, the max value
-            of the data array&#39;s dtype is used.
-
-        memory_saver (bool): 
-            Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
-            the scaling routine will be faster, but will utilize significantly more RAM.
-
-    Returns:
-        A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
-        with the scaling applied.
-
-    Raises:
-        ValueError: Issues with the supplied min, max, or top
-    &#34;&#34;&#34;
-
-    if (memory_saver is True):
-        # Save original data shape
-        input_shape = data.shape
-
-        # determine if we are single or 3 channel
-        if (len(data.shape) == 2):
-            n_channels = 1
-            data = data[:, :, np.newaxis]
-        elif (len(data.shape) == 3):
-            # single channel
-            n_channels = 1
-        elif (len(data.shape) == 4):
-            # three channel
-            n_channels = 3
-        else:
-            raise ValueError(
-                &#34;Unable to determine number of channels based on the supplied images. Make sure you are supplying a &#34;
-                +
-                &#34;[rows,cols,images] or [rows,cols,channels,images] sized array.&#34;
-            )
-
-        # init destination array
-        images_scaled = np.empty((data.shape), dtype=data.dtype)
-
-        # cycle through each image
-        for i in range(0, data.shape[-1]):
-            if (n_channels == 1):
-                images_scaled[:, :, i] = __scale_data(data[:, :, i], min, max,
-                                                      top)
-            else:
-                images_scaled[:, :, :,
-                              i] = __scale_data(data[:, :, :, i], min, max,
-                                                top)
-
-        # Reshape to confirm output is the same shape as input
-        images_scaled = np.reshape(images_scaled, input_shape)
-
-        # return
-        return images_scaled
-    else:
-        # scale and return
-        return __scale_data(data, min, max, top)</code></pre>
-</details>
-<div class="desc"><p>Scale all values of an array that lie in the range min&lt;=x&lt;=max in to
-the range 0&lt;=x&lt;=high.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
-<dd>Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of
-images. Also assumed that the first 2 dimensions are the image's x and y
-coordinates, and the following dimensions are some combination of the number of
-images, and/or the colour channel.</dd>
-<dt><strong><code>min</code></strong> :&ensp;<code>float</code></dt>
-<dd>Minimum value of array to be considered</dd>
-<dt><strong><code>max</code></strong> :&ensp;<code>float</code></dt>
-<dd>Maximum value of array to be considered</dd>
-<dt><strong><code>top</code></strong> :&ensp;<code>float</code></dt>
-<dd>Maximum value of the scaled result. If not supplied, the max value
-of the data array's dtype is used.</dd>
-<dt><strong><code>memory_saver</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Utilize less RAM when scaling a set of images. Defaults to <code>True</code>. If set to <code>False</code> then
-the scaling routine will be faster, but will utilize significantly more RAM.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
-with the scaling applied.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>Issues with the supplied min, max, or top</dd>
-</dl></div>
-</dd>
-<dt id="pyaurorax.tools.set_theme"><code class="name flex">
-<span>def <span class="ident">set_theme</span></span>(<span>theme: str) ‑> None</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def set_theme(theme: str) -&gt; None:
-    &#34;&#34;&#34;
-    A handy wrapper for setting the matplotlib global theme. Common choices are `light`, 
-    `dark`, or `default`.
-
-    Args:
-        theme (str): 
-            Theme name. Common choices are `light`, `dark`, or `default`. If default, then
-            matplotlib theme settings will be fully reset to their defaults.
-
-            Additional themes can be found on the 
-            [matplotlib documentation](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)
-    &#34;&#34;&#34;
-    if (&#34;theme&#34; == &#34;default&#34;):
-        mpl.rcParams.update(mpl.rcParamsDefault)
-    elif (theme == &#34;light&#34;):
-        plt.style.use(&#34;default&#34;)
-    elif (theme == &#34;dark&#34;):
-        plt.style.use(&#34;dark_background&#34;)
-    else:
-        plt.style.use(theme)</code></pre>
-</details>
-<div class="desc"><p>A handy wrapper for setting the matplotlib global theme. Common choices are <code>light</code>,
-<code>dark</code>, or <code>default</code>.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>theme</code></strong> :&ensp;<code>str</code></dt>
-<dd>
-<p>Theme name. Common choices are <code>light</code>, <code>dark</code>, or <code>default</code>. If default, then
-matplotlib theme settings will be fully reset to their defaults.</p>
-<p>Additional themes can be found on the
-<a href="https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html">matplotlib documentation</a></p>
-</dd>
-</dl></div>
-</dd>
-</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
@@ -633,14 +133,19 @@ class Keogram:
     Attributes:
         data (numpy.ndarray): 
             The derived keogram data.
+
         timestamp (List[datetime.datetime]): 
             Timestamps corresponding to each keogram slice.
-        instrument_type (str):
+
+        instrument_type (str): 
             String giving instrument type, either &#39;asi&#39; or &#39;spectrograph&#39;.
+
         ccd_y (numpy.ndarray): 
             The y-axis representing CCD Y coordinates for the keogram.
+
         mag_y (numpy.ndarray): 
             The y-axis representing magnetic latitude for the keogram.
+
         geo_y (numpy.ndarray): 
             The y-axis representing geographic latitude for the keogram.
     &#34;&#34;&#34;
@@ -675,6 +180,26 @@ class Keogram:
         geo_y_str = &#34;None&#34; if self.geo_y is None else &#34;array(%d values)&#34; % (self.geo_y.shape[0])
 
         return &#34;Keogram(data=%s, timestamp=%s, ccd_y=%s, mag_y=%s, geo_y=%s)&#34; % (data_str, timestamp_str, ccd_y_str, mag_y_str, geo_y_str)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+        timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+        ccd_y_str = &#34;None&#34; if self.ccd_y is None else &#34;array(%d values)&#34; % (self.ccd_y.shape[0])
+        mag_y_str = &#34;None&#34; if self.mag_y is None else &#34;array(%d values)&#34; % (self.mag_y.shape[0])
+        geo_y_str = &#34;None&#34; if self.geo_y is None else &#34;array(%d values)&#34; % (self.geo_y.shape[0])
+
+        # print
+        print(&#34;Keogram:&#34;)
+        print(&#34;  %-17s: %s&#34; % (&#34;data&#34;, data_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;instrument_type&#34;, self.instrument_type))
+        print(&#34;  %-17s: %s&#34; % (&#34;ccd_y&#34;, ccd_y_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;geo_y&#34;, geo_y_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;mag_y&#34;, mag_y_str))
 
     def set_geographic_latitudes(self, skymap: Skymap, altitude_km: Optional[Union[int, float]] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -837,7 +362,7 @@ class Keogram:
                 default is `ccd`. This parameter is required.
 
             title (str): 
-                The title to display above the plotted keogram.
+                The title to display above the plotted keogram. Default is no title.
 
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
@@ -906,13 +431,13 @@ class Keogram:
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
         if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                          &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
         elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                          &#34;savefig option parameters will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
 
         # init figure and plot data
         fig = plt.figure(figsize=figsize)
@@ -964,7 +489,7 @@ class Keogram:
 
             # do check for ccd_y
             if (self.ccd_y is None):
-                warnings.warn(
+                show_warning(
                     &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                     &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                     stacklevel=1,
@@ -1017,9 +542,9 @@ class Keogram:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                                  &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                                  stacklevel=1)
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
             # clean up by closing the figure
@@ -1044,8 +569,8 @@ class Keogram:
 <dd>The derived keogram data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
 <dd>Timestamps corresponding to each keogram slice.</dd>
-<dt>instrument_type (str):</dt>
-<dt>String giving instrument type, either 'asi' or 'spectrograph'.</dt>
+<dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>String giving instrument type, either 'asi' or 'spectrograph'.</dd>
 <dt><strong><code>ccd_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The y-axis representing CCD Y coordinates for the keogram.</dd>
 <dt><strong><code>mag_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
@@ -1090,7 +615,7 @@ class Keogram:
             default is `ccd`. This parameter is required.
 
         title (str): 
-            The title to display above the plotted keogram.
+            The title to display above the plotted keogram. Default is no title.
 
         figsize (tuple): 
             The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
@@ -1159,13 +684,13 @@ class Keogram:
     if (returnfig is True and savefig is True):
         raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
     if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
     elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
 
     # init figure and plot data
     fig = plt.figure(figsize=figsize)
@@ -1217,7 +742,7 @@ class Keogram:
 
         # do check for ccd_y
         if (self.ccd_y is None):
-            warnings.warn(
+            show_warning(
                 &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                 &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                 stacklevel=1,
@@ -1270,9 +795,9 @@ class Keogram:
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
         # clean up by closing the figure
@@ -1299,7 +824,7 @@ return the matplotlib plot object for further usage (using the <code>returnfig</
 <dd>Type of y-axis to use when plotting. Options are <code>ccd</code>, <code>mag</code>, or <code>geo</code>. The
 default is <code>ccd</code>. This parameter is required.</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
-<dd>The title to display above the plotted keogram.</dd>
+<dd>The title to display above the plotted keogram. Default is no title.</dd>
 <dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
 <dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
 <dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
@@ -1354,6 +879,36 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <dt><code>ValueError</code></dt>
 <dd>Issues with the y-axis choice.</dd>
 </dl></div>
+</dd>
+<dt id="pyaurorax.tools.Keogram.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+    timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+    ccd_y_str = &#34;None&#34; if self.ccd_y is None else &#34;array(%d values)&#34; % (self.ccd_y.shape[0])
+    mag_y_str = &#34;None&#34; if self.mag_y is None else &#34;array(%d values)&#34; % (self.mag_y.shape[0])
+    geo_y_str = &#34;None&#34; if self.geo_y is None else &#34;array(%d values)&#34; % (self.geo_y.shape[0])
+
+    # print
+    print(&#34;Keogram:&#34;)
+    print(&#34;  %-17s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;instrument_type&#34;, self.instrument_type))
+    print(&#34;  %-17s: %s&#34; % (&#34;ccd_y&#34;, ccd_y_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;geo_y&#34;, geo_y_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;mag_y&#34;, mag_y_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 <dt id="pyaurorax.tools.Keogram.set_geographic_latitudes"><code class="name flex">
 <span>def <span class="ident">set_geographic_latitudes</span></span>(<span>self,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>altitude_km: int | float | None = None) ‑> None</span>
@@ -1588,14 +1143,28 @@ class Montage:
 
         return &#34;Montage(data=%s, timestamp=%s)&#34; % (data_str, timestamp_str)
 
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+        timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+
+        # print
+        print(&#34;Montage:&#34;)
+        print(&#34;  %-11s: %s&#34; % (&#34;data&#34;, data_str))
+        print(&#34;  %-11s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+
     def plot(self,
              rows: int,
              cols: int,
-             figsize: Optional[Tuple[int, int]] = None,
-             cmap: Optional[str] = None,
              timestamps_display: bool = True,
              timestamps_format: str = &#34;%Y-%m-%d %H:%M:%S&#34;,
              timestamps_fontsize: int = 11,
+             figsize: Optional[Tuple[int, int]] = None,
+             title: Optional[str] = None,
+             cmap: Optional[str] = None,
              returnfig: bool = False,
              savefig: bool = False,
              savefig_filename: Optional[str] = None,
@@ -1607,8 +1176,36 @@ class Montage:
         return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
         Args:
+            rows (int): 
+                The number of rows to use when displaying the images as a montage. The product of 
+                the `rows` and `cols` parameters must match the number of images supplied when creating 
+                the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+            cols (int): 
+                The number of columns to use when displaying the images as a montage. The product of 
+                the `rows` and `cols` parameters must match the number of images supplied when creating 
+                the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+            timestamps_display (bool): 
+                Display the timestamps on each montage image. Defaults to True. This parameter is
+                optional.
+
+            timestamps_format (str): 
+                The format of the timestamps when being displayed. This is the same format string
+                as when using the `strftime()` function for a `datetime` object. Default format 
+                string is `%Y-%m-%d %H:%M:%S`. Refer to the 
+                [Python documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes)
+                for further information. This parameter is optional.
+            
+            timestamps_fontsize (int): 
+                The font size for the displayed timestamps. Default is size 11. This parameter is 
+                optional.
+
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+            title (str): 
+                The title to display above the plotted montage. Default is no title.
 
             cmap (str): 
                 The matplotlib colormap to use.
@@ -1649,22 +1246,38 @@ class Montage:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice.
+            ValueError: Issues with the y-axis choice, or rows/cols choice.
         &#34;&#34;&#34;
+        # check rows and cols
+        if (rows * cols != self.data.shape[-1]):
+            raise ValueError((&#34;Invalid choice of rows and columns. The %d images in this Montage object &#34; +
+                              &#34;cannot be organized into a %dx%d grid (%d * %d != %d)&#34;) % (
+                                  self.data.shape[-1],
+                                  rows,
+                                  cols,
+                                  rows,
+                                  cols,
+                                  self.data.shape[-1],
+                              ))
+
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
         if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                          &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
         elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                          &#34;savefig option parameters will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
 
         # init figure
         fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
+
+        # set title
+        if (title is not None):
+            fig.suptitle(title)
 
         # for each image
         for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
@@ -1708,9 +1321,9 @@ class Montage:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                                  &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                                  stacklevel=1)
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
             # clean up by closing the figure
@@ -1739,7 +1352,7 @@ class Montage:
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.tools.Montage.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self,<br>rows: int,<br>cols: int,<br>figsize: Tuple[int, int] | None = None,<br>cmap: str | None = None,<br>timestamps_display: bool = True,<br>timestamps_format: str = '%Y-%m-%d %H:%M:%S',<br>timestamps_fontsize: int = 11,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+<span>def <span class="ident">plot</span></span>(<span>self,<br>rows: int,<br>cols: int,<br>timestamps_display: bool = True,<br>timestamps_format: str = '%Y-%m-%d %H:%M:%S',<br>timestamps_fontsize: int = 11,<br>figsize: Tuple[int, int] | None = None,<br>title: str | None = None,<br>cmap: str | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1749,11 +1362,12 @@ class Montage:
 <pre><code class="python">def plot(self,
          rows: int,
          cols: int,
-         figsize: Optional[Tuple[int, int]] = None,
-         cmap: Optional[str] = None,
          timestamps_display: bool = True,
          timestamps_format: str = &#34;%Y-%m-%d %H:%M:%S&#34;,
          timestamps_fontsize: int = 11,
+         figsize: Optional[Tuple[int, int]] = None,
+         title: Optional[str] = None,
+         cmap: Optional[str] = None,
          returnfig: bool = False,
          savefig: bool = False,
          savefig_filename: Optional[str] = None,
@@ -1765,8 +1379,36 @@ class Montage:
     return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
     Args:
+        rows (int): 
+            The number of rows to use when displaying the images as a montage. The product of 
+            the `rows` and `cols` parameters must match the number of images supplied when creating 
+            the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+        cols (int): 
+            The number of columns to use when displaying the images as a montage. The product of 
+            the `rows` and `cols` parameters must match the number of images supplied when creating 
+            the `Montage` object. If not, a ValueError will be raised. This parameter is required.
+
+        timestamps_display (bool): 
+            Display the timestamps on each montage image. Defaults to True. This parameter is
+            optional.
+
+        timestamps_format (str): 
+            The format of the timestamps when being displayed. This is the same format string
+            as when using the `strftime()` function for a `datetime` object. Default format 
+            string is `%Y-%m-%d %H:%M:%S`. Refer to the 
+            [Python documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes)
+            for further information. This parameter is optional.
+        
+        timestamps_fontsize (int): 
+            The font size for the displayed timestamps. Default is size 11. This parameter is 
+            optional.
+
         figsize (tuple): 
             The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+        title (str): 
+            The title to display above the plotted montage. Default is no title.
 
         cmap (str): 
             The matplotlib colormap to use.
@@ -1807,22 +1449,38 @@ class Montage:
         set to True, the plotting variables `(fig, ax)` will be returned.
 
     Raises:
-        ValueError: Issues with the y-axis choice.
+        ValueError: Issues with the y-axis choice, or rows/cols choice.
     &#34;&#34;&#34;
+    # check rows and cols
+    if (rows * cols != self.data.shape[-1]):
+        raise ValueError((&#34;Invalid choice of rows and columns. The %d images in this Montage object &#34; +
+                          &#34;cannot be organized into a %dx%d grid (%d * %d != %d)&#34;) % (
+                              self.data.shape[-1],
+                              rows,
+                              cols,
+                              rows,
+                              cols,
+                              self.data.shape[-1],
+                          ))
+
     # check return mode
     if (returnfig is True and savefig is True):
         raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
     if (returnfig is True and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
     elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
 
     # init figure
     fig, axs = plt.subplots(nrows=rows, ncols=cols, figsize=figsize)
+
+    # set title
+    if (title is not None):
+        fig.suptitle(title)
 
     # for each image
     for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
@@ -1866,9 +1524,9 @@ class Montage:
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
         # clean up by closing the figure
@@ -1891,8 +1549,30 @@ class Montage:
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
 <h2 id="args">Args</h2>
 <dl>
+<dt><strong><code>rows</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of rows to use when displaying the images as a montage. The product of
+the <code>rows</code> and <code>cols</code> parameters must match the number of images supplied when creating
+the <code><a title="pyaurorax.tools.Montage" href="#pyaurorax.tools.Montage">Montage</a></code> object. If not, a ValueError will be raised. This parameter is required.</dd>
+<dt><strong><code>cols</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of columns to use when displaying the images as a montage. The product of
+the <code>rows</code> and <code>cols</code> parameters must match the number of images supplied when creating
+the <code><a title="pyaurorax.tools.Montage" href="#pyaurorax.tools.Montage">Montage</a></code> object. If not, a ValueError will be raised. This parameter is required.</dd>
+<dt><strong><code>timestamps_display</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Display the timestamps on each montage image. Defaults to True. This parameter is
+optional.</dd>
+<dt><strong><code>timestamps_format</code></strong> :&ensp;<code>str</code></dt>
+<dd>The format of the timestamps when being displayed. This is the same format string
+as when using the <code>strftime()</code> function for a <code>datetime</code> object. Default format
+string is <code>%Y-%m-%d %H:%M:%S</code>. Refer to the
+<a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes">Python documentation</a>
+for further information. This parameter is optional.</dd>
+<dt><strong><code>timestamps_fontsize</code></strong> :&ensp;<code>int</code></dt>
+<dd>The font size for the displayed timestamps. Default is size 11. This parameter is
+optional.</dd>
 <dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
 <dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>The title to display above the plotted montage. Default is no title.</dd>
 <dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>The matplotlib colormap to use.</p>
@@ -1930,8 +1610,31 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>Issues with the y-axis choice.</dd>
+<dd>Issues with the y-axis choice, or rows/cols choice.</dd>
 </dl></div>
+</dd>
+<dt id="pyaurorax.tools.Montage.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+    timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+
+    # print
+    print(&#34;Montage:&#34;)
+    print(&#34;  %-11s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-11s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -1982,30 +1685,55 @@ class Mosaic:
             polycollection_str = &#34;PolyCollection(...)&#34;
 
         if self.contour_data is not None:
-            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %s Contours)&#34; % (
+            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)&#34; % (
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get(&#34;x&#34;, [])),
             )
         else:
             return &#34;Mosaic(polygon_data=&#34; + polycollection_str + &#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
 
-    def plot(self,
-             map_extent: Sequence[Union[float, int]],
-             figsize: Optional[Tuple[int, int]] = None,
-             rayleighs: bool = False,
-             max_rayleighs: int = 20000,
-             title: Optional[str] = None,
-             colorbar_title: Optional[str] = None,
-             ocean_color: Optional[str] = None,
-             land_color: str = &#34;gray&#34;,
-             land_edgecolor: str = &#34;#8A8A8A&#34;,
-             borders_color: str = &#34;#AEAEAE&#34;,
-             borders_disable: bool = False,
-             cbar_colormap: str = &#34;&#34;,
-             returnfig: bool = False,
-             savefig: bool = False,
-             savefig_filename: Optional[str] = None,
-             savefig_quality: Optional[int] = None) -&gt; Any:
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        if isinstance(self.polygon_data, list):
+            polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+        else:
+            polycollection_str = &#34;PolyCollection(...)&#34;
+        cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+        if self.contour_data is not None:
+            contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+        else:
+            contour_data_str = &#34;None&#34;
+
+        # print
+        print(&#34;Mosaic:&#34;)
+        print(&#34;  %-23s: %s&#34; % (&#34;polygon_data&#34;, polycollection_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;spect_cmap&#34;, self.spect_cmap))
+        print(&#34;  %-23s: %s&#34; % (&#34;spect_intensity_scale&#34;, self.spect_intensity_scale))
+
+    def plot(
+            self,
+            map_extent: Sequence[Union[float, int]],
+            figsize: Optional[Tuple[int, int]] = None,
+            rayleighs: bool = False,
+            max_rayleighs: int = 20000,
+            title: Optional[str] = None,
+            ocean_color: Optional[str] = None,
+            land_color: str = &#34;gray&#34;,
+            land_edgecolor: str = &#34;#8A8A8A&#34;,
+            borders_color: str = &#34;#AEAEAE&#34;,
+            borders_disable: bool = False,
+            colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
+            cbar_title: Optional[str] = None,
+            cbar_colormap: str = &#34;&#34;,
+            returnfig: bool = False,
+            savefig: bool = False,
+            savefig_filename: Optional[str] = None,
+            savefig_quality: Optional[int] = None) -&gt; Any:
         &#34;&#34;&#34;
         Generate a plot of the mosaic data. 
         
@@ -2026,6 +1754,9 @@ class Mosaic:
             max_rayleighs (int): 
                 Max intensity scale for Rayleighs. Defaults to `20000`.
 
+            title (str): 
+                The title to display above the plotted mosaic. Default is no title.
+
             ocean_color (str): 
                 Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
                 as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
@@ -2045,7 +1776,13 @@ class Mosaic:
             borders_disable (bool): 
                 Disbale rendering of the borders. Default is `False`.
 
-            cbar_colorcmap (str): 
+            cbar_title (str): 
+                Title for the colorbar. Default is no title.
+
+            colorbar_title (str): 
+                Deprecated as of v1.10.0. Use &#39;cbar_title&#39; instead in the exact same way.
+
+            cbar_colormap (str): 
                 The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
                 mosaic was created with spectrograph data, in which case defaults to the colormap
                 used for spectrograph data..
@@ -2087,19 +1824,25 @@ class Mosaic:
 
         Raises:
         &#34;&#34;&#34;
+        # handle deprecation warnings
+        if (colorbar_title is not None):
+            show_warning(&#34;The parameter &#39;colorbar_title&#39; was deprecated in v1.11.0. Please use &#39;cbar_title&#39; instead (usage is identical).&#34;,
+                         stacklevel=1)
+            cbar_title = colorbar_title
+
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
         if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                          &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
         elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                          &#34;savefig option parameters will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
 
-        # Get colormap if there is spectrograph data
+        # get colormap if there is spectrograph data
         if self.spect_cmap is not None:
             cbar_colormap = self.spect_cmap
 
@@ -2198,7 +1941,7 @@ class Mosaic:
             else:
                 cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
             cbar.ax.set_yticklabels(cbar_ticknames)
-            if colorbar_title is None:
+            if (cbar_title is None):
                 plt.text(1.025,
                          0.5,
                          &#34;Spectrograph Intensity (Rayleighs)&#34;,
@@ -2211,7 +1954,7 @@ class Mosaic:
             else:
                 plt.text(1.025,
                          0.5,
-                         colorbar_title,
+                         cbar_title,
                          fontsize=10,
                          transform=ax.transAxes,
                          va=&#34;center&#34;,
@@ -2236,9 +1979,9 @@ class Mosaic:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                                  &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                                  stacklevel=1)
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
             # clean up by closing the figure
@@ -2270,29 +2013,32 @@ class Mosaic:
         Add geographic contours to a mosaic.
 
         Args:
-            lats (ndarray or list):
+            lats (ndarray or list): 
                 Sequence of geographic latitudes defining a contour.
             
-            lons (ndarray or list):
+            lons (ndarray or list): 
                 Sequence of geographic longitudes defining a contour.
 
-            constant_lats (float, int, or Sequence):
+            constant_lats (float, int, or Sequence): 
                 Geographic Latitude(s) at which to add line(s) of constant latitude.
             
-            constant_lons (float, int, or Sequence):
+            constant_lons (float, int, or Sequence): 
                 Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-            color (str):
+            color (str): 
                 The matplotlib color used for the contour(s).
 
-            linewidth (float or int):
+            linewidth (float or int): 
                 The contour thickness.
             
-            linestyle (str):
+            linestyle (str): 
                 The matplotlib linestyle used for the contour(s).
 
-            marker (str):
+            marker (str): 
                 The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -2376,6 +2122,7 @@ class Mosaic:
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
                 const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
                 # Add contour to dict, along with color and linewidth
                 self.contour_data[&#34;x&#34;].append(const_lat_x)
                 self.contour_data[&#34;y&#34;].append(const_lat_y)
@@ -2423,32 +2170,35 @@ class Mosaic:
         Add geomagnetic contours to a mosaic.
 
         Args:
-            timestamp (datetime.datetime):
+            timestamp (datetime.datetime): 
                 The timestamp used in computing AACGM coordinates.
 
-            lats (ndarray or list):
+            lats (ndarray or list): 
                 Sequence of geomagnetic latitudes defining a contour.
             
-            lons (ndarray or list):
+            lons (ndarray or list): 
                 Sequence of geomagnetic longitudes defining a contour.
 
-            constant_lats (float, int, Sequence):
+            constant_lats (float, int, Sequence): 
                 Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
             
-            constant_lons (float, int, Sequence):
+            constant_lons (float, int, Sequence): 
                 Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-            color (str):
+            color (str): 
                 The matplotlib color used for the contour(s).
 
-            linewidth (float or int):
+            linewidth (float or int): 
                 The contour thickness.
 
-            linestyle (str):
+            linestyle (str): 
                 The matplotlib linestyle used for the contour(s).
 
-            marker (str):
+            marker (str): 
                 The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -2507,6 +2257,7 @@ class Mosaic:
             # Create specified contour from magnetic coords
             y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
             x, y = transformer.transform(x, y)
+
             # Add contour to dict, along with color and linewidth
             self.contour_data[&#34;x&#34;].append(x)
             self.contour_data[&#34;y&#34;].append(y)
@@ -2626,29 +2377,32 @@ is scaled to in the mosaic, if any is present.</dd>
     Add geographic contours to a mosaic.
 
     Args:
-        lats (ndarray or list):
+        lats (ndarray or list): 
             Sequence of geographic latitudes defining a contour.
         
-        lons (ndarray or list):
+        lons (ndarray or list): 
             Sequence of geographic longitudes defining a contour.
 
-        constant_lats (float, int, or Sequence):
+        constant_lats (float, int, or Sequence): 
             Geographic Latitude(s) at which to add line(s) of constant latitude.
         
-        constant_lons (float, int, or Sequence):
+        constant_lons (float, int, or Sequence): 
             Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-        color (str):
+        color (str): 
             The matplotlib color used for the contour(s).
 
-        linewidth (float or int):
+        linewidth (float or int): 
             The contour thickness.
         
-        linestyle (str):
+        linestyle (str): 
             The matplotlib linestyle used for the contour(s).
 
-        marker (str):
+        marker (str): 
             The matplotlib marker used for the contour(s).
+
+        bring_to_front (bool): 
+            Plots the contour on top of all other currently plotted objects.
 
     Returns:
         The object&#39;s contour_data parameter is populated appropriately.
@@ -2732,6 +2486,7 @@ is scaled to in the mosaic, if any is present.</dd>
             const_lat_y = const_lat_y[sort_idx]
             const_lat_x = const_lat_x[sort_idx]
             const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
             # Add contour to dict, along with color and linewidth
             self.contour_data[&#34;x&#34;].append(const_lat_x)
             self.contour_data[&#34;y&#34;].append(const_lat_y)
@@ -2766,22 +2521,26 @@ is scaled to in the mosaic, if any is present.</dd>
 </details>
 <div class="desc"><p>Add geographic contours to a mosaic.</p>
 <h2 id="args">Args</h2>
-<p>lats (ndarray or list):
-Sequence of geographic latitudes defining a contour.</p>
-<p>lons (ndarray or list):
-Sequence of geographic longitudes defining a contour.</p>
-<p>constant_lats (float, int, or Sequence):
-Geographic Latitude(s) at which to add line(s) of constant latitude.</p>
-<p>constant_lons (float, int, or Sequence):
-Geographic Longitude(s) at which to add line(s) of constant longitude.</p>
-<p>color (str):
-The matplotlib color used for the contour(s).</p>
-<p>linewidth (float or int):
-The contour thickness.</p>
-<p>linestyle (str):
-The matplotlib linestyle used for the contour(s).</p>
-<p>marker (str):
-The matplotlib marker used for the contour(s).</p>
+<dl>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic latitudes defining a contour.</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
+<dd>Geographic Latitude(s) at which to add line(s) of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
+<dd>Geographic Longitude(s) at which to add line(s) of constant longitude.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>The contour thickness.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib linestyle used for the contour(s).</dd>
+<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib marker used for the contour(s).</dd>
+<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plots the contour on top of all other currently plotted objects.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>The object's contour_data parameter is populated appropriately.</p>
 <h2 id="raises">Raises</h2>
@@ -2813,32 +2572,35 @@ The matplotlib marker used for the contour(s).</p>
     Add geomagnetic contours to a mosaic.
 
     Args:
-        timestamp (datetime.datetime):
+        timestamp (datetime.datetime): 
             The timestamp used in computing AACGM coordinates.
 
-        lats (ndarray or list):
+        lats (ndarray or list): 
             Sequence of geomagnetic latitudes defining a contour.
         
-        lons (ndarray or list):
+        lons (ndarray or list): 
             Sequence of geomagnetic longitudes defining a contour.
 
-        constant_lats (float, int, Sequence):
+        constant_lats (float, int, Sequence): 
             Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
         
-        constant_lons (float, int, Sequence):
+        constant_lons (float, int, Sequence): 
             Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-        color (str):
+        color (str): 
             The matplotlib color used for the contour(s).
 
-        linewidth (float or int):
+        linewidth (float or int): 
             The contour thickness.
 
-        linestyle (str):
+        linestyle (str): 
             The matplotlib linestyle used for the contour(s).
 
-        marker (str):
+        marker (str): 
             The matplotlib marker used for the contour(s).
+
+        bring_to_front (bool): 
+            Plots the contour on top of all other currently plotted objects.
 
     Returns:
         The object&#39;s contour_data parameter is populated appropriately.
@@ -2897,6 +2659,7 @@ The matplotlib marker used for the contour(s).</p>
         # Create specified contour from magnetic coords
         y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
         x, y = transformer.transform(x, y)
+
         # Add contour to dict, along with color and linewidth
         self.contour_data[&#34;x&#34;].append(x)
         self.contour_data[&#34;y&#34;].append(y)
@@ -2956,24 +2719,28 @@ The matplotlib marker used for the contour(s).</p>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
 <h2 id="args">Args</h2>
-<p>timestamp (datetime.datetime):
-The timestamp used in computing AACGM coordinates.</p>
-<p>lats (ndarray or list):
-Sequence of geomagnetic latitudes defining a contour.</p>
-<p>lons (ndarray or list):
-Sequence of geomagnetic longitudes defining a contour.</p>
-<p>constant_lats (float, int, Sequence):
-Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</p>
-<p>constant_lons (float, int, Sequence):
-Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</p>
-<p>color (str):
-The matplotlib color used for the contour(s).</p>
-<p>linewidth (float or int):
-The contour thickness.</p>
-<p>linestyle (str):
-The matplotlib linestyle used for the contour(s).</p>
-<p>marker (str):
-The matplotlib marker used for the contour(s).</p>
+<dl>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The timestamp used in computing AACGM coordinates.</dd>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geomagnetic latitudes defining a contour.</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geomagnetic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
+<dd>Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
+<dd>Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>The contour thickness.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib linestyle used for the contour(s).</dd>
+<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib marker used for the contour(s).</dd>
+<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plots the contour on top of all other currently plotted objects.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>The object's contour_data parameter is populated appropriately.</p>
 <h2 id="raises">Raises</h2>
@@ -2983,30 +2750,32 @@ The matplotlib marker used for the contour(s).</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.Mosaic.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>colorbar_title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>cbar_colormap: str = '',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>colorbar_title: str | None = None,<br>cbar_title: str | None = None,<br>cbar_colormap: str = '',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def plot(self,
-         map_extent: Sequence[Union[float, int]],
-         figsize: Optional[Tuple[int, int]] = None,
-         rayleighs: bool = False,
-         max_rayleighs: int = 20000,
-         title: Optional[str] = None,
-         colorbar_title: Optional[str] = None,
-         ocean_color: Optional[str] = None,
-         land_color: str = &#34;gray&#34;,
-         land_edgecolor: str = &#34;#8A8A8A&#34;,
-         borders_color: str = &#34;#AEAEAE&#34;,
-         borders_disable: bool = False,
-         cbar_colormap: str = &#34;&#34;,
-         returnfig: bool = False,
-         savefig: bool = False,
-         savefig_filename: Optional[str] = None,
-         savefig_quality: Optional[int] = None) -&gt; Any:
+<pre><code class="python">def plot(
+        self,
+        map_extent: Sequence[Union[float, int]],
+        figsize: Optional[Tuple[int, int]] = None,
+        rayleighs: bool = False,
+        max_rayleighs: int = 20000,
+        title: Optional[str] = None,
+        ocean_color: Optional[str] = None,
+        land_color: str = &#34;gray&#34;,
+        land_edgecolor: str = &#34;#8A8A8A&#34;,
+        borders_color: str = &#34;#AEAEAE&#34;,
+        borders_disable: bool = False,
+        colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
+        cbar_title: Optional[str] = None,
+        cbar_colormap: str = &#34;&#34;,
+        returnfig: bool = False,
+        savefig: bool = False,
+        savefig_filename: Optional[str] = None,
+        savefig_quality: Optional[int] = None) -&gt; Any:
     &#34;&#34;&#34;
     Generate a plot of the mosaic data. 
     
@@ -3027,6 +2796,9 @@ The matplotlib marker used for the contour(s).</p>
         max_rayleighs (int): 
             Max intensity scale for Rayleighs. Defaults to `20000`.
 
+        title (str): 
+            The title to display above the plotted mosaic. Default is no title.
+
         ocean_color (str): 
             Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
             as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
@@ -3046,7 +2818,13 @@ The matplotlib marker used for the contour(s).</p>
         borders_disable (bool): 
             Disbale rendering of the borders. Default is `False`.
 
-        cbar_colorcmap (str): 
+        cbar_title (str): 
+            Title for the colorbar. Default is no title.
+
+        colorbar_title (str): 
+            Deprecated as of v1.10.0. Use &#39;cbar_title&#39; instead in the exact same way.
+
+        cbar_colormap (str): 
             The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
             mosaic was created with spectrograph data, in which case defaults to the colormap
             used for spectrograph data..
@@ -3088,19 +2866,25 @@ The matplotlib marker used for the contour(s).</p>
 
     Raises:
     &#34;&#34;&#34;
+    # handle deprecation warnings
+    if (colorbar_title is not None):
+        show_warning(&#34;The parameter &#39;colorbar_title&#39; was deprecated in v1.11.0. Please use &#39;cbar_title&#39; instead (usage is identical).&#34;,
+                     stacklevel=1)
+        cbar_title = colorbar_title
+
     # check return mode
     if (returnfig is True and savefig is True):
         raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
     if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
     elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
 
-    # Get colormap if there is spectrograph data
+    # get colormap if there is spectrograph data
     if self.spect_cmap is not None:
         cbar_colormap = self.spect_cmap
 
@@ -3199,7 +2983,7 @@ The matplotlib marker used for the contour(s).</p>
         else:
             cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
         cbar.ax.set_yticklabels(cbar_ticknames)
-        if colorbar_title is None:
+        if (cbar_title is None):
             plt.text(1.025,
                      0.5,
                      &#34;Spectrograph Intensity (Rayleighs)&#34;,
@@ -3212,7 +2996,7 @@ The matplotlib marker used for the contour(s).</p>
         else:
             plt.text(1.025,
                      0.5,
-                     colorbar_title,
+                     cbar_title,
                      fontsize=10,
                      transform=ax.transAxes,
                      va=&#34;center&#34;,
@@ -3237,9 +3021,9 @@ The matplotlib marker used for the contour(s).</p>
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
         # clean up by closing the figure
@@ -3271,6 +3055,8 @@ and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
 <dd>Set to <code>True</code> if the data being plotted is in Rayleighs. Defaults to <code>False</code>.</dd>
 <dt><strong><code>max_rayleighs</code></strong> :&ensp;<code>int</code></dt>
 <dd>Max intensity scale for Rayleighs. Defaults to <code>20000</code>.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>The title to display above the plotted mosaic. Default is no title.</dd>
 <dt><strong><code>ocean_color</code></strong> :&ensp;<code>str</code></dt>
 <dd>Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
 as a word, or hexcode prefixed with a '#' character (ie. <code>#55AADD</code>).</dd>
@@ -3285,7 +3071,11 @@ hexcode prefixed with a '#' character.</dd>
 hexcode prefixed with a '#' character.</dd>
 <dt><strong><code>borders_disable</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Disbale rendering of the borders. Default is <code>False</code>.</dd>
-<dt><strong><code>cbar_colorcmap</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>cbar_title</code></strong> :&ensp;<code>str</code></dt>
+<dd>Title for the colorbar. Default is no title.</dd>
+<dt><strong><code>colorbar_title</code></strong> :&ensp;<code>str</code></dt>
+<dd>Deprecated as of v1.10.0. Use 'cbar_title' instead in the exact same way.</dd>
+<dt><strong><code>cbar_colormap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>The matplotlib colormap to use for the plotted color bar. Default is <code>gray</code>, unless
 mosaic was created with spectrograph data, in which case defaults to the colormap
@@ -3323,6 +3113,39 @@ is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillo
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
+<dt id="pyaurorax.tools.Mosaic.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    if isinstance(self.polygon_data, list):
+        polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+    else:
+        polycollection_str = &#34;PolyCollection(...)&#34;
+    cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+    if self.contour_data is not None:
+        contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+    else:
+        contour_data_str = &#34;None&#34;
+
+    # print
+    print(&#34;Mosaic:&#34;)
+    print(&#34;  %-23s: %s&#34; % (&#34;polygon_data&#34;, polycollection_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;spect_cmap&#34;, self.spect_cmap))
+    print(&#34;  %-23s: %s&#34; % (&#34;spect_intensity_scale&#34;, self.spect_intensity_scale))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
 </dl>
 </dd>
 <dt id="pyaurorax.tools.MosaicData"><code class="flex name class">
@@ -3342,13 +3165,17 @@ class MosaicData:
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
+
         timestamps (List[datetime.datetime]): 
             Timestamps of corresponding images.
+
         images (Dict[str, numpy.ndarray]): 
             Image data prepared into the necessary format; a dictionary. Keys are the site UID, 
             ndarray is the prepared data.
+
         images_dimensions (Dict[str, Tuple]): 
             The image dimensions.
+
         data_types (List[str]): 
             The data types for each data object.    
     &#34;&#34;&#34;
@@ -3363,11 +3190,30 @@ class MosaicData:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
-        unique_dimensions = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions)
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
         timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
 
-        return &#34;MosaicData(images=%s, timestamps=%s, site_uid_list=%s)&#34; % (images_str, timestamps_str, self.site_uid_list.__repr__())</code></pre>
+        # return
+        return &#34;MosaicData(images=%s, timestamps=%s, site_uid_list=%s)&#34; % (images_str, timestamps_str, self.site_uid_list.__repr__())
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
+        timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+
+        # print
+        print(&#34;MosaicData:&#34;)
+        print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
+        print(&#34;  %-19s: %s&#34; % (&#34;timestamps&#34;, timestamps_str))
+        print(&#34;  %-19s: %s&#34; % (&#34;images&#34;, images_str))
+        print(&#34;  %-19s: %s&#34; % (&#34;images_dimensions&#34;, self.images_dimensions))
+        print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
 </details>
 <div class="desc"><p>Prepared image data for use by mosaic routines.</p>
 <h2 id="attributes">Attributes</h2>
@@ -3407,6 +3253,36 @@ ndarray is the prepared data.</dd>
 <div class="desc"></div>
 </dd>
 </dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.MosaicData.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
+    timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+
+    # print
+    print(&#34;MosaicData:&#34;)
+    print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
+    print(&#34;  %-19s: %s&#34; % (&#34;timestamps&#34;, timestamps_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;images&#34;, images_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;images_dimensions&#34;, self.images_dimensions))
+    print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
 </dd>
 <dt id="pyaurorax.tools.MosaicSkymap"><code class="flex name class">
 <span>class <span class="ident">MosaicSkymap</span></span>
@@ -3425,15 +3301,19 @@ class MosaicSkymap:
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
+
         elevation (List[numpy.ndarray]): 
             List of elevation data, with each element corresponding to each site. Order 
             matches that of the `site_uid_list` attribute.
+
         polyfoll_lat (List[numpy.ndarray]): 
             List of latitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
+
         polyfoll_lon (List[numpy.ndarray]): 
             List of longitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
+
     &#34;&#34;&#34;
 
     site_uid_list: List[str]
@@ -3445,6 +3325,7 @@ class MosaicSkymap:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
+        # set special strings
         unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
                                                           for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
                                                                                                                         &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
@@ -3457,12 +3338,36 @@ class MosaicSkymap:
         polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
         elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
 
+        # return
         return &#34;MosaicSkymap(polyfill_lat=%s, polyfill_lon=%s, elevation=%s, site_uid_list=%s)&#34; % (
             polyfill_lat_str,
             polyfill_lon_str,
             elevation_str,
             self.site_uid_list.__repr__(),
-        )</code></pre>
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                          for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                          for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+
+        polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
+        polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
+        elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
+
+        # print
+        print(&#34;MosaicSkymap:&#34;)
+        print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lat&#34;, polyfill_lat_str))
+        print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lon&#34;, polyfill_lon_str))
+        print(&#34;  %-15s: %s&#34; % (&#34;elevation&#34;, elevation_str))
+        print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
 </details>
 <div class="desc"><p>Prepared skymap data for use by mosaic routines.</p>
 <h2 id="attributes">Attributes</h2>
@@ -3496,6 +3401,750 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
 <dt id="pyaurorax.tools.MosaicSkymap.site_uid_list"><code class="name">var <span class="ident">site_uid_list</span> : List[str]</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.MosaicSkymap.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                      for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                    &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                      for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                    &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+
+    polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
+    polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
+    elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
+
+    # print
+    print(&#34;MosaicSkymap:&#34;)
+    print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lat&#34;, polyfill_lat_str))
+    print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lon&#34;, polyfill_lon_str))
+    print(&#34;  %-15s: %s&#34; % (&#34;elevation&#34;, elevation_str))
+    print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager"><code class="flex name class">
+<span>class <span class="ident">ToolsManager</span></span>
+<span>(</span><span>aurorax_obj)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ToolsManager:
+    &#34;&#34;&#34;
+    The ToolsManager object is initialized within every PyAuroraX object. It acts as a way to access 
+    the submodules and carry over configuration information in the super class.
+    &#34;&#34;&#34;
+
+    def __init__(self, aurorax_obj):
+        self.__aurorax_obj = aurorax_obj
+
+        # initialize sub-modules
+        self.__bounding_box = BoundingBoxManager(self.__aurorax_obj)
+        self.__calibration = CalibrationManager()
+        self.__ccd_contour = CCDContourManager()
+        self.__grid_files = GridFilesManager(self.__aurorax_obj)
+        self.__keogram = KeogramManager()
+        self.__montage = MontageManager()
+        self.__mosaic = MosaicManager(self.__aurorax_obj)
+        self.__spectra = SpectraManager()
+
+    # ------------------------------------------
+    # properties for submodule managers
+    # ------------------------------------------
+    @property
+    def bounding_box(self):
+        &#34;&#34;&#34;
+        Access to the `bounding_box` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__bounding_box
+
+    @property
+    def calibration(self):
+        &#34;&#34;&#34;
+        Access to the `calibration` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__calibration
+
+    @property
+    def ccd_contour(self):
+        &#34;&#34;&#34;
+        Access to the `ccd_contour` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__ccd_contour
+
+    @property
+    def grid_files(self):
+        &#34;&#34;&#34;
+        Access to the `grid_files` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__grid_files
+
+    @property
+    def keogram(self):
+        &#34;&#34;&#34;
+        Access to the `keogram` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__keogram
+
+    @property
+    def montage(self):
+        &#34;&#34;&#34;
+        Access to the `montage` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__montage
+
+    @property
+    def mosaic(self):
+        &#34;&#34;&#34;
+        Access to the `mosaic` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__mosaic
+
+    @property
+    def spectra(self):
+        &#34;&#34;&#34;
+        Access to the `spectra` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__spectra
+
+    # ------------------------------------------
+    # functions available at this manager level
+    # ------------------------------------------
+    def display(self,
+                image: np.ndarray,
+                cmap: Optional[str] = None,
+                figsize: Optional[Tuple[int, int]] = None,
+                aspect: Optional[Union[Literal[&#34;equal&#34;, &#34;auto&#34;], float]] = None,
+                colorbar: bool = False,
+                title: Optional[str] = None,
+                returnfig: bool = False,
+                savefig: bool = False,
+                savefig_filename: Optional[str] = None,
+                savefig_quality: Optional[int] = None) -&gt; Any:
+        &#34;&#34;&#34;
+        Render a visualization of a single image.
+
+        Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
+        return the matplotlib plot object for further usage (using the `returnfig` parameter).
+
+        Args:
+            image (numpy.ndarray): 
+                The image to display, represented as a numpy array.
+
+            cmap (str): 
+                The matplotlib colormap to use.
+
+                Commonly used colormaps are:
+
+                - REGO: `gist_heat`
+                - THEMIS ASI: `gray`
+                - TREx Blue: `Blues_r`
+                - TREx NIR: `gray`
+                - TREx RGB: `None`
+
+                A list of all available colormaps can be found on the 
+                [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
+
+            figsize (tuple): 
+                The matplotlib figure size to use when displaying, tuple of two integers (ie. `figsize=(14, 4)`)
+        
+            aspect (str or float): 
+                The matplotlib imshow aspect ration to use. A common value for this is `auto`. All valid values 
+                can be found on the [matplotlib documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html).
+
+            colorbar (bool): 
+                Display a colorbar. Default is `False`.
+
+            title (str): 
+                A title to display above the rendered image. Defaults to no title.
+
+            returnfig (bool): 
+                Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
+                manipulation, for example, adding labels or a title in a different location than the default. 
+                
+                Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
+                with it. This can be achieved by doing `plt.close(fig)`. 
+                
+                Note that this method cannot be used in combination with `savefig`.
+
+            savefig (bool): 
+                Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
+                this parameter is set to True. Defaults to `False`.
+
+            savefig_filename (str): 
+                Filename to save the image to. Must be specified if the savefig parameter is set to True.
+
+            savefig_quality (int): 
+                Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+                is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
+
+        Returns:
+            The displayed image, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+            set to True, the plotting variables `(fig, ax)` will be returned.
+
+        Raises:
+            ValueError: issues with supplied parameters.
+        &#34;&#34;&#34;
+        return func_display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, savefig_filename, savefig_quality)
+
+    def movie(
+        self,
+        input_filenames: List[str],
+        output_filename: str,
+        n_parallel: int = 1,
+        fps: int = 25,
+        progress_bar_disable: bool = False,
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Generate a movie file from a list of filenames. Note that the codec used is &#34;mp4v&#34;.
+
+        Args:
+            input_filenames (List[str]): 
+                Filenames of frames to use for movie generation. No sorting is applied, so it is 
+                assumed the list is in the desired order. This parameter is required.
+            
+            output_filename (str): 
+                Filename for the created movie file. This parameter is required.
+
+            n_parallel (int): 
+                Number of multiprocessing workers to use. Default is `1`, which does not use
+                multiprocessing.
+
+            fps (int): 
+                Frames per second (FPS) for the movie file. Default is `25`.
+
+            progress_bar_disable (bool): 
+                Toggle the progress bars off. Default is `False`.        
+
+        Raises:
+            IOError: I/O related issue while generating movie
+        &#34;&#34;&#34;
+        return func_movie(self.__aurorax_obj, input_filenames, output_filename, n_parallel, fps, progress_bar_disable)
+
+    def scale_intensity(
+        self,
+        data: np.ndarray,
+        min: Optional[float] = None,
+        max: Optional[float] = None,
+        top: Optional[float] = None,
+        memory_saver: bool = True,
+    ) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Scale all values of an array that lie in the range min&lt;=x&lt;=max in to 
+        the range 0&lt;=x&lt;=high.
+        
+        Args:
+            data (numpy.ndarray): 
+                Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of 
+                images. Also assumed that the first 2 dimensions are the image&#39;s x and y 
+                coordinates, and the following dimensions are some combination of the number of 
+                images, and/or the colour channel.
+
+            min (float): 
+                Minimum value of array to be considered
+
+            max (float): 
+                Maximum value of array to be considered
+
+            top (float): 
+                Maximum value of the scaled result. If not supplied, the max value
+                of the data array&#39;s dtype is used.
+
+            memory_saver (bool): 
+                Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
+                the scaling routine will be faster, but will utilize significantly more RAM.
+
+        Returns:
+            A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
+            with the scaling applied.
+
+        Raises:
+            ValueError: Issues with the supplied min, max, or top
+        &#34;&#34;&#34;
+        return func_scale_intensity(data, min, max, top, memory_saver)
+
+    def set_theme(self, theme: str) -&gt; None:
+        &#34;&#34;&#34;
+        A handy wrapper for setting the matplotlib global theme. Common choices are `light`, 
+        `dark`, or `default`.
+
+        Args:
+            theme (str): 
+                Theme name. Common choices are `light`, `dark`, or `default`. If default, then
+                matplotlib theme settings will be fully reset to their defaults.
+
+                Additional themes can be found on the 
+                [matplotlib documentation](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)
+        &#34;&#34;&#34;
+        return func_set_theme(theme)</code></pre>
+</details>
+<div class="desc"><p>The ToolsManager object is initialized within every PyAuroraX object. It acts as a way to access
+the submodules and carry over configuration information in the super class.</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.tools.ToolsManager.bounding_box"><code class="name">prop <span class="ident">bounding_box</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def bounding_box(self):
+    &#34;&#34;&#34;
+    Access to the `bounding_box` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__bounding_box</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.bounding_box" href="bounding_box/index.html">pyaurorax.tools.bounding_box</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.calibration"><code class="name">prop <span class="ident">calibration</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def calibration(self):
+    &#34;&#34;&#34;
+    Access to the `calibration` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__calibration</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.calibration" href="calibration/index.html">pyaurorax.tools.calibration</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.ccd_contour"><code class="name">prop <span class="ident">ccd_contour</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def ccd_contour(self):
+    &#34;&#34;&#34;
+    Access to the `ccd_contour` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__ccd_contour</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.ccd_contour" href="ccd_contour/index.html">pyaurorax.tools.ccd_contour</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.grid_files"><code class="name">prop <span class="ident">grid_files</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def grid_files(self):
+    &#34;&#34;&#34;
+    Access to the `grid_files` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__grid_files</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.grid_files" href="grid_files/index.html">pyaurorax.tools.grid_files</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.keogram"><code class="name">prop <span class="ident">keogram</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def keogram(self):
+    &#34;&#34;&#34;
+    Access to the `keogram` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__keogram</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.keogram" href="keogram/index.html">pyaurorax.tools.keogram</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.montage"><code class="name">prop <span class="ident">montage</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def montage(self):
+    &#34;&#34;&#34;
+    Access to the `montage` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__montage</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.montage" href="montage/index.html">pyaurorax.tools.montage</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.mosaic"><code class="name">prop <span class="ident">mosaic</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def mosaic(self):
+    &#34;&#34;&#34;
+    Access to the `mosaic` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__mosaic</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.mosaic" href="mosaic/index.html">pyaurorax.tools.mosaic</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.spectra"><code class="name">prop <span class="ident">spectra</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def spectra(self):
+    &#34;&#34;&#34;
+    Access to the `spectra` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__spectra</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.spectra" href="spectra/index.html">pyaurorax.tools.spectra</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.ToolsManager.display"><code class="name flex">
+<span>def <span class="ident">display</span></span>(<span>self,<br>image: numpy.ndarray,<br>cmap: str | None = None,<br>figsize: Tuple[int, int] | None = None,<br>aspect: Literal['equal', 'auto'] | float | None = None,<br>colorbar: bool = False,<br>title: str | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def display(self,
+            image: np.ndarray,
+            cmap: Optional[str] = None,
+            figsize: Optional[Tuple[int, int]] = None,
+            aspect: Optional[Union[Literal[&#34;equal&#34;, &#34;auto&#34;], float]] = None,
+            colorbar: bool = False,
+            title: Optional[str] = None,
+            returnfig: bool = False,
+            savefig: bool = False,
+            savefig_filename: Optional[str] = None,
+            savefig_quality: Optional[int] = None) -&gt; Any:
+    &#34;&#34;&#34;
+    Render a visualization of a single image.
+
+    Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
+    return the matplotlib plot object for further usage (using the `returnfig` parameter).
+
+    Args:
+        image (numpy.ndarray): 
+            The image to display, represented as a numpy array.
+
+        cmap (str): 
+            The matplotlib colormap to use.
+
+            Commonly used colormaps are:
+
+            - REGO: `gist_heat`
+            - THEMIS ASI: `gray`
+            - TREx Blue: `Blues_r`
+            - TREx NIR: `gray`
+            - TREx RGB: `None`
+
+            A list of all available colormaps can be found on the 
+            [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
+
+        figsize (tuple): 
+            The matplotlib figure size to use when displaying, tuple of two integers (ie. `figsize=(14, 4)`)
+    
+        aspect (str or float): 
+            The matplotlib imshow aspect ration to use. A common value for this is `auto`. All valid values 
+            can be found on the [matplotlib documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html).
+
+        colorbar (bool): 
+            Display a colorbar. Default is `False`.
+
+        title (str): 
+            A title to display above the rendered image. Defaults to no title.
+
+        returnfig (bool): 
+            Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
+            manipulation, for example, adding labels or a title in a different location than the default. 
+            
+            Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
+            with it. This can be achieved by doing `plt.close(fig)`. 
+            
+            Note that this method cannot be used in combination with `savefig`.
+
+        savefig (bool): 
+            Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
+            this parameter is set to True. Defaults to `False`.
+
+        savefig_filename (str): 
+            Filename to save the image to. Must be specified if the savefig parameter is set to True.
+
+        savefig_quality (int): 
+            Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+            is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
+
+    Returns:
+        The displayed image, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+        set to True, the plotting variables `(fig, ax)` will be returned.
+
+    Raises:
+        ValueError: issues with supplied parameters.
+    &#34;&#34;&#34;
+    return func_display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, savefig_filename, savefig_quality)</code></pre>
+</details>
+<div class="desc"><p>Render a visualization of a single image.</p>
+<p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
+return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
+<dd>The image to display, represented as a numpy array.</dd>
+<dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
+<dd>
+<p>The matplotlib colormap to use.</p>
+<p>Commonly used colormaps are:</p>
+<ul>
+<li>REGO: <code>gist_heat</code></li>
+<li>THEMIS ASI: <code>gray</code></li>
+<li>TREx Blue: <code>Blues_r</code></li>
+<li>TREx NIR: <code>gray</code></li>
+<li>TREx RGB: <code>None</code></li>
+</ul>
+<p>A list of all available colormaps can be found on the
+<a href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">matplotlib documentation</a>.</p>
+</dd>
+<dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>The matplotlib figure size to use when displaying, tuple of two integers (ie. <code>figsize=(14, 4)</code>)</dd>
+<dt><strong><code>aspect</code></strong> :&ensp;<code>str</code> or <code>float</code></dt>
+<dd>The matplotlib imshow aspect ration to use. A common value for this is <code>auto</code>. All valid values
+can be found on the <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html">matplotlib documentation</a>.</dd>
+<dt><strong><code>colorbar</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Display a colorbar. Default is <code>False</code>.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>A title to display above the rendered image. Defaults to no title.</dd>
+<dt><strong><code>returnfig</code></strong> :&ensp;<code>bool</code></dt>
+<dd>
+<p>Instead of displaying the image, return the matplotlib figure object. This allows for further plot
+manipulation, for example, adding labels or a title in a different location than the default. </p>
+<p>Remember - if this parameter is supplied, be sure that you close your plot after finishing work
+with it. This can be achieved by doing <code>plt.close(fig)</code>. </p>
+<p>Note that this method cannot be used in combination with <code>savefig</code>.</p>
+</dd>
+<dt><strong><code>savefig</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if
+this parameter is set to True. Defaults to <code>False</code>.</dd>
+<dt><strong><code>savefig_filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Filename to save the image to. Must be specified if the savefig parameter is set to True.</dd>
+<dt><strong><code>savefig_quality</code></strong> :&ensp;<code>int</code></dt>
+<dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The displayed image, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>issues with supplied parameters.</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.movie"><code class="name flex">
+<span>def <span class="ident">movie</span></span>(<span>self,<br>input_filenames: List[str],<br>output_filename: str,<br>n_parallel: int = 1,<br>fps: int = 25,<br>progress_bar_disable: bool = False) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def movie(
+    self,
+    input_filenames: List[str],
+    output_filename: str,
+    n_parallel: int = 1,
+    fps: int = 25,
+    progress_bar_disable: bool = False,
+) -&gt; None:
+    &#34;&#34;&#34;
+    Generate a movie file from a list of filenames. Note that the codec used is &#34;mp4v&#34;.
+
+    Args:
+        input_filenames (List[str]): 
+            Filenames of frames to use for movie generation. No sorting is applied, so it is 
+            assumed the list is in the desired order. This parameter is required.
+        
+        output_filename (str): 
+            Filename for the created movie file. This parameter is required.
+
+        n_parallel (int): 
+            Number of multiprocessing workers to use. Default is `1`, which does not use
+            multiprocessing.
+
+        fps (int): 
+            Frames per second (FPS) for the movie file. Default is `25`.
+
+        progress_bar_disable (bool): 
+            Toggle the progress bars off. Default is `False`.        
+
+    Raises:
+        IOError: I/O related issue while generating movie
+    &#34;&#34;&#34;
+    return func_movie(self.__aurorax_obj, input_filenames, output_filename, n_parallel, fps, progress_bar_disable)</code></pre>
+</details>
+<div class="desc"><p>Generate a movie file from a list of filenames. Note that the codec used is "mp4v".</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_filenames</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>Filenames of frames to use for movie generation. No sorting is applied, so it is
+assumed the list is in the desired order. This parameter is required.</dd>
+<dt><strong><code>output_filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Filename for the created movie file. This parameter is required.</dd>
+<dt><strong><code>n_parallel</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of multiprocessing workers to use. Default is <code>1</code>, which does not use
+multiprocessing.</dd>
+<dt><strong><code>fps</code></strong> :&ensp;<code>int</code></dt>
+<dd>Frames per second (FPS) for the movie file. Default is <code>25</code>.</dd>
+<dt><strong><code>progress_bar_disable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Toggle the progress bars off. Default is <code>False</code>.
+</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>IOError</code></dt>
+<dd>I/O related issue while generating movie</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.scale_intensity"><code class="name flex">
+<span>def <span class="ident">scale_intensity</span></span>(<span>self,<br>data: numpy.ndarray,<br>min: float | None = None,<br>max: float | None = None,<br>top: float | None = None,<br>memory_saver: bool = True) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def scale_intensity(
+    self,
+    data: np.ndarray,
+    min: Optional[float] = None,
+    max: Optional[float] = None,
+    top: Optional[float] = None,
+    memory_saver: bool = True,
+) -&gt; np.ndarray:
+    &#34;&#34;&#34;
+    Scale all values of an array that lie in the range min&lt;=x&lt;=max in to 
+    the range 0&lt;=x&lt;=high.
+    
+    Args:
+        data (numpy.ndarray): 
+            Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of 
+            images. Also assumed that the first 2 dimensions are the image&#39;s x and y 
+            coordinates, and the following dimensions are some combination of the number of 
+            images, and/or the colour channel.
+
+        min (float): 
+            Minimum value of array to be considered
+
+        max (float): 
+            Maximum value of array to be considered
+
+        top (float): 
+            Maximum value of the scaled result. If not supplied, the max value
+            of the data array&#39;s dtype is used.
+
+        memory_saver (bool): 
+            Utilize less RAM when scaling a set of images. Defaults to `True`. If set to `False` then
+            the scaling routine will be faster, but will utilize significantly more RAM.
+
+    Returns:
+        A new `numpy.ndarray` that is the same dimensions as the inputted data array, 
+        with the scaling applied.
+
+    Raises:
+        ValueError: Issues with the supplied min, max, or top
+    &#34;&#34;&#34;
+    return func_scale_intensity(data, min, max, top, memory_saver)</code></pre>
+</details>
+<div class="desc"><p>Scale all values of an array that lie in the range min&lt;=x&lt;=max in to
+the range 0&lt;=x&lt;=high.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
+<dd>Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of
+images. Also assumed that the first 2 dimensions are the image's x and y
+coordinates, and the following dimensions are some combination of the number of
+images, and/or the colour channel.</dd>
+<dt><strong><code>min</code></strong> :&ensp;<code>float</code></dt>
+<dd>Minimum value of array to be considered</dd>
+<dt><strong><code>max</code></strong> :&ensp;<code>float</code></dt>
+<dd>Maximum value of array to be considered</dd>
+<dt><strong><code>top</code></strong> :&ensp;<code>float</code></dt>
+<dd>Maximum value of the scaled result. If not supplied, the max value
+of the data array's dtype is used.</dd>
+<dt><strong><code>memory_saver</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Utilize less RAM when scaling a set of images. Defaults to <code>True</code>. If set to <code>False</code> then
+the scaling routine will be faster, but will utilize significantly more RAM.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
+with the scaling applied.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Issues with the supplied min, max, or top</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.set_theme"><code class="name flex">
+<span>def <span class="ident">set_theme</span></span>(<span>self, theme: str) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_theme(self, theme: str) -&gt; None:
+    &#34;&#34;&#34;
+    A handy wrapper for setting the matplotlib global theme. Common choices are `light`, 
+    `dark`, or `default`.
+
+    Args:
+        theme (str): 
+            Theme name. Common choices are `light`, `dark`, or `default`. If default, then
+            matplotlib theme settings will be fully reset to their defaults.
+
+            Additional themes can be found on the 
+            [matplotlib documentation](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)
+    &#34;&#34;&#34;
+    return func_set_theme(theme)</code></pre>
+</details>
+<div class="desc"><p>A handy wrapper for setting the matplotlib global theme. Common choices are <code>light</code>,
+<code>dark</code>, or <code>default</code>.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>theme</code></strong> :&ensp;<code>str</code></dt>
+<dd>
+<p>Theme name. Common choices are <code>light</code>, <code>dark</code>, or <code>default</code>. If default, then
+matplotlib theme settings will be fully reset to their defaults.</p>
+<p>Additional themes can be found on the
+<a href="https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html">matplotlib documentation</a></p>
+</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>
@@ -3571,20 +4220,13 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.spectra" href="spectra/index.html">pyaurorax.tools.spectra</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="pyaurorax.tools.display" href="#pyaurorax.tools.display">display</a></code></li>
-<li><code><a title="pyaurorax.tools.movie" href="#pyaurorax.tools.movie">movie</a></code></li>
-<li><code><a title="pyaurorax.tools.scale_intensity" href="#pyaurorax.tools.scale_intensity">scale_intensity</a></code></li>
-<li><code><a title="pyaurorax.tools.set_theme" href="#pyaurorax.tools.set_theme">set_theme</a></code></li>
-</ul>
-</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
 <h4><code><a title="pyaurorax.tools.Keogram" href="#pyaurorax.tools.Keogram">Keogram</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.tools.Keogram.plot" href="#pyaurorax.tools.Keogram.plot">plot</a></code></li>
+<li><code><a title="pyaurorax.tools.Keogram.pretty_print" href="#pyaurorax.tools.Keogram.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.Keogram.set_geographic_latitudes" href="#pyaurorax.tools.Keogram.set_geographic_latitudes">set_geographic_latitudes</a></code></li>
 <li><code><a title="pyaurorax.tools.Keogram.set_magnetic_latitudes" href="#pyaurorax.tools.Keogram.set_magnetic_latitudes">set_magnetic_latitudes</a></code></li>
 </ul>
@@ -3593,6 +4235,7 @@ setTimeout(() => input.focus(), 100);
 <h4><code><a title="pyaurorax.tools.Montage" href="#pyaurorax.tools.Montage">Montage</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.tools.Montage.plot" href="#pyaurorax.tools.Montage.plot">plot</a></code></li>
+<li><code><a title="pyaurorax.tools.Montage.pretty_print" href="#pyaurorax.tools.Montage.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 <li>
@@ -3604,16 +4247,18 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.Mosaic.contour_data" href="#pyaurorax.tools.Mosaic.contour_data">contour_data</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.plot" href="#pyaurorax.tools.Mosaic.plot">plot</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.polygon_data" href="#pyaurorax.tools.Mosaic.polygon_data">polygon_data</a></code></li>
+<li><code><a title="pyaurorax.tools.Mosaic.pretty_print" href="#pyaurorax.tools.Mosaic.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.spect_cmap" href="#pyaurorax.tools.Mosaic.spect_cmap">spect_cmap</a></code></li>
 <li><code><a title="pyaurorax.tools.Mosaic.spect_intensity_scale" href="#pyaurorax.tools.Mosaic.spect_intensity_scale">spect_intensity_scale</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pyaurorax.tools.MosaicData" href="#pyaurorax.tools.MosaicData">MosaicData</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="pyaurorax.tools.MosaicData.data_types" href="#pyaurorax.tools.MosaicData.data_types">data_types</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.images" href="#pyaurorax.tools.MosaicData.images">images</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.images_dimensions" href="#pyaurorax.tools.MosaicData.images_dimensions">images_dimensions</a></code></li>
+<li><code><a title="pyaurorax.tools.MosaicData.pretty_print" href="#pyaurorax.tools.MosaicData.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.site_uid_list" href="#pyaurorax.tools.MosaicData.site_uid_list">site_uid_list</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicData.timestamps" href="#pyaurorax.tools.MosaicData.timestamps">timestamps</a></code></li>
 </ul>
@@ -3624,7 +4269,25 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.MosaicSkymap.elevation" href="#pyaurorax.tools.MosaicSkymap.elevation">elevation</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicSkymap.polyfill_lat" href="#pyaurorax.tools.MosaicSkymap.polyfill_lat">polyfill_lat</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicSkymap.polyfill_lon" href="#pyaurorax.tools.MosaicSkymap.polyfill_lon">polyfill_lon</a></code></li>
+<li><code><a title="pyaurorax.tools.MosaicSkymap.pretty_print" href="#pyaurorax.tools.MosaicSkymap.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.MosaicSkymap.site_uid_list" href="#pyaurorax.tools.MosaicSkymap.site_uid_list">site_uid_list</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.tools.ToolsManager" href="#pyaurorax.tools.ToolsManager">ToolsManager</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pyaurorax.tools.ToolsManager.bounding_box" href="#pyaurorax.tools.ToolsManager.bounding_box">bounding_box</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.calibration" href="#pyaurorax.tools.ToolsManager.calibration">calibration</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.ccd_contour" href="#pyaurorax.tools.ToolsManager.ccd_contour">ccd_contour</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.display" href="#pyaurorax.tools.ToolsManager.display">display</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.grid_files" href="#pyaurorax.tools.ToolsManager.grid_files">grid_files</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.keogram" href="#pyaurorax.tools.ToolsManager.keogram">keogram</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.montage" href="#pyaurorax.tools.ToolsManager.montage">montage</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.mosaic" href="#pyaurorax.tools.ToolsManager.mosaic">mosaic</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.movie" href="#pyaurorax.tools.ToolsManager.movie">movie</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.scale_intensity" href="#pyaurorax.tools.ToolsManager.scale_intensity">scale_intensity</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.set_theme" href="#pyaurorax.tools.ToolsManager.set_theme">set_theme</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.spectra" href="#pyaurorax.tools.ToolsManager.spectra">spectra</a></code></li>
 </ul>
 </li>
 </ul>

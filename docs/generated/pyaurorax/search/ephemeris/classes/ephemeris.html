@@ -79,14 +79,27 @@ border-left: 1px solid #ddd;
     Ephemeris object
 
     Attributes:
-        data_source: data source that the ephemeris record is associated with
-        epoch: timestamp for the record (assumed it is in UTC)
-        location_geo: Location object containing geographic latitude and longitude
-        location_gsm: Location object containing GSM latitude and longitude (leave
-            empty for data sources with a type of &#39;ground&#39;)
-        nbtrace: Location object with north B-trace geographic latitude and longitude
-        sbtrace: Location object with south B-trace geographic latitude and longitude
-        metadata: metadata for this record (arbitrary keys and values)
+        data_source (DataSource): 
+            data source that the ephemeris record is associated with
+
+        epoch (datetime.datetime): 
+            timestamp for the record (assumed it is in UTC)
+
+        location_geo (Location): 
+            Location object containing geographic latitude and longitude
+
+        location_gsm (Location): 
+            Location object containing GSM latitude and longitude (leave empty for data 
+            sources with a type of &#39;ground&#39;)
+
+        nbtrace (Location): 
+            Location object with north B-trace geographic latitude and longitude
+
+        sbtrace (Location): 
+            Location object with south B-trace geographic latitude and longitude
+
+        metadata (Dict): 
+            metadata for this record (arbitrary keys and values)
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -165,20 +178,20 @@ border-left: 1px solid #ddd;
 <div class="desc"><p>Ephemeris object</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>data_source</code></strong></dt>
+<dt><strong><code>data_source</code></strong> :&ensp;<code>DataSource</code></dt>
 <dd>data source that the ephemeris record is associated with</dd>
-<dt><strong><code>epoch</code></strong></dt>
+<dt><strong><code>epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>timestamp for the record (assumed it is in UTC)</dd>
-<dt><strong><code>location_geo</code></strong></dt>
+<dt><strong><code>location_geo</code></strong> :&ensp;<code>Location</code></dt>
 <dd>Location object containing geographic latitude and longitude</dd>
-<dt><strong><code>location_gsm</code></strong></dt>
-<dd>Location object containing GSM latitude and longitude (leave
-empty for data sources with a type of 'ground')</dd>
-<dt><strong><code>nbtrace</code></strong></dt>
+<dt><strong><code>location_gsm</code></strong> :&ensp;<code>Location</code></dt>
+<dd>Location object containing GSM latitude and longitude (leave empty for data
+sources with a type of 'ground')</dd>
+<dt><strong><code>nbtrace</code></strong> :&ensp;<code>Location</code></dt>
 <dd>Location object with north B-trace geographic latitude and longitude</dd>
-<dt><strong><code>sbtrace</code></strong></dt>
+<dt><strong><code>sbtrace</code></strong> :&ensp;<code>Location</code></dt>
 <dd>Location object with south B-trace geographic latitude and longitude</dd>
-<dt><strong><code>metadata</code></strong></dt>
+<dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
 <h3>Methods</h3>

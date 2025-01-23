@@ -120,23 +120,32 @@ counts in Rayleighs.</p></div>
     Data product object
 
     Attributes:
-        data_source: data source that the ephemeris record is associated with
-        data_product_type: data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;)
-        start: starting timestamp for the record (assumed it is in UTC), inclusive
-        end: ending timestamp for the record (assumed it is in UTC), inclusive
-        url: the URL of data product
-        metadata: metadata for this record (arbitrary keys and values)
+        data_source (DataSource): 
+            data source that the ephemeris record is associated with
+
+        data_product_type (str): 
+            data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;)
+
+        start (datetime.datetime): 
+            starting timestamp for the record (assumed it is in UTC), inclusive
+
+        end (datetime.datetime): 
+            ending timestamp for the record (assumed it is in UTC), inclusive
+
+        url (str): 
+            the URL of data product
+
+        metadata (Dict): 
+            metadata for this record (arbitrary keys and values)
     &#34;&#34;&#34;
 
-    def __init__(
-        self,
-        data_source: DataSource,
-        data_product_type: str,
-        start: datetime.datetime,
-        end: datetime.datetime,
-        url: str,
-        metadata: Optional[Dict] = None,
-    ):
+    def __init__(self,
+                 data_source: DataSource,
+                 data_product_type: str,
+                 start: datetime.datetime,
+                 end: datetime.datetime,
+                 url: str,
+                 metadata: Optional[Dict] = None):
         self.data_source = data_source
         self.data_product_type = data_product_type
         self.start = start
@@ -198,17 +207,17 @@ counts in Rayleighs.</p></div>
 <div class="desc"><p>Data product object</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>data_source</code></strong></dt>
+<dt><strong><code>data_source</code></strong> :&ensp;<code>DataSource</code></dt>
 <dd>data source that the ephemeris record is associated with</dd>
-<dt><strong><code>data_product_type</code></strong></dt>
+<dt><strong><code>data_product_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>data product type ("keogram", "movie", "summary_plot")</dd>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>starting timestamp for the record (assumed it is in UTC), inclusive</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>ending timestamp for the record (assumed it is in UTC), inclusive</dd>
-<dt><strong><code>url</code></strong></dt>
+<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
 <dd>the URL of data product</dd>
-<dt><strong><code>metadata</code></strong></dt>
+<dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
 <h3>Methods</h3>

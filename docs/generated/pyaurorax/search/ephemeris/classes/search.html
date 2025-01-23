@@ -81,14 +81,25 @@ border-left: 1px solid #ddd;
     Note: At least one search criteria from programs, platforms, or instrument_types
     must be specified.
 
-    Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
+    Attributes:
+        start (datetime.datetime): 
+            start timestamp of the search (inclusive)
+
+        end (datetime.datetime): 
+            end timestamp of the search (inclusive)
+
+        programs (List[str]): 
+            list of programs to search through, defaults to None
+
+        platforms (List[str]): 
+            list of platforms to search through, defaults to None
+
+        instrument_types (List[str]): 
+            list of instrument types to search through, defaults to None
+
+        metadata_filters (List[Dict]): 
+            list of dictionaries describing metadata keys and values to filter on, defaults 
+            to None
 
             e.g. {
                 &#34;key&#34;: &#34;string&#34;,
@@ -97,20 +108,43 @@ border-left: 1px solid #ddd;
                     &#34;string&#34;
                 ]
             }
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either &#39;AND&#39; or &#39;OR&#39;), defaults
-            to &#34;AND&#34;
-        response_format: JSON representation of desired data response format
-        request: AuroraXResponse object returned when the search is executed
-        request_id: unique ID assigned to the request by the AuroraX API
-        request_url: unique URL assigned to the request by the AuroraX API
-        executed: indicates if the search has been executed/started
-        completed: indicates if the search has finished
-        data_url: the URL where data is accessed
-        query: the query for this request as JSON
-        status: the status of the query
-        data: the ephemeris records found
-        logs: all log messages outputted by the AuroraX API for this request
+
+        metadata_filters_logical_operator (str): 
+            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+            defaults to `AND`
+
+        response_format (Dict): 
+            JSON representation of desired data response format
+        
+        request (AuroraXResponse): 
+            AuroraXResponse object returned when the search is executed
+        
+        request_id (str): 
+            unique ID assigned to the request by the AuroraX API
+       
+        request_url (str): 
+            unique URL assigned to the request by the AuroraX API
+     
+        executed (bool): 
+            indicates if the search has been executed/started
+     
+        completed (bool): 
+            indicates if the search has finished
+       
+        data_url (str): 
+            the URL where data is accessed
+      
+        query (Dict): 
+            the query for this request as JSON
+      
+        status (Dict): 
+            the status of the query
+      
+        data (List[EphemerisData]): 
+            the ephemeris records found
+      
+        logs (List[Dict]): 
+            all log messages outputted by the AuroraX API for this request
     &#34;&#34;&#34;
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -127,7 +161,7 @@ border-left: 1px solid #ddd;
                  response_format: Optional[Dict] = None) -&gt; None:
 
         # set variables using passed in args
-        self.aurorax_obj = aurorax_obj
+        self.__aurorax_obj = aurorax_obj
         self.start = start
         self.end = end
         self.programs = programs
@@ -144,7 +178,7 @@ border-left: 1px solid #ddd;
         self.executed = False
         self.completed = False
         self.data_url = &#34;&#34;
-        self.query = {}
+        self.__query = {}
         self.status = {}
         self.data = []
         self.logs = []
@@ -212,7 +246,7 @@ border-left: 1px solid #ddd;
         &#34;&#34;&#34;
         Property for the query value
         &#34;&#34;&#34;
-        self._query = {
+        self.__query = {
             &#34;data_sources&#34;: {
                 &#34;programs&#34;: [] if not self.programs else self.programs,
                 &#34;platforms&#34;: [] if not self.platforms else self.platforms,
@@ -225,11 +259,11 @@ border-left: 1px solid #ddd;
             &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
             &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         }
-        return self._query
+        return self.__query
 
     @query.setter
     def query(self, query):
-        self._query = query
+        self.__query = query
 
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
@@ -243,8 +277,8 @@ border-left: 1px solid #ddd;
             raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
 
         # do request
-        url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
-        req = AuroraXAPIRequest(self.aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
+        url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
         res = req.execute()
 
         # set request ID, request_url, executed
@@ -263,12 +297,13 @@ border-left: 1px solid #ddd;
         Update the status of this ephemeris search request
 
         Args:
-            status: the previously-retrieved status of this request (include
-                to avoid requesting it from the API again), defaults to None
+            status (Dict): 
+                the previously-retrieved status of this request (include to avoid requesting it 
+                from the API again), defaults to None
         &#34;&#34;&#34;
         # get the status if it isn&#39;t passed in
         if (status is None):
-            status = requests_get_status(self.aurorax_obj, self.request_url)
+            status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
         if (status is None):
@@ -285,8 +320,7 @@ border-left: 1px solid #ddd;
 
     def check_for_data(self) -&gt; bool:
         &#34;&#34;&#34;
-        Check to see if data is available for this ephemeris
-        search request
+        Check to see if data is available for this ephemeris search request
 
         Returns:
             True if data is available, else False
@@ -304,7 +338,7 @@ border-left: 1px solid #ddd;
             return
 
         # get data
-        raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+        raw_data = requests_get_data(self.__aurorax_obj, self.data_url, self.response_format, False)
 
         # set data variable
         if (self.response_format is not None):
@@ -320,17 +354,17 @@ border-left: 1px solid #ddd;
 
     def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; None:
         &#34;&#34;&#34;
-        Block and wait for the request to complete and data is
-        available for retrieval
+        Block and wait for the request to complete and data is available for retrieval
 
         Args:
-            poll_interval: time in seconds to wait between polling attempts,
-                defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times and other progress messages, defaults
-                to False
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
         &#34;&#34;&#34;
-        url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
-        self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))
+        url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+        self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
 
     def cancel(self, wait: bool = False, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; int:
         &#34;&#34;&#34;
@@ -342,12 +376,15 @@ border-left: 1px solid #ddd;
         the polling time using the &#39;poll_interval&#39; parameter.
 
         Args:
-            wait: wait until the cancellation request has been
-                completed (may wait for several minutes)
-            poll_interval: seconds to wait between polling
-                calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-            verbose: output poll times and other progress messages, defaults
-                to False
+            wait (bool): 
+                wait until the cancellation request has been completed (may wait for 
+                several minutes)
+
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to 1 second.
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
@@ -356,28 +393,28 @@ border-left: 1px solid #ddd;
             pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         &#34;&#34;&#34;
-        url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
-        return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+        url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
 </details>
 <div class="desc"><p>Class representing an ephemeris search</p>
 <p>Note: At least one search criteria from programs, platforms, or instrument_types
 must be specified.</p>
-<h2 id="args">Args</h2>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>programs</code></strong></dt>
+<dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>list of programs to search through, defaults to None</dd>
-<dt><strong><code>platforms</code></strong></dt>
+<dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>list of platforms to search through, defaults to None</dd>
-<dt><strong><code>instrument_types</code></strong></dt>
+<dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>list of instrument types to search through, defaults to None</dd>
-<dt><strong><code>metadata_filters</code></strong></dt>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>
-<p>list of dictionaries describing metadata keys and
-values to filter on, defaults to None</p>
+<p>list of dictionaries describing metadata keys and values to filter on, defaults
+to None</p>
 <p>e.g. {
 "key": "string",
 "operator": "=",
@@ -386,32 +423,33 @@ values to filter on, defaults to None</p>
 ]
 }</p>
 </dd>
-<dt><strong><code>metadata_filters_logical_operator</code></strong></dt>
-<dd>the logical operator to use when
-evaluating metadata filters (either 'AND' or 'OR'), defaults
-to "AND"</dd>
-<dt><strong><code>response_format</code></strong></dt>
+<dt><strong><code>metadata_filters_logical_operator</code></strong> :&ensp;<code>str</code></dt>
+<dd>the logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
+defaults to <code>AND</code></dd>
+<dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
-<dt><strong><code>request</code></strong></dt>
+<dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
 <dd>AuroraXResponse object returned when the search is executed</dd>
-<dt><strong><code>request_id</code></strong></dt>
+<dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>unique ID assigned to the request by the AuroraX API</dd>
-<dt><strong><code>request_url</code></strong></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
-<dt><strong><code>executed</code></strong></dt>
-<dd>indicates if the search has been executed/started</dd>
-<dt><strong><code>completed</code></strong></dt>
-<dd>indicates if the search has finished</dd>
-<dt><strong><code>data_url</code></strong></dt>
-<dd>the URL where data is accessed</dd>
-<dt><strong><code>query</code></strong></dt>
-<dd>the query for this request as JSON</dd>
-<dt><strong><code>status</code></strong></dt>
-<dd>the status of the query</dd>
-<dt><strong><code>data</code></strong></dt>
-<dd>the ephemeris records found</dd>
-<dt><strong><code>logs</code></strong></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
+<dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
+<dd>
+<p>unique URL assigned to the request by the AuroraX API</p>
+<p>executed (bool):
+indicates if the search has been executed/started</p>
+<p>completed (bool):
+indicates if the search has finished</p>
+<p>data_url (str):
+the URL where data is accessed</p>
+<p>query (Dict):
+the query for this request as JSON</p>
+<p>status (Dict):
+the status of the query</p>
+<p>data (List[EphemerisData]):
+the ephemeris records found</p>
+<p>logs (List[Dict]):
+all log messages outputted by the AuroraX API for this request</p>
+</dd>
 </dl></div>
 <h3>Instance variables</h3>
 <dl>
@@ -426,7 +464,7 @@ def query(self):
     &#34;&#34;&#34;
     Property for the query value
     &#34;&#34;&#34;
-    self._query = {
+    self.__query = {
         &#34;data_sources&#34;: {
             &#34;programs&#34;: [] if not self.programs else self.programs,
             &#34;platforms&#34;: [] if not self.platforms else self.platforms,
@@ -439,7 +477,7 @@ def query(self):
         &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
     }
-    return self._query</code></pre>
+    return self.__query</code></pre>
 </details>
 <div class="desc"><p>Property for the query value</p></div>
 </dd>
@@ -464,12 +502,15 @@ def query(self):
     the polling time using the &#39;poll_interval&#39; parameter.
 
     Args:
-        wait: wait until the cancellation request has been
-            completed (may wait for several minutes)
-        poll_interval: seconds to wait between polling
-            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-        verbose: output poll times and other progress messages, defaults
-            to False
+        wait (bool): 
+            wait until the cancellation request has been completed (may wait for 
+            several minutes)
+
+        poll_interval (float): 
+            seconds to wait between polling calls, defaults to 1 second.
+
+        verbose (bool): 
+            output poll times and other progress messages, defaults to False
 
     Returns:
         1 on success
@@ -478,8 +519,8 @@ def query(self):
         pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
     &#34;&#34;&#34;
-    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
-    return requests_cancel(self.aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+    url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+    return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
 </details>
 <div class="desc"><p>Cancel the ephemeris search request</p>
 <p>This method returns immediately by default since the API processes
@@ -488,15 +529,13 @@ to be completed, set the 'wait' parameter to True. You can adjust
 the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>wait</code></strong></dt>
-<dd>wait until the cancellation request has been
-completed (may wait for several minutes)</dd>
-<dt><strong><code>poll_interval</code></strong></dt>
-<dd>seconds to wait between polling
-calls, defaults to STANDARD_POLLING_SLEEP_TIME.</dd>
-<dt><strong><code>verbose</code></strong></dt>
-<dd>output poll times and other progress messages, defaults
-to False</dd>
+<dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
+<dd>wait until the cancellation request has been completed (may wait for
+several minutes)</dd>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
+<dd>seconds to wait between polling calls, defaults to 1 second.</dd>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
+<dd>output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>1 on success</p>
@@ -518,8 +557,7 @@ to False</dd>
 </summary>
 <pre><code class="python">def check_for_data(self) -&gt; bool:
     &#34;&#34;&#34;
-    Check to see if data is available for this ephemeris
-    search request
+    Check to see if data is available for this ephemeris search request
 
     Returns:
         True if data is available, else False
@@ -527,8 +565,7 @@ to False</dd>
     self.update_status()
     return self.completed</code></pre>
 </details>
-<div class="desc"><p>Check to see if data is available for this ephemeris
-search request</p>
+<div class="desc"><p>Check to see if data is available for this ephemeris search request</p>
 <h2 id="returns">Returns</h2>
 <p>True if data is available, else False</p></div>
 </dd>
@@ -552,8 +589,8 @@ search request</p>
         raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
 
     # do request
-    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
-    req = AuroraXAPIRequest(self.aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
+    url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_SEARCH)
+    req = AuroraXAPIRequest(self.__aurorax_obj, method=&#34;post&#34;, url=url, body=self.query, null_response=True)
     res = req.execute()
 
     # set request ID, request_url, executed
@@ -592,7 +629,7 @@ search request</p>
         return
 
     # get data
-    raw_data = requests_get_data(self.aurorax_obj, self.data_url, self.response_format, False)
+    raw_data = requests_get_data(self.__aurorax_obj, self.data_url, self.response_format, False)
 
     # set data variable
     if (self.response_format is not None):
@@ -679,12 +716,13 @@ search request</p>
     Update the status of this ephemeris search request
 
     Args:
-        status: the previously-retrieved status of this request (include
-            to avoid requesting it from the API again), defaults to None
+        status (Dict): 
+            the previously-retrieved status of this request (include to avoid requesting it 
+            from the API again), defaults to None
     &#34;&#34;&#34;
     # get the status if it isn&#39;t passed in
     if (status is None):
-        status = requests_get_status(self.aurorax_obj, self.request_url)
+        status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
     if (status is None):
@@ -702,9 +740,9 @@ search request</p>
 <div class="desc"><p>Update the status of this ephemeris search request</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>status</code></strong></dt>
-<dd>the previously-retrieved status of this request (include
-to avoid requesting it from the API again), defaults to None</dd>
+<dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>the previously-retrieved status of this request (include to avoid requesting it
+from the API again), defaults to None</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.wait"><code class="name flex">
@@ -717,28 +755,25 @@ to avoid requesting it from the API again), defaults to None</dd>
 </summary>
 <pre><code class="python">def wait(self, poll_interval: float = __STANDARD_POLLING_SLEEP_TIME, verbose: bool = False) -&gt; None:
     &#34;&#34;&#34;
-    Block and wait for the request to complete and data is
-    available for retrieval
+    Block and wait for the request to complete and data is available for retrieval
 
     Args:
-        poll_interval: time in seconds to wait between polling attempts,
-            defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        verbose: output poll times and other progress messages, defaults
-            to False
+        poll_interval (float): 
+            time in seconds to wait between polling attempts, defaults to 1 second
+
+        verbose (bool): 
+            output poll times and other progress messages, defaults to False
     &#34;&#34;&#34;
-    url = &#34;%s/%s&#34; % (self.aurorax_obj.api_base_url, self.aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
-    self.update_status(requests_wait_for_data(self.aurorax_obj, url, poll_interval, verbose))</code></pre>
+    url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
+    self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))</code></pre>
 </details>
-<div class="desc"><p>Block and wait for the request to complete and data is
-available for retrieval</p>
+<div class="desc"><p>Block and wait for the request to complete and data is available for retrieval</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>poll_interval</code></strong></dt>
-<dd>time in seconds to wait between polling attempts,
-defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
-<dt><strong><code>verbose</code></strong></dt>
-<dd>output poll times and other progress messages, defaults
-to False</dd>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
+<dd>time in seconds to wait between polling attempts, defaults to 1 second</dd>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
+<dd>output poll times and other progress messages, defaults to False</dd>
 </dl></div>
 </dd>
 </dl>

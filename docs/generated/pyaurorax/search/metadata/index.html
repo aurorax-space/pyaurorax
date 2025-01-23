@@ -92,8 +92,14 @@ here instead of digging in deeper to the submodules.</p>
         key names match and there aren&#39;t fewer or more keys than expected.
 
         Args:
-            schema: the metadata schema to validate against
-            record: metadata record to validate
+            schema (List[Dict]): 
+                the metadata schema to validate against
+
+            record (Dict): 
+                metadata record to validate
+
+            quiet (bool): 
+                suppress any stdout output
 
         Returns:
             True if the metadata record is valid, False if it is not
@@ -105,7 +111,8 @@ here instead of digging in deeper to the submodules.</p>
         Retrieve the ephemeris metadata schema for a data source
 
         Args:
-            identifier: the AuroraX data source ID
+            identifier (int): 
+                the AuroraX data source ID
 
         Returns:
             the ephemeris metadata schema for the data source
@@ -117,7 +124,8 @@ here instead of digging in deeper to the submodules.</p>
         Retrieve the data products metadata schema for a data source
 
         Args:
-            identifier: the AuroraX data source ID
+            identifier (int): 
+                the AuroraX data source ID
 
         Returns:
             the data products metadata schema for the data source
@@ -141,7 +149,8 @@ the submodules and carry over configuration information in the super class.</p><
     Retrieve the data products metadata schema for a data source
 
     Args:
-        identifier: the AuroraX data source ID
+        identifier (int): 
+            the AuroraX data source ID
 
     Returns:
         the data products metadata schema for the data source
@@ -151,7 +160,7 @@ the submodules and carry over configuration information in the super class.</p><
 <div class="desc"><p>Retrieve the data products metadata schema for a data source</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>identifier</code></strong></dt>
+<dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>the AuroraX data source ID</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -170,7 +179,8 @@ the submodules and carry over configuration information in the super class.</p><
     Retrieve the ephemeris metadata schema for a data source
 
     Args:
-        identifier: the AuroraX data source ID
+        identifier (int): 
+            the AuroraX data source ID
 
     Returns:
         the ephemeris metadata schema for the data source
@@ -180,7 +190,7 @@ the submodules and carry over configuration information in the super class.</p><
 <div class="desc"><p>Retrieve the ephemeris metadata schema for a data source</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>identifier</code></strong></dt>
+<dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>the AuroraX data source ID</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -200,8 +210,14 @@ the submodules and carry over configuration information in the super class.</p><
     key names match and there aren&#39;t fewer or more keys than expected.
 
     Args:
-        schema: the metadata schema to validate against
-        record: metadata record to validate
+        schema (List[Dict]): 
+            the metadata schema to validate against
+
+        record (Dict): 
+            metadata record to validate
+
+        quiet (bool): 
+            suppress any stdout output
 
     Returns:
         True if the metadata record is valid, False if it is not
@@ -212,10 +228,12 @@ the submodules and carry over configuration information in the super class.</p><
 key names match and there aren't fewer or more keys than expected.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>schema</code></strong></dt>
+<dt><strong><code>schema</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>the metadata schema to validate against</dd>
-<dt><strong><code>record</code></strong></dt>
+<dt><strong><code>record</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>metadata record to validate</dd>
+<dt><strong><code>quiet</code></strong> :&ensp;<code>bool</code></dt>
+<dd>suppress any stdout output</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>True if the metadata record is valid, False if it is not</p></div>

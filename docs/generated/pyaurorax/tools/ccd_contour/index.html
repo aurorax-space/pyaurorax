@@ -61,17 +61,227 @@ border-left: 1px solid #ddd;
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pyaurorax.tools.ccd_contour.azimuth"><code class="name flex">
-<span>def <span class="ident">azimuth</span></span>(<span>skymap: pyucalgarysrs.data.classes.Skymap,<br>constant_azimuth: float | int,<br>min_elevation: int | float | None = None,<br>max_elevation: int | float | None = None,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
+<dt id="pyaurorax.tools.ccd_contour.CCDContourManager"><code class="flex name class">
+<span>class <span class="ident">CCDContourManager</span></span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def azimuth(skymap: Skymap,
+<pre><code class="python">class CCDContourManager:
+    &#34;&#34;&#34;
+    The CCDContourManager object is initialized within every PyAuroraX object. It acts as a way to 
+    access the submodules and carry over configuration information in the super class.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        pass
+
+    def azimuth(self,
+                skymap: Skymap,
+                constant_azimuth: Union[int, float],
+                min_elevation: Optional[Union[int, float]] = None,
+                max_elevation: Optional[Union[int, float]] = None,
+                n_points: Optional[int] = None,
+                remove_edge_cases: bool = True) -&gt; Tuple[np.ndarray, np.ndarray]:
+        &#34;&#34;&#34;
+        Obtain CCD Coordinates of a line of constant latitude.
+
+        Args:
+            skymap (pyaurorax.data.ucalgary.Skymap): 
+                The skymap corresponding to the CCD image data to generate contours for.
+
+            constant_azimuth (int or float): 
+                The azimuth angle, in degrees, to create contour of.
+
+            min_elevation (int or float): 
+                Optionally specify the elevation angle at which contour begins. Defaults to 5.
+            
+            max_elevation (int or float): 
+                Optionally specify the elevation angle at which contour begins. Defaults to 90.
+
+            n_points (int or float): 
+                Optionally specify the number of points used to define a contour. By default
+                a reasonable value is selected automatically.
+
+            remove_edge_cases (bool): 
+                Due to the nature of skymaps, often, around the edge of CCD data, contours will
+                have often undesired behaviour due to being bounded within the CCD range. The result
+                is flattened contours along the edge of CCD boundaries. This is completely expected,
+                and these points are removed by default, completely for aesthetic choices. Set this 
+                keyword to False to keep all points in the contour.
+                
+        Returns:
+            A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+            the azimuth contour.
+
+        Raises:
+            ValueError: invalid azimuth supplied.
+        &#34;&#34;&#34;
+        return func_azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, remove_edge_cases)
+
+    def elevation(self,
+                  skymap: Skymap,
+                  constant_elevation: Union[int, float],
+                  n_points: Optional[int] = None,
+                  remove_edge_cases: bool = True) -&gt; Tuple[np.ndarray, np.ndarray]:
+        &#34;&#34;&#34;
+        Obtain CCD Coordinates of a line of constant elevation.
+
+        Args:
+            skymap (pyaurorax.data.ucalgary.Skymap): 
+                The skymap corresponding to the CCD image data to generate contours for.
+
+            constant_elevation (int or float): 
+                The elevation angle, in degrees from the horizon, to create contour of.
+
+            n_points (int or float): 
+                Optionally specify the number of points used to define a contour. By default
+                a reasonable value is selected automatically.
+
+            remove_edge_cases (bool): 
+                Due to the nature of skymaps, often, around the edge of CCD data, contours will
+                have often undesired behaviour due to being bounded within the CCD range. The result
+                is flattened contours along the edge of CCD boundaries. This is completely expected,
+                and these points are removed by default, completely for aesthetic choices. Set this 
+                keyword to False to keep all points in the contour.
+                
+        Returns:
+            A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+            the elevation contour.
+
+        Raises:
+            ValueError: invalid elevation supplied.
+        &#34;&#34;&#34;
+        return func_elevation(skymap, constant_elevation, n_points, remove_edge_cases)
+
+    def geo(self,
+            skymap: Skymap,
+            altitude_km: Union[int, float],
+            contour_lats: Optional[Union[np.ndarray, list]] = None,
+            contour_lons: Optional[Union[np.ndarray, list]] = None,
+            constant_lat: Optional[Union[float, int]] = None,
+            constant_lon: Optional[Union[float, int]] = None,
+            n_points: Optional[int] = None,
+            remove_edge_cases: bool = True) -&gt; Tuple[np.ndarray, np.ndarray]:
+        &#34;&#34;&#34;
+        Obtain CCD Coordinates of a line of constant geographic latitude, constant geographic longitude, or a custom contour
+        defined in geographic coordinates.
+
+        Args:
+            skymap (pyaurorax.data.ucalgary.Skymap): 
+                The skymap corresponding to the CCD image data to generate contours for.
+
+            altitude_km (int or float): 
+                The altitude of the image data to create contours for, in kilometers.
+
+            contour_lats (ndarray or list): 
+                    Sequence of geographic latitudes defining a contour.
+                
+            contour_lons (ndarray or list): 
+                Sequence of geographic longitudes defining a contour.
+
+            constant_lat (float or int): 
+                Geographic Latitude at which to create line of constant latitude.
+            
+            constant_lon (float or int): 
+                Geographic Longitude at which to create line of constant longitude.
+
+            n_points (int or float): 
+                Optionally specify the number of points used to define a contour. By default
+                a reasonable value is selected automatically.
+            
+            remove_edge_cases (bool): 
+                Due to the nature of skymaps, often, around the edge of CCD data, contours will
+                have often undesired behaviour due to being bounded within the CCD range. The result
+                is flattened contours along the edge of CCD boundaries. This is completely expected,
+                and these points are removed by default, completely for aesthetic choices. Set this 
+                keyword to False to keep all points in the contour.
+                
+        Returns:
+            A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+            the elevation contour.
+
+        Raises:
+            ValueError: invalid elevation supplied.
+        &#34;&#34;&#34;
+        return func_geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_lon, n_points, remove_edge_cases)
+
+    def mag(self,
+            skymap: Skymap,
+            timestamp: datetime.datetime,
+            altitude_km: Union[int, float],
+            contour_lats: Optional[Union[np.ndarray, list]] = None,
+            contour_lons: Optional[Union[np.ndarray, list]] = None,
+            constant_lat: Optional[Union[float, int]] = None,
+            constant_lon: Optional[Union[float, int]] = None,
+            n_points: Optional[int] = None,
+            remove_edge_cases: bool = True) -&gt; Tuple[np.ndarray, np.ndarray]:
+        &#34;&#34;&#34;
+        Obtain CCD Coordinates of a line of constant magnetic latitude, constant magnetic longitude, or a custom contour
+        defined in magnetic coordinates.
+
+        Args:
+            skymap (pyaurorax.data.ucalgary.Skymap): 
+                The skymap corresponding to the CCD image data to generate contours for.
+
+            timestamp (datetime.datetime): 
+                The timestamp used for AACGM Conversions.
+
+            altitude_km (int or float): 
+                The altitude of the image data to create contours for, in kilometers.
+
+            contour_lats (ndarray or list): 
+                    Sequence of magnetic latitudes defining a contour.
+                
+            contour_lons (ndarray or list): 
+                Sequence of magnetic longitudes defining a contour.
+
+            constant_lat (float or int): 
+                Magnetic Latitude at which to create line of constant latitude.
+            
+            constant_lon (float or int): 
+                Magnetic Longitude at which to create line of constant longitude.
+
+            n_points (int or float): 
+                Optionally specify the number of points used to define a contour. By default
+                a reasonable value is selected automatically.
+            
+            remove_edge_cases (bool): 
+                Due to the nature of skymaps, often, around the edge of CCD data, contours will
+                have often undesired behaviour due to being bounded within the CCD range. The result
+                is flattened contours along the edge of CCD boundaries. This is completely expected,
+                and these points are removed by default, completely for aesthetic choices. Set this 
+                keyword to False to keep all points in the contour.
+                
+        Returns:
+            A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+            the elevation contour.
+
+        Raises:
+            ValueError: invalid elevation supplied.
+        &#34;&#34;&#34;
+        return func_mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat, constant_lon, n_points, remove_edge_cases)</code></pre>
+</details>
+<div class="desc"><p>The CCDContourManager object is initialized within every PyAuroraX object. It acts as a way to
+access the submodules and carry over configuration information in the super class.</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.ccd_contour.CCDContourManager.azimuth"><code class="name flex">
+<span>def <span class="ident">azimuth</span></span>(<span>self,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>constant_azimuth: float | int,<br>min_elevation: int | float | None = None,<br>max_elevation: int | float | None = None,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def azimuth(self,
+            skymap: Skymap,
             constant_azimuth: Union[int, float],
             min_elevation: Optional[Union[int, float]] = None,
             max_elevation: Optional[Union[int, float]] = None,
@@ -84,13 +294,13 @@ border-left: 1px solid #ddd;
         skymap (pyaurorax.data.ucalgary.Skymap): 
             The skymap corresponding to the CCD image data to generate contours for.
 
-        constant_elevation (int or float): 
-            The elevation angle, in degrees from the horizon, to create contour of.
+        constant_azimuth (int or float): 
+            The azimuth angle, in degrees, to create contour of.
 
         min_elevation (int or float): 
             Optionally specify the elevation angle at which contour begins. Defaults to 5.
         
-        min_elevation (int or float): 
+        max_elevation (int or float): 
             Optionally specify the elevation angle at which contour begins. Defaults to 90.
 
         n_points (int or float): 
@@ -111,89 +321,18 @@ border-left: 1px solid #ddd;
     Raises:
         ValueError: invalid azimuth supplied.
     &#34;&#34;&#34;
-
-    # First check that azimuth is valid
-    if constant_azimuth &lt; 0 or constant_azimuth &gt; 360:
-        raise ValueError(f&#34;Azimuth of {constant_azimuth} is outside of valid range (0,360).&#34;)
-
-    # Check that min/max elevations are valid if supplied
-    if (min_elevation is not None):
-        if (min_elevation &lt; 0) or (min_elevation &gt; 90):
-            raise ValueError(f&#34;Min_elevation of {min_elevation} is outside of valid range (0,90).&#34;)
-    if (max_elevation is not None):
-        if (max_elevation &lt; 0) or (max_elevation &gt; 90):
-            raise ValueError(f&#34;Minimum elevation of {min_elevation} is outside of valid range (0,90).&#34;)
-    if (min_elevation is not None) and (max_elevation is not None):
-        if (min_elevation &gt;= max_elevation):
-            raise ValueError(f&#34;Min_elevation of {min_elevation} is outside of valid range (0,90).&#34;)
-
-    # Pull azimuth and elevation arrays from skymap
-    azimuth = skymap.full_azimuth
-    elevation = skymap.full_elevation
-
-    # Check if azimuth is None (in case someone tries this with a spectrograph skymap)
-    if (azimuth is None):
-        raise ValueError(&#34;Skymap&#39;s &#39;azimuth&#39; value is None, cannot perform this function&#34;)
-
-    # 360 degrees is just zero in skymap
-    if constant_azimuth == 360:
-        constant_azimuth = 0
-
-    # Take a guess at a good number of points if None is supplied
-    if n_points is None:
-        step = 1
-    else:
-        step = 90 / n_points
-
-    # Set bounds of elevation based on input
-    if min_elevation is None:
-        min_elevation = 5
-    if max_elevation is None:
-        max_elevation = 90
-
-    # Iterate through elevation array in steps
-    x_list = []
-    y_list = []
-    for el_min in np.arange(min_elevation, max_elevation + 1, step):
-
-        # Get indices of this elevation slice
-        el_max = el_min + step
-        el_slice_idx = np.logical_and(elevation &gt;= el_min, elevation &lt; el_max)
-
-        # Get index of pixel nearest to target azimuth
-        masked_azimuth = np.where(el_slice_idx, azimuth, np.nan)
-        diffs = np.abs(masked_azimuth - constant_azimuth)
-        y, x = np.where(diffs == np.nanmin(diffs))
-
-        if x.shape == (0, ) or y.shape == (0, ):
-            continue
-
-        # Add to master lists
-        x_list.append(x[0])
-        y_list.append(y[0])
-
-    if remove_edge_cases:
-        # Remove any points lying on the edge of CCD bounds and return
-        x_list = np.array(x_list)
-        y_list = np.array(y_list)
-        edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; elevation.shape[1] - 1, y_list &gt; 0, y_list &lt; elevation.shape[0] - 1]))
-        x_list = x_list[edge_case_idx]
-        y_list = y_list[edge_case_idx]
-        return (x_list, y_list)
-    else:
-        # Convert to arrays, return
-        return (np.array(x_list), np.array(y_list))</code></pre>
+    return func_azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, remove_edge_cases)</code></pre>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant latitude.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
-<dt><strong><code>constant_elevation</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
-<dd>The elevation angle, in degrees from the horizon, to create contour of.</dd>
+<dt><strong><code>constant_azimuth</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
+<dd>The azimuth angle, in degrees, to create contour of.</dd>
 <dt><strong><code>min_elevation</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>Optionally specify the elevation angle at which contour begins. Defaults to 5.</dd>
-<dt><strong><code>min_elevation</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
+<dt><strong><code>max_elevation</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>Optionally specify the elevation angle at which contour begins. Defaults to 90.</dd>
 <dt><strong><code>n_points</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>Optionally specify the number of points used to define a contour. By default
@@ -214,15 +353,16 @@ the azimuth contour.</p>
 <dd>invalid azimuth supplied.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.ccd_contour.elevation"><code class="name flex">
-<span>def <span class="ident">elevation</span></span>(<span>skymap: pyucalgarysrs.data.classes.Skymap,<br>constant_elevation: float | int,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
+<dt id="pyaurorax.tools.ccd_contour.CCDContourManager.elevation"><code class="name flex">
+<span>def <span class="ident">elevation</span></span>(<span>self,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>constant_elevation: float | int,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def elevation(skymap: Skymap,
+<pre><code class="python">def elevation(self,
+              skymap: Skymap,
               constant_elevation: Union[int, float],
               n_points: Optional[int] = None,
               remove_edge_cases: bool = True) -&gt; Tuple[np.ndarray, np.ndarray]:
@@ -254,70 +394,7 @@ the azimuth contour.</p>
     Raises:
         ValueError: invalid elevation supplied.
     &#34;&#34;&#34;
-
-    # First check that elevation is valid
-    if constant_elevation &lt; 0 or constant_elevation &gt; 90:
-        raise ValueError(f&#34;Elevation of {constant_elevation} is outside of valid range (0,90).&#34;)
-
-    # Pull azimuth and elevation arrays from skymap
-    azimuth = skymap.full_azimuth
-    elevation = skymap.full_elevation
-
-    # In the case that the user requests 90 degrees, return the single closest pixel
-    if constant_elevation == 90:
-        diffs = np.abs(elevation - constant_elevation)
-        y, x = np.where(diffs == np.nanmin(diffs))
-        return (np.array(x[0]), np.array(y[0]))
-
-    # Take a guess at a good number of points if None is supplied
-    if n_points is None:
-        if constant_elevation &lt; 30:
-            step = 1 * (257 / float(elevation.shape[0]))
-        elif constant_elevation &gt;= 30 and constant_elevation &lt; 60:
-            step = 3 * (257 / float(elevation.shape[0]))
-        elif constant_elevation &gt;= 60 and constant_elevation &lt; 85:
-            step = 10 * (257 / float(elevation.shape[0]))
-        else:
-            step = 30
-    else:
-        step = 360 / n_points
-
-    # Iterate through azimuth array in steps
-    x_list = []
-    y_list = []
-    for az_min in np.arange(0, 360, step):
-
-        # Get indices of this azimuth slice
-        az_max = az_min + step
-        az_slice_idx = np.logical_and(azimuth &gt;= az_min, azimuth &lt; az_max)
-
-        # Get index of pixel nearest to target elevation
-        masked_elevation = np.where(az_slice_idx, elevation, np.nan)
-        diffs = np.abs(masked_elevation - constant_elevation)
-        y, x = np.where(diffs == np.nanmin(diffs))
-
-        if x.shape == (0, ) or y.shape == (0, ):
-            continue
-
-        # Add to master lists
-        x_list.append(x[0])
-        y_list.append(y[0])
-
-    # Close contour
-    x_list.append(x_list[0])
-    y_list.append(y_list[0])
-
-    if remove_edge_cases:
-        # Remove any points lying on the edge of CCD bounds and return
-        x_list = np.array(x_list)
-        y_list = np.array(y_list)
-        edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; elevation.shape[1] - 0, y_list &gt; 1, y_list &lt; elevation.shape[0] - 1]))
-        x_list = x_list[edge_case_idx]
-        y_list = y_list[edge_case_idx]
-        return (x_list, y_list)
-    else:
-        # Convert to arrays, return
-        return (np.array(x_list), np.array(y_list))</code></pre>
+    return func_elevation(skymap, constant_elevation, n_points, remove_edge_cases)</code></pre>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant elevation.</p>
 <h2 id="args">Args</h2>
@@ -345,15 +422,16 @@ the elevation contour.</p>
 <dd>invalid elevation supplied.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.ccd_contour.geo"><code class="name flex">
-<span>def <span class="ident">geo</span></span>(<span>skymap: pyucalgarysrs.data.classes.Skymap,<br>altitude_km: float | int,<br>contour_lats: numpy.ndarray | list | None = None,<br>contour_lons: numpy.ndarray | list | None = None,<br>constant_lat: int | float | None = None,<br>constant_lon: int | float | None = None,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
+<dt id="pyaurorax.tools.ccd_contour.CCDContourManager.geo"><code class="name flex">
+<span>def <span class="ident">geo</span></span>(<span>self,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>altitude_km: float | int,<br>contour_lats: numpy.ndarray | list | None = None,<br>contour_lons: numpy.ndarray | list | None = None,<br>constant_lat: int | float | None = None,<br>constant_lon: int | float | None = None,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def geo(skymap: Skymap,
+<pre><code class="python">def geo(self,
+        skymap: Skymap,
         altitude_km: Union[int, float],
         contour_lats: Optional[Union[np.ndarray, list]] = None,
         contour_lons: Optional[Union[np.ndarray, list]] = None,
@@ -372,16 +450,16 @@ the elevation contour.</p>
         altitude_km (int or float): 
             The altitude of the image data to create contours for, in kilometers.
 
-        lats (ndarray or list): 
+        contour_lats (ndarray or list): 
                 Sequence of geographic latitudes defining a contour.
             
-        lons (ndarray or list): 
+        contour_lons (ndarray or list): 
             Sequence of geographic longitudes defining a contour.
 
-        constant_lats (float or int): 
+        constant_lat (float or int): 
             Geographic Latitude at which to create line of constant latitude.
         
-        constant_lons (float or int): 
+        constant_lon (float or int): 
             Geographic Longitude at which to create line of constant longitude.
 
         n_points (int or float): 
@@ -402,202 +480,7 @@ the elevation contour.</p>
     Raises:
         ValueError: invalid elevation supplied.
     &#34;&#34;&#34;
-
-    # Check that multiple contours are not defined based on arguments passed
-    if (contour_lats is None) != (contour_lons is None):
-        raise ValueError(&#34;When defining a custom contour, both &#39;contour_lats&#39; and &#39;contour_lons&#39; must be supplied.&#34;)
-    if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) &gt; 1:
-        raise ValueError(
-            &#34;Only one contour can be defined per call: Pass only one of &#39;contour_lats &amp; contour_lons&#39;, &#39;constant_lat&#39;, or &#39;constant_lon&#39;.&#34;)
-    if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) == 0:
-        raise ValueError(&#34;No contour defined in input: Pass one of &#39;contour_lats &amp; contour_lons&#39;, &#39;constant_lat&#39;, or &#39;constant_lon&#39;.&#34;)
-
-    # Obtain lat/lon arrays from skymap at desired altitude
-    if (altitude_km * 1000.0 in skymap.full_map_altitude):
-        altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
-
-        lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
-        lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    else:
-        # Make sure altitude is in range that can be interpolated
-        if (altitude_km * 1000.0 &lt; skymap.full_map_altitude[0]) or (altitude_km * 1000.0 &gt; skymap.full_map_altitude[2]):
-            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; +
-                             str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
-
-        # Initialze empty lat/lon arrays
-        lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-        lons = lats.copy()
-
-        # Interpolate lats and lons at desired altitude
-        for i in range(skymap.full_map_latitude.shape[1]):
-            for j in range(skymap.full_map_latitude.shape[2]):
-                lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
-                lons[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_longitude[:, i, j])
-
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    # First handle case of a contour of constant latidude:
-    if (constant_lat is not None):
-        # First check that the supplied latitude is valid for this skymap
-        if (constant_lat &lt; np.nanmin(lats)) or (constant_lat &gt; np.nanmax(lats)):
-            raise ValueError(f&#34;Latitude {constant_lat} does not coincide with input skymap: latitude range &#34; +
-                             f&#34;at {altitude_km} km is ({np.nanmin(lats), np.nanmax(lats)}).&#34;)
-
-        # Get the longitude bounds of the skymap
-        min_skymap_lon, max_skymap_lon = np.nanmin(lons), np.nanmax(lons)
-
-        # Determine the step in longitudes for grabbing target lat, based on n_points
-        if (n_points is None):
-            n_points = round((lats.shape[0] - 1) / 5.12)
-
-        # Iterate though longitude ranges
-        iteration_lons = np.linspace(min_skymap_lon, max_skymap_lon, n_points)
-        x_list = []
-        y_list = []
-        for i in range(len(iteration_lons) - 1):
-            # Get lon domain for current iteration through skymap
-            lon_min = iteration_lons[i]
-            lon_max = iteration_lons[i + 1]
-
-            # Get indices of this longitude slice
-            lon_slice_idx = np.logical_and(lons &gt;= lon_min, lons &lt; lon_max)
-
-            # Get index of pixel nearest to target elevation
-            masked_lats = np.where(lon_slice_idx, lats, np.nan)
-            diffs = np.abs(masked_lats - constant_lat)
-            y, x = np.where(diffs == np.nanmin(diffs))
-
-            if x.shape == (0, ) or y.shape == (0, ):
-                continue
-
-            # Add to master lists
-            x_list.append(x[0])
-            y_list.append(y[0])
-
-        if remove_edge_cases:
-            # Remove any points lying on the edge of CCD bounds and return
-            x_list = np.array(x_list)
-            y_list = np.array(y_list)
-            edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; lats.shape[1] - 1, y_list &gt; 0, y_list &lt; lats.shape[0] - 1]))
-            x_list = x_list[edge_case_idx]
-            y_list = y_list[edge_case_idx]
-            return (x_list, y_list)
-        else:
-            # Convert to arrays, return
-            return (np.array(x_list), np.array(y_list))
-
-    # Next handle case of a contour of constant longitude:
-    elif (constant_lon is not None):
-        # First check that the supplied longitude is valid for this skymap
-        if (constant_lon &lt; np.nanmin(lons)) or (constant_lon &gt; np.nanmax(lons)):
-            raise ValueError(f&#34;Longitude {constant_lat} does not coincide with input skymap: longitude range &#34; +
-                             f&#34;at {altitude_km} km is ({np.nanmin(lons), np.nanmax(lons)}).&#34;)
-
-        # Get the latitude bounds of the skymap
-        min_skymap_lat, max_skymap_lat = np.nanmin(lats), np.nanmax(lats)
-
-        # Determine the step in longitudes for grabbing target lat, based on n_points
-        if (n_points is None):
-            n_points = round((lats.shape[0] - 1) / 5.12)
-
-        # Iterate though latitude ranges
-        iteration_lats = np.linspace(min_skymap_lat, max_skymap_lat, n_points)
-        x_list = []
-        y_list = []
-        for i in range(len(iteration_lats) - 1):
-            # Get lon domain for current iteration through skymap
-            lat_min = iteration_lats[i]
-            lat_max = iteration_lats[i + 1]
-
-            # Get indices of this longitude slice
-            lat_slice_idx = np.logical_and(lats &gt;= lat_min, lats &lt; lat_max)
-
-            # Get index of pixel nearest to target elevation
-            masked_lons = np.where(lat_slice_idx, lons, np.nan)
-            diffs = np.abs(masked_lons - constant_lon)
-            y, x = np.where(diffs == np.nanmin(diffs))
-
-            if x.shape == (0, ) or y.shape == (0, ):
-                continue
-
-            # Add to master lists
-            x_list.append(x[0])
-            y_list.append(y[0])
-
-        if remove_edge_cases:
-            # Remove any points lying on the edge of CCD bounds and return
-            x_list = np.array(x_list)
-            y_list = np.array(y_list)
-            edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; lats.shape[1] - 1, y_list &gt; 0, y_list &lt; lats.shape[0] - 1]))
-            x_list = x_list[edge_case_idx]
-            y_list = y_list[edge_case_idx]
-            return (x_list, y_list)
-        else:
-            # Convert to arrays, return
-            return (np.array(x_list), np.array(y_list))
-
-    # Finally, handle case of a custom contour
-    elif (contour_lats is not None) and (contour_lons is not None):
-        # Convert lists to ndarrays if necessary
-        if isinstance(lats, list):
-            lats = np.array(lats)
-        if isinstance(lons, list):
-            lons = np.array(lons)
-
-        # Remove any invalid lat/lon pairs
-        invalid_mask = (contour_lons &lt; np.nanmin(lons)) | (contour_lons &gt; np.nanmax(lons)) | (contour_lats &lt; np.nanmin(lats)) | (contour_lats
-                                                                                                                                 &gt; np.nanmax(lats))
-        # Filter out invalid contour points
-        valid_contour_lats = contour_lats[~invalid_mask]
-        valid_contour_lons = contour_lons[~invalid_mask]
-
-        # Get the latitude bounds of the skymap
-        # Iterate through each target point
-        x_list = []
-        y_list = []
-        for target_lat, target_lon in zip(valid_contour_lats, valid_contour_lons):
-            # Make sure lat/lon falls within skymap
-            if target_lat &lt; np.nanmin(lats) or target_lat &gt; np.nanmax(lats):
-                raise ValueError(f&#34;Latitude {target_lat} is outside this skymap&#39;s valid range of {(np.nanmin(lats),np.nanmax(lats))}.&#34;)
-            if target_lon &lt; np.nanmin(lons) or target_lon &gt; np.nanmax(lons):
-                raise ValueError(f&#34;Longitude {target_lon} is outside this skymap&#39;s valid range of {(np.nanmin(lons),np.nanmax(lons))}.&#34;)
-
-            # Compute haversine distance between all points in skymap
-            haversine_diff = __haversine_distances(target_lat, target_lon, lats, lons)
-
-            # Obtain the skymap indices of the nearest point
-            nan_mask = np.isnan(haversine_diff)
-            masked_data = np.ma.masked_array(haversine_diff, mask=nan_mask)
-            nearest_indices = np.unravel_index(np.ma.argmin(masked_data), haversine_diff.shape)
-
-            # Convert indices to CCD Coordinates
-            y_loc = nearest_indices[0] - 1
-            if y_loc &lt; 0:
-                y_loc = 0
-            x_loc = nearest_indices[1] - 1
-            if x_loc &lt; 0:
-                x_loc = 0
-
-            x_list.append(x_loc)
-            y_list.append(y_loc)
-
-        if remove_edge_cases:
-            # Remove any points lying on the edge of CCD bounds and return
-            x_list = np.array(x_list)
-            y_list = np.array(y_list)
-            edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; lats.shape[1] - 1, y_list &gt; 0, y_list &lt; lats.shape[0] - 1]))
-            x_list = x_list[edge_case_idx]
-            y_list = y_list[edge_case_idx]
-            return (x_list, y_list)
-        else:
-            # Convert to arrays, return
-            return (np.array(x_list), np.array(y_list))
-
-    else:
-        # This shouldn&#39;t occur, but typing claims there is a missed case somewhere that could not be identified...
-        raise ValueError(&#34;Something went wrong. Please verify your inputs are in expected format.&#34;)</code></pre>
+    return func_geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_lon, n_points, remove_edge_cases)</code></pre>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant geographic latitude, constant geographic longitude, or a custom contour
 defined in geographic coordinates.</p>
@@ -607,15 +490,15 @@ defined in geographic coordinates.</p>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The altitude of the image data to create contours for, in kilometers.</dd>
-<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dt><strong><code>contour_lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>
 <p>Sequence of geographic latitudes defining a contour.</p>
 </dd>
-<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dt><strong><code>contour_lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of geographic longitudes defining a contour.</dd>
-<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dt><strong><code>constant_lat</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>Geographic Latitude at which to create line of constant latitude.</dd>
-<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dt><strong><code>constant_lon</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>Geographic Longitude at which to create line of constant longitude.</dd>
 <dt><strong><code>n_points</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>Optionally specify the number of points used to define a contour. By default
@@ -636,15 +519,16 @@ the elevation contour.</p>
 <dd>invalid elevation supplied.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.ccd_contour.mag"><code class="name flex">
-<span>def <span class="ident">mag</span></span>(<span>skymap: pyucalgarysrs.data.classes.Skymap,<br>timestamp: datetime.datetime,<br>altitude_km: float | int,<br>contour_lats: numpy.ndarray | list | None = None,<br>contour_lons: numpy.ndarray | list | None = None,<br>constant_lat: int | float | None = None,<br>constant_lon: int | float | None = None,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
+<dt id="pyaurorax.tools.ccd_contour.CCDContourManager.mag"><code class="name flex">
+<span>def <span class="ident">mag</span></span>(<span>self,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>timestamp: datetime.datetime,<br>altitude_km: float | int,<br>contour_lats: numpy.ndarray | list | None = None,<br>contour_lons: numpy.ndarray | list | None = None,<br>constant_lat: int | float | None = None,<br>constant_lon: int | float | None = None,<br>n_points: int | None = None,<br>remove_edge_cases: bool = True) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def mag(skymap: Skymap,
+<pre><code class="python">def mag(self,
+        skymap: Skymap,
         timestamp: datetime.datetime,
         altitude_km: Union[int, float],
         contour_lats: Optional[Union[np.ndarray, list]] = None,
@@ -667,16 +551,16 @@ the elevation contour.</p>
         altitude_km (int or float): 
             The altitude of the image data to create contours for, in kilometers.
 
-        lats (ndarray or list): 
+        contour_lats (ndarray or list): 
                 Sequence of magnetic latitudes defining a contour.
             
-        lons (ndarray or list): 
+        contour_lons (ndarray or list): 
             Sequence of magnetic longitudes defining a contour.
 
-        constant_lats (float or int): 
+        constant_lat (float or int): 
             Magnetic Latitude at which to create line of constant latitude.
         
-        constant_lons (float or int): 
+        constant_lon (float or int): 
             Magnetic Longitude at which to create line of constant longitude.
 
         n_points (int or float): 
@@ -697,221 +581,7 @@ the elevation contour.</p>
     Raises:
         ValueError: invalid elevation supplied.
     &#34;&#34;&#34;
-
-    # Check that multiple contours are not defined based on arguments passed
-    if (contour_lats is None) != (contour_lons is None):
-        raise ValueError(&#34;When defining a custom contour, both &#39;contour_lats&#39; and &#39;contour_lons&#39; must be supplied.&#34;)
-    if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) &gt; 1:
-        raise ValueError(
-            &#34;Only one contour can be defined per call: Pass only one of &#39;contour_lats &amp; contour_lons&#39;, &#39;constant_lat&#39;, or &#39;constant_lon&#39;.&#34;)
-    if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) == 0:
-        raise ValueError(&#34;No contour defined in input: Pass one of &#39;contour_lats &amp; contour_lons&#39;, &#39;constant_lat&#39;, or &#39;constant_lon&#39;.&#34;)
-
-    # Obtain lat/lon arrays from skymap at desired altitude
-    if (altitude_km * 1000.0 in skymap.full_map_altitude):
-        altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
-
-        lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
-        lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-    else:
-        # Make sure altitude is in range that can be interpolated
-        if (altitude_km * 1000.0 &lt; skymap.full_map_altitude[0]) or (altitude_km * 1000.0 &gt; skymap.full_map_altitude[2]):
-            raise ValueError(&#34;Altitude &#34; + str(altitude_km) + &#34; outside valid range of &#34; +
-                             str((skymap.full_map_altitude[0] / 1000.0, skymap.full_map_altitude[2] / 1000.0)))
-
-        # Initialze empty lat/lon arrays
-        lats = np.full(np.squeeze(skymap.full_map_latitude[0, :, :]).shape, np.nan, dtype=skymap.full_map_latitude[0, :, :].dtype)
-        lons = lats.copy()
-
-        # Interpolate lats and lons at desired altitude
-        for i in range(skymap.full_map_latitude.shape[1]):
-            for j in range(skymap.full_map_latitude.shape[2]):
-                lats[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_latitude[:, i, j])
-                lons[i, j] = np.interp(altitude_km * 1000.0, skymap.full_map_altitude, skymap.full_map_longitude[:, i, j])
-
-        lons[np.where(lons &gt; 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
-        # Convert to magnetic coords
-        mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(
-            lats.flatten(),
-            lons.flatten(),
-            (lons * 0.0).flatten(),
-            timestamp,
-            method_code=&#39;G2A&#39;,
-        )
-        lats = np.reshape(mag_lats, lats.shape)
-        lons = np.reshape(mag_lons, lons.shape)
-
-    # First handle case of a contour of constant latidude:
-    if (constant_lat is not None):
-        # First check that the supplied latitude is valid for this skymap
-        if (constant_lat &lt; np.nanmin(lats)) or (constant_lat &gt; np.nanmax(lats)):
-            raise ValueError(f&#34;Latitude {constant_lat} does not coincide with input skymap: magnetic latitude &#34; +
-                             f&#34;range at {altitude_km} km is ({np.nanmin(lats), np.nanmax(lats)}).&#34;)
-
-        # Get the longitude bounds of the skymap
-        min_skymap_lon, max_skymap_lon = np.nanmin(lons), np.nanmax(lons)
-
-        # Determine the step in longitudes for grabbing target lat, based on n_points
-        if (n_points is None):
-            n_points = round((lats.shape[0] - 1) / 5.12)
-
-        # Iterate though longitude ranges
-        iteration_lons = np.linspace(min_skymap_lon, max_skymap_lon, n_points)
-        x_list = []
-        y_list = []
-        for i in range(len(iteration_lons) - 1):
-            # Get lon domain for current iteration through skymap
-            lon_min = iteration_lons[i]
-            lon_max = iteration_lons[i + 1]
-
-            # Get indices of this longitude slice
-            lon_slice_idx = np.logical_and(lons &gt;= lon_min, lons &lt; lon_max)
-
-            # Get index of pixel nearest to target elevation
-            masked_lats = np.where(lon_slice_idx, lats, np.nan)
-            diffs = np.abs(masked_lats - constant_lat)
-            y, x = np.where(diffs == np.nanmin(diffs))
-
-            if x.shape == (0, ) or y.shape == (0, ):
-                continue
-
-            # Add to master lists
-            x_list.append(x[0])
-            y_list.append(y[0])
-
-        if remove_edge_cases:
-            # Remove any points lying on the edge of CCD bounds and return
-            x_list = np.array(x_list)
-            y_list = np.array(y_list)
-            edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; lats.shape[1] - 1, y_list &gt; 0, y_list &lt; lats.shape[0] - 1]))
-            x_list = x_list[edge_case_idx]
-            y_list = y_list[edge_case_idx]
-            return (x_list, y_list)
-        else:
-            # Convert to arrays, return
-            return (np.array(x_list), np.array(y_list))
-
-    # Next handle case of a contour of constant longitude:
-    elif (constant_lon is not None):
-        # First check that the supplied longitude is valid for this skymap
-        if (constant_lon &lt; np.nanmin(lons)) or (constant_lon &gt; np.nanmax(lons)):
-            raise ValueError(f&#34;Longitude {constant_lat} does not coincide with input skymap: magnetic longitude &#34; +
-                             f&#34;range at {altitude_km} km is ({np.nanmin(lons), np.nanmax(lons)}).&#34;)
-
-        # Get the latitude bounds of the skymap
-        min_skymap_lat, max_skymap_lat = np.nanmin(lats), np.nanmax(lats)
-
-        # Determine the step in longitudes for grabbing target lat, based on n_points
-        if (n_points is None):
-            n_points = round((lats.shape[0] - 1) / 5.12)
-
-        # Iterate though latitude ranges
-        iteration_lats = np.linspace(min_skymap_lat, max_skymap_lat, n_points)
-        x_list = []
-        y_list = []
-        for i in range(len(iteration_lats) - 1):
-            # Get lon domain for current iteration through skymap
-            lat_min = iteration_lats[i]
-            lat_max = iteration_lats[i + 1]
-
-            # Get indices of this longitude slice
-            lat_slice_idx = np.logical_and(lats &gt;= lat_min, lats &lt; lat_max)
-
-            # Get index of pixel nearest to target elevation
-            masked_lons = np.where(lat_slice_idx, lons, np.nan)
-            diffs = np.abs(masked_lons - constant_lon)
-            y, x = np.where(diffs == np.nanmin(diffs))
-
-            if x.shape == (0, ) or y.shape == (0, ):
-                continue
-
-            # Add to master lists
-            x_list.append(x[0])
-            y_list.append(y[0])
-
-        if remove_edge_cases:
-            # Remove any points lying on the edge of CCD bounds and return
-            x_list = np.array(x_list)
-            y_list = np.array(y_list)
-            edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; lats.shape[1] - 1, y_list &gt; 0, y_list &lt; lats.shape[0] - 1]))
-            x_list = x_list[edge_case_idx]
-            y_list = y_list[edge_case_idx]
-            return (x_list, y_list)
-        else:
-            # Convert to arrays, return
-            return (np.array(x_list), np.array(y_list))
-
-    # Finally, handle case of a custom contour
-    elif (contour_lats is not None) and (contour_lons is not None):
-        # Convert lists to ndarrays if necessary
-        if isinstance(contour_lats, list):
-            lats = np.array(contour_lats)
-        if isinstance(contour_lons, list):
-            lons = np.array(contour_lons)
-
-        # Remove any invalid lat/lon pairs
-        invalid_mask = (contour_lons &lt; np.nanmin(lons)) | (contour_lons &gt; np.nanmax(lons)) | (contour_lats &lt; np.nanmin(lats)) | (contour_lats
-                                                                                                                                 &gt; np.nanmax(lats))
-        # Filter out invalid contour points
-        valid_contour_lats = contour_lats[~invalid_mask]
-        valid_contour_lons = contour_lons[~invalid_mask]
-
-        # Check if any lat/lons are actually valid for skymap
-        invalid_lats_mask = (contour_lats &lt; np.nanmin(lats)) | (contour_lats &gt; np.nanmax(lats))
-        invalid_lons_mask = (contour_lons &lt; np.nanmin(lons)) | (contour_lons &gt; np.nanmax(lons))
-        if contour_lats[~invalid_lats_mask].shape == (0, ):
-            raise ValueError(f&#34;Magnetic coordinates provided are outside this skymap&#39;s valid range of {(np.nanmin(lats),np.nanmax(lats))}.&#34;)
-        if contour_lons[~invalid_lons_mask].shape == (0, ):
-            raise ValueError(f&#34;Magnetic longitudes provided are outside this skymap&#39;s valid range of {(np.nanmin(lons),np.nanmax(lons))}.&#34;)
-
-        # Get the latitude bounds of the skymap
-        # Iterate through each target point
-        x_list = []
-        y_list = []
-        for target_lat, target_lon in zip(valid_contour_lats, valid_contour_lons):
-            # Make sure lat/lon falls within skymap
-            if target_lat &lt; np.nanmin(lats) or target_lat &gt; np.nanmax(lats):
-                raise ValueError(f&#34;Magnetic latitude {target_lat} is outside this skymap&#39;s valid range of {(np.nanmin(lats),np.nanmax(lats))}.&#34;)
-            if target_lon &lt; np.nanmin(lons) or target_lon &gt; np.nanmax(lons):
-                raise ValueError(f&#34;Magnetic longitude {target_lon} is outside this skymap&#39;s valid range of {(np.nanmin(lons),np.nanmax(lons))}.&#34;)
-
-            # Compute haversine distance between all points in skymap
-            haversine_diff = __haversine_distances(target_lat, target_lon, lats, lons)
-
-            # Obtain the skymap indices of the nearest point
-            nan_mask = np.isnan(haversine_diff)
-            masked_data = np.ma.masked_array(haversine_diff, mask=nan_mask)
-            nearest_indices = np.unravel_index(np.ma.argmin(masked_data), haversine_diff.shape)
-
-            # Convert indices to CCD Coordinates
-            y_loc = nearest_indices[0] - 1
-            if y_loc &lt; 0:
-                y_loc = 0
-            x_loc = nearest_indices[1] - 1
-            if x_loc &lt; 0:
-                x_loc = 0
-
-            x_list.append(x_loc)
-            y_list.append(y_loc)
-
-        if remove_edge_cases:
-            # Remove any points lying on the edge of CCD bounds and return
-            x_list = np.array(x_list)
-            y_list = np.array(y_list)
-            edge_case_idx = np.where(np.logical_and.reduce([x_list &gt; 0, x_list &lt; lats.shape[1] - 1, y_list &gt; 0, y_list &lt; lats.shape[0] - 1]))
-            x_list = x_list[edge_case_idx]
-            y_list = y_list[edge_case_idx]
-            return (x_list, y_list)
-        else:
-            # Convert to arrays, return
-            return (np.array(x_list), np.array(y_list))
-
-    else:
-        # This shouldn&#39;t occur, but typing claims there is a missed case somewhere that could not be identified...
-        raise ValueError(&#34;Something went wrong. Please verify your inputs are in expected format.&#34;)</code></pre>
+    return func_mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat, constant_lon, n_points, remove_edge_cases)</code></pre>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant magnetic latitude, constant magnetic longitude, or a custom contour
 defined in magnetic coordinates.</p>
@@ -923,15 +593,15 @@ defined in magnetic coordinates.</p>
 <dd>The timestamp used for AACGM Conversions.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The altitude of the image data to create contours for, in kilometers.</dd>
-<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dt><strong><code>contour_lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>
 <p>Sequence of magnetic latitudes defining a contour.</p>
 </dd>
-<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dt><strong><code>contour_lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of magnetic longitudes defining a contour.</dd>
-<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dt><strong><code>constant_lat</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>Magnetic Latitude at which to create line of constant latitude.</dd>
-<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dt><strong><code>constant_lon</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>Magnetic Longitude at which to create line of constant longitude.</dd>
 <dt><strong><code>n_points</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>Optionally specify the number of points used to define a contour. By default
@@ -953,8 +623,8 @@ the elevation contour.</p>
 </dl></div>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -1013,12 +683,17 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools" href="../index.html">pyaurorax.tools</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.tools.ccd_contour.CCDContourManager" href="#pyaurorax.tools.ccd_contour.CCDContourManager">CCDContourManager</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.tools.ccd_contour.azimuth" href="#pyaurorax.tools.ccd_contour.azimuth">azimuth</a></code></li>
-<li><code><a title="pyaurorax.tools.ccd_contour.elevation" href="#pyaurorax.tools.ccd_contour.elevation">elevation</a></code></li>
-<li><code><a title="pyaurorax.tools.ccd_contour.geo" href="#pyaurorax.tools.ccd_contour.geo">geo</a></code></li>
-<li><code><a title="pyaurorax.tools.ccd_contour.mag" href="#pyaurorax.tools.ccd_contour.mag">mag</a></code></li>
+<li><code><a title="pyaurorax.tools.ccd_contour.CCDContourManager.azimuth" href="#pyaurorax.tools.ccd_contour.CCDContourManager.azimuth">azimuth</a></code></li>
+<li><code><a title="pyaurorax.tools.ccd_contour.CCDContourManager.elevation" href="#pyaurorax.tools.ccd_contour.CCDContourManager.elevation">elevation</a></code></li>
+<li><code><a title="pyaurorax.tools.ccd_contour.CCDContourManager.geo" href="#pyaurorax.tools.ccd_contour.CCDContourManager.geo">geo</a></code></li>
+<li><code><a title="pyaurorax.tools.ccd_contour.CCDContourManager.mag" href="#pyaurorax.tools.ccd_contour.CCDContourManager.mag">mag</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

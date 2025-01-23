@@ -95,7 +95,8 @@ here instead of digging in deeper to the submodules.</p>
         Retrieve the status of a request
 
         Args:
-            request_url: the URL of the request information
+            request_url (str): 
+                the URL of the request information
 
         Returns:
             the status information for the request
@@ -107,10 +108,14 @@ here instead of digging in deeper to the submodules.</p>
         Retrieve the data for a request
 
         Args:
-            data_url: the URL for the data of a request,
-            response_format: the response format to send as post data, defaults
-                to None
-            skip_serializing: skip any object serializing, defaults to False
+            data_url (str): 
+                the URL for the data of a request,
+            
+            response_format (Dict): 
+                the response format to send as post data, defaults to None
+            
+            skip_serializing (bool): 
+                skip any object serializing, defaults to False
 
         Raises:
             pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
@@ -125,7 +130,8 @@ here instead of digging in deeper to the submodules.</p>
         Retrieve the logs for a request
 
         Args:
-            request_url: the URL of the request information
+            request_url (str): 
+                the URL of the request information
 
         Returns:
             the log messages for the request
@@ -137,10 +143,14 @@ here instead of digging in deeper to the submodules.</p>
         Block and wait for the data to be made available for a request
 
         Args:
-            request_url: the URL of the request information
-            poll_interval: seconds to wait between polling calls, defaults
-                to STANDARD_POLLING_SLEEP_TIME
-            verbose: output poll times and other progress messages, defaults to False
+            request_url (str): 
+                the URL of the request information
+            
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+            
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             the status information for the request
@@ -157,13 +167,18 @@ here instead of digging in deeper to the submodules.</p>
         the polling time using the &#39;poll_interval&#39; parameter.
 
         Args:
-            request_url: the URL string of the request to be canceled
-            wait: set to True to block until the cancellation request
-                has been completed (may wait for several minutes)
-            poll_interval: seconds to wait between polling
-                calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-            verbose: if True then output poll times and other
-                progress, defaults to False
+            request_url (str): 
+                the URL string of the request to be canceled
+            
+            wait (bool): 
+                set to True to block until the cancellation request has been completed (may 
+                wait for several minutes)
+            
+            poll_interval (float): 
+                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+            
+            verbose (bool): 
+                if True then output poll times and other progress, defaults to False
 
         Returns:
             0 on success
@@ -187,19 +202,31 @@ here instead of digging in deeper to the submodules.</p>
         Retrieve a list of search requests matching certain criteria.  Administrators only.
 
         Args:
-            search_type: the type of search request, valid values are &#39;conjunction&#39;,
-                &#39;ephemeris&#39;, or &#39;data_product&#39;. Exclusion of value will return all
-                search requests of any type, defaults to None
-            active: return searches that are currently active or not, exclude for
-                both, defaults to None
-            start: start timestamp for narrowing down search timeframes, defaults to None
-            end: end timestamp for narrowing down search timeframes, defaults to None
-            file_size: filter by result file size, measured in KB, defaults to None
-            result_count: filter by result count, defaults to None
-            query_duration: filter by query duration, measured in milliseconds, defaults
-                to None
-            error_condition: filter by if an error occurred or not, exclude for both,
-                defaults to None
+            search_type (str): 
+                the type of search request, valid values are &#39;conjunction&#39;, &#39;ephemeris&#39;, or 
+                &#39;data_product&#39;. Exclusion of value will return all search requests of any 
+                type, defaults to None
+
+            active (bool): 
+                return searches that are currently active or not, exclude for both, defaults to None
+
+            start (datetime.datetime): 
+                start timestamp for narrowing down search timeframes, defaults to None
+
+            end (datetime.datetime): 
+                end timestamp for narrowing down search timeframes, defaults to None
+
+            file_size (int): 
+                filter by result file size, measured in KB, defaults to None
+
+            result_count (int): 
+                filter by result count, defaults to None
+
+            query_duration (int): 
+                filter by query duration, measured in milliseconds, defaults to None
+
+            error_condition (bool): 
+                filter by if an error occurred or not, exclude for both, defaults to None
 
         Returns:
             list of matching search requests
@@ -211,11 +238,11 @@ here instead of digging in deeper to the submodules.</p>
 
     def delete(self, request_id: str) -&gt; int:
         &#34;&#34;&#34;
-        Entirely remove a search request from the AuroraX
-        database. Administrators only.
+        Entirely remove a search request from the AuroraX database. Administrators only.
 
         Args:
-            request_id: search request UUID
+            request_id (str): 
+                search request UUID
 
         Returns:
             0 on success, raises error on failure
@@ -247,13 +274,18 @@ the submodules and carry over configuration information in the super class.</p><
     the polling time using the &#39;poll_interval&#39; parameter.
 
     Args:
-        request_url: the URL string of the request to be canceled
-        wait: set to True to block until the cancellation request
-            has been completed (may wait for several minutes)
-        poll_interval: seconds to wait between polling
-            calls, defaults to STANDARD_POLLING_SLEEP_TIME.
-        verbose: if True then output poll times and other
-            progress, defaults to False
+        request_url (str): 
+            the URL string of the request to be canceled
+        
+        wait (bool): 
+            set to True to block until the cancellation request has been completed (may 
+            wait for several minutes)
+        
+        poll_interval (float): 
+            seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+        
+        verbose (bool): 
+            if True then output poll times and other progress, defaults to False
 
     Returns:
         0 on success
@@ -271,17 +303,15 @@ to be completed, set the 'wait' parameter to True. You can adjust
 the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_url</code></strong></dt>
+<dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>the URL string of the request to be canceled</dd>
-<dt><strong><code>wait</code></strong></dt>
-<dd>set to True to block until the cancellation request
-has been completed (may wait for several minutes)</dd>
-<dt><strong><code>poll_interval</code></strong></dt>
-<dd>seconds to wait between polling
-calls, defaults to STANDARD_POLLING_SLEEP_TIME.</dd>
-<dt><strong><code>verbose</code></strong></dt>
-<dd>if True then output poll times and other
-progress, defaults to False</dd>
+<dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
+<dd>set to True to block until the cancellation request has been completed (may
+wait for several minutes)</dd>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
+<dd>seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.</dd>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
+<dd>if True then output poll times and other progress, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>0 on success</p>
@@ -303,11 +333,11 @@ progress, defaults to False</dd>
 </summary>
 <pre><code class="python">def delete(self, request_id: str) -&gt; int:
     &#34;&#34;&#34;
-    Entirely remove a search request from the AuroraX
-    database. Administrators only.
+    Entirely remove a search request from the AuroraX database. Administrators only.
 
     Args:
-        request_id: search request UUID
+        request_id (str): 
+            search request UUID
 
     Returns:
         0 on success, raises error on failure
@@ -317,11 +347,10 @@ progress, defaults to False</dd>
     &#34;&#34;&#34;
     return func_delete(self.__aurorax_obj, request_id)</code></pre>
 </details>
-<div class="desc"><p>Entirely remove a search request from the AuroraX
-database. Administrators only.</p>
+<div class="desc"><p>Entirely remove a search request from the AuroraX database. Administrators only.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_id</code></strong></dt>
+<dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>search request UUID</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -345,10 +374,14 @@ database. Administrators only.</p>
     Retrieve the data for a request
 
     Args:
-        data_url: the URL for the data of a request,
-        response_format: the response format to send as post data, defaults
-            to None
-        skip_serializing: skip any object serializing, defaults to False
+        data_url (str): 
+            the URL for the data of a request,
+        
+        response_format (Dict): 
+            the response format to send as post data, defaults to None
+        
+        skip_serializing (bool): 
+            skip any object serializing, defaults to False
 
     Raises:
         pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
@@ -361,12 +394,11 @@ database. Administrators only.</p>
 <div class="desc"><p>Retrieve the data for a request</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>data_url</code></strong></dt>
+<dt><strong><code>data_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>the URL for the data of a request,</dd>
-<dt><strong><code>response_format</code></strong></dt>
-<dd>the response format to send as post data, defaults
-to None</dd>
-<dt><strong><code>skip_serializing</code></strong></dt>
+<dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>the response format to send as post data, defaults to None</dd>
+<dt><strong><code>skip_serializing</code></strong> :&ensp;<code>bool</code></dt>
 <dd>skip any object serializing, defaults to False</dd>
 </dl>
 <h2 id="raises">Raises</h2>
@@ -390,7 +422,8 @@ to None</dd>
     Retrieve the logs for a request
 
     Args:
-        request_url: the URL of the request information
+        request_url (str): 
+            the URL of the request information
 
     Returns:
         the log messages for the request
@@ -400,7 +433,7 @@ to None</dd>
 <div class="desc"><p>Retrieve the logs for a request</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_url</code></strong></dt>
+<dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>the URL of the request information</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -419,7 +452,8 @@ to None</dd>
     Retrieve the status of a request
 
     Args:
-        request_url: the URL of the request information
+        request_url (str): 
+            the URL of the request information
 
     Returns:
         the status information for the request
@@ -429,7 +463,7 @@ to None</dd>
 <div class="desc"><p>Retrieve the status of a request</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_url</code></strong></dt>
+<dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>the URL of the request information</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -456,19 +490,31 @@ to None</dd>
     Retrieve a list of search requests matching certain criteria.  Administrators only.
 
     Args:
-        search_type: the type of search request, valid values are &#39;conjunction&#39;,
-            &#39;ephemeris&#39;, or &#39;data_product&#39;. Exclusion of value will return all
-            search requests of any type, defaults to None
-        active: return searches that are currently active or not, exclude for
-            both, defaults to None
-        start: start timestamp for narrowing down search timeframes, defaults to None
-        end: end timestamp for narrowing down search timeframes, defaults to None
-        file_size: filter by result file size, measured in KB, defaults to None
-        result_count: filter by result count, defaults to None
-        query_duration: filter by query duration, measured in milliseconds, defaults
-            to None
-        error_condition: filter by if an error occurred or not, exclude for both,
-            defaults to None
+        search_type (str): 
+            the type of search request, valid values are &#39;conjunction&#39;, &#39;ephemeris&#39;, or 
+            &#39;data_product&#39;. Exclusion of value will return all search requests of any 
+            type, defaults to None
+
+        active (bool): 
+            return searches that are currently active or not, exclude for both, defaults to None
+
+        start (datetime.datetime): 
+            start timestamp for narrowing down search timeframes, defaults to None
+
+        end (datetime.datetime): 
+            end timestamp for narrowing down search timeframes, defaults to None
+
+        file_size (int): 
+            filter by result file size, measured in KB, defaults to None
+
+        result_count (int): 
+            filter by result count, defaults to None
+
+        query_duration (int): 
+            filter by query duration, measured in milliseconds, defaults to None
+
+        error_condition (bool): 
+            filter by if an error occurred or not, exclude for both, defaults to None
 
     Returns:
         list of matching search requests
@@ -482,27 +528,24 @@ to None</dd>
 Administrators only.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>search_type</code></strong></dt>
-<dd>the type of search request, valid values are 'conjunction',
-'ephemeris', or 'data_product'. Exclusion of value will return all
-search requests of any type, defaults to None</dd>
-<dt><strong><code>active</code></strong></dt>
-<dd>return searches that are currently active or not, exclude for
-both, defaults to None</dd>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>search_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>the type of search request, valid values are 'conjunction', 'ephemeris', or
+'data_product'. Exclusion of value will return all search requests of any
+type, defaults to None</dd>
+<dt><strong><code>active</code></strong> :&ensp;<code>bool</code></dt>
+<dd>return searches that are currently active or not, exclude for both, defaults to None</dd>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>start timestamp for narrowing down search timeframes, defaults to None</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>end timestamp for narrowing down search timeframes, defaults to None</dd>
-<dt><strong><code>file_size</code></strong></dt>
+<dt><strong><code>file_size</code></strong> :&ensp;<code>int</code></dt>
 <dd>filter by result file size, measured in KB, defaults to None</dd>
-<dt><strong><code>result_count</code></strong></dt>
+<dt><strong><code>result_count</code></strong> :&ensp;<code>int</code></dt>
 <dd>filter by result count, defaults to None</dd>
-<dt><strong><code>query_duration</code></strong></dt>
-<dd>filter by query duration, measured in milliseconds, defaults
-to None</dd>
-<dt><strong><code>error_condition</code></strong></dt>
-<dd>filter by if an error occurred or not, exclude for both,
-defaults to None</dd>
+<dt><strong><code>query_duration</code></strong> :&ensp;<code>int</code></dt>
+<dd>filter by query duration, measured in milliseconds, defaults to None</dd>
+<dt><strong><code>error_condition</code></strong> :&ensp;<code>bool</code></dt>
+<dd>filter by if an error occurred or not, exclude for both, defaults to None</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>list of matching search requests</p>
@@ -525,10 +568,14 @@ defaults to None</dd>
     Block and wait for the data to be made available for a request
 
     Args:
-        request_url: the URL of the request information
-        poll_interval: seconds to wait between polling calls, defaults
-            to STANDARD_POLLING_SLEEP_TIME
-        verbose: output poll times and other progress messages, defaults to False
+        request_url (str): 
+            the URL of the request information
+        
+        poll_interval (float): 
+            seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+        
+        verbose (bool): 
+            output poll times and other progress messages, defaults to False
 
     Returns:
         the status information for the request
@@ -538,12 +585,11 @@ defaults to None</dd>
 <div class="desc"><p>Block and wait for the data to be made available for a request</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_url</code></strong></dt>
+<dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>the URL of the request information</dd>
-<dt><strong><code>poll_interval</code></strong></dt>
-<dd>seconds to wait between polling calls, defaults
-to STANDARD_POLLING_SLEEP_TIME</dd>
-<dt><strong><code>verbose</code></strong></dt>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
+<dd>seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME</dd>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>

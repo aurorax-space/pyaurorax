@@ -106,7 +106,7 @@ Transition Region Explorer (TREx) instruments.</p>
         &#34;&#34;&#34;
         return self.__ucalgary
 
-    def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
+    def list_datasets(self, name: Optional[str] = None, level: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
         &#34;&#34;&#34;
         List available datasets from all providers
 
@@ -115,6 +115,10 @@ Transition Region Explorer (TREx) instruments.</p>
                 Supply a name used for filtering. If that name is found in the available dataset 
                 names received from the API, it will be included in the results. This parameter is
                 optional.
+
+            level (str): 
+                Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+                is optional.
             
             timeout (int): 
                 Represents how many seconds to wait for the API to send data before giving up. The 
@@ -132,7 +136,7 @@ Transition Region Explorer (TREx) instruments.</p>
         datasets = []
 
         # get ucalgary datasets
-        ucalgary_datasets = self.__ucalgary.list_datasets(name=name, timeout=timeout)
+        ucalgary_datasets = self.__ucalgary.list_datasets(name=name, level=level, timeout=timeout)
 
         # merge
         datasets = datasets + ucalgary_datasets
@@ -143,7 +147,11 @@ Transition Region Explorer (TREx) instruments.</p>
         # return
         return datasets
 
-    def list_datasets_in_table(self, name: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) -&gt; None:
+    def list_datasets_in_table(self,
+                               name: Optional[str] = None,
+                               level: Optional[str] = None,
+                               max_width: int = 200,
+                               timeout: Optional[int] = None) -&gt; None:
         &#34;&#34;&#34;
         Print available datasets from all providers in a table
 
@@ -152,7 +160,11 @@ Transition Region Explorer (TREx) instruments.</p>
                 Supply a name used for filtering. If that name is found in the available dataset 
                 names received from the API, it will be included in the results. This parameter is
                 optional.
-            
+
+            level (str): 
+                Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+                is optional.
+
             max_width (int): 
                 Maximum width of the table. Default is `200`. This parameter is optional.
 
@@ -168,7 +180,7 @@ Transition Region Explorer (TREx) instruments.</p>
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
         &#34;&#34;&#34;
         # get datasets
-        datasets = self.list_datasets(name=name, timeout=timeout)
+        datasets = self.list_datasets(name=name, level=level, timeout=timeout)
 
         # set table lists
         table_names = []
@@ -451,14 +463,14 @@ object. Raises an exception if not found.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_datasets"><code class="name flex">
-<span>def <span class="ident">list_datasets</span></span>(<span>self, name: str | None = None, timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
+<span>def <span class="ident">list_datasets</span></span>(<span>self,<br>name: str | None = None,<br>level: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def list_datasets(self, name: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
+<pre><code class="python">def list_datasets(self, name: Optional[str] = None, level: Optional[str] = None, timeout: Optional[int] = None) -&gt; List[Dataset]:
     &#34;&#34;&#34;
     List available datasets from all providers
 
@@ -467,6 +479,10 @@ object. Raises an exception if not found.</p>
             Supply a name used for filtering. If that name is found in the available dataset 
             names received from the API, it will be included in the results. This parameter is
             optional.
+
+        level (str): 
+            Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+            is optional.
         
         timeout (int): 
             Represents how many seconds to wait for the API to send data before giving up. The 
@@ -484,7 +500,7 @@ object. Raises an exception if not found.</p>
     datasets = []
 
     # get ucalgary datasets
-    ucalgary_datasets = self.__ucalgary.list_datasets(name=name, timeout=timeout)
+    ucalgary_datasets = self.__ucalgary.list_datasets(name=name, level=level, timeout=timeout)
 
     # merge
     datasets = datasets + ucalgary_datasets
@@ -502,6 +518,9 @@ object. Raises an exception if not found.</p>
 <dd>Supply a name used for filtering. If that name is found in the available dataset
 names received from the API, it will be included in the results. This parameter is
 optional.</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code></dt>
+<dd>Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+is optional.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>Represents how many seconds to wait for the API to send data before giving up. The
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
@@ -517,14 +536,18 @@ objects.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.DataManager.list_datasets_in_table"><code class="name flex">
-<span>def <span class="ident">list_datasets_in_table</span></span>(<span>self, name: str | None = None, max_width: int = 200, timeout: int | None = None) ‑> None</span>
+<span>def <span class="ident">list_datasets_in_table</span></span>(<span>self,<br>name: str | None = None,<br>level: str | None = None,<br>max_width: int = 200,<br>timeout: int | None = None) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def list_datasets_in_table(self, name: Optional[str] = None, max_width: int = 200, timeout: Optional[int] = None) -&gt; None:
+<pre><code class="python">def list_datasets_in_table(self,
+                           name: Optional[str] = None,
+                           level: Optional[str] = None,
+                           max_width: int = 200,
+                           timeout: Optional[int] = None) -&gt; None:
     &#34;&#34;&#34;
     Print available datasets from all providers in a table
 
@@ -533,7 +556,11 @@ objects.</p>
             Supply a name used for filtering. If that name is found in the available dataset 
             names received from the API, it will be included in the results. This parameter is
             optional.
-        
+
+        level (str): 
+            Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+            is optional.
+
         max_width (int): 
             Maximum width of the table. Default is `200`. This parameter is optional.
 
@@ -549,7 +576,7 @@ objects.</p>
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered.
     &#34;&#34;&#34;
     # get datasets
-    datasets = self.list_datasets(name=name, timeout=timeout)
+    datasets = self.list_datasets(name=name, level=level, timeout=timeout)
 
     # set table lists
     table_names = []
@@ -597,6 +624,9 @@ objects.</p>
 <dd>Supply a name used for filtering. If that name is found in the available dataset
 names received from the API, it will be included in the results. This parameter is
 optional.</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code></dt>
+<dd>Supply a level string for filtering. Valid strings are: L0, L1, L1A, L2, L3. This parameter
+is optional.</dd>
 <dt><strong><code>max_width</code></strong> :&ensp;<code>int</code></dt>
 <dd>Maximum width of the table. Default is <code>200</code>. This parameter is optional.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>

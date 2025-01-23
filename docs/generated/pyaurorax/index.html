@@ -106,7 +106,7 @@ AuroraX platform …</p></div>
 <dl>
 <dt id="pyaurorax.PyAuroraX"><code class="flex name class">
 <span>class <span class="ident">PyAuroraX</span></span>
-<span>(</span><span>download_output_root_path: str | None = None,<br>read_tar_temp_path: str | None = None,<br>api_base_url: str | None = None,<br>api_timeout: int | None = None,<br>api_headers: Dict | None = None,<br>api_key: str | None = None,<br>srs_obj: pyucalgarysrs.pyucalgarysrs.PyUCalgarySRS | None = None)</span>
+<span>(</span><span>download_output_root_path: str | None = None,<br>read_tar_temp_path: str | None = None,<br>api_base_url: str | None = None,<br>api_timeout: int | None = None,<br>api_headers: Dict | None = None,<br>api_key: str | None = None,<br>progress_bar_backend: Literal['auto', 'standard', 'notebook'] = 'auto',<br>srs_obj: pyucalgarysrs.pyucalgarysrs.PyUCalgarySRS | None = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -140,14 +140,17 @@ AuroraX platform …</p></div>
         &#34;user-agent&#34;: &#34;python-pyaurorax/%s&#34; % (__version__),
     }  # NOTE: these MUST be lowercase so that the decorator logic cannot be overridden
 
-    def __init__(self,
-                 download_output_root_path: Optional[str] = None,
-                 read_tar_temp_path: Optional[str] = None,
-                 api_base_url: Optional[str] = None,
-                 api_timeout: Optional[int] = None,
-                 api_headers: Optional[Dict] = None,
-                 api_key: Optional[str] = None,
-                 srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None):
+    def __init__(
+        self,
+        download_output_root_path: Optional[str] = None,
+        read_tar_temp_path: Optional[str] = None,
+        api_base_url: Optional[str] = None,
+        api_timeout: Optional[int] = None,
+        api_headers: Optional[Dict] = None,
+        api_key: Optional[str] = None,
+        progress_bar_backend: Literal[&#34;auto&#34;, &#34;standard&#34;, &#34;notebook&#34;] = &#34;auto&#34;,
+        srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None,
+    ):
         &#34;&#34;&#34;
         Attributes:
             download_output_root_path (str): 
@@ -180,6 +183,10 @@ AuroraX platform …</p></div>
                 that an API key is only required for write operations to the AuroraX search API, such as
                 creating data sources or uploading ephemeris data.
         
+            progress_bar_backend (str): 
+                The progress bar backend to use. Valid choices are &#39;auto&#39;, &#39;standard&#39;, or &#39;notebook&#39;. 
+                Default is &#39;auto&#39;. This parameter is optional.
+
             srs_obj (pyucalgarysrs.PyUCalgarySRS): 
                 A [PyUCalgarySRS](https://docs-pyucalgarysrs.phys.ucalgary.ca/#pyucalgarysrs.PyUCalgarySRS) object. 
                 If not supplied, it will create the object with some settings carried over from the PyAuroraX 
@@ -205,6 +212,10 @@ AuroraX platform …</p></div>
             self.__api_timeout = self.__DEFAULT_API_TIMEOUT
         self.__api_key = api_key
 
+        # initialize progress bar parameters
+        self.__progress_bar_backend = progress_bar_backend
+        self._tqdm = None
+
         # initialize paths
         self.__initialize_paths()
 
@@ -215,15 +226,19 @@ AuroraX platform …</p></div>
                 api_timeout=self.__api_timeout,
                 download_output_root_path=self.download_output_root_path,
                 read_tar_temp_path=self.read_tar_temp_path,
+                progress_bar_backend=progress_bar_backend,
             )
         else:
             self.__srs_obj = srs_obj
+
+        # initialize progress bar tqdm object (by pulling it from srs_obj)
+        self._tqdm = self.__srs_obj._tqdm
 
         # initialize sub-modules
         self.__search = SearchManager(self)
         self.__data = DataManager(self)
         self.__models = ModelsManager(self)
-        self.__tools = tools_module
+        self.__tools = ToolsManager(self)
 
     # ------------------------------------------
     # properties for submodule managers
@@ -271,6 +286,14 @@ AuroraX platform …</p></div>
         if (value is None):
             self.__api_base_url = self.__DEFAULT_API_BASE_URL
         else:
+            # check if http:// or https:// is in the URL
+            value = value.lower()
+            if (len(value) &lt;= 8 or (&#34;https://&#34; not in value and &#34;http://&#34; not in value)):
+                raise AuroraXInitializationError(&#34;API base URL is an invalid URL&#34;)
+
+            # remove trailing slash if there is one
+            if (value[-1] == &#39;/&#39;):
+                value = value[0:-1]
             self.__api_base_url = value
 
     @property
@@ -287,7 +310,7 @@ AuroraX platform …</p></div>
             for k, v in value.items():
                 k = k.lower()
                 if (k in new_headers):
-                    warnings.warn(&#34;Cannot override default &#39;%s&#39; header&#34; % (k), UserWarning, stacklevel=1)
+                    show_warning(&#34;Cannot override default &#39;%s&#39; header&#34; % (k), stacklevel=1)
                 else:
                     new_headers[k] = v
         self.__api_headers = new_headers
@@ -347,6 +370,22 @@ AuroraX platform …</p></div>
         self.__srs_obj.read_tar_temp_path = self.__read_tar_temp_path
 
     @property
+    def progress_bar_backend(self):
+        &#34;&#34;&#34;
+        Property for the progress bar backend. See above for details.
+        &#34;&#34;&#34;
+        return self.__progress_bar_backend
+
+    @progress_bar_backend.setter
+    def progress_bar_backend(self, value: str):
+        value = value.lower()
+        if (value != &#34;auto&#34; and value != &#34;standard&#34; and value != &#34;notebook&#34;):
+            raise AuroraXInitializationError(&#34;Invalid progress bar backend. Allowed values are &#39;auto&#39;, &#39;standard&#39; or &#39;notebook&#39;.&#34;)
+        self.__progress_bar_backend = value
+        self.__srs_obj.progress_bar_backend = value
+        self._tqdm = self.__srs_obj._tqdm
+
+    @property
     def srs_obj(self):
         &#34;&#34;&#34;
         Property for the PyUCalgarySRS object. See above for details.
@@ -365,14 +404,32 @@ AuroraX platform …</p></div>
 
     def __repr__(self) -&gt; str:
         return (&#34;PyAuroraX(download_output_root_path=&#39;%s&#39;, read_tar_temp_path=&#39;%s&#39;, api_base_url=&#39;%s&#39;, &#34; +
-                &#34;api_headers=%s, api_timeout=%s, api_key=&#39;%s&#39;, srs_obj=PyUCalgarySRS(...))&#34;) % (
+                &#34;api_headers=%s, api_timeout=%s, api_key=&#39;%s&#39;, progress_bar_backend=&#39;%s&#39;, srs_obj=PyUCalgarySRS(...))&#34;) % (
                     self.__download_output_root_path,
                     self.__read_tar_temp_path,
                     self.api_base_url,
                     self.api_headers,
                     self.api_timeout,
+                    self.progress_bar_backend,
                     self.api_key,
                 )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+
+        # print
+        print(&#34;PyAuroraX:&#34;)
+        print(&#34;  %-27s: %s&#34; % (&#34;download_output_root_path&#34;, self.download_output_root_path))
+        print(&#34;  %-27s: %s&#34; % (&#34;read_tar_temp_path&#34;, self.read_tar_temp_path))
+        print(&#34;  %-27s: %s&#34; % (&#34;api_base_url&#34;, self.api_base_url))
+        print(&#34;  %-27s: %s&#34; % (&#34;api_headers&#34;, self.api_headers))
+        print(&#34;  %-27s: %s&#34; % (&#34;api_timeout&#34;, self.api_timeout))
+        print(&#34;  %-27s: %s&#34; % (&#34;api_key&#34;, self.api_key))
+        print(&#34;  %-27s: %s&#34; % (&#34;progress_bar_backend&#34;, self.progress_bar_backend))
+        print(&#34;  %-27s: %s&#34; % (&#34;srs_obj&#34;, &#34;PyUCalgarySRS(...)&#34;))
 
     # -----------------------------
     # private methods
@@ -604,6 +661,9 @@ the default standard headers.</dd>
 <dd>API key to use when interacting with the AuroraX API. The default value is None. Please note
 that an API key is only required for write operations to the AuroraX search API, such as
 creating data sources or uploading ephemeris data.</dd>
+<dt><strong><code>progress_bar_backend</code></strong> :&ensp;<code>str</code></dt>
+<dd>The progress bar backend to use. Valid choices are 'auto', 'standard', or 'notebook'.
+Default is 'auto'. This parameter is optional.</dd>
 <dt><strong><code>srs_obj</code></strong> :&ensp;<code>pyucalgarysrs.PyUCalgarySRS</code></dt>
 <dd>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/#pyucalgarysrs.PyUCalgarySRS">PyUCalgarySRS</a> object.
 If not supplied, it will create the object with some settings carried over from the PyAuroraX
@@ -722,6 +782,21 @@ def models(self):
 </details>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.models" href="models/index.html">pyaurorax.models</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
+<dt id="pyaurorax.PyAuroraX.progress_bar_backend"><code class="name">prop <span class="ident">progress_bar_backend</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def progress_bar_backend(self):
+    &#34;&#34;&#34;
+    Property for the progress bar backend. See above for details.
+    &#34;&#34;&#34;
+    return self.__progress_bar_backend</code></pre>
+</details>
+<div class="desc"><p>Property for the progress bar backend. See above for details.</p></div>
+</dd>
 <dt id="pyaurorax.PyAuroraX.read_tar_temp_path"><code class="name">prop <span class="ident">read_tar_temp_path</span></code></dt>
 <dd>
 <details class="source">
@@ -785,6 +860,33 @@ def tools(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.PyAuroraX.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+
+    # print
+    print(&#34;PyAuroraX:&#34;)
+    print(&#34;  %-27s: %s&#34; % (&#34;download_output_root_path&#34;, self.download_output_root_path))
+    print(&#34;  %-27s: %s&#34; % (&#34;read_tar_temp_path&#34;, self.read_tar_temp_path))
+    print(&#34;  %-27s: %s&#34; % (&#34;api_base_url&#34;, self.api_base_url))
+    print(&#34;  %-27s: %s&#34; % (&#34;api_headers&#34;, self.api_headers))
+    print(&#34;  %-27s: %s&#34; % (&#34;api_timeout&#34;, self.api_timeout))
+    print(&#34;  %-27s: %s&#34; % (&#34;api_key&#34;, self.api_key))
+    print(&#34;  %-27s: %s&#34; % (&#34;progress_bar_backend&#34;, self.progress_bar_backend))
+    print(&#34;  %-27s: %s&#34; % (&#34;srs_obj&#34;, &#34;PyUCalgarySRS(...)&#34;))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
 <dt id="pyaurorax.PyAuroraX.purge_download_output_root_path"><code class="name flex">
 <span>def <span class="ident">purge_download_output_root_path</span></span>(<span>self, dataset_name: str | None = None)</span>
 </code></dt>
@@ -1103,6 +1205,8 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.PyAuroraX.data" href="#pyaurorax.PyAuroraX.data">data</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.download_output_root_path" href="#pyaurorax.PyAuroraX.download_output_root_path">download_output_root_path</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.models" href="#pyaurorax.PyAuroraX.models">models</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.pretty_print" href="#pyaurorax.PyAuroraX.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.progress_bar_backend" href="#pyaurorax.PyAuroraX.progress_bar_backend">progress_bar_backend</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.purge_download_output_root_path" href="#pyaurorax.PyAuroraX.purge_download_output_root_path">purge_download_output_root_path</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.purge_read_tar_temp_path" href="#pyaurorax.PyAuroraX.purge_read_tar_temp_path">purge_read_tar_temp_path</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.read_tar_temp_path" href="#pyaurorax.PyAuroraX.read_tar_temp_path">read_tar_temp_path</a></code></li>

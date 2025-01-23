@@ -61,17 +61,150 @@ border-left: 1px solid #ddd;
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pyaurorax.tools.calibration.rego"><code class="name flex">
-<span>def <span class="ident">rego</span></span>(<span>images: numpy.ndarray,<br>cal_flatfield: pyucalgarysrs.data.classes.Calibration | None = None,<br>cal_rayleighs: pyucalgarysrs.data.classes.Calibration | None = None,<br>step_dark_frame_correction: bool = True,<br>step_flatfield_calibration: bool = True,<br>step_rayleighs_calibration: bool = True,<br>exposure_length_sec: float = 2.0) ‑> numpy.ndarray</span>
+<dt id="pyaurorax.tools.calibration.CalibrationManager"><code class="flex name class">
+<span>class <span class="ident">CalibrationManager</span></span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_calibration(
+<pre><code class="python">class CalibrationManager:
+    &#34;&#34;&#34;
+    The CalibrationManager object is initialized within every PyAuroraX object. It acts as a way to access 
+    the submodules and carry over configuration information in the super class.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        pass
+
+    def rego(
+        self,
+        images: np.ndarray,
+        cal_flatfield: Optional[Calibration] = None,
+        cal_rayleighs: Optional[Calibration] = None,
+        step_dark_frame_correction: bool = True,
+        step_flatfield_calibration: bool = True,
+        step_rayleighs_calibration: bool = True,
+        exposure_length_sec: float = 2.0,
+    ) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Apply various calibration adjustments to a single or set of images raw images.
+
+        Args:
+            images (numpy.ndarray): 
+                Raw images to perform calibration procedures on.
+            cal_flatfield (pyaurorax.data.ucalgary.Calibration): 
+                Calibration object containing the flatfield data to utilize. This field is required if
+                the `step_flatfield_corection` is set to True.
+            cal_rayleighs (pyaurorax.data.ucalgary.Calibration): 
+                Calibration object containing the Rayleighs data to utilize. This field is required if 
+                the `step_rayleighs_calibration` is set to True.
+            step_dark_frame_correction (bool): 
+                Perform the dark frame correction step by subtracting an average of a bottom corner grid from 
+                the image (ie. 4x4.). Defaults to `True`.
+            step_flatfield_calibration (bool): 
+                Perform the flatfield correction step. Defaults to `True`. Note that the `cal_flatfield` parameter
+                must be supplied if this is True.
+            step_rayleighs_calibration (bool): 
+                Perform the Rayleighs conversion step. Defaults to `True.` Note that the `cal_rayleighs` parameter
+                must be supplied if this is True.
+            exposure_length_sec (float): 
+                Force the exposure length to be a certain value. Default is TREx NIR&#39;s nominal operating mode 
+                exposure length of `2.0 seconds`. Adjusting this field should be done with caution.
+
+        Returns:
+            The calibrated images. 
+            
+            The shape of the calibrated data will be same as the input images. The dtype of the calibrated data 
+            will depend on if the Rayleighs conversion was performed. If it was, a float32 array will be returned. 
+            If it wasn&#39;t, the dtype will be the same as input images&#39; dtype.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+        return func_rego(
+            images,
+            cal_flatfield,
+            cal_rayleighs,
+            step_dark_frame_correction,
+            step_flatfield_calibration,
+            step_rayleighs_calibration,
+            exposure_length_sec,
+        )
+
+    def trex_nir(
+        self,
+        images: np.ndarray,
+        cal_flatfield: Optional[Calibration] = None,
+        cal_rayleighs: Optional[Calibration] = None,
+        step_dark_frame_correction: bool = True,
+        step_flatfield_calibration: bool = True,
+        step_rayleighs_calibration: bool = True,
+        exposure_length_sec: float = 5.0,
+    ) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Apply various calibration adjustments to a single or set of images raw images.
+
+        Args:
+            images (numpy.ndarray): 
+                Raw images to perform calibration procedures on.
+            cal_flatfield (pyaurorax.data.ucalgary.Calibration): 
+                Calibration object containing the flatfield data to utilize. This field is required if
+                the `step_flatfield_corection` is set to True.
+            cal_rayleighs (pyaurorax.data.ucalgary.Calibration): 
+                Calibration object containing the Rayleighs data to utilize. This field is required if 
+                the `step_rayleighs_calibration` is set to True.
+            step_dark_frame_correction (bool): 
+                Perform the dark frame correction step. Defaults to `True`.
+            step_flatfield_calibration (bool): 
+                Perform the flatfield correction step. Defaults to `True`. Note that the `cal_flatfield` parameter
+                must be supplied if this is True.
+            step_rayleighs_calibration (bool): 
+                Perform the Rayleighs conversion step. Defaults to `True.` Note that the `cal_rayleighs` parameter
+                must be supplied if this is True.
+            exposure_length_sec (float): 
+                Force the exposure length to be a certain value. Default is TREx NIR&#39;s nominal operating mode 
+                exposure length of `5.0 seconds`. Adjusting this field should be done with caution.
+
+        Returns:
+            The calibrated images. 
+            
+            The shape of the calibrated data will be same as the input images. The dtype of the calibrated data 
+            will depend on if the Rayleighs conversion was performed. If it was, a float32 array will be returned. 
+            If it wasn&#39;t, the dtype will be the same as input images&#39; dtype.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+        return func_trex_nir(
+            images,
+            cal_flatfield,
+            cal_rayleighs,
+            step_dark_frame_correction,
+            step_flatfield_calibration,
+            step_rayleighs_calibration,
+            exposure_length_sec,
+        )</code></pre>
+</details>
+<div class="desc"><p>The CalibrationManager object is initialized within every PyAuroraX object. It acts as a way to access
+the submodules and carry over configuration information in the super class.</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.calibration.CalibrationManager.rego"><code class="name flex">
+<span>def <span class="ident">rego</span></span>(<span>self,<br>images: numpy.ndarray,<br>cal_flatfield: pyucalgarysrs.data.classes.Calibration | None = None,<br>cal_rayleighs: pyucalgarysrs.data.classes.Calibration | None = None,<br>step_dark_frame_correction: bool = True,<br>step_flatfield_calibration: bool = True,<br>step_rayleighs_calibration: bool = True,<br>exposure_length_sec: float = 2.0) ‑> numpy.ndarray</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rego(
+    self,
     images: np.ndarray,
     cal_flatfield: Optional[Calibration] = None,
     cal_rayleighs: Optional[Calibration] = None,
@@ -93,7 +226,8 @@ border-left: 1px solid #ddd;
             Calibration object containing the Rayleighs data to utilize. This field is required if 
             the `step_rayleighs_calibration` is set to True.
         step_dark_frame_correction (bool): 
-            Perform the dark frame correction step. Defaults to `True`.
+            Perform the dark frame correction step by subtracting an average of a bottom corner grid from 
+            the image (ie. 4x4.). Defaults to `True`.
         step_flatfield_calibration (bool): 
             Perform the flatfield correction step. Defaults to `True`. Note that the `cal_flatfield` parameter
             must be supplied if this is True.
@@ -114,31 +248,15 @@ border-left: 1px solid #ddd;
     Raises:
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
-    # verify that we have everything we need for each requested step
-    if (step_flatfield_calibration is True and cal_flatfield is None):
-        raise ValueError(&#34;The cal_flatfield parameter must be supplied to perform the flatfield correction step&#34;)
-    if (step_rayleighs_calibration is True and cal_rayleighs is None):
-        raise ValueError(&#34;The cal_rayleighs parameter must be supplied to perform the rayleighs conversion step&#34;)
-
-    # init
-    calibrated_images = images
-
-    # perform the dark frame correction
-    #
-    # NOTE: we do a 5x5 bottom corner mean
-    if (step_dark_frame_correction is True):
-        calibrated_images = perform_dark_frame_correction(images, 5)
-
-    # apply the flatfield correction
-    if (step_flatfield_calibration is True and cal_flatfield is not None):
-        calibrated_images = perform_flatfield_calibration(calibrated_images, cal_flatfield)
-
-    # apply the rayleighs conversion
-    if (step_rayleighs_calibration is True and cal_rayleighs is not None):
-        calibrated_images = perform_rayleighs_correction(calibrated_images, cal_rayleighs, exposure_length_sec)
-
-    # return
-    return calibrated_images</code></pre>
+    return func_rego(
+        images,
+        cal_flatfield,
+        cal_rayleighs,
+        step_dark_frame_correction,
+        step_flatfield_calibration,
+        step_rayleighs_calibration,
+        exposure_length_sec,
+    )</code></pre>
 </details>
 <div class="desc"><p>Apply various calibration adjustments to a single or set of images raw images.</p>
 <h2 id="args">Args</h2>
@@ -152,7 +270,8 @@ the <code>step_flatfield_corection</code> is set to True.</dd>
 <dd>Calibration object containing the Rayleighs data to utilize. This field is required if
 the <code>step_rayleighs_calibration</code> is set to True.</dd>
 <dt><strong><code>step_dark_frame_correction</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Perform the dark frame correction step. Defaults to <code>True</code>.</dd>
+<dd>Perform the dark frame correction step by subtracting an average of a bottom corner grid from
+the image (ie. 4x4.). Defaults to <code>True</code>.</dd>
 <dt><strong><code>step_flatfield_calibration</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Perform the flatfield correction step. Defaults to <code>True</code>. Note that the <code>cal_flatfield</code> parameter
 must be supplied if this is True.</dd>
@@ -174,15 +293,16 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.calibration.trex_nir"><code class="name flex">
-<span>def <span class="ident">trex_nir</span></span>(<span>images: numpy.ndarray,<br>cal_flatfield: pyucalgarysrs.data.classes.Calibration | None = None,<br>cal_rayleighs: pyucalgarysrs.data.classes.Calibration | None = None,<br>step_dark_frame_correction: bool = True,<br>step_flatfield_calibration: bool = True,<br>step_rayleighs_calibration: bool = True,<br>exposure_length_sec: float = 5.0) ‑> numpy.ndarray</span>
+<dt id="pyaurorax.tools.calibration.CalibrationManager.trex_nir"><code class="name flex">
+<span>def <span class="ident">trex_nir</span></span>(<span>self,<br>images: numpy.ndarray,<br>cal_flatfield: pyucalgarysrs.data.classes.Calibration | None = None,<br>cal_rayleighs: pyucalgarysrs.data.classes.Calibration | None = None,<br>step_dark_frame_correction: bool = True,<br>step_flatfield_calibration: bool = True,<br>step_rayleighs_calibration: bool = True,<br>exposure_length_sec: float = 5.0) ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def apply_calibration(
+<pre><code class="python">def trex_nir(
+    self,
     images: np.ndarray,
     cal_flatfield: Optional[Calibration] = None,
     cal_rayleighs: Optional[Calibration] = None,
@@ -225,31 +345,15 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
     Raises:
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
-    # verify that we have everything we need for each requested step
-    if (step_flatfield_calibration is True and cal_flatfield is None):
-        raise ValueError(&#34;The cal_flatfield parameter must be supplied to perform the flatfield correction step&#34;)
-    if (step_rayleighs_calibration is True and cal_rayleighs is None):
-        raise ValueError(&#34;The cal_rayleighs parameter must be supplied to perform the rayleighs conversion step&#34;)
-
-    # init
-    calibrated_images = images
-
-    # perform the dark frame correction
-    #
-    # NOTE: we do a 4x4 bottom corner mean
-    if (step_dark_frame_correction is True):
-        calibrated_images = perform_dark_frame_correction(images, 5)
-
-    # apply the flatfield correction
-    if (step_flatfield_calibration is True and cal_flatfield is not None):
-        calibrated_images = perform_flatfield_calibration(calibrated_images, cal_flatfield)
-
-    # apply the rayleighs conversion
-    if (step_rayleighs_calibration is True and cal_rayleighs is not None):
-        calibrated_images = perform_rayleighs_correction(calibrated_images, cal_rayleighs, exposure_length_sec)
-
-    # return
-    return calibrated_images</code></pre>
+    return func_trex_nir(
+        images,
+        cal_flatfield,
+        cal_rayleighs,
+        step_dark_frame_correction,
+        step_flatfield_calibration,
+        step_rayleighs_calibration,
+        exposure_length_sec,
+    )</code></pre>
 </details>
 <div class="desc"><p>Apply various calibration adjustments to a single or set of images raw images.</p>
 <h2 id="args">Args</h2>
@@ -286,8 +390,8 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
 </dl></div>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -346,10 +450,15 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools" href="../index.html">pyaurorax.tools</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.tools.calibration.CalibrationManager" href="#pyaurorax.tools.calibration.CalibrationManager">CalibrationManager</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.tools.calibration.rego" href="#pyaurorax.tools.calibration.rego">rego</a></code></li>
-<li><code><a title="pyaurorax.tools.calibration.trex_nir" href="#pyaurorax.tools.calibration.trex_nir">trex_nir</a></code></li>
+<li><code><a title="pyaurorax.tools.calibration.CalibrationManager.rego" href="#pyaurorax.tools.calibration.CalibrationManager.rego">rego</a></code></li>
+<li><code><a title="pyaurorax.tools.calibration.CalibrationManager.trex_nir" href="#pyaurorax.tools.calibration.CalibrationManager.trex_nir">trex_nir</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

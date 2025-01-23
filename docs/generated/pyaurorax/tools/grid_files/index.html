@@ -61,10 +61,63 @@ border-left: 1px solid #ddd;
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pyaurorax.tools.grid_files.prep_grid_image"><code class="name flex">
-<span>def <span class="ident">prep_grid_image</span></span>(<span>grid: numpy.ndarray,<br>fill_val: float | int = -999.0,<br>scale: numpy.ndarray | list | None = None,<br>cmap: str | None = 'Greys_r') ‑> numpy.ndarray</span>
+<dt id="pyaurorax.tools.grid_files.GridFilesManager"><code class="flex name class">
+<span>class <span class="ident">GridFilesManager</span></span>
+<span>(</span><span>aurorax_obj)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GridFilesManager:
+    &#34;&#34;&#34;
+    The GridFilesManager object is initialized within every PyAuroraX object. It acts as a way to access 
+    the submodules and carry over configuration information in the super class.
+    &#34;&#34;&#34;
+
+    def __init__(self, aurorax_obj):
+        self.__aurorax_obj = aurorax_obj
+
+    def prep_grid_image(
+        self,
+        grid: np.ndarray,
+        fill_val: Union[int, float] = -999.0,
+        scale: Optional[Union[list, np.ndarray]] = None,
+        cmap: Optional[str] = &#34;Greys_r&#34;,
+    ) -&gt; np.ndarray:
+        &#34;&#34;&#34;
+        Takes a grid array, and converts it to RGBA format, masking all empty cells with max
+        transparency, so that it can be plotted overtop of a map.
+
+        Args:
+            grid (numpy.ndarray): 
+                The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.
+            fill_val (int or float): 
+                The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file&#39;s metadata.
+            scale (list or numpy.ndarray): 
+                A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max).
+            cmap (str): 
+                A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to &#34;Greys_r&#34;).
+
+        Returns:
+            The prepared RGBA grid array.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+        return func_prep_grid_image(self.__aurorax_obj, grid, fill_val, scale, cmap)</code></pre>
+</details>
+<div class="desc"><p>The GridFilesManager object is initialized within every PyAuroraX object. It acts as a way to access
+the submodules and carry over configuration information in the super class.</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.grid_files.GridFilesManager.prep_grid_image"><code class="name flex">
+<span>def <span class="ident">prep_grid_image</span></span>(<span>self,<br>grid: numpy.ndarray,<br>fill_val: float | int = -999.0,<br>scale: numpy.ndarray | list | None = None,<br>cmap: str | None = 'Greys_r') ‑> numpy.ndarray</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -72,6 +125,7 @@ border-left: 1px solid #ddd;
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def prep_grid_image(
+    self,
     grid: np.ndarray,
     fill_val: Union[int, float] = -999.0,
     scale: Optional[Union[list, np.ndarray]] = None,
@@ -83,7 +137,7 @@ border-left: 1px solid #ddd;
 
     Args:
         grid (numpy.ndarray): 
-             The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.
+            The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.
         fill_val (int or float): 
             The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file&#39;s metadata.
         scale (list or numpy.ndarray): 
@@ -97,67 +151,7 @@ border-left: 1px solid #ddd;
     Raises:
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
-    # Determine number of channels in grid
-    if len(grid.shape) == 2:
-        n_channels = 1
-    elif len(grid.shape) == 3:
-        n_channels = 3
-    else:
-        raise ValueError(&#34;Routine currently only supports grid data with shape [rows, cols] or [rows, cols, channels].&#34;)
-    
-    # Convert grid to int type for plotting
-    if np.issubdtype(grid.dtype, np.floating):
-        grid = grid.astype(int)
-        
-    # Check that scale input is defined properly
-    if scale is not None:
-        # convert list to array
-        if type(scale) is not np.ndarray:
-            scale = np.array(scale)
-        if scale.shape[0] != 2 or len(scale) != 2:
-            raise ValueError(&#34;Scale must be provided as a two-element vector, i.e. [scale_min, scale_max].&#34;)
-        
-    # Handle RGB data first as it is straightforward
-    if n_channels == 3:
-        # Replace fill values with nans
-        grid = np.where(grid == fill_val, np.nan, grid)
-
-        # Scale the image data
-        if scale is None:
-            scaled_grid = scale_intensity(np.where(np.isnan(grid), 0, grid), top=255, memory_saver=False)
-        else:
-            scaled_grid = scale_intensity(np.where(np.isnan(grid), 0, grid), min=scale[0], max=scale[1], top=255, memory_saver=False)
-        
-        # Add alpha channel
-        alpha_channel = np.where(np.isnan(grid).any(axis=-1), 0, 255)
-        rgba_grid = np.dstack((scaled_grid, alpha_channel))
-
-        return rgba_grid.astype(int)
-    
-    # Handle case of single-channel data, where we build an RGBA image using a matplotlib colormap
-    else:
-        # Replace fill values with nans
-        grid = np.where(grid == fill_val, np.nan, grid)
-
-        # Scale the image data
-        if scale is None:
-            scaled_grid = scale_intensity(np.where(np.isnan(grid), 0, grid), top=255, memory_saver=False)
-        else:
-            scaled_grid = scale_intensity(np.where(np.isnan(grid), 0, grid), min=scale[0], max=scale[1], top=255, memory_saver=False)
-
-        # Normalize array and apply colormap to obtain RGBA Array
-        norm_scaled_grid = scaled_grid / 255.0
-        colormap = plt.get_cmap(cmap)
-        norm_scaled_grid = colormap(norm_scaled_grid)
-        
-        # &#39;De-normalize&#39; array back to 8-bit range
-        rgba_grid = (norm_scaled_grid * 255).astype(int)
-
-        # Add alpha channel with max transparency for cells with no data
-        alpha_channel = np.where(np.isnan(grid), 0, 255)
-        rgba_grid[..., -1] = alpha_channel
-
-        return rgba_grid</code></pre>
+    return func_prep_grid_image(self.__aurorax_obj, grid, fill_val, scale, cmap)</code></pre>
 </details>
 <div class="desc"><p>Takes a grid array, and converts it to RGBA format, masking all empty cells with max
 transparency, so that it can be plotted overtop of a map.</p>
@@ -181,8 +175,8 @@ transparency, so that it can be plotted overtop of a map.</p>
 </dl></div>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -241,9 +235,14 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools" href="../index.html">pyaurorax.tools</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.tools.grid_files.GridFilesManager" href="#pyaurorax.tools.grid_files.GridFilesManager">GridFilesManager</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.tools.grid_files.prep_grid_image" href="#pyaurorax.tools.grid_files.prep_grid_image">prep_grid_image</a></code></li>
+<li><code><a title="pyaurorax.tools.grid_files.GridFilesManager.prep_grid_image" href="#pyaurorax.tools.grid_files.GridFilesManager.prep_grid_image">prep_grid_image</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

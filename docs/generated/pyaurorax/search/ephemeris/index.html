@@ -121,13 +121,24 @@ here instead of digging in deeper to the submodules.</p>
         instrument_types, must be specified.
 
         Args:
-            start: start timestamp of the search (inclusive)
-            end: end timestamp of the search (inclusive)
-            programs: list of programs to search through, defaults to None
-            platforms: list of platforms to search through, defaults to None
-            instrument_types: list of instrument types to search through, defaults to None
-            metadata_filters: list of dictionaries describing metadata keys and
-                values to filter on, defaults to None
+            start (datetime.datetime): 
+                start timestamp of the search (inclusive)
+
+            end (datetime.datetime): 
+                end timestamp of the search (inclusive)
+
+            programs (List[str]): 
+                list of programs to search through, defaults to None
+
+            platforms (List[str]): 
+                list of platforms to search through, defaults to None
+
+            instrument_types (List[str]): 
+                list of instrument types to search through, defaults to None
+
+            metadata_filters (List[Dict]): 
+                list of dictionaries describing metadata keys and values to filter 
+                on, defaults to None
 
                 Example:
 
@@ -136,15 +147,22 @@ here instead of digging in deeper to the submodules.</p>
                         &#34;operator&#34;: &#34;in&#34;,
                         &#34;values&#34;: [&#34;north polar cap&#34;]
                     }]
-            metadata_filters_logical_operator: the logical operator to use when
-                evaluating metadata filters (either &#39;AND&#39; or &#39;OR&#39;), defaults
-                to &#34;AND&#34;
-            response_format: JSON representation of desired data response format
-            poll_interval: time in seconds to wait between polling attempts, defaults
-                to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-            return_immediately: initiate the search and return without waiting for data to
-                be received, defaults to False
-            verbose: output poll times and other progress messages, defaults to False
+
+            metadata_filters_logical_operator (str): 
+                the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+                defaults to `AND`
+
+            response_format (Dict): 
+                JSON representation of desired data response format
+
+            poll_interval (float): 
+                time in seconds to wait between polling attempts, defaults to 1 second
+
+            return_immediately (bool): 
+                initiate the search and return without waiting for data to be received, defaults to False
+
+            verbose (bool): 
+                output poll times and other progress messages, defaults to False
 
         Returns:
             A `pyaurorax..search.EphemerisSearch` object
@@ -172,10 +190,17 @@ here instead of digging in deeper to the submodules.</p>
         Upload ephemeris records to AuroraX
 
         Args:
-            identifier: AuroraX data source ID
-            records: ephemeris records to upload
-            validate_source: validate all records before uploading, defaults to False
-            chunk_size: number of records to upload in a single call, defaults to 500
+            identifier (int): 
+                AuroraX data source ID
+
+            records (List[EphemerisData]): 
+                ephemeris records to upload
+
+            validate_source (bool): 
+                validate all records before uploading, defaults to False
+
+            chunk_size (int): 
+                number of records to upload in a single call, defaults to 500
 
         Returns:
             0 for success, raises exception on error
@@ -194,10 +219,15 @@ here instead of digging in deeper to the submodules.</p>
         immediately whether or not the data has already been deleted.
 
         Args:
-            data_source: data source associated with the data product records (note that
+            data_source (DataSource): 
+                data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
-            start: timestamp marking beginning of range to delete records for, inclusive
-            end: timestamp marking end of range to delete records for, inclusive
+
+            start (datetime.datetime): 
+                timestamp marking beginning of range to delete records for, inclusive
+            
+            end (datetime.datetime): 
+                timestamp marking end of range to delete records for, inclusive
 
         Returns:
             0 on success
@@ -215,8 +245,11 @@ here instead of digging in deeper to the submodules.</p>
         object can be supplied, or a dictionary of the raw JSON query.
 
         Args:
-            search_obj: the ephemeris search to describe, optional
-            query_dict: the ephemeris search query represented as a raw dictionary, optional
+            search_obj (EphemerisSearch): 
+                the ephemeris search to describe, optional
+
+            query_dict (Dict): 
+                the ephemeris search query represented as a raw dictionary, optional
 
         Returns:
             the &#34;SQL-like&#34; string describing the ephemeris search object
@@ -225,14 +258,14 @@ here instead of digging in deeper to the submodules.</p>
 
     def get_request_url(self, request_id: str) -&gt; str:
         &#34;&#34;&#34;
-        Get the ephemeris search request URL for a given
-        request ID. This URL can be used for subsequent
-        pyaurorax.requests function calls. Primarily this method
-        facilitates delving into details about a set of already-submitted
-        ephemeris searches.
+        Get the ephemeris search request URL for a given request ID. This URL can be 
+        used for subsequent pyaurorax.requests function calls. Primarily this method 
+        facilitates delving into details about a set of already-submitted ephemeris 
+        searches.
 
         Args:
-            request_id: the request identifier
+            request_id (str): 
+                the request identifier
 
         Returns:
             the request URL
@@ -259,10 +292,15 @@ the submodules and carry over configuration information in the super class.</p><
     immediately whether or not the data has already been deleted.
 
     Args:
-        data_source: data source associated with the data product records (note that
+        data_source (DataSource): 
+            data source associated with the data product records (note that
             identifier, program, platform, and instrument_type are required)
-        start: timestamp marking beginning of range to delete records for, inclusive
-        end: timestamp marking end of range to delete records for, inclusive
+
+        start (datetime.datetime): 
+            timestamp marking beginning of range to delete records for, inclusive
+        
+        end (datetime.datetime): 
+            timestamp marking end of range to delete records for, inclusive
 
     Returns:
         0 on success
@@ -279,12 +317,12 @@ the submodules and carry over configuration information in the super class.</p><
 immediately whether or not the data has already been deleted.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>data_source</code></strong></dt>
+<dt><strong><code>data_source</code></strong> :&ensp;<code>DataSource</code></dt>
 <dd>data source associated with the data product records (note that
 identifier, program, platform, and instrument_type are required)</dd>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>timestamp marking beginning of range to delete records for, inclusive</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>timestamp marking end of range to delete records for, inclusive</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -313,8 +351,11 @@ identifier, program, platform, and instrument_type are required)</dd>
     object can be supplied, or a dictionary of the raw JSON query.
 
     Args:
-        search_obj: the ephemeris search to describe, optional
-        query_dict: the ephemeris search query represented as a raw dictionary, optional
+        search_obj (EphemerisSearch): 
+            the ephemeris search to describe, optional
+
+        query_dict (Dict): 
+            the ephemeris search query represented as a raw dictionary, optional
 
     Returns:
         the &#34;SQL-like&#34; string describing the ephemeris search object
@@ -325,9 +366,9 @@ identifier, program, platform, and instrument_type are required)</dd>
 object can be supplied, or a dictionary of the raw JSON query.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>search_obj</code></strong></dt>
+<dt><strong><code>search_obj</code></strong> :&ensp;<code>EphemerisSearch</code></dt>
 <dd>the ephemeris search to describe, optional</dd>
-<dt><strong><code>query_dict</code></strong></dt>
+<dt><strong><code>query_dict</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>the ephemeris search query represented as a raw dictionary, optional</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -343,28 +384,27 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 </summary>
 <pre><code class="python">def get_request_url(self, request_id: str) -&gt; str:
     &#34;&#34;&#34;
-    Get the ephemeris search request URL for a given
-    request ID. This URL can be used for subsequent
-    pyaurorax.requests function calls. Primarily this method
-    facilitates delving into details about a set of already-submitted
-    ephemeris searches.
+    Get the ephemeris search request URL for a given request ID. This URL can be 
+    used for subsequent pyaurorax.requests function calls. Primarily this method 
+    facilitates delving into details about a set of already-submitted ephemeris 
+    searches.
 
     Args:
-        request_id: the request identifier
+        request_id (str): 
+            the request identifier
 
     Returns:
         the request URL
     &#34;&#34;&#34;
     return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
 </details>
-<div class="desc"><p>Get the ephemeris search request URL for a given
-request ID. This URL can be used for subsequent
-pyaurorax.requests function calls. Primarily this method
-facilitates delving into details about a set of already-submitted
-ephemeris searches.</p>
+<div class="desc"><p>Get the ephemeris search request URL for a given request ID. This URL can be
+used for subsequent pyaurorax.requests function calls. Primarily this method
+facilitates delving into details about a set of already-submitted ephemeris
+searches.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>request_id</code></strong></dt>
+<dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>the request identifier</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -403,13 +443,24 @@ ephemeris searches.</p>
     instrument_types, must be specified.
 
     Args:
-        start: start timestamp of the search (inclusive)
-        end: end timestamp of the search (inclusive)
-        programs: list of programs to search through, defaults to None
-        platforms: list of platforms to search through, defaults to None
-        instrument_types: list of instrument types to search through, defaults to None
-        metadata_filters: list of dictionaries describing metadata keys and
-            values to filter on, defaults to None
+        start (datetime.datetime): 
+            start timestamp of the search (inclusive)
+
+        end (datetime.datetime): 
+            end timestamp of the search (inclusive)
+
+        programs (List[str]): 
+            list of programs to search through, defaults to None
+
+        platforms (List[str]): 
+            list of platforms to search through, defaults to None
+
+        instrument_types (List[str]): 
+            list of instrument types to search through, defaults to None
+
+        metadata_filters (List[Dict]): 
+            list of dictionaries describing metadata keys and values to filter 
+            on, defaults to None
 
             Example:
 
@@ -418,15 +469,22 @@ ephemeris searches.</p>
                     &#34;operator&#34;: &#34;in&#34;,
                     &#34;values&#34;: [&#34;north polar cap&#34;]
                 }]
-        metadata_filters_logical_operator: the logical operator to use when
-            evaluating metadata filters (either &#39;AND&#39; or &#39;OR&#39;), defaults
-            to &#34;AND&#34;
-        response_format: JSON representation of desired data response format
-        poll_interval: time in seconds to wait between polling attempts, defaults
-            to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
-        return_immediately: initiate the search and return without waiting for data to
-            be received, defaults to False
-        verbose: output poll times and other progress messages, defaults to False
+
+        metadata_filters_logical_operator (str): 
+            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+            defaults to `AND`
+
+        response_format (Dict): 
+            JSON representation of desired data response format
+
+        poll_interval (float): 
+            time in seconds to wait between polling attempts, defaults to 1 second
+
+        return_immediately (bool): 
+            initiate the search and return without waiting for data to be received, defaults to False
+
+        verbose (bool): 
+            output poll times and other progress messages, defaults to False
 
     Returns:
         A `pyaurorax..search.EphemerisSearch` object
@@ -459,20 +517,20 @@ data when it's done.</p>
 instrument_types, must be specified.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>start</code></strong></dt>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>start timestamp of the search (inclusive)</dd>
-<dt><strong><code>end</code></strong></dt>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>end timestamp of the search (inclusive)</dd>
-<dt><strong><code>programs</code></strong></dt>
+<dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>list of programs to search through, defaults to None</dd>
-<dt><strong><code>platforms</code></strong></dt>
+<dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>list of platforms to search through, defaults to None</dd>
-<dt><strong><code>instrument_types</code></strong></dt>
+<dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>list of instrument types to search through, defaults to None</dd>
-<dt><strong><code>metadata_filters</code></strong></dt>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>
-<p>list of dictionaries describing metadata keys and
-values to filter on, defaults to None</p>
+<p>list of dictionaries describing metadata keys and values to filter
+on, defaults to None</p>
 <p>Example:</p>
 <pre><code>[{
     "key": "nbtrace_region",
@@ -481,19 +539,16 @@ values to filter on, defaults to None</p>
 }]
 </code></pre>
 </dd>
-<dt><strong><code>metadata_filters_logical_operator</code></strong></dt>
-<dd>the logical operator to use when
-evaluating metadata filters (either 'AND' or 'OR'), defaults
-to "AND"</dd>
-<dt><strong><code>response_format</code></strong></dt>
+<dt><strong><code>metadata_filters_logical_operator</code></strong> :&ensp;<code>str</code></dt>
+<dd>the logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
+defaults to <code>AND</code></dd>
+<dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
-<dt><strong><code>poll_interval</code></strong></dt>
-<dd>time in seconds to wait between polling attempts, defaults
-to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
-<dt><strong><code>return_immediately</code></strong></dt>
-<dd>initiate the search and return without waiting for data to
-be received, defaults to False</dd>
-<dt><strong><code>verbose</code></strong></dt>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
+<dd>time in seconds to wait between polling attempts, defaults to 1 second</dd>
+<dt><strong><code>return_immediately</code></strong> :&ensp;<code>bool</code></dt>
+<dd>initiate the search and return without waiting for data to be received, defaults to False</dd>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -517,10 +572,17 @@ be received, defaults to False</dd>
     Upload ephemeris records to AuroraX
 
     Args:
-        identifier: AuroraX data source ID
-        records: ephemeris records to upload
-        validate_source: validate all records before uploading, defaults to False
-        chunk_size: number of records to upload in a single call, defaults to 500
+        identifier (int): 
+            AuroraX data source ID
+
+        records (List[EphemerisData]): 
+            ephemeris records to upload
+
+        validate_source (bool): 
+            validate all records before uploading, defaults to False
+
+        chunk_size (int): 
+            number of records to upload in a single call, defaults to 500
 
     Returns:
         0 for success, raises exception on error
@@ -534,13 +596,13 @@ be received, defaults to False</dd>
 <div class="desc"><p>Upload ephemeris records to AuroraX</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>identifier</code></strong></dt>
+<dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>AuroraX data source ID</dd>
-<dt><strong><code>records</code></strong></dt>
+<dt><strong><code>records</code></strong> :&ensp;<code>List[EphemerisData]</code></dt>
 <dd>ephemeris records to upload</dd>
-<dt><strong><code>validate_source</code></strong></dt>
+<dt><strong><code>validate_source</code></strong> :&ensp;<code>bool</code></dt>
 <dd>validate all records before uploading, defaults to False</dd>
-<dt><strong><code>chunk_size</code></strong></dt>
+<dt><strong><code>chunk_size</code></strong> :&ensp;<code>int</code></dt>
 <dd>number of records to upload in a single call, defaults to 500</dd>
 </dl>
 <h2 id="returns">Returns</h2>

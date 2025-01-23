@@ -61,25 +61,235 @@ border-left: 1px solid #ddd;
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pyaurorax.tools.mosaic.create"><code class="name flex">
-<span>def <span class="ident">create</span></span>(<span>prepped_data: <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>],<br>prepped_skymap: <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>],<br>timestamp: datetime.datetime,<br>cartopy_projection: cartopy.crs.Projection,<br>min_elevation: int | List[int] = 5,<br>colormap: str | List[str] | None = None,<br>spect_colormap: str | List[str] | None = None,<br>image_intensity_scales: List | Dict | None = None,<br>spect_intensity_scales: Tuple[int, int] | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
+<dt id="pyaurorax.tools.mosaic.MosaicManager"><code class="flex name class">
+<span>class <span class="ident">MosaicManager</span></span>
+<span>(</span><span>aurorax_obj)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create(prepped_data: Union[MosaicData, List[MosaicData]],
-           prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
-           timestamp: datetime.datetime,
-           cartopy_projection: cartopy.crs.Projection,
-           min_elevation: Union[int, List[int]] = 5,
-           colormap: Optional[Union[str, List[str]]] = None,
-           spect_colormap: Optional[Union[str, List[str]]] = None,
-           image_intensity_scales: Optional[Union[List, Dict]] = None,
-           spect_intensity_scales: Optional[Tuple[int, int]] = None) -&gt; Mosaic:
+<pre><code class="python">class MosaicManager:
+    &#34;&#34;&#34;
+    The MosaicManager object is initialized within every PyAuroraX object. It acts as a way to access 
+    the submodules and carry over configuration information in the super class.
+    &#34;&#34;&#34;
+
+    def __init__(self, aurorax_obj):
+        self.__aurorax_obj = aurorax_obj
+
+    def create(
+            self,
+            prepped_data: Union[MosaicData, List[MosaicData]],
+            prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
+            timestamp: datetime.datetime,
+            cartopy_projection: cartopy.crs.Projection,
+            min_elevation: Union[int, List[int]] = 5,
+            cmap: Optional[Union[str, List[str]]] = None,
+            spect_cmap: Optional[Union[str, List[str]]] = None,
+            image_intensity_scales: Optional[Union[List, Dict]] = None,
+            spect_intensity_scales: Optional[Tuple[int, int]] = None,
+            colormap: Optional[Union[str, List[str]]] = None,  # deprecated in v1.10.0
+            spect_colormap: Optional[Union[str, List[str]]] = None,  # deprecated in v1.10.0
+    ) -&gt; Mosaic:
+        &#34;&#34;&#34;
+        Create a mosaic object.
+
+        Args:
+            prepped_data (pyaurorax.tools.MosaicData): 
+                The prepared mosaic data. Generated from a prior `prep_images()` function call.
+
+            prepped_skymap (pyaurorax.tools.MosaicSkymap): 
+                The prepared skymap data. Generated from a prior `prep_skymaps()` function call.
+
+            timestamp (datetime.datetime): 
+                The timestamp to generate a mosaic for. Must be within the range of timestamps
+                for which image data was prepped and provided.
+
+            cartopy_projection (cartopy.crs.Projection): 
+                The cartopy projection to use when creating the mosaic.
+
+            min_elevation (int): 
+                The minimum elevation cutoff when projecting images on the map, in degrees. Default is `5`.
+
+            cmap (str): 
+                The matplotlib colormap to use for the rendered image data. Default is `gray`.
+
+                Commonly used colormaps are:
+
+                - REGO: `gist_heat`
+                - THEMIS ASI: `gray`
+                - TREx Blue: `Blues_r`
+                - TREx NIR: `gray`
+                - TREx RGB: `None`
+
+                A list of all available colormaps can be found on the 
+                [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
+
+            colormap (str): 
+                Deprecated as of v1.10.0. Use &#39;cmap&#39; instead in the exact same way.
+
+            spect_cmap (str): 
+                The matplotlib colormap to use for the colorbar if working with spectrograph
+                data. Default is `gnuplot`.
+
+            image_intensity_scales (List or Dict): 
+                Ranges for scaling images. Either a a list with 2 elements which will scale all sites with 
+                the same range, or as a dictionary which can be used for scaling each site differently. 
+
+                Example of uniform scaling across all sites: 
+                `image_intensity_scales = [2000, 8000]`
+
+                Example of scaling each site differently:
+                `image_intensity_scales = {&#34;fsmi&#34;: [1000, 10000], &#34;gill&#34;: [2000, 8000]}`
+
+            spect_intensity_scales (Tuple[int]): 
+                Min and max values, in Rayleighs, to scale ALL spectrograph data.
+
+            spect_colormap (str): 
+                The name of a matplotlib colormap to use for plotting spectrograph data.
+
+        Returns:
+            The generated `pyaurorax.tools.Mosaic` object.
+
+        Raises:
+            ValueError: issues with supplied parameters.
+        &#34;&#34;&#34;
+        # handle deprecation warnings
+        use_colormap = False
+        use_spect_colormap = False
+        if (colormap is not None):
+            show_warning(&#34;The parameter &#39;colormap&#39; was deprecated in v1.10.0. Please use &#39;cmap&#39; instead (usage is identical).&#34;, stacklevel=1)
+            use_colormap = True
+        if (spect_colormap is not None):
+            show_warning(&#34;The parameter &#39;spect_colormap&#39; was deprecated in v1.10.0. Please use &#39;spect_cmap&#39; instead (usage is identical).&#34;,
+                         stacklevel=1)
+            use_spect_colormap = True
+
+        # run function
+        if (use_colormap is False and use_spect_colormap is False):
+            # normal
+            return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, cmap, spect_cmap, image_intensity_scales,
+                               spect_intensity_scales)
+        elif (use_colormap is True and use_spect_colormap is True):
+            # both deprecated parameters were supplied
+            return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, colormap, spect_colormap,
+                               image_intensity_scales, spect_intensity_scales)
+        elif (use_colormap is True and use_spect_colormap is False):
+            # one deprecated parameter was supplied (colormap)
+            return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, colormap, spect_cmap,
+                               image_intensity_scales, spect_intensity_scales)
+        else:
+            # one deprecated parameter was supplied (spect_colormap)
+            return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, cmap, spect_colormap,
+                               image_intensity_scales, spect_intensity_scales)
+
+    def prep_images(self,
+                    image_list: List[Data],
+                    data_attribute: Literal[&#34;data&#34;, &#34;calibrated_data&#34;] = &#34;data&#34;,
+                    spect_emission: Literal[&#34;green&#34;, &#34;red&#34;, &#34;blue&#34;, &#34;hbeta&#34;] = &#34;green&#34;,
+                    spect_band: Optional[Tuple[float, float]] = None,
+                    spect_band_bg: Optional[Tuple[float, float]] = None) -&gt; MosaicData:
+        &#34;&#34;&#34;
+        Prepare the image data for use in a mosaic.
+
+        Args:
+            image_list (List[pyaurorax.data.ucalgary.Data]): 
+                List of image data. Each element of the list is the data for each site.
+            
+            data_attribute (str): 
+                The data attribute to use when prepping the images. Either `data` or `calibrated_data`. 
+                Default is `data`.
+
+            spect_emission (str): 
+                The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 
+                &#39;green&#39; (557.7 nm emission).
+
+            spect_band (Tuple[float]): 
+                Manual selection of the wavelength region to integrate for obtaining emissions. Use this
+                to prepare emissions that are not available in spect_emission.
+
+            spect_band_bg (Tuple[float]): 
+                Manual selection of the wavelength region to subtract from integration for manually
+                chosen emissions, via the spect_band argument.
+
+        Returns:
+            The prepared data, as a `pyaurorax.tools.MosaicData` object.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+        return func_prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg)
+
+    def prep_skymaps(self,
+                     skymaps: List[Skymap],
+                     height_km: int,
+                     site_uid_order: Optional[List[str]] = None,
+                     progress_bar_disable: bool = False,
+                     n_parallel: int = 1) -&gt; MosaicSkymap:
+        &#34;&#34;&#34;
+        Prepare skymap data for use by the mosaic routine. This is not time-dependent, so it 
+        would only need to be done once.
+
+        Allows for plotting multiple images on a map, masking the boundaries between 
+        images by elevation angle.
+
+        Args:
+            skymaps (List[pyaurorax.data.ucalgary.Skymap]): 
+                The skymaps to prep.
+            
+            height_km (int): 
+                The altitude to utilize, in kilometers.
+            
+            site_uid_order (List[str]): 
+                The site list order. The order of this list is not important for plotting, but must be
+                consistent with the order of the `skymaps` parameter.
+            
+            progress_bar_disable (bool): 
+                Disable the progress bar. Defaults to `False`.
+
+            n_parallel (int): 
+                Number of skymaps to prepare in parallel using multiprocessing. Default is `1`. 
+
+        Returns:
+            The prepared skymap data as a `pyaurorax.tools.MosaicSkymap` object.
+            
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+        return func_prep_skymaps(self.__aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_disable, n_parallel)</code></pre>
+</details>
+<div class="desc"><p>The MosaicManager object is initialized within every PyAuroraX object. It acts as a way to access
+the submodules and carry over configuration information in the super class.</p></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.mosaic.MosaicManager.create"><code class="name flex">
+<span>def <span class="ident">create</span></span>(<span>self,<br>prepped_data: <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a>],<br>prepped_skymap: <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a> | List[<a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a>],<br>timestamp: datetime.datetime,<br>cartopy_projection: cartopy.crs.Projection,<br>min_elevation: int | List[int] = 5,<br>cmap: str | List[str] | None = None,<br>spect_cmap: str | List[str] | None = None,<br>image_intensity_scales: List | Dict | None = None,<br>spect_intensity_scales: Tuple[int, int] | None = None,<br>colormap: str | List[str] | None = None,<br>spect_colormap: str | List[str] | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.Mosaic" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create(
+        self,
+        prepped_data: Union[MosaicData, List[MosaicData]],
+        prepped_skymap: Union[MosaicSkymap, List[MosaicSkymap]],
+        timestamp: datetime.datetime,
+        cartopy_projection: cartopy.crs.Projection,
+        min_elevation: Union[int, List[int]] = 5,
+        cmap: Optional[Union[str, List[str]]] = None,
+        spect_cmap: Optional[Union[str, List[str]]] = None,
+        image_intensity_scales: Optional[Union[List, Dict]] = None,
+        spect_intensity_scales: Optional[Tuple[int, int]] = None,
+        colormap: Optional[Union[str, List[str]]] = None,  # deprecated in v1.10.0
+        spect_colormap: Optional[Union[str, List[str]]] = None,  # deprecated in v1.10.0
+) -&gt; Mosaic:
     &#34;&#34;&#34;
     Create a mosaic object.
 
@@ -100,7 +310,7 @@ border-left: 1px solid #ddd;
         min_elevation (int): 
             The minimum elevation cutoff when projecting images on the map, in degrees. Default is `5`.
 
-        colormap (str): 
+        cmap (str): 
             The matplotlib colormap to use for the rendered image data. Default is `gray`.
 
             Commonly used colormaps are:
@@ -114,11 +324,14 @@ border-left: 1px solid #ddd;
             A list of all available colormaps can be found on the 
             [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
 
+        colormap (str): 
+            Deprecated as of v1.10.0. Use &#39;cmap&#39; instead in the exact same way.
+
         spect_cmap (str): 
             The matplotlib colormap to use for the colorbar if working with spectrograph
             data. Default is `gnuplot`.
 
-        image_intensity_scaled (List or Dict): 
+        image_intensity_scales (List or Dict): 
             Ranges for scaling images. Either a a list with 2 elements which will scale all sites with 
             the same range, or as a dictionary which can be used for scaling each site differently. 
 
@@ -128,8 +341,11 @@ border-left: 1px solid #ddd;
             Example of scaling each site differently:
             `image_intensity_scales = {&#34;fsmi&#34;: [1000, 10000], &#34;gill&#34;: [2000, 8000]}`
 
-        spect_intensity_scaled (Tuple[int]): 
+        spect_intensity_scales (Tuple[int]): 
             Min and max values, in Rayleighs, to scale ALL spectrograph data.
+
+        spect_colormap (str): 
+            The name of a matplotlib colormap to use for plotting spectrograph data.
 
     Returns:
         The generated `pyaurorax.tools.Mosaic` object.
@@ -137,360 +353,42 @@ border-left: 1px solid #ddd;
     Raises:
         ValueError: issues with supplied parameters.
     &#34;&#34;&#34;
-    # init coordinates transformer
-    #
-    # To convert from geodetic coordinates onto the map projection, we use pyproj instead
-    # of cartopy&#39;s native transformations. This is an optimization.
-    pyproj_src_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
-    pyproj_des_proj = pyproj.CRS.from_user_input(cartopy_projection)
-    transformer = pyproj.Transformer.from_crs(pyproj_src_proj, pyproj_des_proj, always_xy=True)
+    # handle deprecation warnings
+    use_colormap = False
+    use_spect_colormap = False
+    if (colormap is not None):
+        show_warning(&#34;The parameter &#39;colormap&#39; was deprecated in v1.10.0. Please use &#39;cmap&#39; instead (usage is identical).&#34;, stacklevel=1)
+        use_colormap = True
+    if (spect_colormap is not None):
+        show_warning(&#34;The parameter &#39;spect_colormap&#39; was deprecated in v1.10.0. Please use &#39;spect_cmap&#39; instead (usage is identical).&#34;,
+                     stacklevel=1)
+        use_spect_colormap = True
 
-    # Convert data, skymaps, colormap indicators to lists for iteration purposed
-    if not isinstance(prepped_data, list):
-        prepped_data = [prepped_data]
-    if not isinstance(prepped_skymap, list):
-        prepped_skymap = [prepped_skymap]
-    if not isinstance(colormap, list):
-        if colormap is None:
-            colormap = []
-            for _ in range(len(prepped_data)):
-                colormap.append(&#39;gray&#39;)
-        else:
-            colormap = [colormap]
-    if not isinstance(min_elevation, list):
-        tmp = []
-        for _ in range(len(prepped_data)):
-            tmp.append(min_elevation)
-        min_elevation = tmp
-    if spect_intensity_scales is None:
-        spect_intensity_scales = (__DEFAULT_SPECT_SCALE_MIN, __DEFAULT_SPECT_SCALE_MAX)
-
-    # Make sure all lists are same length
-    if (len(prepped_data) != len(prepped_skymap)):
-        raise ValueError(&#34;When passing lists of prepped data and prepped skymap, they must be of the same length.&#34;)
-    if (len(prepped_data) != len(colormap)) or (len(prepped_skymap) != len(colormap)):
-        raise ValueError(&#34;List of colormaps must have same length as lists of prepped data and prepped skymaps.&#34;)
-
-    # Itarate through each set of prepped data, prepped skymap
-    img_poly_list = []
-    any_spect_data = False
-    for mosaic_data_idx in range(len(prepped_data)):
-        data = prepped_data[mosaic_data_idx]
-        skymap = prepped_skymap[mosaic_data_idx]
-        iter_cmap = colormap[mosaic_data_idx]
-        min_el = min_elevation[mosaic_data_idx]
-
-        if spect_colormap is None:
-            iter_spect_cmap = &#39;gnuplot2&#39;
-        else:
-            iter_spect_cmap = spect_colormap
-
-        if isinstance(iter_spect_cmap, list):
-            iter_spect_cmap = iter_spect_cmap[0]
-        # get sites
-        site_list = data.site_uid_list
-
-        # set image intensity scales
-        if (image_intensity_scales is None):
-            # defaults to scaling all sites between 0-20000
-            image_intensity_scales = {}
-            for site_uid in skymap.site_uid_list:
-                image_intensity_scales[site_uid] = [__DEFAULT_SCALE_MIN, __DEFAULT_SCALE_MAX]
-        elif (isinstance(image_intensity_scales, list) is True):
-            image_intensity_scales_dict = {}
-            for site_uid in site_list:
-                image_intensity_scales_dict[site_uid] = image_intensity_scales
-            image_intensity_scales = image_intensity_scales_dict
-        elif (isinstance(image_intensity_scales, dict) is True):
-            # no action needed
-            pass
-        else:
-            raise ValueError(&#34;Invalid image_intensity_scales format. Please refer to the documentation for this function.&#34;)
-
-        # We need a numpy array of the sites requested, that will be used to make sure any sites
-        # that don&#39;t have data for the requested frame are not plotted. Also empty dict for images..
-        site_list_arr = np.array(site_list)
-        # all_images = np.zeros([len(site_list), width * height, __N_CHANNELS], dtype=np.int32)
-        all_images = {}
-
-        # Grab the elevation, and filling lats/lons
-        elev = skymap.elevation
-        polyfill_lon = skymap.polyfill_lon
-        polyfill_lat = skymap.polyfill_lat
-
-        # Now we begin to fill in the above arrays, one site at a time. Before doing so
-        # we need lists to keep track of which sites actually have data for this frame.
-        sites_with_data = []
-        sites_with_data_idx = []
-        datatypes_with_data = []
-
-        # Determine the frame index of data the corresponds to the requested timestamp
-        minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
-        maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
-        if timestamp &lt; minimum_timestamp or timestamp &gt; maximum_timestamp:
-            raise ValueError(&#34;Could not create mosaic for timestamp&#34; + timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;) +
-                             &#34; as image data was only supplied for the timestamp range: &#34; + minimum_timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;) + &#34; to &#34; +
-                             maximum_timestamp.strftime(&#34;%Y/%m/%d %H:%M:%S&#34;))
-
-        # Get the frame index of the timestamp closest to desired mosaic frame
-        frame_idx = np.argmin(np.abs(np.array(data.timestamps) - timestamp))
-
-        # We also define a list that will hold all unique timestamps pulled from each
-        # frame&#39;s metadata. This should be of length 1, and we can check that to make
-        # sure all images being plotted correspond to the same time.
-        unique_timestamps = []
-        n_channels_dict = {}
-        for idx_for_dataype, site in enumerate(site_list):
-
-            # set image dimensions
-            height = data.images_dimensions[site][0]
-            width = data.images_dimensions[site][1]
-
-            # Grab the timestamp for this frame/site
-            meta_timestamp = data.timestamps[frame_idx]
-
-            # Determine whether current image is single or multi-channel, and add to dictionary for reference
-            if len(data.images[site].shape) == 4:
-                n_channels = data.images[site].shape[2]
-            else:
-                n_channels = 1
-            n_channels_dict[site] = n_channels
-
-            # Now, obtain the frame of interest, for this site, from the image data and flatten it
-            if data.data_types[idx_for_dataype] == &#39;spect&#39;:
-                any_spect_data = True
-                rayleighs = data.images[site][:, frame_idx]
-                flattened_rayleighs = np.reshape(rayleighs, height)
-
-                tmp = flattened_rayleighs
-
-                if (np.sum(tmp) == 0.0):
-                    # If it&#39;s sum is zero, we know there is no data so we can simply continue.
-                    continue
-
-                # Scale this site&#39;s data based on previously defined scaling bounds
-                tmp = scale_intensity(
-                    tmp,
-                    min=spect_intensity_scales[0],  # type: ignore
-                    max=spect_intensity_scales[1],  # type: ignore
-                    top=255,
-                    memory_saver=False,
-                )
-
-            else:
-                if n_channels == 1:
-                    img = data.images[site][:, :, frame_idx]
-                    flattened_img = np.reshape(img, (width * height))
-                else:
-                    img = data.images[site][:, :, :, frame_idx]
-                    flattened_img = np.reshape(img, (width * height, n_channels))
-
-                tmp = flattened_img
-
-                if (np.sum(tmp) == 0.0):
-                    # If it&#39;s sum is zero, we know there is no data so we can simply continue.
-                    continue
-
-                # Scale this site&#39;s data based on previously defined scaling bounds
-                tmp = scale_intensity(
-                    tmp,
-                    min=image_intensity_scales[site][0],  # type: ignore
-                    max=image_intensity_scales[site][1],  # type: ignore
-                    top=255,
-                    memory_saver=False,
-                )
-
-            # Add the timestamp to tracking list if it&#39;s unique
-            if meta_timestamp not in unique_timestamps:
-                unique_timestamps.append(meta_timestamp)
-
-            # Append sites to respective lists, and add image data to master list
-            datatypes_with_data.append(data.data_types[idx_for_dataype])
-            sites_with_data.append(site)
-            sites_with_data_idx.append(np.where(site_list_arr == site)[0][0])
-            all_images[site] = tmp.astype(np.int32)
-
-        # This checks to make sure all images have the same timestamps
-        if len(unique_timestamps) != 1:
-            raise Exception(&#34;Error: Images have different timestamps.&#34;)
-
-        # Create empty lists for tracking the pixel polygons and their values
-        lon_list = []
-        lat_list = []
-        cmap_vals = []
-
-        # Set up elevation increment for plotting. We start at the min elevation
-        # and plot groups of elevations until reaching 90 deg.
-        elev_delta = 0.1
-        el = min_el
-
-        # Iterate through all elevation ranges - Always do ASI data first !
-        while el &lt; 90:
-
-            # Only iterate through the sites that actually have data
-            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
-
-                # Skip spectrograph data for now as that should always be plotted last
-                if datatypes_with_data[site_idx] == &#39;spect&#39;:
-                    continue
-
-                if spect_colormap is None:
-                    spect_colormap = iter_spect_cmap
-
-                # Get this sites number of channels
-                n_channels = n_channels_dict[site_id]
-
-                # Get all pixels within current elevation threshold
-                el_idx = np.nonzero(np.logical_and(elev[site_idx] &gt; el, elev[site_idx] &lt;= el + elev_delta))[0]
-                if len(el_idx) == 0:
-                    continue
-
-                # Grab this level&#39;s filling lat/lons
-                el_lvl_fill_lats = polyfill_lat[site_idx][:, el_idx]
-                el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
-
-                # Grab this level&#39;s data values
-                if n_channels == 1:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx]
-                else:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx, :]
-
-                # # Mask any nans that may have slipped through - done as a precaution
-                nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) &amp; ~np.isnan(el_lvl_fill_lons).any(axis=0)
-
-                el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
-                el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
-                if n_channels == 1:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
-                else:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
-
-                # Convert pixel values to a normalized float
-                el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
-
-                # Append polygon lat/lons and values to master lists
-                if n_channels == 1:
-                    cmap = plt.get_cmap(iter_cmap)
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(cmap(el_lvl_colors[k]))
-                else:
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(el_lvl_colors[k, :])
-
-            el += elev_delta
-
-        # Repeat the above, but for spectrograph data now
-        el = min_el
-        while el &lt; 90:
-
-            # Only iterate through the sites that actually have data
-            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
-
-                # Skip spectrograph data for now as that should always be plotted last
-                if datatypes_with_data[site_idx] != &#39;spect&#39;:
-                    continue
-
-                # Get this sites number of channels
-                n_channels = n_channels_dict[site_id]
-
-                # Get all pixels within current elevation threshold
-                el_idx = np.nonzero(np.logical_and(elev[site_idx] &gt; el, elev[site_idx] &lt;= el + elev_delta))[0]
-                if len(el_idx) == 0:
-                    continue
-
-                # Grab this level&#39;s filling lat/lons
-                el_lvl_fill_lats = polyfill_lat[site_idx][:, el_idx]
-                el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
-
-                # Grab this level&#39;s data values
-                if n_channels == 1:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx]
-                else:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx, :]
-
-                # # Mask any nans that may have slipped through - done as a precaution
-                nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) &amp; ~np.isnan(el_lvl_fill_lons).any(axis=0)
-
-                el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
-                el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
-                if n_channels == 1:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
-                else:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
-
-                # Convert pixel values to a normalized float
-                el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
-
-                # Append polygon lat/lons and values to master lists
-                if n_channels == 1:
-                    cmap = plt.get_cmap(iter_spect_cmap)
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(cmap(el_lvl_colors[k]))
-                else:
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(el_lvl_colors[k, :])
-
-            el += elev_delta
-
-        # Use our transformer object to convert the lat/lon polygons into projection coordinates.
-        lons, lats = transformer.transform(np.array(lon_list), np.array(lat_list))
-
-        # Format polygons for creation of PolyCollection object
-        lonlat_polygons = np.empty((lons.shape[0], 5, 2))
-        lonlat_polygons[:, :, 0] = lons
-        lonlat_polygons[:, :, 1] = lats
-
-        # generate a PolyCollection object, containing all of the Polygons shaded with
-        # their corresponding RGB value
-
-        img_data_poly = matplotlib.collections.PolyCollection(
-            lonlat_polygons,  # type: ignore
-            facecolors=cmap_vals,
-            array=None,
-            clim=[0.0, 1.0],
-            edgecolors=&#34;face&#34;,
-        )
-
-        img_poly_list.append(img_data_poly)
-
-    if isinstance(spect_colormap, list):
-        spect_colormap = spect_colormap[0]
-
-    # cast into mosaic object
-    if any_spect_data:
-        if len(img_poly_list) == 1:
-            mosaic = Mosaic(polygon_data=img_poly_list[0],
-                            cartopy_projection=cartopy_projection,
-                            spect_cmap=spect_colormap,
-                            spect_intensity_scale=spect_intensity_scales)
-        else:
-            mosaic = Mosaic(polygon_data=img_poly_list,
-                            cartopy_projection=cartopy_projection,
-                            spect_cmap=spect_colormap,
-                            spect_intensity_scale=spect_intensity_scales)
+    # run function
+    if (use_colormap is False and use_spect_colormap is False):
+        # normal
+        return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, cmap, spect_cmap, image_intensity_scales,
+                           spect_intensity_scales)
+    elif (use_colormap is True and use_spect_colormap is True):
+        # both deprecated parameters were supplied
+        return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, colormap, spect_colormap,
+                           image_intensity_scales, spect_intensity_scales)
+    elif (use_colormap is True and use_spect_colormap is False):
+        # one deprecated parameter was supplied (colormap)
+        return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, colormap, spect_cmap,
+                           image_intensity_scales, spect_intensity_scales)
     else:
-        if len(img_poly_list) == 1:
-            mosaic = Mosaic(polygon_data=img_poly_list[0], cartopy_projection=cartopy_projection)
-        else:
-            mosaic = Mosaic(polygon_data=img_poly_list, cartopy_projection=cartopy_projection)
-    # return
-    return mosaic</code></pre>
+        # one deprecated parameter was supplied (spect_colormap)
+        return func_create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elevation, cmap, spect_colormap,
+                           image_intensity_scales, spect_intensity_scales)</code></pre>
 </details>
 <div class="desc"><p>Create a mosaic object.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>prepped_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.MosaicData" href="../index.html#pyaurorax.tools.MosaicData">MosaicData</a></code></dt>
-<dd>The prepared mosaic data. Generated from a prior <code><a title="pyaurorax.tools.mosaic.prep_images" href="#pyaurorax.tools.mosaic.prep_images">prep_images()</a></code> function call.</dd>
+<dd>The prepared mosaic data. Generated from a prior <code>prep_images()</code> function call.</dd>
 <dt><strong><code>prepped_skymap</code></strong> :&ensp;<code><a title="pyaurorax.tools.MosaicSkymap" href="../index.html#pyaurorax.tools.MosaicSkymap">MosaicSkymap</a></code></dt>
-<dd>The prepared skymap data. Generated from a prior <code><a title="pyaurorax.tools.mosaic.prep_skymaps" href="#pyaurorax.tools.mosaic.prep_skymaps">prep_skymaps()</a></code> function call.</dd>
+<dd>The prepared skymap data. Generated from a prior <code>prep_skymaps()</code> function call.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>The timestamp to generate a mosaic for. Must be within the range of timestamps
 for which image data was prepped and provided.</dd>
@@ -498,7 +396,7 @@ for which image data was prepped and provided.</dd>
 <dd>The cartopy projection to use when creating the mosaic.</dd>
 <dt><strong><code>min_elevation</code></strong> :&ensp;<code>int</code></dt>
 <dd>The minimum elevation cutoff when projecting images on the map, in degrees. Default is <code>5</code>.</dd>
-<dt><strong><code>colormap</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>The matplotlib colormap to use for the rendered image data. Default is <code>gray</code>.</p>
 <p>Commonly used colormaps are:</p>
@@ -512,10 +410,12 @@ for which image data was prepped and provided.</dd>
 <p>A list of all available colormaps can be found on the
 <a href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">matplotlib documentation</a>.</p>
 </dd>
+<dt><strong><code>colormap</code></strong> :&ensp;<code>str</code></dt>
+<dd>Deprecated as of v1.10.0. Use 'cmap' instead in the exact same way.</dd>
 <dt><strong><code>spect_cmap</code></strong> :&ensp;<code>str</code></dt>
 <dd>The matplotlib colormap to use for the colorbar if working with spectrograph
 data. Default is <code>gnuplot</code>.</dd>
-<dt><strong><code>image_intensity_scaled</code></strong> :&ensp;<code>List</code> or <code>Dict</code></dt>
+<dt><strong><code>image_intensity_scales</code></strong> :&ensp;<code>List</code> or <code>Dict</code></dt>
 <dd>
 <p>Ranges for scaling images. Either a a list with 2 elements which will scale all sites with
 the same range, or as a dictionary which can be used for scaling each site differently. </p>
@@ -524,8 +424,10 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <p>Example of scaling each site differently:
 <code>image_intensity_scales = {"fsmi": [1000, 10000], "gill": [2000, 8000]}</code></p>
 </dd>
-<dt><strong><code>spect_intensity_scaled</code></strong> :&ensp;<code>Tuple[int]</code></dt>
+<dt><strong><code>spect_intensity_scales</code></strong> :&ensp;<code>Tuple[int]</code></dt>
 <dd>Min and max values, in Rayleighs, to scale ALL spectrograph data.</dd>
+<dt><strong><code>spect_colormap</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of a matplotlib colormap to use for plotting spectrograph data.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The generated <code><a title="pyaurorax.tools.Mosaic" href="../index.html#pyaurorax.tools.Mosaic">Mosaic</a></code> object.</p>
@@ -535,15 +437,16 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <dd>issues with supplied parameters.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.mosaic.prep_images"><code class="name flex">
-<span>def <span class="ident">prep_images</span></span>(<span>image_list: List[pyucalgarysrs.data.classes.Data],<br>data_attribute: Literal['data', 'calibrated_data'] = 'data',<br>spect_emission: Literal['green', 'red', 'blue', 'hbeta'] = 'green',<br>spect_band: Tuple[float, float] | None = None,<br>spect_band_bg: Tuple[float, float] | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></span>
+<dt id="pyaurorax.tools.mosaic.MosaicManager.prep_images"><code class="name flex">
+<span>def <span class="ident">prep_images</span></span>(<span>self,<br>image_list: List[pyucalgarysrs.data.classes.Data],<br>data_attribute: Literal['data', 'calibrated_data'] = 'data',<br>spect_emission: Literal['green', 'red', 'blue', 'hbeta'] = 'green',<br>spect_band: Tuple[float, float] | None = None,<br>spect_band_bg: Tuple[float, float] | None = None) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicData" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def prep_images(image_list: List[Data],
+<pre><code class="python">def prep_images(self,
+                image_list: List[Data],
                 data_attribute: Literal[&#34;data&#34;, &#34;calibrated_data&#34;] = &#34;data&#34;,
                 spect_emission: Literal[&#34;green&#34;, &#34;red&#34;, &#34;blue&#34;, &#34;hbeta&#34;] = &#34;green&#34;,
                 spect_band: Optional[Tuple[float, float]] = None,
@@ -559,15 +462,15 @@ the same range, or as a dictionary which can be used for scaling each site diffe
             The data attribute to use when prepping the images. Either `data` or `calibrated_data`. 
             Default is `data`.
 
-        spect_emission (str):
+        spect_emission (str): 
             The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 
             &#39;green&#39; (557.7 nm emission).
 
-        spect_band (Tuple[float]):
+        spect_band (Tuple[float]): 
             Manual selection of the wavelength region to integrate for obtaining emissions. Use this
             to prepare emissions that are not available in spect_emission.
 
-        spect_band_bg (Tuple[float]):
+        spect_band_bg (Tuple[float]): 
             Manual selection of the wavelength region to subtract from integration for manually
             chosen emissions, via the spect_band argument.
 
@@ -577,230 +480,7 @@ the same range, or as a dictionary which can be used for scaling each site diffe
     Raises:
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
-    # set image dimensions and number of sites
-    if (data_attribute == &#34;data&#34;):
-        # check that the timestamp and calibrated data match in size
-        for i in range(0, len(image_list)):
-            if (image_list[i].data.shape[-1] != len(image_list[i].timestamp)):
-                raise ValueError((&#34;Number of frames does not match number of timestamp records. There are %d timestamp &#34; +
-                                  &#34;records, and %d images for list index %d&#34;) % (
-                                      len(image_list[i].timestamp),
-                                      image_list[i].data.shape[-1],
-                                      i,
-                                  ))
-    elif (data_attribute == &#34;calibrated_data&#34;):
-        # check that the timestamp and calibrated data match in size
-        for i in range(0, len(image_list)):
-            if (image_list[i].calibrated_data.shape[-1] != len(image_list[i].timestamp)):
-                raise ValueError((&#34;Number of frames does not match number of timestamp records. There are %d timestamp &#34; +
-                                  &#34;records, and %d images for list index %d&#34;) % (
-                                      len(image_list[i].timestamp),
-                                      image_list[i].calibrated_data.shape[-1],
-                                      i,
-                                  ))
-    else:
-        raise ValueError(&#34;Invalid &#39;data_attribute&#39; parameter. Must be either &#39;data&#39; or &#39;calibrated_data&#39;.&#34;)
-
-    # Determine integration bounds for spectrograph data
-    wavelength_range = {
-        &#39;green&#39;: [557.0 - 1.5, 557.0 + 1.5],
-        &#39;red&#39;: [630.0 - 1.5, 630.0 + 1.5],
-        &#39;blue&#39;: [427.8 - 3.0, 427.8 + 0.5],
-        &#39;hbeta&#39;: [486.1 - 1.5, 486.1 + 1.5]
-    }[spect_emission]
-
-    wavelength_bg_range = {
-        &#39;green&#39;: [552.0 - 1.5, 552.0 + 1.5],
-        &#39;red&#39;: [625.0 - 1.5, 625.0 + 1.5],
-        &#39;blue&#39;: [430.0 - 1.0, 430.0 + 1.0],
-        &#39;hbeta&#39;: [480.0 - 1.0, 480.0 + 1.0]
-    }[spect_emission]
-
-    # Check if manual integration bands were supplied
-    if spect_band is not None:
-        wavelength_range = spect_band
-        if spect_band_bg is None:
-            warnings.warn(
-                &#34;Wavelength band supplied without background band. No background subtraction will be performed.&#34;,
-                stacklevel=1,
-            )
-            wavelength_bg_range = None
-        else:
-            wavelength_bg_range = spect_band_bg
-
-    # determine the number of expected frames
-    #
-    # NOTE: this is done to ensure that the eventual image arrays are all the
-    # same size, and we adequately account for dropped frames.
-    #
-    # Steps:
-    #   1) finding the over-arching start and end times of data across all sites
-    #   2) determine the cadence using the timestamps
-    #   3) determine the number of expected frames using the cadence, start and end
-    #
-    start_dt = image_list[0].timestamp[0]
-    end_dt = image_list[0].timestamp[-1]
-    for site_data in image_list:
-        this_start_dt = site_data.timestamp[0]
-        this_end_dt = site_data.timestamp[-1]
-        if (this_start_dt &lt; start_dt):
-            start_dt = this_start_dt
-        if (this_end_dt &gt; end_dt):
-            end_dt = this_end_dt
-    cadence = __determine_cadence(image_list[0].timestamp)
-    curr_dt = start_dt.replace(microsecond=0)
-    expected_num_frames = 0
-    expected_timestamps = []
-    while (curr_dt &lt;= end_dt):
-        expected_timestamps.append(curr_dt)
-        expected_num_frames += 1
-        curr_dt += datetime.timedelta(seconds=cadence)
-
-    # for each site
-    data_type_list = []
-    site_uid_list = []
-    images_dict = {}
-    for site_image_data in image_list:
-
-        if (data_attribute == &#34;data&#34;):
-            site_data = site_image_data.data
-        elif (data_attribute == &#34;calibrated_data&#34;):
-            site_data = site_image_data.calibrated_data
-
-        if site_image_data.dataset is None:
-            warnings.warn(
-                &#34;Skipping data objects with missing datasets.&#34;,
-                stacklevel=1,
-            )
-            continue
-
-        # set image dimensions
-        if &#39;SPECT&#39; in site_image_data.dataset.name:
-            height = site_data.shape[1]
-            width = 1
-        else:
-            height = site_data.shape[0]
-            width = site_data.shape[1]
-
-        # Determine number of channels of image data
-        if len(site_data.shape) == 4:
-            n_channels = site_data.shape[2]
-        else:
-            n_channels = 1
-
-        int_w = None
-        int_bg_w = None
-        wavelength = None
-        if &#39;SPECT&#39; in site_image_data.dataset.name:
-            n_channels = 1
-            current_data_type = &#39;spect&#39;
-            data_type_list.append(current_data_type)
-
-            # Extract wavelength from metadata, and get integration indices
-            wavelength = site_image_data.metadata[0][&#39;wavelength&#39;]
-            int_w = np.where((wavelength &gt;= wavelength_range[0]) &amp; (wavelength &lt;= wavelength_range[1]))
-            if wavelength_bg_range is not None:
-                int_bg_w = np.where((wavelength &gt;= wavelength_bg_range[0]) &amp; (wavelength &lt;= wavelength_bg_range[1]))
-        else:
-            current_data_type = &#39;asi&#39;
-            data_type_list.append(current_data_type)
-
-        # add to site uid list - must use try as metadata differs between networks
-        try:
-            site_uid = site_image_data.metadata[0][&#34;site_unique_id&#34;]
-        except KeyError:
-            try:
-                site_uid = site_image_data.metadata[0][&#34;Site unique ID&#34;]
-            except KeyError:
-                try:
-                    site_uid = site_image_data.metadata[0][&#34;site_uid&#34;].decode(&#39;utf-8&#39;)
-                except KeyError as e:
-                    raise KeyError(&#34;Unable to find site UID in Metadata&#34;) from e
-
-        # We don&#39;t attempt to handle the same site being passed in for multiple networks
-        if site_uid in images_dict.keys():
-
-            d_keys = np.array(list(images_dict.keys()))
-            if data_type_list[np.where(d_keys == site_uid)[0][0]] != current_data_type:
-                site_uid = site_uid + &#39;_&#39; + current_data_type
-
-            else:
-                warnings.warn(
-                    &#34;Same site between differing networks detected. Omitting additional &#39;%s&#39; data&#34; % (site_uid),
-                    stacklevel=1,
-                )
-                continue
-        site_uid_list.append(site_uid)
-
-        # initialize this site&#39;s data destination variables
-        images_dict[site_uid] = np.squeeze(np.full((height, width, n_channels, expected_num_frames), np.nan))
-
-        # use binary search to find the index in the data corresponding to each
-        # expected timestamp (we assume it is already sorted)
-        for i in range(0, len(expected_timestamps)):
-            searching_dt = expected_timestamps[i]
-            found_idx = None
-            low = 0
-            high = len(site_image_data.timestamp) - 1
-            while (low &lt;= high):
-                mid = low + (high - low) // 2
-                this_ts = site_image_data.timestamp[mid].replace(microsecond=0)
-
-                if (this_ts == searching_dt):
-                    found_idx = mid
-                    break
-                elif (this_ts &gt; searching_dt):
-                    high = mid - 1
-                else:
-                    low = mid + 1
-
-            if (found_idx is None):
-                # didn&#39;t find the timestamp, just move on because there will be no data
-                # for this timestamp
-                continue
-            else:
-                # found data for this timestamp
-                if current_data_type == &#39;spect&#39;:
-
-                    # Integrate over wavelengths to get Rayleighs
-                    spectra = site_data[:, :, found_idx]
-
-                    if (int_w is None) or (wavelength is None) or (int_bg_w is None):
-                        wavelength = site_image_data.metadata[0][&#39;wavelength&#39;]
-                        int_w = np.where((wavelength &gt;= wavelength_range[0]) &amp; (wavelength &lt;= wavelength_range[1]))
-                        if wavelength_bg_range is not None:
-                            int_bg_w = np.where((wavelength &gt;= wavelength_bg_range[0]) &amp; (wavelength &lt;= wavelength_bg_range[1]))
-
-                    rayleighs = np.trapz(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
-
-                    if wavelength_bg_range is not None:
-                        if int_bg_w is not None:
-                            rayleighs -= np.trapz(spectra[int_bg_w[0], :], x=wavelength[int_bg_w[0]], axis=0)
-
-                    rayleighs = np.nan_to_num(rayleighs, nan=0.0)
-                    rayleighs[np.where(rayleighs &lt; 0.0)] = 0.0
-
-                    images_dict[site_uid][:, i] = rayleighs
-
-                else:
-                    if n_channels != 1:
-                        images_dict[site_uid][:, :, :, i] = site_data[:, :, :, found_idx]
-                    else:
-                        images_dict[site_uid][:, :, i] = site_data[:, :, found_idx]
-
-    dimensions_dict = {}
-    for site_uid, image in images_dict.items():
-        dimensions_dict[site_uid] = (image.shape[0], image.shape[1])
-
-    # cast into object
-    prepped_data = MosaicData(site_uid_list=site_uid_list,
-                              timestamps=expected_timestamps,
-                              images=images_dict,
-                              images_dimensions=dimensions_dict,
-                              data_types=data_type_list)
-
-    # return
-    return prepped_data</code></pre>
+    return func_prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg)</code></pre>
 </details>
 <div class="desc"><p>Prepare the image data for use in a mosaic.</p>
 <h2 id="args">Args</h2>
@@ -810,16 +490,16 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <dt><strong><code>data_attribute</code></strong> :&ensp;<code>str</code></dt>
 <dd>The data attribute to use when prepping the images. Either <code>data</code> or <code>calibrated_data</code>.
 Default is <code>data</code>.</dd>
+<dt><strong><code>spect_emission</code></strong> :&ensp;<code>str</code></dt>
+<dd>The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is
+'green' (557.7 nm emission).</dd>
+<dt><strong><code>spect_band</code></strong> :&ensp;<code>Tuple[float]</code></dt>
+<dd>Manual selection of the wavelength region to integrate for obtaining emissions. Use this
+to prepare emissions that are not available in spect_emission.</dd>
+<dt><strong><code>spect_band_bg</code></strong> :&ensp;<code>Tuple[float]</code></dt>
+<dd>Manual selection of the wavelength region to subtract from integration for manually
+chosen emissions, via the spect_band argument.</dd>
 </dl>
-<p>spect_emission (str):
-The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is
-'green' (557.7 nm emission).</p>
-<p>spect_band (Tuple[float]):
-Manual selection of the wavelength region to integrate for obtaining emissions. Use this
-to prepare emissions that are not available in spect_emission.</p>
-<p>spect_band_bg (Tuple[float]):
-Manual selection of the wavelength region to subtract from integration for manually
-chosen emissions, via the spect_band argument.</p>
 <h2 id="returns">Returns</h2>
 <p>The prepared data, as a <code><a title="pyaurorax.tools.MosaicData" href="../index.html#pyaurorax.tools.MosaicData">MosaicData</a></code> object.</p>
 <h2 id="raises">Raises</h2>
@@ -828,15 +508,16 @@ chosen emissions, via the spect_band argument.</p>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.mosaic.prep_skymaps"><code class="name flex">
-<span>def <span class="ident">prep_skymaps</span></span>(<span>skymaps: List[pyucalgarysrs.data.classes.Skymap],<br>height_km: int,<br>site_uid_order: List[str] | None = None,<br>progress_bar_disable: bool = False,<br>n_parallel: int = 1) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a></span>
+<dt id="pyaurorax.tools.mosaic.MosaicManager.prep_skymaps"><code class="name flex">
+<span>def <span class="ident">prep_skymaps</span></span>(<span>self,<br>skymaps: List[pyucalgarysrs.data.classes.Skymap],<br>height_km: int,<br>site_uid_order: List[str] | None = None,<br>progress_bar_disable: bool = False,<br>n_parallel: int = 1) ‑> <a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="../classes/mosaic.html#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a></span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def prep_skymaps(skymaps: List[Skymap],
+<pre><code class="python">def prep_skymaps(self,
+                 skymaps: List[Skymap],
                  height_km: int,
                  site_uid_order: Optional[List[str]] = None,
                  progress_bar_disable: bool = False,
@@ -871,101 +552,7 @@ chosen emissions, via the spect_band argument.</p>
     Raises:
         ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
-    # reorder the skymap list based on the site_uid_list supplied
-    skymaps_sorted = []
-    site_uid_list = []
-    if (site_uid_order is not None):
-        # need to specifically order the skymaps
-        #
-        # NOTE: can do an optimization here, but with only a few items
-        # ever in this list, it doesn&#39;t matter. A O(N)^2 routine is
-        # good enough.
-        for site_uid in site_uid_order:
-            for skymap in skymaps:
-                if (site_uid == skymap.site_uid):
-                    skymaps_sorted.append(skymap)
-                    site_uid_list.append(site_uid)
-        if (len(skymaps_sorted) != len(skymaps)):
-            raise ValueError(&#34;Number of items in supplied skymaps and site_uid_order lists do not match, or &#34; +
-                             &#34;some site_uids specified in the order were not found. Unable to flatten skymaps due to this mismatch.&#34;)
-    else:
-        site_uid_list = [x.site_uid for x in skymaps]
-        skymaps_sorted = skymaps
-
-    # define empty numpy arrays for the lats, lons, and elevation angles of all of
-    # the sites. Also define numpy arrays for &#39;filling&#39; the pixel coordinates, which
-    # will contain polygons vertices in lat/lon.
-    elevation = []
-    polyfill_lat = []
-    polyfill_lon = []
-    for skymap in skymaps_sorted:
-        if skymap.project_uid == &#39;spect&#39;:
-            elevation.append(np.zeros((skymap.full_elevation.shape[0])))
-            polyfill_lat.append(np.zeros((5, skymap.full_elevation.shape[0])))
-            polyfill_lon.append(np.zeros((5, skymap.full_elevation.shape[0])))
-        else:
-            elevation.append(np.zeros((skymap.full_elevation.shape[0] * skymap.full_elevation.shape[1])))
-            polyfill_lat.append(np.zeros((5, skymap.full_elevation.shape[0] * skymap.full_elevation.shape[1])))
-            polyfill_lon.append(np.zeros((5, skymap.full_elevation.shape[0] * skymap.full_elevation.shape[1])))
-
-    # set up processing objects
-    processing_dicts = []
-    for i in range(0, len(skymaps_sorted)):
-        processing_dicts.append({
-            &#34;skymap&#34;: skymaps_sorted[i],
-            &#34;height_km&#34;: height_km,
-            &#34;i&#34;: i,
-        })
-
-    if (n_parallel == 1):
-        # don&#39;t do anything special, just a basic loop
-        if (progress_bar_disable is True):
-            # no progress bar
-            for processing_dict in processing_dicts:
-                results_dict = __flatten_skymap(processing_dict)
-                elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-        else:
-            # with progress bar
-            for processing_dict in tqdm(processing_dicts, desc=&#34;Preparing skymaps: &#34;, unit=&#34;skymap&#34;):
-                results_dict = __flatten_skymap(processing_dict)
-                elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-    else:
-        # multiple workers, do it in a multiprocessing loop
-        if (progress_bar_disable is True):
-            with ProcessPoolExecutor(max_workers=n_parallel) as executor:
-                for results_dict in executor.map(__flatten_skymap, processing_dicts):
-                    elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                    polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                    polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-        else:
-            results_dicts = tqdm_process_map(
-                __flatten_skymap,
-                processing_dicts,
-                max_workers=n_parallel,
-                chunksize=1,
-                desc=&#34;Preparing skymaps: &#34;,
-                unit=&#34;skymap&#34;,
-                tqdm_class=tqdm,
-            )
-            for results_dict in results_dicts:
-                elevation[results_dict[&#34;i&#34;]] = results_dict[&#34;elevation&#34;]
-                polyfill_lon[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lon&#34;]
-                polyfill_lat[results_dict[&#34;i&#34;]] = results_dict[&#34;polyfill_lat&#34;]
-
-    # cast data into object
-    flattened_skymap = MosaicSkymap(
-        elevation=elevation,
-        polyfill_lat=polyfill_lat,
-        polyfill_lon=polyfill_lon,
-        site_uid_list=site_uid_list,
-    )
-
-    # return
-    return flattened_skymap</code></pre>
+    return func_prep_skymaps(self.__aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_disable, n_parallel)</code></pre>
 </details>
 <div class="desc"><p>Prepare skymap data for use by the mosaic routine. This is not time-dependent, so it
 would only need to be done once.</p>
@@ -994,8 +581,8 @@ consistent with the order of the <code>skymaps</code> parameter.</dd>
 </dl></div>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -1054,11 +641,16 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools" href="../index.html">pyaurorax.tools</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.tools.mosaic.MosaicManager" href="#pyaurorax.tools.mosaic.MosaicManager">MosaicManager</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.tools.mosaic.create" href="#pyaurorax.tools.mosaic.create">create</a></code></li>
-<li><code><a title="pyaurorax.tools.mosaic.prep_images" href="#pyaurorax.tools.mosaic.prep_images">prep_images</a></code></li>
-<li><code><a title="pyaurorax.tools.mosaic.prep_skymaps" href="#pyaurorax.tools.mosaic.prep_skymaps">prep_skymaps</a></code></li>
+<li><code><a title="pyaurorax.tools.mosaic.MosaicManager.create" href="#pyaurorax.tools.mosaic.MosaicManager.create">create</a></code></li>
+<li><code><a title="pyaurorax.tools.mosaic.MosaicManager.prep_images" href="#pyaurorax.tools.mosaic.MosaicManager.prep_images">prep_images</a></code></li>
+<li><code><a title="pyaurorax.tools.mosaic.MosaicManager.prep_skymaps" href="#pyaurorax.tools.mosaic.MosaicManager.prep_skymaps">prep_skymaps</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

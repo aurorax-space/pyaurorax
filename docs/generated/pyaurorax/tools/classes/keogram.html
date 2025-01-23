@@ -82,14 +82,19 @@ class Keogram:
     Attributes:
         data (numpy.ndarray): 
             The derived keogram data.
+
         timestamp (List[datetime.datetime]): 
             Timestamps corresponding to each keogram slice.
-        instrument_type (str):
+
+        instrument_type (str): 
             String giving instrument type, either &#39;asi&#39; or &#39;spectrograph&#39;.
+
         ccd_y (numpy.ndarray): 
             The y-axis representing CCD Y coordinates for the keogram.
+
         mag_y (numpy.ndarray): 
             The y-axis representing magnetic latitude for the keogram.
+
         geo_y (numpy.ndarray): 
             The y-axis representing geographic latitude for the keogram.
     &#34;&#34;&#34;
@@ -124,6 +129,26 @@ class Keogram:
         geo_y_str = &#34;None&#34; if self.geo_y is None else &#34;array(%d values)&#34; % (self.geo_y.shape[0])
 
         return &#34;Keogram(data=%s, timestamp=%s, ccd_y=%s, mag_y=%s, geo_y=%s)&#34; % (data_str, timestamp_str, ccd_y_str, mag_y_str, geo_y_str)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+        timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+        ccd_y_str = &#34;None&#34; if self.ccd_y is None else &#34;array(%d values)&#34; % (self.ccd_y.shape[0])
+        mag_y_str = &#34;None&#34; if self.mag_y is None else &#34;array(%d values)&#34; % (self.mag_y.shape[0])
+        geo_y_str = &#34;None&#34; if self.geo_y is None else &#34;array(%d values)&#34; % (self.geo_y.shape[0])
+
+        # print
+        print(&#34;Keogram:&#34;)
+        print(&#34;  %-17s: %s&#34; % (&#34;data&#34;, data_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;instrument_type&#34;, self.instrument_type))
+        print(&#34;  %-17s: %s&#34; % (&#34;ccd_y&#34;, ccd_y_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;geo_y&#34;, geo_y_str))
+        print(&#34;  %-17s: %s&#34; % (&#34;mag_y&#34;, mag_y_str))
 
     def set_geographic_latitudes(self, skymap: Skymap, altitude_km: Optional[Union[int, float]] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -286,7 +311,7 @@ class Keogram:
                 default is `ccd`. This parameter is required.
 
             title (str): 
-                The title to display above the plotted keogram.
+                The title to display above the plotted keogram. Default is no title.
 
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
@@ -355,13 +380,13 @@ class Keogram:
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
         if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                          &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
         elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                          &#34;savefig option parameters will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
 
         # init figure and plot data
         fig = plt.figure(figsize=figsize)
@@ -413,7 +438,7 @@ class Keogram:
 
             # do check for ccd_y
             if (self.ccd_y is None):
-                warnings.warn(
+                show_warning(
                     &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                     &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                     stacklevel=1,
@@ -466,9 +491,9 @@ class Keogram:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                                  &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                                  stacklevel=1)
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
             # clean up by closing the figure
@@ -493,8 +518,8 @@ class Keogram:
 <dd>The derived keogram data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
 <dd>Timestamps corresponding to each keogram slice.</dd>
-<dt>instrument_type (str):</dt>
-<dt>String giving instrument type, either 'asi' or 'spectrograph'.</dt>
+<dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
+<dd>String giving instrument type, either 'asi' or 'spectrograph'.</dd>
 <dt><strong><code>ccd_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The y-axis representing CCD Y coordinates for the keogram.</dd>
 <dt><strong><code>mag_y</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
@@ -539,7 +564,7 @@ class Keogram:
             default is `ccd`. This parameter is required.
 
         title (str): 
-            The title to display above the plotted keogram.
+            The title to display above the plotted keogram. Default is no title.
 
         figsize (tuple): 
             The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
@@ -608,13 +633,13 @@ class Keogram:
     if (returnfig is True and savefig is True):
         raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
     if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
     elif savefig is False and (savefig_filename is not None or savefig_quality is not None):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
 
     # init figure and plot data
     fig = plt.figure(figsize=figsize)
@@ -666,7 +691,7 @@ class Keogram:
 
         # do check for ccd_y
         if (self.ccd_y is None):
-            warnings.warn(
+            show_warning(
                 &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                 &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                 stacklevel=1,
@@ -719,9 +744,9 @@ class Keogram:
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
         # clean up by closing the figure
@@ -748,7 +773,7 @@ return the matplotlib plot object for further usage (using the <code>returnfig</
 <dd>Type of y-axis to use when plotting. Options are <code>ccd</code>, <code>mag</code>, or <code>geo</code>. The
 default is <code>ccd</code>. This parameter is required.</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
-<dd>The title to display above the plotted keogram.</dd>
+<dd>The title to display above the plotted keogram. Default is no title.</dd>
 <dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
 <dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
 <dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
@@ -803,6 +828,36 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <dt><code>ValueError</code></dt>
 <dd>Issues with the y-axis choice.</dd>
 </dl></div>
+</dd>
+<dt id="pyaurorax.tools.classes.keogram.Keogram.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    data_str = &#34;array(dims=%s, dtype=%s)&#34; % (self.data.shape, self.data.dtype)
+    timestamp_str = &#34;[%d datetime objects]&#34; % (len(self.timestamp))
+    ccd_y_str = &#34;None&#34; if self.ccd_y is None else &#34;array(%d values)&#34; % (self.ccd_y.shape[0])
+    mag_y_str = &#34;None&#34; if self.mag_y is None else &#34;array(%d values)&#34; % (self.mag_y.shape[0])
+    geo_y_str = &#34;None&#34; if self.geo_y is None else &#34;array(%d values)&#34; % (self.geo_y.shape[0])
+
+    # print
+    print(&#34;Keogram:&#34;)
+    print(&#34;  %-17s: %s&#34; % (&#34;data&#34;, data_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;timestamp&#34;, timestamp_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;instrument_type&#34;, self.instrument_type))
+    print(&#34;  %-17s: %s&#34; % (&#34;ccd_y&#34;, ccd_y_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;geo_y&#34;, geo_y_str))
+    print(&#34;  %-17s: %s&#34; % (&#34;mag_y&#34;, mag_y_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes"><code class="name flex">
 <span>def <span class="ident">set_geographic_latitudes</span></span>(<span>self,<br>skymap: pyucalgarysrs.data.classes.Skymap,<br>altitude_km: int | float | None = None) ‑> None</span>
@@ -1063,6 +1118,7 @@ setTimeout(() => input.focus(), 100);
 <h4><code><a title="pyaurorax.tools.classes.keogram.Keogram" href="#pyaurorax.tools.classes.keogram.Keogram">Keogram</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.tools.classes.keogram.Keogram.plot" href="#pyaurorax.tools.classes.keogram.Keogram.plot">plot</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.keogram.Keogram.pretty_print" href="#pyaurorax.tools.classes.keogram.Keogram.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes" href="#pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes">set_geographic_latitudes</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.keogram.Keogram.set_magnetic_latitudes" href="#pyaurorax.tools.classes.keogram.Keogram.set_magnetic_latitudes">set_magnetic_latitudes</a></code></li>
 </ul>

@@ -112,30 +112,55 @@ class Mosaic:
             polycollection_str = &#34;PolyCollection(...)&#34;
 
         if self.contour_data is not None:
-            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %s Contours)&#34; % (
+            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)&#34; % (
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get(&#34;x&#34;, [])),
             )
         else:
             return &#34;Mosaic(polygon_data=&#34; + polycollection_str + &#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
 
-    def plot(self,
-             map_extent: Sequence[Union[float, int]],
-             figsize: Optional[Tuple[int, int]] = None,
-             rayleighs: bool = False,
-             max_rayleighs: int = 20000,
-             title: Optional[str] = None,
-             colorbar_title: Optional[str] = None,
-             ocean_color: Optional[str] = None,
-             land_color: str = &#34;gray&#34;,
-             land_edgecolor: str = &#34;#8A8A8A&#34;,
-             borders_color: str = &#34;#AEAEAE&#34;,
-             borders_disable: bool = False,
-             cbar_colormap: str = &#34;&#34;,
-             returnfig: bool = False,
-             savefig: bool = False,
-             savefig_filename: Optional[str] = None,
-             savefig_quality: Optional[int] = None) -&gt; Any:
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        if isinstance(self.polygon_data, list):
+            polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+        else:
+            polycollection_str = &#34;PolyCollection(...)&#34;
+        cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+        if self.contour_data is not None:
+            contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+        else:
+            contour_data_str = &#34;None&#34;
+
+        # print
+        print(&#34;Mosaic:&#34;)
+        print(&#34;  %-23s: %s&#34; % (&#34;polygon_data&#34;, polycollection_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;spect_cmap&#34;, self.spect_cmap))
+        print(&#34;  %-23s: %s&#34; % (&#34;spect_intensity_scale&#34;, self.spect_intensity_scale))
+
+    def plot(
+            self,
+            map_extent: Sequence[Union[float, int]],
+            figsize: Optional[Tuple[int, int]] = None,
+            rayleighs: bool = False,
+            max_rayleighs: int = 20000,
+            title: Optional[str] = None,
+            ocean_color: Optional[str] = None,
+            land_color: str = &#34;gray&#34;,
+            land_edgecolor: str = &#34;#8A8A8A&#34;,
+            borders_color: str = &#34;#AEAEAE&#34;,
+            borders_disable: bool = False,
+            colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
+            cbar_title: Optional[str] = None,
+            cbar_colormap: str = &#34;&#34;,
+            returnfig: bool = False,
+            savefig: bool = False,
+            savefig_filename: Optional[str] = None,
+            savefig_quality: Optional[int] = None) -&gt; Any:
         &#34;&#34;&#34;
         Generate a plot of the mosaic data. 
         
@@ -156,6 +181,9 @@ class Mosaic:
             max_rayleighs (int): 
                 Max intensity scale for Rayleighs. Defaults to `20000`.
 
+            title (str): 
+                The title to display above the plotted mosaic. Default is no title.
+
             ocean_color (str): 
                 Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
                 as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
@@ -175,7 +203,13 @@ class Mosaic:
             borders_disable (bool): 
                 Disbale rendering of the borders. Default is `False`.
 
-            cbar_colorcmap (str): 
+            cbar_title (str): 
+                Title for the colorbar. Default is no title.
+
+            colorbar_title (str): 
+                Deprecated as of v1.10.0. Use &#39;cbar_title&#39; instead in the exact same way.
+
+            cbar_colormap (str): 
                 The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
                 mosaic was created with spectrograph data, in which case defaults to the colormap
                 used for spectrograph data..
@@ -217,19 +251,25 @@ class Mosaic:
 
         Raises:
         &#34;&#34;&#34;
+        # handle deprecation warnings
+        if (colorbar_title is not None):
+            show_warning(&#34;The parameter &#39;colorbar_title&#39; was deprecated in v1.11.0. Please use &#39;cbar_title&#39; instead (usage is identical).&#34;,
+                         stacklevel=1)
+            cbar_title = colorbar_title
+
         # check return mode
         if (returnfig is True and savefig is True):
             raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
         if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-            warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                          &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
         elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-            warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                          &#34;savefig option parameters will be ignored.&#34;,
-                          stacklevel=1)
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
 
-        # Get colormap if there is spectrograph data
+        # get colormap if there is spectrograph data
         if self.spect_cmap is not None:
             cbar_colormap = self.spect_cmap
 
@@ -328,7 +368,7 @@ class Mosaic:
             else:
                 cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
             cbar.ax.set_yticklabels(cbar_ticknames)
-            if colorbar_title is None:
+            if (cbar_title is None):
                 plt.text(1.025,
                          0.5,
                          &#34;Spectrograph Intensity (Rayleighs)&#34;,
@@ -341,7 +381,7 @@ class Mosaic:
             else:
                 plt.text(1.025,
                          0.5,
-                         colorbar_title,
+                         cbar_title,
                          fontsize=10,
                          transform=ax.transAxes,
                          va=&#34;center&#34;,
@@ -366,9 +406,9 @@ class Mosaic:
             else:
                 if (savefig_quality is not None):
                     # quality specified, but output filename is not a JPG, so show a warning
-                    warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                                  &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                                  stacklevel=1)
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
             # clean up by closing the figure
@@ -400,29 +440,32 @@ class Mosaic:
         Add geographic contours to a mosaic.
 
         Args:
-            lats (ndarray or list):
+            lats (ndarray or list): 
                 Sequence of geographic latitudes defining a contour.
             
-            lons (ndarray or list):
+            lons (ndarray or list): 
                 Sequence of geographic longitudes defining a contour.
 
-            constant_lats (float, int, or Sequence):
+            constant_lats (float, int, or Sequence): 
                 Geographic Latitude(s) at which to add line(s) of constant latitude.
             
-            constant_lons (float, int, or Sequence):
+            constant_lons (float, int, or Sequence): 
                 Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-            color (str):
+            color (str): 
                 The matplotlib color used for the contour(s).
 
-            linewidth (float or int):
+            linewidth (float or int): 
                 The contour thickness.
             
-            linestyle (str):
+            linestyle (str): 
                 The matplotlib linestyle used for the contour(s).
 
-            marker (str):
+            marker (str): 
                 The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -506,6 +549,7 @@ class Mosaic:
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
                 const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
                 # Add contour to dict, along with color and linewidth
                 self.contour_data[&#34;x&#34;].append(const_lat_x)
                 self.contour_data[&#34;y&#34;].append(const_lat_y)
@@ -553,32 +597,35 @@ class Mosaic:
         Add geomagnetic contours to a mosaic.
 
         Args:
-            timestamp (datetime.datetime):
+            timestamp (datetime.datetime): 
                 The timestamp used in computing AACGM coordinates.
 
-            lats (ndarray or list):
+            lats (ndarray or list): 
                 Sequence of geomagnetic latitudes defining a contour.
             
-            lons (ndarray or list):
+            lons (ndarray or list): 
                 Sequence of geomagnetic longitudes defining a contour.
 
-            constant_lats (float, int, Sequence):
+            constant_lats (float, int, Sequence): 
                 Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
             
-            constant_lons (float, int, Sequence):
+            constant_lons (float, int, Sequence): 
                 Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-            color (str):
+            color (str): 
                 The matplotlib color used for the contour(s).
 
-            linewidth (float or int):
+            linewidth (float or int): 
                 The contour thickness.
 
-            linestyle (str):
+            linestyle (str): 
                 The matplotlib linestyle used for the contour(s).
 
-            marker (str):
+            marker (str): 
                 The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
 
         Returns:
             The object&#39;s contour_data parameter is populated appropriately.
@@ -637,6 +684,7 @@ class Mosaic:
             # Create specified contour from magnetic coords
             y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
             x, y = transformer.transform(x, y)
+
             # Add contour to dict, along with color and linewidth
             self.contour_data[&#34;x&#34;].append(x)
             self.contour_data[&#34;y&#34;].append(y)
@@ -756,29 +804,32 @@ is scaled to in the mosaic, if any is present.</dd>
     Add geographic contours to a mosaic.
 
     Args:
-        lats (ndarray or list):
+        lats (ndarray or list): 
             Sequence of geographic latitudes defining a contour.
         
-        lons (ndarray or list):
+        lons (ndarray or list): 
             Sequence of geographic longitudes defining a contour.
 
-        constant_lats (float, int, or Sequence):
+        constant_lats (float, int, or Sequence): 
             Geographic Latitude(s) at which to add line(s) of constant latitude.
         
-        constant_lons (float, int, or Sequence):
+        constant_lons (float, int, or Sequence): 
             Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-        color (str):
+        color (str): 
             The matplotlib color used for the contour(s).
 
-        linewidth (float or int):
+        linewidth (float or int): 
             The contour thickness.
         
-        linestyle (str):
+        linestyle (str): 
             The matplotlib linestyle used for the contour(s).
 
-        marker (str):
+        marker (str): 
             The matplotlib marker used for the contour(s).
+
+        bring_to_front (bool): 
+            Plots the contour on top of all other currently plotted objects.
 
     Returns:
         The object&#39;s contour_data parameter is populated appropriately.
@@ -862,6 +913,7 @@ is scaled to in the mosaic, if any is present.</dd>
             const_lat_y = const_lat_y[sort_idx]
             const_lat_x = const_lat_x[sort_idx]
             const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
             # Add contour to dict, along with color and linewidth
             self.contour_data[&#34;x&#34;].append(const_lat_x)
             self.contour_data[&#34;y&#34;].append(const_lat_y)
@@ -896,22 +948,26 @@ is scaled to in the mosaic, if any is present.</dd>
 </details>
 <div class="desc"><p>Add geographic contours to a mosaic.</p>
 <h2 id="args">Args</h2>
-<p>lats (ndarray or list):
-Sequence of geographic latitudes defining a contour.</p>
-<p>lons (ndarray or list):
-Sequence of geographic longitudes defining a contour.</p>
-<p>constant_lats (float, int, or Sequence):
-Geographic Latitude(s) at which to add line(s) of constant latitude.</p>
-<p>constant_lons (float, int, or Sequence):
-Geographic Longitude(s) at which to add line(s) of constant longitude.</p>
-<p>color (str):
-The matplotlib color used for the contour(s).</p>
-<p>linewidth (float or int):
-The contour thickness.</p>
-<p>linestyle (str):
-The matplotlib linestyle used for the contour(s).</p>
-<p>marker (str):
-The matplotlib marker used for the contour(s).</p>
+<dl>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic latitudes defining a contour.</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
+<dd>Geographic Latitude(s) at which to add line(s) of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
+<dd>Geographic Longitude(s) at which to add line(s) of constant longitude.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>The contour thickness.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib linestyle used for the contour(s).</dd>
+<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib marker used for the contour(s).</dd>
+<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plots the contour on top of all other currently plotted objects.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>The object's contour_data parameter is populated appropriately.</p>
 <h2 id="raises">Raises</h2>
@@ -943,32 +999,35 @@ The matplotlib marker used for the contour(s).</p>
     Add geomagnetic contours to a mosaic.
 
     Args:
-        timestamp (datetime.datetime):
+        timestamp (datetime.datetime): 
             The timestamp used in computing AACGM coordinates.
 
-        lats (ndarray or list):
+        lats (ndarray or list): 
             Sequence of geomagnetic latitudes defining a contour.
         
-        lons (ndarray or list):
+        lons (ndarray or list): 
             Sequence of geomagnetic longitudes defining a contour.
 
-        constant_lats (float, int, Sequence):
+        constant_lats (float, int, Sequence): 
             Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
         
-        constant_lons (float, int, Sequence):
+        constant_lons (float, int, Sequence): 
             Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-        color (str):
+        color (str): 
             The matplotlib color used for the contour(s).
 
-        linewidth (float or int):
+        linewidth (float or int): 
             The contour thickness.
 
-        linestyle (str):
+        linestyle (str): 
             The matplotlib linestyle used for the contour(s).
 
-        marker (str):
+        marker (str): 
             The matplotlib marker used for the contour(s).
+
+        bring_to_front (bool): 
+            Plots the contour on top of all other currently plotted objects.
 
     Returns:
         The object&#39;s contour_data parameter is populated appropriately.
@@ -1027,6 +1086,7 @@ The matplotlib marker used for the contour(s).</p>
         # Create specified contour from magnetic coords
         y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
         x, y = transformer.transform(x, y)
+
         # Add contour to dict, along with color and linewidth
         self.contour_data[&#34;x&#34;].append(x)
         self.contour_data[&#34;y&#34;].append(y)
@@ -1086,24 +1146,28 @@ The matplotlib marker used for the contour(s).</p>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
 <h2 id="args">Args</h2>
-<p>timestamp (datetime.datetime):
-The timestamp used in computing AACGM coordinates.</p>
-<p>lats (ndarray or list):
-Sequence of geomagnetic latitudes defining a contour.</p>
-<p>lons (ndarray or list):
-Sequence of geomagnetic longitudes defining a contour.</p>
-<p>constant_lats (float, int, Sequence):
-Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</p>
-<p>constant_lons (float, int, Sequence):
-Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</p>
-<p>color (str):
-The matplotlib color used for the contour(s).</p>
-<p>linewidth (float or int):
-The contour thickness.</p>
-<p>linestyle (str):
-The matplotlib linestyle used for the contour(s).</p>
-<p>marker (str):
-The matplotlib marker used for the contour(s).</p>
+<dl>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The timestamp used in computing AACGM coordinates.</dd>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geomagnetic latitudes defining a contour.</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geomagnetic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
+<dd>Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
+<dd>Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>The contour thickness.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib linestyle used for the contour(s).</dd>
+<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib marker used for the contour(s).</dd>
+<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plots the contour on top of all other currently plotted objects.</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <p>The object's contour_data parameter is populated appropriately.</p>
 <h2 id="raises">Raises</h2>
@@ -1113,30 +1177,32 @@ The matplotlib marker used for the contour(s).</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>colorbar_title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>cbar_colormap: str = '',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>colorbar_title: str | None = None,<br>cbar_title: str | None = None,<br>cbar_colormap: str = '',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def plot(self,
-         map_extent: Sequence[Union[float, int]],
-         figsize: Optional[Tuple[int, int]] = None,
-         rayleighs: bool = False,
-         max_rayleighs: int = 20000,
-         title: Optional[str] = None,
-         colorbar_title: Optional[str] = None,
-         ocean_color: Optional[str] = None,
-         land_color: str = &#34;gray&#34;,
-         land_edgecolor: str = &#34;#8A8A8A&#34;,
-         borders_color: str = &#34;#AEAEAE&#34;,
-         borders_disable: bool = False,
-         cbar_colormap: str = &#34;&#34;,
-         returnfig: bool = False,
-         savefig: bool = False,
-         savefig_filename: Optional[str] = None,
-         savefig_quality: Optional[int] = None) -&gt; Any:
+<pre><code class="python">def plot(
+        self,
+        map_extent: Sequence[Union[float, int]],
+        figsize: Optional[Tuple[int, int]] = None,
+        rayleighs: bool = False,
+        max_rayleighs: int = 20000,
+        title: Optional[str] = None,
+        ocean_color: Optional[str] = None,
+        land_color: str = &#34;gray&#34;,
+        land_edgecolor: str = &#34;#8A8A8A&#34;,
+        borders_color: str = &#34;#AEAEAE&#34;,
+        borders_disable: bool = False,
+        colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
+        cbar_title: Optional[str] = None,
+        cbar_colormap: str = &#34;&#34;,
+        returnfig: bool = False,
+        savefig: bool = False,
+        savefig_filename: Optional[str] = None,
+        savefig_quality: Optional[int] = None) -&gt; Any:
     &#34;&#34;&#34;
     Generate a plot of the mosaic data. 
     
@@ -1157,6 +1223,9 @@ The matplotlib marker used for the contour(s).</p>
         max_rayleighs (int): 
             Max intensity scale for Rayleighs. Defaults to `20000`.
 
+        title (str): 
+            The title to display above the plotted mosaic. Default is no title.
+
         ocean_color (str): 
             Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
             as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
@@ -1176,7 +1245,13 @@ The matplotlib marker used for the contour(s).</p>
         borders_disable (bool): 
             Disbale rendering of the borders. Default is `False`.
 
-        cbar_colorcmap (str): 
+        cbar_title (str): 
+            Title for the colorbar. Default is no title.
+
+        colorbar_title (str): 
+            Deprecated as of v1.10.0. Use &#39;cbar_title&#39; instead in the exact same way.
+
+        cbar_colormap (str): 
             The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
             mosaic was created with spectrograph data, in which case defaults to the colormap
             used for spectrograph data..
@@ -1218,19 +1293,25 @@ The matplotlib marker used for the contour(s).</p>
 
     Raises:
     &#34;&#34;&#34;
+    # handle deprecation warnings
+    if (colorbar_title is not None):
+        show_warning(&#34;The parameter &#39;colorbar_title&#39; was deprecated in v1.11.0. Please use &#39;cbar_title&#39; instead (usage is identical).&#34;,
+                     stacklevel=1)
+        cbar_title = colorbar_title
+
     # check return mode
     if (returnfig is True and savefig is True):
         raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
     if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
-        warnings.warn(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
-                      &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
     elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
-        warnings.warn(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
-                      &#34;savefig option parameters will be ignored.&#34;,
-                      stacklevel=1)
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
 
-    # Get colormap if there is spectrograph data
+    # get colormap if there is spectrograph data
     if self.spect_cmap is not None:
         cbar_colormap = self.spect_cmap
 
@@ -1329,7 +1410,7 @@ The matplotlib marker used for the contour(s).</p>
         else:
             cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
         cbar.ax.set_yticklabels(cbar_ticknames)
-        if colorbar_title is None:
+        if (cbar_title is None):
             plt.text(1.025,
                      0.5,
                      &#34;Spectrograph Intensity (Rayleighs)&#34;,
@@ -1342,7 +1423,7 @@ The matplotlib marker used for the contour(s).</p>
         else:
             plt.text(1.025,
                      0.5,
-                     colorbar_title,
+                     cbar_title,
                      fontsize=10,
                      transform=ax.transAxes,
                      va=&#34;center&#34;,
@@ -1367,9 +1448,9 @@ The matplotlib marker used for the contour(s).</p>
         else:
             if (savefig_quality is not None):
                 # quality specified, but output filename is not a JPG, so show a warning
-                warnings.warn(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
-                              &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
-                              stacklevel=1)
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
             plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
 
         # clean up by closing the figure
@@ -1401,6 +1482,8 @@ and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
 <dd>Set to <code>True</code> if the data being plotted is in Rayleighs. Defaults to <code>False</code>.</dd>
 <dt><strong><code>max_rayleighs</code></strong> :&ensp;<code>int</code></dt>
 <dd>Max intensity scale for Rayleighs. Defaults to <code>20000</code>.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>The title to display above the plotted mosaic. Default is no title.</dd>
 <dt><strong><code>ocean_color</code></strong> :&ensp;<code>str</code></dt>
 <dd>Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
 as a word, or hexcode prefixed with a '#' character (ie. <code>#55AADD</code>).</dd>
@@ -1415,7 +1498,11 @@ hexcode prefixed with a '#' character.</dd>
 hexcode prefixed with a '#' character.</dd>
 <dt><strong><code>borders_disable</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Disbale rendering of the borders. Default is <code>False</code>.</dd>
-<dt><strong><code>cbar_colorcmap</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>cbar_title</code></strong> :&ensp;<code>str</code></dt>
+<dd>Title for the colorbar. Default is no title.</dd>
+<dt><strong><code>colorbar_title</code></strong> :&ensp;<code>str</code></dt>
+<dd>Deprecated as of v1.10.0. Use 'cbar_title' instead in the exact same way.</dd>
+<dt><strong><code>cbar_colormap</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>The matplotlib colormap to use for the plotted color bar. Default is <code>gray</code>, unless
 mosaic was created with spectrograph data, in which case defaults to the colormap
@@ -1453,6 +1540,39 @@ is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillo
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
+<dt id="pyaurorax.tools.classes.mosaic.Mosaic.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    if isinstance(self.polygon_data, list):
+        polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+    else:
+        polycollection_str = &#34;PolyCollection(...)&#34;
+    cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+    if self.contour_data is not None:
+        contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+    else:
+        contour_data_str = &#34;None&#34;
+
+    # print
+    print(&#34;Mosaic:&#34;)
+    print(&#34;  %-23s: %s&#34; % (&#34;polygon_data&#34;, polycollection_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;spect_cmap&#34;, self.spect_cmap))
+    print(&#34;  %-23s: %s&#34; % (&#34;spect_intensity_scale&#34;, self.spect_intensity_scale))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
 </dl>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicData"><code class="flex name class">
@@ -1472,13 +1592,17 @@ class MosaicData:
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
+
         timestamps (List[datetime.datetime]): 
             Timestamps of corresponding images.
+
         images (Dict[str, numpy.ndarray]): 
             Image data prepared into the necessary format; a dictionary. Keys are the site UID, 
             ndarray is the prepared data.
+
         images_dimensions (Dict[str, Tuple]): 
             The image dimensions.
+
         data_types (List[str]): 
             The data types for each data object.    
     &#34;&#34;&#34;
@@ -1493,11 +1617,30 @@ class MosaicData:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
-        unique_dimensions = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions)
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
         timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
 
-        return &#34;MosaicData(images=%s, timestamps=%s, site_uid_list=%s)&#34; % (images_str, timestamps_str, self.site_uid_list.__repr__())</code></pre>
+        # return
+        return &#34;MosaicData(images=%s, timestamps=%s, site_uid_list=%s)&#34; % (images_str, timestamps_str, self.site_uid_list.__repr__())
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
+        timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+
+        # print
+        print(&#34;MosaicData:&#34;)
+        print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
+        print(&#34;  %-19s: %s&#34; % (&#34;timestamps&#34;, timestamps_str))
+        print(&#34;  %-19s: %s&#34; % (&#34;images&#34;, images_str))
+        print(&#34;  %-19s: %s&#34; % (&#34;images_dimensions&#34;, self.images_dimensions))
+        print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
 </details>
 <div class="desc"><p>Prepared image data for use by mosaic routines.</p>
 <h2 id="attributes">Attributes</h2>
@@ -1537,6 +1680,36 @@ ndarray is the prepared data.</dd>
 <div class="desc"></div>
 </dd>
 </dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.classes.mosaic.MosaicData.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
+    timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+
+    # print
+    print(&#34;MosaicData:&#34;)
+    print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
+    print(&#34;  %-19s: %s&#34; % (&#34;timestamps&#34;, timestamps_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;images&#34;, images_str))
+    print(&#34;  %-19s: %s&#34; % (&#34;images_dimensions&#34;, self.images_dimensions))
+    print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap"><code class="flex name class">
 <span>class <span class="ident">MosaicSkymap</span></span>
@@ -1555,15 +1728,19 @@ class MosaicSkymap:
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
+
         elevation (List[numpy.ndarray]): 
             List of elevation data, with each element corresponding to each site. Order 
             matches that of the `site_uid_list` attribute.
+
         polyfoll_lat (List[numpy.ndarray]): 
             List of latitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
+
         polyfoll_lon (List[numpy.ndarray]): 
             List of longitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
+
     &#34;&#34;&#34;
 
     site_uid_list: List[str]
@@ -1575,6 +1752,7 @@ class MosaicSkymap:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
+        # set special strings
         unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
                                                           for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
                                                                                                                         &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
@@ -1587,12 +1765,36 @@ class MosaicSkymap:
         polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
         elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
 
+        # return
         return &#34;MosaicSkymap(polyfill_lat=%s, polyfill_lon=%s, elevation=%s, site_uid_list=%s)&#34; % (
             polyfill_lat_str,
             polyfill_lon_str,
             elevation_str,
             self.site_uid_list.__repr__(),
-        )</code></pre>
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                          for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                          for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+
+        polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
+        polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
+        elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
+
+        # print
+        print(&#34;MosaicSkymap:&#34;)
+        print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lat&#34;, polyfill_lat_str))
+        print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lon&#34;, polyfill_lon_str))
+        print(&#34;  %-15s: %s&#34; % (&#34;elevation&#34;, elevation_str))
+        print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
 </details>
 <div class="desc"><p>Prepared skymap data for use by mosaic routines.</p>
 <h2 id="attributes">Attributes</h2>
@@ -1626,6 +1828,42 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list"><code class="name">var <span class="ident">site_uid_list</span> : List[str]</code></dt>
 <dd>
 <div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                      for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                    &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
+                                                      for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
+                                                                                                                    &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+
+    polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
+    polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
+    elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
+
+    # print
+    print(&#34;MosaicSkymap:&#34;)
+    print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lat&#34;, polyfill_lat_str))
+    print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lon&#34;, polyfill_lon_str))
+    print(&#34;  %-15s: %s&#34; % (&#34;elevation&#34;, elevation_str))
+    print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -1699,16 +1937,18 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.contour_data" href="#pyaurorax.tools.classes.mosaic.Mosaic.contour_data">contour_data</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.plot" href="#pyaurorax.tools.classes.mosaic.Mosaic.plot">plot</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.polygon_data" href="#pyaurorax.tools.classes.mosaic.Mosaic.polygon_data">polygon_data</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.pretty_print" href="#pyaurorax.tools.classes.mosaic.Mosaic.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap" href="#pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap">spect_cmap</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale" href="#pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale">spect_intensity_scale</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="pyaurorax.tools.classes.mosaic.MosaicData" href="#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.data_types" href="#pyaurorax.tools.classes.mosaic.MosaicData.data_types">data_types</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.images" href="#pyaurorax.tools.classes.mosaic.MosaicData.images">images</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions" href="#pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions">images_dimensions</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.pretty_print" href="#pyaurorax.tools.classes.mosaic.MosaicData.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list" href="#pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list">site_uid_list</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.timestamps" href="#pyaurorax.tools.classes.mosaic.MosaicData.timestamps">timestamps</a></code></li>
 </ul>
@@ -1719,6 +1959,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation">elevation</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat">polyfill_lat</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon">polyfill_lon</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list">site_uid_list</a></code></li>
 </ul>
 </li>

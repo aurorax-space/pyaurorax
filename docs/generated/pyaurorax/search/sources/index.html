@@ -86,27 +86,51 @@ border-left: 1px solid #ddd;
     AuroraX data source record
 
     Attributes:
-        identifier (int): the unique AuroraX data source identifier
-        program (str): the program for this data source
-        platform (str): the platform for this data source
-        instrument_type (str): the instrument type for this data source
-        source_type (str): the data source type for this data source. Options are
-            in the pyaurorax.search.sources module, or at the top level using the
+        identifier (int): 
+            the unique AuroraX data source identifier
+
+        program (str): 
+            the program for this data source
+
+        platform (str): 
+            the platform for this data source
+
+        instrument_type (str): 
+            the instrument type for this data source
+
+        source_type (str): 
+            the data source type for this data source. Options are in the 
+            pyaurorax.search.sources module, or at the top level using the
             pyaurorax.search.SOURCE_TYPE_* variables.
-        display_name (str): the display name for this data source
-        metadata (Dict): metadata for this data source (arbitrary keys and values)
-        owner (str): the owner&#39;s email address of this data source
-        maintainers (List[str]): the email addresses of AuroraX accounts that can alter
-            this data source and its associated records
-        ephemeris_metadata_schema (Dict): a list of dictionaries capturing the metadata
-            keys and values that can appear in ephemeris records associated with
-            this data source
-        data_product_metadata_schema (Dict): a list of dictionaries capturing the metadata
-            keys and values that can appear in data product records associated with
-            this data source
-        format (str): the format used when printing the data source, defaults to
-            &#34;full_record&#34;. Other options are in the pyaurorax.search.sources module, or
-            at the top level using the pyaurorax.search.FORMAT_* variables.
+
+        display_name (str): 
+            the display name for this data source
+
+        metadata (Dict): 
+            metadata for this data source (arbitrary keys and values)
+
+        owner (str): 
+            the owner&#39;s email address of this data source
+
+        maintainers (List[str]): 
+            the email addresses of AuroraX accounts that can alter this data source and 
+            its associated records
+
+        ephemeris_metadata_schema (Dict): 
+            a list of dictionaries capturing the metadata keys and values that can appear 
+            in ephemeris records associated with this data source
+
+        data_product_metadata_schema (Dict): 
+            a list of dictionaries capturing the metadata keys and values that can appear 
+            in data product records associated with this data source
+
+        stats (DataSourceStatistics): 
+            data source statistics information
+            
+        format (str): 
+            the format used when printing the data source, defaults to `full_record`. Other 
+            options are in the pyaurorax.search.sources module, or at the top level using 
+            the pyaurorax.search.FORMAT_* variables.
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -194,8 +218,8 @@ border-left: 1px solid #ddd;
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>the instrument type for this data source</dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type for this data source. Options are
-in the pyaurorax.search.sources module, or at the top level using the
+<dd>the data source type for this data source. Options are in the
+pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>the display name for this data source</dd>
@@ -204,20 +228,20 @@ pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
 <dd>the owner's email address of this data source</dd>
 <dt><strong><code>maintainers</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the email addresses of AuroraX accounts that can alter
-this data source and its associated records</dd>
+<dd>the email addresses of AuroraX accounts that can alter this data source and
+its associated records</dd>
 <dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata
-keys and values that can appear in ephemeris records associated with
-this data source</dd>
+<dd>a list of dictionaries capturing the metadata keys and values that can appear
+in ephemeris records associated with this data source</dd>
 <dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata
-keys and values that can appear in data product records associated with
-this data source</dd>
+<dd>a list of dictionaries capturing the metadata keys and values that can appear
+in data product records associated with this data source</dd>
+<dt><strong><code>stats</code></strong> :&ensp;<code><a title="pyaurorax.search.sources.DataSourceStatistics" href="#pyaurorax.search.sources.DataSourceStatistics">DataSourceStatistics</a></code></dt>
+<dd>data source statistics information</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format used when printing the data source, defaults to
-"full_record". Other options are in the pyaurorax.search.sources module, or
-at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
+<dd>the format used when printing the data source, defaults to <code>full_record</code>. Other
+options are in the pyaurorax.search.sources module, or at the top level using
+the pyaurorax.search.FORMAT_* variables.</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>
@@ -279,12 +303,23 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
     Data source statistics information
 
     Attributes:
-        ephemeris_count (int): total number of ephemeris records for this data source
-        data_product_count (int): total number of ephemeris records for this data source
-        earliest_ephemeris_loaded (datetime.datetime): timestamp of the earliest ephemeris record
-        latest_ephemeris_loaded (datetime.datetime): timestamp of the latest ephemeris record
-        earliest_data_product_loaded (datetime.datetime): timestamp of the earliest data_product record
-        latest_data_product_loaded (datetime.datetime): timestamp of the latest data product record
+        ephemeris_count (int): 
+            total number of ephemeris records for this data source
+
+        data_product_count (int): 
+            total number of ephemeris records for this data source
+
+        earliest_ephemeris_loaded (datetime.datetime): 
+            timestamp of the earliest ephemeris record
+
+        latest_ephemeris_loaded (datetime.datetime): 
+            timestamp of the latest ephemeris record
+
+        earliest_data_product_loaded (datetime.datetime): 
+            timestamp of the earliest data_product record
+            
+        latest_data_product_loaded (datetime.datetime): 
+            timestamp of the latest data product record
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -397,23 +432,30 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Args:
             program (str): 
                 the program to filter for, defaults to `None`
+
             platform (str): 
                 the platform to filter for, defaults to `None`
+
             instrument_type (str): 
                 the instrument type to filter for, defaults to `None`
+
             source_type (str): 
                 the data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
+                
             owner (str): 
                 the owner&#39;s email address to filter for, defaults to `None`
+
             format (str): 
                 the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             order (str): 
                 the category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
+
             include_stats (bool): 
                 include additional stats information about the data source, defaults to `False`
 
@@ -555,17 +597,22 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Args:
             programs (List[str]): 
                 the programs to search for, defaults to `[]`
+
             platforms (List[str]): 
                 the platforms to search for, defaults to `[]`
-            instrument_type (List[str]): 
+
+            instrument_types (List[str]): 
                 the instrument types to search for, defaults to `[]`
+
             format (str): 
                 the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             order (str): 
                 the category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
+
             include_stats (bool): 
                 include additional stats information about the data source, defaults to `False`
 
@@ -597,14 +644,18 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Args:
             program (str): 
                 the program name
+
             platform (str): 
                 the platform name
+
             instrument_type (str): 
                 the instrument type name
+
             format (str): 
                 the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             include_stats (bool): 
                 include additional stats information about the data source, defaults to `False`
 
@@ -639,23 +690,30 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Args:
             program (str): 
                 the program to filter for, defaults to `None`
+
             platform (str): 
                 the platform to filter for, defaults to `None`
+                
             instrument_type (str): 
                 the instrument type to filter for, defaults to `None`
+
             source_type (str): 
                 the data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
+
             owner (str): 
                 the owner&#39;s email address to filter for, defaults to `None`
+
             format (str): 
                 the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             order (str): 
                 the category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
+
             include_stats (bool): 
                 include additional stats information about the data source, defaults to `False`.
 
@@ -684,10 +742,12 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Args:
             identifier (int): 
                 the AuroraX unique data source identifier number
+
             format (str): 
                 the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             include_stats (bool): 
                 include additional stats information about the data source, defaults to `False`
 
@@ -722,7 +782,8 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Delete a data source from the AuroraX search engine
 
         Args:
-            identifier (int): the data source unique identifier to delete
+            identifier (int): 
+                the data source unique identifier to delete
 
         Returns:
             0 on success, raises error if an issue was encountered
@@ -757,25 +818,37 @@ at the top level using the pyaurorax.search.FORMAT_* variables.</dd>
         Args:
             identifier (int): 
                 the AuroraX unique identifier for the data source, required and cannot be updated
+
             program (str): 
                 the new program for the data source, defaults to `None`
+
             platform (str): 
                 the new platform for the data source, defaults to `None`
+
             instrument_type (str): 
                 the new instrument type for the data source, defaults to `None`
+
             source_type (str): 
                 the new source type for the data source, defaults to `None`. Options
                 are in the pyaurorax.search.sources module, or at the top level using the
                 pyaurorax.search.SOURCE_TYPE_* variables.
+
             display_name (str): 
                 the new display name for the data source, defaults to `None`
+
             metadata (Dict): 
                 the new metadata for the data source, defaults to `None`
+
+            owner (str): 
+                the new owner for the data source, defaults to `None`
+
             maintainers (str): 
                 the new maintainer AuroraX account email addresses, defaults to `None`
+
             ephemeris_metadata_schema (List[Dict]): 
                 a list of dictionaries capturing the metadata keys and values that can 
                 appear in ephemeris records associated with the data source, defaults to `None`
+
             data_product_metadata_schema (List[Dict]): 
                 a list of dictionaries capturing the metadata keys and values that can appear 
                 in data product records associated with the data source, defaults to `None`
@@ -864,7 +937,8 @@ the submodules and carry over configuration information in the super class.</p><
     Delete a data source from the AuroraX search engine
 
     Args:
-        identifier (int): the data source unique identifier to delete
+        identifier (int): 
+            the data source unique identifier to delete
 
     Returns:
         0 on success, raises error if an issue was encountered
@@ -917,14 +991,18 @@ the submodules and carry over configuration information in the super class.</p><
     Args:
         program (str): 
             the program name
+
         platform (str): 
             the platform name
+
         instrument_type (str): 
             the instrument type name
+
         format (str): 
             the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
+
         include_stats (bool): 
             include additional stats information about the data source, defaults to `False`
 
@@ -993,23 +1071,30 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     Args:
         program (str): 
             the program to filter for, defaults to `None`
+
         platform (str): 
             the platform to filter for, defaults to `None`
+            
         instrument_type (str): 
             the instrument type to filter for, defaults to `None`
+
         source_type (str): 
             the data source type to filter for, defaults to `None`. Options are in 
             the pyaurorax.search.sources module, or at the top level using the 
             pyaurorax.search.SOURCE_TYPE_* variables.
+
         owner (str): 
             the owner&#39;s email address to filter for, defaults to `None`
+
         format (str): 
             the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
+
         order (str): 
             the category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
+
         include_stats (bool): 
             include additional stats information about the data source, defaults to `False`.
 
@@ -1079,10 +1164,12 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
     Args:
         identifier (int): 
             the AuroraX unique data source identifier number
+
         format (str): 
             the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
+
         include_stats (bool): 
             include additional stats information about the data source, defaults to `False`
 
@@ -1137,23 +1224,30 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     Args:
         program (str): 
             the program to filter for, defaults to `None`
+
         platform (str): 
             the platform to filter for, defaults to `None`
+
         instrument_type (str): 
             the instrument type to filter for, defaults to `None`
+
         source_type (str): 
             the data source type to filter for, defaults to `None`. Options are in 
             the pyaurorax.search.sources module, or at the top level using the 
             pyaurorax.search.SOURCE_TYPE_* variables.
+            
         owner (str): 
             the owner&#39;s email address to filter for, defaults to `None`
+
         format (str): 
             the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
+
         order (str): 
             the category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
+
         include_stats (bool): 
             include additional stats information about the data source, defaults to `False`
 
@@ -1377,17 +1471,22 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
     Args:
         programs (List[str]): 
             the programs to search for, defaults to `[]`
+
         platforms (List[str]): 
             the platforms to search for, defaults to `[]`
-        instrument_type (List[str]): 
+
+        instrument_types (List[str]): 
             the instrument types to search for, defaults to `[]`
+
         format (str): 
             the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
+
         order (str): 
             the category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
+
         include_stats (bool): 
             include additional stats information about the data source, defaults to `False`
 
@@ -1417,7 +1516,7 @@ supports single values for the parameters.</p>
 <dd>the programs to search for, defaults to <code>[]</code></dd>
 <dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>the platforms to search for, defaults to <code>[]</code></dd>
-<dt><strong><code>instrument_type</code></strong> :&ensp;<code>List[str]</code></dt>
+<dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>the instrument types to search for, defaults to <code>[]</code></dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
 <dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
@@ -1467,25 +1566,37 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
     Args:
         identifier (int): 
             the AuroraX unique identifier for the data source, required and cannot be updated
+
         program (str): 
             the new program for the data source, defaults to `None`
+
         platform (str): 
             the new platform for the data source, defaults to `None`
+
         instrument_type (str): 
             the new instrument type for the data source, defaults to `None`
+
         source_type (str): 
             the new source type for the data source, defaults to `None`. Options
             are in the pyaurorax.search.sources module, or at the top level using the
             pyaurorax.search.SOURCE_TYPE_* variables.
+
         display_name (str): 
             the new display name for the data source, defaults to `None`
+
         metadata (Dict): 
             the new metadata for the data source, defaults to `None`
+
+        owner (str): 
+            the new owner for the data source, defaults to `None`
+
         maintainers (str): 
             the new maintainer AuroraX account email addresses, defaults to `None`
+
         ephemeris_metadata_schema (List[Dict]): 
             a list of dictionaries capturing the metadata keys and values that can 
             appear in ephemeris records associated with the data source, defaults to `None`
+
         data_product_metadata_schema (List[Dict]): 
             a list of dictionaries capturing the metadata keys and values that can appear 
             in data product records associated with the data source, defaults to `None`
@@ -1535,6 +1646,8 @@ pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dd>the new display name for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>the new metadata for the data source, defaults to <code>None</code></dd>
+<dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
+<dd>the new owner for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>maintainers</code></strong> :&ensp;<code>str</code></dt>
 <dd>the new maintainer AuroraX account email addresses, defaults to <code>None</code></dd>
 <dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>List[Dict]</code></dt>
