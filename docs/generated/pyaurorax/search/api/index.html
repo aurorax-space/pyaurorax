@@ -154,6 +154,8 @@ not needed for most use-cases.</p>
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action
+            pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance
         &#34;&#34;&#34;
         # sanitize data
         body_santized = json.dumps(self.body, default=self.__json_converter)
@@ -275,6 +277,8 @@ requests to upload data that respond with just a 202 status code), defaults to <
 
     Raises:
         pyaurorax.exceptions.AuroraXAPIError: error during API call
+        pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action
+        pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance
     &#34;&#34;&#34;
     # sanitize data
     body_santized = json.dumps(self.body, default=self.__json_converter)
@@ -361,6 +365,10 @@ requests to upload data that respond with just a 202 status code), defaults to <
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>error during API call</dd>
+<dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
+<dd>unauthorized user attempted to perform this action</dd>
+<dt><code><a title="pyaurorax.exceptions.AuroraXMaintenanceError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXMaintenanceError">AuroraXMaintenanceError</a></code></dt>
+<dd>AuroraX API is currently undergoing maintenance</dd>
 </dl></div>
 </dd>
 </dl>

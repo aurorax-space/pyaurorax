@@ -631,7 +631,7 @@ class Mosaic:
             The object&#39;s contour_data parameter is populated appropriately.
 
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         &#34;&#34;&#34;
         # Make sure some form of lat/lon is provided
         if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
@@ -639,7 +639,7 @@ class Mosaic:
 
         # If manually passing in lats &amp; lons, make sure both are provided
         if (lats is not None or lons is not None) and (lats is None or lons is None):
-            raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
+            raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
         # Check that color exists in matplotlib
         if color not in matplotlib.colors.CSS4_COLORS:
@@ -1033,7 +1033,7 @@ is scaled to in the mosaic, if any is present.</dd>
         The object&#39;s contour_data parameter is populated appropriately.
 
     Raises:
-        ValueError: issues encountered with supplied parameters.
+        ValueError: issues encountered with supplied parameters
     &#34;&#34;&#34;
     # Make sure some form of lat/lon is provided
     if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
@@ -1041,7 +1041,7 @@ is scaled to in the mosaic, if any is present.</dd>
 
     # If manually passing in lats &amp; lons, make sure both are provided
     if (lats is not None or lons is not None) and (lats is None or lons is None):
-        raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
+        raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
     # Check that color exists in matplotlib
     if color not in matplotlib.colors.CSS4_COLORS:
@@ -1173,7 +1173,7 @@ is scaled to in the mosaic, if any is present.</dd>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues encountered with supplied parameters.</dd>
+<dd>issues encountered with supplied parameters</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.plot"><code class="name flex">

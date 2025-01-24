@@ -377,8 +377,8 @@ AuroraX platform …</p></div>
         return self.__progress_bar_backend
 
     @progress_bar_backend.setter
-    def progress_bar_backend(self, value: str):
-        value = value.lower()
+    def progress_bar_backend(self, value: Literal[&#34;auto&#34;, &#34;standard&#34;, &#34;notebook&#34;]):
+        value = value.lower()  # type: ignore
         if (value != &#34;auto&#34; and value != &#34;standard&#34; and value != &#34;notebook&#34;):
             raise AuroraXInitializationError(&#34;Invalid progress bar backend. Allowed values are &#39;auto&#39;, &#39;standard&#39; or &#39;notebook&#39;.&#34;)
         self.__progress_bar_backend = value

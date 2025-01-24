@@ -110,6 +110,9 @@ border-left: 1px solid #ddd;
                 the browser type to load using. Default is your default browser. Some common other 
                 options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
                 to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXError: unsupported browser specified
         &#34;&#34;&#34;
         return func_open_in_browser(search_obj, browser)
 
@@ -240,6 +243,9 @@ the 'request_id' value populated</dd>
             the browser type to load using. Default is your default browser. Some common other 
             options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
             to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
+    
+    Raises:
+        pyaurorax.exceptions.AuroraXError: unsupported browser specified
     &#34;&#34;&#34;
     return func_open_in_browser(search_obj, browser)</code></pre>
 </details>
@@ -253,7 +259,12 @@ the 'request_id' value populated</dd>
 <p>browser (str)):
 the browser type to load using. Default is your default browser. Some common other
 options are "google-chrome", "firefox", or "safari". For all available options, refer
-to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></p></div>
+to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>unsupported browser specified</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>

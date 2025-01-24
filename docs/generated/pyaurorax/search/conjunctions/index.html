@@ -226,6 +226,9 @@ here instead of digging in deeper to the submodules.</p>
 
         Returns:
             a `pyaurorax.search.ConjunctionSearch` object
+
+        Raises:
+            pyaurorax.exceptions.AuroraXSearchError: the API experienced a search error
         &#34;&#34;&#34;
         return func_search(
             self.__aurorax_obj,
@@ -257,6 +260,9 @@ here instead of digging in deeper to the submodules.</p>
 
         Returns:
             the &#34;SQL-like&#34; string describing the conjunction search object
+
+        Raises:
+            pyaurorax.exceptions.AuroraXError: invalid arguments
         &#34;&#34;&#34;
         return func_describe(self.__aurorax_obj, search_obj, query_dict)
 
@@ -320,6 +326,9 @@ def swarmaurora(self):
 
     Returns:
         the &#34;SQL-like&#34; string describing the conjunction search object
+
+    Raises:
+        pyaurorax.exceptions.AuroraXError: invalid arguments
     &#34;&#34;&#34;
     return func_describe(self.__aurorax_obj, search_obj, query_dict)</code></pre>
 </details>
@@ -333,7 +342,12 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 <dd>the conjunction search query represented as a raw dictionary, optional</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the "SQL-like" string describing the conjunction search object</p></div>
+<p>the "SQL-like" string describing the conjunction search object</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>invalid arguments</dd>
+</dl></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url"><code class="name flex">
 <span>def <span class="ident">get_request_url</span></span>(<span>self, request_id: str) ‑> str</span>
@@ -494,6 +508,9 @@ conjunction searches.</p>
 
     Returns:
         a `pyaurorax.search.ConjunctionSearch` object
+
+    Raises:
+        pyaurorax.exceptions.AuroraXSearchError: the API experienced a search error
     &#34;&#34;&#34;
     return func_search(
         self.__aurorax_obj,
@@ -602,7 +619,12 @@ be received, defaults to False</dd>
 <dd>show the progress of the request using the request log, defaults</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>a <code><a title="pyaurorax.search.ConjunctionSearch" href="../index.html#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code> object</p></div>
+<p>a <code><a title="pyaurorax.search.ConjunctionSearch" href="../index.html#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code> object</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXSearchError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXSearchError">AuroraXSearchError</a></code></dt>
+<dd>the API experienced a search error</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>

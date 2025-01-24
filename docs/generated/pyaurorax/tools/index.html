@@ -425,7 +425,7 @@ class Keogram:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice.
+            ValueError: issues encountered with the y-axis choice
         &#34;&#34;&#34;
         # check return mode
         if (returnfig is True and savefig is True):
@@ -678,7 +678,7 @@ class Keogram:
         set to True, the plotting variables `(fig, ax)` will be returned.
 
     Raises:
-        ValueError: Issues with the y-axis choice.
+        ValueError: issues encountered with the y-axis choice
     &#34;&#34;&#34;
     # check return mode
     if (returnfig is True and savefig is True):
@@ -877,7 +877,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>Issues with the y-axis choice.</dd>
+<dd>issues encountered with the y-axis choice</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.Keogram.pretty_print"><code class="name flex">
@@ -1246,7 +1246,7 @@ class Montage:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice, or rows/cols choice.
+            ValueError: issues with the y-axis choice, or rows/cols choice.
         &#34;&#34;&#34;
         # check rows and cols
         if (rows * cols != self.data.shape[-1]):
@@ -1449,7 +1449,7 @@ class Montage:
         set to True, the plotting variables `(fig, ax)` will be returned.
 
     Raises:
-        ValueError: Issues with the y-axis choice, or rows/cols choice.
+        ValueError: issues with the y-axis choice, or rows/cols choice.
     &#34;&#34;&#34;
     # check rows and cols
     if (rows * cols != self.data.shape[-1]):
@@ -1610,7 +1610,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>Issues with the y-axis choice, or rows/cols choice.</dd>
+<dd>issues with the y-axis choice, or rows/cols choice.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.Montage.pretty_print"><code class="name flex">
@@ -2204,7 +2204,7 @@ class Mosaic:
             The object&#39;s contour_data parameter is populated appropriately.
 
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         &#34;&#34;&#34;
         # Make sure some form of lat/lon is provided
         if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
@@ -2212,7 +2212,7 @@ class Mosaic:
 
         # If manually passing in lats &amp; lons, make sure both are provided
         if (lats is not None or lons is not None) and (lats is None or lons is None):
-            raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
+            raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
         # Check that color exists in matplotlib
         if color not in matplotlib.colors.CSS4_COLORS:
@@ -2606,7 +2606,7 @@ is scaled to in the mosaic, if any is present.</dd>
         The object&#39;s contour_data parameter is populated appropriately.
 
     Raises:
-        ValueError: issues encountered with supplied parameters.
+        ValueError: issues encountered with supplied parameters
     &#34;&#34;&#34;
     # Make sure some form of lat/lon is provided
     if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
@@ -2614,7 +2614,7 @@ is scaled to in the mosaic, if any is present.</dd>
 
     # If manually passing in lats &amp; lons, make sure both are provided
     if (lats is not None or lons is not None) and (lats is None or lons is None):
-        raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
+        raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
     # Check that color exists in matplotlib
     if color not in matplotlib.colors.CSS4_COLORS:
@@ -2746,7 +2746,7 @@ is scaled to in the mosaic, if any is present.</dd>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues encountered with supplied parameters.</dd>
+<dd>issues encountered with supplied parameters</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.Mosaic.plot"><code class="name flex">
@@ -3603,7 +3603,7 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: issues with supplied parameters.
+            ValueError: issues encountered with supplied parameters.
         &#34;&#34;&#34;
         return func_display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, savefig_filename, savefig_quality)
 
@@ -3679,7 +3679,7 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
             with the scaling applied.
 
         Raises:
-            ValueError: Issues with the supplied min, max, or top
+            ValueError: issues encountered with supplied min, max, or top value(s)
         &#34;&#34;&#34;
         return func_scale_intensity(data, min, max, top, memory_saver)
 
@@ -3906,7 +3906,7 @@ def spectra(self):
         set to True, the plotting variables `(fig, ax)` will be returned.
 
     Raises:
-        ValueError: issues with supplied parameters.
+        ValueError: issues encountered with supplied parameters.
     &#34;&#34;&#34;
     return func_display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, savefig_filename, savefig_quality)</code></pre>
 </details>
@@ -3963,7 +3963,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues with supplied parameters.</dd>
+<dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.ToolsManager.movie"><code class="name flex">
@@ -4077,7 +4077,7 @@ multiprocessing.</dd>
         with the scaling applied.
 
     Raises:
-        ValueError: Issues with the supplied min, max, or top
+        ValueError: issues encountered with supplied min, max, or top value(s)
     &#34;&#34;&#34;
     return func_scale_intensity(data, min, max, top, memory_saver)</code></pre>
 </details>
@@ -4107,7 +4107,7 @@ with the scaling applied.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>Issues with the supplied min, max, or top</dd>
+<dd>issues encountered with supplied min, max, or top value(s)</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.ToolsManager.set_theme"><code class="name flex">

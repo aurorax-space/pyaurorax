@@ -158,7 +158,8 @@ border-left: 1px solid #ddd;
             The generated `pyaurorax.tools.Mosaic` object.
 
         Raises:
-            ValueError: issues with supplied parameters.
+            ValueError: issues encountered with supplied parameters
+            pyaurorax.exceptions.AuroraXError: general issue encountered
         &#34;&#34;&#34;
         # handle deprecation warnings
         use_colormap = False
@@ -222,7 +223,7 @@ border-left: 1px solid #ddd;
             The prepared data, as a `pyaurorax.tools.MosaicData` object.
 
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         &#34;&#34;&#34;
         return func_prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg)
 
@@ -260,7 +261,7 @@ border-left: 1px solid #ddd;
             The prepared skymap data as a `pyaurorax.tools.MosaicSkymap` object.
             
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         &#34;&#34;&#34;
         return func_prep_skymaps(self.__aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_disable, n_parallel)</code></pre>
 </details>
@@ -351,7 +352,8 @@ the submodules and carry over configuration information in the super class.</p><
         The generated `pyaurorax.tools.Mosaic` object.
 
     Raises:
-        ValueError: issues with supplied parameters.
+        ValueError: issues encountered with supplied parameters
+        pyaurorax.exceptions.AuroraXError: general issue encountered
     &#34;&#34;&#34;
     # handle deprecation warnings
     use_colormap = False
@@ -434,7 +436,9 @@ the same range, or as a dictionary which can be used for scaling each site diffe
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues with supplied parameters.</dd>
+<dd>issues encountered with supplied parameters</dd>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>general issue encountered</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.mosaic.MosaicManager.prep_images"><code class="name flex">
@@ -478,7 +482,7 @@ the same range, or as a dictionary which can be used for scaling each site diffe
         The prepared data, as a `pyaurorax.tools.MosaicData` object.
 
     Raises:
-        ValueError: issues encountered with supplied parameters.
+        ValueError: issues encountered with supplied parameters
     &#34;&#34;&#34;
     return func_prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg)</code></pre>
 </details>
@@ -505,7 +509,7 @@ chosen emissions, via the spect_band argument.</dd>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues encountered with supplied parameters.</dd>
+<dd>issues encountered with supplied parameters</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.mosaic.MosaicManager.prep_skymaps"><code class="name flex">
@@ -550,7 +554,7 @@ chosen emissions, via the spect_band argument.</dd>
         The prepared skymap data as a `pyaurorax.tools.MosaicSkymap` object.
         
     Raises:
-        ValueError: issues encountered with supplied parameters.
+        ValueError: issues encountered with supplied parameters
     &#34;&#34;&#34;
     return func_prep_skymaps(self.__aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_disable, n_parallel)</code></pre>
 </details>
@@ -577,7 +581,7 @@ consistent with the order of the <code>skymaps</code> parameter.</dd>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>ValueError</code></dt>
-<dd>issues encountered with supplied parameters.</dd>
+<dd>issues encountered with supplied parameters</dd>
 </dl></div>
 </dd>
 </dl>
