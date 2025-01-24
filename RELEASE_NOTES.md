@@ -1,3 +1,8 @@
+Version 1.12.0
+-------------------
+- Type hinting updates
+
+
 Version 1.11.0
 -------------------
 - updates to docstrings

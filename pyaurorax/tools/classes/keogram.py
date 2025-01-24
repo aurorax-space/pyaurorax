@@ -326,7 +326,7 @@ class Keogram:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice.
+            ValueError: issues encountered with the y-axis choice
         """
         # check return mode
         if (returnfig is True and savefig is True):

@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 import matplotlib.collections
 from ..classes.mosaic import Mosaic
 from .._scale_intensity import scale_intensity
+from ...exceptions import AuroraXError
 
 # globals
 __DEFAULT_SCALE_MIN = 0
@@ -204,7 +205,7 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
 
         # This checks to make sure all images have the same timestamps
         if len(unique_timestamps) != 1:
-            raise Exception("Error: Images have different timestamps.")
+            raise AuroraXError("Error: Images have different timestamps.")
 
         # Create empty lists for tracking the pixel polygons and their values
         lon_list = []

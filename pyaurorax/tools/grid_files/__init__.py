@@ -56,6 +56,6 @@ class GridFilesManager:
             The prepared RGBA grid array.
 
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         """
         return func_prep_grid_image(self.__aurorax_obj, grid, fill_val, scale, cmap)

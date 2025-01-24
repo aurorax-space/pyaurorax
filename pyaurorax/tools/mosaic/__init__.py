@@ -112,7 +112,8 @@ class MosaicManager:
             The generated `pyaurorax.tools.Mosaic` object.
 
         Raises:
-            ValueError: issues with supplied parameters.
+            ValueError: issues encountered with supplied parameters
+            pyaurorax.exceptions.AuroraXError: general issue encountered
         """
         # handle deprecation warnings
         use_colormap = False
@@ -176,7 +177,7 @@ class MosaicManager:
             The prepared data, as a `pyaurorax.tools.MosaicData` object.
 
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         """
         return func_prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg)
 
@@ -214,6 +215,6 @@ class MosaicManager:
             The prepared skymap data as a `pyaurorax.tools.MosaicSkymap` object.
             
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         """
         return func_prep_skymaps(self.__aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_disable, n_parallel)

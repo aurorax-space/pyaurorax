@@ -94,6 +94,8 @@ class AuroraXAPIRequest:
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action
+            pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance
         """
         # sanitize data
         body_santized = json.dumps(self.body, default=self.__json_converter)

@@ -83,7 +83,7 @@ class KeogramManager:
             A `pyaurorax.tools.Keogram` object.
 
         Raises:
-            ValueError: issue with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         """
         return func_create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_band, spect_band_bg)
 
@@ -147,5 +147,6 @@ class KeogramManager:
             A `pyaurorax.tools.Keogram` object.
 
         Raises:
+            ValueError: issues encountered with supplied parameters
         """
         return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric)

@@ -726,7 +726,7 @@ class Mosaic:
             The object's contour_data parameter is populated appropriately.
 
         Raises:
-            ValueError: issues encountered with supplied parameters.
+            ValueError: issues encountered with supplied parameters
         """
         # Make sure some form of lat/lon is provided
         if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
@@ -734,7 +734,7 @@ class Mosaic:
 
         # If manually passing in lats & lons, make sure both are provided
         if (lats is not None or lons is not None) and (lats is None or lons is None):
-            raise (ValueError("Manually supplying contour requires both lats and lons."))
+            raise ValueError("Manually supplying contour requires both lats and lons.")
 
         # Check that color exists in matplotlib
         if color not in matplotlib.colors.CSS4_COLORS:

@@ -124,7 +124,7 @@ class SpectraManager:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice.
+            ValueError: issues encountered with supplied parameters
         """
         return func_plot(spect_data, timestamp, spect_loc, title, figsize, color, ylog, xlabel, ylabel, ylim, xlim, plot_line, plot_line_color,
                          returnfig, savefig, savefig_filename, savefig_quality)

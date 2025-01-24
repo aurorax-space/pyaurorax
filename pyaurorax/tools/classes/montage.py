@@ -157,7 +157,7 @@ class Montage:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: Issues with the y-axis choice, or rows/cols choice.
+            ValueError: issues with the y-axis choice, or rows/cols choice.
         """
         # check rows and cols
         if (rows * cols != self.data.shape[-1]):

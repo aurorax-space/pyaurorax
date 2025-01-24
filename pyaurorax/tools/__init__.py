@@ -217,7 +217,7 @@ class ToolsManager:
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
-            ValueError: issues with supplied parameters.
+            ValueError: issues encountered with supplied parameters.
         """
         return func_display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, savefig_filename, savefig_quality)
 
@@ -293,7 +293,7 @@ class ToolsManager:
             with the scaling applied.
 
         Raises:
-            ValueError: Issues with the supplied min, max, or top
+            ValueError: issues encountered with supplied min, max, or top value(s)
         """
         return func_scale_intensity(data, min, max, top, memory_saver)
 

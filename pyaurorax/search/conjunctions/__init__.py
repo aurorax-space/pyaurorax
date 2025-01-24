@@ -167,6 +167,9 @@ class ConjunctionsManager:
 
         Returns:
             a `pyaurorax.search.ConjunctionSearch` object
+
+        Raises:
+            pyaurorax.exceptions.AuroraXSearchError: the API experienced a search error
         """
         return func_search(
             self.__aurorax_obj,
@@ -198,6 +201,9 @@ class ConjunctionsManager:
 
         Returns:
             the "SQL-like" string describing the conjunction search object
+
+        Raises:
+            pyaurorax.exceptions.AuroraXError: invalid arguments
         """
         return func_describe(self.__aurorax_obj, search_obj, query_dict)
 

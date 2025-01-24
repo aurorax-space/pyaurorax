@@ -58,6 +58,9 @@ class SwarmAuroraManager:
                 the browser type to load using. Default is your default browser. Some common other 
                 options are "google-chrome", "firefox", or "safari". For all available options, refer 
                 to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXError: unsupported browser specified
         """
         return func_open_in_browser(search_obj, browser)
 

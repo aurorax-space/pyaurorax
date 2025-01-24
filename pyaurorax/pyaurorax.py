@@ -292,8 +292,8 @@ class PyAuroraX:
         return self.__progress_bar_backend
 
     @progress_bar_backend.setter
-    def progress_bar_backend(self, value: str):
-        value = value.lower()
+    def progress_bar_backend(self, value: Literal["auto", "standard", "notebook"]):
+        value = value.lower()  # type: ignore
         if (value != "auto" and value != "standard" and value != "notebook"):
             raise AuroraXInitializationError("Invalid progress bar backend. Allowed values are 'auto', 'standard' or 'notebook'.")
         self.__progress_bar_backend = value
