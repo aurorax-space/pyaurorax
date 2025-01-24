@@ -111,6 +111,36 @@ class SearchManager:
         self.__data_products = DataProductsManager(self.__aurorax_obj)
         self.__conjunctions = ConjunctionsManager(self.__aurorax_obj)
 
+        # initialize class vars
+        self.DataSource = DataSource
+        self.Location = Location
+        self.AvailabilityResult = AvailabilityResult
+        self.EphemerisData = EphemerisData
+        self.EphemerisSearch = EphemerisSearch
+        self.DataProductData = DataProductData
+        self.DataProductSearch = DataProductSearch
+        self.Conjunction = Conjunction
+        self.ConjunctionSearch = ConjunctionSearch
+
+        # initialize static vars
+        self.FORMAT_BASIC_INFO = FORMAT_BASIC_INFO
+        self.FORMAT_BASIC_INFO_WITH_METADATA = FORMAT_BASIC_INFO_WITH_METADATA
+        self.FORMAT_FULL_RECORD = FORMAT_FULL_RECORD
+        self.FORMAT_IDENTIFIER_ONLY = FORMAT_IDENTIFIER_ONLY
+        self.FORMAT_DEFAULT = FORMAT_DEFAULT
+        self.SOURCE_TYPE_EVENT_LIST = SOURCE_TYPE_EVENT_LIST
+        self.SOURCE_TYPE_GROUND = SOURCE_TYPE_GROUND
+        self.SOURCE_TYPE_HEO = SOURCE_TYPE_HEO
+        self.SOURCE_TYPE_LEO = SOURCE_TYPE_LEO
+        self.SOURCE_TYPE_LUNAR = SOURCE_TYPE_LUNAR
+        self.DATA_PRODUCT_TYPE_KEOGRAM = DATA_PRODUCT_TYPE_KEOGRAM
+        self.DATA_PRODUCT_TYPE_MONTAGE = DATA_PRODUCT_TYPE_MONTAGE
+        self.DATA_PRODUCT_TYPE_MOVIE = DATA_PRODUCT_TYPE_MOVIE
+        self.DATA_PRODUCT_TYPE_SUMMARY_PLOT = DATA_PRODUCT_TYPE_SUMMARY_PLOT
+        self.DATA_PRODUCT_TYPE_DATA_AVAILABILITY = DATA_PRODUCT_TYPE_DATA_AVAILABILITY
+        self.CONJUNCTION_TYPE_NBTRACE = CONJUNCTION_TYPE_NBTRACE
+        self.CONJUNCTION_TYPE_SBTRACE = CONJUNCTION_TYPE_SBTRACE
+
     # ------------------------------------------
     # properties for submodule managers
     # ------------------------------------------
