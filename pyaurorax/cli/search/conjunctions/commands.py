@@ -66,7 +66,6 @@ def __create_search_object_from_query(aurorax_obj, q):
     space = None if "space" not in q else q["space"]
     events = None if "events" not in q else q["events"]
     conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
-    epoch_search_precision = None if "epoch_search_precision" not in q else q["epoch_search_precision"]
     s = pyaurorax.search.ConjunctionSearch(aurorax_obj,
                                            start,
                                            end,
@@ -74,8 +73,7 @@ def __create_search_object_from_query(aurorax_obj, q):
                                            ground=ground,
                                            space=space,
                                            events=events,
-                                           conjunction_types=conjunction_types,
-                                           epoch_search_precision=epoch_search_precision)
+                                           conjunction_types=conjunction_types)
     return s
 
 
@@ -302,7 +300,6 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
     space = None if "space" not in q else q["space"]
     events = None if "events" not in q else q["events"]
     conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
-    epoch_search_precision = None if "epoch_search_precision" not in q else q["epoch_search_precision"]
     verbose_search = True if quiet is False else False
 
     # start search
@@ -313,7 +310,6 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                                                   space=space,
                                                   events=events,
                                                   conjunction_types=conjunction_types,
-                                                  epoch_search_precision=epoch_search_precision,
                                                   poll_interval=poll_interval,
                                                   verbose=verbose_search,
                                                   return_immediately=True)

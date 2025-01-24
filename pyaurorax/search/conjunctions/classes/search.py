@@ -18,8 +18,10 @@ Class definition for a conjunction search
 from __future__ import annotations
 import datetime
 import itertools
-from typing import TYPE_CHECKING, Dict, List, Union, Optional
+from copy import deepcopy
+from typing import TYPE_CHECKING, Dict, List, Union, Optional, Sequence
 from .conjunction import Conjunction, CONJUNCTION_TYPE_NBTRACE
+from .criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock
 from ...api import AuroraXAPIRequest
 from ...sources import DataSource, FORMAT_BASIC_INFO
 from ....exceptions import AuroraXError, AuroraXAPIError
@@ -39,80 +41,32 @@ class ConjunctionSearch:
 
     Attributes:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive).
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive).
 
         distance (int or float or Dict): 
-            the maximum distance allowed between data sources when searching for
+            The maximum distance allowed between data sources when searching for
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the "get_advanced_distances_combos()" function.
 
-        ground (List[Dict]): 
-            list of ground instrument search parameters, defaults to []
+        ground (List[GroundCriteriaBlock or Dict]): 
+            List of ground instrument criteria blocks, defaults to []. List items of Dict 
+            types have been deprecated as of v1.14.0.
 
-            Example:
+        space (List[SpaceCriteriaBlock or Dict]): 
+            List of space instrument criteria blocks, defaults to []. List items of Dict 
+            types have been deprecated as of v1.14.0.
 
-                [{
-                    "programs": ["themis-asi"],
-                    "platforms": ["gillam", "rabbit lake"],
-                    "instrument_types": ["RGB"],
-                    "ephemeris_metadata_filters": {
-                        "logical_operator": "AND",
-                        "expressions": [
-                            {
-                                "key": "calgary_apa_ml_v1",
-                                "operator": "in",
-                                "values": [ "classified as APA" ]
-                            }
-                        ]
-                    }
-                }]
-
-        space (List[Dict]): 
-            list of one or more space instrument search parameters, defaults to []
-
-            Example:
-
-                [{
-                    "programs": ["themis-asi", "swarm"],
-                    "platforms": ["themisa", "swarma"],
-                    "instrument_types": ["footprint"],
-                    "ephemeris_metadata_filters": {
-                        "logical_operator": "AND",
-                        "expressions": [
-                            {
-                                "key": "nbtrace_region",
-                                "operator": "in",
-                                "values": [ "north auroral oval" ]
-                            }
-                        ]
-                    },
-                    "hemisphere": [
-                        "northern"
-                    ]
-                }]
-
-        events (List[Dict]): 
-            list of one or more events search parameters, defaults to []
-
-            Example:
-
-                [{
-                    "programs": [ "events" ],
-                    "instrument_types": [ "substorm onsets" ]
-                }]
+        events (List[EventCriteriaBlock or Dict]): 
+            List of event criteria blocks, defaults to []. List items of Dict types have 
+            been deprecated as of v1.14.0.
 
         conjunction_types (List[str]): 
-            list of conjunction types, defaults to ["nbtrace"]. Options are
+            List of conjunction types, defaults to ["nbtrace"]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-
-        epoch_search_precision (int): 
-            the time precision to which conjunctions are calculated. Can be
-            30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-            development and still considered "alpha".
 
         response_format (Dict): 
             JSON representation of desired data response format
@@ -121,31 +75,31 @@ class ConjunctionSearch:
             AuroraXResponse object returned when the search is executed
 
         request_id (str): 
-            unique ID assigned to the request by the AuroraX API
+            Unique ID assigned to the request by the AuroraX API
 
         request_url (str): 
-            unique URL assigned to the request by the AuroraX API
+            Unique URL assigned to the request by the AuroraX API
 
         executed (bool): 
-            indicates if the search has been executed/started
+            Indicates if the search has been executed/started
 
         completed (bool): 
-            indicates if the search has finished
+            Indicates if the search has finished
 
         data_url (str): 
-            the URL where data is accessed
+            The URL where data is accessed
 
         query (Dict): 
-            the query for this request as JSON
+            The query for this request as JSON
 
         status (Dict): 
-            the status of the query
+            The status of the query
 
         data (List[Conjunction]): 
-            the conjunctions found
+            The conjunctions found
 
         logs (List[Dict]): 
-            all log messages outputted by the AuroraX API for this request
+            All log messages outputted by the AuroraX API for this request
     """
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -155,11 +109,10 @@ class ConjunctionSearch:
                  start: datetime.datetime,
                  end: datetime.datetime,
                  distance: Union[int, float, Dict],
-                 ground: Optional[List[Dict]] = None,
-                 space: Optional[List[Dict]] = None,
+                 ground: Optional[Sequence[Union[GroundCriteriaBlock, Dict]]] = None,
+                 space: Optional[Sequence[Union[SpaceCriteriaBlock, Dict]]] = None,
                  events: Optional[List[Dict]] = None,
                  conjunction_types: Optional[List[str]] = None,
-                 epoch_search_precision: Optional[int] = None,
                  response_format: Optional[Dict] = None):
 
         # set variables using passed in args
@@ -171,7 +124,7 @@ class ConjunctionSearch:
         self.events = [] if events is None else events
         self.distance = distance
         self.conjunction_types = [CONJUNCTION_TYPE_NBTRACE] if conjunction_types is None else conjunction_types
-        self.epoch_search_precision = 60 if epoch_search_precision is None else epoch_search_precision
+        self.epoch_search_precision = 60
         self.response_format = response_format
 
         # initialize additional variables
@@ -341,15 +294,40 @@ class ConjunctionSearch:
         Returns:
             the query parameter
         """
+        # set ground
+        ground_param = self.ground
+        if (isinstance(self.ground, list) and all(isinstance(item, GroundCriteriaBlock) for item in self.ground)):
+            # ground parameter is a list of GroundCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            ground_param = []
+            for g in self.ground:
+                this_g = deepcopy(g.__dict__)
+                this_g["ephemeris_metadata_filters"] = this_g["metadata_filters"]
+                del this_g["metadata_filters"]
+                ground_param.append(this_g)
+
+        # set space
+        space_param = self.space
+        if (isinstance(self.space, list) and all(isinstance(item, SpaceCriteriaBlock) for item in self.space)):
+            # space parameter is a list of SpaceCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            space_param = []
+            for s in self.space:
+                this_s = deepcopy(s.__dict__)
+                this_s["ephemeris_metadata_filters"] = this_s["metadata_filters"]
+                del this_s["metadata_filters"]
+                space_param.append(this_s)
+
+        # set query
         self.__query = {
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
-            "ground": self.ground,
-            "space": self.space,
+            "ground": ground_param,
+            "space": space_param,
             "events": self.events,
             "conjunction_types": self.conjunction_types,
             "max_distances": self.distance,
-            "epoch_search_precision": self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
+            "epoch_search_precision": self.epoch_search_precision,
         }
         return self.__query
 

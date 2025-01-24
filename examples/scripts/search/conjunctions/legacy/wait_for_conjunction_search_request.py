@@ -1,4 +1,5 @@
 import datetime
+import pprint
 import pyaurorax
 
 
@@ -9,9 +10,9 @@ def main():
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 6, 59, 59)
+    ground_params = [{"programs": ["themis-asi"]}]
+    space_params = [{"programs": ["swarm"]}]
     distance = 200
-    ground_params = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
-    space_params = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
 
     # create search object
     s = aurorax.search.conjunctions.search(
@@ -20,12 +21,21 @@ def main():
         ground=ground_params,
         space=space_params,
         distance=distance,
-        verbose=True,
+        return_immediately=True,
     )
 
-    # create the custom import file
-    filename = aurorax.search.conjunctions.swarmaurora.create_custom_import_file(s)
-    print("\nSwarm-Aurora custom import file: %s\n" % (filename))
+    # wait for data
+    print("\nWaiting for request to complete ...")
+    s.wait()
+
+    # get data
+    print("Get data ...")
+    s.get_data()
+
+    # print data
+    print()
+    pprint.pprint(s.data)
+    print()
 
 
 # ----------

@@ -22,8 +22,7 @@ from .classes.search import ConjunctionSearch
 from ..api import AuroraXAPIRequest
 
 
-def search(aurorax_obj, start, end, distance, ground, space, events, conjunction_types, epoch_search_precision, response_format, poll_interval,
-           return_immediately, verbose):
+def search(aurorax_obj, start, end, distance, ground, space, events, conjunction_types, response_format, poll_interval, return_immediately, verbose):
     # create a Search object
     s = ConjunctionSearch(aurorax_obj,
                           start,
@@ -33,7 +32,6 @@ def search(aurorax_obj, start, end, distance, ground, space, events, conjunction
                           space=space,
                           events=events,
                           conjunction_types=conjunction_types,
-                          epoch_search_precision=epoch_search_precision,
                           response_format=response_format)
     if (verbose is True):
         print(f"[{datetime.datetime.now()}] Search object created")
