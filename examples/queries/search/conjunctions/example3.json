@@ -36,6 +36,5 @@
   "events": [],
   "max_distances": {
     "ground1-space1": 500
-  },
-  "epoch_search_precision": 60
+  }
 }

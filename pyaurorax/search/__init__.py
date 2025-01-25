@@ -26,7 +26,8 @@ from .data_products.classes.data_product import DataProductData
 from .data_products.classes.search import DataProductSearch
 from .conjunctions.classes.conjunction import Conjunction
 from .conjunctions.classes.search import ConjunctionSearch
-from .conjunctions.classes.criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock
+from .conjunctions.classes.criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock, EventsCriteriaBlock
+from .metadata_filters import MetadataFilter, MetadataFilterExpression
 
 # pull in constants
 from .sources.classes.data_source import (
@@ -91,6 +92,9 @@ __all__ = [
     "ConjunctionSearch",
     "GroundCriteriaBlock",
     "SpaceCriteriaBlock",
+    "EventsCriteriaBlock",
+    "MetadataFilter",
+    "MetadataFilterExpression",
 ]
 
 
@@ -117,8 +121,11 @@ class SearchManager:
         # initialize class vars
         self.DataSource = DataSource
         self.Location = Location
+        self.MetadataFilter = MetadataFilter
+        self.MetadataFilterExpression = MetadataFilterExpression
         self.GroundCriteriaBlock = GroundCriteriaBlock
         self.SpaceCriteriaBlock = SpaceCriteriaBlock
+        self.EventsCriteriaBlock = EventsCriteriaBlock
         self.ConjunctionSearch = ConjunctionSearch
         self.EphemerisSearch = EphemerisSearch
         self.DataProductSearch = DataProductSearch

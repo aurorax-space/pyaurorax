@@ -480,36 +480,6 @@ def test_conjunctions_search_asynchronous_with_conjunction_types(aurorax):
 
 
 @pytest.mark.search_conjunctions
-@pytest.mark.parametrize("precision_value", [30, 60])
-def test_conjunctions_search_asynchronous_with_epoch_precision(aurorax, precision_value):
-    # set up params
-    start = datetime.datetime(2008, 1, 1, 0, 0, 0)
-    end = datetime.datetime(2008, 1, 1, 23, 59, 59)
-    ground_params = [{"programs": ["themis-asi"], "instrument_types": ["panchromatic ASI"]}]
-    space_params = [{"programs": ["themis"], "instrument_types": ["footprint"]}]
-    distance = 500
-
-    # do asynchronous search
-    s = aurorax.search.conjunctions.search(
-        start,
-        end,
-        distance,
-        ground=ground_params,
-        space=space_params,
-        epoch_search_precision=precision_value,
-    )
-
-    # wait for the request to finish, get the data once done
-    s.wait()
-    s.get_data()
-
-    # check to make sure we got at least one result, and the
-    # first result is a Conjunction object
-    assert len(s.data) > 0
-    assert isinstance(s.data[0], Conjunction) is True
-
-
-@pytest.mark.search_conjunctions
 def test_conjunction_search_describe(aurorax):
     # set params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)

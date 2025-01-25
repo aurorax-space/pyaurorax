@@ -49,6 +49,5 @@
     "ground1-space1": 900,
     "ground1-space2": 900,
     "space1-space2": null
-  },
-  "epoch_search_precision": 60
+  }
 }

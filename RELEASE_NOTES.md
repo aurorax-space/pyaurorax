@@ -1,11 +1,14 @@
 Version 1.12.0
 -------------------
-- Type hinting updates
-- Updates to conjunction, ephemeris, and data product searching in the `aurorax.search` module
+- updates to conjunction, ephemeris, and data product searching in the `aurorax.search` module
   - added new criteria block classes to help with searching: `GroundCriteriaBlock`, `SpaceCriteriaBlock`, `EventCriteriaBlock` (#54, #51)
-  - added new `MetadataFilterExpression` class to help with searching (#28)
+  - added new `MetadataFilter` and `MetadataFilterExpression` classes to help with searching (#28)
   - added support for custom lat/lon searching (#81)
-  - deprecated ground/space/events parameters as `Dict` type, included warnings
+  - removed `epoch_search_precision` field for conjunction searching
+- added `limit` parameter to `aurorax.search.sources.list_in_table()` function
+- added `aurorax.search.conjunctions.create_advanced_distance_combos()` helper function for complex conjunction searches
+- updates to crib sheets to show how to use updated conjunction, ephemeris, and data products search functions
+- type hinting updates
 
 
 Version 1.11.0

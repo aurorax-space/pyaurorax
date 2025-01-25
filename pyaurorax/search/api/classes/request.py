@@ -134,6 +134,10 @@ class AuroraXAPIRequest:
             else:
                 raise AuroraXAPIError("API error code 404: not found")
 
+        # check for 400
+        if (req.status_code == 400):
+            raise AuroraXAPIError("API error code %d: %s" % (req.status_code, req.content.decode()))
+
         # check for server error
         if (req.status_code == 500):
             response_json = req.json()

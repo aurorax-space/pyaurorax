@@ -19,9 +19,9 @@ from __future__ import annotations
 import datetime
 import itertools
 from copy import deepcopy
-from typing import TYPE_CHECKING, Dict, List, Union, Optional, Sequence
-from .conjunction import Conjunction, CONJUNCTION_TYPE_NBTRACE
-from .criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock
+from typing import TYPE_CHECKING, Dict, Union, Optional, Sequence, Literal
+from .conjunction import Conjunction
+from .criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock, EventsCriteriaBlock
 from ...api import AuroraXAPIRequest
 from ...sources import DataSource, FORMAT_BASIC_INFO
 from ....exceptions import AuroraXError, AuroraXAPIError
@@ -52,14 +52,12 @@ class ConjunctionSearch:
             modified from the output of the "get_advanced_distances_combos()" function.
 
         ground (List[GroundCriteriaBlock or Dict]): 
-            List of ground instrument criteria blocks, defaults to []. List items of Dict 
-            types have been deprecated as of v1.14.0.
+            List of ground instrument criteria blocks, defaults to [].
 
         space (List[SpaceCriteriaBlock or Dict]): 
-            List of space instrument criteria blocks, defaults to []. List items of Dict 
-            types have been deprecated as of v1.14.0.
+            List of space instrument criteria blocks, defaults to [].
 
-        events (List[EventCriteriaBlock or Dict]): 
+        events (List[EventsCriteriaBlock or Dict]): 
             List of event criteria blocks, defaults to []. List items of Dict types have 
             been deprecated as of v1.14.0.
 
@@ -109,21 +107,21 @@ class ConjunctionSearch:
                  start: datetime.datetime,
                  end: datetime.datetime,
                  distance: Union[int, float, Dict],
-                 ground: Optional[Sequence[Union[GroundCriteriaBlock, Dict]]] = None,
-                 space: Optional[Sequence[Union[SpaceCriteriaBlock, Dict]]] = None,
-                 events: Optional[List[Dict]] = None,
-                 conjunction_types: Optional[List[str]] = None,
+                 ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
+                 space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
+                 events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
+                 conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace"]]] = ["nbtrace"],
                  response_format: Optional[Dict] = None):
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
         self.start = start
         self.end = end
-        self.ground = [] if ground is None else ground
-        self.space = [] if space is None else space
-        self.events = [] if events is None else events
+        self.ground = ground
+        self.space = space
+        self.events = events
         self.distance = distance
-        self.conjunction_types = [CONJUNCTION_TYPE_NBTRACE] if conjunction_types is None else conjunction_types
+        self.conjunction_types = conjunction_types
         self.epoch_search_precision = 60
         self.response_format = response_format
 
@@ -300,11 +298,13 @@ class ConjunctionSearch:
             # ground parameter is a list of GroundCriteriaBlock objects, so we
             # want to set the query to the dict version of it
             ground_param = []
-            for g in self.ground:
-                this_g = deepcopy(g.__dict__)
-                this_g["ephemeris_metadata_filters"] = this_g["metadata_filters"]
-                del this_g["metadata_filters"]
-                ground_param.append(this_g)
+            for val in self.ground:
+                this_dict = deepcopy(val.__dict__)
+                this_dict["ephemeris_metadata_filters"] = this_dict["metadata_filters"]
+                del this_dict["metadata_filters"]
+                if (this_dict["ephemeris_metadata_filters"] is not None):
+                    this_dict["ephemeris_metadata_filters"] = this_dict["ephemeris_metadata_filters"].to_query_dict()
+                ground_param.append(this_dict)
 
         # set space
         space_param = self.space
@@ -312,11 +312,28 @@ class ConjunctionSearch:
             # space parameter is a list of SpaceCriteriaBlock objects, so we
             # want to set the query to the dict version of it
             space_param = []
-            for s in self.space:
-                this_s = deepcopy(s.__dict__)
-                this_s["ephemeris_metadata_filters"] = this_s["metadata_filters"]
-                del this_s["metadata_filters"]
-                space_param.append(this_s)
+            for val in self.space:
+                this_dict = deepcopy(val.__dict__)
+                this_dict["ephemeris_metadata_filters"] = this_dict["metadata_filters"]
+                del this_dict["metadata_filters"]
+                if (this_dict["ephemeris_metadata_filters"] is not None):
+                    this_dict["ephemeris_metadata_filters"] = this_dict["ephemeris_metadata_filters"].to_query_dict()
+                space_param.append(this_dict)
+
+        # set events
+        events_param = self.events
+        if (isinstance(self.events, list) and all(isinstance(item, EventsCriteriaBlock) for item in self.events)):
+            # space parameter is a list of EventsCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            events_param = []
+            for val in self.events:
+                this_dict = deepcopy(val.__dict__)
+                this_dict["ephemeris_metadata_filters"] = this_dict["metadata_filters"]
+                this_dict["programs"] = ["events"]
+                del this_dict["metadata_filters"]
+                if (this_dict["ephemeris_metadata_filters"] is not None):
+                    this_dict["ephemeris_metadata_filters"] = this_dict["ephemeris_metadata_filters"].to_query_dict()
+                events_param.append(this_dict)
 
         # set query
         self.__query = {
@@ -324,7 +341,7 @@ class ConjunctionSearch:
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
             "ground": ground_param,
             "space": space_param,
-            "events": self.events,
+            "events": events_param,
             "conjunction_types": self.conjunction_types,
             "max_distances": self.distance,
             "epoch_search_precision": self.epoch_search_precision,

@@ -17,6 +17,7 @@ Functions for performing conjunction searches
 
 import datetime
 import humanize
+import itertools
 from ...exceptions import AuroraXSearchError, AuroraXError
 from .classes.search import ConjunctionSearch
 from ..api import AuroraXAPIRequest
@@ -95,3 +96,22 @@ def describe(aurorax_obj, search_obj, query_dict):
 def get_request_url(aurorax_obj, request_id):
     url = "%s/%s" % (aurorax_obj.api_base_url, aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(request_id))
     return url
+
+
+def create_advanced_distance_combos(distance, ground, space, events):
+    # set input arrays
+    options = []
+    for i in range(0, ground):
+        options.append("ground%d" % (i + 1))
+    for i in range(0, space):
+        options.append("space%d" % (i + 1))
+    for i in range(0, events):
+        options.append("events%d" % (i + 1))
+
+    # derive all combinations of options of size 2
+    combinations = {}
+    for element in itertools.combinations(options, r=2):
+        combinations["%s-%s" % (element[0], element[1])] = distance
+
+    # return
+    return combinations

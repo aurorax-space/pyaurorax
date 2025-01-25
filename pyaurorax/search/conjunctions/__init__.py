@@ -21,13 +21,18 @@ here instead of digging in deeper to the submodules.
 """
 
 import datetime
-from typing import Dict, List, Optional, Union, Sequence
+from typing import Dict, Optional, Union, Sequence, Literal
 from .swarmaurora import SwarmAuroraManager
 from .classes.search import ConjunctionSearch
-from .classes.criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock
+from .classes.criteria_block import (
+    GroundCriteriaBlock,
+    SpaceCriteriaBlock,
+    EventsCriteriaBlock,
+)
 from ._conjunctions import search as func_search
 from ._conjunctions import describe as func_describe
 from ._conjunctions import get_request_url as func_get_request_url
+from ._conjunctions import create_advanced_distance_combos as func_create_advanced_distance_combos
 
 __all__ = ["ConjunctionsManager"]
 
@@ -57,14 +62,14 @@ class ConjunctionsManager:
                start: datetime.datetime,
                end: datetime.datetime,
                distance: Union[int, float, Dict],
-               ground: Optional[Sequence[Union[GroundCriteriaBlock, Dict]]] = [],
-               space: Optional[Sequence[Union[SpaceCriteriaBlock, Dict]]] = [],
-               events: Optional[Sequence[Union[EventCriteriaBlock, Dict]]] = [],
-               conjunction_types: Optional[List[str]] = [],
+               ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
+               space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
+               events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
+               conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace"]]] = [],
                response_format: Optional[Dict] = None,
-               poll_interval: Optional[float] = __STANDARD_POLLING_SLEEP_TIME,
-               return_immediately: Optional[bool] = False,
-               verbose: Optional[bool] = False) -> ConjunctionSearch:
+               poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
+               return_immediately: bool = False,
+               verbose: bool = False) -> ConjunctionSearch:
         """
         Search for conjunctions between data sources
 
@@ -94,14 +99,13 @@ class ConjunctionsManager:
                 List of space instrument criteria blocks, defaults to []. List items of Dict 
                 types have been deprecated as of v1.14.0.
 
-            events (List[EventCriteriaBlock or Dict]): 
-                List of event criteria blocks, defaults to []. List items of Dict 
-                types have been deprecated as of v1.14.0.
+            events (List[EventsCriteriaBlock or Dict]): 
+                List of event criteria blocks, defaults to []. List items of Dict types have 
+                been deprecated as of v1.14.0.
 
             conjunction_types (List[str]): 
-                List of conjunction types, defaults to [] (meaning all conjunction types). Options 
-                are in the pyaurorax.conjunctions module, or at the top level using the 
-                pyaurorax.CONJUNCTION_TYPE_* variables.
+                List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+                options are 'nbtrace' or 'sbtrace'. Defaults to 'nbtrace'.
 
             response_format (Dict): 
                 JSON representation of desired data response format.
@@ -172,3 +176,31 @@ class ConjunctionsManager:
             the request URL
         """
         return func_get_request_url(self.__aurorax_obj, request_id)
+
+    def create_advanced_distance_combos(
+        self,
+        distance: int,
+        ground: int = 0,
+        space: int = 0,
+        events: int = 0,
+    ) -> Dict:
+        """
+        Get the advanced distances combinations for the specified parameters
+
+        Args:
+            default_distance (int): 
+                the default distance to use, defaults to None
+            
+            ground (int): 
+                the number of ground criteria blocks, defaults to 0
+
+            space (int): 
+                the number of space criteria blocks, defaults to 0
+
+            events (int): 
+                the number of events criteria blocks, defaults to 0
+
+        Returns:
+            the advanced distances combinations
+        """
+        return func_create_advanced_distance_combos(distance, ground, space, events)

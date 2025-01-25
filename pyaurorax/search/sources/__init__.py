@@ -134,7 +134,8 @@ class SourcesManager:
                       source_type: Optional[str] = None,
                       owner: Optional[str] = None,
                       order: Optional[str] = "identifier",
-                      table_max_width: int = 200) -> None:
+                      table_max_width: int = 200,
+                      limit: Optional[int] = None) -> None:
         """
         Display all data source records in a table. Parameters can be used to filter as desired.
 
@@ -168,6 +169,10 @@ class SourcesManager:
             table_max_width (int): 
                 table maximum width, defaults to 200
 
+            limit (int): 
+                limit the table rows to a certain value, regardless of how many sources it found
+                to display
+
         Returns:
             No return, only prints a table
 
@@ -182,10 +187,14 @@ class SourcesManager:
             instrument_type,
             source_type,
             owner,
-            FORMAT_BASIC_INFO,
+            FORMAT_FULL_RECORD,
             order,
             False,
         )
+
+        # reduce based on limit
+        if (limit is not None and len(datasets) > limit):
+            datasets = datasets[0:limit]
 
         # set table lists
         table_identifiers = []

@@ -62,10 +62,10 @@ def __create_search_object_from_query(aurorax_obj, q):
     start = parse(q["start"], ignoretz=True)
     end = parse(q["end"], ignoretz=True)
     max_distances = q["max_distances"]
-    ground = None if "ground" not in q else q["ground"]
-    space = None if "space" not in q else q["space"]
-    events = None if "events" not in q else q["events"]
-    conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
+    ground = [] if "ground" not in q else q["ground"]
+    space = [] if "space" not in q else q["space"]
+    events = [] if "events" not in q else q["events"]
+    conjunction_types = [] if "conjunction_types" not in q else q["conjunction_types"]
     s = pyaurorax.search.ConjunctionSearch(aurorax_obj,
                                            start,
                                            end,

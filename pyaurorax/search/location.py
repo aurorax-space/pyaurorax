@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-AuroraX `pyaurorax.search.location.Location` class definition
+Class definition for AuroraX search engine location data
 """
 
 from typing import Optional, Dict
@@ -20,8 +20,8 @@ from typing import Optional, Dict
 
 class Location:
     """
-    Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
-    or northern/southern B-trace magnetic footprints.
+    Representation for an AuroraX search engine location. This data can be in geodetic 
+    coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.
 
     Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
     for latitude and -180 to 180 for longitude.

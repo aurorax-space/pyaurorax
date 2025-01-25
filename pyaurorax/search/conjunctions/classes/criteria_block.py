@@ -15,7 +15,8 @@
 Class definition for a criteria block used for conjunction searches
 """
 
-from typing import Literal, Dict, List, Optional
+from typing import Literal, List, Optional
+from ...metadata_filters import MetadataFilter
 
 
 class GroundCriteriaBlock:
@@ -32,18 +33,15 @@ class GroundCriteriaBlock:
         instrument_types (List[str]): 
             List of instrument type strings to use in this criteria block. Optional, default is `[]`.
 
-        hemisphere (List[str]): 
-            List of hemisphere strings to use in this criteria block. Valid values are 'northern' 
-            or 'southern'. Optional, default is `[]`.
+        metadata_filters (MetadataFilter): 
+            The metadata filters to use in this criteria block. Optional, default is None.
     """
 
-    def __init__(
-            self,
-            programs: List[str] = [],
-            platforms: List[str] = [],
-            instrument_types: List[str] = [],
-            metadata_filters: Optional[Dict] = None  # need to change to MetadataFilters object
-    ):
+    def __init__(self,
+                 programs: List[str] = [],
+                 platforms: List[str] = [],
+                 instrument_types: List[str] = [],
+                 metadata_filters: Optional[MetadataFilter] = None):
         self.programs = programs
         self.platforms = platforms
         self.instrument_types = instrument_types
@@ -95,16 +93,17 @@ class SpaceCriteriaBlock:
         hemisphere (List[str]): 
             List of hemisphere strings to use in this criteria block. Valid values are 'northern' 
             or 'southern'. Optional, default is `[]`.
+
+        metadata_filters (MetadataFilter): 
+            The metadata filters to use in this criteria block. Optional, default is None.
     """
 
-    def __init__(
-            self,
-            programs: List[str] = [],
-            platforms: List[str] = [],
-            instrument_types: List[str] = [],
-            hemisphere: List[Literal["northern", "southern"]] = [],
-            metadata_filters: Optional[Dict] = None  # need to change to MetadataFilters object
-    ):
+    def __init__(self,
+                 programs: List[str] = [],
+                 platforms: List[str] = [],
+                 instrument_types: List[str] = [],
+                 hemisphere: List[Literal["northern", "southern"]] = [],
+                 metadata_filters: Optional[MetadataFilter] = None):
         self.programs = programs
         self.platforms = platforms
         self.instrument_types = instrument_types
@@ -146,3 +145,50 @@ class SpaceCriteriaBlock:
         query_dict["ephemeris_metadata_filters"] = None if self.metadata_filters is None else self.metadata_filters.__dict__
         del query_dict["metadata_filters"]
         return query_dict
+
+
+class EventsCriteriaBlock:
+    """
+    Representation of a event criteria block used for conjunction searches. 
+
+    Attributes:
+        platforms (List[str]): 
+            List of platform strings to use in this criteria block. Optional, default is `[]`.
+
+        instrument_types (List[str]): 
+            List of instrument type strings to use in this criteria block. Optional, default is `[]`.
+
+        metadata_filters (MetadataFilter): 
+            The metadata filters to use in this criteria block. Optional, default is None.
+    """
+
+    def __init__(self, platforms: List[str] = [], instrument_types: List[str] = [], metadata_filters: Optional[MetadataFilter] = None):
+        self.platforms = platforms
+        self.instrument_types = instrument_types
+        self.metadata_filters = metadata_filters
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return "EventsCriteriaBlock(platforms=%s, instrument_types=%s, metadata_filters=%s)" % (
+            self.platforms,
+            self.instrument_types,
+            self.metadata_filters,
+        )
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+        max_len = 80
+        metadata_filters_str = str(self.metadata_filters)
+        if (len(metadata_filters_str) > max_len):
+            metadata_filters_str = "%s...)" % (metadata_filters_str[0:max_len])
+
+        # print
+        print("EventsCriteriaBlock:")
+        print("  %-18s: %s" % ("platforms", self.platforms))
+        print("  %-18s: %s" % ("instrument_types", self.instrument_types))
+        print("  %-18s: %s" % ("metadata_filters", metadata_filters_str))
