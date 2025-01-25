@@ -10,12 +10,12 @@ def main():
 
     # start search
     print("Executing search ...")
-    s = aurorax.search.EphemerisSearch(aurorax,
-                                       datetime.datetime(2020, 1, 1, 0, 0, 0),
-                                       datetime.datetime(2020, 1, 1, 23, 59, 59),
-                                       programs=["swarm"],
-                                       platforms=["swarma"],
-                                       instrument_types=["footprint"])
+    s = pyaurorax.search.EphemerisSearch(aurorax,
+                                         datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                         datetime.datetime(2020, 1, 1, 23, 59, 59),
+                                         programs=["swarm"],
+                                         platforms=["swarma"],
+                                         instrument_types=["footprint"])
     s.execute()
 
     # if the request isn't done, wait continuously

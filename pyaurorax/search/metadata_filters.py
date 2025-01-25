@@ -121,7 +121,7 @@ class MetadataFilter:
     def __init__(
         self,
         expressions: List[MetadataFilterExpression],
-        operator: Literal["and", "or"] = "and",
+        operator: Literal["and", "or", "AND", "OR"] = "and",
     ):
         self.expressions = expressions
         self.__operator = operator
@@ -131,7 +131,7 @@ class MetadataFilter:
         return self.__operator
 
     @operator.setter
-    def operator(self, val: Literal["and", "or"] = "and"):
+    def operator(self, val: Literal["and", "or", "AND", "OR"] = "and"):
         if (val.lower() not in ["and", "or"]):
             AuroraXError("Operator '%s' not allowed. You must use one of the following: ['and', 'or']" % (val))
         self.__operator = val.lower()

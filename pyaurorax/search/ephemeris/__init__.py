@@ -20,10 +20,12 @@ here instead of digging in deeper to the submodules.
 """
 
 import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union, Literal
 from .classes.ephemeris import EphemerisData
 from .classes.search import EphemerisSearch
+from ..metadata_filters import MetadataFilter
 from ..sources.classes.data_source import DataSource
+from ..._util import show_warning
 from ._ephemeris import search as func_search
 from ._ephemeris import upload as func_upload
 from ._ephemeris import delete as func_delete
@@ -51,8 +53,8 @@ class EphemerisManager:
                programs: Optional[List[str]] = None,
                platforms: Optional[List[str]] = None,
                instrument_types: Optional[List[str]] = None,
-               metadata_filters: Optional[List[Dict]] = None,
-               metadata_filters_logical_operator: Optional[str] = None,
+               metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
+               metadata_filters_logical_operator: Optional[Literal["and", "or", "AND", "OR"]] = None,
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
@@ -71,35 +73,27 @@ class EphemerisManager:
 
         Args:
             start (datetime.datetime): 
-                start timestamp of the search (inclusive)
+                Start timestamp of the search (inclusive)
 
             end (datetime.datetime): 
-                end timestamp of the search (inclusive)
+                End timestamp of the search (inclusive)
 
             programs (List[str]): 
-                list of programs to search through, defaults to None
+                List of programs to search through, defaults to None
 
             platforms (List[str]): 
-                list of platforms to search through, defaults to None
+                List of platforms to search through, defaults to None
 
             instrument_types (List[str]): 
-                list of instrument types to search through, defaults to None
+                List of instrument types to search through, defaults to None
 
-            metadata_filters (List[Dict]): 
-                list of dictionaries describing metadata keys and values to filter 
-                on, defaults to None
-
-                Example:
-
-                    [{
-                        "key": "nbtrace_region",
-                        "operator": "in",
-                        "values": ["north polar cap"]
-                    }]
+            metadata_filters (MetadataFilter or List[Dict]): 
+                The metadata filters to use when searching, defaults to None
 
             metadata_filters_logical_operator (str): 
-                the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
-                defaults to `AND`
+                The logical operator to use when evaluating metadata filters (either `and` or `or`), 
+                defaults to `and`. This parameter is deprecated in exchange for passing a 
+                MetadataFilter object into the metadata_filters parameter. 
 
             response_format (Dict): 
                 JSON representation of desired data response format
@@ -119,6 +113,14 @@ class EphemerisManager:
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning("Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator " +
+                         "parameter is redundant. Only the MetadataFilter object is needed. The " +
+                         "metadata_filters_logical_operator parameter will be ignored")
+
+        # return
         return func_search(
             self.__aurorax_obj,
             start,
