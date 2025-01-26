@@ -9,6 +9,7 @@ Version 1.12.0
 - added `aurorax.search.conjunctions.create_advanced_distance_combos()` helper function for complex conjunction searches
 - updates to crib sheets to show how to use updated conjunction, ephemeris, and data products search functions
 - type hinting updates
+- bump PyUCalgarySRS dependency to latest
 
 
 Version 1.11.0
