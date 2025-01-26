@@ -13,10 +13,7 @@ def main():
         datetime.datetime(2020, 1, 1, 23, 59, 59),
         programs=["auroramax"],
     )
-
-    print()
-    print(aurorax.search.data_products.describe(search_obj=s))
-    print()
+    print(s)
 
 
 # ----------

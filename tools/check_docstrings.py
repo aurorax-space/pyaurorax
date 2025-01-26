@@ -74,7 +74,7 @@ def check_function_docstring(node, filename):
         # check for each parameter in the docstring
         for param in param_names:
             param_found = False
-            for line in doc_lines:
+            for i, line in enumerate(doc_lines):
                 if (line.strip().startswith(f"{param} (") or line.strip().startswith(f"{param}:")):
                     param_found = True
 
@@ -85,6 +85,16 @@ def check_function_docstring(node, filename):
                     # check for space after colon
                     if not line.endswith(": "):
                         issues.append((filename_to_record, f"Function: {node.name}", f"Missing space after colon for parameter '{param}'"))
+
+                        # Check if the next line starts with a capital letter
+                    if i + 1 < len(doc_lines):
+                        next_line = doc_lines[i + 1].strip()
+                        if next_line and not next_line[0].isupper():
+                            issues.append((
+                                filename_to_record,
+                                f"Function: {node.name}",
+                                f"The description for parameter '{param}' must start with a capital letter.",
+                            ))
                     break
 
             if not param_found:
@@ -120,7 +130,7 @@ def check_class_docstring(node, filename):
         # check for each attribute in the docstring
         for attr in instance_attributes:
             attr_found = False
-            for line in doc_lines:
+            for i, line in enumerate(doc_lines):
                 if (line.strip().startswith(f"{attr} (") or line.strip().startswith(f"{attr}:")):
                     attr_found = True
 
@@ -131,6 +141,17 @@ def check_class_docstring(node, filename):
                     # check for space after colon
                     if not line.endswith(": "):
                         issues.append((filename_to_record, f"Class: {node.name}", f"Missing space after colon for attribute '{attr}'"))
+
+                    # Check if the next line starts with a capital letter
+                    if i + 1 < len(doc_lines):
+                        next_line = doc_lines[i + 1].strip()
+                        if next_line and not next_line[0].isupper():
+                            issues.append((
+                                filename_to_record,
+                                f"Class: {node.name}",
+                                f"The description for attribute '{attr}' must start with a capital letter.",
+                            ))
+
                     break
 
             if not attr_found:

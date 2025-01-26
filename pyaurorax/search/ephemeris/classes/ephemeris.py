@@ -27,10 +27,10 @@ class EphemerisData:
 
     Attributes:
         data_source (DataSource): 
-            data source that the ephemeris record is associated with
+            Data source that the ephemeris record is associated with
 
         epoch (datetime.datetime): 
-            timestamp for the record (assumed it is in UTC)
+            Timestamp for the record (assumed it is in UTC)
 
         location_geo (Location): 
             Location object containing geographic latitude and longitude
@@ -46,7 +46,7 @@ class EphemerisData:
             Location object with south B-trace geographic latitude and longitude
 
         metadata (Dict): 
-            metadata for this record (arbitrary keys and values)
+            Metadata for this record (arbitrary keys and values)
     """
 
     def __init__(self,
@@ -71,7 +71,7 @@ class EphemerisData:
         datetime objects to strings)
 
         Returns:
-            a dictionary object that is JSON-serializable
+            A dictionary object that is JSON-serializable
         """
         # init
         d = self.__dict__

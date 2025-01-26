@@ -122,7 +122,6 @@ class ConjunctionSearch:
         self.events = events
         self.distance = distance
         self.conjunction_types = conjunction_types
-        self.epoch_search_precision = 60
         self.response_format = response_format
 
         # initialize additional variables
@@ -220,7 +219,7 @@ class ConjunctionSearch:
         it was determined to have too many.
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: too many criteria blocks are found
+            pyaurorax.exceptions.AuroraXError: Too many criteria blocks are found
         """
         count_ground = 0
         count_space = 0
@@ -240,10 +239,10 @@ class ConjunctionSearch:
 
         Args:
             default_distance (int): 
-                the default distance to use, defaults to None
+                The default distance to use, defaults to None
 
         Returns:
-            the advanced distances combinations
+            The advanced distances combinations
         """
         # set input arrays
         options = []
@@ -271,7 +270,7 @@ class ConjunctionSearch:
         Property for the distance parameter
 
         Returns:
-            the distance dictionary with all combinations
+            The distance dictionary with all combinations
         """
         return self.__distance
 
@@ -290,7 +289,7 @@ class ConjunctionSearch:
         Property for the query value
 
         Returns:
-            the query parameter
+            The query parameter
         """
         # set ground
         ground_param = self.ground
@@ -344,7 +343,7 @@ class ConjunctionSearch:
             "events": events_param,
             "conjunction_types": self.conjunction_types,
             "max_distances": self.distance,
-            "epoch_search_precision": self.epoch_search_precision,
+            "epoch_search_precision": 60,
         }
         return self.__query
 
@@ -384,7 +383,7 @@ class ConjunctionSearch:
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include
+                The previously-retrieved status of this request (include
                 to avoid requesting it from the API again), defaults to None
 
         Raises:
@@ -456,10 +455,10 @@ class ConjunctionSearch:
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
@@ -478,13 +477,13 @@ class ConjunctionSearch:
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait for several minutes)
+                Wait until the cancellation request has been completed (may wait for several minutes)
 
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+                Seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success

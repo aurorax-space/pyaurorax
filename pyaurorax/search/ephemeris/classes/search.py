@@ -197,6 +197,7 @@ class EphemerisSearch:
         """
         Property for the query value
         """
+        # set metadata filter value
         if (self.metadata_filters is None):
             metadata_filters_dict = {}
         elif (isinstance(self.metadata_filters, MetadataFilter) is True):
@@ -233,7 +234,7 @@ class EphemerisSearch:
         Initiate ephemeris search request
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: invalid request parameters are set
+            pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         """
         # check for at least one filter criteria
         if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
@@ -261,7 +262,7 @@ class EphemerisSearch:
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include to avoid requesting it 
+                The previously-retrieved status of this request (include to avoid requesting it 
                 from the API again), defaults to None
         """
         # get the status if it isn't passed in
@@ -321,10 +322,10 @@ class EphemerisSearch:
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
         """
         url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
         self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
@@ -340,20 +341,20 @@ class EphemerisSearch:
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait for 
+                Wait until the cancellation request has been completed (may wait for 
                 several minutes)
 
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to 1 second.
+                Seconds to wait between polling calls, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
 
         Raises:
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
         url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))

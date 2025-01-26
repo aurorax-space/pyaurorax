@@ -99,13 +99,13 @@ class EphemerisManager:
                 JSON representation of desired data response format
 
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             return_immediately (bool): 
-                initiate the search and return without waiting for data to be received, defaults to False
+                Initiate the search and return without waiting for data to be received, defaults to False
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             A `pyaurorax..search.EphemerisSearch` object
@@ -145,19 +145,19 @@ class EphemerisManager:
                 AuroraX data source ID
 
             records (List[EphemerisData]): 
-                ephemeris records to upload
+                Ephemeris records to upload
 
             validate_source (bool): 
-                validate all records before uploading, defaults to False
+                Validate all records before uploading, defaults to False
 
             chunk_size (int): 
-                number of records to upload in a single call, defaults to 500
+                Number of records to upload in a single call, defaults to 500
 
         Returns:
             0 for success, raises exception on error
 
         Raises:
-            pyaurorax.exceptions.AuroraXUploadError: upload error
+            pyaurorax.exceptions.AuroraXUploadError: Upload error
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
         return func_upload(self.__aurorax_obj, identifier, records, validate_source, chunk_size)
@@ -171,21 +171,21 @@ class EphemerisManager:
 
         Args:
             data_source (DataSource): 
-                data source associated with the data product records (note that
+                Data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
 
             start (datetime.datetime): 
-                timestamp marking beginning of range to delete records for, inclusive
+                Timestamp marking beginning of range to delete records for, inclusive
             
             end (datetime.datetime): 
-                timestamp marking end of range to delete records for, inclusive
+                Timestamp marking end of range to delete records for, inclusive
 
         Returns:
             0 on success
 
         Raises:
-            pyaurorax.exceptions.AuroraXNotFoundError: source not found
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXNotFoundError: Source not found
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
         return func_delete(self.__aurorax_obj, data_source, start, end)
@@ -197,13 +197,13 @@ class EphemerisManager:
 
         Args:
             search_obj (EphemerisSearch): 
-                the ephemeris search to describe, optional
+                The ephemeris search to describe, optional
 
             query_dict (Dict): 
-                the ephemeris search query represented as a raw dictionary, optional
+                The ephemeris search query represented as a raw dictionary, optional
 
         Returns:
-            the "SQL-like" string describing the ephemeris search object
+            The "SQL-like" string describing the ephemeris search object
         """
         return func_describe(self.__aurorax_obj, search_obj, query_dict)
 
@@ -216,9 +216,9 @@ class EphemerisManager:
 
         Args:
             request_id (str): 
-                the request identifier
+                The request identifier
 
         Returns:
-            the request URL
+            The request URL
         """
         return func_get_request_url(self.__aurorax_obj, request_id)

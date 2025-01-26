@@ -20,10 +20,12 @@ here instead of digging in deeper to the submodules.
 """
 
 import datetime
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Literal, Union
 from .classes.data_product import DataProductData
 from .classes.search import DataProductSearch
 from ..sources.classes.data_source import DataSource
+from ..metadata_filters import MetadataFilter
+from ..._util import show_warning
 from ._data_products import search as func_search
 from ._data_products import upload as func_upload
 from ._data_products import delete as func_delete
@@ -52,9 +54,9 @@ class DataProductsManager:
                programs: Optional[List[str]] = None,
                platforms: Optional[List[str]] = None,
                instrument_types: Optional[List[str]] = None,
-               data_product_types: Optional[List[str]] = None,
-               metadata_filters: Optional[List[Dict]] = None,
-               metadata_filters_logical_operator: Optional[str] = None,
+               data_product_types: Optional[Literal["keogram", "montage", "movie", "summary_plot", "data_availability"]] = None,
+               metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
+               metadata_filters_logical_operator: Optional[Literal["and", "or", "AND", "OR"]] = None,
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
@@ -73,56 +75,57 @@ class DataProductsManager:
 
         Args:
             start (datetime.datetime): 
-                start timestamp of the search (inclusive)
+                Start timestamp of the search (inclusive)
          
             end (datetime.datetime): 
-                end timestamp of the search (inclusive)
+                End timestamp of the search (inclusive)
          
             programs (List[str]): 
-                list of programs to search through, defaults to None
+                List of programs to search through, defaults to None
         
             platforms (List[str]): 
-                list of platforms to search through, defaults to None
+                List of platforms to search through, defaults to None
         
             instrument_types (List[str]): 
-                list of instrument types to search through, defaults to None
+                List of instrument types to search through, defaults to None
         
             data_product_types (List[str]): 
-                list of strings describing data product types to filter on e.g. "keogram", defaults 
-                to None. Options are in the pyaurorax.data_products module, or at the top level using 
-                the pyaurorax.DATA_PRODUCT_TYPE* variables.
+                List of strings describing data product types to filter on e.g. "keogram", defaults 
+                to None. Valid options are: `keogram`, `montage`, `movie`, `summary_plot`, and 
+                `data_availability`.
         
-            metadata_filters (List[Dict]): 
-                list of dictionaries describing metadata keys and values to filter on, defaults to None
+            metadata_filters (MetadataFilter or List[Dict]): 
+                The metadata filters to use when searching, defaults to None
 
-                Example:
-
-                    [{
-                        "key": "nbtrace_region",
-                        "operator": "in",
-                        "values": ["north polar cap"]
-                    }]
-           
             metadata_filters_logical_operator (str): 
-                the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
-                defaults to `AND`
+                The logical operator to use when evaluating metadata filters (either `and` or `or`), 
+                defaults to `and`. This parameter is deprecated in exchange for passing a 
+                MetadataFilter object into the metadata_filters parameter. 
             
             response_format (Dict): 
                 JSON representation of desired data response format
             
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
             
             return_immediately (bool): 
-                initiate the search and return without waiting for data to be received, 
+                Initiate the search and return without waiting for data to be received, 
                 defaults to False
             
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
-            a `pyaurorax.search.DataProductSearch` object
+            A `pyaurorax.search.DataProductSearch` object
         """
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning("Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator " +
+                         "parameter is redundant. Only the MetadataFilter object is needed. The " +
+                         "metadata_filters_logical_operator parameter will be ignored")
+
+        # return
         return func_search(
             self.__aurorax_obj,
             start,
@@ -139,29 +142,35 @@ class DataProductsManager:
             verbose,
         )
 
-    def upload(self, identifier: int, records: List[DataProductData], validate_source: bool = False, chunk_size: int = __UPLOAD_CHUNK_SIZE) -> int:
+    def upload(
+        self,
+        identifier: int,
+        records: List[DataProductData],
+        validate_source: bool = False,
+        chunk_size: int = __UPLOAD_CHUNK_SIZE,
+    ) -> int:
         """
         Upload data product records to AuroraX
 
         Args:
             identifier (int): 
-                the AuroraX data source ID
+                The AuroraX data source ID
 
             records (List[DataProductData]): 
-                data product records to upload
+                Data product records to upload
 
             validate_source (bool): 
-                validate all records before uploading, defaults to False
+                Validate all records before uploading, defaults to False
 
             chunk_size (int): 
-                number of records to upload in a single call, defaults to 500
+                Number of records to upload in a single call, defaults to 500
 
         Returns:
             0 for success, raises exception on error
 
         Raises:
-            pyaurorax.exceptions.AuroraXUploadError: upload error
-            pyaurorax.exceptions.AuroraXError: data source validation error
+            pyaurorax.exceptions.AuroraXUploadError: Upload error
+            pyaurorax.exceptions.AuroraXError: Data source validation error
         """
         return func_upload(self.__aurorax_obj, identifier, records, validate_source, chunk_size)
 
@@ -174,7 +183,7 @@ class DataProductsManager:
 
         Args:
             data_source (DataSource): 
-                data source associated with the data product records (note that
+                Data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
 
             urls (List[str]): 
@@ -185,7 +194,7 @@ class DataProductsManager:
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         """
         return func_delete_urls(self.__aurorax_obj, data_source, urls)
 
@@ -202,25 +211,25 @@ class DataProductsManager:
 
         Args:
             data_source (DataSource): 
-                data source associated with the data product records (note that
+                Data source associated with the data product records (note that
                 identifier, program, platform, and instrument_type are required)
             
             start (datetime.datetime): 
-                timestamp marking beginning of range to delete records for, inclusive
+                Timestamp marking beginning of range to delete records for, inclusive
             
             end (datetime.datetime): 
-                timestamp marking end of range to delete records for, inclusive
+                Timestamp marking end of range to delete records for, inclusive
             
             data_product_types (List[str]): 
-                specific types of data product to delete, e.g.
-                ["keogram", "movie"]. If omitted, all data product types will be deleted.
+                Specific types of data product to delete, e.g. ["keogram", "movie"]. If 
+                omitted, all data product types will be deleted.
 
         Returns:
             1 on success
 
         Raises:
-            pyaurorax.exceptions.AuroraXNotFoundError: source not found
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXNotFoundError: Source not found
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         """
         return func_delete(self.__aurorax_obj, data_source, start, end, data_product_types)
 
@@ -231,13 +240,13 @@ class DataProductsManager:
 
         Args:
             search_obj (DataProductSearch): 
-                the data product search to describe, optional
+                The data product search to describe, optional
 
             query_dict (Dict): 
-                the data product search query represented as a raw dictionary, optional
+                The data product search query represented as a raw dictionary, optional
 
         Returns:
-            the "SQL-like" string describing the data product search object
+            The "SQL-like" string describing the data product search object
         """
         return func_describe(self.__aurorax_obj, search_obj, query_dict)
 
@@ -251,9 +260,9 @@ class DataProductsManager:
 
         Args:
             request_id (str): 
-                the request identifier
+                The request identifier
 
         Returns:
-            the request URL
+            The request URL
         """
         return func_get_request_url(self.__aurorax_obj, request_id)

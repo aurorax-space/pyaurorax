@@ -32,19 +32,19 @@ class AuroraXAPIRequest:
             API endpoint URL for the request
 
         method (str): 
-            the HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
+            The HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
 
         params (Dict): 
             URL parameters to send in the request, defaults to `{}`
 
         body (Dict): 
-            the body of the request (ie. post data), defaults to `{}`
+            The body of the request (ie. post data), defaults to `{}`
 
         headers (Dict): 
-            any headers to send as part of the request (in addition to the default ones), defaults to `{}`
+            Any headers to send as part of the request (in addition to the default ones), defaults to `{}`
             
         null_response (bool): 
-            signifies if we expect a response from the API that has no body/data in it (ie. 
+            Signifies if we expect a response from the API that has no body/data in it (ie. 
             requests to upload data that respond with just a 202 status code), defaults to `False`
     """
 
@@ -90,11 +90,11 @@ class AuroraXAPIRequest:
         Execute an AuroraX API request
     
         Returns:
-            an `pyaurorax.search.api.AuroraXAPIResponse` object
+            An `pyaurorax.search.api.AuroraXAPIResponse` object
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
-            pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Unauthorized user attempted to perform this action
             pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance
         """
         # sanitize data

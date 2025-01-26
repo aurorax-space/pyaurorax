@@ -44,34 +44,34 @@ class Conjunction:
 
     Attributes:
         conjunction_type (str): 
-            the type of location data used when the conjunction was found (either 
+            The type of location data used when the conjunction was found (either 
             'nbtrace', 'sbtrace', or 'geographic')
             
         start (datetime.datetime): 
-            start timestamp of the conjunction
+            Start timestamp of the conjunction
 
         end (datetime.datetime): 
-            end timestamp of the conjunction
+            End timestamp of the conjunction
 
         data_sources (List[DataSource]): 
-            data sources in the conjunction
+            Data sources in the conjunction
 
         min_distance (float): 
-            minimum kilometer distance of the conjunction
+            Minimum kilometer distance of the conjunction
 
         max_distance (float): 
-            maximum kilometer distance of the conjunction
+            Maximum kilometer distance of the conjunction
 
         events (List[Dict]): 
-            the sub-conjunctions that make up this over-arching
+            The sub-conjunctions that make up this over-arching
             conjunction (the conjunctions between each set of two data
             sources)
 
         closest_epoch (datetime.datetime): 
-            timestamp for when data sources were closest
+            Timestamp for when data sources were closest
 
         farthest_epoch (datetime.datetime): 
-            timestamp for when data sources were farthest
+            Timestamp for when data sources were farthest
     """
 
     def __init__(

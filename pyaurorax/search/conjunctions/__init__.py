@@ -148,16 +148,16 @@ class ConjunctionsManager:
 
         Args:
             search_obj (ConjunctionSearch): 
-                the conjunction search to describe, optional
+                The conjunction search to describe, optional
 
             query_dict (Dict): 
-                the conjunction search query represented as a raw dictionary, optional
+                The conjunction search query represented as a raw dictionary, optional
 
         Returns:
-            the "SQL-like" string describing the conjunction search object
+            The "SQL-like" string describing the conjunction search object
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: invalid arguments
+            pyaurorax.exceptions.AuroraXError: Invalid arguments
         """
         return func_describe(self.__aurorax_obj, search_obj, query_dict)
 
@@ -170,10 +170,10 @@ class ConjunctionsManager:
 
         Args:
             request_id (str): 
-                the request identifier
+                The request identifier
 
         Returns:
-            the request URL
+            The request URL
         """
         return func_get_request_url(self.__aurorax_obj, request_id)
 
@@ -188,19 +188,19 @@ class ConjunctionsManager:
         Get the advanced distances combinations for the specified parameters
 
         Args:
-            default_distance (int): 
-                the default distance to use, defaults to None
+            distance (int): 
+                The default distance to use, defaults to None
             
             ground (int): 
-                the number of ground criteria blocks, defaults to 0
+                The number of ground criteria blocks, defaults to 0
 
             space (int): 
-                the number of space criteria blocks, defaults to 0
+                The number of space criteria blocks, defaults to 0
 
             events (int): 
-                the number of events criteria blocks, defaults to 0
+                The number of events criteria blocks, defaults to 0
 
         Returns:
-            the advanced distances combinations
+            The advanced distances combinations
         """
         return func_create_advanced_distance_combos(distance, ground, space, events)

@@ -17,8 +17,9 @@ Class definition for a data product search
 
 from __future__ import annotations
 import datetime
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional, Literal, Union
 from .data_product import DataProductData
+from ...metadata_filters import MetadataFilter
 from ...api import AuroraXAPIRequest
 from ...sources import DataSource, FORMAT_BASIC_INFO
 from ....exceptions import AuroraXAPIError
@@ -38,40 +39,32 @@ class DataProductSearch:
 
     Attributes:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive)
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive)
 
         programs (List[str]): 
-            list of program names to search
+            List of program names to search
 
         platforms (List[str]): 
-            list of platform names to search
+            List of platform names to search
 
         instrument_types (List[str]): 
-            list of instrument types to search
+            List of instrument types to search
 
         data_product_types (List[str]): 
-            list of strings describing data product on e.g. "keogram", defaults to 
-            None. Options are in the pyaurorax.data_products module, or at the top 
-            level using the pyaurorax.DATA_PRODUCT_TYPE* variables.
-
-        metadata_filters (List[Dict]): 
-            list of dictionaries describing metadata keys and values to filter on, 
-            defaults to None
-
-            Example:
-
-                [{
-                    "key": "nbtrace_region",
-                    "operator": "in",
-                    "values": ["north polar cap"]
-                }]
+            List of strings describing data product types to filter on e.g. "keogram", defaults 
+            to None. Valid options are: `keogram`, `montage`, `movie`, `summary_plot`, and 
+            `data_availability`.
+    
+        metadata_filters (MetadataFilter or List[Dict]): 
+            The metadata filters to use when searching, defaults to None
 
         metadata_filters_logical_operator (str): 
-            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
-            defaults to `AND`
+            The logical operator to use when evaluating metadata filters (either `and` or `or`), 
+            defaults to `and`. This parameter is deprecated in exchange for passing a 
+            MetadataFilter object into the metadata_filters parameter. 
 
         response_format (Dict): 
             JSON representation of desired data response format
@@ -80,31 +73,31 @@ class DataProductSearch:
             AuroraXResponse object returned when the search is executed
 
         request_id (str): 
-            unique ID assigned to the request by the AuroraX API
+            Unique ID assigned to the request by the AuroraX API
 
         request_url (str): 
-            unique URL assigned to the request by the AuroraX API
+            Unique URL assigned to the request by the AuroraX API
 
         executed (bool): 
-            indicates if the search has been executed/started
+            Indicates if the search has been executed/started
 
         completed (bool): 
-            indicates if the search has finished
+            Indicates if the search has finished
 
         data_url (str): 
-            the URL where data is accessed
+            The URL where data is accessed
 
         query (Dict): 
-            the query for this request as JSON
+            The query for this request as JSON
 
         status (Dict): 
-            the status of the query
+            The status of the query
 
         data (List[DataProductData]): 
-            the data product records found
+            The data product records found
 
         logs (List[Dict]): 
-            all log messages outputted by the AuroraX API for this request
+            All log messages outputted by the AuroraX API for this request
     """
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -116,9 +109,9 @@ class DataProductSearch:
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_types: Optional[List[str]] = None,
-                 metadata_filters: Optional[List[Dict]] = None,
-                 metadata_filters_logical_operator: Optional[str] = None,
+                 data_product_types: Optional[Literal["keogram", "montage", "movie", "summary_plot", "data_availability"]] = None,
+                 metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
+                 metadata_filters_logical_operator: Optional[Literal["and", "or", "AND", "OR"]] = None,
                  response_format: Optional[Dict] = None) -> None:
 
         # set variables using passed in args
@@ -208,20 +201,33 @@ class DataProductSearch:
         """
         Property for the query value
         """
+        # set metadata filter value
+        if (self.metadata_filters is None):
+            metadata_filters_dict = {}
+        elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+            # metadata filter is a class
+            metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+        else:
+            # metadata filter is a dictionary
+            metadata_filters_dict = {
+                "expressions": self.metadata_filters,
+                "logical_operator": self.metadata_filters_logical_operator,
+            }
+
+        # set query
         self.__query = {
             "data_sources": {
                 "programs": [] if not self.programs else self.programs,
                 "platforms": [] if not self.platforms else self.platforms,
                 "instrument_types": [] if not self.instrument_types else self.instrument_types,
-                "data_product_metadata_filters": {} if not self.metadata_filters else {
-                    "logical_operator": self.metadata_filters_logical_operator,
-                    "expressions": self.metadata_filters
-                },
+                "data_product_metadata_filters": metadata_filters_dict,
             },
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
             "end": self.end.strftime("%Y-%m-%dT%H:%M:%S"),
             "data_product_type_filters": [] if not self.data_product_types else self.data_product_types,
         }
+
+        # return
         return self.__query
 
     @query.setter
@@ -254,7 +260,7 @@ class DataProductSearch:
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include
+                The previously-retrieved status of this request (include
                 to avoid requesting it from the API again), defaults to None
         """
         # get the status if it isn't passed in
@@ -316,10 +322,10 @@ class DataProductSearch:
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
         """
         url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
         self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
@@ -335,21 +341,21 @@ class DataProductSearch:
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait 
+                Wait until the cancellation request has been completed (may wait 
                 for several minutes)
             
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to 1 second.
+                Seconds to wait between polling calls, defaults to 1 second.
             
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         """
         url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
         return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)

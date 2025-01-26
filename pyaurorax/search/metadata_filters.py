@@ -47,7 +47,7 @@ class MetadataFilterExpression:
         self,
         key: str,
         values: Union[Any, List[Any]],
-        operator: Literal["=", "!=", ">", "<", ">=", "<=", "between", "in", "not in"],
+        operator: Literal["=", "!=", ">", "<", ">=", "<=", "between", "in", "not in"] = "in",
     ):
         # set required parameters
         self.key = key

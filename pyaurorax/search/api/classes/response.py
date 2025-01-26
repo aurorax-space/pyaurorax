@@ -25,13 +25,13 @@ class AuroraXAPIResponse:
 
     Attributes:
         request (Any): 
-            the request object
+            The request object
 
         data (Any): 
-            the data received as part of the request
+            The data received as part of the request
 
         status_code (int): 
-            the HTTP status code received when making the request
+            The HTTP status code received when making the request
     """
 
     def __init__(self, request: Any, data: Any, status_code: int):

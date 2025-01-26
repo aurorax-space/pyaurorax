@@ -1,6 +1,5 @@
 import datetime
 import pyaurorax
-from pyaurorax.search import DataProductSearch
 
 
 def main():
@@ -8,8 +7,7 @@ def main():
     aurorax = pyaurorax.PyAuroraX()
 
     # start search
-    s = DataProductSearch(
-        aurorax,
+    s = aurorax.search.data_products.search(
         datetime.datetime(2020, 1, 1, 0, 0, 0),
         datetime.datetime(2020, 1, 1, 23, 59, 59),
         programs=["auroramax"],

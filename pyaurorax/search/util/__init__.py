@@ -41,13 +41,13 @@ class UtilManager:
 
         Args:
             geo_location (Location): 
-                a Location object representing the geographic location
+                A Location object representing the geographic location
 
             timestamp (datetime.datetime): 
-                timestamp for this set of latitudes and longitudes
+                Timestamp for this set of latitudes and longitudes
 
         Returns:
-            the north B-trace location as a `Location` object
+            The north B-trace location as a `Location` object
         """
         return func_ground_geo_to_nbtrace(geo_location, timestamp)
 
@@ -61,12 +61,12 @@ class UtilManager:
 
         Args:
             geo_location (Location): 
-                a Location object representing the geographic location
+                A Location object representing the geographic location
 
             timestamp (datetime.datetime): 
-                timestamp for this set of latitudes and longitudes
+                Timestamp for this set of latitudes and longitudes
 
         Returns:
-            the south B-trace location as a `Location` object
+            The south B-trace location as a `Location` object
         """
         return func_ground_geo_to_sbtrace(geo_location, timestamp)

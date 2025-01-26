@@ -74,22 +74,22 @@ class DataProductData:
 
     Attributes:
         data_source (DataSource): 
-            data source that the ephemeris record is associated with
+            Data source that the ephemeris record is associated with
 
         data_product_type (str): 
-            data product type ("keogram", "movie", "summary_plot")
+            Data product type ("keogram", "movie", "summary_plot", etc.)
 
         start (datetime.datetime): 
-            starting timestamp for the record (assumed it is in UTC), inclusive
+            Starting timestamp for the record (assumed it is in UTC), inclusive
 
         end (datetime.datetime): 
-            ending timestamp for the record (assumed it is in UTC), inclusive
+            Ending timestamp for the record (assumed it is in UTC), inclusive
 
         url (str): 
-            the URL of data product
+            The URL of data product
 
         metadata (Dict): 
-            metadata for this record (arbitrary keys and values)
+            Metadata for this record (arbitrary keys and values)
     """
 
     def __init__(self,
@@ -112,7 +112,7 @@ class DataProductData:
         datetime objects to strings)
 
         Returns:
-            a dictionary object that is JSON-serializable
+            A dictionary object that is JSON-serializable
         """
         # init
         d = self.__dict__

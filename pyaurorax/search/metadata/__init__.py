@@ -43,13 +43,13 @@ class MetadataManager:
 
         Args:
             schema (List[Dict]): 
-                the metadata schema to validate against
+                The metadata schema to validate against
 
             record (Dict): 
-                metadata record to validate
+                Metadata record to validate
 
             quiet (bool): 
-                suppress any stdout output
+                Suppress any stdout output
 
         Returns:
             True if the metadata record is valid, False if it is not
@@ -62,10 +62,10 @@ class MetadataManager:
 
         Args:
             identifier (int): 
-                the AuroraX data source ID
+                The AuroraX data source ID
 
         Returns:
-            the ephemeris metadata schema for the data source
+            The ephemeris metadata schema for the data source
         """
         return func_get_ephemeris_schema(self.__aurorax_obj, identifier)
 
@@ -75,9 +75,9 @@ class MetadataManager:
 
         Args:
             identifier (int): 
-                the AuroraX data source ID
+                The AuroraX data source ID
 
         Returns:
-            the data products metadata schema for the data source
+            The data products metadata schema for the data source
         """
         return func_get_data_products_schema(self.__aurorax_obj, identifier)

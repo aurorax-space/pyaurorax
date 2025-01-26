@@ -34,13 +34,13 @@ def main():
         return 1
 
     # create Ephemeris object
-    e = pyaurorax.search.EphemerisData(data_source=ds,
-                                       epoch=epoch,
-                                       location_geo=location_geo,
-                                       location_gsm=location_gsm,
-                                       nbtrace=nbtrace,
-                                       sbtrace=sbtrace,
-                                       metadata=metadata)
+    e = aurorax.search.EphemerisData(data_source=ds,
+                                     epoch=epoch,
+                                     location_geo=location_geo,
+                                     location_gsm=location_gsm,
+                                     nbtrace=nbtrace,
+                                     sbtrace=sbtrace,
+                                     metadata=metadata)
     pprint.pprint(e)
     print("\nUploading record ...")
 

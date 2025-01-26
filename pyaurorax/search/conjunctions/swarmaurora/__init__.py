@@ -37,11 +37,11 @@ class SwarmAuroraManager:
 
         Args:
             search_obj (ConjunctionSearch): 
-                a conjunction search object, must be a completed search with 
+                A conjunction search object, must be a completed search with 
                 the 'request_id' value populated
 
         Returns:
-            the Swarm-Aurora Conjunction Finder URL for this conjunction search
+            The Swarm-Aurora Conjunction Finder URL for this conjunction search
         """
         return func_get_url(search_obj)
 
@@ -51,16 +51,16 @@ class SwarmAuroraManager:
 
         Args:
             search_obj (ConjunctionSearch): 
-                a conjunction search object, must be a completed search with 
+                A conjunction search object, must be a completed search with 
                 the 'request_id' value populated
 
             browser (str)): 
-                the browser type to load using. Default is your default browser. Some common other 
+                The browser type to load using. Default is your default browser. Some common other 
                 options are "google-chrome", "firefox", or "safari". For all available options, refer 
                 to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
         
         Raises:
-            pyaurorax.exceptions.AuroraXError: unsupported browser specified
+            pyaurorax.exceptions.AuroraXError: Unsupported browser specified
         """
         return func_open_in_browser(search_obj, browser)
 
@@ -70,18 +70,18 @@ class SwarmAuroraManager:
 
         Args:
             search_obj (ConjunctionSearch): 
-                a conjunction search object, must be a completed search with 
+                A conjunction search object, must be a completed search with 
                 the 'request_id' value populated
 
             filename (str): 
-                the output filename, default is 'swarmaurora_custom_import_file_{requestID}.json'
+                The output filename, default is 'swarmaurora_custom_import_file_{requestID}.json'
             
             return_dict (bool): 
-                return the custom import file contents as a dictionary instead of saving 
+                Return the custom import file contents as a dictionary instead of saving 
                 a file, default is False
 
         Returns:
-            the filename of the saved custom import file, or a dictionary with the file contents 
+            The filename of the saved custom import file, or a dictionary with the file contents 
             if `return_dict` is set to True
         """
         return func_create_custom_import_file(self.__aurorax_obj, search_obj, filename, return_dict)
