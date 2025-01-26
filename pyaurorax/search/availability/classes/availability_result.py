@@ -27,11 +27,13 @@ class AvailabilityResult:
 
     Attributes:
         data_source (pyaurorax.search.DataSource): 
-            the data source that the records are associated with
+            The data source that the records are associated with
+
         available_ephemeris (Dict): 
-            the ephemeris availability information
+            The ephemeris availability information
+
         available_data_products (Dict): 
-            the data product availability information
+            The data product availability information
     """
     data_source: DataSource
     available_data_products: Optional[Dict] = None

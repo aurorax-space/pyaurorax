@@ -46,11 +46,11 @@ class MosaicSkymap:
             List of elevation data, with each element corresponding to each site. Order 
             matches that of the `site_uid_list` attribute.
 
-        polyfoll_lat (List[numpy.ndarray]): 
+        polyfill_lat (List[numpy.ndarray]): 
             List of latitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
 
-        polyfoll_lon (List[numpy.ndarray]): 
+        polyfill_lon (List[numpy.ndarray]): 
             List of longitude polygon data, with each element corresponding to each site. 
             Order matches that of the `site_uid_list` attribute. 
 

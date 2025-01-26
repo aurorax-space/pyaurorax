@@ -44,8 +44,8 @@ class Conjunction:
 
     Attributes:
         conjunction_type (str): 
-            The type of location data used when the conjunction was found (either 
-            'nbtrace', 'sbtrace', or 'geographic')
+            The type of location data used when the conjunction was found (either `nbtrace`, 
+            `sbtrace`, or `geographic`)
             
         start (datetime.datetime): 
             Start timestamp of the conjunction
@@ -63,9 +63,8 @@ class Conjunction:
             Maximum kilometer distance of the conjunction
 
         events (List[Dict]): 
-            The sub-conjunctions that make up this over-arching
-            conjunction (the conjunctions between each set of two data
-            sources)
+            The sub-conjunctions that make up this over-arching conjunction (the conjunctions 
+            between each set of two data sources)
 
         closest_epoch (datetime.datetime): 
             Timestamp for when data sources were closest

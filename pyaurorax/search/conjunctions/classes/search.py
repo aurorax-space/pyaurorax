@@ -21,7 +21,12 @@ import itertools
 from copy import deepcopy
 from typing import TYPE_CHECKING, Dict, Union, Optional, Sequence, Literal
 from .conjunction import Conjunction
-from .criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock, EventsCriteriaBlock
+from .criteria_block import (
+    GroundCriteriaBlock,
+    SpaceCriteriaBlock,
+    EventsCriteriaBlock,
+    CustomLocationsCriteriaBlock,
+)
 from ...api import AuroraXAPIRequest
 from ...sources import DataSource, FORMAT_BASIC_INFO
 from ....exceptions import AuroraXError, AuroraXAPIError
@@ -58,13 +63,14 @@ class ConjunctionSearch:
             List of space instrument criteria blocks, defaults to [].
 
         events (List[EventsCriteriaBlock or Dict]): 
-            List of event criteria blocks, defaults to []. List items of Dict types have 
-            been deprecated as of v1.14.0.
+            List of event criteria blocks, defaults to [].
+
+        custom_locations (List[CustomLocationsCriteriaBlock or Dict]): 
+            List of custom location criteria blocks, defaults to [].
 
         conjunction_types (List[str]): 
-            List of conjunction types, defaults to ["nbtrace"]. Options are
-            in the pyaurorax.conjunctions module, or at the top level using the
-            pyaurorax.CONJUNCTION_TYPE_* variables.
+            List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+            options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.
 
         response_format (Dict): 
             JSON representation of desired data response format
@@ -110,7 +116,8 @@ class ConjunctionSearch:
                  ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
                  space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
                  events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
-                 conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace"]]] = ["nbtrace"],
+                 custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
+                 conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace", "geographic"]]] = ["nbtrace"],
                  response_format: Optional[Dict] = None):
 
         # set variables using passed in args
@@ -120,6 +127,7 @@ class ConjunctionSearch:
         self.ground = ground
         self.space = space
         self.events = events
+        self.custom_locations = custom_locations
         self.distance = distance
         self.conjunction_types = conjunction_types
         self.response_format = response_format
@@ -224,13 +232,16 @@ class ConjunctionSearch:
         count_ground = 0
         count_space = 0
         count_events = 0
+        count_custom_locations = 0
         if (self.ground is not None):
             count_ground = len(self.ground)
         if (self.space is not None):
             count_space = len(self.space)
         if (self.events is not None):
             count_events = len(self.events)
-        if ((count_ground + count_space + count_events) > 10):
+        if (self.custom_locations is not None):
+            count_custom_locations = len(self.custom_locations)
+        if ((count_ground + count_space + count_events + count_custom_locations) > 10):
             raise AuroraXError("Number of criteria blocks exceeds 10, please reduce the count")
 
     def get_advanced_distances_combos(self, default_distance: Optional[Union[int, float]] = None) -> Dict:
@@ -255,6 +266,9 @@ class ConjunctionSearch:
         if (self.events is not None):
             for i in range(0, len(self.events)):
                 options.append("events%d" % (i + 1))
+        if (self.custom_locations is not None):
+            for i in range(0, len(self.custom_locations)):
+                options.append("adhoc%d" % (i + 1))
 
         # derive all combinations of options of size 2
         combinations = {}
@@ -334,6 +348,16 @@ class ConjunctionSearch:
                     this_dict["ephemeris_metadata_filters"] = this_dict["ephemeris_metadata_filters"].to_query_dict()
                 events_param.append(this_dict)
 
+        # set custom locations
+        custom_param = self.custom_locations
+        if (isinstance(self.custom_locations, list) and all(isinstance(item, CustomLocationsCriteriaBlock) for item in self.custom_locations)):
+            # space parameter is a list of CustomLocationsCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            custom_param = []
+            for val in self.custom_locations:
+                this_dict = val.to_search_query_dict()  # type: ignore
+                custom_param.append(this_dict)
+
         # set query
         self.__query = {
             "start": self.start.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -341,6 +365,7 @@ class ConjunctionSearch:
             "ground": ground_param,
             "space": space_param,
             "events": events_param,
+            "adhoc": custom_param,
             "conjunction_types": self.conjunction_types,
             "max_distances": self.distance,
             "epoch_search_precision": 60,

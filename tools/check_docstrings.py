@@ -118,8 +118,25 @@ def check_class_docstring(node, filename):
         # split the docstring into lines
         doc_lines = docstring.splitlines()
 
-        # collect all instance attributes (e.g., self.attribute) in the class
+        # collect attributes
         instance_attributes = set()
+
+        # collect attributes from dataclasses
+        is_dataclass = any(isinstance(decorator, ast.Name) and decorator.id == "dataclass" for decorator in node.decorator_list)
+        if (is_dataclass is True):
+            for child in node.body:
+                if isinstance(child, ast.AnnAssign) and isinstance(child.target, ast.Name):
+                    instance_attributes.add(child.target.id)
+
+        # collect attributes from regular classes
+        for child in ast.walk(node):
+            if isinstance(child, ast.Assign):
+                for target in child.targets:
+                    if (isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name) and target.value.id == "self"
+                            and not target.attr.startswith("__")):
+                        instance_attributes.add(target.attr)
+
+        # collect all instance attributes (e.g., self.attribute) in the class
         for child in ast.walk(node):
             if isinstance(child, ast.Assign):
                 for target in child.targets:

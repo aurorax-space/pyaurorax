@@ -50,24 +50,32 @@ class AvailabilityManager:
         Args:
             start (datetime.date): 
                 Start date to retrieve availability info for (inclusive)
+
             end (datetime.date): 
                 End date to retrieve availability info for (inclusive)
+
             program (str): 
                 Program name to filter sources by, defaults to `None`
+
             platform (str): 
                 Platform name to filter sources by, defaults to `None`
+
             instrument_type (str): 
                 Instrument type to filter sources by, defaults to `None`
+
             source_type (str): 
                 The data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
+
             owner (str): 
                 Owner email address to filter sources by, defaults to `None`
+
             format (str): 
                 The format of the data sources returned, defaults to `FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+
             slow (bool): 
                 Query the data using a slower, but more accurate method, defaults to `False`
 
@@ -95,24 +103,32 @@ class AvailabilityManager:
         Args:
             start (datetime.date): 
                 Start date to retrieve availability info for (inclusive)
+
             end (datetime.date): 
                 End date to retrieve availability info for (inclusive)
+
             program (str): 
                 Program name to filter sources by, defaults to `None`
+
             platform (str): 
                 Platform name to filter sources by, defaults to `None`
+
             instrument_type (str): 
                 Instrument type to filter sources by, defaults to `None`
+
             source_type (str): 
                 The data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
+
             owner (str): 
                 Owner email address to filter sources by, defaults to `None`
+
             format (str): 
                 The format of the data sources returned, defaults to `FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
+                
             slow (bool): 
                 Query the data using a slower, but more accurate method, defaults to `False`
 

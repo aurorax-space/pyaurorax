@@ -28,6 +28,7 @@ from .classes.criteria_block import (
     GroundCriteriaBlock,
     SpaceCriteriaBlock,
     EventsCriteriaBlock,
+    CustomLocationsCriteriaBlock,
 )
 from ._conjunctions import search as func_search
 from ._conjunctions import describe as func_describe
@@ -65,7 +66,8 @@ class ConjunctionsManager:
                ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
                space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
                events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
-               conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace"]]] = [],
+               custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
+               conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace", "geographic"]]] = [],
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
@@ -92,20 +94,20 @@ class ConjunctionsManager:
                 modified from the output of the "get_advanced_distances_combos()" function.
 
             ground (List[GroundCriteriaBlock or Dict]): 
-                List of ground instrument criteria blocks, defaults to []. List items of Dict 
-                types have been deprecated as of v1.14.0.
+                List of ground instrument criteria blocks, defaults to [].
 
             space (List[SpaceCriteriaBlock or Dict]): 
-                List of space instrument criteria blocks, defaults to []. List items of Dict 
-                types have been deprecated as of v1.14.0.
+                List of space instrument criteria blocks, defaults to [].
 
             events (List[EventsCriteriaBlock or Dict]): 
-                List of event criteria blocks, defaults to []. List items of Dict types have 
-                been deprecated as of v1.14.0.
+                List of event criteria blocks, defaults to [].
+
+            custom_locations (List[CustomLocationsCriteriaBlock or Dict]): 
+                List of custom location criteria blocks, defaults to [].
 
             conjunction_types (List[str]): 
                 List of conjunction types, defaults to [] (meaning all conjunction types). Valid
-                options are 'nbtrace' or 'sbtrace'. Defaults to 'nbtrace'.
+                options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.
 
             response_format (Dict): 
                 JSON representation of desired data response format.
@@ -134,6 +136,7 @@ class ConjunctionsManager:
             ground,
             space,
             events,
+            custom_locations,
             conjunction_types,
             response_format,
             poll_interval,
@@ -183,6 +186,7 @@ class ConjunctionsManager:
         ground: int = 0,
         space: int = 0,
         events: int = 0,
+        custom: int = 0
     ) -> Dict:
         """
         Get the advanced distances combinations for the specified parameters
@@ -200,7 +204,10 @@ class ConjunctionsManager:
             events (int): 
                 The number of events criteria blocks, defaults to 0
 
+            custom (int): 
+                The number of custom location criteria blocks, defaults to 0
+
         Returns:
             The advanced distances combinations
         """
-        return func_create_advanced_distance_combos(distance, ground, space, events)
+        return func_create_advanced_distance_combos(distance, ground, space, events, custom)

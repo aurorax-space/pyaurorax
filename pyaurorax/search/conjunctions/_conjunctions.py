@@ -23,7 +23,8 @@ from .classes.search import ConjunctionSearch
 from ..api import AuroraXAPIRequest
 
 
-def search(aurorax_obj, start, end, distance, ground, space, events, conjunction_types, response_format, poll_interval, return_immediately, verbose):
+def search(aurorax_obj, start, end, distance, ground, space, events, custom_locations, conjunction_types, response_format, poll_interval,
+           return_immediately, verbose):
     # create a Search object
     s = ConjunctionSearch(aurorax_obj,
                           start,
@@ -32,6 +33,7 @@ def search(aurorax_obj, start, end, distance, ground, space, events, conjunction
                           ground=ground,
                           space=space,
                           events=events,
+                          custom_locations=custom_locations,
                           conjunction_types=conjunction_types,
                           response_format=response_format)
     if (verbose is True):
@@ -98,7 +100,7 @@ def get_request_url(aurorax_obj, request_id):
     return url
 
 
-def create_advanced_distance_combos(distance, ground, space, events):
+def create_advanced_distance_combos(distance, ground, space, events, custom):
     # set input arrays
     options = []
     for i in range(0, ground):
@@ -107,6 +109,8 @@ def create_advanced_distance_combos(distance, ground, space, events):
         options.append("space%d" % (i + 1))
     for i in range(0, events):
         options.append("events%d" % (i + 1))
+    for i in range(0, custom):
+        options.append("adhoc%d" % (i + 1))
 
     # derive all combinations of options of size 2
     combinations = {}

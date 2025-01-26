@@ -26,7 +26,12 @@ from .data_products.classes.data_product import DataProductData
 from .data_products.classes.search import DataProductSearch
 from .conjunctions.classes.conjunction import Conjunction
 from .conjunctions.classes.search import ConjunctionSearch
-from .conjunctions.classes.criteria_block import GroundCriteriaBlock, SpaceCriteriaBlock, EventsCriteriaBlock
+from .conjunctions.classes.criteria_block import (
+    GroundCriteriaBlock,
+    SpaceCriteriaBlock,
+    EventsCriteriaBlock,
+    CustomLocationsCriteriaBlock,
+)
 from .metadata_filters import MetadataFilter, MetadataFilterExpression
 
 # pull in constants
@@ -93,6 +98,7 @@ __all__ = [
     "GroundCriteriaBlock",
     "SpaceCriteriaBlock",
     "EventsCriteriaBlock",
+    "CustomLocationsCriteriaBlock",
     "MetadataFilter",
     "MetadataFilterExpression",
 ]
@@ -126,6 +132,7 @@ class SearchManager:
         self.GroundCriteriaBlock = GroundCriteriaBlock
         self.SpaceCriteriaBlock = SpaceCriteriaBlock
         self.EventsCriteriaBlock = EventsCriteriaBlock
+        self.CustomLocationsCriteriaBlock = CustomLocationsCriteriaBlock
         self.ConjunctionSearch = ConjunctionSearch
         self.EphemerisSearch = EphemerisSearch
         self.DataProductSearch = DataProductSearch

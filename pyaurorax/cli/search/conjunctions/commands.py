@@ -65,6 +65,7 @@ def __create_search_object_from_query(aurorax_obj, q):
     ground = [] if "ground" not in q else q["ground"]
     space = [] if "space" not in q else q["space"]
     events = [] if "events" not in q else q["events"]
+    custom = [] if "adhoc" not in q else q["adhoc"]
     conjunction_types = [] if "conjunction_types" not in q else q["conjunction_types"]
     s = pyaurorax.search.ConjunctionSearch(aurorax_obj,
                                            start,
@@ -73,6 +74,7 @@ def __create_search_object_from_query(aurorax_obj, q):
                                            ground=ground,
                                            space=space,
                                            events=events,
+                                           custom_locations=custom,
                                            conjunction_types=conjunction_types)
     return s
 
@@ -299,6 +301,7 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
     ground = None if "ground" not in q else q["ground"]
     space = None if "space" not in q else q["space"]
     events = None if "events" not in q else q["events"]
+    custom = None if "custom" not in q else q["custom"]
     conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
     verbose_search = True if quiet is False else False
 
@@ -309,6 +312,7 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                                                   ground=ground,
                                                   space=space,
                                                   events=events,
+                                                  custom_locations=custom,
                                                   conjunction_types=conjunction_types,
                                                   poll_interval=poll_interval,
                                                   verbose=verbose_search,
