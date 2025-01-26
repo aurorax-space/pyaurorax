@@ -67,7 +67,7 @@ border-left: 1px solid #ddd;
 <dl>
 <dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch"><code class="flex name class">
 <span>class <span class="ident">EphemerisSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>metadata_filters: Optional[List[Dict]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -83,34 +83,26 @@ border-left: 1px solid #ddd;
 
     Attributes:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive)
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive)
 
         programs (List[str]): 
-            list of programs to search through, defaults to None
+            List of programs to search through, defaults to None
 
         platforms (List[str]): 
-            list of platforms to search through, defaults to None
+            List of platforms to search through, defaults to None
 
         instrument_types (List[str]): 
-            list of instrument types to search through, defaults to None
+            List of instrument types to search through, defaults to None
 
-        metadata_filters (List[Dict]): 
-            list of dictionaries describing metadata keys and values to filter on, defaults 
+        metadata_filters (MetadataFilter or List[Dict]): 
+            List of dictionaries describing metadata keys and values to filter on, defaults 
             to None
 
-            e.g. {
-                &#34;key&#34;: &#34;string&#34;,
-                &#34;operator&#34;: &#34;=&#34;,
-                &#34;values&#34;: [
-                    &#34;string&#34;
-                ]
-            }
-
         metadata_filters_logical_operator (str): 
-            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+            The logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
             defaults to `AND`
 
         response_format (Dict): 
@@ -120,31 +112,31 @@ border-left: 1px solid #ddd;
             AuroraXResponse object returned when the search is executed
         
         request_id (str): 
-            unique ID assigned to the request by the AuroraX API
+            Unique ID assigned to the request by the AuroraX API
        
         request_url (str): 
-            unique URL assigned to the request by the AuroraX API
+            Unique URL assigned to the request by the AuroraX API
      
         executed (bool): 
-            indicates if the search has been executed/started
+            Indicates if the search has been executed/started
      
         completed (bool): 
-            indicates if the search has finished
+            Indicates if the search has finished
        
         data_url (str): 
-            the URL where data is accessed
+            The URL where data is accessed
       
         query (Dict): 
-            the query for this request as JSON
+            The query for this request as JSON
       
         status (Dict): 
-            the status of the query
+            The status of the query
       
         data (List[EphemerisData]): 
-            the ephemeris records found
+            The ephemeris records found
       
         logs (List[Dict]): 
-            all log messages outputted by the AuroraX API for this request
+            All log messages outputted by the AuroraX API for this request
     &#34;&#34;&#34;
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -156,8 +148,8 @@ border-left: 1px solid #ddd;
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 metadata_filters: Optional[List[Dict]] = None,
-                 metadata_filters_logical_operator: Optional[Literal[&#34;AND&#34;, &#34;OR&#34;]] = None,
+                 metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
+                 metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
 
         # set variables using passed in args
@@ -168,7 +160,7 @@ border-left: 1px solid #ddd;
         self.platforms = platforms
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
-        self.metadata_filters_logical_operator = &#34;AND&#34; if metadata_filters_logical_operator is None else metadata_filters_logical_operator
+        self.metadata_filters_logical_operator = &#34;AND&#34; if metadata_filters_logical_operator is None else metadata_filters_logical_operator.upper()
         self.response_format = response_format
 
         # initialize additional variables
@@ -246,19 +238,32 @@ border-left: 1px solid #ddd;
         &#34;&#34;&#34;
         Property for the query value
         &#34;&#34;&#34;
+        # set metadata filter value
+        if (self.metadata_filters is None):
+            metadata_filters_dict = {}
+        elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+            # metadata filter is a class
+            metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+        else:
+            # metadata filter is a dictionary
+            metadata_filters_dict = {
+                &#34;expressions&#34;: self.metadata_filters,
+                &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
+            }
+
+        # set query
         self.__query = {
             &#34;data_sources&#34;: {
                 &#34;programs&#34;: [] if not self.programs else self.programs,
                 &#34;platforms&#34;: [] if not self.platforms else self.platforms,
                 &#34;instrument_types&#34;: [] if not self.instrument_types else self.instrument_types,
-                &#34;ephemeris_metadata_filters&#34;: {} if not self.metadata_filters else {
-                    &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
-                    &#34;expressions&#34;: self.metadata_filters
-                },
+                &#34;ephemeris_metadata_filters&#34;: metadata_filters_dict,
             },
             &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
             &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         }
+
+        # return
         return self.__query
 
     @query.setter
@@ -270,7 +275,7 @@ border-left: 1px solid #ddd;
         Initiate ephemeris search request
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: invalid request parameters are set
+            pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         &#34;&#34;&#34;
         # check for at least one filter criteria
         if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
@@ -298,7 +303,7 @@ border-left: 1px solid #ddd;
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include to avoid requesting it 
+                The previously-retrieved status of this request (include to avoid requesting it 
                 from the API again), defaults to None
         &#34;&#34;&#34;
         # get the status if it isn&#39;t passed in
@@ -358,10 +363,10 @@ border-left: 1px solid #ddd;
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
         self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
@@ -377,20 +382,20 @@ border-left: 1px solid #ddd;
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait for 
+                Wait until the cancellation request has been completed (may wait for 
                 several minutes)
 
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to 1 second.
+                Seconds to wait between polling calls, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
 
         Raises:
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
@@ -402,53 +407,44 @@ must be specified.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp of the search (inclusive)</dd>
+<dd>Start timestamp of the search (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp of the search (inclusive)</dd>
+<dd>End timestamp of the search (inclusive)</dd>
 <dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of programs to search through, defaults to None</dd>
+<dd>List of programs to search through, defaults to None</dd>
 <dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of platforms to search through, defaults to None</dd>
+<dd>List of platforms to search through, defaults to None</dd>
 <dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of instrument types to search through, defaults to None</dd>
-<dt><strong><code>metadata_filters</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>
-<p>list of dictionaries describing metadata keys and values to filter on, defaults
-to None</p>
-<p>e.g. {
-"key": "string",
-"operator": "=",
-"values": [
-"string"
-]
-}</p>
-</dd>
+<dd>List of instrument types to search through, defaults to None</dd>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code>MetadataFilter</code> or <code>List[Dict]</code></dt>
+<dd>List of dictionaries describing metadata keys and values to filter on, defaults
+to None</dd>
 <dt><strong><code>metadata_filters_logical_operator</code></strong> :&ensp;<code>str</code></dt>
-<dd>the logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
+<dd>The logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
 defaults to <code>AND</code></dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
 <dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
 <dd>AuroraXResponse object returned when the search is executed</dd>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dd>Unique ID assigned to the request by the AuroraX API</dd>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>
-<p>unique URL assigned to the request by the AuroraX API</p>
+<p>Unique URL assigned to the request by the AuroraX API</p>
 <p>executed (bool):
-indicates if the search has been executed/started</p>
+Indicates if the search has been executed/started</p>
 <p>completed (bool):
-indicates if the search has finished</p>
+Indicates if the search has finished</p>
 <p>data_url (str):
-the URL where data is accessed</p>
+The URL where data is accessed</p>
 <p>query (Dict):
-the query for this request as JSON</p>
+The query for this request as JSON</p>
 <p>status (Dict):
-the status of the query</p>
+The status of the query</p>
 <p>data (List[EphemerisData]):
-the ephemeris records found</p>
+The ephemeris records found</p>
 <p>logs (List[Dict]):
-all log messages outputted by the AuroraX API for this request</p>
+All log messages outputted by the AuroraX API for this request</p>
 </dd>
 </dl></div>
 <h3>Instance variables</h3>
@@ -464,19 +460,32 @@ def query(self):
     &#34;&#34;&#34;
     Property for the query value
     &#34;&#34;&#34;
+    # set metadata filter value
+    if (self.metadata_filters is None):
+        metadata_filters_dict = {}
+    elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+        # metadata filter is a class
+        metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+    else:
+        # metadata filter is a dictionary
+        metadata_filters_dict = {
+            &#34;expressions&#34;: self.metadata_filters,
+            &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
+        }
+
+    # set query
     self.__query = {
         &#34;data_sources&#34;: {
             &#34;programs&#34;: [] if not self.programs else self.programs,
             &#34;platforms&#34;: [] if not self.platforms else self.platforms,
             &#34;instrument_types&#34;: [] if not self.instrument_types else self.instrument_types,
-            &#34;ephemeris_metadata_filters&#34;: {} if not self.metadata_filters else {
-                &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
-                &#34;expressions&#34;: self.metadata_filters
-            },
+            &#34;ephemeris_metadata_filters&#34;: metadata_filters_dict,
         },
         &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
     }
+
+    # return
     return self.__query</code></pre>
 </details>
 <div class="desc"><p>Property for the query value</p></div>
@@ -503,20 +512,20 @@ def query(self):
 
     Args:
         wait (bool): 
-            wait until the cancellation request has been completed (may wait for 
+            Wait until the cancellation request has been completed (may wait for 
             several minutes)
 
         poll_interval (float): 
-            seconds to wait between polling calls, defaults to 1 second.
+            Seconds to wait between polling calls, defaults to 1 second
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
 
     Returns:
         1 on success
 
     Raises:
-        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
     &#34;&#34;&#34;
     url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
@@ -530,19 +539,19 @@ the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
-<dd>wait until the cancellation request has been completed (may wait for
+<dd>Wait until the cancellation request has been completed (may wait for
 several minutes)</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>seconds to wait between polling calls, defaults to 1 second.</dd>
+<dd>Seconds to wait between polling calls, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>1 on success</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>invalid API key for this operation</dd>
+<dd>Invalid API key for this operation</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -582,7 +591,7 @@ several minutes)</dd>
     Initiate ephemeris search request
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: invalid request parameters are set
+        pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
     &#34;&#34;&#34;
     # check for at least one filter criteria
     if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
@@ -608,7 +617,7 @@ several minutes)</dd>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
-<dd>invalid request parameters are set</dd>
+<dd>Invalid request parameters are set</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.get_data"><code class="name flex">
@@ -717,7 +726,7 @@ several minutes)</dd>
 
     Args:
         status (Dict): 
-            the previously-retrieved status of this request (include to avoid requesting it 
+            The previously-retrieved status of this request (include to avoid requesting it 
             from the API again), defaults to None
     &#34;&#34;&#34;
     # get the status if it isn&#39;t passed in
@@ -741,7 +750,7 @@ several minutes)</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the previously-retrieved status of this request (include to avoid requesting it
+<dd>The previously-retrieved status of this request (include to avoid requesting it
 from the API again), defaults to None</dd>
 </dl></div>
 </dd>
@@ -759,10 +768,10 @@ from the API again), defaults to None</dd>
 
     Args:
         poll_interval (float): 
-            time in seconds to wait between polling attempts, defaults to 1 second
+            Time in seconds to wait between polling attempts, defaults to 1 second
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
     &#34;&#34;&#34;
     url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
     self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))</code></pre>
@@ -771,9 +780,9 @@ from the API again), defaults to None</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>time in seconds to wait between polling attempts, defaults to 1 second</dd>
+<dd>Time in seconds to wait between polling attempts, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl></div>
 </dd>
 </dl>

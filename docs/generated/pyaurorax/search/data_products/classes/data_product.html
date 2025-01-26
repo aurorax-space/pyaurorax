@@ -121,22 +121,22 @@ counts in Rayleighs.</p></div>
 
     Attributes:
         data_source (DataSource): 
-            data source that the ephemeris record is associated with
+            Data source that the ephemeris record is associated with
 
         data_product_type (str): 
-            data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;)
+            Data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, etc.)
 
         start (datetime.datetime): 
-            starting timestamp for the record (assumed it is in UTC), inclusive
+            Starting timestamp for the record (assumed it is in UTC), inclusive
 
         end (datetime.datetime): 
-            ending timestamp for the record (assumed it is in UTC), inclusive
+            Ending timestamp for the record (assumed it is in UTC), inclusive
 
         url (str): 
-            the URL of data product
+            The URL of data product
 
         metadata (Dict): 
-            metadata for this record (arbitrary keys and values)
+            Metadata for this record (arbitrary keys and values)
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -159,7 +159,7 @@ counts in Rayleighs.</p></div>
         datetime objects to strings)
 
         Returns:
-            a dictionary object that is JSON-serializable
+            A dictionary object that is JSON-serializable
         &#34;&#34;&#34;
         # init
         d = self.__dict__
@@ -208,17 +208,17 @@ counts in Rayleighs.</p></div>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>data_source</code></strong> :&ensp;<code>DataSource</code></dt>
-<dd>data source that the ephemeris record is associated with</dd>
+<dd>Data source that the ephemeris record is associated with</dd>
 <dt><strong><code>data_product_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>data product type ("keogram", "movie", "summary_plot")</dd>
+<dd>Data product type ("keogram", "movie", "summary_plot", etc.)</dd>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>starting timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dd>Starting timestamp for the record (assumed it is in UTC), inclusive</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>ending timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dd>Ending timestamp for the record (assumed it is in UTC), inclusive</dd>
 <dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL of data product</dd>
+<dd>The URL of data product</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this record (arbitrary keys and values)</dd>
+<dd>Metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>
@@ -236,7 +236,7 @@ counts in Rayleighs.</p></div>
     datetime objects to strings)
 
     Returns:
-        a dictionary object that is JSON-serializable
+        A dictionary object that is JSON-serializable
     &#34;&#34;&#34;
     # init
     d = self.__dict__
@@ -267,7 +267,7 @@ counts in Rayleighs.</p></div>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
-<p>a dictionary object that is JSON-serializable</p></div>
+<p>A dictionary object that is JSON-serializable</p></div>
 </dd>
 </dl>
 </dd>

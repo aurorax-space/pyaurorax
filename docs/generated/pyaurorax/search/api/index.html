@@ -92,19 +92,19 @@ not needed for most use-cases.</p>
             API endpoint URL for the request
 
         method (str): 
-            the HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
+            The HTTP method to use. Valid values are: `get`, `post`, `put`, `delete`, `patch`
 
         params (Dict): 
             URL parameters to send in the request, defaults to `{}`
 
         body (Dict): 
-            the body of the request (ie. post data), defaults to `{}`
+            The body of the request (ie. post data), defaults to `{}`
 
         headers (Dict): 
-            any headers to send as part of the request (in addition to the default ones), defaults to `{}`
+            Any headers to send as part of the request (in addition to the default ones), defaults to `{}`
             
         null_response (bool): 
-            signifies if we expect a response from the API that has no body/data in it (ie. 
+            Signifies if we expect a response from the API that has no body/data in it (ie. 
             requests to upload data that respond with just a 202 status code), defaults to `False`
     &#34;&#34;&#34;
 
@@ -150,11 +150,11 @@ not needed for most use-cases.</p>
         Execute an AuroraX API request
     
         Returns:
-            an `pyaurorax.search.api.AuroraXAPIResponse` object
+            An `pyaurorax.search.api.AuroraXAPIResponse` object
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
-            pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Unauthorized user attempted to perform this action
             pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance
         &#34;&#34;&#34;
         # sanitize data
@@ -193,6 +193,10 @@ not needed for most use-cases.</p>
                     raise AuroraXAPIError(&#34;API error code 404: not found&#34;)
             else:
                 raise AuroraXAPIError(&#34;API error code 404: not found&#34;)
+
+        # check for 400
+        if (req.status_code == 400):
+            raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, req.content.decode()))
 
         # check for server error
         if (req.status_code == 500):
@@ -247,15 +251,15 @@ not needed for most use-cases.</p>
 <dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
 <dd>API endpoint URL for the request</dd>
 <dt><strong><code>method</code></strong> :&ensp;<code>str</code></dt>
-<dd>the HTTP method to use. Valid values are: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code></dd>
+<dd>The HTTP method to use. Valid values are: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code></dd>
 <dt><strong><code>params</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>URL parameters to send in the request, defaults to <code>{}</code></dd>
 <dt><strong><code>body</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the body of the request (ie. post data), defaults to <code>{}</code></dd>
+<dd>The body of the request (ie. post data), defaults to <code>{}</code></dd>
 <dt><strong><code>headers</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>any headers to send as part of the request (in addition to the default ones), defaults to <code>{}</code></dd>
+<dd>Any headers to send as part of the request (in addition to the default ones), defaults to <code>{}</code></dd>
 <dt><strong><code>null_response</code></strong> :&ensp;<code>bool</code></dt>
-<dd>signifies if we expect a response from the API that has no body/data in it (ie.
+<dd>Signifies if we expect a response from the API that has no body/data in it (ie.
 requests to upload data that respond with just a 202 status code), defaults to <code>False</code></dd>
 </dl></div>
 <h3>Methods</h3>
@@ -273,11 +277,11 @@ requests to upload data that respond with just a 202 status code), defaults to <
     Execute an AuroraX API request
 
     Returns:
-        an `pyaurorax.search.api.AuroraXAPIResponse` object
+        An `pyaurorax.search.api.AuroraXAPIResponse` object
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
-        pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Unauthorized user attempted to perform this action
         pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance
     &#34;&#34;&#34;
     # sanitize data
@@ -316,6 +320,10 @@ requests to upload data that respond with just a 202 status code), defaults to <
                 raise AuroraXAPIError(&#34;API error code 404: not found&#34;)
         else:
             raise AuroraXAPIError(&#34;API error code 404: not found&#34;)
+
+    # check for 400
+    if (req.status_code == 400):
+        raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, req.content.decode()))
 
     # check for server error
     if (req.status_code == 500):
@@ -360,13 +368,13 @@ requests to upload data that respond with just a 202 status code), defaults to <
 </details>
 <div class="desc"><p>Execute an AuroraX API request</p>
 <h2 id="returns">Returns</h2>
-<p>an <code><a title="pyaurorax.search.api.AuroraXAPIResponse" href="#pyaurorax.search.api.AuroraXAPIResponse">AuroraXAPIResponse</a></code> object</p>
+<p>An <code><a title="pyaurorax.search.api.AuroraXAPIResponse" href="#pyaurorax.search.api.AuroraXAPIResponse">AuroraXAPIResponse</a></code> object</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>unauthorized user attempted to perform this action</dd>
+<dd>Unauthorized user attempted to perform this action</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXMaintenanceError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXMaintenanceError">AuroraXMaintenanceError</a></code></dt>
 <dd>AuroraX API is currently undergoing maintenance</dd>
 </dl></div>
@@ -388,13 +396,13 @@ requests to upload data that respond with just a 202 status code), defaults to <
 
     Attributes:
         request (Any): 
-            the request object
+            The request object
 
         data (Any): 
-            the data received as part of the request
+            The data received as part of the request
 
         status_code (int): 
-            the HTTP status code received when making the request
+            The HTTP status code received when making the request
     &#34;&#34;&#34;
 
     def __init__(self, request: Any, data: Any, status_code: int):
@@ -412,11 +420,11 @@ requests to upload data that respond with just a 202 status code), defaults to <
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>request</code></strong> :&ensp;<code>Any</code></dt>
-<dd>the request object</dd>
+<dd>The request object</dd>
 <dt><strong><code>data</code></strong> :&ensp;<code>Any</code></dt>
-<dd>the data received as part of the request</dd>
+<dd>The data received as part of the request</dd>
 <dt><strong><code>status_code</code></strong> :&ensp;<code>int</code></dt>
-<dd>the HTTP status code received when making the request</dd>
+<dd>The HTTP status code received when making the request</dd>
 </dl></div>
 </dd>
 </dl>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.5">
 <title>pyaurorax.search.location API documentation</title>
-<meta name="description" content="AuroraX `pyaurorax.search.location.Location` class definition">
+<meta name="description" content="Class definition for AuroraX search engine location data">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -54,7 +54,7 @@ border-left: 1px solid #ddd;
 <h1 class="title">Module <code>pyaurorax.search.location</code></h1>
 </header>
 <section id="section-intro">
-<p>AuroraX <code><a title="pyaurorax.search.location.Location" href="#pyaurorax.search.location.Location">Location</a></code> class definition</p>
+<p>Class definition for AuroraX search engine location data</p>
 </section>
 <section>
 </section>
@@ -76,8 +76,8 @@ border-left: 1px solid #ddd;
 </summary>
 <pre><code class="python">class Location:
     &#34;&#34;&#34;
-    Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
-    or northern/southern B-trace magnetic footprints.
+    Representation for an AuroraX search engine location. This data can be in geodetic 
+    coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.
 
     Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
     for latitude and -180 to 180 for longitude.
@@ -137,8 +137,8 @@ border-left: 1px solid #ddd;
     def __repr__(self) -&gt; str:
         return &#34;%s(lat=%s, lon=%s)&#34; % (self.__class__.__name__, str(self.lat), str(self.lon))</code></pre>
 </details>
-<div class="desc"><p>Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
-or northern/southern B-trace magnetic footprints.</p>
+<div class="desc"><p>Representation for an AuroraX search engine location. This data can be in geodetic
+coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.</p>
 <p>Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
 for latitude and -180 to 180 for longitude.</p>
 <p>Note that latitude and longitude must both be numbers, or both be None.</p>

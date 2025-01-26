@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.5">
+<title>pyaurorax.search.metadata_filters API documentation</title>
+<meta name="description" content="Class definition for a metadata filter objects">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}#lunr-search{width:100%;font-size:1em;padding:6px 9px 5px 9px;border:1px solid silver}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+<style>
+@media screen and (max-width: 699px) {
+#content {
+padding-left: 2em;
+padding-right: 2em;
+padding-top: 0;
+}
+}
+@media screen and (min-width: 700px) {
+#content {
+max-width: 125ch;
+padding-left: 3em;
+padding-right: 3em;
+padding-top: 1em;
+border-left: 1px solid #ddd;
+}
+}
+</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyaurorax.search.metadata_filters</code></h1>
+</header>
+<section id="section-intro">
+<p>Class definition for a metadata filter objects</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilter"><code class="flex name class">
+<span>class <span class="ident">MetadataFilter</span></span>
+<span>(</span><span>expressions: List[<a title="pyaurorax.search.metadata_filters.MetadataFilterExpression" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression">MetadataFilterExpression</a>],<br>operator: Literal['and', 'or', 'AND', 'OR'] = 'and')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MetadataFilter:
+    &#34;&#34;&#34;
+    Representation for an AuroraX search engine metadata filter. These are used 
+    as part of conjunction, ephemeris, and data product searching.
+
+    Attributes:
+        expressions (List[MetadataFilterExpression]): 
+            The list of metadata filter expressions for use with conjunction, ephemeris, and 
+            data product searches.
+        
+        operator (str): 
+            The logical operator to use when the search engine will evaluate multiple expressions. If 
+            not supplied, the search engine will perform a logical &#39;AND&#39; between each expression. Possible
+            choices are &#39;and&#39; or &#39;or&#39;.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        expressions: List[MetadataFilterExpression],
+        operator: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;,
+    ):
+        self.expressions = expressions
+        self.__operator = operator
+
+    @property
+    def operator(self):
+        return self.__operator
+
+    @operator.setter
+    def operator(self, val: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;):
+        if (val.lower() not in [&#34;and&#34;, &#34;or&#34;]):
+            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (val))
+        self.__operator = val.lower()
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        if (len(self.expressions) == 0):
+            expressions_str = &#34;[0 expressions]&#34;
+        elif (len(self.expressions) == 1):
+            expressions_str = &#34;[1 expression]&#34;
+        else:
+            expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
+
+        # return
+        return &#34;MetadataFilter(expressions=%s, operator=&#39;%s&#39;)&#34; % (expressions_str, self.operator)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        if (len(self.expressions) == 0):
+            expressions_str = &#34;[0 expressions]&#34;
+        elif (len(self.expressions) == 1):
+            expressions_str = &#34;[1 expression]&#34;
+        else:
+            expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
+
+        # print
+        print(&#34;MetadataFilter:&#34;)
+        print(&#34;  %-13s: %s&#34; % (&#34;expressions&#34;, expressions_str))
+        print(&#34;  %-13s: %s&#34; % (&#34;operator&#34;, self.operator))
+
+    def to_query_dict(self):
+        &#34;&#34;&#34;
+        Convert the expression object to a dictionary that will be used when executing a search.
+        &#34;&#34;&#34;
+        return {
+            &#34;expressions&#34;: [x.to_query_dict() for x in self.expressions],
+            &#34;logical_operator&#34;: self.operator.upper(),
+        }</code></pre>
+</details>
+<div class="desc"><p>Representation for an AuroraX search engine metadata filter. These are used
+as part of conjunction, ephemeris, and data product searching.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>expressions</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.metadata_filters.MetadataFilterExpression" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression">MetadataFilterExpression</a>]</code></dt>
+<dd>The list of metadata filter expressions for use with conjunction, ephemeris, and
+data product searches.</dd>
+<dt><strong><code>operator</code></strong> :&ensp;<code>str</code></dt>
+<dd>The logical operator to use when the search engine will evaluate multiple expressions. If
+not supplied, the search engine will perform a logical 'AND' between each expression. Possible
+choices are 'and' or 'or'.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>if invalid operator was specified.</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilter.operator"><code class="name">prop <span class="ident">operator</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def operator(self):
+    return self.__operator</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilter.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    if (len(self.expressions) == 0):
+        expressions_str = &#34;[0 expressions]&#34;
+    elif (len(self.expressions) == 1):
+        expressions_str = &#34;[1 expression]&#34;
+    else:
+        expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
+
+    # print
+    print(&#34;MetadataFilter:&#34;)
+    print(&#34;  %-13s: %s&#34; % (&#34;expressions&#34;, expressions_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;operator&#34;, self.operator))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilter.to_query_dict"><code class="name flex">
+<span>def <span class="ident">to_query_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_query_dict(self):
+    &#34;&#34;&#34;
+    Convert the expression object to a dictionary that will be used when executing a search.
+    &#34;&#34;&#34;
+    return {
+        &#34;expressions&#34;: [x.to_query_dict() for x in self.expressions],
+        &#34;logical_operator&#34;: self.operator.upper(),
+    }</code></pre>
+</details>
+<div class="desc"><p>Convert the expression object to a dictionary that will be used when executing a search.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilterExpression"><code class="flex name class">
+<span>class <span class="ident">MetadataFilterExpression</span></span>
+<span>(</span><span>key: str,<br>values: Any | List[Any],<br>operator: Literal['=', '!=', '>', '<', '>=', '<=', 'between', 'in', 'not in'] = 'in')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MetadataFilterExpression:
+    &#34;&#34;&#34;
+    Representation for an AuroraX search engine metadata filter expression. These are used 
+    as part of conjunction, ephemeris, and data product searching.
+
+    Attributes:
+        key (str): 
+            The special key for the metadata filter. For example, &#39;nbtrace_region&#39;.
+        
+        values (Any or List[Any]): 
+            The value(s) that the search will use when filtering. This can either be a single value, 
+            or a list of values.
+
+        operator (str): 
+            The operator to use when the search engine evaluates the expression. Valid choices
+            are: &#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;.
+
+            The &#34;in&#34; and &#34;not in&#34; operators are meant exclusively for expressions where there 
+            are multiple values (ie. the values parameter is a list of strings).
+        
+    Raises:
+        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        key: str,
+        values: Union[Any, List[Any]],
+        operator: Literal[&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;] = &#34;in&#34;,
+    ):
+        # set required parameters
+        self.key = key
+        self.values = values
+        self.__operator = operator
+
+    @property
+    def operator(self) -&gt; str:
+        return self.__operator
+
+    @operator.setter
+    def operator(self, val: Literal[&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
+        if (val not in [&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
+            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#34; +
+                         &#34;&#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; % (val))
+        self.__operator = val
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        values_str = &#34;&#39;%s&#39;&#34; % (self.values)
+        if (type(self.values) is list):
+            values_str = str(self.values)
+
+        # return
+        return &#34;MetadataFilterExpression(key=&#39;%s&#39;, values=%s, operator=&#39;%s&#39;)&#34; % (self.key, values_str, self.operator)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+
+        # print
+        print(&#34;MetadataFilterExpression:&#34;)
+        print(&#34;  %-10s: %s&#34; % (&#34;key&#34;, self.key))
+        print(&#34;  %-10s: %s&#34; % (&#34;values&#34;, self.values))
+        print(&#34;  %-10s: %s&#34; % (&#34;operator&#34;, self.operator))
+
+    def to_query_dict(self):
+        &#34;&#34;&#34;
+        Convert the expression object to a dictionary that will be used when executing a search.
+        &#34;&#34;&#34;
+        return {
+            &#34;key&#34;: str(self.key),
+            &#34;values&#34;: [str(self.values)] if type(self.values) is not list else self.values,
+            &#34;operator&#34;: str(self.operator),
+        }</code></pre>
+</details>
+<div class="desc"><p>Representation for an AuroraX search engine metadata filter expression. These are used
+as part of conjunction, ephemeris, and data product searching.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
+<dd>The special key for the metadata filter. For example, 'nbtrace_region'.</dd>
+<dt><strong><code>values</code></strong> :&ensp;<code>Any</code> or <code>List[Any]</code></dt>
+<dd>The value(s) that the search will use when filtering. This can either be a single value,
+or a list of values.</dd>
+<dt><strong><code>operator</code></strong> :&ensp;<code>str</code></dt>
+<dd>
+<p>The operator to use when the search engine evaluates the expression. Valid choices
+are: "=", "!=", "&gt;", "&lt;", "&gt;=", "&lt;=", "between", "in", "not in".</p>
+<p>The "in" and "not in" operators are meant exclusively for expressions where there
+are multiple values (ie. the values parameter is a list of strings).</p>
+</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>if invalid operator was specified.</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilterExpression.operator"><code class="name">prop <span class="ident">operator</span> : str</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def operator(self) -&gt; str:
+    return self.__operator</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilterExpression.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+
+    # print
+    print(&#34;MetadataFilterExpression:&#34;)
+    print(&#34;  %-10s: %s&#34; % (&#34;key&#34;, self.key))
+    print(&#34;  %-10s: %s&#34; % (&#34;values&#34;, self.values))
+    print(&#34;  %-10s: %s&#34; % (&#34;operator&#34;, self.operator))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+<dt id="pyaurorax.search.metadata_filters.MetadataFilterExpression.to_query_dict"><code class="name flex">
+<span>def <span class="ident">to_query_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_query_dict(self):
+    &#34;&#34;&#34;
+    Convert the expression object to a dictionary that will be used when executing a search.
+    &#34;&#34;&#34;
+    return {
+        &#34;key&#34;: str(self.key),
+        &#34;values&#34;: [str(self.values)] if type(self.values) is not list else self.values,
+        &#34;operator&#34;: str(self.operator),
+    }</code></pre>
+</details>
+<div class="desc"><p>Convert the expression object to a dictionary that will be used when executing a search.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<form>
+<input id="lunr-search" name="q" placeholder="🔎 Search ..." aria-label="Search"
+disabled minlength="2">
+</form>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.css" integrity="sha512-b+T2i3P45i1LZM7I00Ci5QquB9szqaxu+uuk5TUSGjZQ4w4n+qujQiIuvTv2BxE7WCGQCifNMksyKILDiHzsOg==" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.16.0/tingle.min.js" integrity="sha512-2B9/byNV1KKRm5nQ2RLViPFD6U4dUjDGwuW1GU+ImJh8YinPU9Zlq1GzdTMO+G2ROrB5o1qasJBy1ttYz0wCug==" crossorigin></script>
+<style>
+.modal-dialog iframe {
+width: 100vw;
+height: calc(100vh - 80px);
+}
+@media screen and (min-width: 700px) {
+.modal-dialog iframe {
+width: 70vw;
+height: 80vh;
+}
+}
+.modal-dialog .tingle-modal-box {width: auto;}
+.modal-dialog .tingle-modal-box__content {padding: 0;}
+</style>
+<script>
+const input = document.getElementById('lunr-search');
+input.disabled = false;
+input.form.addEventListener('submit', (ev) => {
+ev.preventDefault();
+const url = new URL(window.location);
+url.searchParams.set('q', input.value);
+history.replaceState({}, null, url.toString());
+search(input.value);
+});
+const query = new URL(window.location).searchParams.get('q');
+if (query)
+search(query);
+function search(query) {
+const url = '../../doc-search.html#' + encodeURIComponent(query);
+new tingle.modal({
+cssClass: ['modal-dialog'],
+onClose: () => {
+const url = new URL(window.location);
+url.searchParams.delete('q');
+history.replaceState({}, null, url.toString());
+setTimeout(() => input.focus(), 100);
+}
+}).setContent('<iframe src="' + url + '"></iframe>').open();
+}
+</script>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyaurorax.search" href="index.html">pyaurorax.search</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyaurorax.search.metadata_filters.MetadataFilter" href="#pyaurorax.search.metadata_filters.MetadataFilter">MetadataFilter</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.metadata_filters.MetadataFilter.operator" href="#pyaurorax.search.metadata_filters.MetadataFilter.operator">operator</a></code></li>
+<li><code><a title="pyaurorax.search.metadata_filters.MetadataFilter.pretty_print" href="#pyaurorax.search.metadata_filters.MetadataFilter.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.search.metadata_filters.MetadataFilter.to_query_dict" href="#pyaurorax.search.metadata_filters.MetadataFilter.to_query_dict">to_query_dict</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.search.metadata_filters.MetadataFilterExpression" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression">MetadataFilterExpression</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.metadata_filters.MetadataFilterExpression.operator" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression.operator">operator</a></code></li>
+<li><code><a title="pyaurorax.search.metadata_filters.MetadataFilterExpression.pretty_print" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.search.metadata_filters.MetadataFilterExpression.to_query_dict" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression.to_query_dict">to_query_dict</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+</footer>
+</body>
+</html>

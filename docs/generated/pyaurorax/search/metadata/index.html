@@ -93,13 +93,13 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             schema (List[Dict]): 
-                the metadata schema to validate against
+                The metadata schema to validate against
 
             record (Dict): 
-                metadata record to validate
+                Metadata record to validate
 
             quiet (bool): 
-                suppress any stdout output
+                Suppress any stdout output
 
         Returns:
             True if the metadata record is valid, False if it is not
@@ -112,10 +112,10 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             identifier (int): 
-                the AuroraX data source ID
+                The AuroraX data source ID
 
         Returns:
-            the ephemeris metadata schema for the data source
+            The ephemeris metadata schema for the data source
         &#34;&#34;&#34;
         return func_get_ephemeris_schema(self.__aurorax_obj, identifier)
 
@@ -125,10 +125,10 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             identifier (int): 
-                the AuroraX data source ID
+                The AuroraX data source ID
 
         Returns:
-            the data products metadata schema for the data source
+            The data products metadata schema for the data source
         &#34;&#34;&#34;
         return func_get_data_products_schema(self.__aurorax_obj, identifier)</code></pre>
 </details>
@@ -150,10 +150,10 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         identifier (int): 
-            the AuroraX data source ID
+            The AuroraX data source ID
 
     Returns:
-        the data products metadata schema for the data source
+        The data products metadata schema for the data source
     &#34;&#34;&#34;
     return func_get_data_products_schema(self.__aurorax_obj, identifier)</code></pre>
 </details>
@@ -161,10 +161,10 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the AuroraX data source ID</dd>
+<dd>The AuroraX data source ID</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the data products metadata schema for the data source</p></div>
+<p>The data products metadata schema for the data source</p></div>
 </dd>
 <dt id="pyaurorax.search.metadata.MetadataManager.get_ephemeris_schema"><code class="name flex">
 <span>def <span class="ident">get_ephemeris_schema</span></span>(<span>self, identifier: int) ‑> List[Dict]</span>
@@ -180,10 +180,10 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         identifier (int): 
-            the AuroraX data source ID
+            The AuroraX data source ID
 
     Returns:
-        the ephemeris metadata schema for the data source
+        The ephemeris metadata schema for the data source
     &#34;&#34;&#34;
     return func_get_ephemeris_schema(self.__aurorax_obj, identifier)</code></pre>
 </details>
@@ -191,10 +191,10 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the AuroraX data source ID</dd>
+<dd>The AuroraX data source ID</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the ephemeris metadata schema for the data source</p></div>
+<p>The ephemeris metadata schema for the data source</p></div>
 </dd>
 <dt id="pyaurorax.search.metadata.MetadataManager.validate"><code class="name flex">
 <span>def <span class="ident">validate</span></span>(<span>self, schema: List[Dict], record: Dict, quiet: bool | None = False) ‑> bool</span>
@@ -211,13 +211,13 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         schema (List[Dict]): 
-            the metadata schema to validate against
+            The metadata schema to validate against
 
         record (Dict): 
-            metadata record to validate
+            Metadata record to validate
 
         quiet (bool): 
-            suppress any stdout output
+            Suppress any stdout output
 
     Returns:
         True if the metadata record is valid, False if it is not
@@ -229,11 +229,11 @@ key names match and there aren't fewer or more keys than expected.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>schema</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>the metadata schema to validate against</dd>
+<dd>The metadata schema to validate against</dd>
 <dt><strong><code>record</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata record to validate</dd>
+<dd>Metadata record to validate</dd>
 <dt><strong><code>quiet</code></strong> :&ensp;<code>bool</code></dt>
-<dd>suppress any stdout output</dd>
+<dd>Suppress any stdout output</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>True if the metadata record is valid, False if it is not</p></div>

@@ -96,10 +96,10 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             request_url (str): 
-                the URL of the request information
+                The URL of the request information
 
         Returns:
-            the status information for the request
+            The status information for the request
         &#34;&#34;&#34;
         return func_get_status(self.__aurorax_obj, request_url)
 
@@ -109,16 +109,16 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             data_url (str): 
-                the URL for the data of a request,
+                The URL for the data of a request,
             
             response_format (Dict): 
-                the response format to send as post data, defaults to None
+                The response format to send as post data, defaults to None
             
             skip_serializing (bool): 
-                skip any object serializing, defaults to False
+                Skip any object serializing, defaults to False
 
         Raises:
-            pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
+            pyaurorax.exceptions.AuroraXDataRetrievalError: Error retrieving data
 
         Returns:
             the data for this request
@@ -131,10 +131,10 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             request_url (str): 
-                the URL of the request information
+                The URL of the request information
 
         Returns:
-            the log messages for the request
+            The log messages for the request
         &#34;&#34;&#34;
         return func_get_logs(self.__aurorax_obj, request_url)
 
@@ -144,13 +144,13 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             request_url (str): 
-                the URL of the request information
+                The URL of the request information
             
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+                Seconds to wait between polling calls, defaults to 1 second
             
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             the status information for the request
@@ -168,23 +168,23 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             request_url (str): 
-                the URL string of the request to be canceled
+                The URL string of the request to be canceled
             
             wait (bool): 
-                set to True to block until the cancellation request has been completed (may 
+                Set to True to block until the cancellation request has been completed (may 
                 wait for several minutes)
             
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+                Seconds to wait between polling calls, defaults to 1 second
             
             verbose (bool): 
-                if True then output poll times and other progress, defaults to False
+                If True then output poll times and other progress, defaults to False
 
         Returns:
             0 on success
 
         Raises:
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         &#34;&#34;&#34;
         return func_cancel(self.__aurorax_obj, request_url, wait, poll_interval, verbose)
@@ -203,36 +203,36 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             search_type (str): 
-                the type of search request, valid values are &#39;conjunction&#39;, &#39;ephemeris&#39;, or 
+                The type of search request, valid values are &#39;conjunction&#39;, &#39;ephemeris&#39;, or 
                 &#39;data_product&#39;. Exclusion of value will return all search requests of any 
                 type, defaults to None
 
             active (bool): 
-                return searches that are currently active or not, exclude for both, defaults to None
+                Return searches that are currently active or not, exclude for both, defaults to None
 
             start (datetime.datetime): 
-                start timestamp for narrowing down search timeframes, defaults to None
+                Start timestamp for narrowing down search timeframes, defaults to None
 
             end (datetime.datetime): 
-                end timestamp for narrowing down search timeframes, defaults to None
+                End timestamp for narrowing down search timeframes, defaults to None
 
             file_size (int): 
-                filter by result file size, measured in KB, defaults to None
+                Filter by result file size, measured in KB, defaults to None
 
             result_count (int): 
-                filter by result count, defaults to None
+                Filter by result count, defaults to None
 
             query_duration (int): 
-                filter by query duration, measured in milliseconds, defaults to None
+                Filter by query duration, measured in milliseconds, defaults to None
 
             error_condition (bool): 
-                filter by if an error occurred or not, exclude for both, defaults to None
+                Filter by if an error occurred or not, exclude for both, defaults to None
 
         Returns:
-            list of matching search requests
+            List of matching search requests
 
         Raises:
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         &#34;&#34;&#34;
         return func_list(self.__aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition)
 
@@ -242,13 +242,13 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             request_id (str): 
-                search request UUID
+                Search request UUID
 
         Returns:
             0 on success, raises error on failure
 
         Raises:
-            pyaurorax.exceptions.AuroraXNotFoundError: data source not found
+            pyaurorax.exceptions.AuroraXNotFoundError: Data source not found
         &#34;&#34;&#34;
         return func_delete(self.__aurorax_obj, request_id)</code></pre>
 </details>
@@ -275,23 +275,23 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         request_url (str): 
-            the URL string of the request to be canceled
+            The URL string of the request to be canceled
         
         wait (bool): 
-            set to True to block until the cancellation request has been completed (may 
+            Set to True to block until the cancellation request has been completed (may 
             wait for several minutes)
         
         poll_interval (float): 
-            seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+            Seconds to wait between polling calls, defaults to 1 second
         
         verbose (bool): 
-            if True then output poll times and other progress, defaults to False
+            If True then output poll times and other progress, defaults to False
 
     Returns:
         0 on success
 
     Raises:
-        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
     &#34;&#34;&#34;
     return func_cancel(self.__aurorax_obj, request_url, wait, poll_interval, verbose)</code></pre>
@@ -304,21 +304,21 @@ the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL string of the request to be canceled</dd>
+<dd>The URL string of the request to be canceled</dd>
 <dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
-<dd>set to True to block until the cancellation request has been completed (may
+<dd>Set to True to block until the cancellation request has been completed (may
 wait for several minutes)</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.</dd>
+<dd>Seconds to wait between polling calls, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>if True then output poll times and other progress, defaults to False</dd>
+<dd>If True then output poll times and other progress, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>0 on success</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>invalid API key for this operation</dd>
+<dd>Invalid API key for this operation</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -337,13 +337,13 @@ wait for several minutes)</dd>
 
     Args:
         request_id (str): 
-            search request UUID
+            Search request UUID
 
     Returns:
         0 on success, raises error on failure
 
     Raises:
-        pyaurorax.exceptions.AuroraXNotFoundError: data source not found
+        pyaurorax.exceptions.AuroraXNotFoundError: Data source not found
     &#34;&#34;&#34;
     return func_delete(self.__aurorax_obj, request_id)</code></pre>
 </details>
@@ -351,14 +351,14 @@ wait for several minutes)</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
-<dd>search request UUID</dd>
+<dd>Search request UUID</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>0 on success, raises error on failure</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXNotFoundError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXNotFoundError">AuroraXNotFoundError</a></code></dt>
-<dd>data source not found</dd>
+<dd>Data source not found</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.requests.RequestsManager.get_data"><code class="name flex">
@@ -375,16 +375,16 @@ wait for several minutes)</dd>
 
     Args:
         data_url (str): 
-            the URL for the data of a request,
+            The URL for the data of a request,
         
         response_format (Dict): 
-            the response format to send as post data, defaults to None
+            The response format to send as post data, defaults to None
         
         skip_serializing (bool): 
-            skip any object serializing, defaults to False
+            Skip any object serializing, defaults to False
 
     Raises:
-        pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data
+        pyaurorax.exceptions.AuroraXDataRetrievalError: Error retrieving data
 
     Returns:
         the data for this request
@@ -395,16 +395,16 @@ wait for several minutes)</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>data_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL for the data of a request,</dd>
+<dd>The URL for the data of a request,</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the response format to send as post data, defaults to None</dd>
+<dd>The response format to send as post data, defaults to None</dd>
 <dt><strong><code>skip_serializing</code></strong> :&ensp;<code>bool</code></dt>
-<dd>skip any object serializing, defaults to False</dd>
+<dd>Skip any object serializing, defaults to False</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXDataRetrievalError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXDataRetrievalError">AuroraXDataRetrievalError</a></code></dt>
-<dd>error retrieving data</dd>
+<dd>Error retrieving data</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>the data for this request</p></div>
@@ -423,10 +423,10 @@ wait for several minutes)</dd>
 
     Args:
         request_url (str): 
-            the URL of the request information
+            The URL of the request information
 
     Returns:
-        the log messages for the request
+        The log messages for the request
     &#34;&#34;&#34;
     return func_get_logs(self.__aurorax_obj, request_url)</code></pre>
 </details>
@@ -434,10 +434,10 @@ wait for several minutes)</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL of the request information</dd>
+<dd>The URL of the request information</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the log messages for the request</p></div>
+<p>The log messages for the request</p></div>
 </dd>
 <dt id="pyaurorax.search.requests.RequestsManager.get_status"><code class="name flex">
 <span>def <span class="ident">get_status</span></span>(<span>self, request_url: str) ‑> Dict</span>
@@ -453,10 +453,10 @@ wait for several minutes)</dd>
 
     Args:
         request_url (str): 
-            the URL of the request information
+            The URL of the request information
 
     Returns:
-        the status information for the request
+        The status information for the request
     &#34;&#34;&#34;
     return func_get_status(self.__aurorax_obj, request_url)</code></pre>
 </details>
@@ -464,10 +464,10 @@ wait for several minutes)</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL of the request information</dd>
+<dd>The URL of the request information</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the status information for the request</p></div>
+<p>The status information for the request</p></div>
 </dd>
 <dt id="pyaurorax.search.requests.RequestsManager.list"><code class="name flex">
 <span>def <span class="ident">list</span></span>(<span>self,<br>search_type: str | None = None,<br>active: bool | None = None,<br>start: datetime.datetime | None = None,<br>end: datetime.datetime | None = None,<br>file_size: int | None = None,<br>result_count: int | None = None,<br>query_duration: int | None = None,<br>error_condition: bool | None = None) ‑> List</span>
@@ -491,36 +491,36 @@ wait for several minutes)</dd>
 
     Args:
         search_type (str): 
-            the type of search request, valid values are &#39;conjunction&#39;, &#39;ephemeris&#39;, or 
+            The type of search request, valid values are &#39;conjunction&#39;, &#39;ephemeris&#39;, or 
             &#39;data_product&#39;. Exclusion of value will return all search requests of any 
             type, defaults to None
 
         active (bool): 
-            return searches that are currently active or not, exclude for both, defaults to None
+            Return searches that are currently active or not, exclude for both, defaults to None
 
         start (datetime.datetime): 
-            start timestamp for narrowing down search timeframes, defaults to None
+            Start timestamp for narrowing down search timeframes, defaults to None
 
         end (datetime.datetime): 
-            end timestamp for narrowing down search timeframes, defaults to None
+            End timestamp for narrowing down search timeframes, defaults to None
 
         file_size (int): 
-            filter by result file size, measured in KB, defaults to None
+            Filter by result file size, measured in KB, defaults to None
 
         result_count (int): 
-            filter by result count, defaults to None
+            Filter by result count, defaults to None
 
         query_duration (int): 
-            filter by query duration, measured in milliseconds, defaults to None
+            Filter by query duration, measured in milliseconds, defaults to None
 
         error_condition (bool): 
-            filter by if an error occurred or not, exclude for both, defaults to None
+            Filter by if an error occurred or not, exclude for both, defaults to None
 
     Returns:
-        list of matching search requests
+        List of matching search requests
 
     Raises:
-        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
     &#34;&#34;&#34;
     return func_list(self.__aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition)</code></pre>
 </details>
@@ -529,30 +529,30 @@ Administrators only.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>search_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the type of search request, valid values are 'conjunction', 'ephemeris', or
+<dd>The type of search request, valid values are 'conjunction', 'ephemeris', or
 'data_product'. Exclusion of value will return all search requests of any
 type, defaults to None</dd>
 <dt><strong><code>active</code></strong> :&ensp;<code>bool</code></dt>
-<dd>return searches that are currently active or not, exclude for both, defaults to None</dd>
+<dd>Return searches that are currently active or not, exclude for both, defaults to None</dd>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp for narrowing down search timeframes, defaults to None</dd>
+<dd>Start timestamp for narrowing down search timeframes, defaults to None</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp for narrowing down search timeframes, defaults to None</dd>
+<dd>End timestamp for narrowing down search timeframes, defaults to None</dd>
 <dt><strong><code>file_size</code></strong> :&ensp;<code>int</code></dt>
-<dd>filter by result file size, measured in KB, defaults to None</dd>
+<dd>Filter by result file size, measured in KB, defaults to None</dd>
 <dt><strong><code>result_count</code></strong> :&ensp;<code>int</code></dt>
-<dd>filter by result count, defaults to None</dd>
+<dd>Filter by result count, defaults to None</dd>
 <dt><strong><code>query_duration</code></strong> :&ensp;<code>int</code></dt>
-<dd>filter by query duration, measured in milliseconds, defaults to None</dd>
+<dd>Filter by query duration, measured in milliseconds, defaults to None</dd>
 <dt><strong><code>error_condition</code></strong> :&ensp;<code>bool</code></dt>
-<dd>filter by if an error occurred or not, exclude for both, defaults to None</dd>
+<dd>Filter by if an error occurred or not, exclude for both, defaults to None</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>list of matching search requests</p>
+<p>List of matching search requests</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>invalid API key for this operation</dd>
+<dd>Invalid API key for this operation</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.requests.RequestsManager.wait_for_data"><code class="name flex">
@@ -569,13 +569,13 @@ type, defaults to None</dd>
 
     Args:
         request_url (str): 
-            the URL of the request information
+            The URL of the request information
         
         poll_interval (float): 
-            seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME
+            Seconds to wait between polling calls, defaults to 1 second
         
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
 
     Returns:
         the status information for the request
@@ -586,11 +586,11 @@ type, defaults to None</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL of the request information</dd>
+<dd>The URL of the request information</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME</dd>
+<dd>Seconds to wait between polling calls, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>the status information for the request</p></div>

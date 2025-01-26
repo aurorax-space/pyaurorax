@@ -85,11 +85,15 @@ of data sources …</p></div>
 </dd>
 <dt><code class="name"><a title="pyaurorax.search.location" href="location.html">pyaurorax.search.location</a></code></dt>
 <dd>
-<div class="desc"><p>AuroraX <code><a title="pyaurorax.search.location.Location" href="location.html#pyaurorax.search.location.Location">Location</a></code> class definition</p></div>
+<div class="desc"><p>Class definition for AuroraX search engine location data</p></div>
 </dd>
 <dt><code class="name"><a title="pyaurorax.search.metadata" href="metadata/index.html">pyaurorax.search.metadata</a></code></dt>
 <dd>
 <div class="desc"><p>Interacting with the data source metadata schemas …</p></div>
+</dd>
+<dt><code class="name"><a title="pyaurorax.search.metadata_filters" href="metadata_filters.html">pyaurorax.search.metadata_filters</a></code></dt>
+<dd>
+<div class="desc"><p>Class definition for a metadata filter objects</p></div>
 </dd>
 <dt><code class="name"><a title="pyaurorax.search.requests" href="requests/index.html">pyaurorax.search.requests</a></code></dt>
 <dd>
@@ -181,34 +185,34 @@ class AvailabilityResult:
 
     Attributes:
         conjunction_type (str): 
-            the type of location data used when the conjunction was found (either 
+            The type of location data used when the conjunction was found (either 
             &#39;nbtrace&#39;, &#39;sbtrace&#39;, or &#39;geographic&#39;)
             
         start (datetime.datetime): 
-            start timestamp of the conjunction
+            Start timestamp of the conjunction
 
         end (datetime.datetime): 
-            end timestamp of the conjunction
+            End timestamp of the conjunction
 
         data_sources (List[DataSource]): 
-            data sources in the conjunction
+            Data sources in the conjunction
 
         min_distance (float): 
-            minimum kilometer distance of the conjunction
+            Minimum kilometer distance of the conjunction
 
         max_distance (float): 
-            maximum kilometer distance of the conjunction
+            Maximum kilometer distance of the conjunction
 
         events (List[Dict]): 
-            the sub-conjunctions that make up this over-arching
+            The sub-conjunctions that make up this over-arching
             conjunction (the conjunctions between each set of two data
             sources)
 
         closest_epoch (datetime.datetime): 
-            timestamp for when data sources were closest
+            Timestamp for when data sources were closest
 
         farthest_epoch (datetime.datetime): 
-            timestamp for when data sources were farthest
+            Timestamp for when data sources were farthest
     &#34;&#34;&#34;
 
     def __init__(
@@ -244,31 +248,31 @@ class AvailabilityResult:
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>conjunction_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the type of location data used when the conjunction was found (either
+<dd>The type of location data used when the conjunction was found (either
 'nbtrace', 'sbtrace', or 'geographic')</dd>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp of the conjunction</dd>
+<dd>Start timestamp of the conjunction</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp of the conjunction</dd>
+<dd>End timestamp of the conjunction</dd>
 <dt><strong><code>data_sources</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.DataSource" href="#pyaurorax.search.DataSource">DataSource</a>]</code></dt>
-<dd>data sources in the conjunction</dd>
+<dd>Data sources in the conjunction</dd>
 <dt><strong><code>min_distance</code></strong> :&ensp;<code>float</code></dt>
-<dd>minimum kilometer distance of the conjunction</dd>
+<dd>Minimum kilometer distance of the conjunction</dd>
 <dt><strong><code>max_distance</code></strong> :&ensp;<code>float</code></dt>
-<dd>maximum kilometer distance of the conjunction</dd>
+<dd>Maximum kilometer distance of the conjunction</dd>
 <dt><strong><code>events</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>the sub-conjunctions that make up this over-arching
+<dd>The sub-conjunctions that make up this over-arching
 conjunction (the conjunctions between each set of two data
 sources)</dd>
 <dt><strong><code>closest_epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp for when data sources were closest</dd>
+<dd>Timestamp for when data sources were closest</dd>
 <dt><strong><code>farthest_epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp for when data sources were farthest</dd>
+<dd>Timestamp for when data sources were farthest</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch"><code class="flex name class">
 <span>class <span class="ident">ConjunctionSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Optional[List[Dict]] = None,<br>space: Optional[List[Dict]] = None,<br>events: Optional[List[Dict]] = None,<br>conjunction_types: Optional[List[str]] = None,<br>epoch_search_precision: Optional[int] = None,<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Sequence[Union[<a title="pyaurorax.search.GroundCriteriaBlock" href="#pyaurorax.search.GroundCriteriaBlock">GroundCriteriaBlock</a>, Dict]] = [],<br>space: Sequence[Union[<a title="pyaurorax.search.SpaceCriteriaBlock" href="#pyaurorax.search.SpaceCriteriaBlock">SpaceCriteriaBlock</a>, Dict]] = [],<br>events: Sequence[Union[<a title="pyaurorax.search.EventsCriteriaBlock" href="#pyaurorax.search.EventsCriteriaBlock">EventsCriteriaBlock</a>, Dict]] = [],<br>conjunction_types: "Sequence[Union[str, Literal['nbtrace', 'sbtrace']]]" = ['nbtrace'],<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -281,80 +285,30 @@ sources)</dd>
 
     Attributes:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive).
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive).
 
         distance (int or float or Dict): 
-            the maximum distance allowed between data sources when searching for
+            The maximum distance allowed between data sources when searching for
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
 
-        ground (List[Dict]): 
-            list of ground instrument search parameters, defaults to []
+        ground (List[GroundCriteriaBlock or Dict]): 
+            List of ground instrument criteria blocks, defaults to [].
 
-            Example:
+        space (List[SpaceCriteriaBlock or Dict]): 
+            List of space instrument criteria blocks, defaults to [].
 
-                [{
-                    &#34;programs&#34;: [&#34;themis-asi&#34;],
-                    &#34;platforms&#34;: [&#34;gillam&#34;, &#34;rabbit lake&#34;],
-                    &#34;instrument_types&#34;: [&#34;RGB&#34;],
-                    &#34;ephemeris_metadata_filters&#34;: {
-                        &#34;logical_operator&#34;: &#34;AND&#34;,
-                        &#34;expressions&#34;: [
-                            {
-                                &#34;key&#34;: &#34;calgary_apa_ml_v1&#34;,
-                                &#34;operator&#34;: &#34;in&#34;,
-                                &#34;values&#34;: [ &#34;classified as APA&#34; ]
-                            }
-                        ]
-                    }
-                }]
-
-        space (List[Dict]): 
-            list of one or more space instrument search parameters, defaults to []
-
-            Example:
-
-                [{
-                    &#34;programs&#34;: [&#34;themis-asi&#34;, &#34;swarm&#34;],
-                    &#34;platforms&#34;: [&#34;themisa&#34;, &#34;swarma&#34;],
-                    &#34;instrument_types&#34;: [&#34;footprint&#34;],
-                    &#34;ephemeris_metadata_filters&#34;: {
-                        &#34;logical_operator&#34;: &#34;AND&#34;,
-                        &#34;expressions&#34;: [
-                            {
-                                &#34;key&#34;: &#34;nbtrace_region&#34;,
-                                &#34;operator&#34;: &#34;in&#34;,
-                                &#34;values&#34;: [ &#34;north auroral oval&#34; ]
-                            }
-                        ]
-                    },
-                    &#34;hemisphere&#34;: [
-                        &#34;northern&#34;
-                    ]
-                }]
-
-        events (List[Dict]): 
-            list of one or more events search parameters, defaults to []
-
-            Example:
-
-                [{
-                    &#34;programs&#34;: [ &#34;events&#34; ],
-                    &#34;instrument_types&#34;: [ &#34;substorm onsets&#34; ]
-                }]
+        events (List[EventsCriteriaBlock or Dict]): 
+            List of event criteria blocks, defaults to []. List items of Dict types have 
+            been deprecated as of v1.14.0.
 
         conjunction_types (List[str]): 
-            list of conjunction types, defaults to [&#34;nbtrace&#34;]. Options are
+            List of conjunction types, defaults to [&#34;nbtrace&#34;]. Options are
             in the pyaurorax.conjunctions module, or at the top level using the
             pyaurorax.CONJUNCTION_TYPE_* variables.
-
-        epoch_search_precision (int): 
-            the time precision to which conjunctions are calculated. Can be
-            30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-            development and still considered &#34;alpha&#34;.
 
         response_format (Dict): 
             JSON representation of desired data response format
@@ -363,31 +317,31 @@ sources)</dd>
             AuroraXResponse object returned when the search is executed
 
         request_id (str): 
-            unique ID assigned to the request by the AuroraX API
+            Unique ID assigned to the request by the AuroraX API
 
         request_url (str): 
-            unique URL assigned to the request by the AuroraX API
+            Unique URL assigned to the request by the AuroraX API
 
         executed (bool): 
-            indicates if the search has been executed/started
+            Indicates if the search has been executed/started
 
         completed (bool): 
-            indicates if the search has finished
+            Indicates if the search has finished
 
         data_url (str): 
-            the URL where data is accessed
+            The URL where data is accessed
 
         query (Dict): 
-            the query for this request as JSON
+            The query for this request as JSON
 
         status (Dict): 
-            the status of the query
+            The status of the query
 
         data (List[Conjunction]): 
-            the conjunctions found
+            The conjunctions found
 
         logs (List[Dict]): 
-            all log messages outputted by the AuroraX API for this request
+            All log messages outputted by the AuroraX API for this request
     &#34;&#34;&#34;
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -397,23 +351,21 @@ sources)</dd>
                  start: datetime.datetime,
                  end: datetime.datetime,
                  distance: Union[int, float, Dict],
-                 ground: Optional[List[Dict]] = None,
-                 space: Optional[List[Dict]] = None,
-                 events: Optional[List[Dict]] = None,
-                 conjunction_types: Optional[List[str]] = None,
-                 epoch_search_precision: Optional[int] = None,
+                 ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
+                 space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
+                 events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
+                 conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;]]] = [&#34;nbtrace&#34;],
                  response_format: Optional[Dict] = None):
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
         self.start = start
         self.end = end
-        self.ground = [] if ground is None else ground
-        self.space = [] if space is None else space
-        self.events = [] if events is None else events
+        self.ground = ground
+        self.space = space
+        self.events = events
         self.distance = distance
-        self.conjunction_types = [CONJUNCTION_TYPE_NBTRACE] if conjunction_types is None else conjunction_types
-        self.epoch_search_precision = 60 if epoch_search_precision is None else epoch_search_precision
+        self.conjunction_types = conjunction_types
         self.response_format = response_format
 
         # initialize additional variables
@@ -511,7 +463,7 @@ sources)</dd>
         it was determined to have too many.
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: too many criteria blocks are found
+            pyaurorax.exceptions.AuroraXError: Too many criteria blocks are found
         &#34;&#34;&#34;
         count_ground = 0
         count_space = 0
@@ -531,10 +483,10 @@ sources)</dd>
 
         Args:
             default_distance (int): 
-                the default distance to use, defaults to None
+                The default distance to use, defaults to None
 
         Returns:
-            the advanced distances combinations
+            The advanced distances combinations
         &#34;&#34;&#34;
         # set input arrays
         options = []
@@ -562,7 +514,7 @@ sources)</dd>
         Property for the distance parameter
 
         Returns:
-            the distance dictionary with all combinations
+            The distance dictionary with all combinations
         &#34;&#34;&#34;
         return self.__distance
 
@@ -581,17 +533,61 @@ sources)</dd>
         Property for the query value
 
         Returns:
-            the query parameter
+            The query parameter
         &#34;&#34;&#34;
+        # set ground
+        ground_param = self.ground
+        if (isinstance(self.ground, list) and all(isinstance(item, GroundCriteriaBlock) for item in self.ground)):
+            # ground parameter is a list of GroundCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            ground_param = []
+            for val in self.ground:
+                this_dict = deepcopy(val.__dict__)
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;metadata_filters&#34;]
+                del this_dict[&#34;metadata_filters&#34;]
+                if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
+                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                ground_param.append(this_dict)
+
+        # set space
+        space_param = self.space
+        if (isinstance(self.space, list) and all(isinstance(item, SpaceCriteriaBlock) for item in self.space)):
+            # space parameter is a list of SpaceCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            space_param = []
+            for val in self.space:
+                this_dict = deepcopy(val.__dict__)
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;metadata_filters&#34;]
+                del this_dict[&#34;metadata_filters&#34;]
+                if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
+                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                space_param.append(this_dict)
+
+        # set events
+        events_param = self.events
+        if (isinstance(self.events, list) and all(isinstance(item, EventsCriteriaBlock) for item in self.events)):
+            # space parameter is a list of EventsCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            events_param = []
+            for val in self.events:
+                this_dict = deepcopy(val.__dict__)
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;metadata_filters&#34;]
+                this_dict[&#34;programs&#34;] = [&#34;events&#34;]
+                del this_dict[&#34;metadata_filters&#34;]
+                if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
+                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                events_param.append(this_dict)
+
+        # set query
         self.__query = {
             &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
             &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
-            &#34;ground&#34;: self.ground,
-            &#34;space&#34;: self.space,
-            &#34;events&#34;: self.events,
+            &#34;ground&#34;: ground_param,
+            &#34;space&#34;: space_param,
+            &#34;events&#34;: events_param,
             &#34;conjunction_types&#34;: self.conjunction_types,
             &#34;max_distances&#34;: self.distance,
-            &#34;epoch_search_precision&#34;: self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
+            &#34;epoch_search_precision&#34;: 60,
         }
         return self.__query
 
@@ -631,7 +627,7 @@ sources)</dd>
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include
+                The previously-retrieved status of this request (include
                 to avoid requesting it from the API again), defaults to None
 
         Raises:
@@ -703,10 +699,10 @@ sources)</dd>
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
@@ -725,13 +721,13 @@ sources)</dd>
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait for several minutes)
+                Wait until the cancellation request has been completed (may wait for several minutes)
 
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+                Seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
@@ -746,98 +742,46 @@ sources)</dd>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp of the search (inclusive)</dd>
+<dd>Start timestamp of the search (inclusive).</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp of the search (inclusive)</dd>
+<dd>End timestamp of the search (inclusive).</dd>
 <dt><strong><code>distance</code></strong> :&ensp;<code>int</code> or <code>float</code> or <code>Dict</code></dt>
-<dd>the maximum distance allowed between data sources when searching for
+<dd>The maximum distance allowed between data sources when searching for
 conjunctions. This can either be a number (int or float), or a dictionary
 modified from the output of the "get_advanced_distances_combos()" function.</dd>
-<dt><strong><code>ground</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>
-<p>list of ground instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi"],
-    "platforms": ["gillam", "rabbit lake"],
-    "instrument_types": ["RGB"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "calgary_apa_ml_v1",
-                "operator": "in",
-                "values": [ "classified as APA" ]
-            }
-        ]
-    }
-}]
-</code></pre>
-</dd>
-<dt><strong><code>space</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>
-<p>list of one or more space instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi", "swarm"],
-    "platforms": ["themisa", "swarma"],
-    "instrument_types": ["footprint"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "nbtrace_region",
-                "operator": "in",
-                "values": [ "north auroral oval" ]
-            }
-        ]
-    },
-    "hemisphere": [
-        "northern"
-    ]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>events</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>
-<p>list of one or more events search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": [ "events" ],
-    "instrument_types": [ "substorm onsets" ]
-}]
-</code></pre>
-</dd>
+<dt><strong><code>ground</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.GroundCriteriaBlock" href="#pyaurorax.search.GroundCriteriaBlock">GroundCriteriaBlock</a></code> or <code>Dict]</code></dt>
+<dd>List of ground instrument criteria blocks, defaults to [].</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.SpaceCriteriaBlock" href="#pyaurorax.search.SpaceCriteriaBlock">SpaceCriteriaBlock</a></code> or <code>Dict]</code></dt>
+<dd>List of space instrument criteria blocks, defaults to [].</dd>
+<dt><strong><code>events</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.EventsCriteriaBlock" href="#pyaurorax.search.EventsCriteriaBlock">EventsCriteriaBlock</a></code> or <code>Dict]</code></dt>
+<dd>List of event criteria blocks, defaults to []. List items of Dict types have
+been deprecated as of v1.14.0.</dd>
 <dt><strong><code>conjunction_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of conjunction types, defaults to ["nbtrace"]. Options are
+<dd>List of conjunction types, defaults to ["nbtrace"]. Options are
 in the pyaurorax.conjunctions module, or at the top level using the
 pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
-<dt><strong><code>epoch_search_precision</code></strong> :&ensp;<code>int</code></dt>
-<dd>the time precision to which conjunctions are calculated. Can be
-30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-development and still considered "alpha".</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
 <dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
 <dd>AuroraXResponse object returned when the search is executed</dd>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dd>Unique ID assigned to the request by the AuroraX API</dd>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
+<dd>Unique URL assigned to the request by the AuroraX API</dd>
 <dt><strong><code>executed</code></strong> :&ensp;<code>bool</code></dt>
-<dd>indicates if the search has been executed/started</dd>
+<dd>Indicates if the search has been executed/started</dd>
 <dt><strong><code>completed</code></strong> :&ensp;<code>bool</code></dt>
-<dd>indicates if the search has finished</dd>
+<dd>Indicates if the search has finished</dd>
 <dt><strong><code>data_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL where data is accessed</dd>
+<dd>The URL where data is accessed</dd>
 <dt><strong><code>query</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the query for this request as JSON</dd>
+<dd>The query for this request as JSON</dd>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the status of the query</dd>
+<dd>The status of the query</dd>
 <dt><strong><code>data</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.Conjunction" href="#pyaurorax.search.Conjunction">Conjunction</a>]</code></dt>
-<dd>the conjunctions found</dd>
+<dd>The conjunctions found</dd>
 <dt><strong><code>logs</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
+<dd>All log messages outputted by the AuroraX API for this request</dd>
 </dl></div>
 <h3>Instance variables</h3>
 <dl>
@@ -853,13 +797,13 @@ def distance(self) -&gt; Union[int, float, Dict[str, Union[int, float]]]:
     Property for the distance parameter
 
     Returns:
-        the distance dictionary with all combinations
+        The distance dictionary with all combinations
     &#34;&#34;&#34;
     return self.__distance</code></pre>
 </details>
 <div class="desc"><p>Property for the distance parameter</p>
 <h2 id="returns">Returns</h2>
-<p>the distance dictionary with all combinations</p></div>
+<p>The distance dictionary with all combinations</p></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch.query"><code class="name">prop <span class="ident">query</span> : Dict</code></dt>
 <dd>
@@ -873,23 +817,67 @@ def query(self) -&gt; Dict:
     Property for the query value
 
     Returns:
-        the query parameter
+        The query parameter
     &#34;&#34;&#34;
+    # set ground
+    ground_param = self.ground
+    if (isinstance(self.ground, list) and all(isinstance(item, GroundCriteriaBlock) for item in self.ground)):
+        # ground parameter is a list of GroundCriteriaBlock objects, so we
+        # want to set the query to the dict version of it
+        ground_param = []
+        for val in self.ground:
+            this_dict = deepcopy(val.__dict__)
+            this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;metadata_filters&#34;]
+            del this_dict[&#34;metadata_filters&#34;]
+            if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+            ground_param.append(this_dict)
+
+    # set space
+    space_param = self.space
+    if (isinstance(self.space, list) and all(isinstance(item, SpaceCriteriaBlock) for item in self.space)):
+        # space parameter is a list of SpaceCriteriaBlock objects, so we
+        # want to set the query to the dict version of it
+        space_param = []
+        for val in self.space:
+            this_dict = deepcopy(val.__dict__)
+            this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;metadata_filters&#34;]
+            del this_dict[&#34;metadata_filters&#34;]
+            if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+            space_param.append(this_dict)
+
+    # set events
+    events_param = self.events
+    if (isinstance(self.events, list) and all(isinstance(item, EventsCriteriaBlock) for item in self.events)):
+        # space parameter is a list of EventsCriteriaBlock objects, so we
+        # want to set the query to the dict version of it
+        events_param = []
+        for val in self.events:
+            this_dict = deepcopy(val.__dict__)
+            this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;metadata_filters&#34;]
+            this_dict[&#34;programs&#34;] = [&#34;events&#34;]
+            del this_dict[&#34;metadata_filters&#34;]
+            if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+            events_param.append(this_dict)
+
+    # set query
     self.__query = {
         &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
-        &#34;ground&#34;: self.ground,
-        &#34;space&#34;: self.space,
-        &#34;events&#34;: self.events,
+        &#34;ground&#34;: ground_param,
+        &#34;space&#34;: space_param,
+        &#34;events&#34;: events_param,
         &#34;conjunction_types&#34;: self.conjunction_types,
         &#34;max_distances&#34;: self.distance,
-        &#34;epoch_search_precision&#34;: self.epoch_search_precision if self.epoch_search_precision in [30, 60] else 60,
+        &#34;epoch_search_precision&#34;: 60,
     }
     return self.__query</code></pre>
 </details>
 <div class="desc"><p>Property for the query value</p>
 <h2 id="returns">Returns</h2>
-<p>the query parameter</p></div>
+<p>The query parameter</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -913,13 +901,13 @@ def query(self) -&gt; Dict:
 
     Args:
         wait (bool): 
-            wait until the cancellation request has been completed (may wait for several minutes)
+            Wait until the cancellation request has been completed (may wait for several minutes)
 
         poll_interval (float): 
-            seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
+            Seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
 
     Returns:
         1 on success
@@ -938,11 +926,11 @@ the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
-<dd>wait until the cancellation request has been completed (may wait for several minutes)</dd>
+<dd>Wait until the cancellation request has been completed (may wait for several minutes)</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.</dd>
+<dd>Seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME.</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>1 on success</p>
@@ -968,7 +956,7 @@ the polling time using the 'poll_interval' parameter.</p>
     it was determined to have too many.
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: too many criteria blocks are found
+        pyaurorax.exceptions.AuroraXError: Too many criteria blocks are found
     &#34;&#34;&#34;
     count_ground = 0
     count_space = 0
@@ -989,7 +977,7 @@ it was determined to have too many.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
-<dd>too many criteria blocks are found</dd>
+<dd>Too many criteria blocks are found</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch.check_for_data"><code class="name flex">
@@ -1079,10 +1067,10 @@ search request</p>
 
     Args:
         default_distance (int): 
-            the default distance to use, defaults to None
+            The default distance to use, defaults to None
 
     Returns:
-        the advanced distances combinations
+        The advanced distances combinations
     &#34;&#34;&#34;
     # set input arrays
     options = []
@@ -1108,10 +1096,10 @@ search request</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>default_distance</code></strong> :&ensp;<code>int</code></dt>
-<dd>the default distance to use, defaults to None</dd>
+<dd>The default distance to use, defaults to None</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the advanced distances combinations</p></div>
+<p>The advanced distances combinations</p></div>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch.get_data"><code class="name flex">
 <span>def <span class="ident">get_data</span></span>(<span>self) ‑> None</span>
@@ -1228,7 +1216,7 @@ search request</p>
 
     Args:
         status (Dict): 
-            the previously-retrieved status of this request (include
+            The previously-retrieved status of this request (include
             to avoid requesting it from the API again), defaults to None
 
     Raises:
@@ -1255,7 +1243,7 @@ search request</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the previously-retrieved status of this request (include
+<dd>The previously-retrieved status of this request (include
 to avoid requesting it from the API again), defaults to None</dd>
 </dl>
 <h2 id="raises">Raises</h2>
@@ -1279,10 +1267,10 @@ to avoid requesting it from the API again), defaults to None</dd>
 
     Args:
         poll_interval (float): 
-            time in seconds to wait between polling attempts, defaults to 1 second
+            Time in seconds to wait between polling attempts, defaults to 1 second
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
 
     Raises:
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
@@ -1295,9 +1283,9 @@ available for retrieval</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>time in seconds to wait between polling attempts, defaults to 1 second</dd>
+<dd>Time in seconds to wait between polling attempts, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -1322,22 +1310,22 @@ available for retrieval</p>
 
     Attributes:
         data_source (DataSource): 
-            data source that the ephemeris record is associated with
+            Data source that the ephemeris record is associated with
 
         data_product_type (str): 
-            data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;)
+            Data product type (&#34;keogram&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, etc.)
 
         start (datetime.datetime): 
-            starting timestamp for the record (assumed it is in UTC), inclusive
+            Starting timestamp for the record (assumed it is in UTC), inclusive
 
         end (datetime.datetime): 
-            ending timestamp for the record (assumed it is in UTC), inclusive
+            Ending timestamp for the record (assumed it is in UTC), inclusive
 
         url (str): 
-            the URL of data product
+            The URL of data product
 
         metadata (Dict): 
-            metadata for this record (arbitrary keys and values)
+            Metadata for this record (arbitrary keys and values)
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -1360,7 +1348,7 @@ available for retrieval</p>
         datetime objects to strings)
 
         Returns:
-            a dictionary object that is JSON-serializable
+            A dictionary object that is JSON-serializable
         &#34;&#34;&#34;
         # init
         d = self.__dict__
@@ -1409,17 +1397,17 @@ available for retrieval</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.DataSource" href="#pyaurorax.search.DataSource">DataSource</a></code></dt>
-<dd>data source that the ephemeris record is associated with</dd>
+<dd>Data source that the ephemeris record is associated with</dd>
 <dt><strong><code>data_product_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>data product type ("keogram", "movie", "summary_plot")</dd>
+<dd>Data product type ("keogram", "movie", "summary_plot", etc.)</dd>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>starting timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dd>Starting timestamp for the record (assumed it is in UTC), inclusive</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>ending timestamp for the record (assumed it is in UTC), inclusive</dd>
+<dd>Ending timestamp for the record (assumed it is in UTC), inclusive</dd>
 <dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL of data product</dd>
+<dd>The URL of data product</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this record (arbitrary keys and values)</dd>
+<dd>Metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>
@@ -1437,7 +1425,7 @@ available for retrieval</p>
     datetime objects to strings)
 
     Returns:
-        a dictionary object that is JSON-serializable
+        A dictionary object that is JSON-serializable
     &#34;&#34;&#34;
     # init
     d = self.__dict__
@@ -1468,13 +1456,13 @@ available for retrieval</p>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
-<p>a dictionary object that is JSON-serializable</p></div>
+<p>A dictionary object that is JSON-serializable</p></div>
 </dd>
 </dl>
 </dd>
 <dt id="pyaurorax.search.DataProductSearch"><code class="flex name class">
 <span>class <span class="ident">DataProductSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: Optional[List[str]] = None,<br>metadata_filters: Optional[List[Dict]] = None,<br>metadata_filters_logical_operator: Optional[str] = None,<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: "Optional[Literal['keogram', 'montage', 'movie', 'summary_plot', 'data_availability']]" = None,<br>metadata_filters: Optional[Union[<a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a>, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1487,40 +1475,32 @@ datetime objects to strings)</p>
 
     Attributes:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive)
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive)
 
         programs (List[str]): 
-            list of program names to search
+            List of program names to search
 
         platforms (List[str]): 
-            list of platform names to search
+            List of platform names to search
 
         instrument_types (List[str]): 
-            list of instrument types to search
+            List of instrument types to search
 
         data_product_types (List[str]): 
-            list of strings describing data product on e.g. &#34;keogram&#34;, defaults to 
-            None. Options are in the pyaurorax.data_products module, or at the top 
-            level using the pyaurorax.DATA_PRODUCT_TYPE* variables.
-
-        metadata_filters (List[Dict]): 
-            list of dictionaries describing metadata keys and values to filter on, 
-            defaults to None
-
-            Example:
-
-                [{
-                    &#34;key&#34;: &#34;nbtrace_region&#34;,
-                    &#34;operator&#34;: &#34;in&#34;,
-                    &#34;values&#34;: [&#34;north polar cap&#34;]
-                }]
+            List of strings describing data product types to filter on e.g. &#34;keogram&#34;, defaults 
+            to None. Valid options are: `keogram`, `montage`, `movie`, `summary_plot`, and 
+            `data_availability`.
+    
+        metadata_filters (MetadataFilter or List[Dict]): 
+            The metadata filters to use when searching, defaults to None
 
         metadata_filters_logical_operator (str): 
-            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
-            defaults to `AND`
+            The logical operator to use when evaluating metadata filters (either `and` or `or`), 
+            defaults to `and`. This parameter is deprecated in exchange for passing a 
+            MetadataFilter object into the metadata_filters parameter. 
 
         response_format (Dict): 
             JSON representation of desired data response format
@@ -1529,31 +1509,31 @@ datetime objects to strings)</p>
             AuroraXResponse object returned when the search is executed
 
         request_id (str): 
-            unique ID assigned to the request by the AuroraX API
+            Unique ID assigned to the request by the AuroraX API
 
         request_url (str): 
-            unique URL assigned to the request by the AuroraX API
+            Unique URL assigned to the request by the AuroraX API
 
         executed (bool): 
-            indicates if the search has been executed/started
+            Indicates if the search has been executed/started
 
         completed (bool): 
-            indicates if the search has finished
+            Indicates if the search has finished
 
         data_url (str): 
-            the URL where data is accessed
+            The URL where data is accessed
 
         query (Dict): 
-            the query for this request as JSON
+            The query for this request as JSON
 
         status (Dict): 
-            the status of the query
+            The status of the query
 
         data (List[DataProductData]): 
-            the data product records found
+            The data product records found
 
         logs (List[Dict]): 
-            all log messages outputted by the AuroraX API for this request
+            All log messages outputted by the AuroraX API for this request
     &#34;&#34;&#34;
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -1565,9 +1545,9 @@ datetime objects to strings)</p>
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_types: Optional[List[str]] = None,
-                 metadata_filters: Optional[List[Dict]] = None,
-                 metadata_filters_logical_operator: Optional[str] = None,
+                 data_product_types: Optional[Literal[&#34;keogram&#34;, &#34;montage&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, &#34;data_availability&#34;]] = None,
+                 metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
+                 metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
 
         # set variables using passed in args
@@ -1657,20 +1637,33 @@ datetime objects to strings)</p>
         &#34;&#34;&#34;
         Property for the query value
         &#34;&#34;&#34;
+        # set metadata filter value
+        if (self.metadata_filters is None):
+            metadata_filters_dict = {}
+        elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+            # metadata filter is a class
+            metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+        else:
+            # metadata filter is a dictionary
+            metadata_filters_dict = {
+                &#34;expressions&#34;: self.metadata_filters,
+                &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
+            }
+
+        # set query
         self.__query = {
             &#34;data_sources&#34;: {
                 &#34;programs&#34;: [] if not self.programs else self.programs,
                 &#34;platforms&#34;: [] if not self.platforms else self.platforms,
                 &#34;instrument_types&#34;: [] if not self.instrument_types else self.instrument_types,
-                &#34;data_product_metadata_filters&#34;: {} if not self.metadata_filters else {
-                    &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
-                    &#34;expressions&#34;: self.metadata_filters
-                },
+                &#34;data_product_metadata_filters&#34;: metadata_filters_dict,
             },
             &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
             &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
             &#34;data_product_type_filters&#34;: [] if not self.data_product_types else self.data_product_types,
         }
+
+        # return
         return self.__query
 
     @query.setter
@@ -1703,7 +1696,7 @@ datetime objects to strings)</p>
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include
+                The previously-retrieved status of this request (include
                 to avoid requesting it from the API again), defaults to None
         &#34;&#34;&#34;
         # get the status if it isn&#39;t passed in
@@ -1765,10 +1758,10 @@ datetime objects to strings)</p>
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
         self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
@@ -1784,21 +1777,21 @@ datetime objects to strings)</p>
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait 
+                Wait until the cancellation request has been completed (may wait 
                 for several minutes)
             
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to 1 second.
+                Seconds to wait between polling calls, defaults to 1 second.
             
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
         return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
@@ -1807,56 +1800,47 @@ datetime objects to strings)</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp of the search (inclusive)</dd>
+<dd>Start timestamp of the search (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp of the search (inclusive)</dd>
+<dd>End timestamp of the search (inclusive)</dd>
 <dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of program names to search</dd>
+<dd>List of program names to search</dd>
 <dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of platform names to search</dd>
+<dd>List of platform names to search</dd>
 <dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of instrument types to search</dd>
+<dd>List of instrument types to search</dd>
 <dt><strong><code>data_product_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of strings describing data product on e.g. "keogram", defaults to
-None. Options are in the pyaurorax.data_products module, or at the top
-level using the pyaurorax.DATA_PRODUCT_TYPE* variables.</dd>
-<dt><strong><code>metadata_filters</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>
-<p>list of dictionaries describing metadata keys and values to filter on,
-defaults to None</p>
-<p>Example:</p>
-<pre><code>[{
-    "key": "nbtrace_region",
-    "operator": "in",
-    "values": ["north polar cap"]
-}]
-</code></pre>
-</dd>
+<dd>List of strings describing data product types to filter on e.g. "keogram", defaults
+to None. Valid options are: <code>keogram</code>, <code>montage</code>, <code>movie</code>, <code>summary_plot</code>, and
+<code>data_availability</code>.</dd>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code><a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a></code> or <code>List[Dict]</code></dt>
+<dd>The metadata filters to use when searching, defaults to None</dd>
 <dt><strong><code>metadata_filters_logical_operator</code></strong> :&ensp;<code>str</code></dt>
-<dd>the logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
-defaults to <code>AND</code></dd>
+<dd>The logical operator to use when evaluating metadata filters (either <code>and</code> or <code>or</code>),
+defaults to <code>and</code>. This parameter is deprecated in exchange for passing a
+MetadataFilter object into the metadata_filters parameter. </dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
 <dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
 <dd>AuroraXResponse object returned when the search is executed</dd>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dd>Unique ID assigned to the request by the AuroraX API</dd>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>unique URL assigned to the request by the AuroraX API</dd>
+<dd>Unique URL assigned to the request by the AuroraX API</dd>
 <dt><strong><code>executed</code></strong> :&ensp;<code>bool</code></dt>
-<dd>indicates if the search has been executed/started</dd>
+<dd>Indicates if the search has been executed/started</dd>
 <dt><strong><code>completed</code></strong> :&ensp;<code>bool</code></dt>
-<dd>indicates if the search has finished</dd>
+<dd>Indicates if the search has finished</dd>
 <dt><strong><code>data_url</code></strong> :&ensp;<code>str</code></dt>
-<dd>the URL where data is accessed</dd>
+<dd>The URL where data is accessed</dd>
 <dt><strong><code>query</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the query for this request as JSON</dd>
+<dd>The query for this request as JSON</dd>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the status of the query</dd>
+<dd>The status of the query</dd>
 <dt><strong><code>data</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.DataProductData" href="#pyaurorax.search.DataProductData">DataProductData</a>]</code></dt>
-<dd>the data product records found</dd>
+<dd>The data product records found</dd>
 <dt><strong><code>logs</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>all log messages outputted by the AuroraX API for this request</dd>
+<dd>All log messages outputted by the AuroraX API for this request</dd>
 </dl></div>
 <h3>Instance variables</h3>
 <dl>
@@ -1871,20 +1855,33 @@ def query(self):
     &#34;&#34;&#34;
     Property for the query value
     &#34;&#34;&#34;
+    # set metadata filter value
+    if (self.metadata_filters is None):
+        metadata_filters_dict = {}
+    elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+        # metadata filter is a class
+        metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+    else:
+        # metadata filter is a dictionary
+        metadata_filters_dict = {
+            &#34;expressions&#34;: self.metadata_filters,
+            &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
+        }
+
+    # set query
     self.__query = {
         &#34;data_sources&#34;: {
             &#34;programs&#34;: [] if not self.programs else self.programs,
             &#34;platforms&#34;: [] if not self.platforms else self.platforms,
             &#34;instrument_types&#34;: [] if not self.instrument_types else self.instrument_types,
-            &#34;data_product_metadata_filters&#34;: {} if not self.metadata_filters else {
-                &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
-                &#34;expressions&#34;: self.metadata_filters
-            },
+            &#34;data_product_metadata_filters&#34;: metadata_filters_dict,
         },
         &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         &#34;data_product_type_filters&#34;: [] if not self.data_product_types else self.data_product_types,
     }
+
+    # return
     return self.__query</code></pre>
 </details>
 <div class="desc"><p>Property for the query value</p></div>
@@ -1911,21 +1908,21 @@ def query(self):
 
     Args:
         wait (bool): 
-            wait until the cancellation request has been completed (may wait 
+            Wait until the cancellation request has been completed (may wait 
             for several minutes)
         
         poll_interval (float): 
-            seconds to wait between polling calls, defaults to 1 second.
+            Seconds to wait between polling calls, defaults to 1 second.
         
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
 
     Returns:
         1 on success
 
     Raises:
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
-        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
     &#34;&#34;&#34;
     url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
     return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
@@ -1938,12 +1935,12 @@ the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
-<dd>wait until the cancellation request has been completed (may wait
+<dd>Wait until the cancellation request has been completed (may wait
 for several minutes)</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>seconds to wait between polling calls, defaults to 1 second.</dd>
+<dd>Seconds to wait between polling calls, defaults to 1 second.</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>1 on success</p>
@@ -1952,7 +1949,7 @@ for several minutes)</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>invalid API key for this operation</dd>
+<dd>Invalid API key for this operation</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.DataProductSearch.check_for_data"><code class="name flex">
@@ -2115,7 +2112,7 @@ search request</p>
 
     Args:
         status (Dict): 
-            the previously-retrieved status of this request (include
+            The previously-retrieved status of this request (include
             to avoid requesting it from the API again), defaults to None
     &#34;&#34;&#34;
     # get the status if it isn&#39;t passed in
@@ -2139,7 +2136,7 @@ search request</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the previously-retrieved status of this request (include
+<dd>The previously-retrieved status of this request (include
 to avoid requesting it from the API again), defaults to None</dd>
 </dl></div>
 </dd>
@@ -2158,10 +2155,10 @@ to avoid requesting it from the API again), defaults to None</dd>
 
     Args:
         poll_interval (float): 
-            time in seconds to wait between polling attempts, defaults to 1 second
+            Time in seconds to wait between polling attempts, defaults to 1 second
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
     &#34;&#34;&#34;
     url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
     self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))</code></pre>
@@ -2171,9 +2168,9 @@ for retrieval</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>time in seconds to wait between polling attempts, defaults to 1 second</dd>
+<dd>Time in seconds to wait between polling attempts, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl></div>
 </dd>
 </dl>
@@ -2193,48 +2190,48 @@ for retrieval</p>
 
     Attributes:
         identifier (int): 
-            the unique AuroraX data source identifier
+            The unique AuroraX data source identifier
 
         program (str): 
-            the program for this data source
+            The program for this data source
 
         platform (str): 
-            the platform for this data source
+            The platform for this data source
 
         instrument_type (str): 
-            the instrument type for this data source
+            The instrument type for this data source
 
         source_type (str): 
-            the data source type for this data source. Options are in the 
+            The data source type for this data source. Options are in the 
             pyaurorax.search.sources module, or at the top level using the
             pyaurorax.search.SOURCE_TYPE_* variables.
 
         display_name (str): 
-            the display name for this data source
+            The display name for this data source
 
         metadata (Dict): 
-            metadata for this data source (arbitrary keys and values)
+            Metadata for this data source (arbitrary keys and values)
 
         owner (str): 
-            the owner&#39;s email address of this data source
+            The owner&#39;s email address of this data source
 
         maintainers (List[str]): 
-            the email addresses of AuroraX accounts that can alter this data source and 
+            The email addresses of AuroraX accounts that can alter this data source and 
             its associated records
 
         ephemeris_metadata_schema (Dict): 
-            a list of dictionaries capturing the metadata keys and values that can appear 
+            A list of dictionaries capturing the metadata keys and values that can appear 
             in ephemeris records associated with this data source
 
         data_product_metadata_schema (Dict): 
-            a list of dictionaries capturing the metadata keys and values that can appear 
+            A list of dictionaries capturing the metadata keys and values that can appear 
             in data product records associated with this data source
 
         stats (DataSourceStatistics): 
-            data source statistics information
+            Data source statistics information
             
         format (str): 
-            the format used when printing the data source, defaults to `full_record`. Other 
+            The format used when printing the data source, defaults to `full_record`. Other 
             options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
     &#34;&#34;&#34;
@@ -2316,36 +2313,36 @@ for retrieval</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the unique AuroraX data source identifier</dd>
+<dd>The unique AuroraX data source identifier</dd>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program for this data source</dd>
+<dd>The program for this data source</dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform for this data source</dd>
+<dd>The platform for this data source</dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type for this data source</dd>
+<dd>The instrument type for this data source</dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type for this data source. Options are in the
+<dd>The data source type for this data source. Options are in the
 pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
-<dd>the display name for this data source</dd>
+<dd>The display name for this data source</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this data source (arbitrary keys and values)</dd>
+<dd>Metadata for this data source (arbitrary keys and values)</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the owner's email address of this data source</dd>
+<dd>The owner's email address of this data source</dd>
 <dt><strong><code>maintainers</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the email addresses of AuroraX accounts that can alter this data source and
+<dd>The email addresses of AuroraX accounts that can alter this data source and
 its associated records</dd>
 <dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata keys and values that can appear
+<dd>A list of dictionaries capturing the metadata keys and values that can appear
 in ephemeris records associated with this data source</dd>
 <dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata keys and values that can appear
+<dd>A list of dictionaries capturing the metadata keys and values that can appear
 in data product records associated with this data source</dd>
 <dt><strong><code>stats</code></strong> :&ensp;<code>DataSourceStatistics</code></dt>
-<dd>data source statistics information</dd>
+<dd>Data source statistics information</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format used when printing the data source, defaults to <code>full_record</code>. Other
+<dd>The format used when printing the data source, defaults to <code>full_record</code>. Other
 options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 </dl></div>
@@ -2410,10 +2407,10 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
     Attributes:
         data_source (DataSource): 
-            data source that the ephemeris record is associated with
+            Data source that the ephemeris record is associated with
 
         epoch (datetime.datetime): 
-            timestamp for the record (assumed it is in UTC)
+            Timestamp for the record (assumed it is in UTC)
 
         location_geo (Location): 
             Location object containing geographic latitude and longitude
@@ -2429,7 +2426,7 @@ the pyaurorax.search.FORMAT_* variables.</dd>
             Location object with south B-trace geographic latitude and longitude
 
         metadata (Dict): 
-            metadata for this record (arbitrary keys and values)
+            Metadata for this record (arbitrary keys and values)
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -2454,7 +2451,7 @@ the pyaurorax.search.FORMAT_* variables.</dd>
         datetime objects to strings)
 
         Returns:
-            a dictionary object that is JSON-serializable
+            A dictionary object that is JSON-serializable
         &#34;&#34;&#34;
         # init
         d = self.__dict__
@@ -2509,9 +2506,9 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.DataSource" href="#pyaurorax.search.DataSource">DataSource</a></code></dt>
-<dd>data source that the ephemeris record is associated with</dd>
+<dd>Data source that the ephemeris record is associated with</dd>
 <dt><strong><code>epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp for the record (assumed it is in UTC)</dd>
+<dd>Timestamp for the record (assumed it is in UTC)</dd>
 <dt><strong><code>location_geo</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
 <dd>Location object containing geographic latitude and longitude</dd>
 <dt><strong><code>location_gsm</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
@@ -2522,7 +2519,7 @@ sources with a type of 'ground')</dd>
 <dt><strong><code>sbtrace</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
 <dd>Location object with south B-trace geographic latitude and longitude</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this record (arbitrary keys and values)</dd>
+<dd>Metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>
@@ -2540,7 +2537,7 @@ sources with a type of 'ground')</dd>
     datetime objects to strings)
 
     Returns:
-        a dictionary object that is JSON-serializable
+        A dictionary object that is JSON-serializable
     &#34;&#34;&#34;
     # init
     d = self.__dict__
@@ -2579,13 +2576,13 @@ sources with a type of 'ground')</dd>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
-<p>a dictionary object that is JSON-serializable</p></div>
+<p>A dictionary object that is JSON-serializable</p></div>
 </dd>
 </dl>
 </dd>
 <dt id="pyaurorax.search.EphemerisSearch"><code class="flex name class">
 <span>class <span class="ident">EphemerisSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>metadata_filters: Optional[List[Dict]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>metadata_filters: Optional[Union[<a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a>, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -2601,34 +2598,26 @@ datetime objects to strings)</p>
 
     Attributes:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive)
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive)
 
         programs (List[str]): 
-            list of programs to search through, defaults to None
+            List of programs to search through, defaults to None
 
         platforms (List[str]): 
-            list of platforms to search through, defaults to None
+            List of platforms to search through, defaults to None
 
         instrument_types (List[str]): 
-            list of instrument types to search through, defaults to None
+            List of instrument types to search through, defaults to None
 
-        metadata_filters (List[Dict]): 
-            list of dictionaries describing metadata keys and values to filter on, defaults 
+        metadata_filters (MetadataFilter or List[Dict]): 
+            List of dictionaries describing metadata keys and values to filter on, defaults 
             to None
 
-            e.g. {
-                &#34;key&#34;: &#34;string&#34;,
-                &#34;operator&#34;: &#34;=&#34;,
-                &#34;values&#34;: [
-                    &#34;string&#34;
-                ]
-            }
-
         metadata_filters_logical_operator (str): 
-            the logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
+            The logical operator to use when evaluating metadata filters (either `AND` or `OR`), 
             defaults to `AND`
 
         response_format (Dict): 
@@ -2638,31 +2627,31 @@ datetime objects to strings)</p>
             AuroraXResponse object returned when the search is executed
         
         request_id (str): 
-            unique ID assigned to the request by the AuroraX API
+            Unique ID assigned to the request by the AuroraX API
        
         request_url (str): 
-            unique URL assigned to the request by the AuroraX API
+            Unique URL assigned to the request by the AuroraX API
      
         executed (bool): 
-            indicates if the search has been executed/started
+            Indicates if the search has been executed/started
      
         completed (bool): 
-            indicates if the search has finished
+            Indicates if the search has finished
        
         data_url (str): 
-            the URL where data is accessed
+            The URL where data is accessed
       
         query (Dict): 
-            the query for this request as JSON
+            The query for this request as JSON
       
         status (Dict): 
-            the status of the query
+            The status of the query
       
         data (List[EphemerisData]): 
-            the ephemeris records found
+            The ephemeris records found
       
         logs (List[Dict]): 
-            all log messages outputted by the AuroraX API for this request
+            All log messages outputted by the AuroraX API for this request
     &#34;&#34;&#34;
 
     __STANDARD_POLLING_SLEEP_TIME: float = 1.0
@@ -2674,8 +2663,8 @@ datetime objects to strings)</p>
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 metadata_filters: Optional[List[Dict]] = None,
-                 metadata_filters_logical_operator: Optional[Literal[&#34;AND&#34;, &#34;OR&#34;]] = None,
+                 metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
+                 metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
 
         # set variables using passed in args
@@ -2686,7 +2675,7 @@ datetime objects to strings)</p>
         self.platforms = platforms
         self.instrument_types = instrument_types
         self.metadata_filters = metadata_filters
-        self.metadata_filters_logical_operator = &#34;AND&#34; if metadata_filters_logical_operator is None else metadata_filters_logical_operator
+        self.metadata_filters_logical_operator = &#34;AND&#34; if metadata_filters_logical_operator is None else metadata_filters_logical_operator.upper()
         self.response_format = response_format
 
         # initialize additional variables
@@ -2764,19 +2753,32 @@ datetime objects to strings)</p>
         &#34;&#34;&#34;
         Property for the query value
         &#34;&#34;&#34;
+        # set metadata filter value
+        if (self.metadata_filters is None):
+            metadata_filters_dict = {}
+        elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+            # metadata filter is a class
+            metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+        else:
+            # metadata filter is a dictionary
+            metadata_filters_dict = {
+                &#34;expressions&#34;: self.metadata_filters,
+                &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
+            }
+
+        # set query
         self.__query = {
             &#34;data_sources&#34;: {
                 &#34;programs&#34;: [] if not self.programs else self.programs,
                 &#34;platforms&#34;: [] if not self.platforms else self.platforms,
                 &#34;instrument_types&#34;: [] if not self.instrument_types else self.instrument_types,
-                &#34;ephemeris_metadata_filters&#34;: {} if not self.metadata_filters else {
-                    &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
-                    &#34;expressions&#34;: self.metadata_filters
-                },
+                &#34;ephemeris_metadata_filters&#34;: metadata_filters_dict,
             },
             &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
             &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         }
+
+        # return
         return self.__query
 
     @query.setter
@@ -2788,7 +2790,7 @@ datetime objects to strings)</p>
         Initiate ephemeris search request
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: invalid request parameters are set
+            pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         &#34;&#34;&#34;
         # check for at least one filter criteria
         if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
@@ -2816,7 +2818,7 @@ datetime objects to strings)</p>
 
         Args:
             status (Dict): 
-                the previously-retrieved status of this request (include to avoid requesting it 
+                The previously-retrieved status of this request (include to avoid requesting it 
                 from the API again), defaults to None
         &#34;&#34;&#34;
         # get the status if it isn&#39;t passed in
@@ -2876,10 +2878,10 @@ datetime objects to strings)</p>
 
         Args:
             poll_interval (float): 
-                time in seconds to wait between polling attempts, defaults to 1 second
+                Time in seconds to wait between polling attempts, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
         self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))
@@ -2895,20 +2897,20 @@ datetime objects to strings)</p>
 
         Args:
             wait (bool): 
-                wait until the cancellation request has been completed (may wait for 
+                Wait until the cancellation request has been completed (may wait for 
                 several minutes)
 
             poll_interval (float): 
-                seconds to wait between polling calls, defaults to 1 second.
+                Seconds to wait between polling calls, defaults to 1 second
 
             verbose (bool): 
-                output poll times and other progress messages, defaults to False
+                Output poll times and other progress messages, defaults to False
 
         Returns:
             1 on success
 
         Raises:
-            pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
@@ -2920,53 +2922,44 @@ must be specified.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp of the search (inclusive)</dd>
+<dd>Start timestamp of the search (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp of the search (inclusive)</dd>
+<dd>End timestamp of the search (inclusive)</dd>
 <dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of programs to search through, defaults to None</dd>
+<dd>List of programs to search through, defaults to None</dd>
 <dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of platforms to search through, defaults to None</dd>
+<dd>List of platforms to search through, defaults to None</dd>
 <dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of instrument types to search through, defaults to None</dd>
-<dt><strong><code>metadata_filters</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>
-<p>list of dictionaries describing metadata keys and values to filter on, defaults
-to None</p>
-<p>e.g. {
-"key": "string",
-"operator": "=",
-"values": [
-"string"
-]
-}</p>
-</dd>
+<dd>List of instrument types to search through, defaults to None</dd>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code><a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a></code> or <code>List[Dict]</code></dt>
+<dd>List of dictionaries describing metadata keys and values to filter on, defaults
+to None</dd>
 <dt><strong><code>metadata_filters_logical_operator</code></strong> :&ensp;<code>str</code></dt>
-<dd>the logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
+<dd>The logical operator to use when evaluating metadata filters (either <code>AND</code> or <code>OR</code>),
 defaults to <code>AND</code></dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
 <dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
 <dd>AuroraXResponse object returned when the search is executed</dd>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
-<dd>unique ID assigned to the request by the AuroraX API</dd>
+<dd>Unique ID assigned to the request by the AuroraX API</dd>
 <dt><strong><code>request_url</code></strong> :&ensp;<code>str</code></dt>
 <dd>
-<p>unique URL assigned to the request by the AuroraX API</p>
+<p>Unique URL assigned to the request by the AuroraX API</p>
 <p>executed (bool):
-indicates if the search has been executed/started</p>
+Indicates if the search has been executed/started</p>
 <p>completed (bool):
-indicates if the search has finished</p>
+Indicates if the search has finished</p>
 <p>data_url (str):
-the URL where data is accessed</p>
+The URL where data is accessed</p>
 <p>query (Dict):
-the query for this request as JSON</p>
+The query for this request as JSON</p>
 <p>status (Dict):
-the status of the query</p>
+The status of the query</p>
 <p>data (List[EphemerisData]):
-the ephemeris records found</p>
+The ephemeris records found</p>
 <p>logs (List[Dict]):
-all log messages outputted by the AuroraX API for this request</p>
+All log messages outputted by the AuroraX API for this request</p>
 </dd>
 </dl></div>
 <h3>Instance variables</h3>
@@ -2982,19 +2975,32 @@ def query(self):
     &#34;&#34;&#34;
     Property for the query value
     &#34;&#34;&#34;
+    # set metadata filter value
+    if (self.metadata_filters is None):
+        metadata_filters_dict = {}
+    elif (isinstance(self.metadata_filters, MetadataFilter) is True):
+        # metadata filter is a class
+        metadata_filters_dict = self.metadata_filters.to_query_dict()  # type: ignore
+    else:
+        # metadata filter is a dictionary
+        metadata_filters_dict = {
+            &#34;expressions&#34;: self.metadata_filters,
+            &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
+        }
+
+    # set query
     self.__query = {
         &#34;data_sources&#34;: {
             &#34;programs&#34;: [] if not self.programs else self.programs,
             &#34;platforms&#34;: [] if not self.platforms else self.platforms,
             &#34;instrument_types&#34;: [] if not self.instrument_types else self.instrument_types,
-            &#34;ephemeris_metadata_filters&#34;: {} if not self.metadata_filters else {
-                &#34;logical_operator&#34;: self.metadata_filters_logical_operator,
-                &#34;expressions&#34;: self.metadata_filters
-            },
+            &#34;ephemeris_metadata_filters&#34;: metadata_filters_dict,
         },
         &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
         &#34;end&#34;: self.end.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
     }
+
+    # return
     return self.__query</code></pre>
 </details>
 <div class="desc"><p>Property for the query value</p></div>
@@ -3021,20 +3027,20 @@ def query(self):
 
     Args:
         wait (bool): 
-            wait until the cancellation request has been completed (may wait for 
+            Wait until the cancellation request has been completed (may wait for 
             several minutes)
 
         poll_interval (float): 
-            seconds to wait between polling calls, defaults to 1 second.
+            Seconds to wait between polling calls, defaults to 1 second
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
 
     Returns:
         1 on success
 
     Raises:
-        pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
     &#34;&#34;&#34;
     url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
@@ -3048,19 +3054,19 @@ the polling time using the 'poll_interval' parameter.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
-<dd>wait until the cancellation request has been completed (may wait for
+<dd>Wait until the cancellation request has been completed (may wait for
 several minutes)</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>seconds to wait between polling calls, defaults to 1 second.</dd>
+<dd>Seconds to wait between polling calls, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>1 on success</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>invalid API key for this operation</dd>
+<dd>Invalid API key for this operation</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -3100,7 +3106,7 @@ several minutes)</dd>
     Initiate ephemeris search request
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: invalid request parameters are set
+        pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
     &#34;&#34;&#34;
     # check for at least one filter criteria
     if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
@@ -3126,7 +3132,7 @@ several minutes)</dd>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
-<dd>invalid request parameters are set</dd>
+<dd>Invalid request parameters are set</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.EphemerisSearch.get_data"><code class="name flex">
@@ -3235,7 +3241,7 @@ several minutes)</dd>
 
     Args:
         status (Dict): 
-            the previously-retrieved status of this request (include to avoid requesting it 
+            The previously-retrieved status of this request (include to avoid requesting it 
             from the API again), defaults to None
     &#34;&#34;&#34;
     # get the status if it isn&#39;t passed in
@@ -3259,7 +3265,7 @@ several minutes)</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the previously-retrieved status of this request (include to avoid requesting it
+<dd>The previously-retrieved status of this request (include to avoid requesting it
 from the API again), defaults to None</dd>
 </dl></div>
 </dd>
@@ -3277,10 +3283,10 @@ from the API again), defaults to None</dd>
 
     Args:
         poll_interval (float): 
-            time in seconds to wait between polling attempts, defaults to 1 second
+            Time in seconds to wait between polling attempts, defaults to 1 second
 
         verbose (bool): 
-            output poll times and other progress messages, defaults to False
+            Output poll times and other progress messages, defaults to False
     &#34;&#34;&#34;
     url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_EPHEMERIS_REQUEST.format(self.request_id))
     self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))</code></pre>
@@ -3289,10 +3295,213 @@ from the API again), defaults to None</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
-<dd>time in seconds to wait between polling attempts, defaults to 1 second</dd>
+<dd>Time in seconds to wait between polling attempts, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>output poll times and other progress messages, defaults to False</dd>
+<dd>Output poll times and other progress messages, defaults to False</dd>
 </dl></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyaurorax.search.EventsCriteriaBlock"><code class="flex name class">
+<span>class <span class="ident">EventsCriteriaBlock</span></span>
+<span>(</span><span>platforms: List[str] = [],<br>instrument_types: List[str] = [],<br>metadata_filters: <a title="pyaurorax.search.metadata_filters.MetadataFilter" href="metadata_filters.html#pyaurorax.search.metadata_filters.MetadataFilter">MetadataFilter</a> | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EventsCriteriaBlock:
+    &#34;&#34;&#34;
+    Representation of a event criteria block used for conjunction searches. 
+
+    Attributes:
+        platforms (List[str]): 
+            List of platform strings to use in this criteria block. Optional, default is `[]`.
+
+        instrument_types (List[str]): 
+            List of instrument type strings to use in this criteria block. Optional, default is `[]`.
+
+        metadata_filters (MetadataFilter): 
+            The metadata filters to use in this criteria block. Optional, default is None.
+    &#34;&#34;&#34;
+
+    def __init__(self, platforms: List[str] = [], instrument_types: List[str] = [], metadata_filters: Optional[MetadataFilter] = None):
+        self.platforms = platforms
+        self.instrument_types = instrument_types
+        self.metadata_filters = metadata_filters
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;EventsCriteriaBlock(platforms=%s, instrument_types=%s, metadata_filters=%s)&#34; % (
+            self.platforms,
+            self.instrument_types,
+            self.metadata_filters,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        max_len = 80
+        metadata_filters_str = str(self.metadata_filters)
+        if (len(metadata_filters_str) &gt; max_len):
+            metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
+
+        # print
+        print(&#34;EventsCriteriaBlock:&#34;)
+        print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
+        print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
+        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+</details>
+<div class="desc"><p>Representation of a event criteria block used for conjunction searches. </p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of platform strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of instrument type strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code><a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a></code></dt>
+<dd>The metadata filters to use in this criteria block. Optional, default is None.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.EventsCriteriaBlock.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    max_len = 80
+    metadata_filters_str = str(self.metadata_filters)
+    if (len(metadata_filters_str) &gt; max_len):
+        metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
+
+    # print
+    print(&#34;EventsCriteriaBlock:&#34;)
+    print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
+    print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
+    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyaurorax.search.GroundCriteriaBlock"><code class="flex name class">
+<span>class <span class="ident">GroundCriteriaBlock</span></span>
+<span>(</span><span>programs: List[str] = [],<br>platforms: List[str] = [],<br>instrument_types: List[str] = [],<br>metadata_filters: <a title="pyaurorax.search.metadata_filters.MetadataFilter" href="metadata_filters.html#pyaurorax.search.metadata_filters.MetadataFilter">MetadataFilter</a> | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GroundCriteriaBlock:
+    &#34;&#34;&#34;
+    Representation of a ground criteria block used for conjunction searches. 
+
+    Attributes:
+        programs (List[str]): 
+            List of program strings to use in this criteria block. Optional, default is `[]`.
+        
+        platforms (List[str]): 
+            List of platform strings to use in this criteria block. Optional, default is `[]`.
+
+        instrument_types (List[str]): 
+            List of instrument type strings to use in this criteria block. Optional, default is `[]`.
+
+        metadata_filters (MetadataFilter): 
+            The metadata filters to use in this criteria block. Optional, default is None.
+    &#34;&#34;&#34;
+
+    def __init__(self,
+                 programs: List[str] = [],
+                 platforms: List[str] = [],
+                 instrument_types: List[str] = [],
+                 metadata_filters: Optional[MetadataFilter] = None):
+        self.programs = programs
+        self.platforms = platforms
+        self.instrument_types = instrument_types
+        self.metadata_filters = metadata_filters
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;GroundCriteriaBlock(programs=%s, platforms=%s, instrument_types=%s, metadata_filters=%s)&#34; % (
+            self.programs,
+            self.platforms,
+            self.instrument_types,
+            self.metadata_filters,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        max_len = 80
+        metadata_filters_str = str(self.metadata_filters)
+        if (len(metadata_filters_str) &gt; max_len):
+            metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
+
+        # print
+        print(&#34;GroundCriteriaBlock:&#34;)
+        print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
+        print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
+        print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
+        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+</details>
+<div class="desc"><p>Representation of a ground criteria block used for conjunction searches. </p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of program strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of platform strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of instrument type strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code><a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a></code></dt>
+<dd>The metadata filters to use in this criteria block. Optional, default is None.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.GroundCriteriaBlock.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    max_len = 80
+    metadata_filters_str = str(self.metadata_filters)
+    if (len(metadata_filters_str) &gt; max_len):
+        metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
+
+    # print
+    print(&#34;GroundCriteriaBlock:&#34;)
+    print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
+    print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
+    print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
+    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
@@ -3307,8 +3516,8 @@ from the API again), defaults to None</dd>
 </summary>
 <pre><code class="python">class Location:
     &#34;&#34;&#34;
-    Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
-    or northern/southern B-trace magnetic footprints.
+    Representation for an AuroraX search engine location. This data can be in geodetic 
+    coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.
 
     Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
     for latitude and -180 to 180 for longitude.
@@ -3368,8 +3577,8 @@ from the API again), defaults to None</dd>
     def __repr__(self) -&gt; str:
         return &#34;%s(lat=%s, lon=%s)&#34; % (self.__class__.__name__, str(self.lat), str(self.lon))</code></pre>
 </details>
-<div class="desc"><p>Representation for an AuroraX location, such as geographic coordinates, GSM coordinates,
-or northern/southern B-trace magnetic footprints.</p>
+<div class="desc"><p>Representation for an AuroraX search engine location. This data can be in geodetic
+coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.</p>
 <p>Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
 for latitude and -180 to 180 for longitude.</p>
 <p>Note that latitude and longitude must both be numbers, or both be None.</p>
@@ -3439,6 +3648,345 @@ datetime objects to strings)</p>
 </dd>
 </dl>
 </dd>
+<dt id="pyaurorax.search.MetadataFilter"><code class="flex name class">
+<span>class <span class="ident">MetadataFilter</span></span>
+<span>(</span><span>expressions: List[<a title="pyaurorax.search.metadata_filters.MetadataFilterExpression" href="metadata_filters.html#pyaurorax.search.metadata_filters.MetadataFilterExpression">MetadataFilterExpression</a>],<br>operator: Literal['and', 'or', 'AND', 'OR'] = 'and')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MetadataFilter:
+    &#34;&#34;&#34;
+    Representation for an AuroraX search engine metadata filter. These are used 
+    as part of conjunction, ephemeris, and data product searching.
+
+    Attributes:
+        expressions (List[MetadataFilterExpression]): 
+            The list of metadata filter expressions for use with conjunction, ephemeris, and 
+            data product searches.
+        
+        operator (str): 
+            The logical operator to use when the search engine will evaluate multiple expressions. If 
+            not supplied, the search engine will perform a logical &#39;AND&#39; between each expression. Possible
+            choices are &#39;and&#39; or &#39;or&#39;.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        expressions: List[MetadataFilterExpression],
+        operator: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;,
+    ):
+        self.expressions = expressions
+        self.__operator = operator
+
+    @property
+    def operator(self):
+        return self.__operator
+
+    @operator.setter
+    def operator(self, val: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;):
+        if (val.lower() not in [&#34;and&#34;, &#34;or&#34;]):
+            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (val))
+        self.__operator = val.lower()
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        if (len(self.expressions) == 0):
+            expressions_str = &#34;[0 expressions]&#34;
+        elif (len(self.expressions) == 1):
+            expressions_str = &#34;[1 expression]&#34;
+        else:
+            expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
+
+        # return
+        return &#34;MetadataFilter(expressions=%s, operator=&#39;%s&#39;)&#34; % (expressions_str, self.operator)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        if (len(self.expressions) == 0):
+            expressions_str = &#34;[0 expressions]&#34;
+        elif (len(self.expressions) == 1):
+            expressions_str = &#34;[1 expression]&#34;
+        else:
+            expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
+
+        # print
+        print(&#34;MetadataFilter:&#34;)
+        print(&#34;  %-13s: %s&#34; % (&#34;expressions&#34;, expressions_str))
+        print(&#34;  %-13s: %s&#34; % (&#34;operator&#34;, self.operator))
+
+    def to_query_dict(self):
+        &#34;&#34;&#34;
+        Convert the expression object to a dictionary that will be used when executing a search.
+        &#34;&#34;&#34;
+        return {
+            &#34;expressions&#34;: [x.to_query_dict() for x in self.expressions],
+            &#34;logical_operator&#34;: self.operator.upper(),
+        }</code></pre>
+</details>
+<div class="desc"><p>Representation for an AuroraX search engine metadata filter. These are used
+as part of conjunction, ephemeris, and data product searching.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>expressions</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.MetadataFilterExpression" href="#pyaurorax.search.MetadataFilterExpression">MetadataFilterExpression</a>]</code></dt>
+<dd>The list of metadata filter expressions for use with conjunction, ephemeris, and
+data product searches.</dd>
+<dt><strong><code>operator</code></strong> :&ensp;<code>str</code></dt>
+<dd>The logical operator to use when the search engine will evaluate multiple expressions. If
+not supplied, the search engine will perform a logical 'AND' between each expression. Possible
+choices are 'and' or 'or'.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>if invalid operator was specified.</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.search.MetadataFilter.operator"><code class="name">prop <span class="ident">operator</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def operator(self):
+    return self.__operator</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.MetadataFilter.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    if (len(self.expressions) == 0):
+        expressions_str = &#34;[0 expressions]&#34;
+    elif (len(self.expressions) == 1):
+        expressions_str = &#34;[1 expression]&#34;
+    else:
+        expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
+
+    # print
+    print(&#34;MetadataFilter:&#34;)
+    print(&#34;  %-13s: %s&#34; % (&#34;expressions&#34;, expressions_str))
+    print(&#34;  %-13s: %s&#34; % (&#34;operator&#34;, self.operator))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+<dt id="pyaurorax.search.MetadataFilter.to_query_dict"><code class="name flex">
+<span>def <span class="ident">to_query_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_query_dict(self):
+    &#34;&#34;&#34;
+    Convert the expression object to a dictionary that will be used when executing a search.
+    &#34;&#34;&#34;
+    return {
+        &#34;expressions&#34;: [x.to_query_dict() for x in self.expressions],
+        &#34;logical_operator&#34;: self.operator.upper(),
+    }</code></pre>
+</details>
+<div class="desc"><p>Convert the expression object to a dictionary that will be used when executing a search.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyaurorax.search.MetadataFilterExpression"><code class="flex name class">
+<span>class <span class="ident">MetadataFilterExpression</span></span>
+<span>(</span><span>key: str,<br>values: Any | List[Any],<br>operator: Literal['=', '!=', '>', '<', '>=', '<=', 'between', 'in', 'not in'] = 'in')</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MetadataFilterExpression:
+    &#34;&#34;&#34;
+    Representation for an AuroraX search engine metadata filter expression. These are used 
+    as part of conjunction, ephemeris, and data product searching.
+
+    Attributes:
+        key (str): 
+            The special key for the metadata filter. For example, &#39;nbtrace_region&#39;.
+        
+        values (Any or List[Any]): 
+            The value(s) that the search will use when filtering. This can either be a single value, 
+            or a list of values.
+
+        operator (str): 
+            The operator to use when the search engine evaluates the expression. Valid choices
+            are: &#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;.
+
+            The &#34;in&#34; and &#34;not in&#34; operators are meant exclusively for expressions where there 
+            are multiple values (ie. the values parameter is a list of strings).
+        
+    Raises:
+        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        key: str,
+        values: Union[Any, List[Any]],
+        operator: Literal[&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;] = &#34;in&#34;,
+    ):
+        # set required parameters
+        self.key = key
+        self.values = values
+        self.__operator = operator
+
+    @property
+    def operator(self) -&gt; str:
+        return self.__operator
+
+    @operator.setter
+    def operator(self, val: Literal[&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
+        if (val not in [&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
+            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#34; +
+                         &#34;&#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; % (val))
+        self.__operator = val
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        values_str = &#34;&#39;%s&#39;&#34; % (self.values)
+        if (type(self.values) is list):
+            values_str = str(self.values)
+
+        # return
+        return &#34;MetadataFilterExpression(key=&#39;%s&#39;, values=%s, operator=&#39;%s&#39;)&#34; % (self.key, values_str, self.operator)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+
+        # print
+        print(&#34;MetadataFilterExpression:&#34;)
+        print(&#34;  %-10s: %s&#34; % (&#34;key&#34;, self.key))
+        print(&#34;  %-10s: %s&#34; % (&#34;values&#34;, self.values))
+        print(&#34;  %-10s: %s&#34; % (&#34;operator&#34;, self.operator))
+
+    def to_query_dict(self):
+        &#34;&#34;&#34;
+        Convert the expression object to a dictionary that will be used when executing a search.
+        &#34;&#34;&#34;
+        return {
+            &#34;key&#34;: str(self.key),
+            &#34;values&#34;: [str(self.values)] if type(self.values) is not list else self.values,
+            &#34;operator&#34;: str(self.operator),
+        }</code></pre>
+</details>
+<div class="desc"><p>Representation for an AuroraX search engine metadata filter expression. These are used
+as part of conjunction, ephemeris, and data product searching.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
+<dd>The special key for the metadata filter. For example, 'nbtrace_region'.</dd>
+<dt><strong><code>values</code></strong> :&ensp;<code>Any</code> or <code>List[Any]</code></dt>
+<dd>The value(s) that the search will use when filtering. This can either be a single value,
+or a list of values.</dd>
+<dt><strong><code>operator</code></strong> :&ensp;<code>str</code></dt>
+<dd>
+<p>The operator to use when the search engine evaluates the expression. Valid choices
+are: "=", "!=", "&gt;", "&lt;", "&gt;=", "&lt;=", "between", "in", "not in".</p>
+<p>The "in" and "not in" operators are meant exclusively for expressions where there
+are multiple values (ie. the values parameter is a list of strings).</p>
+</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>if invalid operator was specified.</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.search.MetadataFilterExpression.operator"><code class="name">prop <span class="ident">operator</span> : str</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def operator(self) -&gt; str:
+    return self.__operator</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.MetadataFilterExpression.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+
+    # print
+    print(&#34;MetadataFilterExpression:&#34;)
+    print(&#34;  %-10s: %s&#34; % (&#34;key&#34;, self.key))
+    print(&#34;  %-10s: %s&#34; % (&#34;values&#34;, self.values))
+    print(&#34;  %-10s: %s&#34; % (&#34;operator&#34;, self.operator))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+<dt id="pyaurorax.search.MetadataFilterExpression.to_query_dict"><code class="name flex">
+<span>def <span class="ident">to_query_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_query_dict(self):
+    &#34;&#34;&#34;
+    Convert the expression object to a dictionary that will be used when executing a search.
+    &#34;&#34;&#34;
+    return {
+        &#34;key&#34;: str(self.key),
+        &#34;values&#34;: [str(self.values)] if type(self.values) is not list else self.values,
+        &#34;operator&#34;: str(self.operator),
+    }</code></pre>
+</details>
+<div class="desc"><p>Convert the expression object to a dictionary that will be used when executing a search.</p></div>
+</dd>
+</dl>
+</dd>
 <dt id="pyaurorax.search.SearchManager"><code class="flex name class">
 <span>class <span class="ident">SearchManager</span></span>
 <span>(</span><span>aurorax_obj)</span>
@@ -3471,13 +4019,16 @@ datetime objects to strings)</p>
         # initialize class vars
         self.DataSource = DataSource
         self.Location = Location
-        self.AvailabilityResult = AvailabilityResult
-        self.EphemerisData = EphemerisData
-        self.EphemerisSearch = EphemerisSearch
-        self.DataProductData = DataProductData
-        self.DataProductSearch = DataProductSearch
-        self.Conjunction = Conjunction
+        self.MetadataFilter = MetadataFilter
+        self.MetadataFilterExpression = MetadataFilterExpression
+        self.GroundCriteriaBlock = GroundCriteriaBlock
+        self.SpaceCriteriaBlock = SpaceCriteriaBlock
+        self.EventsCriteriaBlock = EventsCriteriaBlock
         self.ConjunctionSearch = ConjunctionSearch
+        self.EphemerisSearch = EphemerisSearch
+        self.DataProductSearch = DataProductSearch
+        self.EphemerisData = EphemerisData
+        self.DataProductData = DataProductData
 
         # initialize static vars
         self.FORMAT_BASIC_INFO = FORMAT_BASIC_INFO
@@ -3705,6 +4256,148 @@ def util(self):
 </dd>
 </dl>
 </dd>
+<dt id="pyaurorax.search.SpaceCriteriaBlock"><code class="flex name class">
+<span>class <span class="ident">SpaceCriteriaBlock</span></span>
+<span>(</span><span>programs: List[str] = [],<br>platforms: List[str] = [],<br>instrument_types: List[str] = [],<br>hemisphere: List[Literal['northern', 'southern']] = [],<br>metadata_filters: <a title="pyaurorax.search.metadata_filters.MetadataFilter" href="metadata_filters.html#pyaurorax.search.metadata_filters.MetadataFilter">MetadataFilter</a> | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SpaceCriteriaBlock:
+    &#34;&#34;&#34;
+    Representation of a space criteria block used for conjunction searches. 
+
+    Attributes:
+        programs (List[str]): 
+            List of program strings to use in this criteria block. Optional, default is `[]`.
+        
+        platforms (List[str]): 
+            List of platform strings to use in this criteria block. Optional, default is `[]`.
+
+        instrument_types (List[str]): 
+            List of instrument type strings to use in this criteria block. Optional, default is `[]`.
+
+        hemisphere (List[str]): 
+            List of hemisphere strings to use in this criteria block. Valid values are &#39;northern&#39; 
+            or &#39;southern&#39;. Optional, default is `[]`.
+
+        metadata_filters (MetadataFilter): 
+            The metadata filters to use in this criteria block. Optional, default is None.
+    &#34;&#34;&#34;
+
+    def __init__(self,
+                 programs: List[str] = [],
+                 platforms: List[str] = [],
+                 instrument_types: List[str] = [],
+                 hemisphere: List[Literal[&#34;northern&#34;, &#34;southern&#34;]] = [],
+                 metadata_filters: Optional[MetadataFilter] = None):
+        self.programs = programs
+        self.platforms = platforms
+        self.instrument_types = instrument_types
+        self.hemisphere = hemisphere
+        self.metadata_filters = metadata_filters
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;SpaceCriteriaBlock(programs=%s, platforms=%s, instrument_types=%s, hemisphere=%s, metadata_filters=%s)&#34; % (
+            self.programs,
+            self.platforms,
+            self.instrument_types,
+            self.hemisphere,
+            self.metadata_filters,
+        )
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        max_len = 80
+        metadata_filters_str = str(self.metadata_filters)
+        if (len(metadata_filters_str) &gt; max_len):
+            metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
+
+        # print
+        print(&#34;SpaceCriteriaBlock:&#34;)
+        print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
+        print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
+        print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
+        print(&#34;  %-18s: %s&#34; % (&#34;hemisphere&#34;, self.hemisphere))
+        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))
+
+    def to_search_query_dict(self):
+        query_dict = self.__dict__
+        query_dict[&#34;ephemeris_metadata_filters&#34;] = None if self.metadata_filters is None else self.metadata_filters.__dict__
+        del query_dict[&#34;metadata_filters&#34;]
+        return query_dict</code></pre>
+</details>
+<div class="desc"><p>Representation of a space criteria block used for conjunction searches. </p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of program strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of platform strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of instrument type strings to use in this criteria block. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>hemisphere</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of hemisphere strings to use in this criteria block. Valid values are 'northern'
+or 'southern'. Optional, default is <code>[]</code>.</dd>
+<dt><strong><code>metadata_filters</code></strong> :&ensp;<code><a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a></code></dt>
+<dd>The metadata filters to use in this criteria block. Optional, default is None.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.SpaceCriteriaBlock.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    max_len = 80
+    metadata_filters_str = str(self.metadata_filters)
+    if (len(metadata_filters_str) &gt; max_len):
+        metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
+
+    # print
+    print(&#34;SpaceCriteriaBlock:&#34;)
+    print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
+    print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
+    print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
+    print(&#34;  %-18s: %s&#34; % (&#34;hemisphere&#34;, self.hemisphere))
+    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+<dt id="pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict"><code class="name flex">
+<span>def <span class="ident">to_search_query_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_search_query_dict(self):
+    query_dict = self.__dict__
+    query_dict[&#34;ephemeris_metadata_filters&#34;] = None if self.metadata_filters is None else self.metadata_filters.__dict__
+    del query_dict[&#34;metadata_filters&#34;]
+    return query_dict</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -3773,6 +4466,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.search.ephemeris" href="ephemeris/index.html">pyaurorax.search.ephemeris</a></code></li>
 <li><code><a title="pyaurorax.search.location" href="location.html">pyaurorax.search.location</a></code></li>
 <li><code><a title="pyaurorax.search.metadata" href="metadata/index.html">pyaurorax.search.metadata</a></code></li>
+<li><code><a title="pyaurorax.search.metadata_filters" href="metadata_filters.html">pyaurorax.search.metadata_filters</a></code></li>
 <li><code><a title="pyaurorax.search.requests" href="requests/index.html">pyaurorax.search.requests</a></code></li>
 <li><code><a title="pyaurorax.search.sources" href="sources/index.html">pyaurorax.search.sources</a></code></li>
 <li><code><a title="pyaurorax.search.util" href="util/index.html">pyaurorax.search.util</a></code></li>
@@ -3852,11 +4546,39 @@ setTimeout(() => input.focus(), 100);
 </ul>
 </li>
 <li>
+<h4><code><a title="pyaurorax.search.EventsCriteriaBlock" href="#pyaurorax.search.EventsCriteriaBlock">EventsCriteriaBlock</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.EventsCriteriaBlock.pretty_print" href="#pyaurorax.search.EventsCriteriaBlock.pretty_print">pretty_print</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.search.GroundCriteriaBlock" href="#pyaurorax.search.GroundCriteriaBlock">GroundCriteriaBlock</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.GroundCriteriaBlock.pretty_print" href="#pyaurorax.search.GroundCriteriaBlock.pretty_print">pretty_print</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.search.Location.lat" href="#pyaurorax.search.Location.lat">lat</a></code></li>
 <li><code><a title="pyaurorax.search.Location.lon" href="#pyaurorax.search.Location.lon">lon</a></code></li>
 <li><code><a title="pyaurorax.search.Location.to_json_serializable" href="#pyaurorax.search.Location.to_json_serializable">to_json_serializable</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.MetadataFilter.operator" href="#pyaurorax.search.MetadataFilter.operator">operator</a></code></li>
+<li><code><a title="pyaurorax.search.MetadataFilter.pretty_print" href="#pyaurorax.search.MetadataFilter.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.search.MetadataFilter.to_query_dict" href="#pyaurorax.search.MetadataFilter.to_query_dict">to_query_dict</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.search.MetadataFilterExpression" href="#pyaurorax.search.MetadataFilterExpression">MetadataFilterExpression</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.MetadataFilterExpression.operator" href="#pyaurorax.search.MetadataFilterExpression.operator">operator</a></code></li>
+<li><code><a title="pyaurorax.search.MetadataFilterExpression.pretty_print" href="#pyaurorax.search.MetadataFilterExpression.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.search.MetadataFilterExpression.to_query_dict" href="#pyaurorax.search.MetadataFilterExpression.to_query_dict">to_query_dict</a></code></li>
 </ul>
 </li>
 <li>
@@ -3871,6 +4593,13 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.search.SearchManager.requests" href="#pyaurorax.search.SearchManager.requests">requests</a></code></li>
 <li><code><a title="pyaurorax.search.SearchManager.sources" href="#pyaurorax.search.SearchManager.sources">sources</a></code></li>
 <li><code><a title="pyaurorax.search.SearchManager.util" href="#pyaurorax.search.SearchManager.util">util</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.search.SpaceCriteriaBlock" href="#pyaurorax.search.SpaceCriteriaBlock">SpaceCriteriaBlock</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.SpaceCriteriaBlock.pretty_print" href="#pyaurorax.search.SpaceCriteriaBlock.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict" href="#pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict">to_search_query_dict</a></code></li>
 </ul>
 </li>
 </ul>

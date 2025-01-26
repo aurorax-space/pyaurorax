@@ -89,11 +89,11 @@ border-left: 1px solid #ddd;
 
         Args:
             search_obj (ConjunctionSearch): 
-                a conjunction search object, must be a completed search with 
+                A conjunction search object, must be a completed search with 
                 the &#39;request_id&#39; value populated
 
         Returns:
-            the Swarm-Aurora Conjunction Finder URL for this conjunction search
+            The Swarm-Aurora Conjunction Finder URL for this conjunction search
         &#34;&#34;&#34;
         return func_get_url(search_obj)
 
@@ -103,16 +103,16 @@ border-left: 1px solid #ddd;
 
         Args:
             search_obj (ConjunctionSearch): 
-                a conjunction search object, must be a completed search with 
+                A conjunction search object, must be a completed search with 
                 the &#39;request_id&#39; value populated
 
             browser (str)): 
-                the browser type to load using. Default is your default browser. Some common other 
+                The browser type to load using. Default is your default browser. Some common other 
                 options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
                 to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
         
         Raises:
-            pyaurorax.exceptions.AuroraXError: unsupported browser specified
+            pyaurorax.exceptions.AuroraXError: Unsupported browser specified
         &#34;&#34;&#34;
         return func_open_in_browser(search_obj, browser)
 
@@ -122,18 +122,18 @@ border-left: 1px solid #ddd;
 
         Args:
             search_obj (ConjunctionSearch): 
-                a conjunction search object, must be a completed search with 
+                A conjunction search object, must be a completed search with 
                 the &#39;request_id&#39; value populated
 
             filename (str): 
-                the output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
+                The output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
             
             return_dict (bool): 
-                return the custom import file contents as a dictionary instead of saving 
+                Return the custom import file contents as a dictionary instead of saving 
                 a file, default is False
 
         Returns:
-            the filename of the saved custom import file, or a dictionary with the file contents 
+            The filename of the saved custom import file, or a dictionary with the file contents 
             if `return_dict` is set to True
         &#34;&#34;&#34;
         return func_create_custom_import_file(self.__aurorax_obj, search_obj, filename, return_dict)</code></pre>
@@ -156,18 +156,18 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         search_obj (ConjunctionSearch): 
-            a conjunction search object, must be a completed search with 
+            A conjunction search object, must be a completed search with 
             the &#39;request_id&#39; value populated
 
         filename (str): 
-            the output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
+            The output filename, default is &#39;swarmaurora_custom_import_file_{requestID}.json&#39;
         
         return_dict (bool): 
-            return the custom import file contents as a dictionary instead of saving 
+            Return the custom import file contents as a dictionary instead of saving 
             a file, default is False
 
     Returns:
-        the filename of the saved custom import file, or a dictionary with the file contents 
+        The filename of the saved custom import file, or a dictionary with the file contents 
         if `return_dict` is set to True
     &#34;&#34;&#34;
     return func_create_custom_import_file(self.__aurorax_obj, search_obj, filename, return_dict)</code></pre>
@@ -176,16 +176,16 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
-<dd>a conjunction search object, must be a completed search with
+<dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
 <dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
-<dd>the output filename, default is 'swarmaurora_custom_import_file_{requestID}.json'</dd>
+<dd>The output filename, default is 'swarmaurora_custom_import_file_{requestID}.json'</dd>
 <dt><strong><code>return_dict</code></strong> :&ensp;<code>bool</code></dt>
-<dd>return the custom import file contents as a dictionary instead of saving
+<dd>Return the custom import file contents as a dictionary instead of saving
 a file, default is False</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the filename of the saved custom import file, or a dictionary with the file contents
+<p>The filename of the saved custom import file, or a dictionary with the file contents
 if <code>return_dict</code> is set to True</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.get_url"><code class="name flex">
@@ -203,11 +203,11 @@ if <code>return_dict</code> is set to True</p></div>
 
     Args:
         search_obj (ConjunctionSearch): 
-            a conjunction search object, must be a completed search with 
+            A conjunction search object, must be a completed search with 
             the &#39;request_id&#39; value populated
 
     Returns:
-        the Swarm-Aurora Conjunction Finder URL for this conjunction search
+        The Swarm-Aurora Conjunction Finder URL for this conjunction search
     &#34;&#34;&#34;
     return func_get_url(search_obj)</code></pre>
 </details>
@@ -216,11 +216,11 @@ Conjunction Finder</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
-<dd>a conjunction search object, must be a completed search with
+<dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the Swarm-Aurora Conjunction Finder URL for this conjunction search</p></div>
+<p>The Swarm-Aurora Conjunction Finder URL for this conjunction search</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.open_in_browser"><code class="name flex">
 <span>def <span class="ident">open_in_browser</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="../classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a>,<br>browser: str | None = None) ‑> None</span>
@@ -236,16 +236,16 @@ the 'request_id' value populated</dd>
 
     Args:
         search_obj (ConjunctionSearch): 
-            a conjunction search object, must be a completed search with 
+            A conjunction search object, must be a completed search with 
             the &#39;request_id&#39; value populated
 
         browser (str)): 
-            the browser type to load using. Default is your default browser. Some common other 
+            The browser type to load using. Default is your default browser. Some common other 
             options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
             to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
     
     Raises:
-        pyaurorax.exceptions.AuroraXError: unsupported browser specified
+        pyaurorax.exceptions.AuroraXError: Unsupported browser specified
     &#34;&#34;&#34;
     return func_open_in_browser(search_obj, browser)</code></pre>
 </details>
@@ -253,17 +253,17 @@ the 'request_id' value populated</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
-<dd>a conjunction search object, must be a completed search with
+<dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
 </dl>
 <p>browser (str)):
-the browser type to load using. Default is your default browser. Some common other
+The browser type to load using. Default is your default browser. Some common other
 options are "google-chrome", "firefox", or "safari". For all available options, refer
 to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
-<dd>unsupported browser specified</dd>
+<dd>Unsupported browser specified</dd>
 </dl></div>
 </dd>
 </dl>

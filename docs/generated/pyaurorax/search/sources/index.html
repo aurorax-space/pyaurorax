@@ -87,48 +87,48 @@ border-left: 1px solid #ddd;
 
     Attributes:
         identifier (int): 
-            the unique AuroraX data source identifier
+            The unique AuroraX data source identifier
 
         program (str): 
-            the program for this data source
+            The program for this data source
 
         platform (str): 
-            the platform for this data source
+            The platform for this data source
 
         instrument_type (str): 
-            the instrument type for this data source
+            The instrument type for this data source
 
         source_type (str): 
-            the data source type for this data source. Options are in the 
+            The data source type for this data source. Options are in the 
             pyaurorax.search.sources module, or at the top level using the
             pyaurorax.search.SOURCE_TYPE_* variables.
 
         display_name (str): 
-            the display name for this data source
+            The display name for this data source
 
         metadata (Dict): 
-            metadata for this data source (arbitrary keys and values)
+            Metadata for this data source (arbitrary keys and values)
 
         owner (str): 
-            the owner&#39;s email address of this data source
+            The owner&#39;s email address of this data source
 
         maintainers (List[str]): 
-            the email addresses of AuroraX accounts that can alter this data source and 
+            The email addresses of AuroraX accounts that can alter this data source and 
             its associated records
 
         ephemeris_metadata_schema (Dict): 
-            a list of dictionaries capturing the metadata keys and values that can appear 
+            A list of dictionaries capturing the metadata keys and values that can appear 
             in ephemeris records associated with this data source
 
         data_product_metadata_schema (Dict): 
-            a list of dictionaries capturing the metadata keys and values that can appear 
+            A list of dictionaries capturing the metadata keys and values that can appear 
             in data product records associated with this data source
 
         stats (DataSourceStatistics): 
-            data source statistics information
+            Data source statistics information
             
         format (str): 
-            the format used when printing the data source, defaults to `full_record`. Other 
+            The format used when printing the data source, defaults to `full_record`. Other 
             options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
     &#34;&#34;&#34;
@@ -210,36 +210,36 @@ border-left: 1px solid #ddd;
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the unique AuroraX data source identifier</dd>
+<dd>The unique AuroraX data source identifier</dd>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program for this data source</dd>
+<dd>The program for this data source</dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform for this data source</dd>
+<dd>The platform for this data source</dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type for this data source</dd>
+<dd>The instrument type for this data source</dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type for this data source. Options are in the
+<dd>The data source type for this data source. Options are in the
 pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
-<dd>the display name for this data source</dd>
+<dd>The display name for this data source</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this data source (arbitrary keys and values)</dd>
+<dd>Metadata for this data source (arbitrary keys and values)</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the owner's email address of this data source</dd>
+<dd>The owner's email address of this data source</dd>
 <dt><strong><code>maintainers</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the email addresses of AuroraX accounts that can alter this data source and
+<dd>The email addresses of AuroraX accounts that can alter this data source and
 its associated records</dd>
 <dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata keys and values that can appear
+<dd>A list of dictionaries capturing the metadata keys and values that can appear
 in ephemeris records associated with this data source</dd>
 <dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>a list of dictionaries capturing the metadata keys and values that can appear
+<dd>A list of dictionaries capturing the metadata keys and values that can appear
 in data product records associated with this data source</dd>
 <dt><strong><code>stats</code></strong> :&ensp;<code><a title="pyaurorax.search.sources.DataSourceStatistics" href="#pyaurorax.search.sources.DataSourceStatistics">DataSourceStatistics</a></code></dt>
-<dd>data source statistics information</dd>
+<dd>Data source statistics information</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format used when printing the data source, defaults to <code>full_record</code>. Other
+<dd>The format used when printing the data source, defaults to <code>full_record</code>. Other
 options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 </dl></div>
@@ -304,22 +304,22 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
     Attributes:
         ephemeris_count (int): 
-            total number of ephemeris records for this data source
+            Total number of ephemeris records for this data source
 
         data_product_count (int): 
-            total number of ephemeris records for this data source
+            Total number of ephemeris records for this data source
 
         earliest_ephemeris_loaded (datetime.datetime): 
-            timestamp of the earliest ephemeris record
+            Timestamp of the earliest ephemeris record
 
         latest_ephemeris_loaded (datetime.datetime): 
-            timestamp of the latest ephemeris record
+            Timestamp of the latest ephemeris record
 
         earliest_data_product_loaded (datetime.datetime): 
-            timestamp of the earliest data_product record
+            Timestamp of the earliest data_product record
             
         latest_data_product_loaded (datetime.datetime): 
-            timestamp of the latest data product record
+            Timestamp of the latest data product record
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -361,17 +361,17 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>ephemeris_count</code></strong> :&ensp;<code>int</code></dt>
-<dd>total number of ephemeris records for this data source</dd>
+<dd>Total number of ephemeris records for this data source</dd>
 <dt><strong><code>data_product_count</code></strong> :&ensp;<code>int</code></dt>
-<dd>total number of ephemeris records for this data source</dd>
+<dd>Total number of ephemeris records for this data source</dd>
 <dt><strong><code>earliest_ephemeris_loaded</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp of the earliest ephemeris record</dd>
+<dd>Timestamp of the earliest ephemeris record</dd>
 <dt><strong><code>latest_ephemeris_loaded</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp of the latest ephemeris record</dd>
+<dd>Timestamp of the latest ephemeris record</dd>
 <dt><strong><code>earliest_data_product_loaded</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp of the earliest data_product record</dd>
+<dd>Timestamp of the earliest data_product record</dd>
 <dt><strong><code>latest_data_product_loaded</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp of the latest data product record</dd>
+<dd>Timestamp of the latest data product record</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>
@@ -431,39 +431,39 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             program (str): 
-                the program to filter for, defaults to `None`
+                The program to filter for, defaults to `None`
 
             platform (str): 
-                the platform to filter for, defaults to `None`
+                The platform to filter for, defaults to `None`
 
             instrument_type (str): 
-                the instrument type to filter for, defaults to `None`
+                The instrument type to filter for, defaults to `None`
 
             source_type (str): 
-                the data source type to filter for, defaults to `None`. Options are in 
+                The data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
                 
             owner (str): 
-                the owner&#39;s email address to filter for, defaults to `None`
+                The owner&#39;s email address to filter for, defaults to `None`
 
             format (str): 
-                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
 
             order (str): 
-                the category to order results by. Valid values are identifier, program, platform,
+                The category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
 
             include_stats (bool): 
-                include additional stats information about the data source, defaults to `False`
+                Include additional stats information about the data source, defaults to `False`
 
         Returns:
-            a list of `DataSource` records matching the requested parameters
+            A list of `DataSource` records matching the requested parameters
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
         &#34;&#34;&#34;
         return func_list(
             self.__aurorax_obj,
@@ -484,45 +484,50 @@ the pyaurorax.search.FORMAT_* variables.</dd>
                       source_type: Optional[str] = None,
                       owner: Optional[str] = None,
                       order: Optional[str] = &#34;identifier&#34;,
-                      table_max_width: int = 200) -&gt; None:
+                      table_max_width: int = 200,
+                      limit: Optional[int] = None) -&gt; None:
         &#34;&#34;&#34;
         Display all data source records in a table. Parameters can be used to filter as desired.
 
         Args:
             program (str): 
-                the program to filter for, defaults to `None`
+                The program to filter for, defaults to `None`
 
             platform (str): 
-                the platform to filter for, defaults to `None`
+                The platform to filter for, defaults to `None`
 
             instrument_type (str): 
-                the instrument type to filter for, defaults to `None`
+                The instrument type to filter for, defaults to `None`
 
             source_type (str): 
-                the data source type to filter for, defaults to `None`. Options are in 
+                The data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
 
             owner (str): 
-                the owner&#39;s email address to filter for, defaults to `None`
+                The owner&#39;s email address to filter for, defaults to `None`
 
             format (str): 
-                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
 
             order (str): 
-                the category to order results by. Valid values are identifier, program, platform,
+                The category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
                 
             table_max_width (int): 
-                table maximum width, defaults to 200
+                Table maximum width, defaults to 200
+
+            limit (int): 
+                Limit the table rows to a certain value, regardless of how many sources it found
+                to display
 
         Returns:
             No return, only prints a table
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
         &#34;&#34;&#34;
         # get datasets
         datasets = func_list(
@@ -532,10 +537,14 @@ the pyaurorax.search.FORMAT_* variables.</dd>
             instrument_type,
             source_type,
             owner,
-            FORMAT_BASIC_INFO,
+            FORMAT_FULL_RECORD,
             order,
             False,
         )
+
+        # reduce based on limit
+        if (limit is not None and len(datasets) &gt; limit):
+            datasets = datasets[0:limit]
 
         # set table lists
         table_identifiers = []
@@ -596,31 +605,31 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             programs (List[str]): 
-                the programs to search for, defaults to `[]`
+                The programs to search for, defaults to `[]`
 
             platforms (List[str]): 
-                the platforms to search for, defaults to `[]`
+                The platforms to search for, defaults to `[]`
 
             instrument_types (List[str]): 
-                the instrument types to search for, defaults to `[]`
+                The instrument types to search for, defaults to `[]`
 
             format (str): 
-                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
 
             order (str): 
-                the category to order results by. Valid values are identifier, program, platform,
+                The category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
 
             include_stats (bool): 
-                include additional stats information about the data source, defaults to `False`
+                Include additional stats information about the data source, defaults to `False`
 
         Returns:
-            a list of `DataSource` records matching the requested parameters
+            A list of `DataSource` records matching the requested parameters
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
         &#34;&#34;&#34;
         return func_search(
             self.__aurorax_obj,
@@ -643,28 +652,28 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             program (str): 
-                the program name
+                The program name
 
             platform (str): 
-                the platform name
+                The platform name
 
             instrument_type (str): 
-                the instrument type name
+                The instrument type name
 
             format (str): 
-                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
 
             include_stats (bool): 
-                include additional stats information about the data source, defaults to `False`
+                Include additional stats information about the data source, defaults to `False`
 
         Returns:
-            the `DataSource` matching the requested parameters
+            The `DataSource` matching the requested parameters
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
-            pyaurorax.exceptions.AuroraXNotFoundError: source not found
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
+            pyaurorax.exceptions.AuroraXNotFoundError: Source not found
         &#34;&#34;&#34;
         return func_get(
             self.__aurorax_obj,
@@ -689,39 +698,39 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             program (str): 
-                the program to filter for, defaults to `None`
+                The program to filter for, defaults to `None`
 
             platform (str): 
-                the platform to filter for, defaults to `None`
+                The platform to filter for, defaults to `None`
                 
             instrument_type (str): 
-                the instrument type to filter for, defaults to `None`
+                The instrument type to filter for, defaults to `None`
 
             source_type (str): 
-                the data source type to filter for, defaults to `None`. Options are in 
+                The data source type to filter for, defaults to `None`. Options are in 
                 the pyaurorax.search.sources module, or at the top level using the 
                 pyaurorax.search.SOURCE_TYPE_* variables.
 
             owner (str): 
-                the owner&#39;s email address to filter for, defaults to `None`
+                The owner&#39;s email address to filter for, defaults to `None`
 
             format (str): 
-                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
 
             order (str): 
-                the category to order results by. Valid values are identifier, program, platform,
+                The category to order results by. Valid values are identifier, program, platform,
                 instrument_type, display_name, or owner. Defaults to `identifier`
 
             include_stats (bool): 
-                include additional stats information about the data source, defaults to `False`.
+                Include additional stats information about the data source, defaults to `False`.
 
         Returns:
-            a list of `DataSource` records matching the requested parameters
+            A list of `DataSource` records matching the requested parameters
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
         &#34;&#34;&#34;
         return func_get_using_filters(
             self.__aurorax_obj,
@@ -741,21 +750,21 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             identifier (int): 
-                the AuroraX unique data source identifier number
+                The AuroraX unique data source identifier number
 
             format (str): 
-                the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+                The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
                 Other options are in the pyaurorax.search.sources module, or at the top level using 
                 the pyaurorax.search.FORMAT_* variables.
 
             include_stats (bool): 
-                include additional stats information about the data source, defaults to `False`
+                Include additional stats information about the data source, defaults to `False`
 
         Returns:
-            the `DataSource` for the specified identifier
+            The `DataSource` for the specified identifier
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
         &#34;&#34;&#34;
         return func_get_using_identifier(self.__aurorax_obj, identifier, format, include_stats)
 
@@ -765,15 +774,15 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             data_source (DataSource): 
-                the data source to add (note: it must be a fully-defined DataSource object)
+                The data source to add (note: it must be a fully-defined DataSource object)
 
         Returns:
-            the newly created `DataSource`.
+            The newly created `DataSource`.
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
-            pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid
-            pyaurorax.exceptions.AuroraXDuplicateError: duplicate data source, already exists
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
+            pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists
         &#34;&#34;&#34;
         return func_add(self.__aurorax_obj, data_source)
 
@@ -783,16 +792,16 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             identifier (int): 
-                the data source unique identifier to delete
+                The data source unique identifier to delete
 
         Returns:
             0 on success, raises error if an issue was encountered
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
-            pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid
-            pyaurorax.exceptions.AuroraXNotFoundError: data source not found
-            pyaurorax.exceptions.AuroraXConflictError: a conflict occurred
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
+            pyaurorax.exceptions.AuroraXNotFoundError: Data source not found
+            pyaurorax.exceptions.AuroraXConflictError: A conflict occurred
         &#34;&#34;&#34;
         return func_delete(self.__aurorax_obj, identifier)
 
@@ -817,49 +826,49 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             identifier (int): 
-                the AuroraX unique identifier for the data source, required and cannot be updated
+                The AuroraX unique identifier for the data source, required and cannot be updated
 
             program (str): 
-                the new program for the data source, defaults to `None`
+                The new program for the data source, defaults to `None`
 
             platform (str): 
-                the new platform for the data source, defaults to `None`
+                The new platform for the data source, defaults to `None`
 
             instrument_type (str): 
-                the new instrument type for the data source, defaults to `None`
+                The new instrument type for the data source, defaults to `None`
 
             source_type (str): 
-                the new source type for the data source, defaults to `None`. Options
+                The new source type for the data source, defaults to `None`. Options
                 are in the pyaurorax.search.sources module, or at the top level using the
                 pyaurorax.search.SOURCE_TYPE_* variables.
 
             display_name (str): 
-                the new display name for the data source, defaults to `None`
+                The new display name for the data source, defaults to `None`
 
             metadata (Dict): 
-                the new metadata for the data source, defaults to `None`
+                The new metadata for the data source, defaults to `None`
 
             owner (str): 
-                the new owner for the data source, defaults to `None`
+                The new owner for the data source, defaults to `None`
 
             maintainers (str): 
-                the new maintainer AuroraX account email addresses, defaults to `None`
+                The new maintainer AuroraX account email addresses, defaults to `None`
 
             ephemeris_metadata_schema (List[Dict]): 
-                a list of dictionaries capturing the metadata keys and values that can 
+                A list of dictionaries capturing the metadata keys and values that can 
                 appear in ephemeris records associated with the data source, defaults to `None`
 
             data_product_metadata_schema (List[Dict]): 
-                a list of dictionaries capturing the metadata keys and values that can appear 
+                A list of dictionaries capturing the metadata keys and values that can appear 
                 in data product records associated with the data source, defaults to `None`
 
         Returns:
-            the updated `DataSource` record
+            The updated `DataSource` record
 
         Raises:
-            pyaurorax.exceptions.AuroraXAPIError: error during API call
-            pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid
-            pyaurorax.exceptions.AuroraXNotFoundError: data source not found
+            pyaurorax.exceptions.AuroraXAPIError: Error during API call
+            pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
+            pyaurorax.exceptions.AuroraXNotFoundError: Data source not found
         &#34;&#34;&#34;
         return func_update(
             self.__aurorax_obj,
@@ -894,15 +903,15 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         data_source (DataSource): 
-            the data source to add (note: it must be a fully-defined DataSource object)
+            The data source to add (note: it must be a fully-defined DataSource object)
 
     Returns:
-        the newly created `DataSource`.
+        The newly created `DataSource`.
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
-        pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid
-        pyaurorax.exceptions.AuroraXDuplicateError: duplicate data source, already exists
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
+        pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists
     &#34;&#34;&#34;
     return func_add(self.__aurorax_obj, data_source)</code></pre>
 </details>
@@ -910,18 +919,18 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code></dt>
-<dd>the data source to add (note: it must be a fully-defined DataSource object)</dd>
+<dd>The data source to add (note: it must be a fully-defined DataSource object)</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the newly created <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code>.</p>
+<p>The newly created <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code>.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>not allowed to perform task, or API key / user permissions are invalid</dd>
+<dd>Not allowed to perform task, or API key / user permissions are invalid</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXDuplicateError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXDuplicateError">AuroraXDuplicateError</a></code></dt>
-<dd>duplicate data source, already exists</dd>
+<dd>Duplicate data source, already exists</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.delete"><code class="name flex">
@@ -938,16 +947,16 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         identifier (int): 
-            the data source unique identifier to delete
+            The data source unique identifier to delete
 
     Returns:
         0 on success, raises error if an issue was encountered
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
-        pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid
-        pyaurorax.exceptions.AuroraXNotFoundError: data source not found
-        pyaurorax.exceptions.AuroraXConflictError: a conflict occurred
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
+        pyaurorax.exceptions.AuroraXNotFoundError: Data source not found
+        pyaurorax.exceptions.AuroraXConflictError: A conflict occurred
     &#34;&#34;&#34;
     return func_delete(self.__aurorax_obj, identifier)</code></pre>
 </details>
@@ -955,20 +964,20 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the data source unique identifier to delete</dd>
+<dd>The data source unique identifier to delete</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>0 on success, raises error if an issue was encountered</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>not allowed to perform task, or API key / user permissions are invalid</dd>
+<dd>Not allowed to perform task, or API key / user permissions are invalid</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXNotFoundError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXNotFoundError">AuroraXNotFoundError</a></code></dt>
-<dd>data source not found</dd>
+<dd>Data source not found</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXConflictError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXConflictError">AuroraXConflictError</a></code></dt>
-<dd>a conflict occurred</dd>
+<dd>A conflict occurred</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.get"><code class="name flex">
@@ -990,28 +999,28 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         program (str): 
-            the program name
+            The program name
 
         platform (str): 
-            the platform name
+            The platform name
 
         instrument_type (str): 
-            the instrument type name
+            The instrument type name
 
         format (str): 
-            the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+            The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
 
         include_stats (bool): 
-            include additional stats information about the data source, defaults to `False`
+            Include additional stats information about the data source, defaults to `False`
 
     Returns:
-        the `DataSource` matching the requested parameters
+        The `DataSource` matching the requested parameters
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
-        pyaurorax.exceptions.AuroraXNotFoundError: source not found
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
+        pyaurorax.exceptions.AuroraXNotFoundError: Source not found
     &#34;&#34;&#34;
     return func_get(
         self.__aurorax_obj,
@@ -1026,26 +1035,26 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program name</dd>
+<dd>The program name</dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform name</dd>
+<dd>The platform name</dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type name</dd>
+<dd>The instrument type name</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+<dd>The format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
 Other options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
-<dd>include additional stats information about the data source, defaults to <code>False</code></dd>
+<dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> matching the requested parameters</p>
+<p>The <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> matching the requested parameters</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXNotFoundError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXNotFoundError">AuroraXNotFoundError</a></code></dt>
-<dd>source not found</dd>
+<dd>Source not found</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.get_using_filters"><code class="name flex">
@@ -1070,39 +1079,39 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
     Args:
         program (str): 
-            the program to filter for, defaults to `None`
+            The program to filter for, defaults to `None`
 
         platform (str): 
-            the platform to filter for, defaults to `None`
+            The platform to filter for, defaults to `None`
             
         instrument_type (str): 
-            the instrument type to filter for, defaults to `None`
+            The instrument type to filter for, defaults to `None`
 
         source_type (str): 
-            the data source type to filter for, defaults to `None`. Options are in 
+            The data source type to filter for, defaults to `None`. Options are in 
             the pyaurorax.search.sources module, or at the top level using the 
             pyaurorax.search.SOURCE_TYPE_* variables.
 
         owner (str): 
-            the owner&#39;s email address to filter for, defaults to `None`
+            The owner&#39;s email address to filter for, defaults to `None`
 
         format (str): 
-            the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+            The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
 
         order (str): 
-            the category to order results by. Valid values are identifier, program, platform,
+            The category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
 
         include_stats (bool): 
-            include additional stats information about the data source, defaults to `False`.
+            Include additional stats information about the data source, defaults to `False`.
 
     Returns:
-        a list of `DataSource` records matching the requested parameters
+        A list of `DataSource` records matching the requested parameters
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
     &#34;&#34;&#34;
     return func_get_using_filters(
         self.__aurorax_obj,
@@ -1120,33 +1129,33 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program to filter for, defaults to <code>None</code></dd>
+<dd>The program to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform to filter for, defaults to <code>None</code></dd>
+<dd>The platform to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type to filter for, defaults to <code>None</code></dd>
+<dd>The instrument type to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type to filter for, defaults to <code>None</code>. Options are in
+<dd>The data source type to filter for, defaults to <code>None</code>. Options are in
 the pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the owner's email address to filter for, defaults to <code>None</code></dd>
+<dd>The owner's email address to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+<dd>The format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
 Other options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>order</code></strong> :&ensp;<code>str</code></dt>
-<dd>the category to order results by. Valid values are identifier, program, platform,
+<dd>The category to order results by. Valid values are identifier, program, platform,
 instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
-<dd>include additional stats information about the data source, defaults to <code>False</code>.</dd>
+<dd>Include additional stats information about the data source, defaults to <code>False</code>.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>a list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
+<p>A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.get_using_identifier"><code class="name flex">
@@ -1163,21 +1172,21 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 
     Args:
         identifier (int): 
-            the AuroraX unique data source identifier number
+            The AuroraX unique data source identifier number
 
         format (str): 
-            the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+            The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
 
         include_stats (bool): 
-            include additional stats information about the data source, defaults to `False`
+            Include additional stats information about the data source, defaults to `False`
 
     Returns:
-        the `DataSource` for the specified identifier
+        The `DataSource` for the specified identifier
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
     &#34;&#34;&#34;
     return func_get_using_identifier(self.__aurorax_obj, identifier, format, include_stats)</code></pre>
 </details>
@@ -1185,20 +1194,20 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the AuroraX unique data source identifier number</dd>
+<dd>The AuroraX unique data source identifier number</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+<dd>The format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
 Other options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
-<dd>include additional stats information about the data source, defaults to <code>False</code></dd>
+<dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> for the specified identifier</p>
+<p>The <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> for the specified identifier</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.list"><code class="name flex">
@@ -1223,39 +1232,39 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
     Args:
         program (str): 
-            the program to filter for, defaults to `None`
+            The program to filter for, defaults to `None`
 
         platform (str): 
-            the platform to filter for, defaults to `None`
+            The platform to filter for, defaults to `None`
 
         instrument_type (str): 
-            the instrument type to filter for, defaults to `None`
+            The instrument type to filter for, defaults to `None`
 
         source_type (str): 
-            the data source type to filter for, defaults to `None`. Options are in 
+            The data source type to filter for, defaults to `None`. Options are in 
             the pyaurorax.search.sources module, or at the top level using the 
             pyaurorax.search.SOURCE_TYPE_* variables.
             
         owner (str): 
-            the owner&#39;s email address to filter for, defaults to `None`
+            The owner&#39;s email address to filter for, defaults to `None`
 
         format (str): 
-            the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+            The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
 
         order (str): 
-            the category to order results by. Valid values are identifier, program, platform,
+            The category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
 
         include_stats (bool): 
-            include additional stats information about the data source, defaults to `False`
+            Include additional stats information about the data source, defaults to `False`
 
     Returns:
-        a list of `DataSource` records matching the requested parameters
+        A list of `DataSource` records matching the requested parameters
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
     &#34;&#34;&#34;
     return func_list(
         self.__aurorax_obj,
@@ -1273,37 +1282,37 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program to filter for, defaults to <code>None</code></dd>
+<dd>The program to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform to filter for, defaults to <code>None</code></dd>
+<dd>The platform to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type to filter for, defaults to <code>None</code></dd>
+<dd>The instrument type to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type to filter for, defaults to <code>None</code>. Options are in
+<dd>The data source type to filter for, defaults to <code>None</code>. Options are in
 the pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the owner's email address to filter for, defaults to <code>None</code></dd>
+<dd>The owner's email address to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+<dd>The format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
 Other options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>order</code></strong> :&ensp;<code>str</code></dt>
-<dd>the category to order results by. Valid values are identifier, program, platform,
+<dd>The category to order results by. Valid values are identifier, program, platform,
 instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
-<dd>include additional stats information about the data source, defaults to <code>False</code></dd>
+<dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>a list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
+<p>A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.list_in_table"><code class="name flex">
-<span>def <span class="ident">list_in_table</span></span>(<span>self,<br>program: str | None = None,<br>platform: str | None = None,<br>instrument_type: str | None = None,<br>source_type: str | None = None,<br>owner: str | None = None,<br>order: str | None = 'identifier',<br>table_max_width: int = 200) ‑> None</span>
+<span>def <span class="ident">list_in_table</span></span>(<span>self,<br>program: str | None = None,<br>platform: str | None = None,<br>instrument_type: str | None = None,<br>source_type: str | None = None,<br>owner: str | None = None,<br>order: str | None = 'identifier',<br>table_max_width: int = 200,<br>limit: int | None = None) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1317,45 +1326,50 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
                   source_type: Optional[str] = None,
                   owner: Optional[str] = None,
                   order: Optional[str] = &#34;identifier&#34;,
-                  table_max_width: int = 200) -&gt; None:
+                  table_max_width: int = 200,
+                  limit: Optional[int] = None) -&gt; None:
     &#34;&#34;&#34;
     Display all data source records in a table. Parameters can be used to filter as desired.
 
     Args:
         program (str): 
-            the program to filter for, defaults to `None`
+            The program to filter for, defaults to `None`
 
         platform (str): 
-            the platform to filter for, defaults to `None`
+            The platform to filter for, defaults to `None`
 
         instrument_type (str): 
-            the instrument type to filter for, defaults to `None`
+            The instrument type to filter for, defaults to `None`
 
         source_type (str): 
-            the data source type to filter for, defaults to `None`. Options are in 
+            The data source type to filter for, defaults to `None`. Options are in 
             the pyaurorax.search.sources module, or at the top level using the 
             pyaurorax.search.SOURCE_TYPE_* variables.
 
         owner (str): 
-            the owner&#39;s email address to filter for, defaults to `None`
+            The owner&#39;s email address to filter for, defaults to `None`
 
         format (str): 
-            the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+            The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
 
         order (str): 
-            the category to order results by. Valid values are identifier, program, platform,
+            The category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
             
         table_max_width (int): 
-            table maximum width, defaults to 200
+            Table maximum width, defaults to 200
+
+        limit (int): 
+            Limit the table rows to a certain value, regardless of how many sources it found
+            to display
 
     Returns:
         No return, only prints a table
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
     &#34;&#34;&#34;
     # get datasets
     datasets = func_list(
@@ -1365,10 +1379,14 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
         instrument_type,
         source_type,
         owner,
-        FORMAT_BASIC_INFO,
+        FORMAT_FULL_RECORD,
         order,
         False,
     )
+
+    # reduce based on limit
+    if (limit is not None and len(datasets) &gt; limit):
+        datasets = datasets[0:limit]
 
     # set table lists
     table_identifiers = []
@@ -1417,33 +1435,36 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the program to filter for, defaults to <code>None</code></dd>
+<dd>The program to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the platform to filter for, defaults to <code>None</code></dd>
+<dd>The platform to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the instrument type to filter for, defaults to <code>None</code></dd>
+<dd>The instrument type to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the data source type to filter for, defaults to <code>None</code>. Options are in
+<dd>The data source type to filter for, defaults to <code>None</code>. Options are in
 the pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the owner's email address to filter for, defaults to <code>None</code></dd>
+<dd>The owner's email address to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+<dd>The format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
 Other options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>order</code></strong> :&ensp;<code>str</code></dt>
-<dd>the category to order results by. Valid values are identifier, program, platform,
+<dd>The category to order results by. Valid values are identifier, program, platform,
 instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd>
 <dt><strong><code>table_max_width</code></strong> :&ensp;<code>int</code></dt>
-<dd>table maximum width, defaults to 200</dd>
+<dd>Table maximum width, defaults to 200</dd>
+<dt><strong><code>limit</code></strong> :&ensp;<code>int</code></dt>
+<dd>Limit the table rows to a certain value, regardless of how many sources it found
+to display</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>No return, only prints a table</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.search"><code class="name flex">
@@ -1470,31 +1491,31 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 
     Args:
         programs (List[str]): 
-            the programs to search for, defaults to `[]`
+            The programs to search for, defaults to `[]`
 
         platforms (List[str]): 
-            the platforms to search for, defaults to `[]`
+            The platforms to search for, defaults to `[]`
 
         instrument_types (List[str]): 
-            the instrument types to search for, defaults to `[]`
+            The instrument types to search for, defaults to `[]`
 
         format (str): 
-            the format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
+            The format of the data sources returned, defaults to `classes.data_source.FORMAT_FULL_RECORD`. 
             Other options are in the pyaurorax.search.sources module, or at the top level using 
             the pyaurorax.search.FORMAT_* variables.
 
         order (str): 
-            the category to order results by. Valid values are identifier, program, platform,
+            The category to order results by. Valid values are identifier, program, platform,
             instrument_type, display_name, or owner. Defaults to `identifier`
 
         include_stats (bool): 
-            include additional stats information about the data source, defaults to `False`
+            Include additional stats information about the data source, defaults to `False`
 
     Returns:
-        a list of `DataSource` records matching the requested parameters
+        A list of `DataSource` records matching the requested parameters
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
     &#34;&#34;&#34;
     return func_search(
         self.__aurorax_obj,
@@ -1513,27 +1534,27 @@ supports single values for the parameters.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the programs to search for, defaults to <code>[]</code></dd>
+<dd>The programs to search for, defaults to <code>[]</code></dd>
 <dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the platforms to search for, defaults to <code>[]</code></dd>
+<dd>The platforms to search for, defaults to <code>[]</code></dd>
 <dt><strong><code>instrument_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>the instrument types to search for, defaults to <code>[]</code></dd>
+<dd>The instrument types to search for, defaults to <code>[]</code></dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
-<dd>the format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
+<dd>The format of the data sources returned, defaults to <code><a title="pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD" href="classes/data_source.html#pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD">FORMAT_FULL_RECORD</a></code>.
 Other options are in the pyaurorax.search.sources module, or at the top level using
 the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>order</code></strong> :&ensp;<code>str</code></dt>
-<dd>the category to order results by. Valid values are identifier, program, platform,
+<dd>The category to order results by. Valid values are identifier, program, platform,
 instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
-<dd>include additional stats information about the data source, defaults to <code>False</code></dd>
+<dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>a list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
+<p>A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.sources.SourcesManager.update"><code class="name flex">
@@ -1565,49 +1586,49 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 
     Args:
         identifier (int): 
-            the AuroraX unique identifier for the data source, required and cannot be updated
+            The AuroraX unique identifier for the data source, required and cannot be updated
 
         program (str): 
-            the new program for the data source, defaults to `None`
+            The new program for the data source, defaults to `None`
 
         platform (str): 
-            the new platform for the data source, defaults to `None`
+            The new platform for the data source, defaults to `None`
 
         instrument_type (str): 
-            the new instrument type for the data source, defaults to `None`
+            The new instrument type for the data source, defaults to `None`
 
         source_type (str): 
-            the new source type for the data source, defaults to `None`. Options
+            The new source type for the data source, defaults to `None`. Options
             are in the pyaurorax.search.sources module, or at the top level using the
             pyaurorax.search.SOURCE_TYPE_* variables.
 
         display_name (str): 
-            the new display name for the data source, defaults to `None`
+            The new display name for the data source, defaults to `None`
 
         metadata (Dict): 
-            the new metadata for the data source, defaults to `None`
+            The new metadata for the data source, defaults to `None`
 
         owner (str): 
-            the new owner for the data source, defaults to `None`
+            The new owner for the data source, defaults to `None`
 
         maintainers (str): 
-            the new maintainer AuroraX account email addresses, defaults to `None`
+            The new maintainer AuroraX account email addresses, defaults to `None`
 
         ephemeris_metadata_schema (List[Dict]): 
-            a list of dictionaries capturing the metadata keys and values that can 
+            A list of dictionaries capturing the metadata keys and values that can 
             appear in ephemeris records associated with the data source, defaults to `None`
 
         data_product_metadata_schema (List[Dict]): 
-            a list of dictionaries capturing the metadata keys and values that can appear 
+            A list of dictionaries capturing the metadata keys and values that can appear 
             in data product records associated with the data source, defaults to `None`
 
     Returns:
-        the updated `DataSource` record
+        The updated `DataSource` record
 
     Raises:
-        pyaurorax.exceptions.AuroraXAPIError: error during API call
-        pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid
-        pyaurorax.exceptions.AuroraXNotFoundError: data source not found
+        pyaurorax.exceptions.AuroraXAPIError: Error during API call
+        pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
+        pyaurorax.exceptions.AuroraXNotFoundError: Data source not found
     &#34;&#34;&#34;
     return func_update(
         self.__aurorax_obj,
@@ -1631,42 +1652,42 @@ we recommend deletion of the original data source and recreation using the desir
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
-<dd>the AuroraX unique identifier for the data source, required and cannot be updated</dd>
+<dd>The AuroraX unique identifier for the data source, required and cannot be updated</dd>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new program for the data source, defaults to <code>None</code></dd>
+<dd>The new program for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new platform for the data source, defaults to <code>None</code></dd>
+<dd>The new platform for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>instrument_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new instrument type for the data source, defaults to <code>None</code></dd>
+<dd>The new instrument type for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>source_type</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new source type for the data source, defaults to <code>None</code>. Options
+<dd>The new source type for the data source, defaults to <code>None</code>. Options
 are in the pyaurorax.search.sources module, or at the top level using the
 pyaurorax.search.SOURCE_TYPE_* variables.</dd>
 <dt><strong><code>display_name</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new display name for the data source, defaults to <code>None</code></dd>
+<dd>The new display name for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the new metadata for the data source, defaults to <code>None</code></dd>
+<dd>The new metadata for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>owner</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new owner for the data source, defaults to <code>None</code></dd>
+<dd>The new owner for the data source, defaults to <code>None</code></dd>
 <dt><strong><code>maintainers</code></strong> :&ensp;<code>str</code></dt>
-<dd>the new maintainer AuroraX account email addresses, defaults to <code>None</code></dd>
+<dd>The new maintainer AuroraX account email addresses, defaults to <code>None</code></dd>
 <dt><strong><code>ephemeris_metadata_schema</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>a list of dictionaries capturing the metadata keys and values that can
+<dd>A list of dictionaries capturing the metadata keys and values that can
 appear in ephemeris records associated with the data source, defaults to <code>None</code></dd>
 <dt><strong><code>data_product_metadata_schema</code></strong> :&ensp;<code>List[Dict]</code></dt>
-<dd>a list of dictionaries capturing the metadata keys and values that can appear
+<dd>A list of dictionaries capturing the metadata keys and values that can appear
 in data product records associated with the data source, defaults to <code>None</code></dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the updated <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> record</p>
+<p>The updated <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> record</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
-<dd>error during API call</dd>
+<dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
-<dd>not allowed to perform task, or API key / user permissions are invalid</dd>
+<dd>Not allowed to perform task, or API key / user permissions are invalid</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXNotFoundError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXNotFoundError">AuroraXNotFoundError</a></code></dt>
-<dd>data source not found</dd>
+<dd>Data source not found</dd>
 </dl></div>
 </dd>
 </dl>

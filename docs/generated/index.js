@@ -16,6 +16,7 @@ URLS=[
 "pyaurorax/search/availability/classes/availability_result.html",
 "pyaurorax/search/conjunctions/index.html",
 "pyaurorax/search/conjunctions/classes/index.html",
+"pyaurorax/search/conjunctions/classes/criteria_block.html",
 "pyaurorax/search/conjunctions/classes/conjunction.html",
 "pyaurorax/search/conjunctions/classes/search.html",
 "pyaurorax/search/conjunctions/swarmaurora/index.html",
@@ -35,14 +36,15 @@ URLS=[
 "pyaurorax/search/sources/classes/data_source.html",
 "pyaurorax/search/sources/classes/data_source_stats.html",
 "pyaurorax/search/util/index.html",
+"pyaurorax/search/metadata_filters.html",
 "pyaurorax/tools/index.html",
 "pyaurorax/tools/bounding_box/index.html",
 "pyaurorax/tools/bounding_box/extract_metric/index.html",
 "pyaurorax/tools/calibration/index.html",
 "pyaurorax/tools/ccd_contour/index.html",
 "pyaurorax/tools/classes/index.html",
-"pyaurorax/tools/classes/montage.html",
 "pyaurorax/tools/classes/keogram.html",
+"pyaurorax/tools/classes/montage.html",
 "pyaurorax/tools/classes/mosaic.html",
 "pyaurorax/tools/keogram/index.html",
 "pyaurorax/tools/montage/index.html",
@@ -797,7 +799,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.DataSource",
 "url":7,
-"doc":"AuroraX data source record Attributes: identifier (int): the unique AuroraX data source identifier program (str): the program for this data source platform (str): the platform for this data source instrument_type (str): the instrument type for this data source source_type (str): the data source type for this data source. Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): the display name for this data source metadata (Dict): metadata for this data source (arbitrary keys and values) owner (str): the owner's email address of this data source maintainers (List[str]): the email addresses of AuroraX accounts that can alter this data source and its associated records ephemeris_metadata_schema (Dict): a list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with this data source data_product_metadata_schema (Dict): a list of dictionaries capturing the metadata keys and values that can appear in data product records associated with this data source stats (DataSourceStatistics): data source statistics information format (str): the format used when printing the data source, defaults to  full_record . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables."
+"doc":"AuroraX data source record Attributes: identifier (int): The unique AuroraX data source identifier program (str): The program for this data source platform (str): The platform for this data source instrument_type (str): The instrument type for this data source source_type (str): The data source type for this data source. Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): The display name for this data source metadata (Dict): Metadata for this data source (arbitrary keys and values) owner (str): The owner's email address of this data source maintainers (List[str]): The email addresses of AuroraX accounts that can alter this data source and its associated records ephemeris_metadata_schema (Dict): A list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with this data source data_product_metadata_schema (Dict): A list of dictionaries capturing the metadata keys and values that can appear in data product records associated with this data source stats (DataSourceStatistics): Data source statistics information format (str): The format used when printing the data source, defaults to  full_record . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables."
 },
 {
 "ref":"pyaurorax.search.DataSource.pretty_print",
@@ -808,7 +810,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.Location",
 "url":7,
-"doc":"Representation for an AuroraX location, such as geographic coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints. Latitude and longitude values are in decimal degrees format, ranging from -90 to 90 for latitude and -180 to 180 for longitude. Note that latitude and longitude must both be numbers, or both be None. Attributes: lat (float): latitude value lon (float): longitude value Raises: ValueError: if both latitude and longitude are not real numbers, or not both None."
+"doc":"Representation for an AuroraX search engine location. This data can be in geodetic coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints. Latitude and longitude values are in decimal degrees format, ranging from -90 to 90 for latitude and -180 to 180 for longitude. Note that latitude and longitude must both be numbers, or both be None. Attributes: lat (float): latitude value lon (float): longitude value Raises: ValueError: if both latitude and longitude are not real numbers, or not both None."
 },
 {
 "ref":"pyaurorax.search.Location.lat",
@@ -849,18 +851,18 @@ INDEX=[
 {
 "ref":"pyaurorax.search.EphemerisData",
 "url":7,
-"doc":"Ephemeris object Attributes: data_source (DataSource): data source that the ephemeris record is associated with epoch (datetime.datetime): timestamp for the record (assumed it is in UTC) location_geo (Location): Location object containing geographic latitude and longitude location_gsm (Location): Location object containing GSM latitude and longitude (leave empty for data sources with a type of 'ground') nbtrace (Location): Location object with north B-trace geographic latitude and longitude sbtrace (Location): Location object with south B-trace geographic latitude and longitude metadata (Dict): metadata for this record (arbitrary keys and values)"
+"doc":"Ephemeris object Attributes: data_source (DataSource): Data source that the ephemeris record is associated with epoch (datetime.datetime): Timestamp for the record (assumed it is in UTC) location_geo (Location): Location object containing geographic latitude and longitude location_gsm (Location): Location object containing GSM latitude and longitude (leave empty for data sources with a type of 'ground') nbtrace (Location): Location object with north B-trace geographic latitude and longitude sbtrace (Location): Location object with south B-trace geographic latitude and longitude metadata (Dict): Metadata for this record (arbitrary keys and values)"
 },
 {
 "ref":"pyaurorax.search.EphemerisData.to_json_serializable",
 "url":7,
-"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: a dictionary object that is JSON-serializable",
+"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: A dictionary object that is JSON-serializable",
 "func":1
 },
 {
 "ref":"pyaurorax.search.EphemerisSearch",
 "url":7,
-"doc":"Class representing an ephemeris search Note: At least one search criteria from programs, platforms, or instrument_types must be specified. Attributes: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) programs (List[str]): list of programs to search through, defaults to None platforms (List[str]): list of platforms to search through, defaults to None instrument_types (List[str]): list of instrument types to search through, defaults to None metadata_filters (List[Dict]): list of dictionaries describing metadata keys and values to filter on, defaults to None e.g. { \"key\": \"string\", \"operator\": \"=\", \"values\": [ \"string\" ] } metadata_filters_logical_operator (str): the logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): unique ID assigned to the request by the AuroraX API request_url (str): unique URL assigned to the request by the AuroraX API executed (bool): indicates if the search has been executed/started completed (bool): indicates if the search has finished data_url (str): the URL where data is accessed query (Dict): the query for this request as JSON status (Dict): the status of the query data (List[EphemerisData]): the ephemeris records found logs (List[Dict]): all log messages outputted by the AuroraX API for this request"
+"doc":"Class representing an ephemeris search Note: At least one search criteria from programs, platforms, or instrument_types must be specified. Attributes: start (datetime.datetime): Start timestamp of the search (inclusive) end (datetime.datetime): End timestamp of the search (inclusive) programs (List[str]): List of programs to search through, defaults to None platforms (List[str]): List of platforms to search through, defaults to None instrument_types (List[str]): List of instrument types to search through, defaults to None metadata_filters (MetadataFilter or List[Dict]): List of dictionaries describing metadata keys and values to filter on, defaults to None metadata_filters_logical_operator (str): The logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): Unique ID assigned to the request by the AuroraX API request_url (str): Unique URL assigned to the request by the AuroraX API executed (bool): Indicates if the search has been executed/started completed (bool): Indicates if the search has finished data_url (str): The URL where data is accessed query (Dict): The query for this request as JSON status (Dict): The status of the query data (List[EphemerisData]): The ephemeris records found logs (List[Dict]): All log messages outputted by the AuroraX API for this request"
 },
 {
 "ref":"pyaurorax.search.EphemerisSearch.pretty_print",
@@ -876,13 +878,13 @@ INDEX=[
 {
 "ref":"pyaurorax.search.EphemerisSearch.execute",
 "url":7,
-"doc":"Initiate ephemeris search request Raises: pyaurorax.exceptions.AuroraXError: invalid request parameters are set",
+"doc":"Initiate ephemeris search request Raises: pyaurorax.exceptions.AuroraXError: Invalid request parameters are set",
 "func":1
 },
 {
 "ref":"pyaurorax.search.EphemerisSearch.update_status",
 "url":7,
-"doc":"Update the status of this ephemeris search request Args: status (Dict): the previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
+"doc":"Update the status of this ephemeris search request Args: status (Dict): The previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
 "func":1
 },
 {
@@ -900,30 +902,30 @@ INDEX=[
 {
 "ref":"pyaurorax.search.EphemerisSearch.wait",
 "url":7,
-"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): output poll times and other progress messages, defaults to False",
+"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False",
 "func":1
 },
 {
 "ref":"pyaurorax.search.EphemerisSearch.cancel",
 "url":7,
-"doc":"Cancel the ephemeris search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to 1 second. verbose (bool): output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"doc":"Cancel the ephemeris search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): Wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.DataProductData",
 "url":7,
-"doc":"Data product object Attributes: data_source (DataSource): data source that the ephemeris record is associated with data_product_type (str): data product type (\"keogram\", \"movie\", \"summary_plot\") start (datetime.datetime): starting timestamp for the record (assumed it is in UTC), inclusive end (datetime.datetime): ending timestamp for the record (assumed it is in UTC), inclusive url (str): the URL of data product metadata (Dict): metadata for this record (arbitrary keys and values)"
+"doc":"Data product object Attributes: data_source (DataSource): Data source that the ephemeris record is associated with data_product_type (str): Data product type (\"keogram\", \"movie\", \"summary_plot\", etc.) start (datetime.datetime): Starting timestamp for the record (assumed it is in UTC), inclusive end (datetime.datetime): Ending timestamp for the record (assumed it is in UTC), inclusive url (str): The URL of data product metadata (Dict): Metadata for this record (arbitrary keys and values)"
 },
 {
 "ref":"pyaurorax.search.DataProductData.to_json_serializable",
 "url":7,
-"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: a dictionary object that is JSON-serializable",
+"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: A dictionary object that is JSON-serializable",
 "func":1
 },
 {
 "ref":"pyaurorax.search.DataProductSearch",
 "url":7,
-"doc":"Class representing a data product search Attributes: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) programs (List[str]): list of program names to search platforms (List[str]): list of platform names to search instrument_types (List[str]): list of instrument types to search data_product_types (List[str]): list of strings describing data product on e.g. \"keogram\", defaults to None. Options are in the pyaurorax.data_products module, or at the top level using the pyaurorax.DATA_PRODUCT_TYPE variables. metadata_filters (List[Dict]): list of dictionaries describing metadata keys and values to filter on, defaults to None Example: [{ \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [\"north polar cap\"] }] metadata_filters_logical_operator (str): the logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): unique ID assigned to the request by the AuroraX API request_url (str): unique URL assigned to the request by the AuroraX API executed (bool): indicates if the search has been executed/started completed (bool): indicates if the search has finished data_url (str): the URL where data is accessed query (Dict): the query for this request as JSON status (Dict): the status of the query data (List[DataProductData]): the data product records found logs (List[Dict]): all log messages outputted by the AuroraX API for this request"
+"doc":"Class representing a data product search Attributes: start (datetime.datetime): Start timestamp of the search (inclusive) end (datetime.datetime): End timestamp of the search (inclusive) programs (List[str]): List of program names to search platforms (List[str]): List of platform names to search instrument_types (List[str]): List of instrument types to search data_product_types (List[str]): List of strings describing data product types to filter on e.g. \"keogram\", defaults to None. Valid options are:  keogram ,  montage ,  movie ,  summary_plot , and  data_availability . metadata_filters (MetadataFilter or List[Dict]): The metadata filters to use when searching, defaults to None metadata_filters_logical_operator (str): The logical operator to use when evaluating metadata filters (either  and or  or ), defaults to  and . This parameter is deprecated in exchange for passing a MetadataFilter object into the metadata_filters parameter. response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): Unique ID assigned to the request by the AuroraX API request_url (str): Unique URL assigned to the request by the AuroraX API executed (bool): Indicates if the search has been executed/started completed (bool): Indicates if the search has finished data_url (str): The URL where data is accessed query (Dict): The query for this request as JSON status (Dict): The status of the query data (List[DataProductData]): The data product records found logs (List[Dict]): All log messages outputted by the AuroraX API for this request"
 },
 {
 "ref":"pyaurorax.search.DataProductSearch.pretty_print",
@@ -945,7 +947,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.DataProductSearch.update_status",
 "url":7,
-"doc":"Update the status of this data product search request Args: status (Dict): the previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
+"doc":"Update the status of this data product search request Args: status (Dict): The previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
 "func":1
 },
 {
@@ -963,24 +965,24 @@ INDEX=[
 {
 "ref":"pyaurorax.search.DataProductSearch.wait",
 "url":7,
-"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): output poll times and other progress messages, defaults to False",
+"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False",
 "func":1
 },
 {
 "ref":"pyaurorax.search.DataProductSearch.cancel",
 "url":7,
-"doc":"Cancel the data product search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to 1 second. verbose (bool): output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation",
+"doc":"Cancel the data product search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): Wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to 1 second. verbose (bool): Output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation",
 "func":1
 },
 {
 "ref":"pyaurorax.search.Conjunction",
 "url":7,
-"doc":"Conjunction object Attributes: conjunction_type (str): the type of location data used when the conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic') start (datetime.datetime): start timestamp of the conjunction end (datetime.datetime): end timestamp of the conjunction data_sources (List[DataSource]): data sources in the conjunction min_distance (float): minimum kilometer distance of the conjunction max_distance (float): maximum kilometer distance of the conjunction events (List[Dict]): the sub-conjunctions that make up this over-arching conjunction (the conjunctions between each set of two data sources) closest_epoch (datetime.datetime): timestamp for when data sources were closest farthest_epoch (datetime.datetime): timestamp for when data sources were farthest"
+"doc":"Conjunction object Attributes: conjunction_type (str): The type of location data used when the conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic') start (datetime.datetime): Start timestamp of the conjunction end (datetime.datetime): End timestamp of the conjunction data_sources (List[DataSource]): Data sources in the conjunction min_distance (float): Minimum kilometer distance of the conjunction max_distance (float): Maximum kilometer distance of the conjunction events (List[Dict]): The sub-conjunctions that make up this over-arching conjunction (the conjunctions between each set of two data sources) closest_epoch (datetime.datetime): Timestamp for when data sources were closest farthest_epoch (datetime.datetime): Timestamp for when data sources were farthest"
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch",
 "url":7,
-"doc":"Class representing a conjunction search Attributes: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) distance (int or float or Dict): the maximum distance allowed between data sources when searching for conjunctions. This can either be a number (int or float), or a dictionary modified from the output of the \"get_advanced_distances_combos()\" function. ground (List[Dict]): list of ground instrument search parameters, defaults to [] Example: [{ \"programs\": [\"themis-asi\"], \"platforms\": [\"gillam\", \"rabbit lake\"], \"instrument_types\": [\"RGB\"], \"ephemeris_metadata_filters\": { \"logical_operator\": \"AND\", \"expressions\": [ { \"key\": \"calgary_apa_ml_v1\", \"operator\": \"in\", \"values\": [ \"classified as APA\" ] } ] } }] space (List[Dict]): list of one or more space instrument search parameters, defaults to [] Example: [{ \"programs\": [\"themis-asi\", \"swarm\"], \"platforms\": [\"themisa\", \"swarma\"], \"instrument_types\": [\"footprint\"], \"ephemeris_metadata_filters\": { \"logical_operator\": \"AND\", \"expressions\": [ { \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [ \"north auroral oval\" ] } ] }, \"hemisphere\": [ \"northern\" ] }] events (List[Dict]): list of one or more events search parameters, defaults to [] Example: [{ \"programs\": [ \"events\" ], \"instrument_types\": [ \"substorm onsets\" ] }] conjunction_types (List[str]): list of conjunction types, defaults to [\"nbtrace\"]. Options are in the pyaurorax.conjunctions module, or at the top level using the pyaurorax.CONJUNCTION_TYPE_ variables. epoch_search_precision (int): the time precision to which conjunctions are calculated. Can be 30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active development and still considered \"alpha\". response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): unique ID assigned to the request by the AuroraX API request_url (str): unique URL assigned to the request by the AuroraX API executed (bool): indicates if the search has been executed/started completed (bool): indicates if the search has finished data_url (str): the URL where data is accessed query (Dict): the query for this request as JSON status (Dict): the status of the query data (List[Conjunction]): the conjunctions found logs (List[Dict]): all log messages outputted by the AuroraX API for this request"
+"doc":"Class representing a conjunction search Attributes: start (datetime.datetime): Start timestamp of the search (inclusive). end (datetime.datetime): End timestamp of the search (inclusive). distance (int or float or Dict): The maximum distance allowed between data sources when searching for conjunctions. This can either be a number (int or float), or a dictionary modified from the output of the \"get_advanced_distances_combos()\" function. ground (List[GroundCriteriaBlock or Dict]): List of ground instrument criteria blocks, defaults to []. space (List[SpaceCriteriaBlock or Dict]): List of space instrument criteria blocks, defaults to []. events (List[EventsCriteriaBlock or Dict]): List of event criteria blocks, defaults to []. List items of Dict types have been deprecated as of v1.14.0. conjunction_types (List[str]): List of conjunction types, defaults to [\"nbtrace\"]. Options are in the pyaurorax.conjunctions module, or at the top level using the pyaurorax.CONJUNCTION_TYPE_ variables. response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): Unique ID assigned to the request by the AuroraX API request_url (str): Unique URL assigned to the request by the AuroraX API executed (bool): Indicates if the search has been executed/started completed (bool): Indicates if the search has finished data_url (str): The URL where data is accessed query (Dict): The query for this request as JSON status (Dict): The status of the query data (List[Conjunction]): The conjunctions found logs (List[Dict]): All log messages outputted by the AuroraX API for this request"
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch.pretty_print",
@@ -991,24 +993,24 @@ INDEX=[
 {
 "ref":"pyaurorax.search.ConjunctionSearch.check_criteria_block_count_validity",
 "url":7,
-"doc":"Check the number of of criteria blocks to see if there is too many. A max of 10 is allowed by the AuroraX conjunction search engine. An exception is raised if it was determined to have too many. Raises: pyaurorax.exceptions.AuroraXError: too many criteria blocks are found",
+"doc":"Check the number of of criteria blocks to see if there is too many. A max of 10 is allowed by the AuroraX conjunction search engine. An exception is raised if it was determined to have too many. Raises: pyaurorax.exceptions.AuroraXError: Too many criteria blocks are found",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch.get_advanced_distances_combos",
 "url":7,
-"doc":"Get the advanced distances combinations for this search Args: default_distance (int): the default distance to use, defaults to None Returns: the advanced distances combinations",
+"doc":"Get the advanced distances combinations for this search Args: default_distance (int): The default distance to use, defaults to None Returns: The advanced distances combinations",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch.distance",
 "url":7,
-"doc":"Property for the distance parameter Returns: the distance dictionary with all combinations"
+"doc":"Property for the distance parameter Returns: The distance dictionary with all combinations"
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch.query",
 "url":7,
-"doc":"Property for the query value Returns: the query parameter"
+"doc":"Property for the query value Returns: The query parameter"
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch.execute",
@@ -1019,7 +1021,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.ConjunctionSearch.update_status",
 "url":7,
-"doc":"Update the status of this conjunction search request Args: status (Dict): the previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"doc":"Update the status of this conjunction search request Args: status (Dict): The previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
@@ -1037,13 +1039,96 @@ INDEX=[
 {
 "ref":"pyaurorax.search.ConjunctionSearch.wait",
 "url":7,
-"doc":"Block and wait until the request is complete and data is available for retrieval Args: poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): output poll times and other progress messages, defaults to False Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"doc":"Block and wait until the request is complete and data is available for retrieval Args: poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ConjunctionSearch.cancel",
 "url":7,
-"doc":"Cancel the conjunction search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME. verbose (bool): output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"doc":"Cancel the conjunction search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): Wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME. verbose (bool): Output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"func":1
+},
+{
+"ref":"pyaurorax.search.GroundCriteriaBlock",
+"url":7,
+"doc":"Representation of a ground criteria block used for conjunction searches. Attributes: programs (List[str]): List of program strings to use in this criteria block. Optional, default is  [] . platforms (List[str]): List of platform strings to use in this criteria block. Optional, default is  [] . instrument_types (List[str]): List of instrument type strings to use in this criteria block. Optional, default is  [] . metadata_filters (MetadataFilter): The metadata filters to use in this criteria block. Optional, default is None."
+},
+{
+"ref":"pyaurorax.search.GroundCriteriaBlock.pretty_print",
+"url":7,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.SpaceCriteriaBlock",
+"url":7,
+"doc":"Representation of a space criteria block used for conjunction searches. Attributes: programs (List[str]): List of program strings to use in this criteria block. Optional, default is  [] . platforms (List[str]): List of platform strings to use in this criteria block. Optional, default is  [] . instrument_types (List[str]): List of instrument type strings to use in this criteria block. Optional, default is  [] . hemisphere (List[str]): List of hemisphere strings to use in this criteria block. Valid values are 'northern' or 'southern'. Optional, default is  [] . metadata_filters (MetadataFilter): The metadata filters to use in this criteria block. Optional, default is None."
+},
+{
+"ref":"pyaurorax.search.SpaceCriteriaBlock.pretty_print",
+"url":7,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict",
+"url":7,
+"doc":"",
+"func":1
+},
+{
+"ref":"pyaurorax.search.EventsCriteriaBlock",
+"url":7,
+"doc":"Representation of a event criteria block used for conjunction searches. Attributes: platforms (List[str]): List of platform strings to use in this criteria block. Optional, default is  [] . instrument_types (List[str]): List of instrument type strings to use in this criteria block. Optional, default is  [] . metadata_filters (MetadataFilter): The metadata filters to use in this criteria block. Optional, default is None."
+},
+{
+"ref":"pyaurorax.search.EventsCriteriaBlock.pretty_print",
+"url":7,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.MetadataFilter",
+"url":7,
+"doc":"Representation for an AuroraX search engine metadata filter. These are used as part of conjunction, ephemeris, and data product searching. Attributes: expressions (List[MetadataFilterExpression]): The list of metadata filter expressions for use with conjunction, ephemeris, and data product searches. operator (str): The logical operator to use when the search engine will evaluate multiple expressions. If not supplied, the search engine will perform a logical 'AND' between each expression. Possible choices are 'and' or 'or'. Raises: pyaurorax.exceptions.AuroraXError: if invalid operator was specified."
+},
+{
+"ref":"pyaurorax.search.MetadataFilter.operator",
+"url":7,
+"doc":""
+},
+{
+"ref":"pyaurorax.search.MetadataFilter.pretty_print",
+"url":7,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.MetadataFilter.to_query_dict",
+"url":7,
+"doc":"Convert the expression object to a dictionary that will be used when executing a search.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.MetadataFilterExpression",
+"url":7,
+"doc":"Representation for an AuroraX search engine metadata filter expression. These are used as part of conjunction, ephemeris, and data product searching. Attributes: key (str): The special key for the metadata filter. For example, 'nbtrace_region'. values (Any or List[Any]): The value(s) that the search will use when filtering. This can either be a single value, or a list of values. operator (str): The operator to use when the search engine evaluates the expression. Valid choices are: \"=\", \"!=\", \">\", \" =\", \"<=\", \"between\", \"in\", \"not in\". The \"in\" and \"not in\" operators are meant exclusively for expressions where there are multiple values (ie. the values parameter is a list of strings). Raises: pyaurorax.exceptions.AuroraXError: if invalid operator was specified."
+},
+{
+"ref":"pyaurorax.search.MetadataFilterExpression.operator",
+"url":7,
+"doc":""
+},
+{
+"ref":"pyaurorax.search.MetadataFilterExpression.pretty_print",
+"url":7,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.MetadataFilterExpression.to_query_dict",
+"url":7,
+"doc":"Convert the expression object to a dictionary that will be used when executing a search.",
 "func":1
 },
 {
@@ -1054,18 +1139,18 @@ INDEX=[
 {
 "ref":"pyaurorax.search.api.AuroraXAPIRequest",
 "url":8,
-"doc":"Class definition for an AuroraX API request Attributes: url (str): API endpoint URL for the request method (str): the HTTP method to use. Valid values are:  get ,  post ,  put ,  delete ,  patch params (Dict): URL parameters to send in the request, defaults to  {} body (Dict): the body of the request (ie. post data), defaults to  {} headers (Dict): any headers to send as part of the request (in addition to the default ones), defaults to  {} null_response (bool): signifies if we expect a response from the API that has no body/data in it (ie. requests to upload data that respond with just a 202 status code), defaults to  False "
+"doc":"Class definition for an AuroraX API request Attributes: url (str): API endpoint URL for the request method (str): The HTTP method to use. Valid values are:  get ,  post ,  put ,  delete ,  patch params (Dict): URL parameters to send in the request, defaults to  {} body (Dict): The body of the request (ie. post data), defaults to  {} headers (Dict): Any headers to send as part of the request (in addition to the default ones), defaults to  {} null_response (bool): Signifies if we expect a response from the API that has no body/data in it (ie. requests to upload data that respond with just a 202 status code), defaults to  False "
 },
 {
 "ref":"pyaurorax.search.api.AuroraXAPIRequest.execute",
 "url":8,
-"doc":"Execute an AuroraX API request Returns: an  pyaurorax.search.api.AuroraXAPIResponse object Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance",
+"doc":"Execute an AuroraX API request Returns: An  pyaurorax.search.api.AuroraXAPIResponse object Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: Unauthorized user attempted to perform this action pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance",
 "func":1
 },
 {
 "ref":"pyaurorax.search.api.AuroraXAPIResponse",
 "url":8,
-"doc":"Class definition for an AuroraX API response Attributes: request (Any): the request object data (Any): the data received as part of the request status_code (int): the HTTP status code received when making the request"
+"doc":"Class definition for an AuroraX API response Attributes: request (Any): The request object data (Any): The data received as part of the request status_code (int): The HTTP status code received when making the request"
 },
 {
 "ref":"pyaurorax.search.api.classes",
@@ -1080,12 +1165,12 @@ INDEX=[
 {
 "ref":"pyaurorax.search.api.classes.request.AuroraXAPIRequest",
 "url":10,
-"doc":"Class definition for an AuroraX API request Attributes: url (str): API endpoint URL for the request method (str): the HTTP method to use. Valid values are:  get ,  post ,  put ,  delete ,  patch params (Dict): URL parameters to send in the request, defaults to  {} body (Dict): the body of the request (ie. post data), defaults to  {} headers (Dict): any headers to send as part of the request (in addition to the default ones), defaults to  {} null_response (bool): signifies if we expect a response from the API that has no body/data in it (ie. requests to upload data that respond with just a 202 status code), defaults to  False "
+"doc":"Class definition for an AuroraX API request Attributes: url (str): API endpoint URL for the request method (str): The HTTP method to use. Valid values are:  get ,  post ,  put ,  delete ,  patch params (Dict): URL parameters to send in the request, defaults to  {} body (Dict): The body of the request (ie. post data), defaults to  {} headers (Dict): Any headers to send as part of the request (in addition to the default ones), defaults to  {} null_response (bool): Signifies if we expect a response from the API that has no body/data in it (ie. requests to upload data that respond with just a 202 status code), defaults to  False "
 },
 {
 "ref":"pyaurorax.search.api.classes.request.AuroraXAPIRequest.execute",
 "url":10,
-"doc":"Execute an AuroraX API request Returns: an  pyaurorax.search.api.AuroraXAPIResponse object Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: unauthorized user attempted to perform this action pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance",
+"doc":"Execute an AuroraX API request Returns: An  pyaurorax.search.api.AuroraXAPIResponse object Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: Unauthorized user attempted to perform this action pyaurorax.exceptions.AuroraXMaintenanceError: AuroraX API is currently undergoing maintenance",
 "func":1
 },
 {
@@ -1096,7 +1181,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.api.classes.response.AuroraXAPIResponse",
 "url":11,
-"doc":"Class definition for an AuroraX API response Attributes: request (Any): the request object data (Any): the data received as part of the request status_code (int): the HTTP status code received when making the request"
+"doc":"Class definition for an AuroraX API response Attributes: request (Any): The request object data (Any): The data received as part of the request status_code (int): The HTTP status code received when making the request"
 },
 {
 "ref":"pyaurorax.search.availability",
@@ -1188,19 +1273,25 @@ INDEX=[
 {
 "ref":"pyaurorax.search.conjunctions.ConjunctionsManager.search",
 "url":15,
-"doc":"Search for conjunctions between data sources By default, this function will block and wait until the request completes and all data is downloaded. If you don't want to wait, set the 'return_immediately value to True. The Search object will be returned right after the search has been started, and you can use the helper functions as part of that object to get the data when it's done. Args: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) distance (int or float or Dict): the maximum distance allowed between data sources when searching for conjunctions. This can either be a number (int or float), or a dictionary modified from the output of the \"get_advanced_distances_combos()\" function. ground (List[str]): list of ground instrument search parameters, defaults to [] Example: [{ \"programs\": [\"themis-asi\"], \"platforms\": [\"gillam\", \"rabbit lake\"], \"instrument_types\": [\"RGB\"], \"ephemeris_metadata_filters\": { \"logical_operator\": \"AND\", \"expressions\": [ { \"key\": \"calgary_apa_ml_v1\", \"operator\": \"in\", \"values\": [ \"classified as APA\" ] } ] } }] space (List[str]): list of one or more space instrument search parameters, defaults to [] Example: [{ \"programs\": [\"themis-asi\", \"swarm\"], \"platforms\": [\"themisa\", \"swarma\"], \"instrument_types\": [\"footprint\"], \"ephemeris_metadata_filters\": { \"logical_operator\": \"AND\", \"expressions\": [ { \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [ \"north auroral oval\" ] } ] }, \"hemisphere\": [ \"northern\" ] }] events (List[str]): list of one or more events search parameters, defaults to [] Example: [{ \"programs\": [ \"events\" ], \"instrument_types\": [ \"substorm onsets\" ] }] conjunction_types (List[str]): list of conjunction types, defaults to [] (meaning all conjunction types). Options are in the pyaurorax.conjunctions module, or at the top level using the pyaurorax.CONJUNCTION_TYPE_ variables. epoch_search_precision (int): the time precision to which conjunctions are calculated. Can be 30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active development and still considered \"alpha\". response_format (Dict): JSON representation of desired data response format poll_interval (bool): seconds to wait between polling calls, defaults to pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME return_immediately (bool): initiate the search and return without waiting for data to be received, defaults to False verbose (bool): show the progress of the request using the request log, defaults Returns: a  pyaurorax.search.ConjunctionSearch object Raises: pyaurorax.exceptions.AuroraXSearchError: the API experienced a search error",
+"doc":"Search for conjunctions between data sources By default, this function will block and wait until the request completes and all data is downloaded. If you don't want to wait, set the 'return_immediately value to True. The Search object will be returned right after the search has been started, and you can use the helper functions as part of that object to get the data when it's done. Args: start (datetime.datetime): Start timestamp of the search (inclusive). end (datetime.datetime): End timestamp of the search (inclusive). distance (int or float or Dict): The maximum distance allowed between data sources when searching for conjunctions. This can either be a number (int or float), or a dictionary modified from the output of the \"get_advanced_distances_combos()\" function. ground (List[GroundCriteriaBlock or Dict]): List of ground instrument criteria blocks, defaults to []. List items of Dict types have been deprecated as of v1.14.0. space (List[SpaceCriteriaBlock or Dict]): List of space instrument criteria blocks, defaults to []. List items of Dict types have been deprecated as of v1.14.0. events (List[EventsCriteriaBlock or Dict]): List of event criteria blocks, defaults to []. List items of Dict types have been deprecated as of v1.14.0. conjunction_types (List[str]): List of conjunction types, defaults to [] (meaning all conjunction types). Valid options are 'nbtrace' or 'sbtrace'. Defaults to 'nbtrace'. response_format (Dict): JSON representation of desired data response format. poll_interval (bool): Seconds to wait between polling calls, defaults to 1 second. return_immediately (bool): Initiate the search and return without waiting for data to be received, defaults to  False . verbose (bool): Show the progress of the request using the request log, defaults to  False . Returns: A  pyaurorax.search.ConjunctionSearch object Raises: pyaurorax.exceptions.AuroraXSearchError: The API experienced a search error",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.ConjunctionsManager.describe",
 "url":15,
-"doc":"Describe a conjunction search as an \"SQL-like\" string. Either a ConjunctionSearch object can be supplied, or a dictionary of the raw JSON query. Args: search_obj (ConjunctionSearch): the conjunction search to describe, optional query_dict (Dict): the conjunction search query represented as a raw dictionary, optional Returns: the \"SQL-like\" string describing the conjunction search object Raises: pyaurorax.exceptions.AuroraXError: invalid arguments",
+"doc":"Describe a conjunction search as an \"SQL-like\" string. Either a ConjunctionSearch object can be supplied, or a dictionary of the raw JSON query. Args: search_obj (ConjunctionSearch): The conjunction search to describe, optional query_dict (Dict): The conjunction search query represented as a raw dictionary, optional Returns: The \"SQL-like\" string describing the conjunction search object Raises: pyaurorax.exceptions.AuroraXError: Invalid arguments",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url",
 "url":15,
-"doc":"Get the conjunction search request URL for a given request ID. This URL can be used for subsequent pyaurorax.requests function calls. Primarily this method facilitates delving into details about a set of already-submitted conjunction searches. Args: request_id (str): the request identifier Returns: the request URL",
+"doc":"Get the conjunction search request URL for a given request ID. This URL can be used for subsequent pyaurorax.requests function calls. Primarily this method facilitates delving into details about a set of already-submitted conjunction searches. Args: request_id (str): The request identifier Returns: The request URL",
+"func":1
+},
+{
+"ref":"pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos",
+"url":15,
+"doc":"Get the advanced distances combinations for the specified parameters Args: distance (int): The default distance to use, defaults to None ground (int): The number of ground criteria blocks, defaults to 0 space (int): The number of space criteria blocks, defaults to 0 events (int): The number of events criteria blocks, defaults to 0 Returns: The advanced distances combinations",
 "func":1
 },
 {
@@ -1209,1339 +1300,1432 @@ INDEX=[
 "doc":""
 },
 {
-"ref":"pyaurorax.search.conjunctions.classes.conjunction",
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block",
 "url":17,
+"doc":"Class definition for a criteria block used for conjunction searches"
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock",
+"url":17,
+"doc":"Representation of a ground criteria block used for conjunction searches. Attributes: programs (List[str]): List of program strings to use in this criteria block. Optional, default is  [] . platforms (List[str]): List of platform strings to use in this criteria block. Optional, default is  [] . instrument_types (List[str]): List of instrument type strings to use in this criteria block. Optional, default is  [] . metadata_filters (MetadataFilter): The metadata filters to use in this criteria block. Optional, default is None."
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock.pretty_print",
+"url":17,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock",
+"url":17,
+"doc":"Representation of a space criteria block used for conjunction searches. Attributes: programs (List[str]): List of program strings to use in this criteria block. Optional, default is  [] . platforms (List[str]): List of platform strings to use in this criteria block. Optional, default is  [] . instrument_types (List[str]): List of instrument type strings to use in this criteria block. Optional, default is  [] . hemisphere (List[str]): List of hemisphere strings to use in this criteria block. Valid values are 'northern' or 'southern'. Optional, default is  [] . metadata_filters (MetadataFilter): The metadata filters to use in this criteria block. Optional, default is None."
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock.pretty_print",
+"url":17,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock.to_search_query_dict",
+"url":17,
+"doc":"",
+"func":1
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock",
+"url":17,
+"doc":"Representation of a event criteria block used for conjunction searches. Attributes: platforms (List[str]): List of platform strings to use in this criteria block. Optional, default is  [] . instrument_types (List[str]): List of instrument type strings to use in this criteria block. Optional, default is  [] . metadata_filters (MetadataFilter): The metadata filters to use in this criteria block. Optional, default is None."
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock.pretty_print",
+"url":17,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.conjunctions.classes.conjunction",
+"url":18,
 "doc":"Class definition for a conjunction"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.conjunction.CONJUNCTION_TYPE_NBTRACE",
-"url":17,
+"url":18,
 "doc":"Conjunction search 'conjunction_type' category for finding conjunctions using the north B-trace data"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.conjunction.CONJUNCTION_TYPE_SBTRACE",
-"url":17,
+"url":18,
 "doc":"Conjunction search 'conjunction_type' category for finding conjunctions using the south B-trace data"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.conjunction.CONJUNCTION_TYPE_GEOGRAPHIC",
-"url":17,
+"url":18,
 "doc":"Conjunction search 'conjunction_type' category for finding conjunctions using the geographic position data"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.conjunction.Conjunction",
-"url":17,
-"doc":"Conjunction object Attributes: conjunction_type (str): the type of location data used when the conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic') start (datetime.datetime): start timestamp of the conjunction end (datetime.datetime): end timestamp of the conjunction data_sources (List[DataSource]): data sources in the conjunction min_distance (float): minimum kilometer distance of the conjunction max_distance (float): maximum kilometer distance of the conjunction events (List[Dict]): the sub-conjunctions that make up this over-arching conjunction (the conjunctions between each set of two data sources) closest_epoch (datetime.datetime): timestamp for when data sources were closest farthest_epoch (datetime.datetime): timestamp for when data sources were farthest"
+"url":18,
+"doc":"Conjunction object Attributes: conjunction_type (str): The type of location data used when the conjunction was found (either 'nbtrace', 'sbtrace', or 'geographic') start (datetime.datetime): Start timestamp of the conjunction end (datetime.datetime): End timestamp of the conjunction data_sources (List[DataSource]): Data sources in the conjunction min_distance (float): Minimum kilometer distance of the conjunction max_distance (float): Maximum kilometer distance of the conjunction events (List[Dict]): The sub-conjunctions that make up this over-arching conjunction (the conjunctions between each set of two data sources) closest_epoch (datetime.datetime): Timestamp for when data sources were closest farthest_epoch (datetime.datetime): Timestamp for when data sources were farthest"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search",
-"url":18,
+"url":19,
 "doc":"Class definition for a conjunction search"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch",
-"url":18,
-"doc":"Class representing a conjunction search Attributes: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) distance (int or float or Dict): the maximum distance allowed between data sources when searching for conjunctions. This can either be a number (int or float), or a dictionary modified from the output of the \"get_advanced_distances_combos()\" function. ground (List[Dict]): list of ground instrument search parameters, defaults to [] Example: [{ \"programs\": [\"themis-asi\"], \"platforms\": [\"gillam\", \"rabbit lake\"], \"instrument_types\": [\"RGB\"], \"ephemeris_metadata_filters\": { \"logical_operator\": \"AND\", \"expressions\": [ { \"key\": \"calgary_apa_ml_v1\", \"operator\": \"in\", \"values\": [ \"classified as APA\" ] } ] } }] space (List[Dict]): list of one or more space instrument search parameters, defaults to [] Example: [{ \"programs\": [\"themis-asi\", \"swarm\"], \"platforms\": [\"themisa\", \"swarma\"], \"instrument_types\": [\"footprint\"], \"ephemeris_metadata_filters\": { \"logical_operator\": \"AND\", \"expressions\": [ { \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [ \"north auroral oval\" ] } ] }, \"hemisphere\": [ \"northern\" ] }] events (List[Dict]): list of one or more events search parameters, defaults to [] Example: [{ \"programs\": [ \"events\" ], \"instrument_types\": [ \"substorm onsets\" ] }] conjunction_types (List[str]): list of conjunction types, defaults to [\"nbtrace\"]. Options are in the pyaurorax.conjunctions module, or at the top level using the pyaurorax.CONJUNCTION_TYPE_ variables. epoch_search_precision (int): the time precision to which conjunctions are calculated. Can be 30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active development and still considered \"alpha\". response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): unique ID assigned to the request by the AuroraX API request_url (str): unique URL assigned to the request by the AuroraX API executed (bool): indicates if the search has been executed/started completed (bool): indicates if the search has finished data_url (str): the URL where data is accessed query (Dict): the query for this request as JSON status (Dict): the status of the query data (List[Conjunction]): the conjunctions found logs (List[Dict]): all log messages outputted by the AuroraX API for this request"
+"url":19,
+"doc":"Class representing a conjunction search Attributes: start (datetime.datetime): Start timestamp of the search (inclusive). end (datetime.datetime): End timestamp of the search (inclusive). distance (int or float or Dict): The maximum distance allowed between data sources when searching for conjunctions. This can either be a number (int or float), or a dictionary modified from the output of the \"get_advanced_distances_combos()\" function. ground (List[GroundCriteriaBlock or Dict]): List of ground instrument criteria blocks, defaults to []. space (List[SpaceCriteriaBlock or Dict]): List of space instrument criteria blocks, defaults to []. events (List[EventsCriteriaBlock or Dict]): List of event criteria blocks, defaults to []. List items of Dict types have been deprecated as of v1.14.0. conjunction_types (List[str]): List of conjunction types, defaults to [\"nbtrace\"]. Options are in the pyaurorax.conjunctions module, or at the top level using the pyaurorax.CONJUNCTION_TYPE_ variables. response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): Unique ID assigned to the request by the AuroraX API request_url (str): Unique URL assigned to the request by the AuroraX API executed (bool): Indicates if the search has been executed/started completed (bool): Indicates if the search has finished data_url (str): The URL where data is accessed query (Dict): The query for this request as JSON status (Dict): The status of the query data (List[Conjunction]): The conjunctions found logs (List[Dict]): All log messages outputted by the AuroraX API for this request"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.pretty_print",
-"url":18,
+"url":19,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.check_criteria_block_count_validity",
-"url":18,
-"doc":"Check the number of of criteria blocks to see if there is too many. A max of 10 is allowed by the AuroraX conjunction search engine. An exception is raised if it was determined to have too many. Raises: pyaurorax.exceptions.AuroraXError: too many criteria blocks are found",
+"url":19,
+"doc":"Check the number of of criteria blocks to see if there is too many. A max of 10 is allowed by the AuroraX conjunction search engine. An exception is raised if it was determined to have too many. Raises: pyaurorax.exceptions.AuroraXError: Too many criteria blocks are found",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.get_advanced_distances_combos",
-"url":18,
-"doc":"Get the advanced distances combinations for this search Args: default_distance (int): the default distance to use, defaults to None Returns: the advanced distances combinations",
+"url":19,
+"doc":"Get the advanced distances combinations for this search Args: default_distance (int): The default distance to use, defaults to None Returns: The advanced distances combinations",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.distance",
-"url":18,
-"doc":"Property for the distance parameter Returns: the distance dictionary with all combinations"
+"url":19,
+"doc":"Property for the distance parameter Returns: The distance dictionary with all combinations"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.query",
-"url":18,
-"doc":"Property for the query value Returns: the query parameter"
+"url":19,
+"doc":"Property for the query value Returns: The query parameter"
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.execute",
-"url":18,
+"url":19,
 "doc":"Initiate a conjunction search request Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.update_status",
-"url":18,
-"doc":"Update the status of this conjunction search request Args: status (Dict): the previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":19,
+"doc":"Update the status of this conjunction search request Args: status (Dict): The previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.check_for_data",
-"url":18,
+"url":19,
 "doc":"Check to see if data is available for this conjunction search request Returns: True if data is available, else False Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.get_data",
-"url":18,
+"url":19,
 "doc":"Retrieve the data available for this conjunction search request Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.wait",
-"url":18,
-"doc":"Block and wait until the request is complete and data is available for retrieval Args: poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): output poll times and other progress messages, defaults to False Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":19,
+"doc":"Block and wait until the request is complete and data is available for retrieval Args: poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.cancel",
-"url":18,
-"doc":"Cancel the conjunction search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME. verbose (bool): output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":19,
+"doc":"Cancel the conjunction search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): Wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME. verbose (bool): Output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.swarmaurora",
-"url":19,
+"url":20,
 "doc":""
 },
 {
 "ref":"pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager",
-"url":19,
+"url":20,
 "doc":"The SwarmAuroraManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.get_url",
-"url":19,
-"doc":"Get a URL that displays a conjunction search in the Swarm-Aurora Conjunction Finder Args: search_obj (ConjunctionSearch): a conjunction search object, must be a completed search with the 'request_id' value populated Returns: the Swarm-Aurora Conjunction Finder URL for this conjunction search",
+"url":20,
+"doc":"Get a URL that displays a conjunction search in the Swarm-Aurora Conjunction Finder Args: search_obj (ConjunctionSearch): A conjunction search object, must be a completed search with the 'request_id' value populated Returns: The Swarm-Aurora Conjunction Finder URL for this conjunction search",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.open_in_browser",
-"url":19,
-"doc":"In a browser, open a conjunction search in the Swarm-Aurora Conjunction Finder. Args: search_obj (ConjunctionSearch): a conjunction search object, must be a completed search with the 'request_id' value populated browser (str : the browser type to load using. Default is your default browser. Some common other options are \"google-chrome\", \"firefox\", or \"safari\". For all available options, refer to https: docs.python.org/3/library/webbrowser.html webbrowser.get Raises: pyaurorax.exceptions.AuroraXError: unsupported browser specified",
+"url":20,
+"doc":"In a browser, open a conjunction search in the Swarm-Aurora Conjunction Finder. Args: search_obj (ConjunctionSearch): A conjunction search object, must be a completed search with the 'request_id' value populated browser (str : The browser type to load using. Default is your default browser. Some common other options are \"google-chrome\", \"firefox\", or \"safari\". For all available options, refer to https: docs.python.org/3/library/webbrowser.html webbrowser.get Raises: pyaurorax.exceptions.AuroraXError: Unsupported browser specified",
 "func":1
 },
 {
 "ref":"pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.create_custom_import_file",
-"url":19,
-"doc":"Generate a Swarm-Aurora custom import file for a given conjunction search Args: search_obj (ConjunctionSearch): a conjunction search object, must be a completed search with the 'request_id' value populated filename (str): the output filename, default is 'swarmaurora_custom_import_file_{requestID}.json' return_dict (bool): return the custom import file contents as a dictionary instead of saving a file, default is False Returns: the filename of the saved custom import file, or a dictionary with the file contents if  return_dict is set to True",
+"url":20,
+"doc":"Generate a Swarm-Aurora custom import file for a given conjunction search Args: search_obj (ConjunctionSearch): A conjunction search object, must be a completed search with the 'request_id' value populated filename (str): The output filename, default is 'swarmaurora_custom_import_file_{requestID}.json' return_dict (bool): Return the custom import file contents as a dictionary instead of saving a file, default is False Returns: The filename of the saved custom import file, or a dictionary with the file contents if  return_dict is set to True",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products",
-"url":20,
+"url":21,
 "doc":"Use the AuroraX search engine to search and upload data product records. Note that all functions and classes from submodules are all imported at this level of the data_products module. They can be referenced from here instead of digging in deeper to the submodules."
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager",
-"url":20,
+"url":21,
 "doc":"The DataProductsManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.search",
-"url":20,
-"doc":"Search for data product records By default, this function will block and wait until the request completes and all data is downloaded. If you don't want to wait, set the 'return_immediately value to True. The Search object will be returned right after the search has been started, and you can use the helper functions as part of that object to get the data when it's done. Note: At least one search criteria from programs, platforms, or instrument_types, must be specified. Args: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) programs (List[str]): list of programs to search through, defaults to None platforms (List[str]): list of platforms to search through, defaults to None instrument_types (List[str]): list of instrument types to search through, defaults to None data_product_types (List[str]): list of strings describing data product types to filter on e.g. \"keogram\", defaults to None. Options are in the pyaurorax.data_products module, or at the top level using the pyaurorax.DATA_PRODUCT_TYPE variables. metadata_filters (List[Dict]): list of dictionaries describing metadata keys and values to filter on, defaults to None Example: [{ \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [\"north polar cap\"] }] metadata_filters_logical_operator (str): the logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second return_immediately (bool): initiate the search and return without waiting for data to be received, defaults to False verbose (bool): output poll times and other progress messages, defaults to False Returns: a  pyaurorax.search.DataProductSearch object",
+"url":21,
+"doc":"Search for data product records By default, this function will block and wait until the request completes and all data is downloaded. If you don't want to wait, set the 'return_immediately value to True. The Search object will be returned right after the search has been started, and you can use the helper functions as part of that object to get the data when it's done. Note: At least one search criteria from programs, platforms, or instrument_types, must be specified. Args: start (datetime.datetime): Start timestamp of the search (inclusive) end (datetime.datetime): End timestamp of the search (inclusive) programs (List[str]): List of programs to search through, defaults to None platforms (List[str]): List of platforms to search through, defaults to None instrument_types (List[str]): List of instrument types to search through, defaults to None data_product_types (List[str]): List of strings describing data product types to filter on e.g. \"keogram\", defaults to None. Valid options are:  keogram ,  montage ,  movie ,  summary_plot , and  data_availability . metadata_filters (MetadataFilter or List[Dict]): The metadata filters to use when searching, defaults to None metadata_filters_logical_operator (str): The logical operator to use when evaluating metadata filters (either  and or  or ), defaults to  and . This parameter is deprecated in exchange for passing a MetadataFilter object into the metadata_filters parameter. response_format (Dict): JSON representation of desired data response format poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second return_immediately (bool): Initiate the search and return without waiting for data to be received, defaults to False verbose (bool): Output poll times and other progress messages, defaults to False Returns: A  pyaurorax.search.DataProductSearch object",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.upload",
-"url":20,
-"doc":"Upload data product records to AuroraX Args: identifier (int): the AuroraX data source ID records (List[DataProductData]): data product records to upload validate_source (bool): validate all records before uploading, defaults to False chunk_size (int): number of records to upload in a single call, defaults to 500 Returns: 0 for success, raises exception on error Raises: pyaurorax.exceptions.AuroraXUploadError: upload error pyaurorax.exceptions.AuroraXError: data source validation error",
+"url":21,
+"doc":"Upload data product records to AuroraX Args: identifier (int): The AuroraX data source ID records (List[DataProductData]): Data product records to upload validate_source (bool): Validate all records before uploading, defaults to False chunk_size (int): Number of records to upload in a single call, defaults to 500 Returns: 0 for success, raises exception on error Raises: pyaurorax.exceptions.AuroraXUploadError: Upload error pyaurorax.exceptions.AuroraXError: Data source validation error",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.delete_urls",
-"url":20,
-"doc":"Delete data products by URL. The API processes this request asynchronously, so this method will return immediately whether or not the data has already been deleted. Args: data_source (DataSource): data source associated with the data product records (note that identifier, program, platform, and instrument_type are required) urls (List[str]): URLs of data product records to delete Returns: 0 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation",
+"url":21,
+"doc":"Delete data products by URL. The API processes this request asynchronously, so this method will return immediately whether or not the data has already been deleted. Args: data_source (DataSource): Data source associated with the data product records (note that identifier, program, platform, and instrument_type are required) urls (List[str]): URLs of data product records to delete Returns: 0 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.delete",
-"url":20,
-"doc":"Delete data products associated with a data source within a date range. The API processes this request asynchronously, so this method will return immediately whether or not the data has already been deleted. Args: data_source (DataSource): data source associated with the data product records (note that identifier, program, platform, and instrument_type are required) start (datetime.datetime): timestamp marking beginning of range to delete records for, inclusive end (datetime.datetime): timestamp marking end of range to delete records for, inclusive data_product_types (List[str]): specific types of data product to delete, e.g. [\"keogram\", \"movie\"]. If omitted, all data product types will be deleted. Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXNotFoundError: source not found pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation",
+"url":21,
+"doc":"Delete data products associated with a data source within a date range. The API processes this request asynchronously, so this method will return immediately whether or not the data has already been deleted. Args: data_source (DataSource): Data source associated with the data product records (note that identifier, program, platform, and instrument_type are required) start (datetime.datetime): Timestamp marking beginning of range to delete records for, inclusive end (datetime.datetime): Timestamp marking end of range to delete records for, inclusive data_product_types (List[str]): Specific types of data product to delete, e.g. [\"keogram\", \"movie\"]. If omitted, all data product types will be deleted. Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXNotFoundError: Source not found pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.describe",
-"url":20,
-"doc":"Describe a data product search as an \"SQL-like\" string. Either a DataProductSearch object can be supplied, or a dictionary of the raw JSON query. Args: search_obj (DataProductSearch): the data product search to describe, optional query_dict (Dict): the data product search query represented as a raw dictionary, optional Returns: the \"SQL-like\" string describing the data product search object",
+"url":21,
+"doc":"Describe a data product search as an \"SQL-like\" string. Either a DataProductSearch object can be supplied, or a dictionary of the raw JSON query. Args: search_obj (DataProductSearch): The data product search to describe, optional query_dict (Dict): The data product search query represented as a raw dictionary, optional Returns: The \"SQL-like\" string describing the data product search object",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.get_request_url",
-"url":20,
-"doc":"Get the data product search request URL for a given request ID. This URL can be used for subsequent pyaurorax.requests function calls. Primarily this method facilitates delving into details about a set of already-submitted data product searches. Args: request_id (str): the request identifier Returns: the request URL",
+"url":21,
+"doc":"Get the data product search request URL for a given request ID. This URL can be used for subsequent pyaurorax.requests function calls. Primarily this method facilitates delving into details about a set of already-submitted data product searches. Args: request_id (str): The request identifier Returns: The request URL",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes",
-"url":21,
+"url":22,
 "doc":"Separated classes and functions used by the data_products module. Note that these classes and variables are all imported higher up at the top of the data_products module. They can be referenced from there instead of digging in deeper to these submodules."
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product",
-"url":22,
+"url":23,
 "doc":"Class definition for a data product"
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_KEOGRAM",
-"url":22,
+"url":23,
 "doc":"Data product type for keograms. Keograms are a 2-D representation of a series of images, and are one of the most popular data products that auroral science uses. More information can be found at https: docs.aurorax.space/about_the_data/standards/ keograms."
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MONTAGE",
-"url":22,
+"url":23,
 "doc":"Data product type for montages. Like keograms, montages are another representation of a series of images. However, montages are not a 2D representation but rather a collage of thumnbail images for the period of time. An example can be found at https: data.phys.ucalgary.ca/sort_by_project/THEMIS/asi/stream2/2021/12/28/gill_themis19/20211228__gill_themis19_full-montage.pgm.jpg"
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_MOVIE",
-"url":22,
+"url":23,
 "doc":"Data product type for movies. Movies are timelapse video files of auroral data, usually as MP4 or MPEG. They can consist of frames for a whole night, or an hour, and can be at any cadence that is most appropriate."
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_SUMMARY_PLOT",
-"url":22,
+"url":23,
 "doc":"Data product type for summary plots. A summary plot can be any type of plot that shows auroral data in a summary format, for example a background-subtracted meridian scanning photometer plot showing counts in Rayleighs."
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DATA_PRODUCT_TYPE_DATA_AVAILABILITY",
-"url":22,
+"url":23,
 "doc":"Data product type for data availability. The AuroraX data availability system does not account for times when data was not expected to be collected, such as summer shutdowns due to inadequate night hours. This data product type for 'data availability' is meant to be used as a smarter data availability mechanism for Aurora."
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DataProductData",
-"url":22,
-"doc":"Data product object Attributes: data_source (DataSource): data source that the ephemeris record is associated with data_product_type (str): data product type (\"keogram\", \"movie\", \"summary_plot\") start (datetime.datetime): starting timestamp for the record (assumed it is in UTC), inclusive end (datetime.datetime): ending timestamp for the record (assumed it is in UTC), inclusive url (str): the URL of data product metadata (Dict): metadata for this record (arbitrary keys and values)"
+"url":23,
+"doc":"Data product object Attributes: data_source (DataSource): Data source that the ephemeris record is associated with data_product_type (str): Data product type (\"keogram\", \"movie\", \"summary_plot\", etc.) start (datetime.datetime): Starting timestamp for the record (assumed it is in UTC), inclusive end (datetime.datetime): Ending timestamp for the record (assumed it is in UTC), inclusive url (str): The URL of data product metadata (Dict): Metadata for this record (arbitrary keys and values)"
 },
 {
 "ref":"pyaurorax.search.data_products.classes.data_product.DataProductData.to_json_serializable",
-"url":22,
-"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: a dictionary object that is JSON-serializable",
+"url":23,
+"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: A dictionary object that is JSON-serializable",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search",
-"url":23,
+"url":24,
 "doc":"Class definition for a data product search"
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch",
-"url":23,
-"doc":"Class representing a data product search Attributes: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) programs (List[str]): list of program names to search platforms (List[str]): list of platform names to search instrument_types (List[str]): list of instrument types to search data_product_types (List[str]): list of strings describing data product on e.g. \"keogram\", defaults to None. Options are in the pyaurorax.data_products module, or at the top level using the pyaurorax.DATA_PRODUCT_TYPE variables. metadata_filters (List[Dict]): list of dictionaries describing metadata keys and values to filter on, defaults to None Example: [{ \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [\"north polar cap\"] }] metadata_filters_logical_operator (str): the logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): unique ID assigned to the request by the AuroraX API request_url (str): unique URL assigned to the request by the AuroraX API executed (bool): indicates if the search has been executed/started completed (bool): indicates if the search has finished data_url (str): the URL where data is accessed query (Dict): the query for this request as JSON status (Dict): the status of the query data (List[DataProductData]): the data product records found logs (List[Dict]): all log messages outputted by the AuroraX API for this request"
+"url":24,
+"doc":"Class representing a data product search Attributes: start (datetime.datetime): Start timestamp of the search (inclusive) end (datetime.datetime): End timestamp of the search (inclusive) programs (List[str]): List of program names to search platforms (List[str]): List of platform names to search instrument_types (List[str]): List of instrument types to search data_product_types (List[str]): List of strings describing data product types to filter on e.g. \"keogram\", defaults to None. Valid options are:  keogram ,  montage ,  movie ,  summary_plot , and  data_availability . metadata_filters (MetadataFilter or List[Dict]): The metadata filters to use when searching, defaults to None metadata_filters_logical_operator (str): The logical operator to use when evaluating metadata filters (either  and or  or ), defaults to  and . This parameter is deprecated in exchange for passing a MetadataFilter object into the metadata_filters parameter. response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): Unique ID assigned to the request by the AuroraX API request_url (str): Unique URL assigned to the request by the AuroraX API executed (bool): Indicates if the search has been executed/started completed (bool): Indicates if the search has finished data_url (str): The URL where data is accessed query (Dict): The query for this request as JSON status (Dict): The status of the query data (List[DataProductData]): The data product records found logs (List[Dict]): All log messages outputted by the AuroraX API for this request"
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.pretty_print",
-"url":23,
+"url":24,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.query",
-"url":23,
+"url":24,
 "doc":"Property for the query value"
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.execute",
-"url":23,
+"url":24,
 "doc":"Initiate a data product search request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.update_status",
-"url":23,
-"doc":"Update the status of this data product search request Args: status (Dict): the previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
+"url":24,
+"doc":"Update the status of this data product search request Args: status (Dict): The previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.check_for_data",
-"url":23,
+"url":24,
 "doc":"Check to see if data is available for this data product search request Returns: True if data is available, else False",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.get_data",
-"url":23,
+"url":24,
 "doc":"Retrieve the data available for this data product search request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.wait",
-"url":23,
-"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): output poll times and other progress messages, defaults to False",
+"url":24,
+"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False",
 "func":1
 },
 {
 "ref":"pyaurorax.search.data_products.classes.search.DataProductSearch.cancel",
-"url":23,
-"doc":"Cancel the data product search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to 1 second. verbose (bool): output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation",
+"url":24,
+"doc":"Cancel the data product search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): Wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to 1 second. verbose (bool): Output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris",
-"url":24,
+"url":25,
 "doc":"Use the AuroraX search engine to search and upload ephemeris records. Note that all functions and classes from submodules are all imported at this level of the ephemeris module. They can be referenced from here instead of digging in deeper to the submodules."
 },
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager",
-"url":24,
+"url":25,
 "doc":"The EphemerisManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager.search",
-"url":24,
-"doc":"Search for ephemeris records By default, this function will block and wait until the request completes and all data is downloaded. If you don't want to wait, set the 'return_immediately value to True. The Search object will be returned right after the search has been started, and you can use the helper functions as part of that object to get the data when it's done. Note: At least one search criteria from programs, platforms, or instrument_types, must be specified. Args: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) programs (List[str]): list of programs to search through, defaults to None platforms (List[str]): list of platforms to search through, defaults to None instrument_types (List[str]): list of instrument types to search through, defaults to None metadata_filters (List[Dict]): list of dictionaries describing metadata keys and values to filter on, defaults to None Example: [{ \"key\": \"nbtrace_region\", \"operator\": \"in\", \"values\": [\"north polar cap\"] }] metadata_filters_logical_operator (str): the logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second return_immediately (bool): initiate the search and return without waiting for data to be received, defaults to False verbose (bool): output poll times and other progress messages, defaults to False Returns: A  pyaurorax search.EphemerisSearch object Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":25,
+"doc":"Search for ephemeris records By default, this function will block and wait until the request completes and all data is downloaded. If you don't want to wait, set the 'return_immediately value to True. The Search object will be returned right after the search has been started, and you can use the helper functions as part of that object to get the data when it's done. Note: At least one search criteria from programs, platforms, or instrument_types, must be specified. Args: start (datetime.datetime): Start timestamp of the search (inclusive) end (datetime.datetime): End timestamp of the search (inclusive) programs (List[str]): List of programs to search through, defaults to None platforms (List[str]): List of platforms to search through, defaults to None instrument_types (List[str]): List of instrument types to search through, defaults to None metadata_filters (MetadataFilter or List[Dict]): The metadata filters to use when searching, defaults to None metadata_filters_logical_operator (str): The logical operator to use when evaluating metadata filters (either  and or  or ), defaults to  and . This parameter is deprecated in exchange for passing a MetadataFilter object into the metadata_filters parameter. response_format (Dict): JSON representation of desired data response format poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second return_immediately (bool): Initiate the search and return without waiting for data to be received, defaults to False verbose (bool): Output poll times and other progress messages, defaults to False Returns: A  pyaurorax search.EphemerisSearch object Raises: pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager.upload",
-"url":24,
-"doc":"Upload ephemeris records to AuroraX Args: identifier (int): AuroraX data source ID records (List[EphemerisData]): ephemeris records to upload validate_source (bool): validate all records before uploading, defaults to False chunk_size (int): number of records to upload in a single call, defaults to 500 Returns: 0 for success, raises exception on error Raises: pyaurorax.exceptions.AuroraXUploadError: upload error pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":25,
+"doc":"Upload ephemeris records to AuroraX Args: identifier (int): AuroraX data source ID records (List[EphemerisData]): Ephemeris records to upload validate_source (bool): Validate all records before uploading, defaults to False chunk_size (int): Number of records to upload in a single call, defaults to 500 Returns: 0 for success, raises exception on error Raises: pyaurorax.exceptions.AuroraXUploadError: Upload error pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager.delete",
-"url":24,
-"doc":"Delete ephemeris records between a timeframe. The API processes this request asynchronously, so this method will return immediately whether or not the data has already been deleted. Args: data_source (DataSource): data source associated with the data product records (note that identifier, program, platform, and instrument_type are required) start (datetime.datetime): timestamp marking beginning of range to delete records for, inclusive end (datetime.datetime): timestamp marking end of range to delete records for, inclusive Returns: 0 on success Raises: pyaurorax.exceptions.AuroraXNotFoundError: source not found pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":25,
+"doc":"Delete ephemeris records between a timeframe. The API processes this request asynchronously, so this method will return immediately whether or not the data has already been deleted. Args: data_source (DataSource): Data source associated with the data product records (note that identifier, program, platform, and instrument_type are required) start (datetime.datetime): Timestamp marking beginning of range to delete records for, inclusive end (datetime.datetime): Timestamp marking end of range to delete records for, inclusive Returns: 0 on success Raises: pyaurorax.exceptions.AuroraXNotFoundError: Source not found pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager.describe",
-"url":24,
-"doc":"Describe an ephemeris search as an \"SQL-like\" string. Either a EphemerisSearch object can be supplied, or a dictionary of the raw JSON query. Args: search_obj (EphemerisSearch): the ephemeris search to describe, optional query_dict (Dict): the ephemeris search query represented as a raw dictionary, optional Returns: the \"SQL-like\" string describing the ephemeris search object",
+"url":25,
+"doc":"Describe an ephemeris search as an \"SQL-like\" string. Either a EphemerisSearch object can be supplied, or a dictionary of the raw JSON query. Args: search_obj (EphemerisSearch): The ephemeris search to describe, optional query_dict (Dict): The ephemeris search query represented as a raw dictionary, optional Returns: The \"SQL-like\" string describing the ephemeris search object",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager.get_request_url",
-"url":24,
-"doc":"Get the ephemeris search request URL for a given request ID. This URL can be used for subsequent pyaurorax.requests function calls. Primarily this method facilitates delving into details about a set of already-submitted ephemeris searches. Args: request_id (str): the request identifier Returns: the request URL",
+"url":25,
+"doc":"Get the ephemeris search request URL for a given request ID. This URL can be used for subsequent pyaurorax.requests function calls. Primarily this method facilitates delving into details about a set of already-submitted ephemeris searches. Args: request_id (str): The request identifier Returns: The request URL",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes",
-"url":25,
+"url":26,
 "doc":"Separated classes and functions used by the ephemeris module. Note that these classes and variables are all imported higher up at the top of the ephemeris module. They can be referenced from there instead of digging in deeper to these submodules."
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.ephemeris",
-"url":26,
+"url":27,
 "doc":"Class definition for an ephemeris record"
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.ephemeris.EphemerisData",
-"url":26,
-"doc":"Ephemeris object Attributes: data_source (DataSource): data source that the ephemeris record is associated with epoch (datetime.datetime): timestamp for the record (assumed it is in UTC) location_geo (Location): Location object containing geographic latitude and longitude location_gsm (Location): Location object containing GSM latitude and longitude (leave empty for data sources with a type of 'ground') nbtrace (Location): Location object with north B-trace geographic latitude and longitude sbtrace (Location): Location object with south B-trace geographic latitude and longitude metadata (Dict): metadata for this record (arbitrary keys and values)"
+"url":27,
+"doc":"Ephemeris object Attributes: data_source (DataSource): Data source that the ephemeris record is associated with epoch (datetime.datetime): Timestamp for the record (assumed it is in UTC) location_geo (Location): Location object containing geographic latitude and longitude location_gsm (Location): Location object containing GSM latitude and longitude (leave empty for data sources with a type of 'ground') nbtrace (Location): Location object with north B-trace geographic latitude and longitude sbtrace (Location): Location object with south B-trace geographic latitude and longitude metadata (Dict): Metadata for this record (arbitrary keys and values)"
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.ephemeris.EphemerisData.to_json_serializable",
-"url":26,
-"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: a dictionary object that is JSON-serializable",
+"url":27,
+"doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: A dictionary object that is JSON-serializable",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search",
-"url":27,
+"url":28,
 "doc":"Class definition for an ephemeris search"
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch",
-"url":27,
-"doc":"Class representing an ephemeris search Note: At least one search criteria from programs, platforms, or instrument_types must be specified. Attributes: start (datetime.datetime): start timestamp of the search (inclusive) end (datetime.datetime): end timestamp of the search (inclusive) programs (List[str]): list of programs to search through, defaults to None platforms (List[str]): list of platforms to search through, defaults to None instrument_types (List[str]): list of instrument types to search through, defaults to None metadata_filters (List[Dict]): list of dictionaries describing metadata keys and values to filter on, defaults to None e.g. { \"key\": \"string\", \"operator\": \"=\", \"values\": [ \"string\" ] } metadata_filters_logical_operator (str): the logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): unique ID assigned to the request by the AuroraX API request_url (str): unique URL assigned to the request by the AuroraX API executed (bool): indicates if the search has been executed/started completed (bool): indicates if the search has finished data_url (str): the URL where data is accessed query (Dict): the query for this request as JSON status (Dict): the status of the query data (List[EphemerisData]): the ephemeris records found logs (List[Dict]): all log messages outputted by the AuroraX API for this request"
+"url":28,
+"doc":"Class representing an ephemeris search Note: At least one search criteria from programs, platforms, or instrument_types must be specified. Attributes: start (datetime.datetime): Start timestamp of the search (inclusive) end (datetime.datetime): End timestamp of the search (inclusive) programs (List[str]): List of programs to search through, defaults to None platforms (List[str]): List of platforms to search through, defaults to None instrument_types (List[str]): List of instrument types to search through, defaults to None metadata_filters (MetadataFilter or List[Dict]): List of dictionaries describing metadata keys and values to filter on, defaults to None metadata_filters_logical_operator (str): The logical operator to use when evaluating metadata filters (either  AND or  OR ), defaults to  AND response_format (Dict): JSON representation of desired data response format request (AuroraXResponse): AuroraXResponse object returned when the search is executed request_id (str): Unique ID assigned to the request by the AuroraX API request_url (str): Unique URL assigned to the request by the AuroraX API executed (bool): Indicates if the search has been executed/started completed (bool): Indicates if the search has finished data_url (str): The URL where data is accessed query (Dict): The query for this request as JSON status (Dict): The status of the query data (List[EphemerisData]): The ephemeris records found logs (List[Dict]): All log messages outputted by the AuroraX API for this request"
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.pretty_print",
-"url":27,
+"url":28,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.query",
-"url":27,
+"url":28,
 "doc":"Property for the query value"
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.execute",
-"url":27,
-"doc":"Initiate ephemeris search request Raises: pyaurorax.exceptions.AuroraXError: invalid request parameters are set",
+"url":28,
+"doc":"Initiate ephemeris search request Raises: pyaurorax.exceptions.AuroraXError: Invalid request parameters are set",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.update_status",
-"url":27,
-"doc":"Update the status of this ephemeris search request Args: status (Dict): the previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
+"url":28,
+"doc":"Update the status of this ephemeris search request Args: status (Dict): The previously-retrieved status of this request (include to avoid requesting it from the API again), defaults to None",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.check_for_data",
-"url":27,
+"url":28,
 "doc":"Check to see if data is available for this ephemeris search request Returns: True if data is available, else False",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.get_data",
-"url":27,
+"url":28,
 "doc":"Retrieve the data available for this ephemeris search request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.wait",
-"url":27,
-"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): output poll times and other progress messages, defaults to False",
+"url":28,
+"doc":"Block and wait for the request to complete and data is available for retrieval Args: poll_interval (float): Time in seconds to wait between polling attempts, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False",
 "func":1
 },
 {
 "ref":"pyaurorax.search.ephemeris.classes.search.EphemerisSearch.cancel",
-"url":27,
-"doc":"Cancel the ephemeris search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to 1 second. verbose (bool): output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":28,
+"doc":"Cancel the ephemeris search request This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: wait (bool): Wait until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False Returns: 1 on success Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.location",
-"url":28,
-"doc":"AuroraX  pyaurorax.search.location.Location class definition"
+"url":29,
+"doc":"Class definition for AuroraX search engine location data"
 },
 {
 "ref":"pyaurorax.search.location.Location",
-"url":28,
-"doc":"Representation for an AuroraX location, such as geographic coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints. Latitude and longitude values are in decimal degrees format, ranging from -90 to 90 for latitude and -180 to 180 for longitude. Note that latitude and longitude must both be numbers, or both be None. Attributes: lat (float): latitude value lon (float): longitude value Raises: ValueError: if both latitude and longitude are not real numbers, or not both None."
+"url":29,
+"doc":"Representation for an AuroraX search engine location. This data can be in geodetic coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints. Latitude and longitude values are in decimal degrees format, ranging from -90 to 90 for latitude and -180 to 180 for longitude. Note that latitude and longitude must both be numbers, or both be None. Attributes: lat (float): latitude value lon (float): longitude value Raises: ValueError: if both latitude and longitude are not real numbers, or not both None."
 },
 {
 "ref":"pyaurorax.search.location.Location.lat",
-"url":28,
+"url":29,
 "doc":""
 },
 {
 "ref":"pyaurorax.search.location.Location.lon",
-"url":28,
+"url":29,
 "doc":""
 },
 {
 "ref":"pyaurorax.search.location.Location.to_json_serializable",
-"url":28,
+"url":29,
 "doc":"Convert object to a JSON-serializable object (ie. translate datetime objects to strings) Returns: a dictionary object that is JSON-serializable",
 "func":1
 },
 {
 "ref":"pyaurorax.search.metadata",
-"url":29,
+"url":30,
 "doc":"Interacting with the data source metadata schemas. Note that all functions and classes from submodules are all imported at this level of the metadata module. They can be referenced from here instead of digging in deeper to the submodules."
 },
 {
 "ref":"pyaurorax.search.metadata.MetadataManager",
-"url":29,
+"url":30,
 "doc":"The MetadataManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.metadata.MetadataManager.validate",
-"url":29,
-"doc":"Validate a metadata record against a schema. This checks that the key names match and there aren't fewer or more keys than expected. Args: schema (List[Dict]): the metadata schema to validate against record (Dict): metadata record to validate quiet (bool): suppress any stdout output Returns: True if the metadata record is valid, False if it is not",
+"url":30,
+"doc":"Validate a metadata record against a schema. This checks that the key names match and there aren't fewer or more keys than expected. Args: schema (List[Dict]): The metadata schema to validate against record (Dict): Metadata record to validate quiet (bool): Suppress any stdout output Returns: True if the metadata record is valid, False if it is not",
 "func":1
 },
 {
 "ref":"pyaurorax.search.metadata.MetadataManager.get_ephemeris_schema",
-"url":29,
-"doc":"Retrieve the ephemeris metadata schema for a data source Args: identifier (int): the AuroraX data source ID Returns: the ephemeris metadata schema for the data source",
+"url":30,
+"doc":"Retrieve the ephemeris metadata schema for a data source Args: identifier (int): The AuroraX data source ID Returns: The ephemeris metadata schema for the data source",
 "func":1
 },
 {
 "ref":"pyaurorax.search.metadata.MetadataManager.get_data_products_schema",
-"url":29,
-"doc":"Retrieve the data products metadata schema for a data source Args: identifier (int): the AuroraX data source ID Returns: the data products metadata schema for the data source",
+"url":30,
+"doc":"Retrieve the data products metadata schema for a data source Args: identifier (int): The AuroraX data source ID Returns: The data products metadata schema for the data source",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests",
-"url":30,
+"url":31,
 "doc":"Helper methods for retrieving data from an AuroraX search engine API request. Note that all functions and classes from submodules are all imported at this level of the requests module. They can be referenced from here instead of digging in deeper to the submodules."
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager",
-"url":30,
+"url":31,
 "doc":"The RequestsManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.get_status",
-"url":30,
-"doc":"Retrieve the status of a request Args: request_url (str): the URL of the request information Returns: the status information for the request",
+"url":31,
+"doc":"Retrieve the status of a request Args: request_url (str): The URL of the request information Returns: The status information for the request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.get_data",
-"url":30,
-"doc":"Retrieve the data for a request Args: data_url (str): the URL for the data of a request, response_format (Dict): the response format to send as post data, defaults to None skip_serializing (bool): skip any object serializing, defaults to False Raises: pyaurorax.exceptions.AuroraXDataRetrievalError: error retrieving data Returns: the data for this request",
+"url":31,
+"doc":"Retrieve the data for a request Args: data_url (str): The URL for the data of a request, response_format (Dict): The response format to send as post data, defaults to None skip_serializing (bool): Skip any object serializing, defaults to False Raises: pyaurorax.exceptions.AuroraXDataRetrievalError: Error retrieving data Returns: the data for this request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.get_logs",
-"url":30,
-"doc":"Retrieve the logs for a request Args: request_url (str): the URL of the request information Returns: the log messages for the request",
+"url":31,
+"doc":"Retrieve the logs for a request Args: request_url (str): The URL of the request information Returns: The log messages for the request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.wait_for_data",
-"url":30,
-"doc":"Block and wait for the data to be made available for a request Args: request_url (str): the URL of the request information poll_interval (float): seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME verbose (bool): output poll times and other progress messages, defaults to False Returns: the status information for the request",
+"url":31,
+"doc":"Block and wait for the data to be made available for a request Args: request_url (str): The URL of the request information poll_interval (float): Seconds to wait between polling calls, defaults to 1 second verbose (bool): Output poll times and other progress messages, defaults to False Returns: the status information for the request",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.cancel",
-"url":30,
-"doc":"Cancel the request at the given URL. This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: request_url (str): the URL string of the request to be canceled wait (bool): set to True to block until the cancellation request has been completed (may wait for several minutes) poll_interval (float): seconds to wait between polling calls, defaults to STANDARD_POLLING_SLEEP_TIME. verbose (bool): if True then output poll times and other progress, defaults to False Returns: 0 on success Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
+"url":31,
+"doc":"Cancel the request at the given URL. This method returns immediately by default since the API processes this request asynchronously. If you would prefer to wait for it to be completed, set the 'wait' parameter to True. You can adjust the polling time using the 'poll_interval' parameter. Args: request_url (str): The URL string of the request to be canceled wait (bool): Set to True to block until the cancellation request has been completed (may wait for several minutes) poll_interval (float): Seconds to wait between polling calls, defaults to 1 second verbose (bool): If True then output poll times and other progress, defaults to False Returns: 0 on success Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation pyaurorax.exceptions.AuroraXAPIError: An API error was encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.list",
-"url":30,
-"doc":"Retrieve a list of search requests matching certain criteria. Administrators only. Args: search_type (str): the type of search request, valid values are 'conjunction', 'ephemeris', or 'data_product'. Exclusion of value will return all search requests of any type, defaults to None active (bool): return searches that are currently active or not, exclude for both, defaults to None start (datetime.datetime): start timestamp for narrowing down search timeframes, defaults to None end (datetime.datetime): end timestamp for narrowing down search timeframes, defaults to None file_size (int): filter by result file size, measured in KB, defaults to None result_count (int): filter by result count, defaults to None query_duration (int): filter by query duration, measured in milliseconds, defaults to None error_condition (bool): filter by if an error occurred or not, exclude for both, defaults to None Returns: list of matching search requests Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: invalid API key for this operation",
+"url":31,
+"doc":"Retrieve a list of search requests matching certain criteria. Administrators only. Args: search_type (str): The type of search request, valid values are 'conjunction', 'ephemeris', or 'data_product'. Exclusion of value will return all search requests of any type, defaults to None active (bool): Return searches that are currently active or not, exclude for both, defaults to None start (datetime.datetime): Start timestamp for narrowing down search timeframes, defaults to None end (datetime.datetime): End timestamp for narrowing down search timeframes, defaults to None file_size (int): Filter by result file size, measured in KB, defaults to None result_count (int): Filter by result count, defaults to None query_duration (int): Filter by query duration, measured in milliseconds, defaults to None error_condition (bool): Filter by if an error occurred or not, exclude for both, defaults to None Returns: List of matching search requests Raises: pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation",
 "func":1
 },
 {
 "ref":"pyaurorax.search.requests.RequestsManager.delete",
-"url":30,
-"doc":"Entirely remove a search request from the AuroraX database. Administrators only. Args: request_id (str): search request UUID Returns: 0 on success, raises error on failure Raises: pyaurorax.exceptions.AuroraXNotFoundError: data source not found",
+"url":31,
+"doc":"Entirely remove a search request from the AuroraX database. Administrators only. Args: request_id (str): Search request UUID Returns: 0 on success, raises error on failure Raises: pyaurorax.exceptions.AuroraXNotFoundError: Data source not found",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources",
-"url":31,
+"url":32,
 "doc":"Manage AuroraX data sources utilized by the search engine."
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager",
-"url":31,
+"url":32,
 "doc":"The SourcesManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.list",
-"url":31,
-"doc":"Retrieve all data source records. Parameters can be used to filter as desired. Args: program (str): the program to filter for, defaults to  None platform (str): the platform to filter for, defaults to  None instrument_type (str): the instrument type to filter for, defaults to  None source_type (str): the data source type to filter for, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. owner (str): the owner's email address to filter for, defaults to  None format (str): the format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): the category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier include_stats (bool): include additional stats information about the data source, defaults to  False Returns: a list of  DataSource records matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call",
+"url":32,
+"doc":"Retrieve all data source records. Parameters can be used to filter as desired. Args: program (str): The program to filter for, defaults to  None platform (str): The platform to filter for, defaults to  None instrument_type (str): The instrument type to filter for, defaults to  None source_type (str): The data source type to filter for, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. owner (str): The owner's email address to filter for, defaults to  None format (str): The format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): The category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier include_stats (bool): Include additional stats information about the data source, defaults to  False Returns: A list of  DataSource records matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.list_in_table",
-"url":31,
-"doc":"Display all data source records in a table. Parameters can be used to filter as desired. Args: program (str): the program to filter for, defaults to  None platform (str): the platform to filter for, defaults to  None instrument_type (str): the instrument type to filter for, defaults to  None source_type (str): the data source type to filter for, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. owner (str): the owner's email address to filter for, defaults to  None format (str): the format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): the category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier table_max_width (int): table maximum width, defaults to 200 Returns: No return, only prints a table Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call",
+"url":32,
+"doc":"Display all data source records in a table. Parameters can be used to filter as desired. Args: program (str): The program to filter for, defaults to  None platform (str): The platform to filter for, defaults to  None instrument_type (str): The instrument type to filter for, defaults to  None source_type (str): The data source type to filter for, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. owner (str): The owner's email address to filter for, defaults to  None format (str): The format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): The category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier table_max_width (int): Table maximum width, defaults to 200 limit (int): Limit the table rows to a certain value, regardless of how many sources it found to display Returns: No return, only prints a table Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.search",
-"url":31,
-"doc":"Search for data source records. Parameters can be used to filter as desired. This function is very similar to the  list() function, however multiple programs, platforms, and/or instrument types can be supplied here. The  list() function only supports single values for the parameters. Args: programs (List[str]): the programs to search for, defaults to  [] platforms (List[str]): the platforms to search for, defaults to  [] instrument_types (List[str]): the instrument types to search for, defaults to  [] format (str): the format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): the category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier include_stats (bool): include additional stats information about the data source, defaults to  False Returns: a list of  DataSource records matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call",
+"url":32,
+"doc":"Search for data source records. Parameters can be used to filter as desired. This function is very similar to the  list() function, however multiple programs, platforms, and/or instrument types can be supplied here. The  list() function only supports single values for the parameters. Args: programs (List[str]): The programs to search for, defaults to  [] platforms (List[str]): The platforms to search for, defaults to  [] instrument_types (List[str]): The instrument types to search for, defaults to  [] format (str): The format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): The category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier include_stats (bool): Include additional stats information about the data source, defaults to  False Returns: A list of  DataSource records matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.get",
-"url":31,
-"doc":"Retrieve a specific data source record Args: program (str): the program name platform (str): the platform name instrument_type (str): the instrument type name format (str): the format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. include_stats (bool): include additional stats information about the data source, defaults to  False Returns: the  DataSource matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call pyaurorax.exceptions.AuroraXNotFoundError: source not found",
+"url":32,
+"doc":"Retrieve a specific data source record Args: program (str): The program name platform (str): The platform name instrument_type (str): The instrument type name format (str): The format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. include_stats (bool): Include additional stats information about the data source, defaults to  False Returns: The  DataSource matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call pyaurorax.exceptions.AuroraXNotFoundError: Source not found",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.get_using_filters",
-"url":31,
-"doc":"Retrieve all data sources matching a filter Args: program (str): the program to filter for, defaults to  None platform (str): the platform to filter for, defaults to  None instrument_type (str): the instrument type to filter for, defaults to  None source_type (str): the data source type to filter for, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. owner (str): the owner's email address to filter for, defaults to  None format (str): the format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): the category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier include_stats (bool): include additional stats information about the data source, defaults to  False . Returns: a list of  DataSource records matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call",
+"url":32,
+"doc":"Retrieve all data sources matching a filter Args: program (str): The program to filter for, defaults to  None platform (str): The platform to filter for, defaults to  None instrument_type (str): The instrument type to filter for, defaults to  None source_type (str): The data source type to filter for, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. owner (str): The owner's email address to filter for, defaults to  None format (str): The format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. order (str): The category to order results by. Valid values are identifier, program, platform, instrument_type, display_name, or owner. Defaults to  identifier include_stats (bool): Include additional stats information about the data source, defaults to  False . Returns: A list of  DataSource records matching the requested parameters Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.get_using_identifier",
-"url":31,
-"doc":"Retrieve data source for a specific identifier Args: identifier (int): the AuroraX unique data source identifier number format (str): the format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. include_stats (bool): include additional stats information about the data source, defaults to  False Returns: the  DataSource for the specified identifier Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call",
+"url":32,
+"doc":"Retrieve data source for a specific identifier Args: identifier (int): The AuroraX unique data source identifier number format (str): The format of the data sources returned, defaults to  classes.data_source.FORMAT_FULL_RECORD . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables. include_stats (bool): Include additional stats information about the data source, defaults to  False Returns: The  DataSource for the specified identifier Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.add",
-"url":31,
-"doc":"Add a new data source to the AuroraX search engine Args: data_source (DataSource): the data source to add (note: it must be a fully-defined DataSource object) Returns: the newly created  DataSource . Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid pyaurorax.exceptions.AuroraXDuplicateError: duplicate data source, already exists",
+"url":32,
+"doc":"Add a new data source to the AuroraX search engine Args: data_source (DataSource): The data source to add (note: it must be a fully-defined DataSource object) Returns: The newly created  DataSource . Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.delete",
-"url":31,
-"doc":"Delete a data source from the AuroraX search engine Args: identifier (int): the data source unique identifier to delete Returns: 0 on success, raises error if an issue was encountered Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid pyaurorax.exceptions.AuroraXNotFoundError: data source not found pyaurorax.exceptions.AuroraXConflictError: a conflict occurred",
+"url":32,
+"doc":"Delete a data source from the AuroraX search engine Args: identifier (int): The data source unique identifier to delete Returns: 0 on success, raises error if an issue was encountered Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid pyaurorax.exceptions.AuroraXNotFoundError: Data source not found pyaurorax.exceptions.AuroraXConflictError: A conflict occurred",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.SourcesManager.update",
-"url":31,
-"doc":"Update a data source in the AuroraX search engine. Omitted fields are ignored during the update. Note that the identifier cannot be updated. If you need to update the data source's identifier, we recommend deletion of the original data source and recreation using the desired identifier. Args: identifier (int): the AuroraX unique identifier for the data source, required and cannot be updated program (str): the new program for the data source, defaults to  None platform (str): the new platform for the data source, defaults to  None instrument_type (str): the new instrument type for the data source, defaults to  None source_type (str): the new source type for the data source, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): the new display name for the data source, defaults to  None metadata (Dict): the new metadata for the data source, defaults to  None owner (str): the new owner for the data source, defaults to  None maintainers (str): the new maintainer AuroraX account email addresses, defaults to  None ephemeris_metadata_schema (List[Dict]): a list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with the data source, defaults to  None data_product_metadata_schema (List[Dict]): a list of dictionaries capturing the metadata keys and values that can appear in data product records associated with the data source, defaults to  None Returns: the updated  DataSource record Raises: pyaurorax.exceptions.AuroraXAPIError: error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: not allowed to perform task, or API key / user permissions are invalid pyaurorax.exceptions.AuroraXNotFoundError: data source not found",
+"url":32,
+"doc":"Update a data source in the AuroraX search engine. Omitted fields are ignored during the update. Note that the identifier cannot be updated. If you need to update the data source's identifier, we recommend deletion of the original data source and recreation using the desired identifier. Args: identifier (int): The AuroraX unique identifier for the data source, required and cannot be updated program (str): The new program for the data source, defaults to  None platform (str): The new platform for the data source, defaults to  None instrument_type (str): The new instrument type for the data source, defaults to  None source_type (str): The new source type for the data source, defaults to  None . Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): The new display name for the data source, defaults to  None metadata (Dict): The new metadata for the data source, defaults to  None owner (str): The new owner for the data source, defaults to  None maintainers (str): The new maintainer AuroraX account email addresses, defaults to  None ephemeris_metadata_schema (List[Dict]): A list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with the data source, defaults to  None data_product_metadata_schema (List[Dict]): A list of dictionaries capturing the metadata keys and values that can appear in data product records associated with the data source, defaults to  None Returns: The updated  DataSource record Raises: pyaurorax.exceptions.AuroraXAPIError: Error during API call pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid pyaurorax.exceptions.AuroraXNotFoundError: Data source not found",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.DataSource",
-"url":31,
-"doc":"AuroraX data source record Attributes: identifier (int): the unique AuroraX data source identifier program (str): the program for this data source platform (str): the platform for this data source instrument_type (str): the instrument type for this data source source_type (str): the data source type for this data source. Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): the display name for this data source metadata (Dict): metadata for this data source (arbitrary keys and values) owner (str): the owner's email address of this data source maintainers (List[str]): the email addresses of AuroraX accounts that can alter this data source and its associated records ephemeris_metadata_schema (Dict): a list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with this data source data_product_metadata_schema (Dict): a list of dictionaries capturing the metadata keys and values that can appear in data product records associated with this data source stats (DataSourceStatistics): data source statistics information format (str): the format used when printing the data source, defaults to  full_record . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables."
+"url":32,
+"doc":"AuroraX data source record Attributes: identifier (int): The unique AuroraX data source identifier program (str): The program for this data source platform (str): The platform for this data source instrument_type (str): The instrument type for this data source source_type (str): The data source type for this data source. Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): The display name for this data source metadata (Dict): Metadata for this data source (arbitrary keys and values) owner (str): The owner's email address of this data source maintainers (List[str]): The email addresses of AuroraX accounts that can alter this data source and its associated records ephemeris_metadata_schema (Dict): A list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with this data source data_product_metadata_schema (Dict): A list of dictionaries capturing the metadata keys and values that can appear in data product records associated with this data source stats (DataSourceStatistics): Data source statistics information format (str): The format used when printing the data source, defaults to  full_record . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables."
 },
 {
 "ref":"pyaurorax.search.sources.DataSource.pretty_print",
-"url":31,
+"url":32,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.DataSourceStatistics",
-"url":31,
-"doc":"Data source statistics information Attributes: ephemeris_count (int): total number of ephemeris records for this data source data_product_count (int): total number of ephemeris records for this data source earliest_ephemeris_loaded (datetime.datetime): timestamp of the earliest ephemeris record latest_ephemeris_loaded (datetime.datetime): timestamp of the latest ephemeris record earliest_data_product_loaded (datetime.datetime): timestamp of the earliest data_product record latest_data_product_loaded (datetime.datetime): timestamp of the latest data product record"
+"url":32,
+"doc":"Data source statistics information Attributes: ephemeris_count (int): Total number of ephemeris records for this data source data_product_count (int): Total number of ephemeris records for this data source earliest_ephemeris_loaded (datetime.datetime): Timestamp of the earliest ephemeris record latest_ephemeris_loaded (datetime.datetime): Timestamp of the latest ephemeris record earliest_data_product_loaded (datetime.datetime): Timestamp of the earliest data_product record latest_data_product_loaded (datetime.datetime): Timestamp of the latest data product record"
 },
 {
 "ref":"pyaurorax.search.sources.DataSourceStatistics.pretty_print",
-"url":31,
+"url":32,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.classes",
-"url":32,
+"url":33,
 "doc":"Class definitions used by the  sources submodule"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source",
-"url":33,
+"url":34,
 "doc":"AuroraX data source record"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.FORMAT_BASIC_INFO",
-"url":33,
+"url":34,
 "doc":"Data sources are returned with basic information: identifier, program, platform, instrument type, source type, and display name"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.FORMAT_BASIC_INFO_WITH_METADATA",
-"url":33,
+"url":34,
 "doc":"Data sources are returned with basic information, plus the metadata"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.FORMAT_IDENTIFIER_ONLY",
-"url":33,
+"url":34,
 "doc":"Data sources are returned with only the identifier"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.FORMAT_FULL_RECORD",
-"url":33,
+"url":34,
 "doc":"Data sources are returned with all information."
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.FORMAT_DEFAULT",
-"url":33,
+"url":34,
 "doc":"Default data source format (basic info)"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.SOURCE_TYPE_GROUND",
-"url":33,
+"url":34,
 "doc":"Data source 'source_type' category for a ground instrument"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.SOURCE_TYPE_LEO",
-"url":33,
+"url":34,
 "doc":"Data source 'source_type' category for a low-earth orbiting satellite"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.SOURCE_TYPE_HEO",
-"url":33,
+"url":34,
 "doc":"Data source 'source_type' category for a highly-elliptical orbiting satellite"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.SOURCE_TYPE_LUNAR",
-"url":33,
+"url":34,
 "doc":"Data source 'source_type' category for a lunar orbiting satellite"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.SOURCE_TYPE_EVENT_LIST",
-"url":33,
+"url":34,
 "doc":"Data source 'source_type' category for a specially-curated event list"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.SOURCE_TYPE_NOT_APPLICABLE",
-"url":33,
+"url":34,
 "doc":"Data source 'source_type' category for a specially-curated event list"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.DataSource",
-"url":33,
-"doc":"AuroraX data source record Attributes: identifier (int): the unique AuroraX data source identifier program (str): the program for this data source platform (str): the platform for this data source instrument_type (str): the instrument type for this data source source_type (str): the data source type for this data source. Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): the display name for this data source metadata (Dict): metadata for this data source (arbitrary keys and values) owner (str): the owner's email address of this data source maintainers (List[str]): the email addresses of AuroraX accounts that can alter this data source and its associated records ephemeris_metadata_schema (Dict): a list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with this data source data_product_metadata_schema (Dict): a list of dictionaries capturing the metadata keys and values that can appear in data product records associated with this data source stats (DataSourceStatistics): data source statistics information format (str): the format used when printing the data source, defaults to  full_record . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables."
+"url":34,
+"doc":"AuroraX data source record Attributes: identifier (int): The unique AuroraX data source identifier program (str): The program for this data source platform (str): The platform for this data source instrument_type (str): The instrument type for this data source source_type (str): The data source type for this data source. Options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.SOURCE_TYPE_ variables. display_name (str): The display name for this data source metadata (Dict): Metadata for this data source (arbitrary keys and values) owner (str): The owner's email address of this data source maintainers (List[str]): The email addresses of AuroraX accounts that can alter this data source and its associated records ephemeris_metadata_schema (Dict): A list of dictionaries capturing the metadata keys and values that can appear in ephemeris records associated with this data source data_product_metadata_schema (Dict): A list of dictionaries capturing the metadata keys and values that can appear in data product records associated with this data source stats (DataSourceStatistics): Data source statistics information format (str): The format used when printing the data source, defaults to  full_record . Other options are in the pyaurorax.search.sources module, or at the top level using the pyaurorax.search.FORMAT_ variables."
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source.DataSource.pretty_print",
-"url":33,
+"url":34,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source_stats",
-"url":34,
+"url":35,
 "doc":"Data source statistics information"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics",
-"url":34,
-"doc":"Data source statistics information Attributes: ephemeris_count (int): total number of ephemeris records for this data source data_product_count (int): total number of ephemeris records for this data source earliest_ephemeris_loaded (datetime.datetime): timestamp of the earliest ephemeris record latest_ephemeris_loaded (datetime.datetime): timestamp of the latest ephemeris record earliest_data_product_loaded (datetime.datetime): timestamp of the earliest data_product record latest_data_product_loaded (datetime.datetime): timestamp of the latest data product record"
+"url":35,
+"doc":"Data source statistics information Attributes: ephemeris_count (int): Total number of ephemeris records for this data source data_product_count (int): Total number of ephemeris records for this data source earliest_ephemeris_loaded (datetime.datetime): Timestamp of the earliest ephemeris record latest_ephemeris_loaded (datetime.datetime): Timestamp of the latest ephemeris record earliest_data_product_loaded (datetime.datetime): Timestamp of the earliest data_product record latest_data_product_loaded (datetime.datetime): Timestamp of the latest data product record"
 },
 {
 "ref":"pyaurorax.search.sources.classes.data_source_stats.DataSourceStatistics.pretty_print",
-"url":34,
+"url":35,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.search.util",
-"url":35,
+"url":36,
 "doc":"Utility methods. For example, converting arbitrary geographic locations to North/South B-trace geographic locations."
 },
 {
 "ref":"pyaurorax.search.util.UtilManager",
-"url":35,
+"url":36,
 "doc":"The UtilManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.search.util.UtilManager.ground_geo_to_nbtrace",
-"url":35,
-"doc":"Convert geographic location to North B-Trace geographic location The timestamp is required because when calculating the B-trace values, the location is converted into geomagnetic coordinates using AACGM. This conversion is different based on the timestamp since the magnetic coordinates change over time. Args: geo_location (Location): a Location object representing the geographic location timestamp (datetime.datetime): timestamp for this set of latitudes and longitudes Returns: the north B-trace location as a  Location object",
+"url":36,
+"doc":"Convert geographic location to North B-Trace geographic location The timestamp is required because when calculating the B-trace values, the location is converted into geomagnetic coordinates using AACGM. This conversion is different based on the timestamp since the magnetic coordinates change over time. Args: geo_location (Location): A Location object representing the geographic location timestamp (datetime.datetime): Timestamp for this set of latitudes and longitudes Returns: The north B-trace location as a  Location object",
 "func":1
 },
 {
 "ref":"pyaurorax.search.util.UtilManager.ground_geo_to_sbtrace",
-"url":35,
-"doc":"Convert geographic location to South B-Trace geographic location The timestamp is required because when calculating the B-trace values, the location is converted into geomagnetic coordinates using AACGM. This conversion is different based on the timestamp since the magnetic coordinates change over time. Args: geo_location (Location): a Location object representing the geographic location timestamp (datetime.datetime): timestamp for this set of latitudes and longitudes Returns: the south B-trace location as a  Location object",
+"url":36,
+"doc":"Convert geographic location to South B-Trace geographic location The timestamp is required because when calculating the B-trace values, the location is converted into geomagnetic coordinates using AACGM. This conversion is different based on the timestamp since the magnetic coordinates change over time. Args: geo_location (Location): A Location object representing the geographic location timestamp (datetime.datetime): Timestamp for this set of latitudes and longitudes Returns: The south B-trace location as a  Location object",
+"func":1
+},
+{
+"ref":"pyaurorax.search.metadata_filters",
+"url":37,
+"doc":"Class definition for a metadata filter objects"
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilterExpression",
+"url":37,
+"doc":"Representation for an AuroraX search engine metadata filter expression. These are used as part of conjunction, ephemeris, and data product searching. Attributes: key (str): The special key for the metadata filter. For example, 'nbtrace_region'. values (Any or List[Any]): The value(s) that the search will use when filtering. This can either be a single value, or a list of values. operator (str): The operator to use when the search engine evaluates the expression. Valid choices are: \"=\", \"!=\", \">\", \" =\", \"<=\", \"between\", \"in\", \"not in\". The \"in\" and \"not in\" operators are meant exclusively for expressions where there are multiple values (ie. the values parameter is a list of strings). Raises: pyaurorax.exceptions.AuroraXError: if invalid operator was specified."
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilterExpression.operator",
+"url":37,
+"doc":""
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilterExpression.pretty_print",
+"url":37,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilterExpression.to_query_dict",
+"url":37,
+"doc":"Convert the expression object to a dictionary that will be used when executing a search.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilter",
+"url":37,
+"doc":"Representation for an AuroraX search engine metadata filter. These are used as part of conjunction, ephemeris, and data product searching. Attributes: expressions (List[MetadataFilterExpression]): The list of metadata filter expressions for use with conjunction, ephemeris, and data product searches. operator (str): The logical operator to use when the search engine will evaluate multiple expressions. If not supplied, the search engine will perform a logical 'AND' between each expression. Possible choices are 'and' or 'or'. Raises: pyaurorax.exceptions.AuroraXError: if invalid operator was specified."
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilter.operator",
+"url":37,
+"doc":""
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilter.pretty_print",
+"url":37,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.search.metadata_filters.MetadataFilter.to_query_dict",
+"url":37,
+"doc":"Convert the expression object to a dictionary that will be used when executing a search.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools",
-"url":36,
+"url":38,
 "doc":"Data analysis toolkit for working with all-sky imager data available within the AuroraX platform. This portion of the PyAuroraX library allows you to easily generate basic plots for ASI data, and common manipulations. These include things like displaying single images, making keograms, projecting ASI data onto maps, and extracting metrics for a given lat/lon bounding box. Example: For shorter function calls, you can initialize the tools submodule using like so:  import pyaurorax aurorax = pyaurorax.PyAuroraX() at = aurorax.tools  "
 },
 {
 "ref":"pyaurorax.tools.ToolsManager",
-"url":36,
+"url":38,
 "doc":"The ToolsManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.bounding_box",
-"url":36,
+"url":38,
 "doc":"Access to the  bounding_box submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.calibration",
-"url":36,
+"url":38,
 "doc":"Access to the  calibration submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.ccd_contour",
-"url":36,
+"url":38,
 "doc":"Access to the  ccd_contour submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.grid_files",
-"url":36,
+"url":38,
 "doc":"Access to the  grid_files submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.keogram",
-"url":36,
+"url":38,
 "doc":"Access to the  keogram submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.montage",
-"url":36,
+"url":38,
 "doc":"Access to the  montage submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.mosaic",
-"url":36,
+"url":38,
 "doc":"Access to the  mosaic submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.spectra",
-"url":36,
+"url":38,
 "doc":"Access to the  spectra submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.display",
-"url":36,
+"url":38,
 "doc":"Render a visualization of a single image. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: image (numpy.ndarray): The image to display, represented as a numpy array. cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). figsize (tuple): The matplotlib figure size to use when displaying, tuple of two integers (ie.  figsize=(14, 4) ) aspect (str or float): The matplotlib imshow aspect ration to use. A common value for this is  auto . All valid values can be found on the [matplotlib documentation](https: matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). colorbar (bool): Display a colorbar. Default is  False . title (str): A title to display above the rendered image. Defaults to no title. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed image, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.movie",
-"url":36,
+"url":38,
 "doc":"Generate a movie file from a list of filenames. Note that the codec used is \"mp4v\". Args: input_filenames (List[str]): Filenames of frames to use for movie generation. No sorting is applied, so it is assumed the list is in the desired order. This parameter is required. output_filename (str): Filename for the created movie file. This parameter is required. n_parallel (int): Number of multiprocessing workers to use. Default is  1 , which does not use multiprocessing. fps (int): Frames per second (FPS) for the movie file. Default is  25 . progress_bar_disable (bool): Toggle the progress bars off. Default is  False . Raises: IOError: I/O related issue while generating movie",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.scale_intensity",
-"url":36,
+"url":38,
 "doc":"Scale all values of an array that lie in the range min<=x<=max in to the range 0<=x<=high. Args: data (numpy.ndarray): Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of images. Also assumed that the first 2 dimensions are the image's x and y coordinates, and the following dimensions are some combination of the number of images, and/or the colour channel. min (float): Minimum value of array to be considered max (float): Maximum value of array to be considered top (float): Maximum value of the scaled result. If not supplied, the max value of the data array's dtype is used. memory_saver (bool): Utilize less RAM when scaling a set of images. Defaults to  True . If set to  False then the scaling routine will be faster, but will utilize significantly more RAM. Returns: A new  numpy.ndarray that is the same dimensions as the inputted data array, with the scaling applied. Raises: ValueError: issues encountered with supplied min, max, or top value(s)",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ToolsManager.set_theme",
-"url":36,
+"url":38,
 "doc":"A handy wrapper for setting the matplotlib global theme. Common choices are  light ,  dark , or  default . Args: theme (str): Theme name. Common choices are  light ,  dark , or  default . If default, then matplotlib theme settings will be fully reset to their defaults. Additional themes can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Keogram",
-"url":36,
+"url":38,
 "doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. instrument_type (str): String giving instrument type, either 'asi' or 'spectrograph'. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
 },
 {
 "ref":"pyaurorax.tools.Keogram.pretty_print",
-"url":36,
+"url":38,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Keogram.set_geographic_latitudes",
-"url":36,
+"url":38,
 "doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude_km (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Keogram.set_magnetic_latitudes",
-"url":36,
+"url":38,
 "doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude_km (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Keogram.plot",
-"url":36,
+"url":38,
 "doc":"Generate a plot of the keogram data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: y_type (str): Type of y-axis to use when plotting. Options are  ccd ,  mag , or  geo . The default is  ccd . This parameter is required. title (str): The title to display above the plotted keogram. Default is no title. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). aspect (str or float): The matplotlib imshow aspect ration to use. A common value for this is  auto . All valid values can be found on the [matplotlib documentation](https: matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). axes_visible (bool): Display the axes. Default is  True . xlabel (str): The x-axis label to use. Default is  Time (UTC) . ylabel (str): The y-axis label to use. Default is based on y_type. xtick_increment (int): The x-axis tick increment to use. Default is 100. ytick_increment (int): The y-axis tick increment to use. Default is 50. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed keogram, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues encountered with the y-axis choice",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Montage",
-"url":36,
+"url":38,
 "doc":"Class representation for a montage Attributes: data (numpy.ndarray): The derived montage data. timestamp (List[datetime.datetime]): Timestamps corresponding to each montage image."
 },
 {
 "ref":"pyaurorax.tools.Montage.pretty_print",
-"url":36,
+"url":38,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Montage.plot",
-"url":36,
+"url":38,
 "doc":"Generate a plot of the montage data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: rows (int): The number of rows to use when displaying the images as a montage. The product of the  rows and  cols parameters must match the number of images supplied when creating the  Montage object. If not, a ValueError will be raised. This parameter is required. cols (int): The number of columns to use when displaying the images as a montage. The product of the  rows and  cols parameters must match the number of images supplied when creating the  Montage object. If not, a ValueError will be raised. This parameter is required. timestamps_display (bool): Display the timestamps on each montage image. Defaults to True. This parameter is optional. timestamps_format (str): The format of the timestamps when being displayed. This is the same format string as when using the  strftime() function for a  datetime object. Default format string is  %Y-%m-%d %H:%M:%S . Refer to the [Python documentation](https: docs.python.org/3/library/datetime.html strftime-and-strptime-format-codes) for further information. This parameter is optional. timestamps_fontsize (int): The font size for the displayed timestamps. Default is size 11. This parameter is optional. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . title (str): The title to display above the plotted montage. Default is no title. cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues with the y-axis choice, or rows/cols choice.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Mosaic",
-"url":36,
+"url":38,
 "doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data. spect_cmap (str): String giving the cmap to use for spect legend. spect_intensity_scale (Tuple[int]): The min and max values that spectrograph data is scaled to in the mosaic, if any is present."
 },
 {
 "ref":"pyaurorax.tools.Mosaic.polygon_data",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.Mosaic.cartopy_projection",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.Mosaic.contour_data",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.Mosaic.spect_cmap",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.Mosaic.spect_intensity_scale",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.Mosaic.pretty_print",
-"url":36,
+"url":38,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Mosaic.plot",
-"url":36,
+"url":38,
 "doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . title (str): The title to display above the plotted mosaic. Default is no title. ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_title (str): Title for the colorbar. Default is no title. colorbar_title (str): Deprecated as of v1.10.0. Use 'cbar_title' instead in the exact same way. cbar_colormap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray , unless mosaic was created with spectrograph data, in which case defaults to the colormap used for spectrograph data Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Mosaic.add_geo_contours",
-"url":36,
+"url":38,
 "doc":"Add geographic contours to a mosaic. Args: lats (ndarray or list): Sequence of geographic latitudes defining a contour. lons (ndarray or list): Sequence of geographic longitudes defining a contour. constant_lats (float, int, or Sequence): Geographic Latitude(s) at which to add line(s) of constant latitude. constant_lons (float, int, or Sequence): Geographic Longitude(s) at which to add line(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). bring_to_front (bool): Plots the contour on top of all other currently plotted objects. Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.Mosaic.add_mag_contours",
-"url":36,
+"url":38,
 "doc":"Add geomagnetic contours to a mosaic. Args: timestamp (datetime.datetime): The timestamp used in computing AACGM coordinates. lats (ndarray or list): Sequence of geomagnetic latitudes defining a contour. lons (ndarray or list): Sequence of geomagnetic longitudes defining a contour. constant_lats (float, int, Sequence): Geomagnetic latitude(s) at which to add contour(s) of constant latitude. constant_lons (float, int, Sequence): Geomagnetic longitude(s) at which to add contours(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). bring_to_front (bool): Plots the contour on top of all other currently plotted objects. Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.MosaicData",
-"url":36,
+"url":38,
 "doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions. data_types (List[str]): The data types for each data object."
 },
 {
 "ref":"pyaurorax.tools.MosaicData.site_uid_list",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicData.timestamps",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicData.images",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicData.images_dimensions",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicData.data_types",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicData.pretty_print",
-"url":36,
+"url":38,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.MosaicSkymap",
-"url":36,
+"url":38,
 "doc":"Prepared skymap data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. elevation (List[numpy.ndarray]): List of elevation data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lat (List[numpy.ndarray]): List of latitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lon (List[numpy.ndarray]): List of longitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute."
 },
 {
 "ref":"pyaurorax.tools.MosaicSkymap.site_uid_list",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicSkymap.elevation",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicSkymap.polyfill_lat",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicSkymap.polyfill_lon",
-"url":36,
+"url":38,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.MosaicSkymap.pretty_print",
-"url":36,
+"url":38,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.bounding_box",
-"url":37,
+"url":39,
 "doc":"Methods for working with data in a specific bounding box."
 },
 {
 "ref":"pyaurorax.tools.bounding_box.BoundingBoxManager",
-"url":37,
+"url":39,
 "doc":"The BoundingBoxManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.bounding_box.BoundingBoxManager.extract_metric",
-"url":37,
+"url":39,
 "doc":"Access to the  extract_metric submodule from within a PyAuroraX object."
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric",
-"url":38,
+"url":40,
 "doc":"Extract various metrics from a given bounding box."
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric.ExtractMetricManager",
-"url":38,
+"url":40,
 "doc":"The ExtractMetricManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric.ExtractMetricManager.azimuth",
-"url":38,
+"url":40,
 "doc":"Compute a metric of image data within an azimuthal boundary. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the image data. azimuth_bounds (Sequence[int, float]): A 2-element sequence specifying the azimuthal bounds from which to extract the metric. Anticipated order is [az_min, az_max]. metric (str): The name of the metric that is to be computed for the bounded area. Valid metrics are  mean ,  median ,  sum . Default is  median . n_channels (int): By default, function will assume the type of data passed as input - this argument can be used to manually specify the number of channels contained in image data. show_preview (bool): Plot a preview of the bounded area. Returns: A numpy.ndarray containing the metrics computed within azimuth range, for all image frames. Raises: ValueError: issue encountered with value supplied in parameter",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric.ExtractMetricManager.ccd",
-"url":38,
+"url":40,
 "doc":"Compute a metric of image data within a CCD boundary. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. ccd_bounds (List[int]): A 4-element sequence specifying the (inclusive) CCD bounds from which to extract the metric. Anticipated order is [x0, x1, y0, y1]. metric (str): The name of the metric that is to be computed for the bounded area. Valid metrics are  mean ,  median ,  sum . Defaults to  median . n_channels (int): By default, function will assume the type of data passed as input - this argument can be used to manually specify the number of channels contained in image data. show_preview (bool): Plot a preview of the bounded area. Returns: A numpy.ndarray containing the metrics computed within CCD bounds, for all image frames. Raises: ValueError: issue encountered with value supplied in parameter",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric.ExtractMetricManager.elevation",
-"url":38,
+"url":40,
 "doc":"Compute a metric of image data within an elevation boundary. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the image data. elevation_bounds (Sequence): A 2-element sequence specifying the elevation bounds from which to extract the metric. Anticipated order is [el_min, el_max]. metric (str): The name of the metric that is to be computed for the bounded area. Valid metrics are  mean ,  median ,  sum . Default is  median . n_channels (int): By default, function will assume the type of data passed as input - this argument can be used to manually specify the number of channels contained in image data. show_preview (bool): Plot a preview of the bounded area. Returns: A numpy.ndarray containing the metrics computed within elevation range, for all image frames. Raises: ValueError: issue encountered with value supplied in parameter",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric.ExtractMetricManager.geo",
-"url":38,
+"url":40,
 "doc":"Compute a metric of image data within a geographic lat/lon boundary. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the image data. altitude_km (int or float): The altitude of the image data in kilometers. lonlat_bounds (Sequence): A 4-element sequence specifying the lat/lon bounds from which to extract the metric. Anticipated order is [lon_0, lon_1, lat_0, lat_1]. metric (str): The name of the metric that is to be computed for the bounded area. Valid metrics are  mean ,  median ,  sum . Default is  median . n_channels (int): By default, function will assume the type of data passed as input - this argument can be used to manually specify the number of channels contained in image data. show_preview (bool): Plot a preview of the bounded area. Returns: A numpy.ndarray containing the metrics computed within elevation range, for all image frames. Raises: ValueError: issue encountered with value supplied in parameter",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.bounding_box.extract_metric.ExtractMetricManager.mag",
-"url":38,
+"url":40,
 "doc":"Compute a metric of image data within a magnetic lat/lon boundary. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. timestamp (List[datetime.datetime]): A list of timestamps corresponding to each image. skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the image data. altitude_km (int or float): The altitude of the image data in kilometers. lonlat_bounds (Sequence): A 4-element sequence specifying the magnetic lat/lon bounds from which to extract the metric. Anticipated order is [lon_0, lon_1, lat_0, lat_1]. metric (str): The name of the metric that is to be computed for the bounded area. Valid metrics are  mean ,  median ,  sum . Default is  median . n_channels (int): By default, function will assume the type of data passed as input - this argument can be used to manually specify the number of channels contained in image data. show_preview (bool): Plot a preview of the bounded area. Returns: A numpy.ndarray containing the metrics computed within elevation range, for all image frames. Raises: ValueError: issue encountered with value supplied in parameter",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.calibration",
-"url":39,
+"url":41,
 "doc":"Perform various calibration procedures on image data."
 },
 {
 "ref":"pyaurorax.tools.calibration.CalibrationManager",
-"url":39,
+"url":41,
 "doc":"The CalibrationManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.calibration.CalibrationManager.rego",
-"url":39,
+"url":41,
 "doc":"Apply various calibration adjustments to a single or set of images raw images. Args: images (numpy.ndarray): Raw images to perform calibration procedures on. cal_flatfield (pyaurorax.data.ucalgary.Calibration): Calibration object containing the flatfield data to utilize. This field is required if the  step_flatfield_corection is set to True. cal_rayleighs (pyaurorax.data.ucalgary.Calibration): Calibration object containing the Rayleighs data to utilize. This field is required if the  step_rayleighs_calibration is set to True. step_dark_frame_correction (bool): Perform the dark frame correction step by subtracting an average of a bottom corner grid from the image (ie. 4x4.). Defaults to  True . step_flatfield_calibration (bool): Perform the flatfield correction step. Defaults to  True . Note that the  cal_flatfield parameter must be supplied if this is True. step_rayleighs_calibration (bool): Perform the Rayleighs conversion step. Defaults to  True. Note that the  cal_rayleighs parameter must be supplied if this is True. exposure_length_sec (float): Force the exposure length to be a certain value. Default is TREx NIR's nominal operating mode exposure length of  2.0 seconds . Adjusting this field should be done with caution. Returns: The calibrated images. The shape of the calibrated data will be same as the input images. The dtype of the calibrated data will depend on if the Rayleighs conversion was performed. If it was, a float32 array will be returned. If it wasn't, the dtype will be the same as input images' dtype. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.calibration.CalibrationManager.trex_nir",
-"url":39,
+"url":41,
 "doc":"Apply various calibration adjustments to a single or set of images raw images. Args: images (numpy.ndarray): Raw images to perform calibration procedures on. cal_flatfield (pyaurorax.data.ucalgary.Calibration): Calibration object containing the flatfield data to utilize. This field is required if the  step_flatfield_corection is set to True. cal_rayleighs (pyaurorax.data.ucalgary.Calibration): Calibration object containing the Rayleighs data to utilize. This field is required if the  step_rayleighs_calibration is set to True. step_dark_frame_correction (bool): Perform the dark frame correction step. Defaults to  True . step_flatfield_calibration (bool): Perform the flatfield correction step. Defaults to  True . Note that the  cal_flatfield parameter must be supplied if this is True. step_rayleighs_calibration (bool): Perform the Rayleighs conversion step. Defaults to  True. Note that the  cal_rayleighs parameter must be supplied if this is True. exposure_length_sec (float): Force the exposure length to be a certain value. Default is TREx NIR's nominal operating mode exposure length of  5.0 seconds . Adjusting this field should be done with caution. Returns: The calibrated images. The shape of the calibrated data will be same as the input images. The dtype of the calibrated data will depend on if the Rayleighs conversion was performed. If it was, a float32 array will be returned. If it wasn't, the dtype will be the same as input images' dtype. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ccd_contour",
-"url":40,
+"url":42,
 "doc":"Obtain contours in pixel coordinates from a skymap for plotting over CCD images."
 },
 {
 "ref":"pyaurorax.tools.ccd_contour.CCDContourManager",
-"url":40,
+"url":42,
 "doc":"The CCDContourManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.ccd_contour.CCDContourManager.azimuth",
-"url":40,
+"url":42,
 "doc":"Obtain CCD Coordinates of a line of constant latitude. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the CCD image data to generate contours for. constant_azimuth (int or float): The azimuth angle, in degrees, to create contour of. min_elevation (int or float): Optionally specify the elevation angle at which contour begins. Defaults to 5. max_elevation (int or float): Optionally specify the elevation angle at which contour begins. Defaults to 90. n_points (int or float): Optionally specify the number of points used to define a contour. By default a reasonable value is selected automatically. remove_edge_cases (bool): Due to the nature of skymaps, often, around the edge of CCD data, contours will have often undesired behaviour due to being bounded within the CCD range. The result is flattened contours along the edge of CCD boundaries. This is completely expected, and these points are removed by default, completely for aesthetic choices. Set this keyword to False to keep all points in the contour. Returns: A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of the azimuth contour. Raises: ValueError: invalid azimuth supplied.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ccd_contour.CCDContourManager.elevation",
-"url":40,
+"url":42,
 "doc":"Obtain CCD Coordinates of a line of constant elevation. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the CCD image data to generate contours for. constant_elevation (int or float): The elevation angle, in degrees from the horizon, to create contour of. n_points (int or float): Optionally specify the number of points used to define a contour. By default a reasonable value is selected automatically. remove_edge_cases (bool): Due to the nature of skymaps, often, around the edge of CCD data, contours will have often undesired behaviour due to being bounded within the CCD range. The result is flattened contours along the edge of CCD boundaries. This is completely expected, and these points are removed by default, completely for aesthetic choices. Set this keyword to False to keep all points in the contour. Returns: A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of the elevation contour. Raises: ValueError: invalid elevation supplied.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ccd_contour.CCDContourManager.geo",
-"url":40,
+"url":42,
 "doc":"Obtain CCD Coordinates of a line of constant geographic latitude, constant geographic longitude, or a custom contour defined in geographic coordinates. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the CCD image data to generate contours for. altitude_km (int or float): The altitude of the image data to create contours for, in kilometers. contour_lats (ndarray or list): Sequence of geographic latitudes defining a contour. contour_lons (ndarray or list): Sequence of geographic longitudes defining a contour. constant_lat (float or int): Geographic Latitude at which to create line of constant latitude. constant_lon (float or int): Geographic Longitude at which to create line of constant longitude. n_points (int or float): Optionally specify the number of points used to define a contour. By default a reasonable value is selected automatically. remove_edge_cases (bool): Due to the nature of skymaps, often, around the edge of CCD data, contours will have often undesired behaviour due to being bounded within the CCD range. The result is flattened contours along the edge of CCD boundaries. This is completely expected, and these points are removed by default, completely for aesthetic choices. Set this keyword to False to keep all points in the contour. Returns: A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of the elevation contour. Raises: ValueError: invalid elevation supplied.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.ccd_contour.CCDContourManager.mag",
-"url":40,
+"url":42,
 "doc":"Obtain CCD Coordinates of a line of constant magnetic latitude, constant magnetic longitude, or a custom contour defined in magnetic coordinates. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap corresponding to the CCD image data to generate contours for. timestamp (datetime.datetime): The timestamp used for AACGM Conversions. altitude_km (int or float): The altitude of the image data to create contours for, in kilometers. contour_lats (ndarray or list): Sequence of magnetic latitudes defining a contour. contour_lons (ndarray or list): Sequence of magnetic longitudes defining a contour. constant_lat (float or int): Magnetic Latitude at which to create line of constant latitude. constant_lon (float or int): Magnetic Longitude at which to create line of constant longitude. n_points (int or float): Optionally specify the number of points used to define a contour. By default a reasonable value is selected automatically. remove_edge_cases (bool): Due to the nature of skymaps, often, around the edge of CCD data, contours will have often undesired behaviour due to being bounded within the CCD range. The result is flattened contours along the edge of CCD boundaries. This is completely expected, and these points are removed by default, completely for aesthetic choices. Set this keyword to False to keep all points in the contour. Returns: A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of the elevation contour. Raises: ValueError: invalid elevation supplied.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes",
-"url":41,
+"url":43,
 "doc":"Class definitions for data analysis objects."
 },
 {
-"ref":"pyaurorax.tools.classes.montage",
-"url":42,
-"doc":"Class representation for a montage."
-},
-{
-"ref":"pyaurorax.tools.classes.montage.Montage",
-"url":42,
-"doc":"Class representation for a montage Attributes: data (numpy.ndarray): The derived montage data. timestamp (List[datetime.datetime]): Timestamps corresponding to each montage image."
-},
-{
-"ref":"pyaurorax.tools.classes.montage.Montage.pretty_print",
-"url":42,
-"doc":"A special print output for this class.",
-"func":1
-},
-{
-"ref":"pyaurorax.tools.classes.montage.Montage.plot",
-"url":42,
-"doc":"Generate a plot of the montage data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: rows (int): The number of rows to use when displaying the images as a montage. The product of the  rows and  cols parameters must match the number of images supplied when creating the  Montage object. If not, a ValueError will be raised. This parameter is required. cols (int): The number of columns to use when displaying the images as a montage. The product of the  rows and  cols parameters must match the number of images supplied when creating the  Montage object. If not, a ValueError will be raised. This parameter is required. timestamps_display (bool): Display the timestamps on each montage image. Defaults to True. This parameter is optional. timestamps_format (str): The format of the timestamps when being displayed. This is the same format string as when using the  strftime() function for a  datetime object. Default format string is  %Y-%m-%d %H:%M:%S . Refer to the [Python documentation](https: docs.python.org/3/library/datetime.html strftime-and-strptime-format-codes) for further information. This parameter is optional. timestamps_fontsize (int): The font size for the displayed timestamps. Default is size 11. This parameter is optional. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . title (str): The title to display above the plotted montage. Default is no title. cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues with the y-axis choice, or rows/cols choice.",
-"func":1
-},
-{
 "ref":"pyaurorax.tools.classes.keogram",
-"url":43,
+"url":44,
 "doc":"Class representation for a keogram."
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram",
-"url":43,
+"url":44,
 "doc":"Class representation for a keogram Attributes: data (numpy.ndarray): The derived keogram data. timestamp (List[datetime.datetime]): Timestamps corresponding to each keogram slice. instrument_type (str): String giving instrument type, either 'asi' or 'spectrograph'. ccd_y (numpy.ndarray): The y-axis representing CCD Y coordinates for the keogram. mag_y (numpy.ndarray): The y-axis representing magnetic latitude for the keogram. geo_y (numpy.ndarray): The y-axis representing geographic latitude for the keogram."
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.pretty_print",
-"url":43,
+"url":44,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes",
-"url":43,
+"url":44,
 "doc":"Set the geographic latitude values for this keogram, using the specified skymap data. The data will be set to the geo_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. altitude_km (int): The altitude to use, in kilometers. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  geo_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.set_magnetic_latitudes",
-"url":43,
+"url":44,
 "doc":"Set the magnetic latitude values for this keogram, using the specified skymap data. AACGMv2 will be utilized to perform the calculations. The resulting data will be set to the mag_y attribute of this Keogram object, which can then be used for plotting and/or further analysis. Args: skymap (pyaurorax.data.ucalgary.Skymap): The skymap object to use. This parameter is required. timestamp (datetime.datetime): The timestamp to use when converting skymap data to magnetic coordinates. Utilizes AACGMv2 to do the conversion. altitude_km (int): The altitude to use. If not specified, it will use the default in the skymap object. If the specified altitude is not valid, a ValueError will be raised. Returns: None. The Keogram object's  mag_y attribute will be updated. Raises: ValueError: Issues with specified altitude.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.keogram.Keogram.plot",
-"url":43,
+"url":44,
 "doc":"Generate a plot of the keogram data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: y_type (str): Type of y-axis to use when plotting. Options are  ccd ,  mag , or  geo . The default is  ccd . This parameter is required. title (str): The title to display above the plotted keogram. Default is no title. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). aspect (str or float): The matplotlib imshow aspect ration to use. A common value for this is  auto . All valid values can be found on the [matplotlib documentation](https: matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html). axes_visible (bool): Display the axes. Default is  True . xlabel (str): The x-axis label to use. Default is  Time (UTC) . ylabel (str): The y-axis label to use. Default is based on y_type. xtick_increment (int): The x-axis tick increment to use. Default is 100. ytick_increment (int): The y-axis tick increment to use. Default is 50. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed keogram, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues encountered with the y-axis choice",
 "func":1
 },
 {
+"ref":"pyaurorax.tools.classes.montage",
+"url":45,
+"doc":"Class representation for a montage."
+},
+{
+"ref":"pyaurorax.tools.classes.montage.Montage",
+"url":45,
+"doc":"Class representation for a montage Attributes: data (numpy.ndarray): The derived montage data. timestamp (List[datetime.datetime]): Timestamps corresponding to each montage image."
+},
+{
+"ref":"pyaurorax.tools.classes.montage.Montage.pretty_print",
+"url":45,
+"doc":"A special print output for this class.",
+"func":1
+},
+{
+"ref":"pyaurorax.tools.classes.montage.Montage.plot",
+"url":45,
+"doc":"Generate a plot of the montage data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: rows (int): The number of rows to use when displaying the images as a montage. The product of the  rows and  cols parameters must match the number of images supplied when creating the  Montage object. If not, a ValueError will be raised. This parameter is required. cols (int): The number of columns to use when displaying the images as a montage. The product of the  rows and  cols parameters must match the number of images supplied when creating the  Montage object. If not, a ValueError will be raised. This parameter is required. timestamps_display (bool): Display the timestamps on each montage image. Defaults to True. This parameter is optional. timestamps_format (str): The format of the timestamps when being displayed. This is the same format string as when using the  strftime() function for a  datetime object. Default format string is  %Y-%m-%d %H:%M:%S . Refer to the [Python documentation](https: docs.python.org/3/library/datetime.html strftime-and-strptime-format-codes) for further information. This parameter is optional. timestamps_fontsize (int): The font size for the displayed timestamps. Default is size 11. This parameter is optional. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . title (str): The title to display above the plotted montage. Default is no title. cmap (str): The matplotlib colormap to use. Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues with the y-axis choice, or rows/cols choice.",
+"func":1
+},
+{
 "ref":"pyaurorax.tools.classes.mosaic",
-"url":44,
+"url":46,
 "doc":"Class representation for a mosaic."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap",
-"url":44,
+"url":46,
 "doc":"Prepared skymap data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. elevation (List[numpy.ndarray]): List of elevation data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lat (List[numpy.ndarray]): List of latitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute. polyfoll_lon (List[numpy.ndarray]): List of longitude polygon data, with each element corresponding to each site. Order matches that of the  site_uid_list attribute."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print",
-"url":44,
+"url":46,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData",
-"url":44,
+"url":46,
 "doc":"Prepared image data for use by mosaic routines. Attributes: site_uid_list (List[str]): List of site unique identifiers contained within this object. timestamps (List[datetime.datetime]): Timestamps of corresponding images. images (Dict[str, numpy.ndarray]): Image data prepared into the necessary format; a dictionary. Keys are the site UID, ndarray is the prepared data. images_dimensions (Dict[str, Tuple]): The image dimensions. data_types (List[str]): The data types for each data object."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.timestamps",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.images",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.data_types",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.MosaicData.pretty_print",
-"url":44,
+"url":46,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic",
-"url":44,
+"url":46,
 "doc":"Class representation for a generated mosaic. Attributes: polygon_data (matplotlib.collections.PolyCollection): Generated polygons containing rendered data. cartopy_projection (cartopy.crs.Projection): Cartopy projection to utilize. contour_data (Dict[str, List[Any ): Generated contour data. spect_cmap (str): String giving the cmap to use for spect legend. spect_intensity_scale (Tuple[int]): The min and max values that spectrograph data is scaled to in the mosaic, if any is present."
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.polygon_data",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.contour_data",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale",
-"url":44,
+"url":46,
 "doc":""
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.pretty_print",
-"url":44,
+"url":46,
 "doc":"A special print output for this class.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.plot",
-"url":44,
+"url":46,
 "doc":"Generate a plot of the mosaic data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: map_extent (List[int]): Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat]. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . rayleighs (bool): Set to  True if the data being plotted is in Rayleighs. Defaults to  False . max_rayleighs (int): Max intensity scale for Rayleighs. Defaults to  20000 . title (str): The title to display above the plotted mosaic. Default is no title. ocean_color (str): Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  55AADD ). land_color (str): Colour of the land. Default is  gray . Colours can be supplied as a word, or hexcode prefixed with a ' ' character (ie.  41BB87 ). land_edgecolor (str): Color of the land edges. Default is  8A8A8A . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_color (str): Color of the country borders. Default is  AEAEAE . Colours can be supplied as a word, or hexcode prefixed with a ' ' character. borders_disable (bool): Disbale rendering of the borders. Default is  False . cbar_title (str): Title for the colorbar. Default is no title. colorbar_title (str): Deprecated as of v1.10.0. Use 'cbar_title' instead in the exact same way. cbar_colormap (str): The matplotlib colormap to use for the plotted color bar. Default is  gray , unless mosaic was created with spectrograph data, in which case defaults to the colormap used for spectrograph data Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed montage, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises:",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours",
-"url":44,
+"url":46,
 "doc":"Add geographic contours to a mosaic. Args: lats (ndarray or list): Sequence of geographic latitudes defining a contour. lons (ndarray or list): Sequence of geographic longitudes defining a contour. constant_lats (float, int, or Sequence): Geographic Latitude(s) at which to add line(s) of constant latitude. constant_lons (float, int, or Sequence): Geographic Longitude(s) at which to add line(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). bring_to_front (bool): Plots the contour on top of all other currently plotted objects. Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours",
-"url":44,
+"url":46,
 "doc":"Add geomagnetic contours to a mosaic. Args: timestamp (datetime.datetime): The timestamp used in computing AACGM coordinates. lats (ndarray or list): Sequence of geomagnetic latitudes defining a contour. lons (ndarray or list): Sequence of geomagnetic longitudes defining a contour. constant_lats (float, int, Sequence): Geomagnetic latitude(s) at which to add contour(s) of constant latitude. constant_lons (float, int, Sequence): Geomagnetic longitude(s) at which to add contours(s) of constant longitude. color (str): The matplotlib color used for the contour(s). linewidth (float or int): The contour thickness. linestyle (str): The matplotlib linestyle used for the contour(s). marker (str): The matplotlib marker used for the contour(s). bring_to_front (bool): Plots the contour on top of all other currently plotted objects. Returns: The object's contour_data parameter is populated appropriately. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.keogram",
-"url":45,
+"url":47,
 "doc":"Generate keograms."
 },
 {
 "ref":"pyaurorax.tools.keogram.KeogramManager",
-"url":45,
+"url":47,
 "doc":"The KeogramManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.keogram.KeogramManager.create",
-"url":45,
+"url":47,
 "doc":"Create a keogram from a set of images. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. If it is not, then be sure to specify the  axis parameter accordingly. timestamp (List[datetime.datetime]): A list of timestamps corresponding to each image. axis (int): The axis to extract the keogram slice from. Default is  0 , meaning the rows (or Y) axis. spectra (bool): Make a keogram out of spectrograph data, for a specific emission. Defaults to False (ASI data). wavelength (numpy.ndarray): The wavelength array corresponding to spectrograph data. If spectra=True, this parameter must be supplied. spect_emission (str): The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 'green' (557.7 nm emission). spect_band (Tuple[float]): Manual selection of the wavelength region to integrate for obtaining emissions. Use this to prepare emissions that are not available in spect_emission. spect_band_bg (Tuple[float]): Manual selection of the wavelength region to subtract from integration for manually chosen emissions, via the spect_band argument. Returns: A  pyaurorax.tools.Keogram object. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.keogram.KeogramManager.create_custom",
-"url":45,
+"url":47,
 "doc":"Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points, in CCD, geographic, or geomagnetic coordinates, within the bounds of the image data. Keogram is created from the bottom up, meaning the first point will correspond to the bottom of the keogram data. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. If it is not, then be sure to specify the  axis parameter accordingly. timestamp (List[datetime.datetime]): A list of timestamps corresponding to each image. coordinate_system (str): The coordinate system in which input points are defined. Valid options are \"ccd\", \"geo\", or \"mag\". width (int): Width of the desired keogram slice, in CCD pixel units. x_locs (Sequence[float, int]): Sequence of points giving the x-coordinates that define a path through the image data, from which to build the keogram. y_locs (Sequence[float, int]): Sequence of points giving the y-coordinates that define a path through the image data, from which to build the keogram. preview (Optional[bool]): When True, the first frame in images will be displayed, with the keogram slice plotted. skymap (Skymap): The skymap to use in georeferencing when working in geographic or magnetic coordinates. altitude_km (float, int): The altitude of the image data, in km, to use in georeferencing when working in geographic or magnetic coordinates. metric (str): The metric used to compute values for each keogram pixel. Valid options are \"median\", \"mean\", and \"sum\". Defaults to \"median\". Returns: A  pyaurorax.tools.Keogram object. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.montage",
-"url":46,
+"url":48,
 "doc":"Create montages."
 },
 {
 "ref":"pyaurorax.tools.montage.MontageManager",
-"url":46,
+"url":48,
 "doc":"The MontageManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.montage.MontageManager.create",
-"url":46,
+"url":48,
 "doc":"Create a montage from a set of images. Args: images (numpy.ndarray): A set of images. Normally this would come directly from a data  read call, but can also be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images] or [row, cols, channels, num_images]. If it is not, then be sure to specify the  axis parameter accordingly. timestamp (List[datetime.datetime]): A list of timestamps corresponding to each image. Returns: A  pyaurorax.tools.Montage object.",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.mosaic",
-"url":47,
+"url":49,
 "doc":"Prepare data and create mosaics."
 },
 {
 "ref":"pyaurorax.tools.mosaic.MosaicManager",
-"url":47,
+"url":49,
 "doc":"The MosaicManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.mosaic.MosaicManager.create",
-"url":47,
+"url":49,
 "doc":"Create a mosaic object. Args: prepped_data (pyaurorax.tools.MosaicData): The prepared mosaic data. Generated from a prior  prep_images() function call. prepped_skymap (pyaurorax.tools.MosaicSkymap): The prepared skymap data. Generated from a prior  prep_skymaps() function call. timestamp (datetime.datetime): The timestamp to generate a mosaic for. Must be within the range of timestamps for which image data was prepped and provided. cartopy_projection (cartopy.crs.Projection): The cartopy projection to use when creating the mosaic. min_elevation (int): The minimum elevation cutoff when projecting images on the map, in degrees. Default is  5 . cmap (str): The matplotlib colormap to use for the rendered image data. Default is  gray . Commonly used colormaps are: - REGO:  gist_heat - THEMIS ASI:  gray - TREx Blue:  Blues_r - TREx NIR:  gray - TREx RGB:  None A list of all available colormaps can be found on the [matplotlib documentation](https: matplotlib.org/stable/gallery/color/colormap_reference.html). colormap (str): Deprecated as of v1.10.0. Use 'cmap' instead in the exact same way. spect_cmap (str): The matplotlib colormap to use for the colorbar if working with spectrograph data. Default is  gnuplot . image_intensity_scales (List or Dict): Ranges for scaling images. Either a a list with 2 elements which will scale all sites with the same range, or as a dictionary which can be used for scaling each site differently. Example of uniform scaling across all sites:  image_intensity_scales = [2000, 8000] Example of scaling each site differently:  image_intensity_scales = {\"fsmi\": [1000, 10000], \"gill\": [2000, 8000]} spect_intensity_scales (Tuple[int]): Min and max values, in Rayleighs, to scale ALL spectrograph data. spect_colormap (str): The name of a matplotlib colormap to use for plotting spectrograph data. Returns: The generated  pyaurorax.tools.Mosaic object. Raises: ValueError: issues encountered with supplied parameters pyaurorax.exceptions.AuroraXError: general issue encountered",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.mosaic.MosaicManager.prep_images",
-"url":47,
+"url":49,
 "doc":"Prepare the image data for use in a mosaic. Args: image_list (List[pyaurorax.data.ucalgary.Data]): List of image data. Each element of the list is the data for each site. data_attribute (str): The data attribute to use when prepping the images. Either  data or  calibrated_data . Default is  data . spect_emission (str): The emission (green, red, blue, hbeta) to prepare from spectrograph data. Default is 'green' (557.7 nm emission). spect_band (Tuple[float]): Manual selection of the wavelength region to integrate for obtaining emissions. Use this to prepare emissions that are not available in spect_emission. spect_band_bg (Tuple[float]): Manual selection of the wavelength region to subtract from integration for manually chosen emissions, via the spect_band argument. Returns: The prepared data, as a  pyaurorax.tools.MosaicData object. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.mosaic.MosaicManager.prep_skymaps",
-"url":47,
+"url":49,
 "doc":"Prepare skymap data for use by the mosaic routine. This is not time-dependent, so it would only need to be done once. Allows for plotting multiple images on a map, masking the boundaries between images by elevation angle. Args: skymaps (List[pyaurorax.data.ucalgary.Skymap]): The skymaps to prep. height_km (int): The altitude to utilize, in kilometers. site_uid_order (List[str]): The site list order. The order of this list is not important for plotting, but must be consistent with the order of the  skymaps parameter. progress_bar_disable (bool): Disable the progress bar. Defaults to  False . n_parallel (int): Number of skymaps to prepare in parallel using multiprocessing. Default is  1 . Returns: The prepared skymap data as a  pyaurorax.tools.MosaicSkymap object. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.grid_files",
-"url":48,
+"url":50,
 "doc":"Prepare grid data for plotting."
 },
 {
 "ref":"pyaurorax.tools.grid_files.GridFilesManager",
-"url":48,
+"url":50,
 "doc":"The GridFilesManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.grid_files.GridFilesManager.prep_grid_image",
-"url":48,
+"url":50,
 "doc":"Takes a grid array, and converts it to RGBA format, masking all empty cells with max transparency, so that it can be plotted overtop of a map. Args: grid (numpy.ndarray): The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file. fill_val (int or float): The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file's metadata. scale (list or numpy.ndarray): A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max). cmap (str): A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to \"Greys_r\"). Returns: The prepared RGBA grid array. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 },
 {
 "ref":"pyaurorax.tools.spectra",
-"url":49,
+"url":51,
 "doc":"Work with spectrograph data."
 },
 {
 "ref":"pyaurorax.tools.spectra.SpectraManager",
-"url":49,
+"url":51,
 "doc":"The SpectraManager object is initialized within every PyAuroraX object. It acts as a way to access the submodules and carry over configuration information in the super class."
 },
 {
 "ref":"pyaurorax.tools.spectra.SpectraManager.plot",
-"url":49,
+"url":51,
 "doc":"Generate a plot of one or more spectra from spectrograph data. Either display it (default behaviour), save it to disk (using the  savefig parameter), or return the matplotlib plot object for further usage (using the  returnfig parameter). Args: spect_data (pyaurorax.data.ucalgary.Data): The data object containing spectrograph data. timestamp (datetime.datetime): A timestamp or list of timestamps for which to plot spectra from. spect_loc (int): An int or list of ints giving the spectrograph spatial bin indices to plot. title (str): The title to display above the plotted spectra. figsize (tuple): The matplotlib figure size to use when plotting. For example  figsize=(14,4) . color (str, List): A string or list of strings giving the matplotlib color names to use for plotting spectra. ylog (bool): Plot on a logarithmic axis. Default is linear. xlabel (str): The x-axis label to use. Default is  Wavelength (nm) . ylabel (str): The y-axis label to use. Default is 'Intensity (Rayleighs)'. ylim (Tuple[int]): The min and max values to display on the y-axis, in units of Rayleighs/nm. xlim (Tuple[int]): The min and max values to display on the x-axis, in units of nm. plot_line (float): A float, or list of floats, giving wavelengths at which to plot a vertical line, useful for comparing to known emission wavelengths (e.g. 557.7). plot_line_color (str): A string or list of strings giving the colors to use for plotting lines specified by 'plot_lines'. returnfig (bool): Instead of displaying the image, return the matplotlib figure object. This allows for further plot manipulation, for example, adding labels or a title in a different location than the default. Remember - if this parameter is supplied, be sure that you close your plot after finishing work with it. This can be achieved by doing  plt.close(fig) . Note that this method cannot be used in combination with  savefig . savefig (bool): Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if this parameter is set to True. Defaults to  False . savefig_filename (str): Filename to save the image to. Must be specified if the savefig parameter is set to True. savefig_quality (int): Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%. Returns: The displayed spectra, by default. If  savefig is set to True, nothing will be returned. If  returnfig is set to True, the plotting variables  (fig, ax) will be returned. Raises: ValueError: issues encountered with supplied parameters",
 "func":1
 }

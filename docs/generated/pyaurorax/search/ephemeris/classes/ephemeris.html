@@ -80,10 +80,10 @@ border-left: 1px solid #ddd;
 
     Attributes:
         data_source (DataSource): 
-            data source that the ephemeris record is associated with
+            Data source that the ephemeris record is associated with
 
         epoch (datetime.datetime): 
-            timestamp for the record (assumed it is in UTC)
+            Timestamp for the record (assumed it is in UTC)
 
         location_geo (Location): 
             Location object containing geographic latitude and longitude
@@ -99,7 +99,7 @@ border-left: 1px solid #ddd;
             Location object with south B-trace geographic latitude and longitude
 
         metadata (Dict): 
-            metadata for this record (arbitrary keys and values)
+            Metadata for this record (arbitrary keys and values)
     &#34;&#34;&#34;
 
     def __init__(self,
@@ -124,7 +124,7 @@ border-left: 1px solid #ddd;
         datetime objects to strings)
 
         Returns:
-            a dictionary object that is JSON-serializable
+            A dictionary object that is JSON-serializable
         &#34;&#34;&#34;
         # init
         d = self.__dict__
@@ -179,9 +179,9 @@ border-left: 1px solid #ddd;
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>data_source</code></strong> :&ensp;<code>DataSource</code></dt>
-<dd>data source that the ephemeris record is associated with</dd>
+<dd>Data source that the ephemeris record is associated with</dd>
 <dt><strong><code>epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp for the record (assumed it is in UTC)</dd>
+<dd>Timestamp for the record (assumed it is in UTC)</dd>
 <dt><strong><code>location_geo</code></strong> :&ensp;<code>Location</code></dt>
 <dd>Location object containing geographic latitude and longitude</dd>
 <dt><strong><code>location_gsm</code></strong> :&ensp;<code>Location</code></dt>
@@ -192,7 +192,7 @@ sources with a type of 'ground')</dd>
 <dt><strong><code>sbtrace</code></strong> :&ensp;<code>Location</code></dt>
 <dd>Location object with south B-trace geographic latitude and longitude</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>metadata for this record (arbitrary keys and values)</dd>
+<dd>Metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
 <h3>Methods</h3>
 <dl>
@@ -210,7 +210,7 @@ sources with a type of 'ground')</dd>
     datetime objects to strings)
 
     Returns:
-        a dictionary object that is JSON-serializable
+        A dictionary object that is JSON-serializable
     &#34;&#34;&#34;
     # init
     d = self.__dict__
@@ -249,7 +249,7 @@ sources with a type of 'ground')</dd>
 <div class="desc"><p>Convert object to a JSON-serializable object (ie. translate
 datetime objects to strings)</p>
 <h2 id="returns">Returns</h2>
-<p>a dictionary object that is JSON-serializable</p></div>
+<p>A dictionary object that is JSON-serializable</p></div>
 </dd>
 </dl>
 </dd>

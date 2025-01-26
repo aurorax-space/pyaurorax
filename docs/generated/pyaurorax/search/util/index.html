@@ -94,13 +94,13 @@ B-trace geographic locations.</p>
 
         Args:
             geo_location (Location): 
-                a Location object representing the geographic location
+                A Location object representing the geographic location
 
             timestamp (datetime.datetime): 
-                timestamp for this set of latitudes and longitudes
+                Timestamp for this set of latitudes and longitudes
 
         Returns:
-            the north B-trace location as a `Location` object
+            The north B-trace location as a `Location` object
         &#34;&#34;&#34;
         return func_ground_geo_to_nbtrace(geo_location, timestamp)
 
@@ -114,13 +114,13 @@ B-trace geographic locations.</p>
 
         Args:
             geo_location (Location): 
-                a Location object representing the geographic location
+                A Location object representing the geographic location
 
             timestamp (datetime.datetime): 
-                timestamp for this set of latitudes and longitudes
+                Timestamp for this set of latitudes and longitudes
 
         Returns:
-            the south B-trace location as a `Location` object
+            The south B-trace location as a `Location` object
         &#34;&#34;&#34;
         return func_ground_geo_to_sbtrace(geo_location, timestamp)</code></pre>
 </details>
@@ -146,13 +146,13 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         geo_location (Location): 
-            a Location object representing the geographic location
+            A Location object representing the geographic location
 
         timestamp (datetime.datetime): 
-            timestamp for this set of latitudes and longitudes
+            Timestamp for this set of latitudes and longitudes
 
     Returns:
-        the north B-trace location as a `Location` object
+        The north B-trace location as a `Location` object
     &#34;&#34;&#34;
     return func_ground_geo_to_nbtrace(geo_location, timestamp)</code></pre>
 </details>
@@ -164,12 +164,12 @@ based on the timestamp since the magnetic coordinates change over time.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>geo_location</code></strong> :&ensp;<code>Location</code></dt>
-<dd>a Location object representing the geographic location</dd>
+<dd>A Location object representing the geographic location</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp for this set of latitudes and longitudes</dd>
+<dd>Timestamp for this set of latitudes and longitudes</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the north B-trace location as a <code>Location</code> object</p></div>
+<p>The north B-trace location as a <code>Location</code> object</p></div>
 </dd>
 <dt id="pyaurorax.search.util.UtilManager.ground_geo_to_sbtrace"><code class="name flex">
 <span>def <span class="ident">ground_geo_to_sbtrace</span></span>(<span>self,<br>geo_location: <a title="pyaurorax.search.location.Location" href="../location.html#pyaurorax.search.location.Location">Location</a>,<br>timestamp: datetime.datetime) ‑> <a title="pyaurorax.search.location.Location" href="../location.html#pyaurorax.search.location.Location">Location</a></span>
@@ -189,13 +189,13 @@ based on the timestamp since the magnetic coordinates change over time.</p>
 
     Args:
         geo_location (Location): 
-            a Location object representing the geographic location
+            A Location object representing the geographic location
 
         timestamp (datetime.datetime): 
-            timestamp for this set of latitudes and longitudes
+            Timestamp for this set of latitudes and longitudes
 
     Returns:
-        the south B-trace location as a `Location` object
+        The south B-trace location as a `Location` object
     &#34;&#34;&#34;
     return func_ground_geo_to_sbtrace(geo_location, timestamp)</code></pre>
 </details>
@@ -207,12 +207,12 @@ based on the timestamp since the magnetic coordinates change over time.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>geo_location</code></strong> :&ensp;<code>Location</code></dt>
-<dd>a Location object representing the geographic location</dd>
+<dd>A Location object representing the geographic location</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>timestamp for this set of latitudes and longitudes</dd>
+<dd>Timestamp for this set of latitudes and longitudes</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the south B-trace location as a <code>Location</code> object</p></div>
+<p>The south B-trace location as a <code>Location</code> object</p></div>
 </dd>
 </dl>
 </dd>

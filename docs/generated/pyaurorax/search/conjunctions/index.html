@@ -115,15 +115,14 @@ here instead of digging in deeper to the submodules.</p>
                start: datetime.datetime,
                end: datetime.datetime,
                distance: Union[int, float, Dict],
-               ground: Optional[List[Dict]] = [],
-               space: Optional[List[Dict]] = [],
-               events: Optional[List[Dict]] = [],
-               conjunction_types: Optional[List[str]] = [],
-               epoch_search_precision: Optional[int] = 60,
+               ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
+               space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
+               events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
+               conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;]]] = [],
                response_format: Optional[Dict] = None,
-               poll_interval: Optional[float] = __STANDARD_POLLING_SLEEP_TIME,
-               return_immediately: Optional[bool] = False,
-               verbose: Optional[bool] = False) -&gt; ConjunctionSearch:
+               poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
+               return_immediately: bool = False,
+               verbose: bool = False) -&gt; ConjunctionSearch:
         &#34;&#34;&#34;
         Search for conjunctions between data sources
 
@@ -135,100 +134,50 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             start (datetime.datetime): 
-                start timestamp of the search (inclusive)
+                Start timestamp of the search (inclusive).
 
             end (datetime.datetime): 
-                end timestamp of the search (inclusive)
+                End timestamp of the search (inclusive).
 
             distance (int or float or Dict): 
-                the maximum distance allowed between data sources when searching for
+                The maximum distance allowed between data sources when searching for
                 conjunctions. This can either be a number (int or float), or a dictionary
                 modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
 
-            ground (List[str]): 
-                list of ground instrument search parameters, defaults to []
+            ground (List[GroundCriteriaBlock or Dict]): 
+                List of ground instrument criteria blocks, defaults to []. List items of Dict 
+                types have been deprecated as of v1.14.0.
 
-                Example:
+            space (List[SpaceCriteriaBlock or Dict]): 
+                List of space instrument criteria blocks, defaults to []. List items of Dict 
+                types have been deprecated as of v1.14.0.
 
-                    [{
-                        &#34;programs&#34;: [&#34;themis-asi&#34;],
-                        &#34;platforms&#34;: [&#34;gillam&#34;, &#34;rabbit lake&#34;],
-                        &#34;instrument_types&#34;: [&#34;RGB&#34;],
-                        &#34;ephemeris_metadata_filters&#34;: {
-                            &#34;logical_operator&#34;: &#34;AND&#34;,
-                            &#34;expressions&#34;: [
-                                {
-                                    &#34;key&#34;: &#34;calgary_apa_ml_v1&#34;,
-                                    &#34;operator&#34;: &#34;in&#34;,
-                                    &#34;values&#34;: [ &#34;classified as APA&#34; ]
-                                }
-                            ]
-                        }
-                    }]
-
-            space (List[str]): 
-                list of one or more space instrument search parameters, defaults to []
-
-                Example:
-
-                    [{
-                        &#34;programs&#34;: [&#34;themis-asi&#34;, &#34;swarm&#34;],
-                        &#34;platforms&#34;: [&#34;themisa&#34;, &#34;swarma&#34;],
-                        &#34;instrument_types&#34;: [&#34;footprint&#34;],
-                        &#34;ephemeris_metadata_filters&#34;: {
-                            &#34;logical_operator&#34;: &#34;AND&#34;,
-                            &#34;expressions&#34;: [
-                                {
-                                    &#34;key&#34;: &#34;nbtrace_region&#34;,
-                                    &#34;operator&#34;: &#34;in&#34;,
-                                    &#34;values&#34;: [ &#34;north auroral oval&#34; ]
-                                }
-                            ]
-                        },
-                        &#34;hemisphere&#34;: [
-                            &#34;northern&#34;
-                        ]
-                    }]
-
-            events (List[str]): 
-                list of one or more events search parameters, defaults to []
-
-                Example:
-
-                    [{
-                        &#34;programs&#34;: [ &#34;events&#34; ],
-                        &#34;instrument_types&#34;: [ &#34;substorm onsets&#34; ]
-                    }]
+            events (List[EventsCriteriaBlock or Dict]): 
+                List of event criteria blocks, defaults to []. List items of Dict types have 
+                been deprecated as of v1.14.0.
 
             conjunction_types (List[str]): 
-                list of conjunction types, defaults to [] (meaning all conjunction types). Options 
-                are in the pyaurorax.conjunctions module, or at the top level using the 
-                pyaurorax.CONJUNCTION_TYPE_* variables.
-
-            epoch_search_precision (int): 
-                the time precision to which conjunctions are calculated. Can be
-                30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-                development and still considered &#34;alpha&#34;.
+                List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+                options are &#39;nbtrace&#39; or &#39;sbtrace&#39;. Defaults to &#39;nbtrace&#39;.
 
             response_format (Dict): 
-                JSON representation of desired data response format
+                JSON representation of desired data response format.
 
             poll_interval (bool): 
-                seconds to wait between polling calls, defaults to
-                pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+                Seconds to wait between polling calls, defaults to 1 second.
 
             return_immediately (bool): 
-                initiate the search and return without waiting for data to
-                be received, defaults to False
+                Initiate the search and return without waiting for data to be received, defaults 
+                to `False`.
 
             verbose (bool): 
-                show the progress of the request using the request log, defaults
+                Show the progress of the request using the request log, defaults to `False`.
 
         Returns:
-            a `pyaurorax.search.ConjunctionSearch` object
+            A `pyaurorax.search.ConjunctionSearch` object
 
         Raises:
-            pyaurorax.exceptions.AuroraXSearchError: the API experienced a search error
+            pyaurorax.exceptions.AuroraXSearchError: The API experienced a search error
         &#34;&#34;&#34;
         return func_search(
             self.__aurorax_obj,
@@ -239,7 +188,6 @@ here instead of digging in deeper to the submodules.</p>
             space,
             events,
             conjunction_types,
-            epoch_search_precision,
             response_format,
             poll_interval,
             return_immediately,
@@ -253,16 +201,16 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             search_obj (ConjunctionSearch): 
-                the conjunction search to describe, optional
+                The conjunction search to describe, optional
 
             query_dict (Dict): 
-                the conjunction search query represented as a raw dictionary, optional
+                The conjunction search query represented as a raw dictionary, optional
 
         Returns:
-            the &#34;SQL-like&#34; string describing the conjunction search object
+            The &#34;SQL-like&#34; string describing the conjunction search object
 
         Raises:
-            pyaurorax.exceptions.AuroraXError: invalid arguments
+            pyaurorax.exceptions.AuroraXError: Invalid arguments
         &#34;&#34;&#34;
         return func_describe(self.__aurorax_obj, search_obj, query_dict)
 
@@ -275,12 +223,40 @@ here instead of digging in deeper to the submodules.</p>
 
         Args:
             request_id (str): 
-                the request identifier
+                The request identifier
 
         Returns:
-            the request URL
+            The request URL
         &#34;&#34;&#34;
-        return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
+        return func_get_request_url(self.__aurorax_obj, request_id)
+
+    def create_advanced_distance_combos(
+        self,
+        distance: int,
+        ground: int = 0,
+        space: int = 0,
+        events: int = 0,
+    ) -&gt; Dict:
+        &#34;&#34;&#34;
+        Get the advanced distances combinations for the specified parameters
+
+        Args:
+            distance (int): 
+                The default distance to use, defaults to None
+            
+            ground (int): 
+                The number of ground criteria blocks, defaults to 0
+
+            space (int): 
+                The number of space criteria blocks, defaults to 0
+
+            events (int): 
+                The number of events criteria blocks, defaults to 0
+
+        Returns:
+            The advanced distances combinations
+        &#34;&#34;&#34;
+        return func_create_advanced_distance_combos(distance, ground, space, events)</code></pre>
 </details>
 <div class="desc"><p>The ConjunctionsManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
@@ -304,6 +280,57 @@ def swarmaurora(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos"><code class="name flex">
+<span>def <span class="ident">create_advanced_distance_combos</span></span>(<span>self, distance: int, ground: int = 0, space: int = 0, events: int = 0) ‑> Dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_advanced_distance_combos(
+    self,
+    distance: int,
+    ground: int = 0,
+    space: int = 0,
+    events: int = 0,
+) -&gt; Dict:
+    &#34;&#34;&#34;
+    Get the advanced distances combinations for the specified parameters
+
+    Args:
+        distance (int): 
+            The default distance to use, defaults to None
+        
+        ground (int): 
+            The number of ground criteria blocks, defaults to 0
+
+        space (int): 
+            The number of space criteria blocks, defaults to 0
+
+        events (int): 
+            The number of events criteria blocks, defaults to 0
+
+    Returns:
+        The advanced distances combinations
+    &#34;&#34;&#34;
+    return func_create_advanced_distance_combos(distance, ground, space, events)</code></pre>
+</details>
+<div class="desc"><p>Get the advanced distances combinations for the specified parameters</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>distance</code></strong> :&ensp;<code>int</code></dt>
+<dd>The default distance to use, defaults to None</dd>
+<dt><strong><code>ground</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of ground criteria blocks, defaults to 0</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of space criteria blocks, defaults to 0</dd>
+<dt><strong><code>events</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of events criteria blocks, defaults to 0</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The advanced distances combinations</p></div>
+</dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.describe"><code class="name flex">
 <span>def <span class="ident">describe</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a> | None = None,<br>query_dict: Dict | None = None) ‑> str</span>
 </code></dt>
@@ -319,16 +346,16 @@ def swarmaurora(self):
 
     Args:
         search_obj (ConjunctionSearch): 
-            the conjunction search to describe, optional
+            The conjunction search to describe, optional
 
         query_dict (Dict): 
-            the conjunction search query represented as a raw dictionary, optional
+            The conjunction search query represented as a raw dictionary, optional
 
     Returns:
-        the &#34;SQL-like&#34; string describing the conjunction search object
+        The &#34;SQL-like&#34; string describing the conjunction search object
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: invalid arguments
+        pyaurorax.exceptions.AuroraXError: Invalid arguments
     &#34;&#34;&#34;
     return func_describe(self.__aurorax_obj, search_obj, query_dict)</code></pre>
 </details>
@@ -337,16 +364,16 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
-<dd>the conjunction search to describe, optional</dd>
+<dd>The conjunction search to describe, optional</dd>
 <dt><strong><code>query_dict</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>the conjunction search query represented as a raw dictionary, optional</dd>
+<dd>The conjunction search query represented as a raw dictionary, optional</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the "SQL-like" string describing the conjunction search object</p>
+<p>The "SQL-like" string describing the conjunction search object</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
-<dd>invalid arguments</dd>
+<dd>Invalid arguments</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url"><code class="name flex">
@@ -366,10 +393,10 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 
     Args:
         request_id (str): 
-            the request identifier
+            The request identifier
 
     Returns:
-        the request URL
+        The request URL
     &#34;&#34;&#34;
     return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
 </details>
@@ -380,13 +407,13 @@ conjunction searches.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
-<dd>the request identifier</dd>
+<dd>The request identifier</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>the request URL</p></div>
+<p>The request URL</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: List[Dict] | None = [],<br>space: List[Dict] | None = [],<br>events: List[Dict] | None = [],<br>conjunction_types: List[str] | None = [],<br>epoch_search_precision: int | None = 60,<br>response_format: Dict | None = None,<br>poll_interval: float | None = 1.0,<br>return_immediately: bool | None = False,<br>verbose: bool | None = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
+<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock">GroundCriteriaBlock</a> | Dict] = [],<br>space: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock">SpaceCriteriaBlock</a> | Dict] = [],<br>events: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a> | Dict] = [],<br>conjunction_types: Sequence[str | Literal['nbtrace', 'sbtrace']] = [],<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -397,15 +424,14 @@ conjunction searches.</p>
            start: datetime.datetime,
            end: datetime.datetime,
            distance: Union[int, float, Dict],
-           ground: Optional[List[Dict]] = [],
-           space: Optional[List[Dict]] = [],
-           events: Optional[List[Dict]] = [],
-           conjunction_types: Optional[List[str]] = [],
-           epoch_search_precision: Optional[int] = 60,
+           ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
+           space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
+           events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
+           conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;]]] = [],
            response_format: Optional[Dict] = None,
-           poll_interval: Optional[float] = __STANDARD_POLLING_SLEEP_TIME,
-           return_immediately: Optional[bool] = False,
-           verbose: Optional[bool] = False) -&gt; ConjunctionSearch:
+           poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
+           return_immediately: bool = False,
+           verbose: bool = False) -&gt; ConjunctionSearch:
     &#34;&#34;&#34;
     Search for conjunctions between data sources
 
@@ -417,100 +443,50 @@ conjunction searches.</p>
 
     Args:
         start (datetime.datetime): 
-            start timestamp of the search (inclusive)
+            Start timestamp of the search (inclusive).
 
         end (datetime.datetime): 
-            end timestamp of the search (inclusive)
+            End timestamp of the search (inclusive).
 
         distance (int or float or Dict): 
-            the maximum distance allowed between data sources when searching for
+            The maximum distance allowed between data sources when searching for
             conjunctions. This can either be a number (int or float), or a dictionary
             modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
 
-        ground (List[str]): 
-            list of ground instrument search parameters, defaults to []
+        ground (List[GroundCriteriaBlock or Dict]): 
+            List of ground instrument criteria blocks, defaults to []. List items of Dict 
+            types have been deprecated as of v1.14.0.
 
-            Example:
+        space (List[SpaceCriteriaBlock or Dict]): 
+            List of space instrument criteria blocks, defaults to []. List items of Dict 
+            types have been deprecated as of v1.14.0.
 
-                [{
-                    &#34;programs&#34;: [&#34;themis-asi&#34;],
-                    &#34;platforms&#34;: [&#34;gillam&#34;, &#34;rabbit lake&#34;],
-                    &#34;instrument_types&#34;: [&#34;RGB&#34;],
-                    &#34;ephemeris_metadata_filters&#34;: {
-                        &#34;logical_operator&#34;: &#34;AND&#34;,
-                        &#34;expressions&#34;: [
-                            {
-                                &#34;key&#34;: &#34;calgary_apa_ml_v1&#34;,
-                                &#34;operator&#34;: &#34;in&#34;,
-                                &#34;values&#34;: [ &#34;classified as APA&#34; ]
-                            }
-                        ]
-                    }
-                }]
-
-        space (List[str]): 
-            list of one or more space instrument search parameters, defaults to []
-
-            Example:
-
-                [{
-                    &#34;programs&#34;: [&#34;themis-asi&#34;, &#34;swarm&#34;],
-                    &#34;platforms&#34;: [&#34;themisa&#34;, &#34;swarma&#34;],
-                    &#34;instrument_types&#34;: [&#34;footprint&#34;],
-                    &#34;ephemeris_metadata_filters&#34;: {
-                        &#34;logical_operator&#34;: &#34;AND&#34;,
-                        &#34;expressions&#34;: [
-                            {
-                                &#34;key&#34;: &#34;nbtrace_region&#34;,
-                                &#34;operator&#34;: &#34;in&#34;,
-                                &#34;values&#34;: [ &#34;north auroral oval&#34; ]
-                            }
-                        ]
-                    },
-                    &#34;hemisphere&#34;: [
-                        &#34;northern&#34;
-                    ]
-                }]
-
-        events (List[str]): 
-            list of one or more events search parameters, defaults to []
-
-            Example:
-
-                [{
-                    &#34;programs&#34;: [ &#34;events&#34; ],
-                    &#34;instrument_types&#34;: [ &#34;substorm onsets&#34; ]
-                }]
+        events (List[EventsCriteriaBlock or Dict]): 
+            List of event criteria blocks, defaults to []. List items of Dict types have 
+            been deprecated as of v1.14.0.
 
         conjunction_types (List[str]): 
-            list of conjunction types, defaults to [] (meaning all conjunction types). Options 
-            are in the pyaurorax.conjunctions module, or at the top level using the 
-            pyaurorax.CONJUNCTION_TYPE_* variables.
-
-        epoch_search_precision (int): 
-            the time precision to which conjunctions are calculated. Can be
-            30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-            development and still considered &#34;alpha&#34;.
+            List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+            options are &#39;nbtrace&#39; or &#39;sbtrace&#39;. Defaults to &#39;nbtrace&#39;.
 
         response_format (Dict): 
-            JSON representation of desired data response format
+            JSON representation of desired data response format.
 
         poll_interval (bool): 
-            seconds to wait between polling calls, defaults to
-            pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME
+            Seconds to wait between polling calls, defaults to 1 second.
 
         return_immediately (bool): 
-            initiate the search and return without waiting for data to
-            be received, defaults to False
+            Initiate the search and return without waiting for data to be received, defaults 
+            to `False`.
 
         verbose (bool): 
-            show the progress of the request using the request log, defaults
+            Show the progress of the request using the request log, defaults to `False`.
 
     Returns:
-        a `pyaurorax.search.ConjunctionSearch` object
+        A `pyaurorax.search.ConjunctionSearch` object
 
     Raises:
-        pyaurorax.exceptions.AuroraXSearchError: the API experienced a search error
+        pyaurorax.exceptions.AuroraXSearchError: The API experienced a search error
     &#34;&#34;&#34;
     return func_search(
         self.__aurorax_obj,
@@ -521,7 +497,6 @@ conjunction searches.</p>
         space,
         events,
         conjunction_types,
-        epoch_search_precision,
         response_format,
         poll_interval,
         return_immediately,
@@ -537,93 +512,41 @@ data when it's done.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>start timestamp of the search (inclusive)</dd>
+<dd>Start timestamp of the search (inclusive).</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>end timestamp of the search (inclusive)</dd>
+<dd>End timestamp of the search (inclusive).</dd>
 <dt><strong><code>distance</code></strong> :&ensp;<code>int</code> or <code>float</code> or <code>Dict</code></dt>
-<dd>the maximum distance allowed between data sources when searching for
+<dd>The maximum distance allowed between data sources when searching for
 conjunctions. This can either be a number (int or float), or a dictionary
 modified from the output of the "get_advanced_distances_combos()" function.</dd>
-<dt><strong><code>ground</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>
-<p>list of ground instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi"],
-    "platforms": ["gillam", "rabbit lake"],
-    "instrument_types": ["RGB"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "calgary_apa_ml_v1",
-                "operator": "in",
-                "values": [ "classified as APA" ]
-            }
-        ]
-    }
-}]
-</code></pre>
-</dd>
-<dt><strong><code>space</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>
-<p>list of one or more space instrument search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": ["themis-asi", "swarm"],
-    "platforms": ["themisa", "swarma"],
-    "instrument_types": ["footprint"],
-    "ephemeris_metadata_filters": {
-        "logical_operator": "AND",
-        "expressions": [
-            {
-                "key": "nbtrace_region",
-                "operator": "in",
-                "values": [ "north auroral oval" ]
-            }
-        ]
-    },
-    "hemisphere": [
-        "northern"
-    ]
-}]
-</code></pre>
-</dd>
-<dt><strong><code>events</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>
-<p>list of one or more events search parameters, defaults to []</p>
-<p>Example:</p>
-<pre><code>[{
-    "programs": [ "events" ],
-    "instrument_types": [ "substorm onsets" ]
-}]
-</code></pre>
-</dd>
+<dt><strong><code>ground</code></strong> :&ensp;<code>List[GroundCriteriaBlock</code> or <code>Dict]</code></dt>
+<dd>List of ground instrument criteria blocks, defaults to []. List items of Dict
+types have been deprecated as of v1.14.0.</dd>
+<dt><strong><code>space</code></strong> :&ensp;<code>List[SpaceCriteriaBlock</code> or <code>Dict]</code></dt>
+<dd>List of space instrument criteria blocks, defaults to []. List items of Dict
+types have been deprecated as of v1.14.0.</dd>
+<dt><strong><code>events</code></strong> :&ensp;<code>List[EventsCriteriaBlock</code> or <code>Dict]</code></dt>
+<dd>List of event criteria blocks, defaults to []. List items of Dict types have
+been deprecated as of v1.14.0.</dd>
 <dt><strong><code>conjunction_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>list of conjunction types, defaults to [] (meaning all conjunction types). Options
-are in the pyaurorax.conjunctions module, or at the top level using the
-pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
-<dt><strong><code>epoch_search_precision</code></strong> :&ensp;<code>int</code></dt>
-<dd>the time precision to which conjunctions are calculated. Can be
-30 or 60 seconds. Defaults to 60 seconds. Note - this parameter is under active
-development and still considered "alpha".</dd>
+<dd>List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+options are 'nbtrace' or 'sbtrace'. Defaults to 'nbtrace'.</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>JSON representation of desired data response format</dd>
+<dd>JSON representation of desired data response format.</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>bool</code></dt>
-<dd>seconds to wait between polling calls, defaults to
-pyaurorax.requests.STANDARD_POLLING_SLEEP_TIME</dd>
+<dd>Seconds to wait between polling calls, defaults to 1 second.</dd>
 <dt><strong><code>return_immediately</code></strong> :&ensp;<code>bool</code></dt>
-<dd>initiate the search and return without waiting for data to
-be received, defaults to False</dd>
+<dd>Initiate the search and return without waiting for data to be received, defaults
+to <code>False</code>.</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
-<dd>show the progress of the request using the request log, defaults</dd>
+<dd>Show the progress of the request using the request log, defaults to <code>False</code>.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>a <code><a title="pyaurorax.search.ConjunctionSearch" href="../index.html#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code> object</p>
+<p>A <code><a title="pyaurorax.search.ConjunctionSearch" href="../index.html#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code> object</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXSearchError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXSearchError">AuroraXSearchError</a></code></dt>
-<dd>the API experienced a search error</dd>
+<dd>The API experienced a search error</dd>
 </dl></div>
 </dd>
 </dl>
@@ -698,6 +621,7 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager" href="#pyaurorax.search.conjunctions.ConjunctionsManager">ConjunctionsManager</a></code></h4>
 <ul class="">
+<li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos" href="#pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos">create_advanced_distance_combos</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.describe" href="#pyaurorax.search.conjunctions.ConjunctionsManager.describe">describe</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url" href="#pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url">get_request_url</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.search" href="#pyaurorax.search.conjunctions.ConjunctionsManager.search">search</a></code></li>
