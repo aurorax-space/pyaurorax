@@ -58,13 +58,13 @@ numpy = "^1.26.4"
 matplotlib = "^3.9.0"
 pyproj = "^3.6.1"
 cartopy = "^0.23.0"
-pyucalgarysrs = "1.14.0"
+pyucalgarysrs = "1.15.0"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.9.2"
+ruff = "0.9.3"
 pytest = "8.3.4"
 pycodestyle = "2.12.1"
 yapf = "0.43.0"
