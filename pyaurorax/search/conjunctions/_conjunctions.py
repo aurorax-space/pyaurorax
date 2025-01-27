@@ -18,6 +18,8 @@ Functions for performing conjunction searches
 import datetime
 import humanize
 import itertools
+import json
+from copy import deepcopy
 from ...exceptions import AuroraXSearchError, AuroraXError
 from .classes.search import ConjunctionSearch
 from ..api import AuroraXAPIRequest
@@ -36,6 +38,74 @@ def search(aurorax_obj, start, end, distance, ground, space, events, custom_loca
                           custom_locations=custom_locations,
                           conjunction_types=conjunction_types,
                           response_format=response_format)
+    if (verbose is True):
+        print(f"[{datetime.datetime.now()}] Search object created")
+
+    # execute the search
+    s.execute()
+    if (verbose is True):
+        print("[%s] Request submitted" % (datetime.datetime.now()))
+        print("[%s] Request ID: %s" % (datetime.datetime.now(), s.request_id))
+        print("[%s] Request details available at: %s" % (datetime.datetime.now(), s.request_url))
+
+    # return immediately if we wanted to
+    if (return_immediately is True):
+        return s
+
+    # wait for data
+    if (verbose is True):
+        print("[%s] Waiting for data ..." % (datetime.datetime.now()))
+    s.wait(poll_interval=poll_interval, verbose=verbose)
+
+    # check if error condition encountered
+    if (s.status["search_result"]["error_condition"] is True):
+        # error encountered
+        raise AuroraXSearchError(s.logs[-1]["summary"])
+
+    # get the data
+    if (verbose is True):
+        print("[%s] Retrieving data ..." % (datetime.datetime.now()))
+    s.get_data()
+
+    # return response with the data
+    if (verbose is True):
+        print("[%s] Retrieved %s of data containing %d records" % (
+            datetime.datetime.now(),
+            humanize.filesize.naturalsize(s.status["search_result"]["file_size"]),  # type: ignore
+            s.status["search_result"]["result_count"],
+        ))
+
+    # return
+    return s
+
+
+def search_from_raw_query(aurorax_obj, query, poll_interval, return_immediately, verbose):
+    # convert to dict
+    if (isinstance(query, str) is True):
+        # query is a string, so presumably it is a JSON-valid string; convert it to dict
+        query = json.loads(query)
+
+    # set required values
+    if ("start" not in query):
+        raise AuroraXError("The 'start' parameter is missing from the query. This parameter is required.")
+    query["start"] = datetime.datetime.fromisoformat(query["start"][0:-1])
+    if ("end" not in query):
+        raise AuroraXError("The 'end' parameter is missing from the query. This parameter is required.")
+    query["end"] = datetime.datetime.fromisoformat(query["end"][0:-1])
+    if ("max_distances" not in query):
+        raise AuroraXError("The 'max_distances' parameter is missing from the query. This parameter is required.")
+
+    # change name of distance
+    query["distance"] = deepcopy(query["max_distances"])
+    del query["max_distances"]
+
+    # change name of adhoc
+    if ("adhoc" in query):
+        query["custom_locations"] = deepcopy(query["adhoc"])
+        del query["adhoc"]
+
+    # create ConjunctionSearch object
+    s = ConjunctionSearch(aurorax_obj=aurorax_obj, **query)
     if (verbose is True):
         print(f"[{datetime.datetime.now()}] Search object created")
 

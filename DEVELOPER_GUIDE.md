@@ -89,3 +89,7 @@ To publish a new release, you must set the PyPI token first within Poetry and th
 $ poetry config pypi-token.pypi <pypi token>
 $ make publish
 ```
+
+## Development Notes
+
+Attempted to use @overload decorator for `__init__` function of ConjunctionSearch to allow normal instantiation and also query dict instantiation. This didn't pan out because we would have to change arguments to be all keyword based (**kwargs) and not allow any positional args. Don't really want to make that change. 

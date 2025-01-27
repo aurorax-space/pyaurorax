@@ -359,3 +359,18 @@ class DataProductSearch:
         """
         url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
         return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)
+
+    def describe(self):
+        """
+        Describe the data products search as an "SQL-like" string.
+
+        Returns:
+            The "SQL-like" string describing the data products search object
+        """
+        # make request
+        url = "%s/%s" % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DESCRIBE_DATA_PRODUCTS_QUERY)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method="post", url=url, body=self.query)
+        res = req.execute()
+
+        # return
+        return res.data

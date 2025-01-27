@@ -31,6 +31,7 @@ from .classes.criteria_block import (
     CustomLocationsCriteriaBlock,
 )
 from ._conjunctions import search as func_search
+from ._conjunctions import search_from_raw_query as func_search_from_raw_query
 from ._conjunctions import describe as func_describe
 from ._conjunctions import get_request_url as func_get_request_url
 from ._conjunctions import create_advanced_distance_combos as func_create_advanced_distance_combos
@@ -73,7 +74,7 @@ class ConjunctionsManager:
                return_immediately: bool = False,
                verbose: bool = False) -> ConjunctionSearch:
         """
-        Search for conjunctions between data sources
+        Search for conjunctions
 
         By default, this function will block and wait until the request completes and
         all data is downloaded. If you don't want to wait, set the 'return_immediately`
@@ -144,6 +145,50 @@ class ConjunctionsManager:
             verbose,
         )
 
+    def search_from_raw_query(self,
+                              query: Union[Dict, str],
+                              poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
+                              return_immediately: bool = False,
+                              verbose: bool = False) -> ConjunctionSearch:
+        """
+        Search for conjunctions, using a query dictionary as the input. 
+        
+        This is especially useful if you're working in the AuroraX Conjunction Search webpage 
+        to create a search and you'd like to port it over to this Python library with ease.
+
+        Args:
+            query (Dict or str): 
+                A query in dictionary or string format. If it's in string format, it should valid
+                JSON.
+
+                In the conjunction search web page (https://aurorax.space/conjunctionSearch/standard), 
+                click on the 'More' button under the 'Tools' section on the right of the page. Then click 
+                on 'About query' to bring up a modal. Copy the query in JSON format using the clipboard 
+                icon, and use this JSON string as input to the function.
+
+                Many JSON strings can be pasted as a dictionary object without any adjustments, however, 
+                there are a few edge cases. For example, if the max_distances field has 'null' values in 
+                it, then it is not valid Python. In this case, enclose the JSON in a multi-line string 
+                (using the triple-quotes), and pass the query as a string to the function.
+
+            poll_interval (bool): 
+                Seconds to wait between polling calls, defaults to 1 second.
+
+            return_immediately (bool): 
+                Initiate the search and return without waiting for data to be received, defaults 
+                to `False`.
+
+            verbose (bool): 
+                Show the progress of the request using the request log, defaults to `False`.
+
+        Returns:
+            A `ConjunctionSearch` object.
+
+        Raises:
+            pyaurorax.exceptions.AuroraXSearchError: An error was encountered during the search process
+        """
+        return func_search_from_raw_query(self.__aurorax_obj, query, poll_interval, return_immediately, verbose)
+
     def describe(self, search_obj: Optional[ConjunctionSearch] = None, query_dict: Optional[Dict] = None) -> str:
         """
         Describe a conjunction search as an "SQL-like" string. Either a ConjunctionSearch
@@ -186,7 +231,7 @@ class ConjunctionsManager:
         ground: int = 0,
         space: int = 0,
         events: int = 0,
-        custom: int = 0
+        custom: int = 0,
     ) -> Dict:
         """
         Get the advanced distances combinations for the specified parameters

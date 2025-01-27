@@ -5,6 +5,8 @@ Version 1.12.0
   - added new `MetadataFilter` and `MetadataFilterExpression` classes to help with searching (#28)
   - added support for custom lat/lon searching (#81)
   - removed `epoch_search_precision` field for conjunction searching
+  - added ability to do conjunction searches using a dictionary or string, updated examples notebook (#76)
+  - added `describe()` function to all search objects
 - added `limit` parameter to `aurorax.search.sources.list_in_table()` function
 - added `aurorax.search.conjunctions.create_advanced_distance_combos()` helper function for complex conjunction searches
 - updates to crib sheets to show how to use updated conjunction, ephemeris, and data products search functions
