@@ -399,7 +399,22 @@ border-left: 1px solid #ddd;
             pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(self.request_id))
-        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)
+
+    def describe(self):
+        &#34;&#34;&#34;
+        Describe the data products search as an &#34;SQL-like&#34; string.
+
+        Returns:
+            The &#34;SQL-like&#34; string describing the data products search object
+        &#34;&#34;&#34;
+        # make request
+        url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DESCRIBE_DATA_PRODUCTS_QUERY)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method=&#34;post&#34;, url=url, body=self.query)
+        res = req.execute()
+
+        # return
+        return res.data</code></pre>
 </details>
 <div class="desc"><p>Class representing a data product search</p>
 <h2 id="attributes">Attributes</h2>
@@ -580,6 +595,33 @@ for several minutes)</dd>
 search request</p>
 <h2 id="returns">Returns</h2>
 <p>True if data is available, else False</p></div>
+</dd>
+<dt id="pyaurorax.search.data_products.classes.search.DataProductSearch.describe"><code class="name flex">
+<span>def <span class="ident">describe</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def describe(self):
+    &#34;&#34;&#34;
+    Describe the data products search as an &#34;SQL-like&#34; string.
+
+    Returns:
+        The &#34;SQL-like&#34; string describing the data products search object
+    &#34;&#34;&#34;
+    # make request
+    url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DESCRIBE_DATA_PRODUCTS_QUERY)
+    req = AuroraXAPIRequest(self.__aurorax_obj, method=&#34;post&#34;, url=url, body=self.query)
+    res = req.execute()
+
+    # return
+    return res.data</code></pre>
+</details>
+<div class="desc"><p>Describe the data products search as an "SQL-like" string.</p>
+<h2 id="returns">Returns</h2>
+<p>The "SQL-like" string describing the data products search object</p></div>
 </dd>
 <dt id="pyaurorax.search.data_products.classes.search.DataProductSearch.execute"><code class="name flex">
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
@@ -846,6 +888,7 @@ setTimeout(() => input.focus(), 100);
 <ul class="two-column">
 <li><code><a title="pyaurorax.search.data_products.classes.search.DataProductSearch.cancel" href="#pyaurorax.search.data_products.classes.search.DataProductSearch.cancel">cancel</a></code></li>
 <li><code><a title="pyaurorax.search.data_products.classes.search.DataProductSearch.check_for_data" href="#pyaurorax.search.data_products.classes.search.DataProductSearch.check_for_data">check_for_data</a></code></li>
+<li><code><a title="pyaurorax.search.data_products.classes.search.DataProductSearch.describe" href="#pyaurorax.search.data_products.classes.search.DataProductSearch.describe">describe</a></code></li>
 <li><code><a title="pyaurorax.search.data_products.classes.search.DataProductSearch.execute" href="#pyaurorax.search.data_products.classes.search.DataProductSearch.execute">execute</a></code></li>
 <li><code><a title="pyaurorax.search.data_products.classes.search.DataProductSearch.get_data" href="#pyaurorax.search.data_products.classes.search.DataProductSearch.get_data">get_data</a></code></li>
 <li><code><a title="pyaurorax.search.data_products.classes.search.DataProductSearch.pretty_print" href="#pyaurorax.search.data_products.classes.search.DataProductSearch.pretty_print">pretty_print</a></code></li>

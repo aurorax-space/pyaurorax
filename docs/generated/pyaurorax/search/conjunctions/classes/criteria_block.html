@@ -65,6 +65,103 @@ border-left: 1px solid #ddd;
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock"><code class="flex name class">
+<span>class <span class="ident">CustomLocationsCriteriaBlock</span></span>
+<span>(</span><span>locations: List[Tuple[float, float]] = [])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CustomLocationsCriteriaBlock:
+    &#34;&#34;&#34;
+    Representation of a custom location criteria block used for conjunction searches. 
+
+    Attributes:
+        locations (List[Tuple[float, float]]): 
+            List of locations to use in this criteria block. Location are 2-element tuples
+            of (latitude, longitude). Latitude values must be between -90 and 90, and longitude
+            values must be between -180 and 180. Optional, default is `[]`.
+    &#34;&#34;&#34;
+
+    def __init__(self, locations: List[Tuple[float, float]] = []):
+        self.locations = locations
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        return &#34;CustomLocationsCriteriaBlock(locations=%s)&#34; % (self.locations)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        print(&#34;CustomLocationsCriteriaBlock:&#34;)
+        print(&#34;  %-11s: %s&#34; % (&#34;locations&#34;, self.locations))
+
+    def to_search_query_dict(self):
+        query_dict = {}
+        if (len(self.locations) &gt; 0):
+            query_dict[&#34;locations&#34;] = []
+            for location in self.locations:
+                query_dict[&#34;locations&#34;].append({
+                    &#34;lat&#34;: location[0],
+                    &#34;lon&#34;: location[1],
+                })
+        return query_dict</code></pre>
+</details>
+<div class="desc"><p>Representation of a custom location criteria block used for conjunction searches. </p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>locations</code></strong> :&ensp;<code>List[Tuple[float, float]]</code></dt>
+<dd>List of locations to use in this criteria block. Location are 2-element tuples
+of (latitude, longitude). Latitude values must be between -90 and 90, and longitude
+values must be between -180 and 180. Optional, default is <code>[]</code>.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    print(&#34;CustomLocationsCriteriaBlock:&#34;)
+    print(&#34;  %-11s: %s&#34; % (&#34;locations&#34;, self.locations))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+<dt id="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock.to_search_query_dict"><code class="name flex">
+<span>def <span class="ident">to_search_query_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_search_query_dict(self):
+    query_dict = {}
+    if (len(self.locations) &gt; 0):
+        query_dict[&#34;locations&#34;] = []
+        for location in self.locations:
+            query_dict[&#34;locations&#34;].append({
+                &#34;lat&#34;: location[0],
+                &#34;lon&#34;: location[1],
+            })
+    return query_dict</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock"><code class="flex name class">
 <span>class <span class="ident">EventsCriteriaBlock</span></span>
 <span>(</span><span>platforms: List[str] = [],<br>instrument_types: List[str] = [],<br>metadata_filters: <a title="pyaurorax.search.metadata_filters.MetadataFilter" href="../../metadata_filters.html#pyaurorax.search.metadata_filters.MetadataFilter">MetadataFilter</a> | None = None)</span>
@@ -471,6 +568,13 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock" href="#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock">CustomLocationsCriteriaBlock</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock.pretty_print" href="#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock.pretty_print">pretty_print</a></code></li>
+<li><code><a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock.to_search_query_dict" href="#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock.to_search_query_dict">to_search_query_dict</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a></code></h4>
 <ul class="">

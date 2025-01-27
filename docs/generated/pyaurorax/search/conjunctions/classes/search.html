@@ -67,7 +67,7 @@ border-left: 1px solid #ddd;
 <dl>
 <dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch"><code class="flex name class">
 <span>class <span class="ident">ConjunctionSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],<br>space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],<br>events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],<br>conjunction_types: "Sequence[Union[str, Literal['nbtrace', 'sbtrace']]]" = ['nbtrace'],<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],<br>space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],<br>events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],<br>custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],<br>conjunction_types: "Sequence[Union[str, Literal['nbtrace', 'sbtrace', 'geographic']]]" = ['nbtrace'],<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -97,13 +97,14 @@ border-left: 1px solid #ddd;
             List of space instrument criteria blocks, defaults to [].
 
         events (List[EventsCriteriaBlock or Dict]): 
-            List of event criteria blocks, defaults to []. List items of Dict types have 
-            been deprecated as of v1.14.0.
+            List of event criteria blocks, defaults to [].
+
+        custom_locations (List[CustomLocationsCriteriaBlock or Dict]): 
+            List of custom location criteria blocks, defaults to [].
 
         conjunction_types (List[str]): 
-            List of conjunction types, defaults to [&#34;nbtrace&#34;]. Options are
-            in the pyaurorax.conjunctions module, or at the top level using the
-            pyaurorax.CONJUNCTION_TYPE_* variables.
+            List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+            options are &#39;nbtrace&#39;, &#39;sbtrace&#39;, and &#39;geographic&#39;. Defaults to &#39;nbtrace&#39;.
 
         response_format (Dict): 
             JSON representation of desired data response format
@@ -149,7 +150,8 @@ border-left: 1px solid #ddd;
                  ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
                  space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
                  events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
-                 conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;]]] = [&#34;nbtrace&#34;],
+                 custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
+                 conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [&#34;nbtrace&#34;],
                  response_format: Optional[Dict] = None):
 
         # set variables using passed in args
@@ -159,6 +161,7 @@ border-left: 1px solid #ddd;
         self.ground = ground
         self.space = space
         self.events = events
+        self.custom_locations = custom_locations
         self.distance = distance
         self.conjunction_types = conjunction_types
         self.response_format = response_format
@@ -263,13 +266,16 @@ border-left: 1px solid #ddd;
         count_ground = 0
         count_space = 0
         count_events = 0
+        count_custom_locations = 0
         if (self.ground is not None):
             count_ground = len(self.ground)
         if (self.space is not None):
             count_space = len(self.space)
         if (self.events is not None):
             count_events = len(self.events)
-        if ((count_ground + count_space + count_events) &gt; 10):
+        if (self.custom_locations is not None):
+            count_custom_locations = len(self.custom_locations)
+        if ((count_ground + count_space + count_events + count_custom_locations) &gt; 10):
             raise AuroraXError(&#34;Number of criteria blocks exceeds 10, please reduce the count&#34;)
 
     def get_advanced_distances_combos(self, default_distance: Optional[Union[int, float]] = None) -&gt; Dict:
@@ -294,6 +300,9 @@ border-left: 1px solid #ddd;
         if (self.events is not None):
             for i in range(0, len(self.events)):
                 options.append(&#34;events%d&#34; % (i + 1))
+        if (self.custom_locations is not None):
+            for i in range(0, len(self.custom_locations)):
+                options.append(&#34;adhoc%d&#34; % (i + 1))
 
         # derive all combinations of options of size 2
         combinations = {}
@@ -373,6 +382,16 @@ border-left: 1px solid #ddd;
                     this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
                 events_param.append(this_dict)
 
+        # set custom locations
+        custom_param = self.custom_locations
+        if (isinstance(self.custom_locations, list) and all(isinstance(item, CustomLocationsCriteriaBlock) for item in self.custom_locations)):
+            # space parameter is a list of CustomLocationsCriteriaBlock objects, so we
+            # want to set the query to the dict version of it
+            custom_param = []
+            for val in self.custom_locations:
+                this_dict = val.to_search_query_dict()  # type: ignore
+                custom_param.append(this_dict)
+
         # set query
         self.__query = {
             &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
@@ -380,6 +399,7 @@ border-left: 1px solid #ddd;
             &#34;ground&#34;: ground_param,
             &#34;space&#34;: space_param,
             &#34;events&#34;: events_param,
+            &#34;adhoc&#34;: custom_param,
             &#34;conjunction_types&#34;: self.conjunction_types,
             &#34;max_distances&#34;: self.distance,
             &#34;epoch_search_precision&#34;: 60,
@@ -531,7 +551,22 @@ border-left: 1px solid #ddd;
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         &#34;&#34;&#34;
         url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_CONJUNCTION_REQUEST.format(self.request_id))
-        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)</code></pre>
+        return requests_cancel(self.__aurorax_obj, url, wait, poll_interval, verbose)
+
+    def describe(self):
+        &#34;&#34;&#34;
+        Describe the conjunction search as an &#34;SQL-like&#34; string.
+
+        Returns:
+            The &#34;SQL-like&#34; string describing the conjunction search object
+        &#34;&#34;&#34;
+        # make request
+        url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DESCRIBE_CONJUNCTION_QUERY)
+        req = AuroraXAPIRequest(self.__aurorax_obj, method=&#34;post&#34;, url=url, body=self.query)
+        res = req.execute()
+
+        # return
+        return res.data</code></pre>
 </details>
 <div class="desc"><p>Class representing a conjunction search</p>
 <h2 id="attributes">Attributes</h2>
@@ -549,12 +584,12 @@ modified from the output of the "get_advanced_distances_combos()" function.</dd>
 <dt><strong><code>space</code></strong> :&ensp;<code>List[SpaceCriteriaBlock</code> or <code>Dict]</code></dt>
 <dd>List of space instrument criteria blocks, defaults to [].</dd>
 <dt><strong><code>events</code></strong> :&ensp;<code>List[EventsCriteriaBlock</code> or <code>Dict]</code></dt>
-<dd>List of event criteria blocks, defaults to []. List items of Dict types have
-been deprecated as of v1.14.0.</dd>
+<dd>List of event criteria blocks, defaults to [].</dd>
+<dt><strong><code>custom_locations</code></strong> :&ensp;<code>List[CustomLocationsCriteriaBlock</code> or <code>Dict]</code></dt>
+<dd>List of custom location criteria blocks, defaults to [].</dd>
 <dt><strong><code>conjunction_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>List of conjunction types, defaults to ["nbtrace"]. Options are
-in the pyaurorax.conjunctions module, or at the top level using the
-pyaurorax.CONJUNCTION_TYPE_* variables.</dd>
+<dd>List of conjunction types, defaults to [] (meaning all conjunction types). Valid
+options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
 <dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
@@ -657,6 +692,16 @@ def query(self) -&gt; Dict:
                 this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
             events_param.append(this_dict)
 
+    # set custom locations
+    custom_param = self.custom_locations
+    if (isinstance(self.custom_locations, list) and all(isinstance(item, CustomLocationsCriteriaBlock) for item in self.custom_locations)):
+        # space parameter is a list of CustomLocationsCriteriaBlock objects, so we
+        # want to set the query to the dict version of it
+        custom_param = []
+        for val in self.custom_locations:
+            this_dict = val.to_search_query_dict()  # type: ignore
+            custom_param.append(this_dict)
+
     # set query
     self.__query = {
         &#34;start&#34;: self.start.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;),
@@ -664,6 +709,7 @@ def query(self) -&gt; Dict:
         &#34;ground&#34;: ground_param,
         &#34;space&#34;: space_param,
         &#34;events&#34;: events_param,
+        &#34;adhoc&#34;: custom_param,
         &#34;conjunction_types&#34;: self.conjunction_types,
         &#34;max_distances&#34;: self.distance,
         &#34;epoch_search_precision&#34;: 60,
@@ -756,13 +802,16 @@ the polling time using the 'poll_interval' parameter.</p>
     count_ground = 0
     count_space = 0
     count_events = 0
+    count_custom_locations = 0
     if (self.ground is not None):
         count_ground = len(self.ground)
     if (self.space is not None):
         count_space = len(self.space)
     if (self.events is not None):
         count_events = len(self.events)
-    if ((count_ground + count_space + count_events) &gt; 10):
+    if (self.custom_locations is not None):
+        count_custom_locations = len(self.custom_locations)
+    if ((count_ground + count_space + count_events + count_custom_locations) &gt; 10):
         raise AuroraXError(&#34;Number of criteria blocks exceeds 10, please reduce the count&#34;)</code></pre>
 </details>
 <div class="desc"><p>Check the number of of criteria blocks to see if there
@@ -806,6 +855,33 @@ search request</p>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
+</dd>
+<dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.describe"><code class="name flex">
+<span>def <span class="ident">describe</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def describe(self):
+    &#34;&#34;&#34;
+    Describe the conjunction search as an &#34;SQL-like&#34; string.
+
+    Returns:
+        The &#34;SQL-like&#34; string describing the conjunction search object
+    &#34;&#34;&#34;
+    # make request
+    url = &#34;%s/%s&#34; % (self.__aurorax_obj.api_base_url, self.__aurorax_obj.search.api.URL_SUFFIX_DESCRIBE_CONJUNCTION_QUERY)
+    req = AuroraXAPIRequest(self.__aurorax_obj, method=&#34;post&#34;, url=url, body=self.query)
+    res = req.execute()
+
+    # return
+    return res.data</code></pre>
+</details>
+<div class="desc"><p>Describe the conjunction search as an "SQL-like" string.</p>
+<h2 id="returns">Returns</h2>
+<p>The "SQL-like" string describing the conjunction search object</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.execute"><code class="name flex">
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
@@ -878,6 +954,9 @@ search request</p>
     if (self.events is not None):
         for i in range(0, len(self.events)):
             options.append(&#34;events%d&#34; % (i + 1))
+    if (self.custom_locations is not None):
+        for i in range(0, len(self.custom_locations)):
+            options.append(&#34;adhoc%d&#34; % (i + 1))
 
     # derive all combinations of options of size 2
     combinations = {}
@@ -1157,6 +1236,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.cancel" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.cancel">cancel</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.check_criteria_block_count_validity" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.check_criteria_block_count_validity">check_criteria_block_count_validity</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.check_for_data" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.check_for_data">check_for_data</a></code></li>
+<li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.describe" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.describe">describe</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.distance" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.distance">distance</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.execute" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.execute">execute</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.get_advanced_distances_combos" href="#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch.get_advanced_distances_combos">get_advanced_distances_combos</a></code></li>

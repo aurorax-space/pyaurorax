@@ -118,13 +118,14 @@ here instead of digging in deeper to the submodules.</p>
                ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
                space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
                events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
-               conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;]]] = [],
+               custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
+               conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [],
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
                verbose: bool = False) -&gt; ConjunctionSearch:
         &#34;&#34;&#34;
-        Search for conjunctions between data sources
+        Search for conjunctions
 
         By default, this function will block and wait until the request completes and
         all data is downloaded. If you don&#39;t want to wait, set the &#39;return_immediately`
@@ -145,20 +146,20 @@ here instead of digging in deeper to the submodules.</p>
                 modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
 
             ground (List[GroundCriteriaBlock or Dict]): 
-                List of ground instrument criteria blocks, defaults to []. List items of Dict 
-                types have been deprecated as of v1.14.0.
+                List of ground instrument criteria blocks, defaults to [].
 
             space (List[SpaceCriteriaBlock or Dict]): 
-                List of space instrument criteria blocks, defaults to []. List items of Dict 
-                types have been deprecated as of v1.14.0.
+                List of space instrument criteria blocks, defaults to [].
 
             events (List[EventsCriteriaBlock or Dict]): 
-                List of event criteria blocks, defaults to []. List items of Dict types have 
-                been deprecated as of v1.14.0.
+                List of event criteria blocks, defaults to [].
+
+            custom_locations (List[CustomLocationsCriteriaBlock or Dict]): 
+                List of custom location criteria blocks, defaults to [].
 
             conjunction_types (List[str]): 
                 List of conjunction types, defaults to [] (meaning all conjunction types). Valid
-                options are &#39;nbtrace&#39; or &#39;sbtrace&#39;. Defaults to &#39;nbtrace&#39;.
+                options are &#39;nbtrace&#39;, &#39;sbtrace&#39;, and &#39;geographic&#39;. Defaults to &#39;nbtrace&#39;.
 
             response_format (Dict): 
                 JSON representation of desired data response format.
@@ -187,12 +188,57 @@ here instead of digging in deeper to the submodules.</p>
             ground,
             space,
             events,
+            custom_locations,
             conjunction_types,
             response_format,
             poll_interval,
             return_immediately,
             verbose,
         )
+
+    def search_from_raw_query(self,
+                              query: Union[Dict, str],
+                              poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
+                              return_immediately: bool = False,
+                              verbose: bool = False) -&gt; ConjunctionSearch:
+        &#34;&#34;&#34;
+        Search for conjunctions, using a query dictionary as the input. 
+        
+        This is especially useful if you&#39;re working in the AuroraX Conjunction Search webpage 
+        to create a search and you&#39;d like to port it over to this Python library with ease.
+
+        Args:
+            query (Dict or str): 
+                A query in dictionary or string format. If it&#39;s in string format, it should valid
+                JSON.
+
+                In the conjunction search web page (https://aurorax.space/conjunctionSearch/standard), 
+                click on the &#39;More&#39; button under the &#39;Tools&#39; section on the right of the page. Then click 
+                on &#39;About query&#39; to bring up a modal. Copy the query in JSON format using the clipboard 
+                icon, and use this JSON string as input to the function.
+
+                Many JSON strings can be pasted as a dictionary object without any adjustments, however, 
+                there are a few edge cases. For example, if the max_distances field has &#39;null&#39; values in 
+                it, then it is not valid Python. In this case, enclose the JSON in a multi-line string 
+                (using the triple-quotes), and pass the query as a string to the function.
+
+            poll_interval (bool): 
+                Seconds to wait between polling calls, defaults to 1 second.
+
+            return_immediately (bool): 
+                Initiate the search and return without waiting for data to be received, defaults 
+                to `False`.
+
+            verbose (bool): 
+                Show the progress of the request using the request log, defaults to `False`.
+
+        Returns:
+            A `ConjunctionSearch` object.
+
+        Raises:
+            pyaurorax.exceptions.AuroraXSearchError: An error was encountered during the search process
+        &#34;&#34;&#34;
+        return func_search_from_raw_query(self.__aurorax_obj, query, poll_interval, return_immediately, verbose)
 
     def describe(self, search_obj: Optional[ConjunctionSearch] = None, query_dict: Optional[Dict] = None) -&gt; str:
         &#34;&#34;&#34;
@@ -236,6 +282,7 @@ here instead of digging in deeper to the submodules.</p>
         ground: int = 0,
         space: int = 0,
         events: int = 0,
+        custom: int = 0,
     ) -&gt; Dict:
         &#34;&#34;&#34;
         Get the advanced distances combinations for the specified parameters
@@ -253,10 +300,13 @@ here instead of digging in deeper to the submodules.</p>
             events (int): 
                 The number of events criteria blocks, defaults to 0
 
+            custom (int): 
+                The number of custom location criteria blocks, defaults to 0
+
         Returns:
             The advanced distances combinations
         &#34;&#34;&#34;
-        return func_create_advanced_distance_combos(distance, ground, space, events)</code></pre>
+        return func_create_advanced_distance_combos(distance, ground, space, events, custom)</code></pre>
 </details>
 <div class="desc"><p>The ConjunctionsManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
@@ -281,7 +331,7 @@ def swarmaurora(self):
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos"><code class="name flex">
-<span>def <span class="ident">create_advanced_distance_combos</span></span>(<span>self, distance: int, ground: int = 0, space: int = 0, events: int = 0) ‑> Dict</span>
+<span>def <span class="ident">create_advanced_distance_combos</span></span>(<span>self,<br>distance: int,<br>ground: int = 0,<br>space: int = 0,<br>events: int = 0,<br>custom: int = 0) ‑> Dict</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -294,6 +344,7 @@ def swarmaurora(self):
     ground: int = 0,
     space: int = 0,
     events: int = 0,
+    custom: int = 0,
 ) -&gt; Dict:
     &#34;&#34;&#34;
     Get the advanced distances combinations for the specified parameters
@@ -311,10 +362,13 @@ def swarmaurora(self):
         events (int): 
             The number of events criteria blocks, defaults to 0
 
+        custom (int): 
+            The number of custom location criteria blocks, defaults to 0
+
     Returns:
         The advanced distances combinations
     &#34;&#34;&#34;
-    return func_create_advanced_distance_combos(distance, ground, space, events)</code></pre>
+    return func_create_advanced_distance_combos(distance, ground, space, events, custom)</code></pre>
 </details>
 <div class="desc"><p>Get the advanced distances combinations for the specified parameters</p>
 <h2 id="args">Args</h2>
@@ -327,6 +381,8 @@ def swarmaurora(self):
 <dd>The number of space criteria blocks, defaults to 0</dd>
 <dt><strong><code>events</code></strong> :&ensp;<code>int</code></dt>
 <dd>The number of events criteria blocks, defaults to 0</dd>
+<dt><strong><code>custom</code></strong> :&ensp;<code>int</code></dt>
+<dd>The number of custom location criteria blocks, defaults to 0</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The advanced distances combinations</p></div>
@@ -413,7 +469,7 @@ conjunction searches.</p>
 <p>The request URL</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock">GroundCriteriaBlock</a> | Dict] = [],<br>space: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock">SpaceCriteriaBlock</a> | Dict] = [],<br>events: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a> | Dict] = [],<br>conjunction_types: Sequence[str | Literal['nbtrace', 'sbtrace']] = [],<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
+<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock">GroundCriteriaBlock</a> | Dict] = [],<br>space: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock">SpaceCriteriaBlock</a> | Dict] = [],<br>events: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a> | Dict] = [],<br>custom_locations: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock">CustomLocationsCriteriaBlock</a> | Dict] = [],<br>conjunction_types: Sequence[str | Literal['nbtrace', 'sbtrace', 'geographic']] = [],<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -427,13 +483,14 @@ conjunction searches.</p>
            ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],
            space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],
            events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
-           conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;]]] = [],
+           custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
+           conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [],
            response_format: Optional[Dict] = None,
            poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
            return_immediately: bool = False,
            verbose: bool = False) -&gt; ConjunctionSearch:
     &#34;&#34;&#34;
-    Search for conjunctions between data sources
+    Search for conjunctions
 
     By default, this function will block and wait until the request completes and
     all data is downloaded. If you don&#39;t want to wait, set the &#39;return_immediately`
@@ -454,20 +511,20 @@ conjunction searches.</p>
             modified from the output of the &#34;get_advanced_distances_combos()&#34; function.
 
         ground (List[GroundCriteriaBlock or Dict]): 
-            List of ground instrument criteria blocks, defaults to []. List items of Dict 
-            types have been deprecated as of v1.14.0.
+            List of ground instrument criteria blocks, defaults to [].
 
         space (List[SpaceCriteriaBlock or Dict]): 
-            List of space instrument criteria blocks, defaults to []. List items of Dict 
-            types have been deprecated as of v1.14.0.
+            List of space instrument criteria blocks, defaults to [].
 
         events (List[EventsCriteriaBlock or Dict]): 
-            List of event criteria blocks, defaults to []. List items of Dict types have 
-            been deprecated as of v1.14.0.
+            List of event criteria blocks, defaults to [].
+
+        custom_locations (List[CustomLocationsCriteriaBlock or Dict]): 
+            List of custom location criteria blocks, defaults to [].
 
         conjunction_types (List[str]): 
             List of conjunction types, defaults to [] (meaning all conjunction types). Valid
-            options are &#39;nbtrace&#39; or &#39;sbtrace&#39;. Defaults to &#39;nbtrace&#39;.
+            options are &#39;nbtrace&#39;, &#39;sbtrace&#39;, and &#39;geographic&#39;. Defaults to &#39;nbtrace&#39;.
 
         response_format (Dict): 
             JSON representation of desired data response format.
@@ -496,6 +553,7 @@ conjunction searches.</p>
         ground,
         space,
         events,
+        custom_locations,
         conjunction_types,
         response_format,
         poll_interval,
@@ -503,7 +561,7 @@ conjunction searches.</p>
         verbose,
     )</code></pre>
 </details>
-<div class="desc"><p>Search for conjunctions between data sources</p>
+<div class="desc"><p>Search for conjunctions</p>
 <p>By default, this function will block and wait until the request completes and
 all data is downloaded. If you don't want to wait, set the 'return_immediately`
 value to True. The Search object will be returned right after the search has been
@@ -520,17 +578,16 @@ data when it's done.</p>
 conjunctions. This can either be a number (int or float), or a dictionary
 modified from the output of the "get_advanced_distances_combos()" function.</dd>
 <dt><strong><code>ground</code></strong> :&ensp;<code>List[GroundCriteriaBlock</code> or <code>Dict]</code></dt>
-<dd>List of ground instrument criteria blocks, defaults to []. List items of Dict
-types have been deprecated as of v1.14.0.</dd>
+<dd>List of ground instrument criteria blocks, defaults to [].</dd>
 <dt><strong><code>space</code></strong> :&ensp;<code>List[SpaceCriteriaBlock</code> or <code>Dict]</code></dt>
-<dd>List of space instrument criteria blocks, defaults to []. List items of Dict
-types have been deprecated as of v1.14.0.</dd>
+<dd>List of space instrument criteria blocks, defaults to [].</dd>
 <dt><strong><code>events</code></strong> :&ensp;<code>List[EventsCriteriaBlock</code> or <code>Dict]</code></dt>
-<dd>List of event criteria blocks, defaults to []. List items of Dict types have
-been deprecated as of v1.14.0.</dd>
+<dd>List of event criteria blocks, defaults to [].</dd>
+<dt><strong><code>custom_locations</code></strong> :&ensp;<code>List[CustomLocationsCriteriaBlock</code> or <code>Dict]</code></dt>
+<dd>List of custom location criteria blocks, defaults to [].</dd>
 <dt><strong><code>conjunction_types</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of conjunction types, defaults to [] (meaning all conjunction types). Valid
-options are 'nbtrace' or 'sbtrace'. Defaults to 'nbtrace'.</dd>
+options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format.</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>bool</code></dt>
@@ -547,6 +604,92 @@ to <code>False</code>.</dd>
 <dl>
 <dt><code><a title="pyaurorax.exceptions.AuroraXSearchError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXSearchError">AuroraXSearchError</a></code></dt>
 <dd>The API experienced a search error</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.search.conjunctions.ConjunctionsManager.search_from_raw_query"><code class="name flex">
+<span>def <span class="ident">search_from_raw_query</span></span>(<span>self,<br>query: Dict | str,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def search_from_raw_query(self,
+                          query: Union[Dict, str],
+                          poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
+                          return_immediately: bool = False,
+                          verbose: bool = False) -&gt; ConjunctionSearch:
+    &#34;&#34;&#34;
+    Search for conjunctions, using a query dictionary as the input. 
+    
+    This is especially useful if you&#39;re working in the AuroraX Conjunction Search webpage 
+    to create a search and you&#39;d like to port it over to this Python library with ease.
+
+    Args:
+        query (Dict or str): 
+            A query in dictionary or string format. If it&#39;s in string format, it should valid
+            JSON.
+
+            In the conjunction search web page (https://aurorax.space/conjunctionSearch/standard), 
+            click on the &#39;More&#39; button under the &#39;Tools&#39; section on the right of the page. Then click 
+            on &#39;About query&#39; to bring up a modal. Copy the query in JSON format using the clipboard 
+            icon, and use this JSON string as input to the function.
+
+            Many JSON strings can be pasted as a dictionary object without any adjustments, however, 
+            there are a few edge cases. For example, if the max_distances field has &#39;null&#39; values in 
+            it, then it is not valid Python. In this case, enclose the JSON in a multi-line string 
+            (using the triple-quotes), and pass the query as a string to the function.
+
+        poll_interval (bool): 
+            Seconds to wait between polling calls, defaults to 1 second.
+
+        return_immediately (bool): 
+            Initiate the search and return without waiting for data to be received, defaults 
+            to `False`.
+
+        verbose (bool): 
+            Show the progress of the request using the request log, defaults to `False`.
+
+    Returns:
+        A `ConjunctionSearch` object.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXSearchError: An error was encountered during the search process
+    &#34;&#34;&#34;
+    return func_search_from_raw_query(self.__aurorax_obj, query, poll_interval, return_immediately, verbose)</code></pre>
+</details>
+<div class="desc"><p>Search for conjunctions, using a query dictionary as the input. </p>
+<p>This is especially useful if you're working in the AuroraX Conjunction Search webpage
+to create a search and you'd like to port it over to this Python library with ease.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>query</code></strong> :&ensp;<code>Dict</code> or <code>str</code></dt>
+<dd>
+<p>A query in dictionary or string format. If it's in string format, it should valid
+JSON.</p>
+<p>In the conjunction search web page (<a href="https://aurorax.space/conjunctionSearch/standard">https://aurorax.space/conjunctionSearch/standard</a>),
+click on the 'More' button under the 'Tools' section on the right of the page. Then click
+on 'About query' to bring up a modal. Copy the query in JSON format using the clipboard
+icon, and use this JSON string as input to the function.</p>
+<p>Many JSON strings can be pasted as a dictionary object without any adjustments, however,
+there are a few edge cases. For example, if the max_distances field has 'null' values in
+it, then it is not valid Python. In this case, enclose the JSON in a multi-line string
+(using the triple-quotes), and pass the query as a string to the function.</p>
+</dd>
+<dt><strong><code>poll_interval</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Seconds to wait between polling calls, defaults to 1 second.</dd>
+<dt><strong><code>return_immediately</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Initiate the search and return without waiting for data to be received, defaults
+to <code>False</code>.</dd>
+<dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Show the progress of the request using the request log, defaults to <code>False</code>.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A <code>ConjunctionSearch</code> object.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXSearchError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXSearchError">AuroraXSearchError</a></code></dt>
+<dd>An error was encountered during the search process</dd>
 </dl></div>
 </dd>
 </dl>
@@ -625,6 +768,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.describe" href="#pyaurorax.search.conjunctions.ConjunctionsManager.describe">describe</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url" href="#pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url">get_request_url</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.search" href="#pyaurorax.search.conjunctions.ConjunctionsManager.search">search</a></code></li>
+<li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.search_from_raw_query" href="#pyaurorax.search.conjunctions.ConjunctionsManager.search_from_raw_query">search_from_raw_query</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.swarmaurora" href="#pyaurorax.search.conjunctions.ConjunctionsManager.swarmaurora">swarmaurora</a></code></li>
 </ul>
 </li>
