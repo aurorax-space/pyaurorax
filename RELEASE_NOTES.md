@@ -1,12 +1,12 @@
 Version 1.12.0
 -------------------
 - updates to conjunction, ephemeris, and data product searching in the `aurorax.search` module
-  - added new criteria block classes to help with searching: `GroundCriteriaBlock`, `SpaceCriteriaBlock`, `EventCriteriaBlock` (#54, #51)
-  - added new `MetadataFilter` and `MetadataFilterExpression` classes to help with searching (#28)
   - added support for custom lat/lon searching (#81)
+  - added new criteria block classes to help with searching: `GroundCriteriaBlock`, `SpaceCriteriaBlock`, `EventCriteriaBlock`, and `CustomLocationsCriteriaBlock` (#54, #51)
+  - added new `MetadataFilter` and `MetadataFilterExpression` classes to help with searching (#28)
   - removed `epoch_search_precision` field for conjunction searching
-  - added ability to do conjunction searches using a dictionary or string, updated examples notebook (#76)
   - added `describe()` function to all search objects
+  - added ability to do conjunction searches using a dictionary or string, updated examples notebook (#76)
 - added `limit` parameter to `aurorax.search.sources.list_in_table()` function
 - added `aurorax.search.conjunctions.create_advanced_distance_combos()` helper function for complex conjunction searches
 - updates to crib sheets to show how to use updated conjunction, ephemeris, and data products search functions
