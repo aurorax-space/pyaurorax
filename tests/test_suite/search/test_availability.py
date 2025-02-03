@@ -17,7 +17,7 @@ import datetime
 from pyaurorax.search import AvailabilityResult
 
 
-@pytest.mark.search_availability
+@pytest.mark.search_ro
 def test_ephemeris_availability(aurorax):
     # set params
     start_date = datetime.datetime(2019, 1, 1)
@@ -41,7 +41,7 @@ def test_ephemeris_availability(aurorax):
     assert availability[0].data_source.program == "swarm"
 
 
-@pytest.mark.search_availability
+@pytest.mark.search_ro
 def test_data_product_availability(aurorax):
     # set params
     start_date = datetime.datetime(2019, 1, 1)

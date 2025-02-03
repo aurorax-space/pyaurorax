@@ -23,13 +23,13 @@ from pyaurorax.search.sources import (
 )
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_single_source(aurorax):
     source = aurorax.search.sources.get("swarm", "swarma", "footprint", format=FORMAT_FULL_RECORD)
     assert isinstance(source, DataSource) is True
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_search_sources(aurorax):
     # get sources
     sources = aurorax.search.sources.search(programs=["swarm"], format=FORMAT_FULL_RECORD, include_stats=True)
@@ -40,7 +40,7 @@ def test_search_sources(aurorax):
         assert isinstance(s, DataSource) is True
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_source_by_filter(aurorax):
     # get sources
     sources = aurorax.search.sources.get_using_filters(program="swarm", instrument_type="footprint", format=FORMAT_FULL_RECORD)
@@ -51,7 +51,7 @@ def test_get_source_by_filter(aurorax):
         assert isinstance(s, DataSource) is True
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_source_by_id(aurorax):
     source = aurorax.search.sources.get("swarm", "swarma", "footprint", format=FORMAT_IDENTIFIER_ONLY)
     source_using_id = aurorax.search.sources.get_using_identifier(source.identifier, format=FORMAT_FULL_RECORD)
@@ -59,19 +59,19 @@ def test_get_source_by_id(aurorax):
     assert source.identifier == source_using_id.identifier
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_source_not_found(aurorax):
     with pytest.raises(pyaurorax.AuroraXNotFoundError):
         aurorax.search.sources.get("definitely", "doesnt", "exist")
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_source_using_filters_not_found(aurorax):
     sources = aurorax.search.sources.get_using_filters("definitely", "doesnt", "exist")
     assert len(sources) == 0
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_source_using_identifier_not_found(aurorax):
     identifier = 12345678
     with pytest.raises(pyaurorax.AuroraXAPIError) as e_info:
@@ -79,7 +79,7 @@ def test_get_source_using_identifier_not_found(aurorax):
     assert "No Data Source record found in AuroraX for identifier %d" % (identifier) in str(e_info)
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_get_source_stats(aurorax):
     # get data source with stats
     program = "themis"
@@ -99,7 +99,7 @@ def test_get_source_stats(aurorax):
         assert isinstance(source.stats, DataSourceStatistics) is True
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_ro
 def test_list_sources(aurorax):
     # get sources
     sources = aurorax.search.sources.list()
@@ -110,7 +110,7 @@ def test_list_sources(aurorax):
         assert isinstance(s, DataSource) is True
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_rw
 def test_add_source_specific_identifier(aurorax):
     # set values
     identifier = 400
@@ -168,7 +168,7 @@ def test_add_source_specific_identifier(aurorax):
     aurorax.search.sources.delete(identifier)
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_rw
 def test_add_source_arbitrary_identifier(aurorax):
     # set values
     identifier = 401
@@ -226,7 +226,7 @@ def test_add_source_arbitrary_identifier(aurorax):
     aurorax.search.sources.delete(added_ds.identifier)
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_rw
 def test_update_source(aurorax):
     # create the data source
     identifier = 402
@@ -260,7 +260,7 @@ def test_update_source(aurorax):
     assert delete_result == 0
 
 
-@pytest.mark.search_sources
+@pytest.mark.search_rw
 def test_delete_source(aurorax):
     # set values
     idenifier = 403

@@ -16,7 +16,7 @@ import pytest
 from pyaurorax.search import FORMAT_IDENTIFIER_ONLY
 
 
-@pytest.mark.search_metadata
+@pytest.mark.search_ro
 def test_validate_schema(aurorax):
     source = aurorax.search.sources.get_using_filters(program="swarm", platform="swarma", instrument_type="footprint")
     schema = aurorax.search.metadata.get_ephemeris_schema(source[0].identifier)
@@ -40,7 +40,7 @@ def test_validate_schema(aurorax):
     assert aurorax.search.metadata.validate(schema, metadata)
 
 
-@pytest.mark.search_metadata
+@pytest.mark.search_ro
 def test_get_ephemeris_metadata_schema(aurorax):
     # set parameters
     program = "swarm"
@@ -57,7 +57,7 @@ def test_get_ephemeris_metadata_schema(aurorax):
     assert isinstance(schema, list) is True
 
 
-@pytest.mark.search_metadata
+@pytest.mark.search_ro
 def test_get_data_product_metadata_schema(aurorax):
     # set parameters
     program = "themis-asi"

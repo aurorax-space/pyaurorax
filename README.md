@@ -16,21 +16,19 @@ Some links to help:
 
 ## Installation
 
-PyAuroraX is available on PyPI so pip can be used to install it:
+Installation can be done using pip:
 
-```
+```console
 $ pip install pyaurorax
 ```
 
-Futhermore, if you want the most bleeding edge version of PyAuroraX, you can install it directly from the Github repository:
+For the most bleeding edge version of PyAuroraX, you can install it directly from the Github repository:
 
-```
+```console
 $ pip install pyaurorax@git+https://github.com/aurorax-space/pyaurorax
-```
 
-Alternatively, you can clone the repo and install locally
+[OR]
 
-```
 $ git clone https://github.com/aurorax-space/pyaurorax.git
 $ cd pyaurorax
 $ pip install .
@@ -43,13 +41,13 @@ There are two things you can use as part of the PyAuroraX library: the main libr
 You can import the library using the following statement:
 
 ```python
->>> import pyaurorax
->>> aurorax = pyaurorax.PyAuroraX()
+import pyaurorax
+aurorax = pyaurorax.PyAuroraX()
 ```
 
-The program `aurorax-cli` is included in the PyAuroraX package as a command line tool. Try it out using:
+The program `aurorax-cli` is included in the PyAuroraX package as a command line tool. This tool currently has functionality for interacting only with the AuroraX Search Engine. Try it out using:
 
-```
+```console
 $ aurorax-cli --help
 ```
 

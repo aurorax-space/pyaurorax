@@ -18,7 +18,7 @@ import numpy as np
 from pyaurorax.search import Location
 
 
-@pytest.mark.search_util
+@pytest.mark.search_ro
 def test_convert_nbtrace_northern(aurorax):
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -33,7 +33,7 @@ def test_convert_nbtrace_northern(aurorax):
     assert np.floor(nbtrace.lat) == lat and np.floor(nbtrace.lon) == lon
 
 
-@pytest.mark.search_util
+@pytest.mark.search_ro
 def test_convert_nbtrace_southern(aurorax):
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -48,7 +48,7 @@ def test_convert_nbtrace_southern(aurorax):
     assert np.floor(nbtrace.lat) == 58 and np.floor(nbtrace.lon) == -9
 
 
-@pytest.mark.search_util
+@pytest.mark.search_ro
 def test_convert_sbtrace_northern(aurorax):
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -63,7 +63,7 @@ def test_convert_sbtrace_northern(aurorax):
     assert np.floor(sbtrace.lat) == lat and np.floor(sbtrace.lon) == lon
 
 
-@pytest.mark.search_util
+@pytest.mark.search_ro
 def test_convert_sbtrace_southern(aurorax):
     # set timestamp
     timestamp = datetime.datetime(2020, 1, 1, 0, 0, 0)

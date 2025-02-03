@@ -26,14 +26,14 @@ from pyaurorax.search import FORMAT_FULL_RECORD, FORMAT_BASIC_INFO, Location, Ep
 ACCOUNTS_URL = "/api/v1/accounts"
 
 
-@pytest.mark.search_exceptions
+@pytest.mark.search_ro
 def test_auroraxnotfound_error(aurorax):
     # test finding a source that doesn't exist
     with pytest.raises(AuroraXNotFoundError):
         aurorax.search.sources.get("does-not-exist", "does-not-exist", "does-not-exist")
 
 
-@pytest.mark.search_exceptions
+@pytest.mark.search_ro
 def test_auroraxduplicate_error(aurorax):
     # test making duplicate data source
     with pytest.raises(AuroraXDuplicateError):
@@ -47,7 +47,7 @@ def test_auroraxduplicate_error(aurorax):
         aurorax.search.sources.add(ds)
 
 
-@pytest.mark.search_exceptions
+@pytest.mark.search_ro
 def test_ephemeris_aurorax_error(aurorax):
     with pytest.raises(AuroraXError):
         # set values
@@ -85,7 +85,7 @@ def test_ephemeris_aurorax_error(aurorax):
         aurorax.search.ephemeris.upload(source.identifier, records, True)
 
 
-@pytest.mark.search_exceptions
+@pytest.mark.search_ro
 def test_data_product_aurorax_error(aurorax):
     with pytest.raises(AuroraXError):
         # set values
@@ -116,7 +116,7 @@ def test_data_product_aurorax_error(aurorax):
         aurorax.search.data_products.upload(source.identifier, records, True)
 
 
-@pytest.mark.search_exceptions
+@pytest.mark.search_ro
 def test_auroraxconflict_error(aurorax):
     # set values
     program = "test-program"

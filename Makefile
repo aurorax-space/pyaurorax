@@ -12,11 +12,14 @@ update upgrade:
 	python -m pip install --upgrade poetry
 	poetry update
 
+docs:
+	poetry run pdoc3 --html --force --output-dir docs/generated pyaurorax --config "lunr_search={'fuzziness': 1}" --template-dir docs/templates
+
 test: test-linting
 
 test-linting: test-ruff test-pycodestyle test-pyright test-bandit
 
-test-ruff ruff:
+test-ruff:
 	@printf "Running ruff tests\n+++++++++++++++++++++++++++\n"
 	ruff check --respect-gitignore --quiet pyaurorax
 	ruff check --respect-gitignore --quiet tests
@@ -30,21 +33,21 @@ test-pycodestyle:
 	pycodestyle --config=.pycodestyle tools
 	@printf "\n\n"
 
-test-pyright pyright:
+test-pyright:
 	@printf "Running pyright tests\n+++++++++++++++++++++++++++\n"
 	pyright
 	@printf "\n\n"
 
-test-bandit bandit:
+test-bandit:
 	@printf "Running bandit tests\n+++++++++++++++++++++++++++\n"
 	bandit -c pyproject.toml -r -ii pyaurorax
 	@printf "\n\n"
 
-test-pytest pytest:
-	pytest -n auto --cov=pyaurorax --cov-report= --maxfail=1
+test-pytest:
+	pytest -n auto --dist worksteal --cov=pyaurorax --cov-report= --maxfail=1
 
-test-pytest-search:
-	pytest -n auto -m "search_accounts or search_availability or search_conjunctions or search_data_products or search_ephemeris or search_exceptions or search_location or search_metadata or search_requests or search_sources or search_util"
+test-notebooks:
+	pytest -n 6 --nbmake examples --ignore-glob=examples/notebooks/**/in_development/*.ipynb
 
 test-coverage coverage:
 	coverage report
@@ -53,9 +56,6 @@ test-coverage coverage:
 show-outdated:
 	poetry show --outdated
 
-docs:
-	poetry run pdoc3 --html --force --output-dir docs/generated pyaurorax --config "lunr_search={'fuzziness': 1}" --template-dir docs/templates
-
 tool-checks:
 	@./tools/check_for_license.py
 	@./tools/check_docstrings.py
@@ -63,6 +63,7 @@ tool-checks:
 publish:
 	${MAKE} test
 	${MAKE} tool-checks
+	${MAKE} test-notebooks
 	poetry build
 	poetry publish
 	@rm -rf pyaurorax.egg-info build dist

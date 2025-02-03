@@ -26,7 +26,7 @@ EXPECTED_ACCOUNT_RECORD_KEYS = [
 ]
 
 
-@pytest.mark.search_accounts
+@pytest.mark.search_ro
 def test_get_all_accounts(aurorax):
     """
     Check retrieval of all accounts
@@ -47,7 +47,7 @@ def test_get_all_accounts(aurorax):
         assert key in account_record_keys
 
 
-@pytest.mark.search_accounts
+@pytest.mark.search_ro
 @pytest.mark.parametrize("role,expected_min_count", [("Administrator", 1), ("Owner", 0), ("Maintainer", 0), ("User", 1)])
 def test_get_all_accounts_with_role(aurorax, role, expected_min_count):
     """

@@ -18,7 +18,7 @@ import time
 from pyaurorax.search import EphemerisSearch
 
 
-@pytest.mark.search_requests
+@pytest.mark.search_ro
 def test_get_request_logs(aurorax):
     # start search
     r = EphemerisSearch(aurorax,
@@ -37,7 +37,7 @@ def test_get_request_logs(aurorax):
     assert isinstance(logs, list) is True
 
 
-@pytest.mark.search_requests
+@pytest.mark.search_ro
 def test_get_request_status(aurorax):
     # start search
     r = EphemerisSearch(aurorax,
@@ -56,7 +56,7 @@ def test_get_request_status(aurorax):
     assert status
 
 
-@pytest.mark.search_requests
+@pytest.mark.search_ro
 def test_get_request_data(aurorax):
     # start search
     r = EphemerisSearch(aurorax,
@@ -80,7 +80,7 @@ def test_get_request_data(aurorax):
     assert len(data_res) > 0
 
 
-@pytest.mark.search_requests
+@pytest.mark.search_ro
 def test_wait_for_request_data(aurorax):
     # start search
     r = EphemerisSearch(aurorax,

@@ -20,7 +20,7 @@ from pyaurorax.search import Conjunction, ConjunctionSearch, CONJUNCTION_TYPE_SB
 from pyaurorax import AuroraXError
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_object(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -45,7 +45,7 @@ def test_conjunctions_search_object(aurorax):
     assert isinstance(s, ConjunctionSearch) is True
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_query_property(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -71,7 +71,7 @@ def test_conjunctions_search_query_property(aurorax):
     assert s.query is not None
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_object_with_advanced_distances(aurorax):
     # set up params
     start = datetime.datetime(2019, 2, 5, 0, 0, 0)
@@ -88,7 +88,7 @@ def test_conjunctions_search_object_with_advanced_distances(aurorax):
     assert s.query is not None
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 @pytest.mark.parametrize("num_ground_blocks,num_space_blocks,num_events_blocks,should_pass", [(5, 5, 0, True), (5, 6, 0, False), (6, 5, 0, False),
                                                                                               (5, 4, 1, True), (5, 5, 1, False), (5, 4, 2, False),
                                                                                               (0, 5, 5, True), (5, 0, 5, True), (0, 5, 6, False),
@@ -135,7 +135,7 @@ def test_conjunctions_too_many_criteria_blocks(aurorax, num_ground_blocks, num_s
         raise AssertionError("Test should not pass but exception was not encountered")
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_synchronous(aurorax):
     # set params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -160,7 +160,7 @@ def test_conjunctions_search_synchronous(aurorax):
     assert isinstance(s.data[0], Conjunction) is True
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_synchronous_with_response_format(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -195,7 +195,7 @@ def test_conjunctions_search_synchronous_with_response_format(aurorax):
         assert key in response_format.keys()
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_synchronous_events_and_space(aurorax):
     # set up params
     start = datetime.datetime(2008, 3, 1, 0, 0, 0)
@@ -220,7 +220,7 @@ def test_conjunctions_search_synchronous_events_and_space(aurorax):
     assert isinstance(s.data[0], Conjunction)
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -249,7 +249,7 @@ def test_conjunctions_search_asynchronous(aurorax):
     assert isinstance(s.data[0], Conjunction) is True
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_cancel(aurorax):
     # set up params
     start = datetime.datetime(2019, 1, 1, 0, 0, 0)
@@ -275,7 +275,7 @@ def test_conjunctions_search_asynchronous_cancel(aurorax):
     assert result == 0
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_with_response_format(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -317,7 +317,7 @@ def test_conjunctions_search_asynchronous_with_response_format(aurorax):
         assert key in response_format.keys()
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_events_and_space(aurorax):
     # set up params
     start = datetime.datetime(2008, 3, 1, 0, 0, 0)
@@ -347,7 +347,7 @@ def test_conjunctions_search_asynchronous_events_and_space(aurorax):
     assert isinstance(s.data[0], Conjunction) is True
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_with_metadata_filters(aurorax):
     # set up params
     start = datetime.datetime(2019, 3, 27, 0, 0, 0)
@@ -396,7 +396,7 @@ def test_conjunctions_search_asynchronous_with_metadata_filters(aurorax):
     assert isinstance(s.data[0], Conjunction)
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_space_only_with_hemispheres(aurorax):
     # set up params
     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
@@ -417,7 +417,7 @@ def test_conjunctions_search_asynchronous_space_only_with_hemispheres(aurorax):
     assert isinstance(s.data[0], Conjunction) is True
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_with_advanced_distances(aurorax):
     # set up params
     start = datetime.datetime(2019, 2, 5, 0, 0, 0)
@@ -450,7 +450,7 @@ def test_conjunctions_search_asynchronous_with_advanced_distances(aurorax):
     assert all(x in query_distance_keys for x in distances_set) and g1s1_distance_set and s1s2_distance_set and len(s.data) > 0
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunctions_search_asynchronous_with_conjunction_types(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -479,7 +479,7 @@ def test_conjunctions_search_asynchronous_with_conjunction_types(aurorax):
     assert s.data[0].conjunction_type == CONJUNCTION_TYPE_SBTRACE
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_conjunction_search_describe(aurorax):
     # set params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -504,7 +504,7 @@ def test_conjunction_search_describe(aurorax):
     assert describe_str == expected_response_str
 
 
-@pytest.mark.search_conjunctions
+@pytest.mark.search_ro
 def test_get_request_url(aurorax):
     request_id = "testing-request-id"
     expected_url = aurorax.api_base_url + "/api/v1/conjunctions/requests/" + request_id

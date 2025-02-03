@@ -21,7 +21,7 @@ from pyaurorax.search import Location, DataSource, EphemerisSearch, EphemerisDat
 MAX_WAIT_TIME = 30
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_create_ephemeris_data_object(aurorax):
     # set values
     program = "test-program"
@@ -46,7 +46,7 @@ def test_create_ephemeris_data_object(aurorax):
     assert e.data_source.instrument_type == instrument_type
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_create_ephemeris_search_object(aurorax):
     # set vars
     start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -73,7 +73,7 @@ def test_create_ephemeris_search_object(aurorax):
     assert s.instrument_types == instrument_types
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_search_ephemeris_synchronous(aurorax):
     s = aurorax.search.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
                                         datetime.datetime(2019, 1, 1, 0, 59, 59),
@@ -86,7 +86,7 @@ def test_search_ephemeris_synchronous(aurorax):
     assert isinstance(s.data[0], EphemerisData) is True
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_search_ephemeris_asynchronous(aurorax):
     s = aurorax.search.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
                                         datetime.datetime(2019, 1, 1, 0, 59, 59),
@@ -113,7 +113,7 @@ def test_search_ephemeris_asynchronous(aurorax):
     assert isinstance(s.data[0], EphemerisData) is True
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_search_ephemeris_response_format_asynchronous(aurorax):
     s = aurorax.search.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
                                         datetime.datetime(2019, 1, 1, 0, 59, 59),
@@ -153,7 +153,7 @@ def test_search_ephemeris_response_format_asynchronous(aurorax):
     assert "nbtrace" not in s.data[0].keys()
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_search_ephemeris_logs(aurorax):
     s = EphemerisSearch(aurorax,
                         datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -179,7 +179,7 @@ def test_search_ephemeris_logs(aurorax):
     assert len(s.logs) > 0
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_search_ephemeris_status(aurorax):
     s = EphemerisSearch(aurorax,
                         datetime.datetime(2019, 1, 1, 0, 0, 0),
@@ -205,7 +205,7 @@ def test_search_ephemeris_status(aurorax):
     assert s.completed is True
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_rw
 def test_upload_and_delete_ephemeris(aurorax):
     # get the data source
     program = "test-program"
@@ -246,20 +246,34 @@ def test_upload_and_delete_ephemeris(aurorax):
     result = aurorax.search.ephemeris.upload(ds.identifier, records, True)
     assert result == 0
 
-    # wait
-    time.sleep(10)  # won't take long for it to be ingested, but we wait anyways
+    # check that records got uploaded
+    #
+    # NOTE: we periodically check a few times
+    max_tries = 5
+    for i in range(1, max_tries + 1):
+        # wait to it to be ingested
+        time.sleep(5)
 
-    # retrieve uploaded record
-    s = EphemerisSearch(aurorax,
-                        datetime.datetime(2020, 1, 1, 0, 0, 0),
-                        datetime.datetime(2020, 1, 1, 23, 59, 59),
-                        programs=[program],
-                        platforms=[platform],
-                        instrument_types=[instrument_type])
-    s.execute()
-    s.wait()
-    s.get_data()
-    assert len(s.data) > 0
+        # retrieve uploaded record
+        s = EphemerisSearch(aurorax,
+                            datetime.datetime(2020, 1, 1, 0, 0, 0),
+                            datetime.datetime(2020, 1, 1, 23, 59, 59),
+                            programs=[program],
+                            platforms=[platform],
+                            instrument_types=[instrument_type])
+        s.execute()
+        s.wait()
+        s.get_data()
+
+        # check
+        if (len(s.data) == 0):
+            if (i == max_tries):
+                # failed after all the tries for checking
+                raise AssertionError("Max tries reached")
+            else:
+                continue
+        assert len(s.data) > 0
+        break
 
     # cleanup by deleting the ephemeris data that was uploaded
     delete_result = aurorax.search.ephemeris.delete(
@@ -270,7 +284,7 @@ def test_upload_and_delete_ephemeris(aurorax):
     assert delete_result == 0
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_cancel_ephemeris_search(aurorax):
     start_dt = datetime.datetime(2018, 1, 1, 0, 0, 0)
     end_dt = datetime.datetime(2021, 12, 31, 23, 59, 59)
@@ -284,7 +298,7 @@ def test_cancel_ephemeris_search(aurorax):
     assert result == 0
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_describe_ephemeris_search(aurorax):
     # set params
     start = datetime.datetime(2019, 1, 1, 0, 0, 0)
@@ -307,7 +321,7 @@ def test_describe_ephemeris_search(aurorax):
     assert describe_str == expected_response_str
 
 
-@pytest.mark.search_ephemeris
+@pytest.mark.search_ro
 def test_get_request_url(aurorax):
     request_id = "testing-request-id"
     expected_url = aurorax.api_base_url + "/api/v1/ephemeris/requests/" + request_id

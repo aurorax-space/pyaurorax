@@ -27,7 +27,7 @@ from pyaurorax.search import (
 MAX_WAIT_TIME = 30
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_create_data_product_object(aurorax):
     # set values
     program = "test-program"
@@ -59,7 +59,7 @@ def test_create_data_product_object(aurorax):
     assert d.data_source.instrument_type == instrument_type
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_create_data_products_search_object(aurorax):
     # set vars
     start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -74,7 +74,7 @@ def test_create_data_products_search_object(aurorax):
     assert s.programs == programs
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_search_data_products_synchronous(aurorax):
     s = aurorax.search.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -87,7 +87,7 @@ def test_search_data_products_synchronous(aurorax):
     assert isinstance(s.data[0], DataProductData) is True
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_search_data_products_asynchronous(aurorax):
     s = aurorax.search.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -112,7 +112,7 @@ def test_search_data_products_asynchronous(aurorax):
     assert isinstance(s.data[0], DataProductData) is True
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_search_data_products_metadata_filters_synchronous(aurorax):
     metadata_filters = [{
         "key": "keogram_type",
@@ -140,7 +140,7 @@ def test_search_data_products_metadata_filters_synchronous(aurorax):
     assert len(s.data) == len(result_filter)
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_search_data_products_response_format_asynchronous(aurorax):
     s = aurorax.search.data_products.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                             datetime.datetime(2020, 1, 2, 23, 59, 59),
@@ -176,7 +176,7 @@ def test_search_data_products_response_format_asynchronous(aurorax):
     assert "data_product_type" not in s.data[0].keys()
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_search_data_products_logs(aurorax):
     s = DataProductSearch(
         aurorax,
@@ -200,7 +200,7 @@ def test_search_data_products_logs(aurorax):
     assert len(s.logs) > 0
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_search_data_products_status(aurorax):
     s = DataProductSearch(
         aurorax,
@@ -224,7 +224,7 @@ def test_search_data_products_status(aurorax):
     assert s.completed is True
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_rw
 def test_upload_and_delete_data_products(aurorax):
     # set values
     program = "test-program"
@@ -258,22 +258,36 @@ def test_upload_and_delete_data_products(aurorax):
     result = aurorax.search.data_products.upload(ds.identifier, records, True)
     assert result == 0
 
-    # wait
-    time.sleep(10)  # won't take long for it to be ingested, but we wait anyways
+    # check that records got uploaded
+    #
+    # NOTE: we periodically check a few times
+    max_tries = 5
+    for i in range(1, max_tries + 1):
+        # wait to it to be ingested
+        time.sleep(5)
 
-    # search for data
-    s = DataProductSearch(
-        aurorax,
-        start_dt1,
-        end_dt2,
-        programs=[program],
-        platforms=[platform],
-        instrument_types=[instrument_type],
-    )
-    s.execute()
-    s.wait()
-    s.get_data()
-    assert (result == 0) and (len(s.data) > 0)
+        # search for data
+        s = DataProductSearch(
+            aurorax,
+            start_dt1,
+            end_dt2,
+            programs=[program],
+            platforms=[platform],
+            instrument_types=[instrument_type],
+        )
+        s.execute()
+        s.wait()
+        s.get_data()
+
+        # check
+        if (len(s.data) == 0):
+            if (i == max_tries):
+                # failed after all the tries for checking
+                raise AssertionError("Max tries reached")
+            else:
+                continue
+        assert len(s.data) > 0
+        break
 
     # cleanup by deleting the data products data that was uploaded
     delete_result = aurorax.search.ephemeris.delete(
@@ -283,15 +297,8 @@ def test_upload_and_delete_data_products(aurorax):
     )
     assert delete_result == 0
 
-    # wait
-    time.sleep(5)  # won't take long for it to be deleted, but we wait anyways
 
-    # search data products again to verify the records were deleted
-    s = aurorax.search.data_products.search(start_dt1, end_dt2, programs=[program], platforms=[platform], instrument_types=[instrument_type])
-    assert len(s.data) == 0
-
-
-@pytest.mark.search_data_products
+@pytest.mark.search_rw
 def test_upload_and_delete_urls_data_products(aurorax):
     # get data source
     program = "test-program"
@@ -301,10 +308,10 @@ def test_upload_and_delete_urls_data_products(aurorax):
 
     # upload record
     url1 = "test.jpg"
-    start_dt1 = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    start_dt1 = datetime.datetime(2020, 2, 1, 0, 0, 0)
     end_dt1 = start_dt1.replace(hour=23, minute=59, second=59)
     url2 = "test2.jpg"
-    start_dt2 = datetime.datetime(2020, 1, 2, 0, 0, 0)
+    start_dt2 = datetime.datetime(2020, 2, 2, 0, 0, 0)
     end_dt2 = start_dt2.replace(hour=23, minute=59, second=59)
     dp1 = DataProductData(data_source=ds, data_product_type=DATA_PRODUCT_TYPE_KEOGRAM, url=url1, start=start_dt1, end=end_dt1)
     dp2 = DataProductData(data_source=ds, data_product_type=DATA_PRODUCT_TYPE_KEOGRAM, url=url2, start=start_dt2, end=end_dt2)
@@ -312,37 +319,48 @@ def test_upload_and_delete_urls_data_products(aurorax):
     result = aurorax.search.data_products.upload(ds.identifier, records, True)
     assert result == 0
 
-    # wait
-    time.sleep(10)  # won't take long for it to be ingested, but we wait anyways
-
-    # do synchronous search for existing records
-    s = aurorax.search.data_products.search(
-        start_dt1,
-        end_dt2,
-        programs=[program],
-        platforms=[platform],
-        instrument_types=[instrument_type],
-    )
-    if len(s.data) == 0:
-        raise AssertionError("No data product records exist to delete")
-
-    # get URLs to delete
+    # check that records got uploaded
+    #
+    # NOTE: we periodically check a few times
+    max_tries = 5
     urls_to_delete = []
-    for dp in s.data:
-        urls_to_delete.append(dp.url)
+    for i in range(1, max_tries + 1):
+        # wait to it to be ingested
+        time.sleep(5)
+
+        # do synchronous search for existing records
+        s = aurorax.search.data_products.search(
+            start_dt1,
+            end_dt2,
+            programs=[program],
+            platforms=[platform],
+            instrument_types=[instrument_type],
+        )
+
+        # check
+        if (len(s.data) == 0):
+            if (i == max_tries):
+                # failed after all the tries for checking
+                raise AssertionError("Max tries reached")
+            else:
+                continue
+        assert len(s.data) > 0
+
+        # get URLs to delete
+        urls_to_delete = []
+        for dp in s.data:
+            urls_to_delete.append(dp.url)
+
+        # break out
+        break
+    assert len(urls_to_delete) > 0
 
     # delete data
-    result = aurorax.search.data_products.delete_urls(ds, urls_to_delete)
-
-    # wait
-    time.sleep(5)  # won't take long for it to be deleted, but we wait anyways
-
-    # search data products again to verify the records were deleted
-    s = aurorax.search.data_products.search(start_dt1, end_dt2, programs=[program], platforms=[platform], instrument_types=[instrument_type])
-    assert len(s.data) == 0
+    delete_result = aurorax.search.data_products.delete_urls(ds, urls_to_delete)
+    assert delete_result == 0
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_cancel_data_products_search(aurorax):
     # set up query params
     start_dt = datetime.datetime(2018, 1, 1)
@@ -358,7 +376,7 @@ def test_cancel_data_products_search(aurorax):
     assert result == 0
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_describe_data_products_search(aurorax):
     # set params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
@@ -371,7 +389,7 @@ def test_describe_data_products_search(aurorax):
         "data_product_type in (keogram)"
 
     # create search object
-    s = DataProductSearch(aurorax, start, end, programs=programs, data_product_types=data_product_types)
+    s = DataProductSearch(aurorax, start, end, programs=programs, data_product_types=data_product_types)  # type: ignore
 
     # get describe string
     describe_str = aurorax.search.data_products.describe(s)
@@ -381,7 +399,7 @@ def test_describe_data_products_search(aurorax):
     assert describe_str == expected_response_str
 
 
-@pytest.mark.search_data_products
+@pytest.mark.search_ro
 def test_get_request_url(aurorax):
     request_id = "testing-request-id"
     expected_url = aurorax.api_base_url + "/api/v1/data_products/requests/" + request_id

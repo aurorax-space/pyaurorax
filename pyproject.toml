@@ -17,7 +17,7 @@ maintainers = [
     "Darren Chaddock <dchaddoc@ucalgary.ca>",
     "Josh Houghton <joshua.houghton1@ucalgary.ca>"
 ]
-license = "Apache Software License"
+license = "Apache License 2.0"
 packages = [
     { include = "pyaurorax" },
 ]
@@ -60,13 +60,13 @@ numpy = "^1.26.4"
 matplotlib = "^3.9.0"
 pyproj = "^3.6.1"
 cartopy = "^0.23.0"
-pyucalgarysrs = "1.15.0"
+pyucalgarysrs = "1.18.0"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.9.3"
+ruff = "0.9.4"
 pytest = "8.3.4"
 pycodestyle = "2.12.1"
 yapf = "0.43.0"
@@ -74,7 +74,7 @@ pytest-xdist = "3.6.1"
 pytest-sugar = "1.0.0"
 pytest-cov = "6.0.0"
 bandit = "1.8.2"
-pyright = "1.1.392.post0"
+pyright = "1.1.393"
 pdoc3 = "0.11.5"
 python-dotenv = "1.0.1"
 tabulate = "0.9.0"
@@ -82,7 +82,8 @@ jupyter = "^1.1.1"
 iprogress = "^0.4"
 ipywidgets = "^8.1.5"
 ipykernel = "^6.29.5"
-nbval = "^0.11.0"
+pandas = "^2.2.3"
+nbmake = "^1.5.5"
 
 [tool.ruff]
 line-length = 150
@@ -105,26 +106,23 @@ ignore_patterns = [
 [tool.pyright]
 include = [
     "pyaurorax/**/*.py",
+    "examples/**/*.py",
+    "examples/**/*.ipynb",
+    "tests/test_suite/**/*.py",
 ]
 typeCheckingMode = "standard"
 
 [tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:aacgmv2.*",  # aacgmv2 v1.7.2 has a DeprecationWarning showing up, so we ignore it (https://github.com/aburrell/aacgmv2/issues/94)
+]
 testpaths = [
     "tests/test_suite/**/*.py",
 ]
 markers = [
     "top_level: top level PyAuroraX object tests",
-    "search_accounts: account-related tests",
-    "search_availability: data availability tests",
-    "search_conjunctions: conjunction search tests",
-    "search_data_products: data product tests",
-    "search_ephemeris: ephemeris tests",
-    "search_exceptions: exception handler tests",
-    "search_location: location class tests",
-    "search_metadata: metadata validation tests",
-    "search_requests: request class tests",
-    "search_sources: data sources tests",
-    "search_util: utility function tests",
+    "search_ro: search engine read-only tests",
+    "search_rw: search engine read/write tests",
 ]
 
 [tool.bandit]
