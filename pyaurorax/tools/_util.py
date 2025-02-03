@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 
 def set_theme(theme):
-    if ("theme" == "default"):
+    if (theme == "default"):
         mpl.rcParams.update(mpl.rcParamsDefault)
     elif (theme == "light"):
         plt.style.use("default")
