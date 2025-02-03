@@ -1,3 +1,9 @@
+Version 1.13.0
+-------------------
+- bugfix for changing matplotlib theme back to 'default'
+- major updates to test suite, several bugfixes
+
+
 Version 1.12.0
 -------------------
 - updates to conjunction, ephemeris, and data product searching in the `aurorax.search` module
