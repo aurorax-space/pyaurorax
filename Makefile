@@ -44,10 +44,10 @@ test-bandit:
 	@printf "\n\n"
 
 test-pytest:
-	pytest -n auto --dist worksteal --cov=pyaurorax --cov-report= --maxfail=1
+	pytest -n auto --cov=pyaurorax --cov-report= --dist worksteal
 
 test-notebooks:
-	pytest -n 6 --nbmake examples --ignore-glob=examples/notebooks/**/in_development/*.ipynb
+	pytest -n 6 --nbmake examples/notebooks --ignore-glob=examples/notebooks/**/in_development/*.ipynb
 
 test-coverage coverage:
 	coverage report

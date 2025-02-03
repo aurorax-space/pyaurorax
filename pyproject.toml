@@ -105,10 +105,12 @@ ignore_patterns = [
 
 [tool.pyright]
 include = [
+    "pyaurorax/*.py",
     "pyaurorax/**/*.py",
     "examples/**/*.py",
     "examples/**/*.ipynb",
     "tests/test_suite/**/*.py",
+    "tests/test_suite/*.py",
 ]
 typeCheckingMode = "standard"
 
@@ -118,6 +120,7 @@ filterwarnings = [
 ]
 testpaths = [
     "tests/test_suite/**/*.py",
+    "tests/test_suite/*.py",
 ]
 markers = [
     "top_level: top level PyAuroraX object tests",

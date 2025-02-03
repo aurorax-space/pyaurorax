@@ -249,7 +249,7 @@ def test_upload_and_delete_ephemeris(aurorax):
     # check that records got uploaded
     #
     # NOTE: we periodically check a few times
-    max_tries = 5
+    max_tries = 10
     for i in range(1, max_tries + 1):
         # wait to it to be ingested
         time.sleep(5)

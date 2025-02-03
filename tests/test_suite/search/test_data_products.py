@@ -261,7 +261,7 @@ def test_upload_and_delete_data_products(aurorax):
     # check that records got uploaded
     #
     # NOTE: we periodically check a few times
-    max_tries = 5
+    max_tries = 10
     for i in range(1, max_tries + 1):
         # wait to it to be ingested
         time.sleep(5)
@@ -322,7 +322,7 @@ def test_upload_and_delete_urls_data_products(aurorax):
     # check that records got uploaded
     #
     # NOTE: we periodically check a few times
-    max_tries = 5
+    max_tries = 10
     urls_to_delete = []
     for i in range(1, max_tries + 1):
         # wait to it to be ingested
