@@ -13,6 +13,7 @@ Some links to help:
 - [Example Gallery](https://data.phys.ucalgary.ca/working_with_data/index.html#python)
 - [PyAuroraX API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax)
 - [AuroraX main website](https://aurorax.space)
+- [Additional examples](https://github.com/aurorax-space/pyaurorax/tree/main/examples)
 
 ## Installation
 
