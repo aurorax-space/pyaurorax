@@ -8,6 +8,7 @@ Version 1.13.0
   - issue when ordering by 'owner' for `aurorax.search.sources.list()` and `aurorax.search.sources.search()` functions
 - removed `aurorax-cli search sources get_stats` command (`aurorax-cli search sources get --include-stats` flag covers this functionality)
 - removed `aurorax-cli search util ground_to_nbtrace` and `aurorax-cli search util ground_to_sbtrace` commands (use library functions instead)
+- removed setter class for `api_headers` and `srs_obj` in `PyAurorax()` objects
 - bump PyUCalgarySRS dependency to latest
 
 
