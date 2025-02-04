@@ -126,6 +126,7 @@ markers = [
     "top_level: top level PyAuroraX object tests",
     "search_ro: search engine read-only tests",
     "search_rw: search engine read/write tests",
+    "cli: command line interface tests",
 ]
 
 [tool.bandit]

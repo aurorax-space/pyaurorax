@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
 import requests
 import click
 import pyaurorax
@@ -32,23 +33,21 @@ class Config(object):
             self.aurorax.api_base_url = api_base_url
 
 
-def __test_connectivity(aurorax, quiet=False, return_json=False):
+def __test_connectivity(aurorax):
     # make request
     click.echo("Checking connectivity to %s ...\n" % (aurorax.api_base_url))
     try:
         r = requests.get(aurorax.api_base_url, timeout=aurorax.api_timeout)
-    except requests.RequestException as e:
+    except requests.RequestException as e:  # pragma: nocover
         click.echo("Error connecting to AuroraX API: %s" % (str(e)))
-        return
+        sys.exit(1)
 
     # check status code
     if (r.status_code == 200):
-        if (quiet is False):
-            click.echo("Connectivity to the AuroraX API looks good!")
-        if (return_json is True):
-            return r.json()
+        click.echo("Connectivity to the AuroraX API looks good!")
     else:
         click.echo("Error connecting to AuroraX API, got a %d response" % (r.status_code))
+        sys.exit(1)
 
 
 @click.group(invoke_without_command=True)
@@ -72,7 +71,7 @@ def cli(ctx, api_key, api_base_url, verbose, test_connectivity):
     if (ctx.invoked_subcommand is None):
         if (test_connectivity is True):
             # evaluate --test-connectivity
-            __test_connectivity(ctx.obj.aurorax, quiet=False)
+            __test_connectivity(ctx.obj.aurorax)
         else:
             # no options called, output the help
             click.echo("""Welcome to the PyAuroraX CLI program!

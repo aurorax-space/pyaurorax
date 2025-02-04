@@ -28,7 +28,7 @@ def availability_group():
 def __print_availability_table(type, availability, order):
     # check to see if there's anything to show
     if (len(availability) == 0):
-        click.echo(f"No {type} availability information found!")
+        click.echo(f"No {type.replace('_', ' ')} availability information found!")
         return
 
     # set table lists
@@ -42,15 +42,11 @@ def __print_availability_table(type, availability, order):
     table_counts = []
     for a in availability:
         # set which info to use, based on type
-        dates_and_counts = None
         if (type == "ephemeris"):
             dates_and_counts = a.available_ephemeris
-        elif (type == "data products"):
+        else:
+            # type must be data_products
             dates_and_counts = a.available_data_products
-        if (dates_and_counts is None):
-            click.echo("Unexpected error occurred, please open an issue on the Github repository detailing "
-                       "how you were able to make this message appear")
-            return
 
         # for each date
         for date, count in dates_and_counts.items():
@@ -107,7 +103,7 @@ def __print_availability_table(type, availability, order):
 @click.option("--instrument-type", type=str, help="The instrument type to filter for")
 @click.option("--source-type", type=str, help="The source type to filter for")
 @click.option("--order",
-              type=click.Choice(["identifier", "program", "platform", "instrument_type", "display_name"]),
+              type=click.Choice(["identifier", "program", "platform", "instrument_type", "source_type", "display_name"]),
               default="identifier",
               show_default=True,
               help="Order results using a certain column")
@@ -119,7 +115,7 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
 
     \b
     START_DATE    the start date to retrieve info for, inclusive (valid formats: YYYY/MM/DD, YYYY-MM-DD, YYYYMMDD)
-    END_DATE      the end date to retrieve info for, inclusive (valid formats: YYYY/MM/, YYYY-MM-DD, YYYYMMDD)
+    END_DATE      the end date to retrieve info for, inclusive (valid formats: YYYY/MM/DD, YYYY-MM-DD, YYYYMMDD)
     """
     # set start and end datetime objects
     try:
@@ -151,7 +147,7 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
                                                          platform=platform,
                                                          instrument_type=instrument_type,
                                                          source_type=source_type)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -171,7 +167,7 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
 
     # reverse
     if (reversed_ is True):
-        a = reversed(a)
+        a = list(reversed(a))
 
     # print it out nicely
     __print_availability_table("ephemeris", a, order)
@@ -185,7 +181,7 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
 @click.option("--instrument-type", type=str, help="The instrument type to filter for")
 @click.option("--source-type", type=str, help="The source type to filter for")
 @click.option("--order",
-              type=click.Choice(["identifier", "program", "platform", "instrument_type", "display_name"]),
+              type=click.Choice(["identifier", "program", "platform", "instrument_type", "source_type", "display_name"]),
               default="identifier",
               show_default=True,
               help="Order results using a certain column")
@@ -197,7 +193,7 @@ def data_products(config, start_date, end_date, program, platform, instrument_ty
 
     \b
     START_DATE    the start date to retrieve info for, inclusive (valid formats: YYYY/MM/DD, YYYY-MM-DD, YYYYMMDD)
-    END_DATE      the end date to retrieve info for, inclusive (valid formats: YYYY/MM/, YYYY-MM-DD, YYYYMMDD)
+    END_DATE      the end date to retrieve info for, inclusive (valid formats: YYYY/MM/DD, YYYY-MM-DD, YYYYMMDD)
     """
     # set start and end datetime objects
     try:
@@ -229,13 +225,13 @@ def data_products(config, start_date, end_date, program, platform, instrument_ty
                                                              platform=platform,
                                                              instrument_type=instrument_type,
                                                              source_type=source_type)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
     # reverse
     if (reversed_ is True):
-        a = reversed(a)
+        a = list(reversed(a))
 
     # print it out nicely
     __print_availability_table("data products", a, order)

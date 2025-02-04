@@ -307,10 +307,10 @@ def test_upload_and_delete_urls_data_products(aurorax):
     ds = aurorax.search.sources.get(program, platform, instrument_type)
 
     # upload record
-    url1 = "test.jpg"
+    url1 = "test_delete1.jpg"
     start_dt1 = datetime.datetime(2020, 2, 1, 0, 0, 0)
     end_dt1 = start_dt1.replace(hour=23, minute=59, second=59)
-    url2 = "test2.jpg"
+    url2 = "test_delete2.jpg"
     start_dt2 = datetime.datetime(2020, 2, 2, 0, 0, 0)
     end_dt2 = start_dt2.replace(hour=23, minute=59, second=59)
     dp1 = DataProductData(data_source=ds, data_product_type=DATA_PRODUCT_TYPE_KEOGRAM, url=url1, start=start_dt1, end=end_dt1)

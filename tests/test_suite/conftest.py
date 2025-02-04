@@ -17,6 +17,7 @@ import glob
 import shutil
 import pytest
 import pyaurorax
+from click.testing import CliRunner
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -29,6 +30,11 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="session")
 def api_url(request):
     return request.config.getoption("--api-url")
+
+
+@pytest.fixture(scope="session")
+def cli_runner():
+    return CliRunner()
 
 
 @pytest.fixture
