@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import copy
 import glob
 import shutil
 import pytest
@@ -134,3 +135,16 @@ def pytest_sessionfinish(session, exitstatus):
     path_list = sorted(glob.glob(glob_str))
     for p in path_list:
         shutil.rmtree(p)
+
+
+@pytest.fixture(scope="session")
+def all_datasets(api_url):
+    aurorax = pyaurorax.PyAuroraX(api_base_url=api_url)
+    return aurorax.data.list_datasets()
+
+
+def find_dataset(datasets, dataset_name):
+    for d in datasets:
+        if (d.name == dataset_name):
+            return copy.deepcopy(d)
+    return None

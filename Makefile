@@ -1,16 +1,21 @@
-.PHONY: install update test test-linting test-pycodestyle test-bandit test-pytest test-pytest-search test-coverage show-outdated docs tool-checks publish
+.PHONY: install update get-test-data docs test test-linting test-pycodestyle test-bandit test-pytest test-pytest-search test-coverage show-outdated tool-checks publish
 
 all:
 
-poetry:
-	python -m pip install poetry
-
 install: poetry
+	pip install poetry
 	poetry install
+	${MAKE} get-test-data
 
 update upgrade:
-	python -m pip install --upgrade poetry
+	 pip install --upgrade poetry
 	poetry update
+
+get-test-data:
+	mkdir -p tests/test_data
+	cd tests/test_data && rm -rf *
+	cd tests/test_data && wget -O test_data.tar.gz https://aurora.phys.ucalgary.ca/public/github_tests/pyaurorax_test_data.tar.gz
+	cd tests/test_data && tar -zxvf test_data.tar.gz && rm test_data.tar.gz
 
 docs:
 	poetry run pdoc3 --html --force --output-dir docs/generated pyaurorax --config "lunr_search={'fuzziness': 1}" --template-dir docs/templates

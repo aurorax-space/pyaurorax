@@ -32,7 +32,7 @@ from pyucalgarysrs.exceptions import SRSAPIError, SRSDownloadError
 from ...exceptions import AuroraXAPIError, AuroraXDownloadError
 from .read import ReadManager
 if TYPE_CHECKING:
-    from ...pyaurorax import PyAuroraX
+    from ...pyaurorax import PyAuroraX  # pragma: nocover
 
 __all__ = [
     "UCalgaryManager",
@@ -659,7 +659,7 @@ class UCalgaryManager:
                 best_skymap_filename = url
 
         # check if we found a skymap
-        if (best_skymap_filename is None):
+        if (best_skymap_filename is None):  # pragma: nocover
             raise ValueError("Unable to determine a skymap recommendation")
 
         # set the filename

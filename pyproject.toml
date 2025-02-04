@@ -127,6 +127,8 @@ markers = [
     "search_ro: search engine read-only tests",
     "search_rw: search engine read/write tests",
     "cli: command line interface tests",
+    "data: data retrieval/reading tests",
+    "models: model tests",
 ]
 
 [tool.bandit]

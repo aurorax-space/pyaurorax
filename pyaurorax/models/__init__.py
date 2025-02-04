@@ -16,7 +16,12 @@ Interact with various auroral models, such as the TREx Auroral Transport Model (
 """
 
 # pull in classes
-from .atm import ATMForwardOutputFlags, ATMInverseOutputFlags  # noqa
+from .atm import (
+    ATMForwardOutputFlags,  # noqa
+    ATMInverseOutputFlags,  # noqa
+    ATMForwardResult,  # noqa
+    ATMInverseResult,  # noqa
+)
 
 # imports for this file
 from .atm import ATMManager
