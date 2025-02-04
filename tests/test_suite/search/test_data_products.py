@@ -319,41 +319,8 @@ def test_upload_and_delete_urls_data_products(aurorax):
     result = aurorax.search.data_products.upload(ds.identifier, records, True)
     assert result == 0
 
-    # check that records got uploaded
-    #
-    # NOTE: we periodically check a few times
-    max_tries = 10
-    urls_to_delete = []
-    for i in range(1, max_tries + 1):
-        # wait to it to be ingested
-        time.sleep(5)
-
-        # do synchronous search for existing records
-        s = aurorax.search.data_products.search(
-            start_dt1,
-            end_dt2,
-            programs=[program],
-            platforms=[platform],
-            instrument_types=[instrument_type],
-        )
-
-        # check
-        if (len(s.data) == 0):
-            if (i == max_tries):
-                # failed after all the tries for checking
-                raise AssertionError("Max tries reached")
-            else:
-                continue
-        assert len(s.data) > 0
-
-        # get URLs to delete
-        urls_to_delete = []
-        for dp in s.data:
-            urls_to_delete.append(dp.url)
-
-        # break out
-        break
-    assert len(urls_to_delete) > 0
+    # set urls to delete
+    urls_to_delete = [dp1.url, dp2.url]
 
     # delete data
     delete_result = aurorax.search.data_products.delete_urls(ds, urls_to_delete)

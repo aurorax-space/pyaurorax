@@ -78,7 +78,7 @@ def list(aurorax_obj, program, platform, instrument_type, source_type, owner, fo
     res = req.execute()
 
     # order results
-    res.data = sorted(res.data, key=lambda x: x[order])
+    res.data = sorted(res.data, key=lambda x: "None" if x[order] is None else x[order])
 
     # cast
     sources = []
@@ -118,7 +118,7 @@ def search(aurorax_obj, programs, platforms, instrument_types, format, order, in
     res = req.execute()
 
     # order results
-    res.data = sorted(res.data, key=lambda x: x[order])
+    res.data = sorted(res.data, key=lambda x: "None" if x[order] is None else x[order])
 
     # cast
     sources = []

@@ -73,7 +73,7 @@ def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
         table_data_types.append(item["data_type"])
         table_allowed_values.append('\n'.join(textwrap.wrap(str(item["allowed_values"]), wrap_threshold)))
         table_descriptions.append('\n'.join(textwrap.wrap(item["description"], wrap_threshold)))
-        if ("additional_description" in item):
+        if ("additional_description" in item and item["additional_description"] is not None):
             table_additional_descriptions.append('\n'.join(textwrap.wrap(item["additional_description"], wrap_threshold)))
         else:
             table_additional_descriptions.append("-")
@@ -440,27 +440,6 @@ def get_using_identifier(config, identifier, format, include_stats):
 
     # print it out nicely
     __print_single_data_source(ds, format, include_stats=include_stats)
-
-
-@sources_group.command("get_stats", short_help="Get statistics about a data source")
-@click.argument("identifier", type=int)
-@click.pass_obj
-def get_stats(config, identifier):
-    """
-    Get statistics about a data source
-
-    \b
-    IDENTIFIER     the identifier of the data source
-    """
-    # get stats information
-    try:
-        ds = config.aurorax.search.sources.get_stats(identifier)
-    except pyaurorax.AuroraXError as e:
-        click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
-        sys.exit(1)
-
-    # print it out nicely
-    __print_single_data_source(ds, format=pyaurorax.search.FORMAT_BASIC_INFO, include_stats=True)
 
 
 @sources_group.command("add", short_help="Add a data source")

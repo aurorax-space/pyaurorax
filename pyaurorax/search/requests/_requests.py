@@ -40,11 +40,14 @@ def get_status(aurorax_obj, request_url):
 
 def get_data(aurorax_obj, data_url, response_format, skip_serializing):
     # do request
-    if (response_format is not None):
-        req = AuroraXAPIRequest(aurorax_obj, method="post", url=data_url, body=response_format)
-    else:
-        req = AuroraXAPIRequest(aurorax_obj, method="get", url=data_url)
-    res = req.execute()
+    try:
+        if (response_format is not None):
+            req = AuroraXAPIRequest(aurorax_obj, method="post", url=data_url, body=response_format)
+        else:
+            req = AuroraXAPIRequest(aurorax_obj, method="get", url=data_url)
+        res = req.execute()
+    except Exception as e:
+        raise AuroraXDataRetrievalError("unable to retrieve data (likely there is none)") from e
 
     # check for error message
     if ("error" in res.data):

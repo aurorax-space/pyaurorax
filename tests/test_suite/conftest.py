@@ -37,9 +37,52 @@ def cli_runner():
     return CliRunner()
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
+def conjunction_search_id():
+    # NOTE: the below conjunction search request ID was taken from a
+    # manual conjunction search against the production API (example1.json
+    # from the examples/queries/conjunctions directory).
+    return "9c888643-af01-4ff9-922b-a772b3ff68cd"
+
+
+@pytest.fixture(scope="session")
+def conjunction_search_input_filename():
+    return "%s/../../examples/queries/search/conjunctions/example1.json" % (os.path.dirname(__file__))
+
+
+@pytest.fixture(scope="session")
+def ephemeris_search_id():
+    # NOTE: the below conjunction search request ID was taken from a
+    # manual ephemeris search against the production API (example2.json
+    # from the examples/queries/ephemeris directory).
+    return "ac2a02d9-94ee-499b-ad74-839e989b1859"
+
+
+@pytest.fixture(scope="session")
+def ephemeris_search_input_filename():
+    return "%s/../../examples/queries/search/ephemeris/example2.json" % (os.path.dirname(__file__))
+
+
+@pytest.fixture(scope="session")
+def data_products_search_id():
+    # NOTE: the below conjunction search request ID was taken from a
+    # manual data products search against the production API (example2.json
+    # from the examples/queries/data_products directory).
+    return "d719bcef-9ec5-4227-ba87-0fda7738ef57"
+
+
+@pytest.fixture(scope="session")
+def data_products_search_input_filename():
+    return "%s/../../examples/queries/search/data_products/example2.json" % (os.path.dirname(__file__))
+
+
+@pytest.fixture(scope="session")
 def api_key(request):
-    return request.config.getoption("--api-key")
+    api_key = request.config.getoption("--api-key")
+    if (api_key is None):
+        load_dotenv("%s/.env" % (os.path.dirname(os.path.realpath(__file__))))
+        api_key = os.environ["AURORAX_API_KEY"]
+    return api_key
 
 
 @pytest.fixture(scope="function")

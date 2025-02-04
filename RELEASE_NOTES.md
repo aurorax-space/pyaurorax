@@ -1,7 +1,14 @@
 Version 1.13.0
 -------------------
-- bugfix for changing matplotlib theme back to 'default'
-- major updates to test suite, several bugfixes
+- major updates to test suite
+- bugfixes
+  - issue when changing matplotlib theme back to 'default'
+  - CLI `sources get --format` bugfix for full record format
+  - improve handling of conjunction/ephemeris/data product searches that return no results when retrieving data
+  - issue when ordering by 'owner' for `aurorax.search.sources.list()` and `aurorax.search.sources.search()` functions
+- removed `aurorax-cli search sources get_stats` command (`aurorax-cli search sources get --include-stats` flag covers this functionality)
+- removed `aurorax-cli search util ground_to_nbtrace` and `aurorax-cli search util ground_to_sbtrace` commands (use library functions instead)
+- bump PyUCalgarySRS dependency to latest
 
 
 Version 1.12.0

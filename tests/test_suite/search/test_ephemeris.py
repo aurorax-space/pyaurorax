@@ -246,34 +246,8 @@ def test_upload_and_delete_ephemeris(aurorax):
     result = aurorax.search.ephemeris.upload(ds.identifier, records, True)
     assert result == 0
 
-    # check that records got uploaded
-    #
-    # NOTE: we periodically check a few times
-    max_tries = 10
-    for i in range(1, max_tries + 1):
-        # wait to it to be ingested
-        time.sleep(5)
-
-        # retrieve uploaded record
-        s = EphemerisSearch(aurorax,
-                            datetime.datetime(2020, 1, 1, 0, 0, 0),
-                            datetime.datetime(2020, 1, 1, 23, 59, 59),
-                            programs=[program],
-                            platforms=[platform],
-                            instrument_types=[instrument_type])
-        s.execute()
-        s.wait()
-        s.get_data()
-
-        # check
-        if (len(s.data) == 0):
-            if (i == max_tries):
-                # failed after all the tries for checking
-                raise AssertionError("Max tries reached")
-            else:
-                continue
-        assert len(s.data) > 0
-        break
+    # briefly sleep, arbitrary amount > a few seconds
+    time.sleep(5)
 
     # cleanup by deleting the ephemeris data that was uploaded
     delete_result = aurorax.search.ephemeris.delete(

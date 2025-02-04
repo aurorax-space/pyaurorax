@@ -102,10 +102,13 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
     try:
         url = "%s/%s" % (config.aurorax.api_base_url, URL_SUFFIX_CONJUNCTION_REQUEST.format(request_uuid))
         s = config.aurorax.search.requests.get_status(url)
-    except pyaurorax.AuroraXNotFoundError as e:
-        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+    except pyaurorax.AuroraXAPIError as e:
+        if ("API error code 404" in str(e)):
+            click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        else:  # pragma: nocover
+            click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -137,10 +140,13 @@ def get_logs(config, request_uuid, filter_, table_max_width, no_truncate):
     try:
         url = "%s/%s" % (config.aurorax.api_base_url, URL_SUFFIX_CONJUNCTION_REQUEST.format(request_uuid))
         s = config.aurorax.search.requests.get_status(url)
-    except pyaurorax.AuroraXNotFoundError as e:
-        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+    except pyaurorax.AuroraXAPIError as e:
+        if ("API error code 404" in str(e)):
+            click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        else:  # pragma: nocover
+            click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -168,10 +174,13 @@ def get_query(config, request_uuid):
     try:
         url = "%s/%s" % (config.aurorax.api_base_url, URL_SUFFIX_CONJUNCTION_REQUEST.format(request_uuid))
         s = config.aurorax.search.requests.get_status(url)
-    except pyaurorax.AuroraXNotFoundError as e:
-        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+    except pyaurorax.AuroraXAPIError as e:
+        if ("API error code 404" in str(e)):
+            click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        else:  # pragma: nocover
+            click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -216,10 +225,13 @@ def search_resubmit(config, request_uuid):
         click.echo("Retrieving query for request '%s' ..." % (request_uuid))
         url = "%s/%s" % (config.aurorax.api_base_url, URL_SUFFIX_CONJUNCTION_REQUEST.format(request_uuid))
         status = config.aurorax.search.requests.get_status(url)
-    except pyaurorax.AuroraXNotFoundError as e:
-        click.echo("%s occurred: request ID not found" % (type(e).__name__))
+    except pyaurorax.AuroraXAPIError as e:
+        if ("API error code 404" in str(e)):
+            click.echo("%s occurred: request ID not found" % (type(e).__name__))
+        else:  # pragma: nocover
+            click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -298,11 +310,11 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
     start = parse(q["start"], ignoretz=True)
     end = parse(q["end"], ignoretz=True)
     max_distances = q["max_distances"]
-    ground = None if "ground" not in q else q["ground"]
-    space = None if "space" not in q else q["space"]
-    events = None if "events" not in q else q["events"]
-    custom = None if "custom" not in q else q["custom"]
-    conjunction_types = None if "conjunction_types" not in q else q["conjunction_types"]
+    ground = [] if "ground" not in q else q["ground"]
+    space = [] if "space" not in q else q["space"]
+    events = [] if "events" not in q else q["events"]
+    custom = [] if "custom" not in q else q["custom"]
+    conjunction_types = [] if "conjunction_types" not in q else q["conjunction_types"]
     verbose_search = True if quiet is False else False
 
     # start search
@@ -332,7 +344,7 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
     if (swarmaurora_show_url is True):
         url = config.aurorax.search.conjunctions.swarmaurora.get_url(s)
         print("[%s] Swarm-Aurora URL: %s" % (datetime.datetime.now(), url))
-    if (swarmaurora_open_browser is True):
+    if (swarmaurora_open_browser is True):  # pragma: nocover
         print(("[%s] Launching a browser to show this conjunction search in "
                "Swarm-Aurora (browser='%s') ...") % (datetime.datetime.now(), swarmaurora_browser_type))
         if (swarmaurora_browser_type == "default"):
