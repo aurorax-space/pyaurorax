@@ -19,7 +19,6 @@ import pyucalgarysrs
 from texttable import Texttable
 from pathlib import Path
 from typing import Optional, Dict, Any, Literal
-from ._util import show_warning
 from . import __version__
 from .exceptions import AuroraXInitializationError, AuroraXPurgeError
 from .search import SearchManager
@@ -64,7 +63,6 @@ class PyAuroraX:
         api_headers: Optional[Dict] = None,
         api_key: Optional[str] = None,
         progress_bar_backend: Literal["auto", "standard", "notebook"] = "auto",
-        srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None,
     ):
         """
         Attributes:
@@ -119,13 +117,11 @@ class PyAuroraX:
         self.__api_base_url = api_base_url
         if (api_base_url is None):
             self.__api_base_url = self.__DEFAULT_API_BASE_URL
-        self.__api_headers = api_headers
-        if (api_headers is None):
-            self.__api_headers = self.__DEFAULT_API_HEADERS
         self.__api_timeout = api_timeout
         if (api_timeout is None):
             self.__api_timeout = self.__DEFAULT_API_TIMEOUT
         self.__api_key = api_key
+        self.__api_headers = self.__DEFAULT_API_HEADERS
 
         # initialize progress bar parameters
         self.__progress_bar_backend = progress_bar_backend
@@ -135,16 +131,13 @@ class PyAuroraX:
         self.__initialize_paths()
 
         # initialize PyUCalgarySRS object
-        if (srs_obj is None):
-            self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
-                api_headers=self.__api_headers,
-                api_timeout=self.__api_timeout,
-                download_output_root_path=self.download_output_root_path,
-                read_tar_temp_path=self.read_tar_temp_path,
-                progress_bar_backend=progress_bar_backend,
-            )
-        else:
-            self.__srs_obj = srs_obj
+        self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
+            api_headers=self.__api_headers,
+            api_timeout=self.__api_timeout,
+            download_output_root_path=self.download_output_root_path,
+            read_tar_temp_path=self.read_tar_temp_path,
+            progress_bar_backend=progress_bar_backend,
+        )
 
         # initialize progress bar tqdm object (by pulling it from srs_obj)
         self._tqdm = self.__srs_obj._tqdm
@@ -197,7 +190,7 @@ class PyAuroraX:
         return self.__api_base_url
 
     @api_base_url.setter
-    def api_base_url(self, value: str):
+    def api_base_url(self, value: Optional[str] = None):
         if (value is None):
             self.__api_base_url = self.__DEFAULT_API_BASE_URL
         else:
@@ -217,20 +210,6 @@ class PyAuroraX:
         Property for the API headers. See above for details.
         """
         return self.__api_headers
-
-    @api_headers.setter
-    def api_headers(self, value: Dict):
-        new_headers = self.__DEFAULT_API_HEADERS
-        if (value is not None):
-            for k, v in value.items():
-                k = k.lower()
-                if (k in new_headers):
-                    show_warning("Cannot override default '%s' header" % (k), stacklevel=1)
-                else:
-                    new_headers[k] = v
-        self.__api_headers = new_headers
-        if ("user-agent" in new_headers):
-            self.__srs_obj.api_headers = {"user-agent": new_headers["user-agent"]}
 
     @property
     def api_timeout(self):
@@ -292,8 +271,11 @@ class PyAuroraX:
         return self.__progress_bar_backend
 
     @progress_bar_backend.setter
-    def progress_bar_backend(self, value: Literal["auto", "standard", "notebook"]):
-        value = value.lower()  # type: ignore
+    def progress_bar_backend(self, value: Optional[Literal["auto", "standard", "notebook"]] = None):
+        if (value is None):
+            value = "auto"
+        else:
+            value = value.lower()  # type: ignore
         if (value != "auto" and value != "standard" and value != "notebook"):
             raise AuroraXInitializationError("Invalid progress bar backend. Allowed values are 'auto', 'standard' or 'notebook'.")
         self.__progress_bar_backend = value
@@ -306,10 +288,6 @@ class PyAuroraX:
         Property for the PyUCalgarySRS object. See above for details.
         """
         return self.__srs_obj
-
-    @srs_obj.setter
-    def srs_obj(self, new_obj: pyucalgarysrs.PyUCalgarySRS):
-        self.__srs_obj = new_obj
 
     # -----------------------------
     # special methods

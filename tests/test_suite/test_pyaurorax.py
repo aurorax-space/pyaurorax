@@ -19,12 +19,13 @@ import string
 import pytest
 import platform
 import pyaurorax
-import warnings
+import pyucalgarysrs
+import datetime
 from pathlib import Path
 
 
 @pytest.mark.top_level
-def test_top_level_class_instantiation_noparams():
+def test_top_level_class_instantiation_noparams(capsys):
     # instantiate
     aurorax = pyaurorax.PyAuroraX()
 
@@ -46,41 +47,52 @@ def test_top_level_class_instantiation_noparams():
     assert os.path.exists(new_path)
     shutil.rmtree(new_path, ignore_errors=True)
 
-    # check str and repr methods
+    # change API key
+    testing_api_key = "some-api-key"
+    aurorax.api_key = testing_api_key
+    assert aurorax.api_key == testing_api_key
+
+    # check __str__ and __repr__ for PyAuroraX type
+    print_str = str(aurorax)
+    assert print_str != ""
     assert isinstance(str(aurorax), str) is True
     assert isinstance(repr(aurorax), str) is True
+    aurorax.pretty_print()
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+    # check SRS object
+    assert isinstance(aurorax.srs_obj, pyucalgarysrs.PyUCalgarySRS) is True
 
 
 @pytest.mark.top_level
 def test_top_level_class_instantiation_usingparams():
     # instantiate object
     testing_url = "https://testing-url.com"
+    testing_api_key = "some-api-key"
     testing_download_path = str("%s/pyaurorax_data_download_testing_%s" %
                                 (Path.home(), ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))))
-    testing_read_path = str("%s/pyaurorax_data_tar_testing%s" % (Path.home(), ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))))
-    testing_api_key = "abcd1234"
+    testing_tar_path = str("%s/pyaurorax_tar_read_testing_%s" % (Path.home(), ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))))
     testing_api_timeout = 5
-    testing_api_headers = {"some_key": "some value"}
     aurorax = pyaurorax.PyAuroraX(
         api_base_url=testing_url,
         download_output_root_path=testing_download_path,
-        read_tar_temp_path=testing_read_path,
-        api_key=testing_api_key,
+        read_tar_temp_path=testing_tar_path,
         api_timeout=testing_api_timeout,
-        api_headers=testing_api_headers,
+        api_key=testing_api_key,
     )
     assert aurorax.download_output_root_path == testing_download_path
-    assert aurorax.read_tar_temp_path == testing_read_path
+    assert aurorax.read_tar_temp_path == testing_tar_path
     assert aurorax.api_base_url == testing_url
-    assert aurorax.api_timeout == testing_api_timeout
-    assert aurorax.api_headers == testing_api_headers
     assert aurorax.api_key == testing_api_key
+    assert aurorax.api_headers != {} and "user-agent" in aurorax.api_headers and "python-pyaurorax" in aurorax.api_headers["user-agent"]
+    assert aurorax.api_timeout == testing_api_timeout
     assert os.path.exists(testing_download_path)
-    assert os.path.exists(testing_read_path)
+    assert os.path.exists(testing_tar_path)
 
     # cleanup
     shutil.rmtree(testing_download_path, ignore_errors=True)
-    shutil.rmtree(testing_read_path, ignore_errors=True)
+    shutil.rmtree(testing_tar_path, ignore_errors=True)
 
 
 @pytest.mark.top_level
@@ -107,23 +119,14 @@ def test_api_base_url(aurorax):
     aurorax.api_base_url = None
     assert aurorax.api_base_url != "https://something"
 
+    # check that trailing slash is removed
+    aurorax.api_base_url = "https://something/"
+    assert aurorax.api_base_url == "https://something"
 
-@pytest.mark.top_level
-def test_api_headers(aurorax):
-    # set flag
-    default_headers = aurorax.api_headers
-    aurorax.api_headers = {"some": "thing"}
-    assert "some" in aurorax.api_headers and aurorax.api_headers["some"] == "thing"
-    aurorax.api_headers = None
-    assert aurorax.api_headers == default_headers
-
-    # check warning
-    with warnings.catch_warnings(record=True) as w:
-        warnings.simplefilter("always")  # cause all warnings to always be triggered.
-        aurorax.api_headers = {"user-agent": "some other value"}
-        assert len(w) == 1
-        assert issubclass(w[-1].category, UserWarning)
-        assert "Cannot override default" in str(w[-1].message)
+    # check invalid URL
+    with pytest.raises(pyaurorax.AuroraXInitializationError) as e_info:
+        aurorax.api_base_url = "something invalid"
+    assert "API base URL is an invalid URL" in str(e_info)
 
 
 @pytest.mark.top_level
@@ -134,6 +137,33 @@ def test_api_timeout(aurorax):
     assert aurorax.api_timeout == 5
     aurorax.api_timeout = None
     assert aurorax.api_timeout == default_timeout
+
+
+@pytest.mark.top_level
+def test_progress_bar_backend(aurorax):
+    # save default for later
+    progress_bar_backend = aurorax.progress_bar_backend
+
+    # set flag (standard)
+    aurorax.progress_bar_backend = "standard"
+    assert aurorax.progress_bar_backend == "standard"
+
+    # set flag (notebook)
+    aurorax.progress_bar_backend = "notebook"
+    assert aurorax.progress_bar_backend == "notebook"
+
+    # set flag (auto)
+    aurorax.progress_bar_backend = "auto"
+    assert aurorax.progress_bar_backend == "auto"
+
+    # set flag (back to default)
+    aurorax.progress_bar_backend = None
+    assert aurorax.progress_bar_backend == progress_bar_backend
+
+    # check invalid value
+    with pytest.raises(pyaurorax.AuroraXInitializationError) as e_info:
+        aurorax.progress_bar_backend = "something invalid"
+    assert "Invalid progress bar backend" in str(e_info)
 
 
 @pytest.mark.top_level
@@ -189,3 +219,28 @@ def test_purge_tar_temp_path(aurorax):
 
     # cleanup
     shutil.rmtree(aurorax.read_tar_temp_path, ignore_errors=True)
+
+
+@pytest.mark.top_level
+def test_show_data_usage(aurorax, capsys):
+    # download a bit of data for several datasets
+    for dataset_name in ["THEMIS_ASI_RAW", "TREX_RGB_RAW_NOMINAL"]:
+        start_dt = datetime.datetime(2023, 1, 1, 6, 0)
+        end_dt = datetime.datetime(2023, 1, 1, 6, 0)
+        site_uid = "gill"
+        aurorax.data.ucalgary.download(dataset_name, start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+
+    # check default params
+    print(aurorax.show_data_usage())
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+    # check return_dict=True
+    print(aurorax.show_data_usage(return_dict=True))
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+    # check order being name
+    print(aurorax.show_data_usage(order="name"))
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
