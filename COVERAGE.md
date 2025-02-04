@@ -13,7 +13,7 @@ pyaurorax/cli/search/data_products/commands.py                   167      4    9
 pyaurorax/cli/search/ephemeris/commands.py                       165      4    98%   133, 166, 213-214
 pyaurorax/cli/search/helpers.py                                  158     31    80%   50-53, 59-60, 70, 120, 138, 148, 172-174, 179-181, 185-189, 207-224, 256-258
 pyaurorax/cli/search/sources/commands.py                         305     75    75%   41, 51, 83, 85-97, 121, 141, 143, 156, 158, 160, 166, 199, 232, 290-292, 329-335, 341-347, 353-359, 368-370, 379, 411-413, 437-439, 464-476, 494-505, 518-523
-pyaurorax/cli/search/util/commands.py                            100     11    89%   94, 169-171, 175-177, 194, 198, 213-214
+pyaurorax/cli/search/util/commands.py                             98     11    89%   92, 167-169, 173-175, 192, 196, 211-212
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81     64    21%   49, 78-90, 125-164, 187-201, 233-245, 280-319
 pyaurorax/data/ucalgary/__init__.py                              110     81    26%   35, 68, 96-104, 126-129, 160-163, 172, 193, 311-329, 419-433, 494-504, 586, 639-675, 719-755, 799-835
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6139   3044    50%
+TOTAL                                                           6137   3044    50%
 
 13 empty files skipped.
 ```
