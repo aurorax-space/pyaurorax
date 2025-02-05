@@ -385,6 +385,12 @@ def test_async(aurorax):
         return_immediately=True,
     )
 
+    # get data
+    #
+    # NOTE: this is not supposed to be done at this point, but for coverage we
+    # include it
+    s.get_data()
+
     # update the status
     #
     # NOTE: this is not needed, but for coverage we include it

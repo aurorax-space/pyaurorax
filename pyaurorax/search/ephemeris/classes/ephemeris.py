@@ -95,8 +95,6 @@ class EphemerisData:
             for key, value in self.metadata.items():
                 if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
                     self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
-        # if (isinstance(self.metadata, list) is True):
-        #     self.metadata = {}
 
         # format data source fields for query
         d["program"] = self.data_source.program

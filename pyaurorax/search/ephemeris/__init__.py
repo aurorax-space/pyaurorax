@@ -25,7 +25,6 @@ from .classes.ephemeris import EphemerisData
 from .classes.search import EphemerisSearch
 from ..metadata_filters import MetadataFilter
 from ..sources.classes.data_source import DataSource
-from ..._util import show_warning
 from ._ephemeris import search as func_search
 from ._ephemeris import upload as func_upload
 from ._ephemeris import delete as func_delete
@@ -113,13 +112,6 @@ class EphemerisManager:
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
-        # show warnings
-        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
-            # logical operator supplied, but MetadataFilter supplied too
-            show_warning("Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator " +
-                         "parameter is redundant. Only the MetadataFilter object is needed. The " +
-                         "metadata_filters_logical_operator parameter will be ignored")
-
         # return
         return func_search(
             self.__aurorax_obj,

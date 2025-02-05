@@ -168,7 +168,7 @@ def conjunction_search_obj():
     return s
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def conjunction_search_dict():
     return {
         "start": "2019-01-01T00:00:00.000Z",
@@ -191,4 +191,43 @@ def conjunction_search_dict():
         "max_distances": {
             "ground1-space1": 500
         }
+    }
+
+
+@pytest.fixture(scope="session")
+def ephemeris_search_obj():
+    # init
+    aurorax = pyaurorax.PyAuroraX()
+
+    # set vars
+    start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end_dt = datetime.datetime(2020, 1, 10, 0, 0, 0)
+    programs = ["swarm"]
+    platforms = ["swarma"]
+    instrument_types = ["footprint"]
+
+    # create object
+    s = pyaurorax.search.EphemerisSearch(
+        aurorax,
+        start_dt,
+        end_dt,
+        programs=programs,
+        platforms=platforms,
+        instrument_types=instrument_types,
+    )
+
+    # return
+    return s
+
+
+@pytest.fixture(scope="session")
+def ephemeris_search_dict():
+    return {
+        "data_sources": {
+            "programs": ["themis-asi"],
+            "platforms": ["gillam"],
+            "instrument_types": ["panchromatic ASI"],
+        },
+        "start": "2025-02-05T16:36:43.720Z",
+        "end": "2025-02-05T16:36:43.720Z"
     }

@@ -4,7 +4,7 @@ Current coverage report:
 Name                                                           Stmts   Miss  Cover   Missing
 --------------------------------------------------------------------------------------------
 pyaurorax/__init__.py                                              9      0   100%
-pyaurorax/_util.py                                                 5      3    40%   25-27
+pyaurorax/_util.py                                                 5      0   100%
 pyaurorax/cli/cli.py                                              37      0   100%
 pyaurorax/cli/search/__init__.py                                  16      0   100%
 pyaurorax/cli/search/availability/commands.py                    127      0   100%
@@ -33,17 +33,17 @@ pyaurorax/search/conjunctions/__init__.py                         31      0   10
 pyaurorax/search/conjunctions/_conjunctions.py                    91      0   100%
 pyaurorax/search/conjunctions/classes/conjunction.py              39      0   100%
 pyaurorax/search/conjunctions/classes/criteria_block.py           67      0   100%
-pyaurorax/search/conjunctions/classes/search.py                  215      3    99%   366, 471-472
+pyaurorax/search/conjunctions/classes/search.py                  215      1    99%   366
 pyaurorax/search/conjunctions/swarmaurora/__init__.py             15      0   100%
 pyaurorax/search/conjunctions/swarmaurora/_swarmaurora.py         24      0   100%
 pyaurorax/search/data_products/__init__.py                        33      2    94%   124, 234
 pyaurorax/search/data_products/_data_products.py                 100     27    73%   40-44, 86, 92, 96, 101, 128, 143-145, 154, 169, 177-204, 211-214
 pyaurorax/search/data_products/classes/data_product.py            47      1    98%   130
 pyaurorax/search/data_products/classes/search.py                 128     46    64%   33, 142, 145, 156-197, 209, 235, 272, 291-292, 300-301, 371-376
-pyaurorax/search/ephemeris/__init__.py                            30      1    97%   119
-pyaurorax/search/ephemeris/_ephemeris.py                          88     17    81%   38-42, 83, 89, 93, 98, 125, 140-142, 151, 167, 177-180
+pyaurorax/search/ephemeris/__init__.py                            28      0   100%
+pyaurorax/search/ephemeris/_ephemeris.py                          78      2    97%   142, 151
 pyaurorax/search/ephemeris/classes/ephemeris.py                   42      1    98%   97
-pyaurorax/search/ephemeris/classes/search.py                     129     47    64%   33, 138, 141, 152-193, 205, 230, 241, 274, 292-293, 301-302, 371-376
+pyaurorax/search/ephemeris/classes/search.py                     118      0   100%
 pyaurorax/search/location.py                                      29      6    79%   52-55, 63-66
 pyaurorax/search/metadata/__init__.py                             14      0   100%
 pyaurorax/search/metadata/_metadata.py                            20      5    75%   29-31, 45, 54
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6068   2584    57%
+TOTAL                                                           6045   2516    58%
 
 13 empty files skipped.
 ```

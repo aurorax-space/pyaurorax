@@ -29,8 +29,9 @@ from ...requests._requests import (
     get_data as requests_get_data,
     get_status as requests_get_status,
 )
+from ...._util import show_warning
 if TYPE_CHECKING:
-    from ....pyaurorax import PyAuroraX
+    from ....pyaurorax import PyAuroraX  # pragma: nocover
 
 
 class EphemerisSearch:
@@ -111,6 +112,13 @@ class EphemerisSearch:
                  metadata_filters_logical_operator: Optional[Literal["and", "or", "AND", "OR"]] = None,
                  response_format: Optional[Dict] = None) -> None:
 
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning("Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator " +
+                         "parameter is redundant. Only the MetadataFilter object is needed. The " +
+                         "metadata_filters_logical_operator parameter will be ignored")
+
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
         self.start = start
@@ -159,9 +167,7 @@ class EphemerisSearch:
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = "[0 ephemeris results]"
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = "[1 ephemeris result]"
             else:
                 data_str = "[%d ephemeris results]" % (len(self.data))
@@ -170,9 +176,7 @@ class EphemerisSearch:
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = "[0 log messages]"
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover
                 logs_str = "[1 log message]"
             else:
                 logs_str = "[%d log messages]" % (len(self.logs))
@@ -225,10 +229,6 @@ class EphemerisSearch:
         # return
         return self.__query
 
-    @query.setter
-    def query(self, query):
-        self.__query = query
-
     def execute(self) -> None:
         """
         Initiate ephemeris search request
@@ -237,7 +237,7 @@ class EphemerisSearch:
             pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         """
         # check for at least one filter criteria
-        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover
             raise AuroraXError("At least one filter criteria parameter besides 'start' and 'end' must be specified")
 
         # do request
@@ -270,7 +270,7 @@ class EphemerisSearch:
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover
             raise AuroraXAPIError("Could not retrieve status for this request")
 
         # update request status by checking if data URI is set
