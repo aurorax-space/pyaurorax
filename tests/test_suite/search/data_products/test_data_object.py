@@ -14,37 +14,36 @@
 
 import pytest
 import datetime
-from pyaurorax.search import Location, EphemerisData, DataSource
+from pyaurorax.search import DataSource, DataProductData, DATA_PRODUCT_TYPE_KEOGRAM
 
 
 @pytest.mark.search_ro
-def test_create_data_object(aurorax):
+def test_create_data_product_object(aurorax):
     # set values
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument-type"
-    epoch = datetime.datetime(2020, 1, 1, 0, 0)
-    location_geo = Location(lat=51.049999, lon=-114.066666)
-    nbtrace = Location(lat=1.23, lon=45.6)
-    sbtrace = Location(lat=7.89, lon=101.23)
+    start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end_dt = start_dt.replace(hour=23, minute=59, second=59)
+    data_product_type = DATA_PRODUCT_TYPE_KEOGRAM
+    url = "testing_url.jpg"
     metadata = {}
 
     # get identifier
     data_source = aurorax.search.sources.get(program, platform, instrument_type)
 
-    # create Ephemeris object
-    e = EphemerisData(
+    # create DataProduct object
+    d = DataProductData(
         data_source=data_source,
-        epoch=epoch,
-        location_geo=location_geo,
-        nbtrace=nbtrace,
-        sbtrace=sbtrace,
+        data_product_type=data_product_type,
+        url=url,
+        start=start_dt,
+        end=end_dt,
         metadata=metadata,
     )
 
-    # check
-    assert isinstance(e, EphemerisData) is True
-    assert isinstance(e.data_source, DataSource) is True
-    assert e.data_source.program == program
-    assert e.data_source.platform == platform
-    assert e.data_source.instrument_type == instrument_type
+    assert isinstance(d, DataProductData) is True
+    assert isinstance(d.data_source, DataSource) is True
+    assert d.data_source.program == program
+    assert d.data_source.platform == platform
+    assert d.data_source.instrument_type == instrument_type

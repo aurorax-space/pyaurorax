@@ -15,38 +15,27 @@
 import pytest
 import datetime
 import warnings
-from pyaurorax.search import EphemerisSearch
+from pyaurorax.search import DataProductSearch, DATA_PRODUCT_TYPE_KEOGRAM, DATA_PRODUCT_TYPE_MOVIE
 
 
 @pytest.mark.search_ro
 def test_simple(aurorax, capsys):
     # set vars
     start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
-    end_dt = datetime.datetime(2020, 1, 10, 0, 0, 0)
-    programs = ["swarm"]
-    platforms = ["swarma"]
-    instrument_types = ["footprint"]
+    end_dt = datetime.datetime(2020, 1, 1, 23, 59, 59)
+    programs = ["auroramax"]
 
-    # create object
-    s = EphemerisSearch(
-        aurorax,
-        start_dt,
-        end_dt,
-        programs=programs,
-        platforms=platforms,
-        instrument_types=instrument_types,
-    )
+    # create search object
+    s = DataProductSearch(aurorax, start_dt, end_dt, programs=programs)
 
     # check
-    assert isinstance(s, EphemerisSearch) is True
+    assert isinstance(s, DataProductSearch) is True
     assert s.start == start_dt
     assert s.end == end_dt
     assert s.programs == programs
-    assert s.platforms == platforms
-    assert s.instrument_types == instrument_types
     assert s.query != ""
 
-    # check __str__ and __repr__ for EphemerisSearch type
+    # check __str__ and __repr__ for DataProductSearch type
     print_str = str(s)
     assert print_str != ""
     assert isinstance(str(s), str) is True
@@ -63,34 +52,40 @@ def test_simple(aurorax, capsys):
 @pytest.mark.search_ro
 def test_with_metadata_filters(aurorax, capsys):
     # set search parameters
-    start = datetime.datetime(2019, 1, 1, 6, 0, 0)
-    end = datetime.datetime(2019, 1, 1, 6, 11, 59)
-    programs = ["swarm"]
-    platforms = ["swarma"]
-    instrument_types = ["footprint"]
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 2, 23, 59, 59)
+    programs = ["auroramax"]
 
     # set metadata filters
     metadata_filter = aurorax.search.MetadataFilter(
-        expressions=[aurorax.search.MetadataFilterExpression("nbtrace_region", "north polar cap", operator="=")])
+        expressions=[
+            aurorax.search.MetadataFilterExpression("keogram_type", "daily_hires", operator="="),
+            aurorax.search.MetadataFilterExpression("movie_type", "real-time daily", operator="=")
+        ],
+        operator="OR",
+    )
 
     # create object
-    s = EphemerisSearch(
+    s = DataProductSearch(
         aurorax,
         start,
         end,
         programs=programs,
-        platforms=platforms,
-        instrument_types=instrument_types,
+        data_product_types=["keogram", "movie"],
         metadata_filters=metadata_filter,
     )
 
     # check
-    assert isinstance(s, EphemerisSearch) is True
-    assert s.start == start
-    assert s.end == end
-    assert s.programs == programs
-    assert s.platforms == platforms
-    assert s.instrument_types == instrument_types
+    assert isinstance(s, DataProductSearch) is True
+
+    # deeper check on data
+    for dp in s.data:
+        if (dp.data_product_type == DATA_PRODUCT_TYPE_MOVIE):
+            assert dp.metadata["movie_type"] == "real-time daily"  # type: ignore
+        elif (dp.data_product_type == DATA_PRODUCT_TYPE_KEOGRAM):
+            assert dp.metadata["keogram_type"] == "daily_hires"  # type: ignore
+        else:
+            raise AssertionError("Unexpected data product record included in search results")
 
     # check __str__ and __repr__ for EphemerisSearch type
     print_str = str(s)
@@ -108,34 +103,35 @@ def test_with_metadata_filters(aurorax, capsys):
 
 @pytest.mark.search_ro
 def test_create_response_format_template(aurorax):
-    response_format = aurorax.search.ephemeris.create_response_format_template()
+    response_format = aurorax.search.data_products.create_response_format_template()
     assert isinstance(response_format, dict) is True
 
 
 @pytest.mark.search_ro
 def test_metadata_filter_warning(aurorax):
     # set search parameters
-    start = datetime.datetime(2019, 1, 1, 6, 0, 0)
-    end = datetime.datetime(2019, 1, 1, 6, 11, 59)
-    programs = ["swarm"]
-    platforms = ["swarma"]
-    instrument_types = ["footprint"]
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 2, 23, 59, 59)
+    programs = ["auroramax"]
 
     # set metadata filters
     metadata_filter = aurorax.search.MetadataFilter(
-        expressions=[aurorax.search.MetadataFilterExpression("nbtrace_region", "north polar cap", operator="=")])
+        expressions=[
+            aurorax.search.MetadataFilterExpression("keogram_type", "daily_hires", operator="="),
+            aurorax.search.MetadataFilterExpression("movie_type", "real-time daily", operator="=")
+        ],
+        operator="OR",
+    )
 
     # create object
     with warnings.catch_warnings(record=True) as w:
-        _ = EphemerisSearch(
+        _ = DataProductSearch(
             aurorax,
             start,
             end,
             programs=programs,
-            platforms=platforms,
-            instrument_types=instrument_types,
             metadata_filters=metadata_filter,
-            metadata_filters_logical_operator="AND",
+            metadata_filters_logical_operator="OR",
         )
     assert len(w) == 1
     assert issubclass(w[-1].category, UserWarning)

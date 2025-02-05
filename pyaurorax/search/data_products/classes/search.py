@@ -29,8 +29,9 @@ from ...requests._requests import (
     get_data as requests_get_data,
     get_status as requests_get_status,
 )
+from ...._util import show_warning
 if TYPE_CHECKING:
-    from ....pyaurorax import PyAuroraX
+    from ....pyaurorax import PyAuroraX  # pragma: nocover
 
 
 class DataProductSearch:
@@ -109,10 +110,17 @@ class DataProductSearch:
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_types: Optional[Literal["keogram", "montage", "movie", "summary_plot", "data_availability"]] = None,
+                 data_product_types: Optional[List[Literal["keogram", "montage", "movie", "summary_plot", "data_availability"]]] = None,
                  metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
                  metadata_filters_logical_operator: Optional[Literal["and", "or", "AND", "OR"]] = None,
                  response_format: Optional[Dict] = None) -> None:
+
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning("Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator " +
+                         "parameter is redundant. Only the MetadataFilter object is needed. The " +
+                         "metadata_filters_logical_operator parameter will be ignored")
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
@@ -174,9 +182,7 @@ class DataProductSearch:
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = "[0 log messages]"
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover
                 logs_str = "[1 log message]"
             else:
                 logs_str = "[%d log messages]" % (len(self.logs))
@@ -230,10 +236,6 @@ class DataProductSearch:
         # return
         return self.__query
 
-    @query.setter
-    def query(self, query):
-        self.__query = query
-
     def execute(self) -> None:
         """
         Initiate a data product search request
@@ -268,7 +270,7 @@ class DataProductSearch:
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover
             raise AuroraXAPIError("Could not retrieve status for this request")
 
         # update request status by checking if data URI is set

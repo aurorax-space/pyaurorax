@@ -214,3 +214,62 @@ class EphemerisManager:
             The request URL
         """
         return func_get_request_url(self.__aurorax_obj, request_id)
+
+    def create_response_format_template(self, default: bool = False) -> Dict:
+        """
+        Generate a template dictionary that can be used as the response_format parameter
+        in an ephemeris search.
+
+        Args:
+            default (bool): 
+                The default value to set for every parameter that can be returned, defaults
+                to False.
+
+        Returns:
+            A template dictionary for the response format
+        """
+        return {
+            "data_source": {
+                "identifier": default,
+                "program": default,
+                "platform": default,
+                "instrument_type": default,
+                "source_type": default,
+                "display_name": default,
+                "ephemeris_metadata_schema": {
+                    "field_name": default,
+                    "description": default,
+                    "data_type": default,
+                    "allowed_values": default,
+                    "additional_description": default
+                },
+                "data_product_metadata_schema": {
+                    "field_name": default,
+                    "description": default,
+                    "data_type": default,
+                    "allowed_values": default,
+                    "additional_description": default
+                },
+                "owner": default,
+                "maintainers": default,
+                "metadata": default
+            },
+            "epoch": default,
+            "location_geo": {
+                "lat": default,
+                "lon": default
+            },
+            "location_gsm": {
+                "lat": default,
+                "lon": default
+            },
+            "nbtrace": {
+                "lat": default,
+                "lon": default
+            },
+            "sbtrace": {
+                "lat": default,
+                "lon": default
+            },
+            "metadata": default
+        }

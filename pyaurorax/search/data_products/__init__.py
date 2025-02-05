@@ -25,7 +25,6 @@ from .classes.data_product import DataProductData
 from .classes.search import DataProductSearch
 from ..sources.classes.data_source import DataSource
 from ..metadata_filters import MetadataFilter
-from ..._util import show_warning
 from ._data_products import search as func_search
 from ._data_products import upload as func_upload
 from ._data_products import delete as func_delete
@@ -54,7 +53,7 @@ class DataProductsManager:
                programs: Optional[List[str]] = None,
                platforms: Optional[List[str]] = None,
                instrument_types: Optional[List[str]] = None,
-               data_product_types: Optional[Literal["keogram", "montage", "movie", "summary_plot", "data_availability"]] = None,
+               data_product_types: Optional[List[Literal["keogram", "montage", "movie", "summary_plot", "data_availability"]]] = None,
                metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
                metadata_filters_logical_operator: Optional[Literal["and", "or", "AND", "OR"]] = None,
                response_format: Optional[Dict] = None,
@@ -118,13 +117,6 @@ class DataProductsManager:
         Returns:
             A `pyaurorax.search.DataProductSearch` object
         """
-        # show warnings
-        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
-            # logical operator supplied, but MetadataFilter supplied too
-            show_warning("Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator " +
-                         "parameter is redundant. Only the MetadataFilter object is needed. The " +
-                         "metadata_filters_logical_operator parameter will be ignored")
-
         # return
         return func_search(
             self.__aurorax_obj,
@@ -266,3 +258,49 @@ class DataProductsManager:
             The request URL
         """
         return func_get_request_url(self.__aurorax_obj, request_id)
+
+    def create_response_format_template(self, default: bool = False) -> Dict:
+        """
+        Generate a template dictionary that can be used as the response_format parameter
+        in a data products search.
+
+        Args:
+            default (bool): 
+                The default value to set for every parameter that can be returned, defaults
+                to False.
+
+        Returns:
+            A template dictionary for the response format
+        """
+        return {
+            "start": default,
+            "end": default,
+            "data_source": {
+                "identifier": default,
+                "program": default,
+                "platform": default,
+                "instrument_type": default,
+                "source_type": default,
+                "display_name": default,
+                "ephemeris_metadata_schema": {
+                    "field_name": default,
+                    "description": default,
+                    "data_type": default,
+                    "allowed_values": default,
+                    "additional_description": default
+                },
+                "data_product_metadata_schema": {
+                    "field_name": default,
+                    "description": default,
+                    "data_type": default,
+                    "allowed_values": default,
+                    "additional_description": default
+                },
+                "owner": default,
+                "maintainers": default,
+                "metadata": default
+            },
+            "url": default,
+            "data_product_type": default,
+            "metadata": default
+        }

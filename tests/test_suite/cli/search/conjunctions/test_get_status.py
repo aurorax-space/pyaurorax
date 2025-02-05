@@ -24,42 +24,50 @@ def test_help(cli_runner):
 
 
 @pytest.mark.cli
-def test_simple(cli_runner, conjunction_search_id):
+def test_simple(cli_runner, api_url, conjunction_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search conjunctions get_status %s" % (conjunction_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search conjunctions get_status %s" % (api_url, conjunction_search_id))
     assert result.exit_code == 0
     assert result.stdout != ""
 
 
 @pytest.mark.cli
-def test_show_logs(cli_runner, conjunction_search_id):
+def test_show_logs(cli_runner, api_url, conjunction_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search conjunctions get_status %s --show-logs" % (conjunction_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search conjunctions get_status %s --show-logs" % (api_url, conjunction_search_id))
     assert result.exit_code == 0
     assert result.stdout != ""
 
 
 @pytest.mark.cli
-def test_show_query(cli_runner, conjunction_search_id):
+def test_show_query(cli_runner, api_url, conjunction_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search conjunctions get_status %s --show-query" % (conjunction_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search conjunctions get_status %s --show-query" % (api_url, conjunction_search_id))
     assert result.exit_code == 0
     assert result.stdout != ""
 
 
 @pytest.mark.cli
 @pytest.mark.parametrize("filter_param", ["debug", "info", "warn", "error"])
-def test_filter_logs(cli_runner, conjunction_search_id, filter_param):
+def test_filter_logs(cli_runner, api_url, conjunction_search_id, filter_param):
     # get the data
-    result = cli_runner.invoke(cli, "search conjunctions get_status %s --show-logs --filter-logs=%s" % (conjunction_search_id, filter_param))
+    result = cli_runner.invoke(
+        cli, "--api-base-url=%s search conjunctions get_status %s --show-logs --filter-logs=%s" % (
+            api_url,
+            conjunction_search_id,
+            filter_param,
+        ))
     assert result.exit_code == 0
     assert result.stdout != ""
 
 
 @pytest.mark.cli
-def test_table_max_width(cli_runner, conjunction_search_id):
+def test_table_max_width(cli_runner, api_url, conjunction_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search conjunctions get_status %s --table-max-width=100" % (conjunction_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search conjunctions get_status %s --table-max-width=100" % (
+        api_url,
+        conjunction_search_id,
+    ))
     assert result.exit_code == 0
     assert result.stdout != ""
 

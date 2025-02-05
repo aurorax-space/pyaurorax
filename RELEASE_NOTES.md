@@ -7,6 +7,7 @@ Version 1.13.0
   - improve handling of conjunction/ephemeris/data product searches that return no results when retrieving data
   - improve handling of conjunction/ephemeris/data product searches which receive incorrect criteria blocks
   - issue when ordering by 'owner' for `aurorax.search.sources.list()` and `aurorax.search.sources.search()` functions
+  - incorrect typing for `aurorax.search.data_products.search()` function's `data_product_type` parameter (corrected to be list of literals, instead of single literal)
 - removed `aurorax-cli search sources get_stats` command (`aurorax-cli search sources get --include-stats` flag covers this functionality)
 - removed `aurorax-cli search util ground_to_nbtrace` and `aurorax-cli search util ground_to_sbtrace` commands (use library functions instead)
 - removed setter class for `api_headers` and `srs_obj` in `PyAurorax()` objects

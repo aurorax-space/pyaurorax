@@ -24,9 +24,9 @@ def test_help(cli_runner):
 
 
 @pytest.mark.cli
-def test_simple(cli_runner, data_products_search_id):
+def test_simple(cli_runner, api_url, data_products_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search data_products get_logs %s" % (data_products_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search data_products get_logs %s" % (api_url, data_products_search_id))
     assert result.exit_code == 0
     assert result.stdout != ""
 
@@ -41,16 +41,23 @@ def test_bad_request_id(cli_runner):
 
 @pytest.mark.cli
 @pytest.mark.parametrize("filter_param", ["debug", "info", "warn", "error"])
-def test_filter_logs(cli_runner, data_products_search_id, filter_param):
+def test_filter_logs(cli_runner, api_url, data_products_search_id, filter_param):
     # get the data
-    result = cli_runner.invoke(cli, "search data_products get_logs %s --filter=%s" % (data_products_search_id, filter_param))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search data_products get_logs %s --filter=%s" % (
+        api_url,
+        data_products_search_id,
+        filter_param,
+    ))
     assert result.exit_code == 0
     assert result.stdout != ""
 
 
 @pytest.mark.cli
-def test_table_max_width(cli_runner, data_products_search_id):
+def test_table_max_width(cli_runner, api_url, data_products_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search data_products get_logs %s --table-max-width=100" % (data_products_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search data_products get_logs %s --table-max-width=100" % (
+        api_url,
+        data_products_search_id,
+    ))
     assert result.exit_code == 0
     assert result.stdout != ""

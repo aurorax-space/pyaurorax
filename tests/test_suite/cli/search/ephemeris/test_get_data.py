@@ -27,9 +27,9 @@ def test_help(cli_runner):
 
 
 @pytest.mark.cli
-def test_simple(cli_runner, ephemeris_search_id):
+def test_simple(cli_runner, api_url, ephemeris_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search ephemeris get_data %s" % (ephemeris_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search ephemeris get_data %s" % (api_url, ephemeris_search_id))
     assert result.exit_code == 0
     assert "Checking request status" in result.stdout
 
@@ -40,10 +40,14 @@ def test_simple(cli_runner, ephemeris_search_id):
 
 
 @pytest.mark.cli
-def test_with_outfile(cli_runner, ephemeris_search_id):
+def test_with_outfile(cli_runner, api_url, ephemeris_search_id):
     # get the data
     output_filename = "/tmp/pyaurorax_testing_%s_data.json" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
-    result = cli_runner.invoke(cli, "search ephemeris get_data %s --outfile=%s" % (ephemeris_search_id, output_filename))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search ephemeris get_data %s --outfile=%s" % (
+        api_url,
+        ephemeris_search_id,
+        output_filename,
+    ))
     assert result.exit_code == 0
     assert "Checking request status" in result.stdout
 
@@ -53,10 +57,15 @@ def test_with_outfile(cli_runner, ephemeris_search_id):
 
 
 @pytest.mark.cli
-def test_with_outfile_indent(cli_runner, ephemeris_search_id):
+def test_with_outfile_indent(cli_runner, api_url, ephemeris_search_id):
     # get the data
     output_filename = "/tmp/pyaurorax_testing_%s_data.json" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
-    result = cli_runner.invoke(cli, "search ephemeris get_data %s --outfile=%s --indent=2" % (ephemeris_search_id, output_filename))
+    result = cli_runner.invoke(
+        cli, "--api-base-url=%s search ephemeris get_data %s --outfile=%s --indent=2" % (
+            api_url,
+            ephemeris_search_id,
+            output_filename,
+        ))
     assert result.exit_code == 0
     assert "Checking request status" in result.stdout
 
@@ -66,10 +75,15 @@ def test_with_outfile_indent(cli_runner, ephemeris_search_id):
 
 
 @pytest.mark.cli
-def test_with_outfile_minify(cli_runner, ephemeris_search_id):
+def test_with_outfile_minify(cli_runner, api_url, ephemeris_search_id):
     # get the data
     output_filename = "/tmp/pyaurorax_testing_%s_data.json" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
-    result = cli_runner.invoke(cli, "search ephemeris get_data %s --outfile=%s --minify" % (ephemeris_search_id, output_filename))
+    result = cli_runner.invoke(
+        cli, "--api-base-url=%s search ephemeris get_data %s --outfile=%s --minify" % (
+            api_url,
+            ephemeris_search_id,
+            output_filename,
+        ))
     assert result.exit_code == 0
     assert "Checking request status" in result.stdout
 
@@ -80,8 +94,12 @@ def test_with_outfile_minify(cli_runner, ephemeris_search_id):
 
 @pytest.mark.cli
 @pytest.mark.parametrize("arg_value", ["dict", "objects"])
-def test_output_to_terminal(cli_runner, ephemeris_search_id, arg_value):
+def test_output_to_terminal(cli_runner, api_url, ephemeris_search_id, arg_value):
     # get the data
-    result = cli_runner.invoke(cli, "search ephemeris get_data %s --output-to-terminal=%s" % (ephemeris_search_id, arg_value))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search ephemeris get_data %s --output-to-terminal=%s" % (
+        api_url,
+        ephemeris_search_id,
+        arg_value,
+    ))
     assert result.exit_code == 0
     assert "Checking request status" in result.stdout

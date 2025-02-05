@@ -23,6 +23,11 @@ from click.testing import CliRunner
 from pathlib import Path
 from dotenv import load_dotenv
 
+# globals
+CONJUNCTION_SEARCH_REQUEST_ID = None
+EPHEMERIS_SEARCH_REQUEST_ID = None
+DATA_PRODUCTS_SEARCH_REQUEST_ID = None
+
 
 def pytest_addoption(parser):
     parser.addoption("--api-url", action="store", default="https://api.staging.aurorax.space", help="A specific API URL to use")
@@ -41,10 +46,7 @@ def cli_runner():
 
 @pytest.fixture(scope="session")
 def conjunction_search_id():
-    # NOTE: the below conjunction search request ID was taken from a
-    # manual conjunction search against the production API (example1.json
-    # from the examples/queries/conjunctions directory).
-    return "9c888643-af01-4ff9-922b-a772b3ff68cd"
+    return CONJUNCTION_SEARCH_REQUEST_ID
 
 
 @pytest.fixture(scope="session")
@@ -54,10 +56,7 @@ def conjunction_search_input_filename():
 
 @pytest.fixture(scope="session")
 def ephemeris_search_id():
-    # NOTE: the below conjunction search request ID was taken from a
-    # manual ephemeris search against the production API (example2.json
-    # from the examples/queries/ephemeris directory).
-    return "ac2a02d9-94ee-499b-ad74-839e989b1859"
+    return EPHEMERIS_SEARCH_REQUEST_ID
 
 
 @pytest.fixture(scope="session")
@@ -67,10 +66,7 @@ def ephemeris_search_input_filename():
 
 @pytest.fixture(scope="session")
 def data_products_search_id():
-    # NOTE: the below conjunction search request ID was taken from a
-    # manual data products search against the production API (example2.json
-    # from the examples/queries/data_products directory).
-    return "d719bcef-9ec5-4227-ba87-0fda7738ef57"
+    return DATA_PRODUCTS_SEARCH_REQUEST_ID
 
 
 @pytest.fixture(scope="session")
@@ -99,7 +95,14 @@ def pytest_sessionstart(session):
     """
     Called before any test is done
     """
+    # init
+    d1 = datetime.datetime.now()
+    global CONJUNCTION_SEARCH_REQUEST_ID
+    global EPHEMERIS_SEARCH_REQUEST_ID
+    global DATA_PRODUCTS_SEARCH_REQUEST_ID
+
     # initial setup
+    print("[SETUP] Setting up API URL and API key ...")
     api_url = session.config.getoption("--api-url")
     api_key = session.config.getoption("--api-key")
     if (api_key is None):
@@ -109,6 +112,7 @@ def pytest_sessionstart(session):
 
     # create the generic data source that will be used for
     # ephemeris and data products upload/delete tests
+    print("[SETUP] Creating testing data source ...")
     program = "test-program"
     platform = "test-platform"
     instrument_type = "test-instrument-type"
@@ -125,12 +129,42 @@ def pytest_sessionstart(session):
                                          source_type=source_type)
         aurorax.search.sources.add(ds)
 
+    # perform simple conjunction search, set the request ID
+    print("[SETUP] Performing conjunction search ...")
+    s = aurorax.search.conjunctions.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
+                                           datetime.datetime(2020, 1, 1, 6, 59, 59),
+                                           500,
+                                           ground=[aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])],
+                                           space=[aurorax.search.SpaceCriteriaBlock(programs=["swarm"])])
+    CONJUNCTION_SEARCH_REQUEST_ID = s.request_id
+
+    # perform simple ephemeris search, set the request ID
+    print("[SETUP] Performing ephemeris search ...")
+    s = aurorax.search.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                        datetime.datetime(2019, 1, 1, 0, 9, 59),
+                                        programs=["swarm"],
+                                        platforms=["swarma"],
+                                        instrument_types=["footprint"])
+    EPHEMERIS_SEARCH_REQUEST_ID = s.request_id
+
+    # perform simple data product search, set the request ID
+    print("[SETUP] Performing data products search ...")
+    s = aurorax.search.data_products.search(datetime.datetime(2020, 1, 1, 6, 0, 0),
+                                            datetime.datetime(2020, 1, 1, 6, 59, 59),
+                                            programs=["auroramax"],
+                                            data_product_types=["keogram"])
+    DATA_PRODUCTS_SEARCH_REQUEST_ID = s.request_id
+
+    # complete
+    print("[SETUP] Initialization completed in %s" % (datetime.datetime.now() - d1))
+
 
 def pytest_sessionfinish(session, exitstatus):
     """
     Called after whole test run finished, right before
     returning the exit status to the system.
     """
+    print("[TEARDOWN] Cleaning up all testing data dirs ...")
     # delete all data testing dirs
     glob_str = "%s/pyaurorax_data_*testing*" % (str(Path.home()))
     path_list = sorted(glob.glob(glob_str))
@@ -222,6 +256,36 @@ def ephemeris_search_obj():
 
 @pytest.fixture(scope="session")
 def ephemeris_search_dict():
+    return {
+        "data_sources": {
+            "programs": ["themis-asi"],
+            "platforms": ["gillam"],
+            "instrument_types": ["panchromatic ASI"],
+        },
+        "start": "2025-02-05T16:36:43.720Z",
+        "end": "2025-02-05T16:36:43.720Z"
+    }
+
+
+@pytest.fixture(scope="session")
+def data_products_search_obj():
+    # init
+    aurorax = pyaurorax.PyAuroraX()
+
+    # set vars
+    start_dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end_dt = datetime.datetime(2020, 1, 1, 23, 59, 59)
+    programs = ["auroramax"]
+
+    # create search object
+    s = aurorax.search.DataProductSearch(aurorax, start_dt, end_dt, programs=programs)
+
+    # return
+    return s
+
+
+@pytest.fixture(scope="session")
+def data_products_search_dict():
     return {
         "data_sources": {
             "programs": ["themis-asi"],

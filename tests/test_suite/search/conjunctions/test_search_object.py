@@ -80,7 +80,6 @@ def test_create_object(aurorax, test_dict, capsys):
 
     # check describe function
     description = s.describe()
-    print(description)
     assert description != ""
 
 

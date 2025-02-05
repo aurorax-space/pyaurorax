@@ -24,9 +24,9 @@ def test_help(cli_runner):
 
 
 @pytest.mark.cli
-def test_simple(cli_runner, ephemeris_search_id):
+def test_simple(cli_runner, api_url, ephemeris_search_id):
     # get the data
-    result = cli_runner.invoke(cli, "search ephemeris get_query %s" % (ephemeris_search_id))
+    result = cli_runner.invoke(cli, "--api-base-url=%s search ephemeris get_query %s" % (api_url, ephemeris_search_id))
     assert result.exit_code == 0
     assert result.stdout != ""
 
