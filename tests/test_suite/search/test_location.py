@@ -17,21 +17,61 @@ from pyaurorax.search import Location
 
 
 @pytest.mark.search_ro
-def test_create_location_object():
-    loc = Location(lat=51, lon=-110)
-    assert loc.lat == 51.0 and loc.lon == -110.0
+def test_create_object():
+    l = Location(lat=51, lon=-110)
+    assert l.lat == 51.0 and l.lon == -110.0
 
-    print_str = print(loc)
+    print_str = print(l)
     assert print_str != ""
 
 
 @pytest.mark.search_ro
-def test_create_empty_location_object():
-    loc = Location(lat=None, lon=None)
-    assert loc.lat is None and loc.lon is None
+def test_change_object():
+    l = Location(lat=51, lon=-110)
+    l.lat = 80.0
+    l.lon = -150
+    assert l.lat == 80.0 and l.lon == -150.0
 
 
 @pytest.mark.search_ro
-def test_create_invalid_location_object():
+def test_create_empty_object():
+    l = Location(lat=None, lon=None)
+    assert l.lat is None and l.lon is None
+
+
+@pytest.mark.search_ro
+def test_create_invalid_object():
     with pytest.raises(ValueError):
         Location(lat=51, lon=None)
+
+
+@pytest.mark.search_ro
+def test_invalid_change1():
+    l = Location(lat=51, lon=-114.)
+    with pytest.raises(ValueError) as e_info:
+        l.lat = None  # type: ignore
+    assert "Latitude and longitude must both be numbers, or both be None" in str(e_info)
+
+
+@pytest.mark.search_ro
+def test_invalid_change2():
+    l = Location(lat=51, lon=-114.)
+    with pytest.raises(ValueError) as e_info:
+        l.lon = None  # type: ignore
+    assert "Latitude and longitude must both be numbers, or both be None" in str(e_info)
+
+
+@pytest.mark.search_ro
+def test_invalid_change3():
+    l = Location(lat=None, lon=None)
+    with pytest.raises(ValueError) as e_info:
+        l.lat = 51
+    assert "Latitude and longitude must both be numbers, or both be None" in str(e_info)
+
+
+@pytest.mark.search_ro
+def test_invalid_change4():
+    l = Location(lat=None, lon=None)
+    with pytest.raises(ValueError) as e_info:
+        l.lon = -114.
+    assert "Latitude and longitude must both be numbers, or both be None" in str(e_info)
