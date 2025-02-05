@@ -48,7 +48,12 @@ def test_get_all_accounts(aurorax):
 
 
 @pytest.mark.search_ro
-@pytest.mark.parametrize("role,expected_min_count", [("Administrator", 1), ("Owner", 0), ("Maintainer", 0), ("User", 1)])
+@pytest.mark.parametrize("role,expected_min_count", [
+    ("Administrator", 1),
+    ("Owner", 0),
+    ("Maintainer", 0),
+    ("User", 1),
+])
 def test_get_all_accounts_with_role(aurorax, role, expected_min_count):
     """
     Check retrieval of all accounts using filtering
