@@ -5,10 +5,14 @@ Version 1.13.0
   - issue when changing matplotlib theme back to 'default'
   - CLI `sources get --format` bugfix for full record format
   - improve handling of conjunction/ephemeris/data product searches that return no results when retrieving data
+  - improve handling of conjunction/ephemeris/data product searches which receive incorrect criteria blocks
   - issue when ordering by 'owner' for `aurorax.search.sources.list()` and `aurorax.search.sources.search()` functions
 - removed `aurorax-cli search sources get_stats` command (`aurorax-cli search sources get --include-stats` flag covers this functionality)
 - removed `aurorax-cli search util ground_to_nbtrace` and `aurorax-cli search util ground_to_sbtrace` commands (use library functions instead)
 - removed setter class for `api_headers` and `srs_obj` in `PyAurorax()` objects
+- changed the `distance` parameter for `aurorax.search.conjunctions.create_advanced_distance_combos()` function to be optional, defaulting to None
+- added the `aurorax.search.conjunctions.create_response_format_template()` function to assist with specifying the `response_format` parameter to a conjunction search
+- changed `aurorax.search.conjunctions.swarmaurora.open_in_browser()` function to raise a ValueError instead of a AuroraXError when the 'browser' parameter was an unsupport choice
 - bump PyUCalgarySRS dependency to latest
 
 

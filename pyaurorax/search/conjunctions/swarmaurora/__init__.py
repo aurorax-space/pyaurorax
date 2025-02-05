@@ -54,13 +54,13 @@ class SwarmAuroraManager:
                 A conjunction search object, must be a completed search with 
                 the 'request_id' value populated
 
-            browser (str)): 
+            browser (str): 
                 The browser type to load using. Default is your default browser. Some common other 
                 options are "google-chrome", "firefox", or "safari". For all available options, refer 
                 to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
         
         Raises:
-            pyaurorax.exceptions.AuroraXError: Unsupported browser specified
+            ValueError: Unsupported browser specified
         """
         return func_open_in_browser(search_obj, browser)
 

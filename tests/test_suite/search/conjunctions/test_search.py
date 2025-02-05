@@ -14,7 +14,7 @@
 
 import pytest
 import datetime
-from pyaurorax.search import Conjunction #, ConjunctionSearch, CONJUNCTION_TYPE_SBTRACE
+from pyaurorax.search import Conjunction, CONJUNCTION_TYPE_SBTRACE
 
 
 @pytest.mark.search_ro
@@ -30,6 +30,8 @@ def test_simple(aurorax, capsys):
 
     # perform search
     s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space, verbose=True)
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
 
     # check results
     assert len(s.data) > 0
@@ -50,6 +52,60 @@ def test_simple(aurorax, capsys):
     assert isinstance(str(s.data[0]), str) is True
     assert isinstance(repr(s.data[0]), str) is True
     s.data[0].pretty_print()
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+
+@pytest.mark.search_ro
+def test_simple_no_results(aurorax, capsys):
+    # set timeframe and distance
+    start = datetime.datetime(1990, 1, 1, 0, 0, 0)
+    end = datetime.datetime(1990, 1, 1, 0, 59, 59)
+    distance = 200
+
+    # set criteria blocks
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
+
+    # perform search
+    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space)
+
+    # check results
+    assert len(s.data) == 0
+
+    # check __str__ and __repr__ for ConjunctionSearch type
+    print_str = str(s)
+    assert print_str != ""
+    assert isinstance(str(s), str) is True
+    assert isinstance(repr(s), str) is True
+    s.pretty_print()
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+
+@pytest.mark.search_ro
+def test_simple_exactly_one_result(aurorax, capsys):
+    # set timeframe and distance
+    start = datetime.datetime(2020, 1, 1, 0, 7, 0)
+    end = datetime.datetime(2020, 1, 1, 0, 9, 0)
+    distance = 200
+
+    # set criteria blocks
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
+
+    # perform search
+    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space)
+
+    # check results
+    assert len(s.data) == 1
+
+    # check __str__ and __repr__ for ConjunctionSearch type
+    print_str = str(s)
+    assert print_str != ""
+    assert isinstance(str(s), str) is True
+    assert isinstance(repr(s), str) is True
+    s.pretty_print()
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 
@@ -69,20 +125,11 @@ def test_triple_search(aurorax, capsys):
     space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
 
     # perform search
-    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space, verbose=True)
+    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space)
 
     # check results
     assert len(s.data) > 0
     assert isinstance(s.data[0], Conjunction) is True
-
-    # check __str__ and __repr__ for ConjunctionSearch type
-    print_str = str(s)
-    assert print_str != ""
-    assert isinstance(str(s), str) is True
-    assert isinstance(repr(s), str) is True
-    s.pretty_print()
-    captured_stdout = capsys.readouterr().out
-    assert captured_stdout != ""
 
     # check __str__ and __repr__ for Conjunction type
     print_str = str(s.data[0])
@@ -94,342 +141,292 @@ def test_triple_search(aurorax, capsys):
     assert captured_stdout != ""
 
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_synchronous_with_response_format(aurorax):
-#     # set up params
-#     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-#     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"], "platforms": ["gillam"]}]
-#     space_params = [{"programs": ["swarm", "themis"]}]
-#     distance = 300
-#     response_format = {
-#         "conjunction_type": True,
-#         "start": True,
-#         "end": True,
-#         "min_distance": True,
-#         "closest_epoch": True,
-#         "data_sources": {
-#             "identifier": True
-#         }
-#     }
+@pytest.mark.search_ro
+def test_with_hemispheres(aurorax):
+    # set up params
+    start = datetime.datetime(2019, 2, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 2, 1, 23, 59, 59)
+    space = [
+        aurorax.search.SpaceCriteriaBlock(programs=["swarm"], hemisphere=["southern"]),
+        aurorax.search.SpaceCriteriaBlock(programs=["themis"], hemisphere=["northern"])
+    ]
+    distance = 300
 
-#     # do synchronous search
-#     s = aurorax.search.conjunctions.search(start,
-#                                            end,
-#                                            distance,
-#                                            ground=ground_params,
-#                                            space=space_params,
-#                                            verbose=False,
-#                                            response_format=response_format)
+    # perform search
+    s = aurorax.search.conjunctions.search(start, end, distance, space=space)
 
-#     # do checks on response data
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], dict) is True
-#     for key in s.data[0].keys():
-#         assert key in response_format.keys()
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_synchronous_events_and_space(aurorax):
-#     # set up params
-#     start = datetime.datetime(2008, 3, 1, 0, 0, 0)
-#     end = datetime.datetime(2008, 3, 1, 23, 59, 59)
-#     space_params = [{"programs": ["swarm", "themis"]}]
-#     events_params = [{"programs": ["events"], "instrument_types": ["substorm onset"]}]
-#     distance = 500
 
-#     # do synchronous search
-#     s = aurorax.search.conjunctions.search(
-#         start,
-#         end,
-#         distance,
-#         space=space_params,
-#         events=events_params,
-#         verbose=False,
-#     )
+@pytest.mark.search_ro
+def test_conjunction_types(aurorax):
+    # set up params
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 23, 59, 59)
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
+    conjunction_types = [CONJUNCTION_TYPE_SBTRACE]
+    distance = 100
 
-#     # check to make sure we got at least one result, and the
-#     # first result is a Conjunction object
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], Conjunction)
+    # perform search
+    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space, conjunction_types=conjunction_types)
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous(aurorax):
-#     # set up params
-#     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-#     end = datetime.datetime(2020, 1, 1, 6, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"]}]
-#     space_params = [{"programs": ["swarm"]}]
-#     distance = 100
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
+    for c in s.data:
+        assert c.conjunction_type == CONJUNCTION_TYPE_SBTRACE
 
-#     # so asynchronous search
-#     s = aurorax.search.conjunctions.search(
-#         start,
-#         end,
-#         distance,
-#         ground=ground_params,
-#         space=space_params,
-#         return_immediately=True,
-#     )
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
+@pytest.mark.search_ro
+def test_with_ground_metadata_filters(aurorax):
+    # set timeframe, distance, and conjunction type
+    start = datetime.datetime(2008, 1, 11, 0, 0, 0)
+    end = datetime.datetime(2008, 1, 15, 23, 59, 59)
+    conjunction_types = [aurorax.search.CONJUNCTION_TYPE_NBTRACE]
+    distance = 500
 
-#     # check to make sure we got at least one result, and the
-#     # first result is a Conjunction object
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], Conjunction) is True
+    # set ground criteria block
+    ground = [
+        aurorax.search.GroundCriteriaBlock(
+            programs=["themis-asi"],
+            metadata_filters=aurorax.search.MetadataFilter(expressions=[
+                # only find records that were classified as APA
+                aurorax.search.MetadataFilterExpression("calgary_apa_ml_v1", "classified as APA", operator="="),
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_cancel(aurorax):
-#     # set up params
-#     start = datetime.datetime(2019, 1, 1, 0, 0, 0)
-#     end = datetime.datetime(2019, 12, 31, 23, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"]}]
-#     space_params = [{"programs": ["swarm"]}]
-#     conjunction_types = [CONJUNCTION_TYPE_SBTRACE]
-#     distance = 100
+                # with a confidence of at least 95%
+                aurorax.search.MetadataFilterExpression("calgary_apa_ml_v1_confidence", 95, operator=">="),
+            ]))
+    ]
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(start,
-#                                            end,
-#                                            distance,
-#                                            ground=ground_params,
-#                                            space=space_params,
-#                                            conjunction_types=conjunction_types,
-#                                            return_immediately=True)
+    # set space criteria block
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["themis"], hemisphere=["northern"])]
 
-#     # cancel request
-#     result = s.cancel(wait=True)
+    # perform the search
+    s = aurorax.search.conjunctions.search(
+        start=start,
+        end=end,
+        distance=distance,
+        ground=ground,
+        space=space,
+        conjunction_types=conjunction_types,
+    )
 
-#     # check to make sure it has been cancelled
-#     assert result == 0
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_with_response_format(aurorax):
-#     # set up params
-#     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-#     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"], "platforms": ["gillam"]}]
-#     space_params = [{"programs": ["swarm", "themis"]}]
-#     distance = 300
-#     response_format = {
-#         "conjunction_type": True,
-#         "start": True,
-#         "end": True,
-#         "min_distance": True,
-#         "closest_epoch": True,
-#         "data_sources": {
-#             "identifier": True
-#         }
-#     }
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(start,
-#                                            end,
-#                                            distance,
-#                                            ground=ground_params,
-#                                            space=space_params,
-#                                            verbose=False,
-#                                            response_format=response_format,
-#                                            return_immediately=True)
+@pytest.mark.search_ro
+def test_with_space_metadata_filters(aurorax):
+    # set timeframe and distance
+    start = datetime.datetime(2019, 2, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 2, 3, 23, 59, 59)
+    distance = 500
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
+    # set ground criteria block
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi", "rego"])]
 
-#     # check to make sure there is at least one conjunction found, and
-#     # the "max_distance" key is not in the first conjunction (since
-#     # we didn't ask for it)
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], dict)
-#     for key in s.data[0].keys():
-#         assert key in response_format.keys()
+    # set space criteria block, with a metadata filter
+    expression1 = aurorax.search.MetadataFilterExpression(key="nbtrace_region", values="north polar cap", operator="=")
+    metadata_filter = aurorax.search.MetadataFilter(expressions=[expression1])
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"], metadata_filters=metadata_filter)]
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_events_and_space(aurorax):
-#     # set up params
-#     start = datetime.datetime(2008, 3, 1, 0, 0, 0)
-#     end = datetime.datetime(2008, 3, 1, 23, 59, 59)
-#     space_params = [{"programs": ["swarm", "themis"]}]
-#     events_params = [{"programs": ["events"], "instrument_types": ["substorm onset"]}]
-#     distance = 500
+    # perform search
+    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space)
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(
-#         start,
-#         end,
-#         distance,
-#         space=space_params,
-#         events=events_params,
-#         verbose=False,
-#         return_immediately=True,
-#     )
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
 
-#     # check to make sure we got at least one result, and the
-#     # first result is a Conjunction object
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], Conjunction) is True
+@pytest.mark.search_ro
+def test_with_advanced_distances(aurorax):
+    # set timeframe
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 4, 23, 59, 59)
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_with_metadata_filters(aurorax):
-#     # set up params
-#     start = datetime.datetime(2019, 3, 27, 0, 0, 0)
-#     end = datetime.datetime(2019, 3, 27, 23, 59, 59)
-#     ground_params = [{
-#         "programs": ["themis-asi"],
-#         "ephemeris_metadata_filters": {
-#             "logical_operator": "AND",
-#             "expressions": [{
-#                 "key": "ml_cloud_v1",
-#                 "operator": "=",
-#                 "values": ["not classified as cloud"]
-#             }]
-#         }
-#     }]
-#     space_params = [{
-#         "programs": ["swarm"],
-#         "ephemeris_metadata_filters": {
-#             "logical_operator": "AND",
-#             "expressions": [{
-#                 "key": "nbtrace_region",
-#                 "operator": "=",
-#                 "values": ["north polar cap"]
-#             }]
-#         }
-#     }]
-#     distance = 300
+    # set criteria blocks
+    ground = [
+        aurorax.search.GroundCriteriaBlock(programs=["rego"]),
+        aurorax.search.GroundCriteriaBlock(programs=["trex"]),
+    ]
+    space = [
+        aurorax.search.SpaceCriteriaBlock(programs=["swarm"]),
+        aurorax.search.SpaceCriteriaBlock(programs=["themis"]),
+    ]
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(
-#         start,
-#         end,
-#         distance,
-#         ground=ground_params,
-#         space=space_params,
-#         return_immediately=True,
-#     )
+    # set advanced distances
+    advanced_distances = {
+        "ground1-ground2": None,
+        "ground1-space1": 500,
+        "ground1-space2": 500,
+        "ground2-space1": 500,
+        "ground2-space2": 500,
+        "space1-space2": None
+    }
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
+    # perform search
+    s = aurorax.search.conjunctions.search(start, end, advanced_distances, ground=ground, space=space)
 
-#     # check to make sure we got at least one result, and the
-#     # first result is a Conjunction object
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], Conjunction)
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_space_only_with_hemispheres(aurorax):
-#     # set up params
-#     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
-#     end = datetime.datetime(2019, 2, 1, 23, 59, 59)
-#     space_params = [{"programs": ["swarm"], "hemisphere": ["southern"]}, {"programs": ["themis"], "hemisphere": ["northern"]}]
-#     distance = 300
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(start, end, distance, space=space_params, return_immediately=True)
+@pytest.mark.search_ro
+def test_events(aurorax):
+    # set timeframe and distance
+    start = datetime.datetime(2008, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2008, 12, 31, 23, 59, 59)
+    distance = 500
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
+    # set criteria blocks
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["themis"])]
+    events = [aurorax.search.EventsCriteriaBlock(instrument_types=["substorm onset"])]
 
-#     # check to make sure we got at least one result, and the
-#     # first result is a Conjunction object
-#     assert len(s.data) > 0
-#     assert isinstance(s.data[0], Conjunction) is True
+    # do search
+    s = aurorax.search.conjunctions.search(
+        start=start,
+        end=end,
+        distance=distance,
+        space=space,
+        events=events,
+    )
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_with_advanced_distances(aurorax):
-#     # set up params
-#     start = datetime.datetime(2019, 2, 5, 0, 0, 0)
-#     end = datetime.datetime(2019, 2, 5, 23, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"]}]
-#     space_params = [{"programs": ["swarm"]}, {"programs": ["themis"]}]
-#     advanced_distances = {"ground1-space1": 200, "space1-space2": 500}
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(
-#         start,
-#         end,
-#         advanced_distances,
-#         ground=ground_params,
-#         space=space_params,
-#         return_immediately=True,
-#     )
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
+@pytest.mark.search_ro
+def test_custom(aurorax):
+    # set timeframe and distance
+    start = datetime.datetime(2018, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2018, 1, 1, 23, 59, 59)
+    distance = 500
 
-#     # compare the distances
-#     query_distance_keys = s.query["max_distances"].keys()
-#     distances_set = ["ground1-space1", "ground1-space2", "space1-space2"]
-#     g1s1_distance_set = s.query["max_distances"]["ground1-space1"] == advanced_distances["ground1-space1"]
-#     s1s2_distance_set = s.query["max_distances"]["space1-space2"] == advanced_distances["space1-space2"]
+    # set criteria blocks
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
+    custom = [aurorax.search.CustomLocationsCriteriaBlock(locations=[(51.05, -114.07)])]
 
-#     # do checks
-#     assert all(x in query_distance_keys for x in distances_set) and g1s1_distance_set and s1s2_distance_set and len(s.data) > 0
+    # do search
+    s = aurorax.search.conjunctions.search(
+        start=start,
+        end=end,
+        distance=distance,
+        space=space,
+        custom_locations=custom,
+    )
 
-# @pytest.mark.search_ro
-# def test_conjunctions_search_asynchronous_with_conjunction_types(aurorax):
-#     # set up params
-#     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-#     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"]}]
-#     space_params = [{"programs": ["swarm"]}]
-#     conjunction_type = [CONJUNCTION_TYPE_SBTRACE]
-#     distance = 100
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
 
-#     # do asynchronous search
-#     s = aurorax.search.conjunctions.search(start,
-#                                            end,
-#                                            distance,
-#                                            ground=ground_params,
-#                                            space=space_params,
-#                                            conjunction_types=conjunction_type,
-#                                            return_immediately=True)
 
-#     # wait for the request to finish, get the data once done
-#     s.wait()
-#     s.get_data()
+@pytest.mark.search_ro
+def test_response_format(aurorax):
+    # set up params
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 23, 59, 59)
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"], platforms=["gillam"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm", "themis"])]
+    distance = 300
+    response_format = {
+        "conjunction_type": True,
+        "start": True,
+        "end": True,
+        "min_distance": True,
+        "closest_epoch": True,
+        "data_sources": {
+            "identifier": True
+        }
+    }
 
-#     # check that conjunctions were cound and the conjunction type of
-#     # the first is south b-trace
-#     assert len(s.data) > 0
-#     assert s.data[0].conjunction_type == CONJUNCTION_TYPE_SBTRACE
+    # do synchronous search
+    s = aurorax.search.conjunctions.search(
+        start,
+        end,
+        distance,
+        ground=ground,
+        space=space,
+        verbose=False,
+        response_format=response_format,
+    )
 
-# @pytest.mark.search_ro
-# def test_conjunction_search_describe(aurorax):
-#     # set params
-#     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-#     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
-#     ground_params = [{"programs": ["themis-asi"]}]
-#     space_params = [{"programs": ["swarm", "themis"]}]
-#     distance = 500
-#     expected_response_str = "Find conjunctions of type (nbtrace) with epoch precision " \
-#         "of 60 seconds between data sources of ground1=(program in (themis-asi)) AND " \
-#         "space1=(program in (swarm, themis)) WHERE epochs are between 2020-01-01T00:00:00 " \
-#         "AND 2020-01-01T23:59:59 UTC HAVING max distances between location points of " \
-#         "ground1-space1=500 km."
+    # do checks on response data
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], dict) is True
+    for key in s.data[0].keys():
+        assert key in response_format.keys()
 
-#     # create search object
-#     s = ConjunctionSearch(aurorax, start, end, distance, ground=ground_params, space=space_params)
 
-#     # get describe string
-#     describe_str = aurorax.search.conjunctions.describe(s)
+@pytest.mark.search_ro
+def test_async(aurorax):
+    # set up params
+    # set timeframe and distance
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 6, 59, 59)
+    distance = 200
 
-#     # test response
-#     assert describe_str is not None
-#     assert describe_str == expected_response_str
+    # set criteria blocks
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
 
-# @pytest.mark.search_ro
-# def test_get_request_url(aurorax):
-#     request_id = "testing-request-id"
-#     expected_url = aurorax.api_base_url + "/api/v1/conjunctions/requests/" + request_id
-#     returned_url = aurorax.search.conjunctions.get_request_url(request_id)
-#     assert returned_url == expected_url
+    # so asynchronous search
+    s = aurorax.search.conjunctions.search(
+        start,
+        end,
+        distance,
+        ground=ground,
+        space=space,
+        return_immediately=True,
+    )
+
+    # update the status
+    #
+    # NOTE: this is not needed, but for coverage we include it
+    s.update_status()
+
+    # wait for the request to finish
+    s.wait()
+
+    # check for data
+    #
+    # NOTE: again, this is not needed, but for coverage we include it
+    s.check_for_data()
+
+    # get data
+    s.get_data()
+
+    # check results
+    assert len(s.data) > 0
+    assert isinstance(s.data[0], Conjunction) is True
+
+
+@pytest.mark.search_ro
+def test_cancel(aurorax):
+    # set up params
+    start = datetime.datetime(2019, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2019, 12, 31, 23, 59, 59)
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
+    conjunction_types = [aurorax.search.CONJUNCTION_TYPE_SBTRACE]
+    distance = 100
+
+    # do asynchronous search
+    s = aurorax.search.conjunctions.search(start,
+                                           end,
+                                           distance,
+                                           ground=ground,
+                                           space=space,
+                                           conjunction_types=conjunction_types,
+                                           return_immediately=True)
+
+    # cancel request
+    result = s.cancel(wait=True)
+
+    # check to make sure it has been cancelled
+    assert result == 0

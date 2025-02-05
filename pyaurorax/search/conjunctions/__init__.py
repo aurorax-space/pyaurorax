@@ -227,7 +227,7 @@ class ConjunctionsManager:
 
     def create_advanced_distance_combos(
         self,
-        distance: int,
+        distance: Optional[int] = None,
         ground: int = 0,
         space: int = 0,
         events: int = 0,
@@ -256,3 +256,144 @@ class ConjunctionsManager:
             The advanced distances combinations
         """
         return func_create_advanced_distance_combos(distance, ground, space, events, custom)
+
+    def create_response_format_template(self, default: bool = False) -> Dict:
+        """
+        Generate a template dictionary that can be used as the response_format parameter
+        in a conjunction search.
+
+        Args:
+            default (bool): 
+                The default value to set for every parameter that can be returned, defaults
+                to False.
+
+        Returns:
+            A template dictionary for the response format
+        """
+        return {
+            "conjunction_type": default,
+            "start": default,
+            "end": default,
+            "min_distance": default,
+            "max_distance": default,
+            "closest_epoch": default,
+            "farthest_epoch": default,
+            "data_sources": {
+                "identifier": default,
+                "program": default,
+                "platform": default,
+                "instrument_type": default,
+                "source_type": default,
+                "display_name": default,
+                "ephemeris_metadata_schema": {
+                    "field_name": default,
+                    "description": default,
+                    "data_type": default,
+                    "allowed_values": default,
+                    "additional_description": default
+                },
+                "data_product_metadata_schema": {
+                    "field_name": default,
+                    "description": default,
+                    "data_type": default,
+                    "allowed_values": default,
+                    "additional_description": default
+                },
+                "owner": default,
+                "maintainers": default,
+                "metadata": default
+            },
+            "events": {
+                "conjunction_type": default,
+                "e1_source": {
+                    "identifier": default,
+                    "program": default,
+                    "platform": default,
+                    "instrument_type": default,
+                    "source_type": default,
+                    "display_name": default,
+                    "ephemeris_metadata_schema": {
+                        "field_name": default,
+                        "description": default,
+                        "data_type": default,
+                        "allowed_values": default,
+                        "additional_description": default
+                    },
+                    "data_product_metadata_schema": {
+                        "field_name": default,
+                        "description": default,
+                        "data_type": default,
+                        "allowed_values": default,
+                        "additional_description": default
+                    },
+                    "owner": default,
+                    "maintainers": default,
+                    "metadata": default
+                },
+                "e2_source": {
+                    "identifier": default,
+                    "program": default,
+                    "platform": default,
+                    "instrument_type": default,
+                    "source_type": default,
+                    "display_name": default,
+                    "ephemeris_metadata_schema": {
+                        "field_name": default,
+                        "description": default,
+                        "data_type": default,
+                        "allowed_values": default,
+                        "additional_description": default
+                    },
+                    "data_product_metadata_schema": {
+                        "field_name": default,
+                        "description": default,
+                        "data_type": default,
+                        "allowed_values": default,
+                        "additional_description": default
+                    },
+                    "owner": default,
+                    "maintainers": default,
+                    "metadata": default
+                },
+                "start": default,
+                "end": default,
+                "min_distance": default,
+                "max_distance": default,
+                "generated_e1_ephemeris_query": {
+                    "request_id": default,
+                    "data_sources": {
+                        "programs": default,
+                        "platforms": default,
+                        "instrument_types": default,
+                        "ephemeris_metadata_filters": {
+                            "logicalOperator": default,
+                            "expressions": {
+                                "key": default,
+                                "operator": default,
+                                "values": default
+                            }
+                        }
+                    },
+                    "start": default,
+                    "end": default
+                },
+                "generated_e2_ephemeris_query": {
+                    "request_id": default,
+                    "data_sources": {
+                        "programs": default,
+                        "platforms": default,
+                        "instrument_types": default,
+                        "ephemeris_metadata_filters": {
+                            "logicalOperator": default,
+                            "expressions": {
+                                "key": default,
+                                "operator": default,
+                                "values": default
+                            }
+                        }
+                    },
+                    "start": default,
+                    "end": default
+                }
+            }
+        }

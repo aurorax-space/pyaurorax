@@ -18,7 +18,6 @@ Functions for using conjunction searches with Swarm-Aurora
 import webbrowser
 import json
 from ...api import AuroraXAPIRequest
-from ....exceptions import AuroraXError
 
 
 def get_url(search_obj):
@@ -32,8 +31,8 @@ def open_in_browser(search_obj, browser):
         w.open_new_tab(url)
     except Exception as e:
         if ("could not locate runnable browser" in str(e)):
-            raise AuroraXError(("Error: selected browser '%s' not found, please try another. For the list of options, refer to "
-                                "https://docs.python.org/3/library/webbrowser.html#webbrowser.get") % (browser)) from e
+            raise ValueError(("Error: selected browser '%s' not found, please try another. For the list of options, refer to "
+                              "https://docs.python.org/3/library/webbrowser.html#webbrowser.get") % (browser)) from e
 
 
 def create_custom_import_file(aurorax_obj, search_obj, filename, return_dict):

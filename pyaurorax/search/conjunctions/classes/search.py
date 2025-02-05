@@ -37,7 +37,7 @@ from ...requests._requests import (
     get_status as requests_get_status,
 )
 if TYPE_CHECKING:
-    from ....pyaurorax import PyAuroraX
+    from ....pyaurorax import PyAuroraX  # pragma: nocover
 
 
 class ConjunctionSearch:
@@ -99,8 +99,9 @@ class ConjunctionSearch:
         status (Dict): 
             The status of the query
 
-        data (List[Conjunction]): 
-            The conjunctions found
+        data (List[Conjunction, Dict]): 
+            A list of the conjunctions found. The results will be dictionaries only if the
+            response_format parameter was supplied.
 
         logs (List[Dict]): 
             All log messages outputted by the AuroraX API for this request
@@ -119,6 +120,27 @@ class ConjunctionSearch:
                  custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                  conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace", "geographic"]]] = ["nbtrace"],
                  response_format: Optional[Dict] = None):
+
+        # some verification
+        for item in ground:
+            if (isinstance(item, dict) is False and isinstance(item, GroundCriteriaBlock) is False):
+                raise ValueError(
+                    "A %s object was found in the 'ground' parameter. Only GroundCriteriaBlock objects are allowed in the ground parameter." %
+                    (item.__class__.__name__))
+        for item in space:
+            if (isinstance(item, dict) is False and isinstance(item, SpaceCriteriaBlock) is False):
+                raise ValueError(
+                    "A %s object was found in the 'space' parameter. Only SpaceCriteriaBlock objects are allowed in the ground parameter." %
+                    (item.__class__.__name__))
+        for item in events:
+            if (isinstance(item, dict) is False and isinstance(item, EventsCriteriaBlock) is False):
+                raise ValueError(
+                    "A %s object was found in the 'events' parameter. Only EventsCriteriaBlock objects are allowed in the ground parameter." %
+                    (item.__class__.__name__))
+        for item in custom_locations:
+            if (isinstance(item, dict) is False and isinstance(item, CustomLocationsCriteriaBlock) is False):
+                raise ValueError(("A %s object was found in the 'custom_locations' parameter. Only CustomLocationsCriteriaBlock objects " +
+                                  "are allowed in the ground parameter.") % (item.__class__.__name__))
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
@@ -169,9 +191,7 @@ class ConjunctionSearch:
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = "[0 conjunction results]"
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = "[1 conjunction result]"
             else:
                 data_str = "[%d conjunction results]" % (len(self.data))
@@ -180,9 +200,7 @@ class ConjunctionSearch:
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = "[0 log messages]"
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover
                 logs_str = "[1 log message]"
             else:
                 logs_str = "[%d log messages]" % (len(self.logs))
@@ -372,10 +390,6 @@ class ConjunctionSearch:
         }
         return self.__query
 
-    @query.setter
-    def query(self, query: Dict) -> None:
-        self.__query = query
-
     def execute(self) -> None:
         """
         Initiate a conjunction search request
@@ -419,7 +433,7 @@ class ConjunctionSearch:
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover
             raise AuroraXAPIError("Could not retrieve status for this request")
 
         # update request status by checking if data URI is set

@@ -62,18 +62,12 @@ class GroundCriteriaBlock:
         """
         A special print output for this class.
         """
-        # set special strings
-        max_len = 80
-        metadata_filters_str = str(self.metadata_filters)
-        if (len(metadata_filters_str) > max_len):
-            metadata_filters_str = "%s...)" % (metadata_filters_str[0:max_len])
-
         # print
         print("GroundCriteriaBlock:")
         print("  %-18s: %s" % ("programs", self.programs))
         print("  %-18s: %s" % ("platforms", self.platforms))
         print("  %-18s: %s" % ("instrument_types", self.instrument_types))
-        print("  %-18s: %s" % ("metadata_filters", metadata_filters_str))
+        print("  %-18s: %s" % ("metadata_filters", self.metadata_filters))
 
 
 class SpaceCriteriaBlock:
@@ -126,25 +120,13 @@ class SpaceCriteriaBlock:
         """
         A special print output for this class.
         """
-        # set special strings
-        max_len = 80
-        metadata_filters_str = str(self.metadata_filters)
-        if (len(metadata_filters_str) > max_len):
-            metadata_filters_str = "%s...)" % (metadata_filters_str[0:max_len])
-
         # print
         print("SpaceCriteriaBlock:")
         print("  %-18s: %s" % ("programs", self.programs))
         print("  %-18s: %s" % ("platforms", self.platforms))
         print("  %-18s: %s" % ("instrument_types", self.instrument_types))
         print("  %-18s: %s" % ("hemisphere", self.hemisphere))
-        print("  %-18s: %s" % ("metadata_filters", metadata_filters_str))
-
-    def to_search_query_dict(self):
-        query_dict = self.__dict__
-        query_dict["ephemeris_metadata_filters"] = None if self.metadata_filters is None else self.metadata_filters.__dict__
-        del query_dict["metadata_filters"]
-        return query_dict
+        print("  %-18s: %s" % ("metadata_filters", self.metadata_filters))
 
 
 class EventsCriteriaBlock:
@@ -181,17 +163,11 @@ class EventsCriteriaBlock:
         """
         A special print output for this class.
         """
-        # set special strings
-        max_len = 80
-        metadata_filters_str = str(self.metadata_filters)
-        if (len(metadata_filters_str) > max_len):
-            metadata_filters_str = "%s...)" % (metadata_filters_str[0:max_len])
-
         # print
         print("EventsCriteriaBlock:")
         print("  %-18s: %s" % ("platforms", self.platforms))
         print("  %-18s: %s" % ("instrument_types", self.instrument_types))
-        print("  %-18s: %s" % ("metadata_filters", metadata_filters_str))
+        print("  %-18s: %s" % ("metadata_filters", self.metadata_filters))
 
 
 class CustomLocationsCriteriaBlock:

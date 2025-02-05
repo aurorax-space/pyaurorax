@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import random
+import string
 import pytest
 
 
@@ -28,5 +31,31 @@ def test_open_in_browser(aurorax, conjunction_search_obj):
 
 
 @pytest.mark.search_ro
-def test_create_custom_import_file(aurorax, conjunction_search_obj):
-    pass
+def test_open_in_browser_bad_choice(aurorax, conjunction_search_obj):
+    with pytest.raises(ValueError) as e_info:
+        aurorax.search.conjunctions.swarmaurora.open_in_browser(conjunction_search_obj, browser="some-bad-choice")
+    assert "Error: selected browser" in str(e_info) and "not found, please try another" in str(e_info)
+
+
+@pytest.mark.search_ro
+def test_create_custom_import_file_simple(aurorax, conjunction_search_obj):
+    output_filename = aurorax.search.conjunctions.swarmaurora.create_custom_import_file(conjunction_search_obj)
+    assert isinstance(output_filename, str) is True
+    assert os.path.exists(output_filename) is True
+    os.remove(output_filename)
+
+
+@pytest.mark.search_ro
+def test_create_custom_import_file_with_filename(aurorax, conjunction_search_obj):
+    output_filename = "/tmp/pyaurorax_testing_%s_swarmaurora_custom.json" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
+    aurorax.search.conjunctions.swarmaurora.create_custom_import_file(conjunction_search_obj, filename=output_filename)
+    assert os.path.exists(output_filename) is True
+    os.remove(output_filename)
+
+
+@pytest.mark.search_ro
+def test_create_custom_import_file_as_dict(aurorax, conjunction_search_obj):
+    custom_import_dict = aurorax.search.conjunctions.swarmaurora.create_custom_import_file(conjunction_search_obj, return_dict=True)
+    assert isinstance(custom_import_dict, list) is True
+    for item in custom_import_dict:
+        assert isinstance(item, dict) is True
