@@ -14,129 +14,11 @@
 
 import pytest
 import datetime
-import random
-import string
-from pyaurorax.search import Conjunction, ConjunctionSearch, CONJUNCTION_TYPE_SBTRACE
-from pyaurorax import AuroraXError
+from pyaurorax.search import Conjunction, CONJUNCTION_TYPE_SBTRACE
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_object(aurorax):
-    # set up params
-    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-    end = datetime.datetime(2020, 1, 1, 6, 59, 59)
-    ground_params = [{"programs": ["themis-asi"]}]
-    space_params = [{"programs": ["swarm"]}]
-    events_params = [{"programs": ["events"]}]
-    distance = 200
-
-    # create search object
-    s = ConjunctionSearch(
-        aurorax,
-        start,
-        end,
-        ground=ground_params,
-        space=space_params,
-        events=events_params,
-        distance=distance,
-    )
-
-    # check to make sure type is correct
-    assert isinstance(s, ConjunctionSearch) is True
-
-
-@pytest.mark.search_ro
-def test_conjunctions_search_query_property(aurorax):
-    # set up params
-    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-    end = datetime.datetime(2020, 1, 1, 6, 59, 59)
-    ground_params = [{"programs": ["themis-asi"]}]
-    space_params = [{"programs": ["swarm"]}]
-    events_params = [{"programs": ["events"]}]
-    distance = 200
-
-    # create object
-    s = ConjunctionSearch(
-        aurorax,
-        start,
-        end,
-        ground=ground_params,
-        space=space_params,
-        events=events_params,
-        distance=distance,
-    )
-
-    # try to get the query parameter
-    assert "query" in dir(s)
-    assert s.query is not None
-
-
-@pytest.mark.search_ro
-def test_conjunctions_search_object_with_advanced_distances(aurorax):
-    # set up params
-    start = datetime.datetime(2019, 2, 5, 0, 0, 0)
-    end = datetime.datetime(2019, 2, 5, 23, 59, 59)
-    ground_params = [{"programs": ["themis-asi"]}]
-    space_params = [{"programs": ["swarm"]}, {"programs": ["themis"]}]
-    advanced_distances = {"ground1-space1": 200, "space1-space2": 500}
-
-    # create object
-    s = ConjunctionSearch(aurorax, start, end, advanced_distances, ground=ground_params, space=space_params)
-
-    # try to get the query parameter
-    assert "query" in dir(s)
-    assert s.query is not None
-
-
-@pytest.mark.search_ro
-@pytest.mark.parametrize("num_ground_blocks,num_space_blocks,num_events_blocks,should_pass", [(5, 5, 0, True), (5, 6, 0, False), (6, 5, 0, False),
-                                                                                              (5, 4, 1, True), (5, 5, 1, False), (5, 4, 2, False),
-                                                                                              (0, 5, 5, True), (5, 0, 5, True), (0, 5, 6, False),
-                                                                                              (11, 0, 0, False), (0, 11, 0, False), (0, 0, 11, False),
-                                                                                              (10, 0, 0, True), (0, 10, 0, True), (0, 0, 10, True)])
-def test_conjunctions_too_many_criteria_blocks(aurorax, num_ground_blocks, num_space_blocks, num_events_blocks, should_pass):
-    # set basic search params
-    start = datetime.datetime(2019, 1, 1, 0, 0, 0)
-    end = datetime.datetime(2019, 1, 31, 23, 59, 59)
-    distance = 300
-
-    # set ground
-    ground = []
-    for _ in range(0, num_ground_blocks):
-        random_str = ''.join(random.sample(string.ascii_lowercase, 10))
-        ground.append({"programs": [random_str]})
-
-    # set space
-    space = []
-    for _ in range(0, num_space_blocks):
-        random_str = ''.join(random.sample(string.ascii_lowercase, 10))
-        space.append({"programs": [random_str]})
-
-    # set events
-    events = []
-    for _ in range(0, num_events_blocks):
-        random_str = ''.join(random.sample(string.ascii_lowercase, 10))
-        events.append({"programs": [random_str]})
-
-    # create search object
-    s = ConjunctionSearch(aurorax, start, end, distance, ground=ground, space=space, events=events)
-
-    # check the criteria block count
-    try:
-        s.check_criteria_block_count_validity()
-        exception_raised = False
-    except AuroraXError:
-        exception_raised = True
-
-    # check if the test should pass or fail
-    if (should_pass is True and exception_raised is True):
-        raise AssertionError("Test should pass but exception was encountered")
-    elif (should_pass is False and exception_raised is False):
-        raise AssertionError("Test should not pass but exception was not encountered")
-
-
-@pytest.mark.search_ro
-def test_conjunctions_search_synchronous(aurorax):
+def test_simple(aurorax):
     # set params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
@@ -154,14 +36,13 @@ def test_conjunctions_search_synchronous(aurorax):
         verbose=False,
     )
 
-    # check to make sure we got at least one result, and the
-    # first result is a Conjunction object
+    # check
     assert len(s.data) > 0
     assert isinstance(s.data[0], Conjunction) is True
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_synchronous_with_response_format(aurorax):
+def test_with_response_format(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
@@ -196,7 +77,7 @@ def test_conjunctions_search_synchronous_with_response_format(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_synchronous_events_and_space(aurorax):
+def test_events_and_space(aurorax):
     # set up params
     start = datetime.datetime(2008, 3, 1, 0, 0, 0)
     end = datetime.datetime(2008, 3, 1, 23, 59, 59)
@@ -221,7 +102,7 @@ def test_conjunctions_search_synchronous_events_and_space(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous(aurorax):
+def test_async(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 6, 59, 59)
@@ -250,7 +131,7 @@ def test_conjunctions_search_asynchronous(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_cancel(aurorax):
+def test_async_cancel(aurorax):
     # set up params
     start = datetime.datetime(2019, 1, 1, 0, 0, 0)
     end = datetime.datetime(2019, 12, 31, 23, 59, 59)
@@ -276,7 +157,7 @@ def test_conjunctions_search_asynchronous_cancel(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_with_response_format(aurorax):
+def test_async_with_response_format(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
@@ -318,7 +199,7 @@ def test_conjunctions_search_asynchronous_with_response_format(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_events_and_space(aurorax):
+def test_async_events_and_space(aurorax):
     # set up params
     start = datetime.datetime(2008, 3, 1, 0, 0, 0)
     end = datetime.datetime(2008, 3, 1, 23, 59, 59)
@@ -348,7 +229,7 @@ def test_conjunctions_search_asynchronous_events_and_space(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_with_metadata_filters(aurorax):
+def test_async_with_metadata_filters(aurorax):
     # set up params
     start = datetime.datetime(2019, 3, 27, 0, 0, 0)
     end = datetime.datetime(2019, 3, 27, 23, 59, 59)
@@ -397,7 +278,7 @@ def test_conjunctions_search_asynchronous_with_metadata_filters(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_space_only_with_hemispheres(aurorax):
+def test_async_space_only_with_hemispheres(aurorax):
     # set up params
     start = datetime.datetime(2019, 2, 1, 0, 0, 0)
     end = datetime.datetime(2019, 2, 1, 23, 59, 59)
@@ -418,7 +299,7 @@ def test_conjunctions_search_asynchronous_space_only_with_hemispheres(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_with_advanced_distances(aurorax):
+def test_async_with_advanced_distances(aurorax):
     # set up params
     start = datetime.datetime(2019, 2, 5, 0, 0, 0)
     end = datetime.datetime(2019, 2, 5, 23, 59, 59)
@@ -451,7 +332,7 @@ def test_conjunctions_search_asynchronous_with_advanced_distances(aurorax):
 
 
 @pytest.mark.search_ro
-def test_conjunctions_search_asynchronous_with_conjunction_types(aurorax):
+def test_async_with_conjunction_types(aurorax):
     # set up params
     start = datetime.datetime(2020, 1, 1, 0, 0, 0)
     end = datetime.datetime(2020, 1, 1, 23, 59, 59)
@@ -477,36 +358,3 @@ def test_conjunctions_search_asynchronous_with_conjunction_types(aurorax):
     # the first is south b-trace
     assert len(s.data) > 0
     assert s.data[0].conjunction_type == CONJUNCTION_TYPE_SBTRACE
-
-
-@pytest.mark.search_ro
-def test_conjunction_search_describe(aurorax):
-    # set params
-    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
-    end = datetime.datetime(2020, 1, 1, 23, 59, 59)
-    ground_params = [{"programs": ["themis-asi"]}]
-    space_params = [{"programs": ["swarm", "themis"]}]
-    distance = 500
-    expected_response_str = "Find conjunctions of type (nbtrace) with epoch precision " \
-        "of 60 seconds between data sources of ground1=(program in (themis-asi)) AND " \
-        "space1=(program in (swarm, themis)) WHERE epochs are between 2020-01-01T00:00:00 " \
-        "AND 2020-01-01T23:59:59 UTC HAVING max distances between location points of " \
-        "ground1-space1=500 km."
-
-    # create search object
-    s = ConjunctionSearch(aurorax, start, end, distance, ground=ground_params, space=space_params)
-
-    # get describe string
-    describe_str = aurorax.search.conjunctions.describe(s)
-
-    # test response
-    assert describe_str is not None
-    assert describe_str == expected_response_str
-
-
-@pytest.mark.search_ro
-def test_get_request_url(aurorax):
-    request_id = "testing-request-id"
-    expected_url = aurorax.api_base_url + "/api/v1/conjunctions/requests/" + request_id
-    returned_url = aurorax.search.conjunctions.get_request_url(request_id)
-    assert returned_url == expected_url

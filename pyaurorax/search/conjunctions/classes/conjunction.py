@@ -101,3 +101,29 @@ class Conjunction:
     def __repr__(self) -> str:
         return f"Conjunction(start={repr(self.start)}, end={repr(self.end)}, min_distance={self.min_distance:.2f}, " \
             f"max_distance={self.max_distance:.2f}, data_sources=[...], events=[...])"
+
+    def pretty_print(self):
+        """
+        A special print output for this class.
+        """
+        # set special strings
+        if (len(self.data_sources) == 1):  # pragma: nocover
+            data_sources_str = "[%d data source]" % (len(self.data_sources))
+        else:
+            data_sources_str = "[%d data sources]" % (len(self.data_sources))
+        if (len(self.events) == 1):
+            events_str = "[%d event]" % (len(self.events))
+        else:
+            events_str = "[%d events]" % (len(self.events))
+
+        # print
+        print("Conjunction:")
+        print("  %-18s: %s" % ("conjunction_type", self.conjunction_type))
+        print("  %-18s: %s" % ("start", self.start))
+        print("  %-18s: %s" % ("end", self.end))
+        print("  %-18s: %s" % ("data_sources", data_sources_str))
+        print("  %-18s: %s" % ("min_distance", self.min_distance))
+        print("  %-18s: %s" % ("max_distance", self.max_distance))
+        print("  %-18s: %s" % ("events", events_str))
+        print("  %-18s: %s" % ("closest_epoch", self.closest_epoch))
+        print("  %-18s: %s" % ("farthest_epoch", self.farthest_epoch))

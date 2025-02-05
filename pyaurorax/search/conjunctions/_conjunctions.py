@@ -58,7 +58,7 @@ def search(aurorax_obj, start, end, distance, ground, space, events, custom_loca
     s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # check if error condition encountered
-    if (s.status["search_result"]["error_condition"] is True):
+    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover
         # error encountered
         raise AuroraXSearchError(s.logs[-1]["summary"])
 
@@ -80,6 +80,9 @@ def search(aurorax_obj, start, end, distance, ground, space, events, custom_loca
 
 
 def search_from_raw_query(aurorax_obj, query, poll_interval, return_immediately, verbose):
+    # deep copy the query first
+    query = deepcopy(query)
+
     # convert to dict
     if (isinstance(query, str) is True):
         # query is a string, so presumably it is a JSON-valid string; convert it to dict
@@ -126,7 +129,7 @@ def search_from_raw_query(aurorax_obj, query, poll_interval, return_immediately,
     s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # check if error condition encountered
-    if (s.status["search_result"]["error_condition"] is True):
+    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover
         # error encountered
         raise AuroraXSearchError(s.logs[-1]["summary"])
 

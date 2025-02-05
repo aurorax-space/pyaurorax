@@ -17,6 +17,7 @@ import copy
 import glob
 import shutil
 import pytest
+import datetime
 import pyaurorax
 from click.testing import CliRunner
 from pathlib import Path
@@ -148,3 +149,46 @@ def find_dataset(datasets, dataset_name):
         if (d.name == dataset_name):
             return copy.deepcopy(d)
     return None
+
+
+@pytest.fixture(scope="session")
+def conjunction_search_obj():
+    # init
+    aurorax = pyaurorax.PyAuroraX()
+
+    # create search object
+    start = datetime.datetime(2020, 1, 1, 0, 0, 0)
+    end = datetime.datetime(2020, 1, 1, 6, 59, 59)
+    distance = 500
+    ground = [aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])]
+    space = [aurorax.search.SpaceCriteriaBlock(programs=["swarm"])]
+    s = aurorax.search.conjunctions.search(start, end, distance, ground=ground, space=space, return_immediately=True)
+
+    # return
+    return s
+
+
+@pytest.fixture(scope="function")
+def conjunction_search_dict():
+    return {
+        "start": "2019-01-01T00:00:00.000Z",
+        "end": "2019-01-03T23:59:59.000Z",
+        "conjunction_types": ["nbtrace"],
+        "ground": [{
+            "programs": ["themis-asi"],
+            "platforms": ["fort smith", "gillam"],
+            "instrument_types": ["panchromatic ASI"],
+            "ephemeris_metadata_filters": {}
+        }],
+        "space": [{
+            "programs": ["swarm"],
+            "platforms": [],
+            "instrument_types": ["footprint"],
+            "ephemeris_metadata_filters": {},
+            "hemisphere": ["northern"]
+        }],
+        "events": [],
+        "max_distances": {
+            "ground1-space1": 500
+        }
+    }
