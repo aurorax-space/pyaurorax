@@ -82,10 +82,10 @@ def get_status(config, request_uuid, show_logs, show_query, filter_logs, table_m
     except pyaurorax.AuroraXAPIError as e:
         if ("API error code 404" in str(e)):
             click.echo("%s occurred: request ID not found" % (type(e).__name__))
-        else:  # pragma: nocover
+        else:  # pragma: nocover-ok
             click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:  # pragma: nocover
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -119,10 +119,10 @@ def get_logs(config, request_uuid, filter_, table_max_width):
     except pyaurorax.AuroraXAPIError as e:
         if ("API error code 404" in str(e)):
             click.echo("%s occurred: request ID not found" % (type(e).__name__))
-        else:  # pragma: nocover
+        else:  # pragma: nocover-ok
             click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:  # pragma: nocover
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -150,10 +150,10 @@ def get_query(config, request_uuid):
     except pyaurorax.AuroraXAPIError as e:
         if ("API error code 404" in str(e)):
             click.echo("%s occurred: request ID not found" % (type(e).__name__))
-        else:  # pragma: nocover
+        else:  # pragma: nocover-ok
             click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:  # pragma: nocover
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -201,10 +201,10 @@ def search_resubmit(config, request_uuid):
     except pyaurorax.AuroraXAPIError as e:
         if ("API error code 404" in str(e)):
             click.echo("%s occurred: request ID not found" % (type(e).__name__))
-        else:  # pragma: nocover
+        else:  # pragma: nocover-ok
             click.echo("%s occurred: unexpected error -- %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:  # pragma: nocover
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 

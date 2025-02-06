@@ -38,7 +38,7 @@ def __test_connectivity(aurorax):
     click.echo("Checking connectivity to %s ...\n" % (aurorax.api_base_url))
     try:
         r = requests.get(aurorax.api_base_url, timeout=aurorax.api_timeout)
-    except requests.RequestException as e:  # pragma: nocover
+    except requests.RequestException as e:  # pragma: nocover-ok
         click.echo("Error connecting to AuroraX API: %s" % (str(e)))
         sys.exit(1)
 

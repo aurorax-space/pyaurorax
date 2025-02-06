@@ -19,7 +19,7 @@ from pyucalgarysrs.data import Dataset, Data
 from pyucalgarysrs.exceptions import SRSError, SRSUnsupportedReadError
 from ....exceptions import AuroraXError, AuroraXUnsupportedReadError
 if TYPE_CHECKING:
-    from ....pyaurorax import PyAuroraX  # pragma: nocover
+    from ....pyaurorax import PyAuroraX  # pragma: nocover-ok
 
 
 class ReadManager:

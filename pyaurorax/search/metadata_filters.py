@@ -16,7 +16,6 @@ Class definition for a metadata filter objects
 """
 
 from typing import List, Literal, Union, Any
-from ..exceptions import AuroraXError
 
 
 class MetadataFilterExpression:
@@ -40,7 +39,7 @@ class MetadataFilterExpression:
             are multiple values (ie. the values parameter is a list of strings).
         
     Raises:
-        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+        pyaurorax.exceptions.ValueError: if invalid operator was specified.
     """
 
     def __init__(
@@ -52,6 +51,12 @@ class MetadataFilterExpression:
         # set required parameters
         self.key = key
         self.values = values
+
+        # set operator
+        if (operator not in ["=", "!=", ">", "<", ">=", "<=", "between", "in", "not in"]):
+            raise ValueError(
+                "Operator '%s' not allowed. You must use one of the following: ['=', '!=', '>', '<', '>=', '<=', 'between', 'in', 'not in']" %
+                (operator))
         self.__operator = operator
 
     @property
@@ -61,8 +66,8 @@ class MetadataFilterExpression:
     @operator.setter
     def operator(self, val: Literal["=", "!=", ">", "<", ">=", "<=", "between", "in", "not in"]):
         if (val not in ["=", "!=", ">", "<", ">=", "<=", "between", "in", "not in"]):
-            AuroraXError("Operator '%s' not allowed. You must use one of the following: ['=', '!=', '>', '<', " +
-                         "'>=', '<=', 'between', 'in', 'not in']" % (val))
+            raise ValueError(
+                "Operator '%s' not allowed. You must use one of the following: ['=', '!=', '>', '<', '>=', '<=', 'between', 'in', 'not in']" % (val))
         self.__operator = val
 
     def __str__(self) -> str:
@@ -115,7 +120,7 @@ class MetadataFilter:
             choices are 'and' or 'or'.
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+        pyaurorax.exceptions.ValueError: if invalid operator was specified.
     """
 
     def __init__(
@@ -124,6 +129,10 @@ class MetadataFilter:
         operator: Literal["and", "or", "AND", "OR"] = "and",
     ):
         self.expressions = expressions
+
+        # set operator
+        if (operator.lower() not in ["and", "or"]):
+            raise ValueError("Operator '%s' not allowed. You must use one of the following: ['and', 'or']" % (operator))
         self.__operator = operator
 
     @property
@@ -133,7 +142,7 @@ class MetadataFilter:
     @operator.setter
     def operator(self, val: Literal["and", "or", "AND", "OR"] = "and"):
         if (val.lower() not in ["and", "or"]):
-            AuroraXError("Operator '%s' not allowed. You must use one of the following: ['and', 'or']" % (val))
+            raise ValueError("Operator '%s' not allowed. You must use one of the following: ['and', 'or']" % (val))
         self.__operator = val.lower()
 
     def __str__(self) -> str:
@@ -141,9 +150,7 @@ class MetadataFilter:
 
     def __repr__(self) -> str:
         # set special strings
-        if (len(self.expressions) == 0):
-            expressions_str = "[0 expressions]"
-        elif (len(self.expressions) == 1):
+        if (len(self.expressions) == 1):
             expressions_str = "[1 expression]"
         else:
             expressions_str = "[%d expressions]" % (len(self.expressions))

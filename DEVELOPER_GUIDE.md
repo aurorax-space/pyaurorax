@@ -92,4 +92,15 @@ $ make publish
 
 ## Development Notes
 
+### Code coverage
+
+The overall mentality is that the coverage report is in place to help us quickly find out any new holes in the test suite. The below two rules help us with this, indicating that any file showing <100% coverage has a new hole introduced that we were not previously aware of.
+
+  1. Lines marked with `# pragma: nocover-ok` indicate that they are excluded from the coverage report and that we have consciously done so. These lines have been verified to ensure that it's ok that we're not paying attention to the test suite holes they are attributed to
+  2. Lines marked with `# pragma: nocover` indicate that they are excluded from the coverage report, but that we should work towards plugging the holes.
+
+The example notebooks CAN be included in the coverage by including `--cov=pyaurorax --cov-report= --cov-append` in the pytest call from the Makefile. However, we currently prefer to not include them in the coverage since the regular test suite is needed anyways, and will be more comprehensive. Notebooks are tested before each release is published, to ensure they are working.
+
+### General
+
 Attempted to use @overload decorator for `__init__` function of ConjunctionSearch to allow normal instantiation and also query dict instantiation. This didn't pan out because we would have to change arguments to be all keyword based (**kwargs) and not allow any positional args. Don't really want to make that change. 

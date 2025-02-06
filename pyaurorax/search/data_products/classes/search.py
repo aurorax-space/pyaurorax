@@ -31,7 +31,7 @@ from ...requests._requests import (
 )
 from ...._util import show_warning
 if TYPE_CHECKING:
-    from ....pyaurorax import PyAuroraX  # pragma: nocover
+    from ....pyaurorax import PyAuroraX  # pragma: nocover-ok
 
 
 class DataProductSearch:
@@ -182,7 +182,7 @@ class DataProductSearch:
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 1):  # pragma: nocover
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = "[1 log message]"
             else:
                 logs_str = "[%d log messages]" % (len(self.logs))
@@ -270,7 +270,7 @@ class DataProductSearch:
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):  # pragma: nocover
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError("Could not retrieve status for this request")
 
         # update request status by checking if data URI is set

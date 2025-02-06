@@ -40,7 +40,7 @@ class AuroraXAPIResponse:
         self.status_code = status_code
 
     def __str__(self) -> str:
-        return self.__repr__()  # pragma: nocover
+        return self.__repr__()  # pragma: nocover-ok
 
     def __repr__(self) -> str:
-        return f"AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})"  # pragma: nocover
+        return f"AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})"  # pragma: nocover-ok

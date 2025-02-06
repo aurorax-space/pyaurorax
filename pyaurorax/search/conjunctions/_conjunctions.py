@@ -58,7 +58,7 @@ def search(aurorax_obj, start, end, distance, ground, space, events, custom_loca
     s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # check if error condition encountered
-    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover
+    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover-ok
         # error encountered
         raise AuroraXSearchError(s.logs[-1]["summary"])
 
@@ -129,7 +129,7 @@ def search_from_raw_query(aurorax_obj, query, poll_interval, return_immediately,
     s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # check if error condition encountered
-    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover
+    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover-ok
         # error encountered
         raise AuroraXSearchError(s.logs[-1]["summary"])
 

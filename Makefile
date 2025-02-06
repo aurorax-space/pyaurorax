@@ -1,4 +1,4 @@
-.PHONY: install update get-test-data docs test test-linting test-pycodestyle test-bandit test-pytest test-pytest-search test-coverage show-outdated tool-checks publish
+.PHONY: install update get-test-data docs test test-linting test-pycodestyle test-bandit test-pytest test-pytest test-pytest-search-rw test-pytest-notebooks test-coverage show-outdated tool-checks publish
 
 all:
 
@@ -49,10 +49,16 @@ test-bandit:
 	@printf "\n\n"
 
 test-pytest:
-	pytest -n auto --cov=pyaurorax --cov-report= --dist worksteal
+	pytest -n auto --dist worksteal --cov=pyaurorax --cov-report= --cov-append -m "not search_rw"
 
-test-notebooks:
+test-pytest-search-rw:
+	pytest -n 4 --dist worksteal --cov=pyaurorax --cov-report= --cov-append -m "search_rw"
+
+test-pytest-notebooks test-notebooks:
 	pytest -n 6 --nbmake examples/notebooks --ignore-glob=examples/notebooks/**/in_development/*.ipynb
+
+test-pytest-clear:
+	rm .coverage
 
 test-coverage coverage:
 	coverage report

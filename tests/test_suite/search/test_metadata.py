@@ -41,6 +41,26 @@ def test_validate_schema(aurorax):
 
 
 @pytest.mark.search_ro
+def test_validate_bad_schema(aurorax, capsys):
+    source = aurorax.search.sources.get_using_filters(program="swarm", platform="swarma", instrument_type="footprint")
+    schema = aurorax.search.metadata.get_ephemeris_schema(source[0].identifier)
+
+    # create an example metadata dictionary
+    metadata = {
+        "some_bad_key": "some bad value",
+    }
+
+    # validate
+    valid = aurorax.search.metadata.validate(schema, metadata)
+    assert valid is False
+
+    # validate (not quiet)
+    valid = aurorax.search.metadata.validate(schema, metadata, quiet=False)
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+
+@pytest.mark.search_ro
 def test_get_ephemeris_metadata_schema(aurorax):
     # set parameters
     program = "swarm"
@@ -58,6 +78,24 @@ def test_get_ephemeris_metadata_schema(aurorax):
 
 
 @pytest.mark.search_ro
+def test_get_empty_ephemeris_metadata_schema(aurorax):
+    # set parameters
+    program = "events"
+    platform = "mcgrath"
+    instrument_type = "STEVE"
+
+    # get identifier
+    data_source = aurorax.search.sources.get(program, platform, instrument_type, "identifier_only")
+
+    # get schema
+    schema = aurorax.search.metadata.get_ephemeris_schema(data_source.identifier)
+
+    # check
+    assert isinstance(schema, list) is True
+    assert schema == []
+
+
+@pytest.mark.search_ro
 def test_get_data_product_metadata_schema(aurorax):
     # set parameters
     program = "themis-asi"
@@ -72,3 +110,21 @@ def test_get_data_product_metadata_schema(aurorax):
 
     # check
     assert isinstance(schema, list) is True
+
+
+@pytest.mark.search_ro
+def test_get_empty_data_product_metadata_schema(aurorax):
+    # set parameters
+    program = "events"
+    platform = "mcgrath"
+    instrument_type = "STEVE"
+
+    # get identifier
+    data_source = aurorax.search.sources.get(program, platform, instrument_type, format=FORMAT_IDENTIFIER_ONLY)
+
+    # get schema
+    schema = aurorax.search.metadata.get_data_products_schema(data_source.identifier)
+
+    # check
+    assert isinstance(schema, list) is True
+    assert schema == []

@@ -35,7 +35,7 @@ from pyucalgarysrs.models.atm import (
 )
 from ...exceptions import AuroraXAPIError
 if TYPE_CHECKING:
-    from ...pyaurorax import PyAuroraX  # pragma: nocover
+    from ...pyaurorax import PyAuroraX  # pragma: nocover-ok
 
 __all__ = [
     "ATMManager",

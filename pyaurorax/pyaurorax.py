@@ -342,7 +342,7 @@ class PyAuroraX:
         try:
             os.makedirs(self.download_output_root_path, exist_ok=True)
             os.makedirs(self.read_tar_temp_path, exist_ok=True)
-        except IOError as e:  # pragma: nocover
+        except IOError as e:  # pragma: nocover-ok
             raise AuroraXInitializationError("Error during output path creation: %s" % str(e)) from e
 
     # -----------------------------
@@ -377,7 +377,7 @@ class PyAuroraX:
                         shutil.rmtree(item)
                     elif (os.path.isfile(item) is True):
                         os.remove(item)
-        except Exception as e:  # pragma: nocover
+        except Exception as e:  # pragma: nocover-ok
             raise AuroraXPurgeError("Error while purging download output root path: %s" % (str(e))) from e
 
     def purge_read_tar_temp_path(self):
@@ -407,7 +407,7 @@ class PyAuroraX:
 
             # purge pyucalgarysrs path
             self.__srs_obj.purge_read_tar_temp_path()
-        except Exception as e:  # pragma: nocover
+        except Exception as e:  # pragma: nocover-ok
             raise AuroraXPurgeError("Error while purging read tar temp path: %s" % (str(e))) from e
 
     def show_data_usage(self, order: Literal["name", "size"] = "size", return_dict: bool = False) -> Any:

@@ -107,7 +107,7 @@ class Conjunction:
         A special print output for this class.
         """
         # set special strings
-        if (len(self.data_sources) == 1):  # pragma: nocover
+        if (len(self.data_sources) == 1):  # pragma: nocover-ok
             data_sources_str = "[%d data source]" % (len(self.data_sources))
         else:
             data_sources_str = "[%d data sources]" % (len(self.data_sources))

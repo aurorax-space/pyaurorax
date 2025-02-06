@@ -147,7 +147,7 @@ def ephemeris(config, start_date, end_date, program, platform, instrument_type, 
                                                          platform=platform,
                                                          instrument_type=instrument_type,
                                                          source_type=source_type)
-    except pyaurorax.AuroraXError as e:  # pragma: nocover
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -225,7 +225,7 @@ def data_products(config, start_date, end_date, program, platform, instrument_ty
                                                              platform=platform,
                                                              instrument_type=instrument_type,
                                                              source_type=source_type)
-    except pyaurorax.AuroraXError as e:  # pragma: nocover
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 

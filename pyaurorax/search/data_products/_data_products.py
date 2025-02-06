@@ -37,7 +37,7 @@ def __validate_data_source(aurorax_obj, identifier, records):
     # get data source
     try:
         ds = get_using_identifier(aurorax_obj, identifier, FORMAT_DEFAULT, False)
-    except AuroraXAPIError as e:  # pragma: nocover
+    except AuroraXAPIError as e:  # pragma: nocover-ok
         if ("no data source record found" in str(e).lower()):
             raise AuroraXAPIError("Data source with identifier %d could not be found" % (identifier)) from e
         else:
@@ -87,7 +87,7 @@ def search(aurorax_obj, start, end, programs, platforms, instrument_types, data_
     s.wait(poll_interval=poll_interval, verbose=verbose)
 
     # check if error condition encountered
-    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover
+    if (s.status["search_result"]["error_condition"] is True):  # pragma: nocover-ok
         # error encountered
         raise AuroraXSearchError(s.logs[-1]["summary"])
 
@@ -140,7 +140,7 @@ def upload(aurorax_obj, identifier, all_records, validate_source, chunk_size):
 
         # evaluate response
         if (res.status_code == 400):
-            if isinstance(res.data, list):  # pragma: nocover
+            if isinstance(res.data, list):  # pragma: nocover-ok
                 raise AuroraXUploadError("%s - %s" % (res.status_code, res.data[0]["message"]))
             raise AuroraXUploadError("%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
@@ -150,7 +150,7 @@ def upload(aurorax_obj, identifier, all_records, validate_source, chunk_size):
 
 def delete_urls(aurorax_obj, data_source, urls):
     # check to make sure the identifier, program, platform, and instrument type are all set in the data source
-    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):  # pragma: nocover
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):  # pragma: nocover-ok
         raise AuroraXError("One or more required data source parameters are missing, delete operation aborted")
 
     # do request
@@ -165,7 +165,7 @@ def delete_urls(aurorax_obj, data_source, urls):
     res = delete_req.execute()
 
     # evaluate response
-    if (res.status_code == 400):  # pragma: nocover
+    if (res.status_code == 400):  # pragma: nocover-ok
         raise AuroraXAPIError("%s - %s" % (res.data["error_code"], res.data["error_message"]))
 
     # return
@@ -174,7 +174,7 @@ def delete_urls(aurorax_obj, data_source, urls):
 
 def delete(aurorax_obj, data_source, start, end, data_product_types):
     # check to make sure the identifier, program, platform, and instrument type are all set in the data source
-    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):  # pragma: nocover
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):  # pragma: nocover-ok
         raise AuroraXError("One or more required data source parameters are missing, delete operation aborted")
 
     # do request to get all data products between start and end datetimes
@@ -192,7 +192,7 @@ def delete(aurorax_obj, data_source, start, end, data_product_types):
                    poll_interval=__STANDARD_POLLING_SLEEP_TIME,
                    return_immediately=False,
                    verbose=False)
-    except Exception as e:  # pragma: nocover
+    except Exception as e:  # pragma: nocover-ok
         raise AuroraXError(e) from e
 
     # collect URLs from search result

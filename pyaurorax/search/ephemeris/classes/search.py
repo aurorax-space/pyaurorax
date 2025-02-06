@@ -31,7 +31,7 @@ from ...requests._requests import (
 )
 from ...._util import show_warning
 if TYPE_CHECKING:
-    from ....pyaurorax import PyAuroraX  # pragma: nocover
+    from ....pyaurorax import PyAuroraX  # pragma: nocover-ok
 
 
 class EphemerisSearch:
@@ -176,7 +176,7 @@ class EphemerisSearch:
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 1):  # pragma: nocover
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = "[1 log message]"
             else:
                 logs_str = "[%d log messages]" % (len(self.logs))
@@ -237,7 +237,7 @@ class EphemerisSearch:
             pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         """
         # check for at least one filter criteria
-        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover
+        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover-ok
             raise AuroraXError("At least one filter criteria parameter besides 'start' and 'end' must be specified")
 
         # do request
@@ -270,7 +270,7 @@ class EphemerisSearch:
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):  # pragma: nocover
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError("Could not retrieve status for this request")
 
         # update request status by checking if data URI is set

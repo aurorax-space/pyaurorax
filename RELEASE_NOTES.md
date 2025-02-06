@@ -14,6 +14,7 @@ Version 1.13.0
 - changed the `distance` parameter for `aurorax.search.conjunctions.create_advanced_distance_combos()` function to be optional, defaulting to None
 - added the `aurorax.search.conjunctions.create_response_format_template()` function to assist with specifying the `response_format` parameter to a conjunction search
 - changed `aurorax.search.conjunctions.swarmaurora.open_in_browser()` function to raise a ValueError instead of a AuroraXError when the 'browser' parameter was an unsupport choice
+- changed `MetadataFilter` and `MetadataFilterExpression` classes to raise ValueError instead of AuroraXError when an unsupported operator was specified
 - bump PyUCalgarySRS dependency to latest
 
 

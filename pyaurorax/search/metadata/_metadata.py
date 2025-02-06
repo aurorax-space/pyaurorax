@@ -39,7 +39,7 @@ def get_ephemeris_schema(aurorax_obj, identifier):
     source_info = get_using_identifier(aurorax_obj, identifier, FORMAT_FULL_RECORD, False)
 
     # if there's an ephemeris metadata schema, return it
-    if source_info.ephemeris_metadata_schema:
+    if source_info.ephemeris_metadata_schema:  # pragma: nocover-ok
         return source_info.ephemeris_metadata_schema
     else:
         return []
@@ -50,7 +50,7 @@ def get_data_products_schema(aurorax_obj, identifier):
     source_info = get_using_identifier(aurorax_obj, identifier, FORMAT_FULL_RECORD, False)
 
     # if there's a data products metadata schema, return it
-    if source_info.data_product_metadata_schema:
+    if source_info.data_product_metadata_schema:  # pragma: nocover-ok
         return source_info.data_product_metadata_schema
     else:
         return []
