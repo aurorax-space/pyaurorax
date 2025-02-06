@@ -223,7 +223,7 @@ def test_metadata_filter_warning(aurorax):
 @pytest.mark.search_ro
 def test_cancel(aurorax):
     start_dt = datetime.datetime(2018, 1, 1, 0, 0, 0)
-    end_dt = datetime.datetime(2021, 12, 31, 23, 59, 59)
+    end_dt = datetime.datetime(2018, 1, 31, 23, 59, 59)
     programs = ["themis"]
 
     # do search
@@ -235,3 +235,17 @@ def test_cancel(aurorax):
 
     # check it was cancelled
     assert result == 0
+
+
+@pytest.mark.search_ro
+def test_cancel_no_wait(aurorax):
+    start_dt = datetime.datetime(2018, 1, 1, 0, 0, 0)
+    end_dt = datetime.datetime(2018, 1, 31, 23, 59, 59)
+    programs = ["themis"]
+
+    # do search
+    s = EphemerisSearch(aurorax, start=start_dt, end=end_dt, programs=programs)
+    s.execute()
+
+    # cancel it
+    s.cancel(wait=False)

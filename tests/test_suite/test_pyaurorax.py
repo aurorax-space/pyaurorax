@@ -51,6 +51,9 @@ def test_top_level_class_instantiation_noparams(capsys):
     testing_api_key = "some-api-key"
     aurorax.api_key = testing_api_key
     assert aurorax.api_key == testing_api_key
+    assert "x-aurorax-api-key" in aurorax.api_headers and aurorax.api_headers["x-aurorax-api-key"] == testing_api_key
+    aurorax.api_key = None
+    assert "x-aurorax-api-key" not in aurorax.api_headers
 
     # check __str__ and __repr__ for PyAuroraX type
     print_str = str(aurorax)

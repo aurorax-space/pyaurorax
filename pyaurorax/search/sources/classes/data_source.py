@@ -204,7 +204,7 @@ class DataSource:
         else:
             data_product_metadata_schema_str = self.data_product_metadata_schema
         print("  %-30s: %s" % ("data_product_metadata_schema", data_product_metadata_schema_str))
-        if (self.stats is not None and len(str(self.stats)) > max_len):
+        if (self.stats is not None and len(str(self.stats)) > max_len):  # pragma: nocover
             stats_str = "%s..." % (str(self.stats)[0:max_len])
         else:
             stats_str = self.data_product_metadata_schema

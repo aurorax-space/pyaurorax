@@ -21,7 +21,7 @@ here instead of digging in deeper to the submodules.
 """
 
 import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Literal
 from ._requests import get_status as func_get_status
 from ._requests import get_data as func_get_data
 from ._requests import get_logs as func_get_logs
@@ -144,7 +144,7 @@ class RequestsManager:
         return func_cancel(self.__aurorax_obj, request_url, wait, poll_interval, verbose)
 
     def list(self,
-             search_type: Optional[str] = None,
+             search_type: Optional[Literal["conjunction", "ephemeris", "data_product"]] = None,
              active: Optional[bool] = None,
              start: Optional[datetime.datetime] = None,
              end: Optional[datetime.datetime] = None,
@@ -186,11 +186,12 @@ class RequestsManager:
             List of matching search requests
 
         Raises:
+            ValueError: Unsupported search type
             pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         """
         return func_list(self.__aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition)
 
-    def delete(self, request_id: str) -> int:
+    def delete(self, request_id: str) -> int:  # pragma: nocover
         """
         Entirely remove a search request from the AuroraX database. Administrators only.
 

@@ -424,12 +424,14 @@ class SourcesManager:
 
         Args:
             data_source (DataSource): 
-                The data source to add (note: it must be a fully-defined DataSource object)
+                The data source to add. THe data source record must have at least the following 
+                values specified: program, platform, instrument_type, display_name, and source_type.
 
         Returns:
             The newly created `DataSource`.
 
         Raises:
+            pyaurorax.exceptions.ValueError: Invalid values for DataSource supplied
             pyaurorax.exceptions.AuroraXAPIError: Error during API call
             pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
             pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists

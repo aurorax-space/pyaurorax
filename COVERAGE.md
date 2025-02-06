@@ -21,7 +21,7 @@ pyaurorax/data/ucalgary/read/__init__.py                          36      0   10
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
 pyaurorax/models/atm/__init__.py                                  17      0   100%
-pyaurorax/pyaurorax.py                                           203      1    99%   180
+pyaurorax/pyaurorax.py                                           206      1    99%   174
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -48,12 +48,12 @@ pyaurorax/search/location.py                                      29      0   10
 pyaurorax/search/metadata/__init__.py                             14      0   100%
 pyaurorax/search/metadata/_metadata.py                            16      0   100%
 pyaurorax/search/metadata_filters.py                              60      0   100%
-pyaurorax/search/requests/__init__.py                             28      2    93%   144, 207
-pyaurorax/search/requests/_requests.py                           100     24    76%   50, 54, 88, 115, 122-125, 129, 136-139, 144, 152, 154, 156, 158, 167, 169, 177-184
-pyaurorax/search/sources/__init__.py                              59     26    56%   183-240
-pyaurorax/search/sources/_sources.py                             119     13    89%   132, 154-155, 208, 211, 213, 215, 217, 245-246, 257, 293-294
-pyaurorax/search/sources/classes/data_source.py                   68     26    62%   170, 173, 186-212
-pyaurorax/search/sources/classes/data_source_stats.py             22      9    59%   61, 64, 73-79
+pyaurorax/search/requests/__init__.py                             26      0   100%
+pyaurorax/search/requests/_requests.py                            80      0   100%
+pyaurorax/search/sources/__init__.py                              59      0   100%
+pyaurorax/search/sources/_sources.py                             110      0   100%
+pyaurorax/search/sources/classes/data_source.py                   66      0   100%
+pyaurorax/search/sources/classes/data_source_stats.py             22      0   100%
 pyaurorax/search/util/__init__.py                                 11      0   100%
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
 pyaurorax/tools/__init__.py                                       61     12    80%   93, 100, 107, 114, 121, 128, 135, 142, 222, 256, 298, 313
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5863   2247    62%
+TOTAL                                                           5833   2147    63%
 
 13 empty files skipped.
 ```

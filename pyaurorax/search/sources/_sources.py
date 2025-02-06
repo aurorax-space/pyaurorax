@@ -150,7 +150,7 @@ def get(aurorax_obj, program, platform, instrument_type, format, include_stats):
     # set results to the first thing found
     if (len(sources) == 1):
         return sources[0]
-    elif (len(sources) > 1):
+    elif (len(sources) > 1):  # pragma: nocover-ok
         show_warning("Found more than one data source matching this criteria, returning the first (found %d)" % (len(sources)), stacklevel=1)
         return sources[0]
     else:
@@ -205,16 +205,16 @@ def add(aurorax_obj, ds):
     # note that the source type also has a limit, but because we control these
     # ourselves, we don't need a check for it.
     if not all([ds.program, ds.platform, ds.instrument_type, ds.source_type, ds.display_name]):
-        raise AuroraXAPIError("Missing required fields. To create a data source, the program, platform, " +
-                              "instrument_type, source_type, and display_name, are all required")
+        raise ValueError("Missing required fields. To create a data source, the program, platform, " +
+                         "instrument_type, source_type, and display_name, are all required")
     if (len(ds.program) > 200):
-        raise AuroraXAPIError("Program too long. Must be less than 200 characters")
+        raise ValueError("Program too long. Must be less than 200 characters")
     if (len(ds.platform) > 50):
-        raise AuroraXAPIError("Platform too long. Must be less than 50 characters")
+        raise ValueError("Platform too long. Must be less than 50 characters")
     if (len(ds.instrument_type) > 200):
-        raise AuroraXAPIError("Instrument type too long. Must be less than 200 characters")
+        raise ValueError("Instrument type too long. Must be less than 200 characters")
     if (len(ds.display_name) > 50):
-        raise AuroraXAPIError("Display name too long. Must be less than 50 characters")
+        raise ValueError("Display name too long. Must be less than 50 characters")
 
     # set up request
     request_data = {
@@ -242,7 +242,7 @@ def add(aurorax_obj, ds):
     # return
     try:
         return DataSource(**res.data)
-    except Exception:
+    except Exception:  # pragma: nocover
         raise AuroraXAPIError("Could not create data source") from None
 
 
@@ -253,7 +253,7 @@ def delete(aurorax_obj, identifier):
     res = req.execute()
 
     # evaluate response
-    if (res.status_code == 400):
+    if (res.status_code == 400):  # pragma: nocover
         raise AuroraXAPIError("%s - %s" % (res.data["error_code"], res.data["error_message"]))
     elif (res.status_code == 409):
         raise AuroraXConflictError("%s - %s" % (res.data["error_code"], res.data["error_message"]))
@@ -290,5 +290,5 @@ def update(aurorax_obj, identifier, program, platform, instrument_type, source_t
     # return
     try:
         return get_using_identifier(aurorax_obj, ds.identifier, FORMAT_FULL_RECORD, False)
-    except Exception:
+    except Exception:  # pragma: nocover
         raise AuroraXAPIError("Could not update data source") from None

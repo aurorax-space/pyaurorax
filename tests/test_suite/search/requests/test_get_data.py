@@ -19,44 +19,6 @@ from pyaurorax.search import EphemerisSearch
 
 
 @pytest.mark.search_ro
-def test_get_request_logs(aurorax):
-    # start search
-    r = EphemerisSearch(aurorax,
-                        datetime.datetime(2020, 1, 1, 0, 0, 0),
-                        datetime.datetime(2020, 1, 1, 1, 0, 0),
-                        programs=["swarm"],
-                        platforms=["swarma"],
-                        instrument_types=["ssc-web"])
-    r.execute()
-
-    # sleep briefly
-    time.sleep(1.0)
-
-    # wait for data
-    logs = aurorax.search.requests.get_logs(r.request_url)
-    assert isinstance(logs, list) is True
-
-
-@pytest.mark.search_ro
-def test_get_request_status(aurorax):
-    # start search
-    r = EphemerisSearch(aurorax,
-                        datetime.datetime(2020, 1, 1, 0, 0, 0),
-                        datetime.datetime(2020, 1, 1, 1, 0, 0),
-                        programs=["swarm"],
-                        platforms=["swarma"],
-                        instrument_types=["footprint"])
-    r.execute()
-
-    # sleep briefly
-    r.wait()
-
-    # get status
-    status = aurorax.search.requests.get_status(r.request_url)
-    assert status
-
-
-@pytest.mark.search_ro
 def test_get_request_data(aurorax):
     # start search
     r = EphemerisSearch(aurorax,

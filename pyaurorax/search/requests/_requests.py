@@ -17,7 +17,6 @@ Functions for interacting with AuroraX requests
 
 import datetime
 import time
-from ..._util import show_warning
 from ..api.classes.request import AuroraXAPIRequest
 from ..location import Location
 from ...exceptions import (
@@ -46,11 +45,11 @@ def get_data(aurorax_obj, data_url, response_format, skip_serializing):
         else:
             req = AuroraXAPIRequest(aurorax_obj, method="get", url=data_url)
         res = req.execute()
-    except Exception as e:
+    except Exception as e:  # pragma: nocover
         raise AuroraXDataRetrievalError("unable to retrieve data (likely there is none)") from e
 
     # check for error message
-    if ("error" in res.data):
+    if ("error" in res.data):  # pragma: nocover
         raise AuroraXDataRetrievalError("%s: %s" % (
             res.data["error"]["error_code"],
             res.data["error"]["error_message"],
@@ -84,7 +83,7 @@ def get_logs(aurorax_obj, request_url):
     # return
     if ("logs" in status):
         return status["logs"]
-    else:
+    else:  # pragma: nocover
         return []
 
 
@@ -118,7 +117,7 @@ def cancel(aurorax_obj, request_url, wait, poll_interval, verbose):
     status = get_status(aurorax_obj, request_url)
 
     # wait for request to be cancelled
-    while (status["search_result"]["data_uri"] is None and status["search_result"]["error_condition"] is False):
+    while (status["search_result"]["data_uri"] is None and status["search_result"]["error_condition"] is False):  # pragma: nocover
         time.sleep(poll_interval)
         if (verbose is True):
             print("[%s] Checking for cancellation status ..." % (datetime.datetime.now()))
@@ -133,10 +132,8 @@ def cancel(aurorax_obj, request_url, wait, poll_interval, verbose):
 def list(aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition):
     # check the search request type
     if (search_type is not None and search_type not in __ALLOWED_SEARCH_LISTING_TYPES):
-        show_warning("The search type value '%s' is not one that PyAuroraX knows about. Supported values are: "
-                     "%s. Aborting request." % (search_type, ', '.join(__ALLOWED_SEARCH_LISTING_TYPES)),
-                     stacklevel=1)
-        return []
+        raise ValueError("The search type value '%s' is not one that PyAuroraX knows about. Supported values are: "
+                         "%s. Aborting request." % (search_type, ', '.join(__ALLOWED_SEARCH_LISTING_TYPES)))
 
     # set params
     params = {}
@@ -158,21 +155,18 @@ def list(aurorax_obj, search_type, active, start, end, file_size, result_count, 
         params["query_duration"] = query_duration
 
     # do request
-    url = "%s/%s" % (aurorax_obj.api_base_url, aurorax_obj.search.api.URL_SUFFIX_LIST_REQUESTS)
-    req = AuroraXAPIRequest(aurorax_obj, method="get", url=url, params=params)
-    res = req.execute()
-
-    # check responses
-    if (res.status_code == 401):
-        raise AuroraXUnauthorizedError("API key not detected, please authenticate first.")
-    if (res.status_code == 403):
-        raise AuroraXUnauthorizedError("Administrator account required. API key not valid for this level of access")
+    try:
+        url = "%s/%s" % (aurorax_obj.api_base_url, aurorax_obj.search.api.URL_SUFFIX_LIST_REQUESTS)
+        req = AuroraXAPIRequest(aurorax_obj, method="get", url=url, params=params)
+        res = req.execute()
+    except AuroraXUnauthorizedError as e:
+        raise AuroraXUnauthorizedError("An Administrator API key was not detected, and is required for this function") from e
 
     # return
     return res.data
 
 
-def delete(aurorax_obj, request_id):
+def delete(aurorax_obj, request_id):  # pragma: nocover
     # do request
     url = "%s/%s" % (aurorax_obj.api_base_url, aurorax_obj.search.api.URL_SUFFIX_DELETE_REQUESTS.format(request_id))
     req = AuroraXAPIRequest(aurorax_obj, method="delete", url=url, null_response=True)

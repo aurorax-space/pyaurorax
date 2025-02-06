@@ -18,7 +18,7 @@ import humanize
 import pyucalgarysrs
 from texttable import Texttable
 from pathlib import Path
-from typing import Optional, Dict, Any, Literal
+from typing import Optional, Any, Literal
 from . import __version__
 from .exceptions import AuroraXInitializationError, AuroraXPurgeError
 from .search import SearchManager
@@ -60,7 +60,6 @@ class PyAuroraX:
         read_tar_temp_path: Optional[str] = None,
         api_base_url: Optional[str] = None,
         api_timeout: Optional[int] = None,
-        api_headers: Optional[Dict] = None,
         api_key: Optional[str] = None,
         progress_bar_backend: Literal["auto", "standard", "notebook"] = "auto",
     ):
@@ -86,11 +85,6 @@ class PyAuroraX:
                 The timeout used when communicating with the Aurorax API. This value is represented in 
                 seconds, and by default is `10 seconds`.
             
-            api_headers (Dict): 
-                HTTP headers used when communicating with the AuroraX API. The default for this value 
-                consists of several standard headers. Any changes to this parameter are in addition to 
-                the default standard headers.
-
             api_key (str): 
                 API key to use when interacting with the AuroraX API. The default value is None. Please note
                 that an API key is only required for write operations to the AuroraX search API, such as
@@ -234,8 +228,17 @@ class PyAuroraX:
         return self.__api_key
 
     @api_key.setter
-    def api_key(self, value: str):
+    def api_key(self, value: Optional[str] = None):
+        # set the private var
         self.__api_key = value
+
+        # update the headers
+        if (value is None or value == "") and "x-aurorax-api-key" in self.__api_headers:
+            # remove it
+            del self.__api_headers["x-aurorax-api-key"]
+        else:
+            # add/update it
+            self.__api_headers["x-aurorax-api-key"] = self.__api_key  # type: ignore
 
     @property
     def download_output_root_path(self):
@@ -297,14 +300,14 @@ class PyAuroraX:
 
     def __repr__(self) -> str:
         return ("PyAuroraX(download_output_root_path='%s', read_tar_temp_path='%s', api_base_url='%s', " +
-                "api_headers=%s, api_timeout=%s, api_key='%s', progress_bar_backend='%s', srs_obj=PyUCalgarySRS(...))") % (
+                "api_headers=%s, api_timeout=%s, api_key=%s, progress_bar_backend='%s', srs_obj=PyUCalgarySRS(...))") % (
                     self.__download_output_root_path,
                     self.__read_tar_temp_path,
                     self.api_base_url,
                     self.api_headers,
                     self.api_timeout,
+                    "None" if self.api_key is None else "'%s'" % (self.api_key),
                     self.progress_bar_backend,
-                    self.api_key,
                 )
 
     def pretty_print(self):

@@ -33,6 +33,7 @@ DATA_PRODUCTS_SEARCH_REQUEST_ID = None
 def pytest_addoption(parser):
     parser.addoption("--api-url", action="store", default="https://api.staging.aurorax.space", help="A specific API URL to use")
     parser.addoption("--api-key", type=str, help="A specific API key to use")
+    parser.addoption("--no-init-tasks", action="store_true", help="Do not do the initialization tasks")
 
 
 #---------------------------------------------------
@@ -301,22 +302,25 @@ def pytest_sessionstart(session):
         setup_task_dict["data_products_search_id"] = s.request_id
 
     # create and run threads for each setup task
-    print("[SETUP] Running setup tasks ...")
-    thread1 = threading.Thread(target=setup_task1)
-    thread2 = threading.Thread(target=setup_task2)
-    thread3 = threading.Thread(target=setup_task3)
-    thread4 = threading.Thread(target=setup_task4)
-    thread1.start()
-    thread2.start()
-    thread3.start()
-    thread4.start()
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
-    CONJUNCTION_SEARCH_REQUEST_ID = setup_task_dict["conjunction_search_id"]
-    EPHEMERIS_SEARCH_REQUEST_ID = setup_task_dict["ephemeris_search_id"]
-    DATA_PRODUCTS_SEARCH_REQUEST_ID = setup_task_dict["data_products_search_id"]
+    if (session.config.getoption("--no-init-tasks") is False):
+        print("[SETUP] Running setup tasks ...")
+        thread1 = threading.Thread(target=setup_task1)
+        thread2 = threading.Thread(target=setup_task2)
+        thread3 = threading.Thread(target=setup_task3)
+        thread4 = threading.Thread(target=setup_task4)
+        thread1.start()
+        thread2.start()
+        thread3.start()
+        thread4.start()
+        thread1.join()
+        thread2.join()
+        thread3.join()
+        thread4.join()
+        CONJUNCTION_SEARCH_REQUEST_ID = setup_task_dict["conjunction_search_id"]
+        EPHEMERIS_SEARCH_REQUEST_ID = setup_task_dict["ephemeris_search_id"]
+        DATA_PRODUCTS_SEARCH_REQUEST_ID = setup_task_dict["data_products_search_id"]
+    else:
+        print("[SETUP] Skipping setup tasks")
 
     # complete
     print("[SETUP] Initialization completed in %s" % (datetime.datetime.now() - d1))
@@ -327,7 +331,7 @@ def pytest_sessionfinish(session, exitstatus):
     Called after whole test run finished, right before
     returning the exit status to the system.
     """
-    print("\n[TEARDOWN] Cleaning up all testing data dirs ...")
+    print("\n\n[TEARDOWN] Cleaning up all testing data dirs ...")
     # delete all data testing dirs
     glob_str = "%s/pyaurorax_data_*testing*" % (str(Path.home()))
     path_list = sorted(glob.glob(glob_str))
