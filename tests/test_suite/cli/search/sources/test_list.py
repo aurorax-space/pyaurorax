@@ -88,3 +88,10 @@ def test_include_stats(cli_runner):
     result = cli_runner.invoke(cli, "search sources list --include-stats")
     assert result.exit_code == 0
     assert result.output != ""
+
+
+@pytest.mark.cli
+def test_stats_and_owner(cli_runner):
+    result = cli_runner.invoke(cli, "search sources list --include-stats --order=owner")
+    assert result.exit_code == 0
+    assert result.output != ""

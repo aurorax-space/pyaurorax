@@ -41,6 +41,6 @@ def test_simple(cli_runner, json_filename):
 
 @pytest.mark.cli
 def test_bad_file(cli_runner):
-    result = cli_runner.invoke(cli, "search ephemeris describe some-bad-file.json")
+    result = cli_runner.invoke(cli, "search conjunctions describe some-bad-file.json")
     assert result.exit_code == 1
     assert "infile doesn't exist" in result.stdout

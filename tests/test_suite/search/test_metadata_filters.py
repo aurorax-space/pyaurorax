@@ -22,7 +22,8 @@ def test_create(aurorax, capsys):
     expression2 = aurorax.search.MetadataFilterExpression(key="some_key", values=["some value", "another value"], operator="in")
 
     # create filter
-    metadata_filter = aurorax.search.MetadataFilter(expressions=[expression1, expression2])
+    metadata_filter1 = aurorax.search.MetadataFilter(expressions=[expression1])
+    metadata_filter2 = aurorax.search.MetadataFilter(expressions=[expression1, expression2])
 
     # check __str__ and __repr__ for MetadataFilterExpression type
     print_str = str(expression1)
@@ -43,11 +44,20 @@ def test_create(aurorax, capsys):
     assert captured_stdout != ""
 
     # check __str__ and __repr__ for MetadataFilter type
-    print_str = str(metadata_filter)
+    print_str = str(metadata_filter1)
     assert print_str != ""
-    assert isinstance(str(metadata_filter), str) is True
-    assert isinstance(repr(metadata_filter), str) is True
-    metadata_filter.pretty_print()
+    assert isinstance(str(metadata_filter1), str) is True
+    assert isinstance(repr(metadata_filter1), str) is True
+    metadata_filter1.pretty_print()
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+    # check __str__ and __repr__ for MetadataFilter type
+    print_str = str(metadata_filter2)
+    assert print_str != ""
+    assert isinstance(str(metadata_filter2), str) is True
+    assert isinstance(repr(metadata_filter2), str) is True
+    metadata_filter2.pretty_print()
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 

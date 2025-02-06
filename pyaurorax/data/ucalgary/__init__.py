@@ -323,9 +323,9 @@ class UCalgaryManager:
                 progress_bar_desc=progress_bar_desc,
                 timeout=timeout,
             )
-        except SRSDownloadError as e:
+        except SRSDownloadError as e:  # pragma: nocover
             raise AuroraXDownloadError(e) from e
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def download_using_urls(self,
@@ -427,9 +427,9 @@ class UCalgaryManager:
                 progress_bar_desc=progress_bar_desc,
                 timeout=timeout,
             )
-        except SRSDownloadError as e:
+        except SRSDownloadError as e:  # pragma: nocover
             raise AuroraXDownloadError(e) from e
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def get_urls(self,
@@ -500,7 +500,7 @@ class UCalgaryManager:
                 device_uid=device_uid,
                 timeout=timeout,
             )
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def read(self,

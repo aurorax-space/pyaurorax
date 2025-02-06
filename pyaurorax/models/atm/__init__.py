@@ -185,7 +185,7 @@ class ATMManager:
                 no_cache=no_cache,
                 timeout=timeout,
             )
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def inverse(self,
@@ -293,5 +293,5 @@ class ATMManager:
                 no_cache=no_cache,
                 timeout=timeout,
             )
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e

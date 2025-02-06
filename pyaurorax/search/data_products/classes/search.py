@@ -171,9 +171,7 @@ class DataProductSearch:
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = "[0 data product results]"
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = "[1 data product result]"
             else:
                 data_str = "[%d data product results]" % (len(self.data))

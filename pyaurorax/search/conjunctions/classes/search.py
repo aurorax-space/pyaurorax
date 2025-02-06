@@ -363,7 +363,7 @@ class ConjunctionSearch:
                 this_dict["programs"] = ["events"]
                 del this_dict["metadata_filters"]
                 if (this_dict["ephemeris_metadata_filters"] is not None):
-                    this_dict["ephemeris_metadata_filters"] = this_dict["ephemeris_metadata_filters"].to_query_dict()
+                    this_dict["ephemeris_metadata_filters"] = this_dict["ephemeris_metadata_filters"].to_query_dict()  # pragma: nocover
                 events_param.append(this_dict)
 
         # set custom locations

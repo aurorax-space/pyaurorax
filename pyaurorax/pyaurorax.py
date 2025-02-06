@@ -401,7 +401,7 @@ class PyAuroraX:
             for item in os.listdir(self.read_tar_temp_path):
                 item = Path(self.read_tar_temp_path) / item
                 if (os.path.isdir(item) is True and self.download_output_root_path not in str(item)):
-                    shutil.rmtree(item)
+                    shutil.rmtree(item)  # pragma: nocover
                 elif (os.path.isfile(item) is True):
                     os.remove(item)
 

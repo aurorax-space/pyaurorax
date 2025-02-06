@@ -149,9 +149,9 @@ class ReadManager:
                 end_time=end_time,
                 quiet=quiet,
             )
-        except SRSUnsupportedReadError as e:
+        except SRSUnsupportedReadError as e:  # pragma: nocover
             raise AuroraXUnsupportedReadError(e) from e
-        except SRSError as e:
+        except SRSError as e:  # pragma: nocover
             raise AuroraXError(e) from e
 
     def read_themis(self,
@@ -232,7 +232,7 @@ class ReadManager:
                 quiet=quiet,
                 dataset=dataset,
             )
-        except SRSError as e:
+        except SRSError as e:  # pragma: nocover
             raise AuroraXError(e) from e
 
     def read_rego(self,

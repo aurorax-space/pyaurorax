@@ -61,15 +61,15 @@ def test_reversed(cli_runner):
 def test_filters(cli_runner, test_dict):
     # construct args
     args = []
-    if ("program" in test_dict):
-        args.append("--program=%s" % (test_dict["programs"]))
-    if ("platform" in test_dict):
-        args.append("--platform=%s" % (test_dict["platforms"]))
-    if ("instrument_type" in test_dict):
-        args.append("--instrument-type=%s" % (test_dict["instrument_types"]))
+    if ("programs" in test_dict):
+        args.append("--programs=%s" % (test_dict["programs"]))
+    if ("platforms" in test_dict):
+        args.append("--platforms=%s" % (test_dict["platforms"]))
+    if ("instrument_types" in test_dict):
+        args.append("--instrument-types=%s" % (test_dict["instrument_types"]))
 
     # do command
-    result = cli_runner.invoke(cli, "search sources list %s" % (' '.join(args)))
+    result = cli_runner.invoke(cli, "search sources search %s" % (' '.join(args)))
     assert result.exit_code == 0
     assert result.output != ""
 
@@ -77,13 +77,20 @@ def test_filters(cli_runner, test_dict):
 @pytest.mark.cli
 @pytest.mark.parametrize("order_value", ["identifier", "program", "platform", "instrument_type", "display_name", "owner"])
 def test_order(cli_runner, order_value):
-    result = cli_runner.invoke(cli, "search sources list --order=%s" % (order_value))
+    result = cli_runner.invoke(cli, "search sources search --order=%s" % (order_value))
     assert result.exit_code == 0
     assert result.output != ""
 
 
 @pytest.mark.cli
 def test_include_stats(cli_runner):
-    result = cli_runner.invoke(cli, "search sources list --include-stats")
+    result = cli_runner.invoke(cli, "search sources search --include-stats")
+    assert result.exit_code == 0
+    assert result.output != ""
+
+
+@pytest.mark.cli
+def test_stats_and_owner(cli_runner):
+    result = cli_runner.invoke(cli, "search sources search --include-stats --order=owner")
     assert result.exit_code == 0
     assert result.output != ""

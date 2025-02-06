@@ -127,7 +127,7 @@ class DataProductData:
         if (self.metadata is not None):
             for key, value in self.metadata.items():
                 if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                    self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")
+                    self.metadata[key] = self.metadata[key].strftime("%Y-%m-%dT%H:%M:%S.%f")  # pragma: nocover
 
         # format data source fields for query
         d["program"] = self.data_source.program

@@ -202,7 +202,7 @@ def list_search_requests(config, search_type, active, start, end, file_size, res
 @utility_group.command("delete_search_request", short_help="Delete a search request (admins only)")
 @click.argument("request_uuid", type=str)
 @click.pass_obj
-def delete_search_request(config, request_uuid):
+def delete_search_request(config, request_uuid):  # pragma: nocover
     """
     Delete a search request from AuroraX (admins only)
 

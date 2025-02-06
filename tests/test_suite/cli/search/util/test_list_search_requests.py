@@ -31,7 +31,45 @@ def test_simple(cli_runner, api_key):
 
 
 @pytest.mark.cli
+def test_order(cli_runner, api_key):
+    result = cli_runner.invoke(
+        cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s " +
+              "search util list_search_requests --start=2024-01-01T00:00:00 --end=2024-01-31T23:59:59 --order=error_condition") % (api_key))
+    assert result.exit_code == 0
+
+
+@pytest.mark.cli
 def test_active(cli_runner, api_key):
     result = cli_runner.invoke(cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s search util list_search_requests --active") %
                                (api_key))
     assert result.exit_code == 0
+
+
+@pytest.mark.cli
+def test_reversed(cli_runner, api_key):
+    result = cli_runner.invoke(
+        cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s search util list_search_requests --active --reversed") % (api_key))
+    assert result.exit_code == 0
+
+
+@pytest.mark.cli
+def test_limit(cli_runner, api_key):
+    result = cli_runner.invoke(cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s search util list_search_requests --limit=10") %
+                               (api_key))
+    assert result.exit_code == 0
+
+
+@pytest.mark.cli
+def test_bad_start_timestring(cli_runner, api_key):
+    result = cli_runner.invoke(cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s " +
+                                     "search util list_search_requests --start=2024-01-01T00:00 --end=2024-01-31T23:59:59") % (api_key))
+    assert result.exit_code == 1
+    assert "Error parsing start timestamp" in result.output
+
+
+@pytest.mark.cli
+def test_bad_end_timestring(cli_runner, api_key):
+    result = cli_runner.invoke(cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s " +
+                                     "search util list_search_requests --start=2024-01-01T00:00:00 --end=2024-01-31T23:59") % (api_key))
+    assert result.exit_code == 1
+    assert "Error parsing end timestamp" in result.output

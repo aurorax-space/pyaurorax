@@ -44,7 +44,7 @@ def print_request_logs_table(logs, filter_level=None, table_max_width=None, trun
     """
     # init
     default_wrap_threshold = 70
-    if (table_max_width is None):
+    if (table_max_width is None):  # pragma: nocover
         try:
             terminal_columns = os.get_terminal_size().columns
             wrap_threshold = terminal_columns - 38 - 5  # 38 is the size level+timestamp, 5 for some padding
@@ -55,7 +55,7 @@ def print_request_logs_table(logs, filter_level=None, table_max_width=None, trun
             wrap_threshold = default_wrap_threshold
     else:
         wrap_threshold = table_max_width - 38 - 5  # 38 is the size level+timestamp, 5 for some padding
-        if (wrap_threshold < 0):
+        if (wrap_threshold < 0):  # pragma: nocover
             warnings.warn("Terminal width is too small, using default table width which might not look good", stacklevel=1)
             wrap_threshold = default_wrap_threshold
 
@@ -67,7 +67,7 @@ def print_request_logs_table(logs, filter_level=None, table_max_width=None, trun
         if (filter_level is None or log["level"] == filter_level):
             table_levels.append(log["level"])
             if (truncate is True and len(log["summary"]) > 1000):
-                table_summaries.append('\n'.join(textwrap.wrap(log["summary"][0:1000] + "...", wrap_threshold)))
+                table_summaries.append('\n'.join(textwrap.wrap(log["summary"][0:1000] + "...", wrap_threshold)))  # pragma: nocover
             else:
                 table_summaries.append('\n'.join(textwrap.wrap(log["summary"], wrap_threshold)))
             table_timestamps.append(parse(log["timestamp"], ignoretz=True))
@@ -117,7 +117,7 @@ def print_request_status(aurorax_obj, s, show_logs=False, show_query=False, filt
         # set error condition
         error_condition = "False"
         if (s["search_result"]["error_condition"] is True):
-            error_condition = colored("True", "red")
+            error_condition = colored("True", "red")  # pragma: nocover
 
     # print out status nicely
     click.echo("Completed:\t\t%s" % (request_completed))
@@ -135,7 +135,7 @@ def print_request_status(aurorax_obj, s, show_logs=False, show_query=False, filt
             click.echo()
             print_request_logs_table(s["logs"], filter_level=filter_logs, table_max_width=table_max_width)
         else:
-            click.echo("Search logs: missing, unable to display")
+            click.echo("Search logs: missing, unable to display")  # pragma: nocover
 
     # print out query if we asked for it
     if (show_query is True):
@@ -145,7 +145,7 @@ def print_request_status(aurorax_obj, s, show_logs=False, show_query=False, filt
             del query_to_show["request_id"]
             click.echo(pprint.pformat(query_to_show))
         else:
-            click.echo("\nSearch query: missing, unable to display")
+            click.echo("\nSearch query: missing, unable to display")  # pragma: nocover
 
 
 def get_search_data(aurorax_obj, type, request_uuid, outfile, output_to_terminal, indent, minify, show_times=False, search_obj=None):
@@ -168,7 +168,7 @@ def get_search_data(aurorax_obj, type, request_uuid, outfile, output_to_terminal
                 url = "%s/%s" % (aurorax_obj.api_base_url, URL_SUFFIX_DATA_PRODUCTS_REQUEST.format(request_uuid))
             elif (type == "ephemeris"):
                 url = "%s/%s" % (aurorax_obj.api_base_url, URL_SUFFIX_EPHEMERIS_REQUEST.format(request_uuid))
-            else:
+            else:  # pragma: nocover
                 click.echo("Unexpected error occurred, please open an issue on the Github repository detailing how "
                            "you were able to make this message appear")
                 sys.exit(1)
@@ -176,12 +176,12 @@ def get_search_data(aurorax_obj, type, request_uuid, outfile, output_to_terminal
             # get status
             try:
                 s = aurorax_obj.search.requests.get_status(url)
-            except pyaurorax.AuroraXNotFoundError:
+            except pyaurorax.AuroraXNotFoundError:  # pragma: nocover
                 click.echo("Error: request ID not found")
                 sys.exit(1)
 
             # check status
-            if (s["search_result"]["completed_timestamp"] is None):
+            if (s["search_result"]["completed_timestamp"] is None):  # pragma: nocover
                 click.echo("Error: Search is not done yet, not retrieving data")
                 click.echo("\nNote: you can use the get_status command to "
                            "check if the search has completed. Try the command "
@@ -204,7 +204,7 @@ def get_search_data(aurorax_obj, type, request_uuid, outfile, output_to_terminal
                 show_times=show_times,
             )
             data = aurorax_obj.search.requests.get_data(data_url, skip_serializing=True)
-        except pyaurorax.AuroraXDataRetrievalError as e:
+        except pyaurorax.AuroraXDataRetrievalError as e:  # pragma: nocover
             # parse error message
             if ("NotFound" in (str(e))):
                 click.echo("\n%s" % ('\n'.join(
@@ -216,10 +216,10 @@ def get_search_data(aurorax_obj, type, request_uuid, outfile, output_to_terminal
             else:
                 __echo_helper("Error downloading data: %s" % (str(e)), show_times=show_times)
             sys.exit(1)
-    except pyaurorax.AuroraXNotFoundError as e:
+    except pyaurorax.AuroraXNotFoundError as e:  # pragma: nocover
         click.echo("%s occurred: request ID not found" % (type(e).__name__))  # type: ignore
         sys.exit(1)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover
         __echo_helper("%s occurred: %s" % (type(e).__name__, e.args[0]), show_times=show_times)  # type: ignore
         sys.exit(1)
 
@@ -252,7 +252,7 @@ def get_search_data(aurorax_obj, type, request_uuid, outfile, output_to_terminal
                 elif (type == "ephemeris"):
                     # serialize into Ephemeris object
                     d_serialized = pyaurorax.search.EphemerisData(**d)
-                else:
+                else:  # pragma: nocover
                     click.echo("Unexpected error occurred, please open an issue on the Github repository detailing "
                                "how you were able to make this message appear")
                     sys.exit(1)

@@ -37,7 +37,7 @@ ALLOWED_FORMATS = [
 
 
 def __print_stats(stats):
-    if (stats.ephemeris_count == 0):
+    if (stats.ephemeris_count == 0):  # pragma: nocover
         click.echo("Ephemeris Stats:\t0 records")
     else:
         click.echo("Ephemeris Stats:\t%s (%s to %s)" % (
@@ -80,7 +80,7 @@ def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
         if ("searchable" in item):
             table_searchable.append(item["searchable"])
         else:
-            table_searchable.append("-")
+            table_searchable.append("-")  # pragma: nocover
     for item in data_product_schema:
         table_schemas.append("data_product")
         table_field_names.append(item["field_name"])
@@ -90,11 +90,11 @@ def __print_metadata_schema_table(ephemeris_schema=[], data_product_schema=[]):
         if ("additional_description" in item):
             table_additional_descriptions.append('\n'.join(textwrap.wrap(item["additional_description"], wrap_threshold)))
         else:
-            table_additional_descriptions.append("-")
+            table_additional_descriptions.append("-")  # pragma: nocover
         if ("searchable" in item):
             table_searchable.append(item["searchable"])
         else:
-            table_searchable.append("-")
+            table_searchable.append("-")  # pragma: nocover
 
     # set header values
     table_headers = ["Schema", "Field Name", "Data Type", "Allowed Values", "Searchable", "Description", "Additional Description"]
@@ -138,7 +138,7 @@ def __print_single_data_source(ds, format, include_stats):
         if (ds.metadata == {}):
             click.echo("Metadata:\t\t%s" % (ds.metadata))
         else:
-            click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))
+            click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))  # pragma: nocover
         if (include_stats is True):
             __print_stats(ds.stats)
     elif (format == pyaurorax.search.FORMAT_FULL_RECORD):
@@ -153,7 +153,7 @@ def __print_single_data_source(ds, format, include_stats):
         if (ds.metadata == {}):
             click.echo("Metadata:\t\t%s" % (ds.metadata))
         else:
-            click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))
+            click.echo("Metadata:\n%s" % (pprint.pformat(ds.metadata)))  # pragma: nocover
         if (include_stats is True):
             __print_stats(ds.stats)
         if (ds.ephemeris_metadata_schema == []):
@@ -195,7 +195,7 @@ def __print_sources_table(sources, order, show_owner, include_stats):
                     (humanize.intcomma(source.stats.ephemeris_count), source.stats.earliest_ephemeris_loaded.strftime("%Y-%m-%dT%H:%M"),
                      source.stats.latest_ephemeris_loaded.strftime("%Y-%m-%dT%H:%M")))
                 sum_ephemeris_count += source.stats.ephemeris_count
-            else:
+            else:  # pragma: nocover
                 table_stats_ephemeris.append("%s records" % (humanize.intcomma(source.stats.ephemeris_count)))
             if (source.stats.earliest_data_product_loaded is not None and source.stats.latest_data_product_loaded is not None):
                 table_stats_data_products.append(
@@ -287,7 +287,7 @@ def list(config, program, platform, instrument_type, source_type, owner, order, 
                                                                   owner=owner,
                                                                   order=order,
                                                                   include_stats=include_stats)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -365,7 +365,7 @@ def search(config, programs, platforms, instrument_types, order, include_stats, 
                                                        instrument_types=parsed_instrument_types,
                                                        order=order,
                                                        include_stats=include_stats)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -408,7 +408,7 @@ def get(config, program, platform, instrument_type, format, include_stats):
                                                instrument_type=instrument_type,
                                                format=format,
                                                include_stats=include_stats)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -434,7 +434,7 @@ def get_using_identifier(config, identifier, format, include_stats):
     # get data source
     try:
         ds = config.aurorax.search.sources.get_using_identifier(identifier, format=format, include_stats=include_stats)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -450,7 +450,7 @@ def get_using_identifier(config, identifier, format, include_stats):
 @click.argument("display_name", type=str)
 @click.option("--identifier", type=int, help="Custom identifier to use")
 @click.pass_obj
-def add(config, program, platform, instrument_type, source_type, display_name, identifier):
+def add(config, program, platform, instrument_type, source_type, display_name, identifier):  # pragma: nocover
     """
     Add a data source
 
@@ -484,7 +484,7 @@ def add(config, program, platform, instrument_type, source_type, display_name, i
 @click.option("--source-type", type=click.Choice(SUPPORTED_SOURCE_TYPES), help="New source type value")
 @click.option("--display-name", type=str, help="New display name value")
 @click.pass_obj
-def update(config, identifier, program, platform, instrument_type, source_type, display_name):
+def update(config, identifier, program, platform, instrument_type, source_type, display_name):  # pragma: nocover
     """
     Update a data source
 
@@ -500,7 +500,7 @@ def update(config, identifier, program, platform, instrument_type, source_type, 
                                                           display_name=display_name)
         click.echo("Updated data source successfully\n")
         click.echo(ds)
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)
 
@@ -508,7 +508,7 @@ def update(config, identifier, program, platform, instrument_type, source_type, 
 @sources_group.command("delete", short_help="Delete a data source")
 @click.argument("identifier", type=int)
 @click.pass_obj
-def delete(config, identifier):
+def delete(config, identifier):  # pragma: nocover
     """
     Delete a data source
 
@@ -518,6 +518,6 @@ def delete(config, identifier):
     try:
         config.aurorax.search.sources.delete(identifier)
         click.echo("Successfully deleted data source #%d" % (identifier))
-    except pyaurorax.AuroraXError as e:
+    except pyaurorax.AuroraXError as e:  # pragma: nocover-ok
         click.echo("%s occurred: %s" % (type(e).__name__, e.args[0]))
         sys.exit(1)

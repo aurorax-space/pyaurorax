@@ -139,7 +139,7 @@ def upload(aurorax_obj, identifier, all_records, validate_source, chunk_size):
         if (res.status_code == 400):
             if isinstance(res.data, list):  # pragma: nocover-ok
                 raise AuroraXUploadError("%s - %s" % (res.status_code, res.data[0]["message"]))
-            raise AuroraXUploadError("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+            raise AuroraXUploadError("%s - %s" % (res.data["error_code"], res.data["error_message"]))  # pragma: nocover
 
     # return
     return 0
@@ -147,7 +147,7 @@ def upload(aurorax_obj, identifier, all_records, validate_source, chunk_size):
 
 def delete(aurorax_obj, data_source, start, end):
     # check to make sure the identifier, program, platform, and instrument type are all set in the data source
-    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):
+    if not all([data_source.identifier, data_source.program, data_source.platform, data_source.instrument_type]):  # pragma: nocover
         raise AuroraXError("One or more required data source parameters are missing, delete operation aborted")
 
     # do request

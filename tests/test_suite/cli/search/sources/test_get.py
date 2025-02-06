@@ -36,14 +36,37 @@ def test_simple(cli_runner, program, platform, instrument_type):
 
 @pytest.mark.cli
 @pytest.mark.parametrize("format_value", ["basic_info", "with_metadata", "identifier_only", "full_record"])
-def test_format(cli_runner, format_value):
+def test_format1(cli_runner, format_value):
     result = cli_runner.invoke(cli, "search sources get swarm swarma footprint --format=%s" % (format_value))
     assert result.exit_code == 0
     assert result.output != ""
 
 
 @pytest.mark.cli
-def test_include_stats(cli_runner):
+@pytest.mark.parametrize("format_value", ["basic_info", "with_metadata", "identifier_only", "full_record"])
+def test_format_and_stats1(cli_runner, format_value):
+    result = cli_runner.invoke(cli, "search sources get swarm swarma footprint --format=%s --include-stats" % (format_value))
+    assert result.exit_code == 0
+    assert result.output != ""
+
+
+@pytest.mark.cli
+@pytest.mark.parametrize("format_value", ["basic_info", "with_metadata", "identifier_only", "full_record"])
+def test_format_and_stats2(cli_runner, format_value):
+    result = cli_runner.invoke(cli, "search sources get auroramax yellowknife 'DSLR' --format=%s --include-stats" % (format_value))
+    assert result.exit_code == 0
+    assert result.output != ""
+
+
+@pytest.mark.cli
+def test_include_stats1(cli_runner):
     result = cli_runner.invoke(cli, "search sources get swarm swarma footprint --include-stats")
+    assert result.exit_code == 0
+    assert result.output != ""
+
+
+@pytest.mark.cli
+def test_include_stats2(cli_runner):
+    result = cli_runner.invoke(cli, "search sources get auroramax yellowknife 'DSLR' --include-stats")
     assert result.exit_code == 0
     assert result.output != ""

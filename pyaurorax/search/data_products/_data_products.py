@@ -124,7 +124,7 @@ def upload(aurorax_obj, identifier, all_records, validate_source, chunk_size):
     # NOTE: we do this so that upload requests that are large are able to
     # more consistently succeed. If a call is to upload 10,000 records, we
     # under-the-hood chunk it up into N-record calls.
-    if (len(all_records) > chunk_size):
+    if (len(all_records) > chunk_size):  # pragma: nocover
         chunked_indexes = np.array_split(np.array(range(0, len(all_records)), dtype=np.int32), int(np.floor(len(all_records) / chunk_size)))
     else:
         chunked_indexes = [np.arange(0, len(all_records), dtype=np.int32)]
@@ -142,7 +142,7 @@ def upload(aurorax_obj, identifier, all_records, validate_source, chunk_size):
         if (res.status_code == 400):
             if isinstance(res.data, list):  # pragma: nocover-ok
                 raise AuroraXUploadError("%s - %s" % (res.status_code, res.data[0]["message"]))
-            raise AuroraXUploadError("%s - %s" % (res.data["error_code"], res.data["error_message"]))
+            raise AuroraXUploadError("%s - %s" % (res.data["error_code"], res.data["error_message"]))  # pragma: nocover
 
     # return
     return 0

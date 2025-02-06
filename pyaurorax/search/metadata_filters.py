@@ -163,9 +163,7 @@ class MetadataFilter:
         A special print output for this class.
         """
         # set special strings
-        if (len(self.expressions) == 0):
-            expressions_str = "[0 expressions]"
-        elif (len(self.expressions) == 1):
+        if (len(self.expressions) == 1):
             expressions_str = "[1 expression]"
         else:
             expressions_str = "[%d expressions]" % (len(self.expressions))

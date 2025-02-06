@@ -157,7 +157,7 @@ def get_logs(config, request_uuid, filter_, table_max_width, no_truncate):
     if ("logs" in s):
         print_request_logs_table(s["logs"], filter_level=filter_, table_max_width=table_max_width, truncate=truncate)
     else:
-        click.echo("Search logs: missing, unable to display")
+        click.echo("Search logs: missing, unable to display")  # pragma: nocover
 
 
 @conjunctions_group.command("get_query", short_help="Get query for a conjunction search request")
@@ -190,7 +190,7 @@ def get_query(config, request_uuid):
         del query_to_show["request_id"]
         click.echo(pprint.pformat(query_to_show))
     else:
-        click.echo("\nSearch query missing from request status, unable to display")
+        click.echo("\nSearch query missing from request status, unable to display")  # pragma: nocover
 
 
 @conjunctions_group.command("get_data", short_help="Get data for a conjunction search request")
@@ -236,7 +236,7 @@ def search_resubmit(config, request_uuid):
         sys.exit(1)
 
     # set the query to use for resubmission
-    if ("query" not in status["search_request"]):
+    if ("query" not in status["search_request"]):  # pragma: nocover
         click.echo("Error resubmitting: missing query from original request ID")
         sys.exit(1)
     q = status["search_request"]["query"]

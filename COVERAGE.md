@@ -8,20 +8,20 @@ pyaurorax/_util.py                                                 5      0   10
 pyaurorax/cli/cli.py                                              37      0   100%
 pyaurorax/cli/search/__init__.py                                  16      0   100%
 pyaurorax/cli/search/availability/commands.py                    127      0   100%
-pyaurorax/cli/search/conjunctions/commands.py                    171      6    96%   160, 193, 240-241, 368-369
-pyaurorax/cli/search/data_products/commands.py                   167      4    98%   135, 168, 215-216
-pyaurorax/cli/search/ephemeris/commands.py                       165      4    98%   133, 166, 213-214
-pyaurorax/cli/search/helpers.py                                  158     31    80%   50-53, 59-60, 70, 120, 138, 148, 172-174, 179-181, 185-189, 207-224, 256-258
-pyaurorax/cli/search/sources/commands.py                         305     75    75%   41, 51, 83, 85-97, 121, 141, 143, 156, 158, 160, 166, 199, 232, 290-292, 329-335, 341-347, 353-359, 368-370, 379, 411-413, 437-439, 464-476, 494-505, 518-523
-pyaurorax/cli/search/util/commands.py                             98     11    89%   92, 167-169, 173-175, 192, 196, 211-212
+pyaurorax/cli/search/conjunctions/commands.py                    166      0   100%
+pyaurorax/cli/search/data_products/commands.py                   162      0   100%
+pyaurorax/cli/search/ephemeris/commands.py                       160      0   100%
+pyaurorax/cli/search/helpers.py                                  120      0   100%
+pyaurorax/cli/search/sources/commands.py                         242      0   100%
+pyaurorax/cli/search/util/commands.py                             92      0   100%
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81      0   100%
-pyaurorax/data/ucalgary/__init__.py                              107     10    91%   326-329, 430-433, 503-504
-pyaurorax/data/ucalgary/read/__init__.py                          42      6    86%   152-155, 235-236
+pyaurorax/data/ucalgary/__init__.py                               97      0   100%
+pyaurorax/data/ucalgary/read/__init__.py                          36      0   100%
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
-pyaurorax/models/atm/__init__.py                                  21      4    81%   188-189, 296-297
-pyaurorax/pyaurorax.py                                           204      2    99%   180, 404
+pyaurorax/models/atm/__init__.py                                  17      0   100%
+pyaurorax/pyaurorax.py                                           203      1    99%   180
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -33,25 +33,25 @@ pyaurorax/search/conjunctions/__init__.py                         31      0   10
 pyaurorax/search/conjunctions/_conjunctions.py                    91      0   100%
 pyaurorax/search/conjunctions/classes/conjunction.py              39      0   100%
 pyaurorax/search/conjunctions/classes/criteria_block.py           67      0   100%
-pyaurorax/search/conjunctions/classes/search.py                  215      1    99%   366
+pyaurorax/search/conjunctions/classes/search.py                  214      0   100%
 pyaurorax/search/conjunctions/swarmaurora/__init__.py             15      0   100%
 pyaurorax/search/conjunctions/swarmaurora/_swarmaurora.py         24      0   100%
-pyaurorax/search/data_products/__init__.py                        32      2    94%   191, 226
-pyaurorax/search/data_products/_data_products.py                  84     28    67%   54, 118-148, 157-172, 181-204
-pyaurorax/search/data_products/classes/data_product.py            47     14    70%   118-139
-pyaurorax/search/data_products/classes/search.py                 121      0   100%
+pyaurorax/search/data_products/__init__.py                        32      0   100%
+pyaurorax/search/data_products/_data_products.py                  81      0   100%
+pyaurorax/search/data_products/classes/data_product.py            46      0   100%
+pyaurorax/search/data_products/classes/search.py                 119      0   100%
 pyaurorax/search/ephemeris/__init__.py                            29      0   100%
-pyaurorax/search/ephemeris/_ephemeris.py                          78      4    95%   52, 125, 142, 151
-pyaurorax/search/ephemeris/classes/ephemeris.py                   42      1    98%   97
+pyaurorax/search/ephemeris/_ephemeris.py                          75      0   100%
+pyaurorax/search/ephemeris/classes/ephemeris.py                   41      0   100%
 pyaurorax/search/ephemeris/classes/search.py                     118      0   100%
 pyaurorax/search/location.py                                      29      0   100%
 pyaurorax/search/metadata/__init__.py                             14      0   100%
 pyaurorax/search/metadata/_metadata.py                            16      0   100%
-pyaurorax/search/metadata_filters.py                              62      3    95%   154, 167, 169
+pyaurorax/search/metadata_filters.py                              60      0   100%
 pyaurorax/search/requests/__init__.py                             28      2    93%   144, 207
-pyaurorax/search/requests/_requests.py                           100     25    75%   49-50, 54, 88, 115, 122-125, 129, 136-139, 144, 152, 154, 156, 158, 167, 169, 177-184
-pyaurorax/search/sources/__init__.py                              59     27    54%   183-240, 523
-pyaurorax/search/sources/_sources.py                             119     26    78%   132, 154-155, 208, 211, 213, 215, 217, 231, 243-246, 257, 262, 268-294
+pyaurorax/search/requests/_requests.py                           100     24    76%   50, 54, 88, 115, 122-125, 129, 136-139, 144, 152, 154, 156, 158, 167, 169, 177-184
+pyaurorax/search/sources/__init__.py                              59     26    56%   183-240
+pyaurorax/search/sources/_sources.py                             119     13    89%   132, 154-155, 208, 211, 213, 215, 217, 245-246, 257, 293-294
 pyaurorax/search/sources/classes/data_source.py                   68     26    62%   170, 173, 186-212
 pyaurorax/search/sources/classes/data_source_stats.py             22      9    59%   61, 64, 73-79
 pyaurorax/search/util/__init__.py                                 11      0   100%
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6019   2467    59%
+TOTAL                                                           5863   2247    62%
 
 13 empty files skipped.
 ```
