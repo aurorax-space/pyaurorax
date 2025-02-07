@@ -18,6 +18,7 @@ import glob
 import shutil
 import pytest
 import datetime
+import gc
 import pyaurorax
 import threading
 from click.testing import CliRunner
@@ -28,12 +29,14 @@ from dotenv import load_dotenv
 CONJUNCTION_SEARCH_REQUEST_ID = None
 EPHEMERIS_SEARCH_REQUEST_ID = None
 DATA_PRODUCTS_SEARCH_REQUEST_ID = None
+tools_data_single_themis_file = None
 
 
 def pytest_addoption(parser):
     parser.addoption("--api-url", action="store", default="https://api.staging.aurorax.space", help="A specific API URL to use")
     parser.addoption("--api-key", type=str, help="A specific API key to use")
-    parser.addoption("--no-init-tasks", action="store_true", help="Do not do the initialization tasks")
+    parser.addoption("--do-search-tasks", action="store_true", help="Do the search initialization tasks")
+    parser.addoption("--do-tools-tasks", action="store_true", help="Do the tools initialization tasks")
 
 
 #---------------------------------------------------
@@ -234,6 +237,26 @@ def find_dataset(datasets, dataset_name):
 
 
 #---------------------------------------------------
+# Fixtures: tools
+#---------------------------------------------------
+@pytest.fixture(scope="function")
+def plot_cleanup():
+    yield  # do test
+    gc.collect()
+
+
+@pytest.fixture(scope="function")
+def at():
+    aurorax = pyaurorax.PyAuroraX()
+    return aurorax.tools
+
+
+@pytest.fixture(scope="session")
+def themis_single_file():
+    return tools_data_single_themis_file
+
+
+#---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
 def pytest_sessionstart(session):
@@ -246,6 +269,7 @@ def pytest_sessionstart(session):
     global CONJUNCTION_SEARCH_REQUEST_ID
     global EPHEMERIS_SEARCH_REQUEST_ID
     global DATA_PRODUCTS_SEARCH_REQUEST_ID
+    global tools_data_single_themis_file
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -301,13 +325,20 @@ def pytest_sessionstart(session):
                                                 data_product_types=["keogram"])
         setup_task_dict["data_products_search_id"] = s.request_id
 
-    # create and run threads for each setup task
-    if (session.config.getoption("--no-init-tasks") is False):
-        print("[SETUP] Running setup tasks ...")
+    # do search initialization tasks
+    if (session.config.getoption("--do-search-tasks") is True):
+        # init
+        print("[SETUP] Running search setup tasks ...")
+
+        # do data source creation
         thread1 = threading.Thread(target=setup_task1)
+
+        # run conjunction, ephemeris, and data product search
         thread2 = threading.Thread(target=setup_task2)
         thread3 = threading.Thread(target=setup_task3)
         thread4 = threading.Thread(target=setup_task4)
+
+        # start and wait for threads
         thread1.start()
         thread2.start()
         thread3.start()
@@ -316,11 +347,40 @@ def pytest_sessionstart(session):
         thread2.join()
         thread3.join()
         thread4.join()
+
+        # set results
         CONJUNCTION_SEARCH_REQUEST_ID = setup_task_dict["conjunction_search_id"]
         EPHEMERIS_SEARCH_REQUEST_ID = setup_task_dict["ephemeris_search_id"]
         DATA_PRODUCTS_SEARCH_REQUEST_ID = setup_task_dict["data_products_search_id"]
     else:
-        print("[SETUP] Skipping setup tasks")
+        print("[SETUP] Skipping search setup tasks")
+
+    # do tools initialization tasks
+    if (session.config.getoption("--do-tools-tasks") is True):
+        # init
+        print("[SETUP] Running tools setup tasks ...")
+
+        # read in single THEMIS file
+        def init_task_download_read_themis_single_minute():
+            # read in a minute of THEMIS raw data
+            r = aurorax.data.ucalgary.download(
+                "THEMIS_ASI_RAW",
+                datetime.datetime(2021, 11, 4, 9, 0),
+                datetime.datetime(2021, 11, 4, 9, 0),
+                site_uid="atha",
+                progress_bar_disable=True,
+            )
+            setup_task_dict["themis_single_file"] = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
+        # start and wait for threads
+        thread1 = threading.Thread(target=init_task_download_read_themis_single_minute)
+        thread1.start()
+        thread1.join()
+
+        # set results
+        tools_data_single_themis_file = setup_task_dict["themis_single_file"]
+    else:
+        print("[SETUP] Skipping tools setup tasks")
 
     # complete
     print("[SETUP] Initialization completed in %s" % (datetime.datetime.now() - d1))

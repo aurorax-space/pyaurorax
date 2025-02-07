@@ -129,6 +129,7 @@ markers = [
     "cli: command line interface tests",
     "data: data retrieval/reading tests",
     "models: model tests",
+    "tools: analysis support tools tests",
 ]
 
 [tool.bandit]
