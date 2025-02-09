@@ -21,7 +21,7 @@ pyaurorax/data/ucalgary/read/__init__.py                          36      0   10
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
 pyaurorax/models/atm/__init__.py                                  17      0   100%
-pyaurorax/pyaurorax.py                                           206      1    99%   174
+pyaurorax/pyaurorax.py                                           206      0   100%
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -56,11 +56,11 @@ pyaurorax/search/sources/classes/data_source.py                   66      0   10
 pyaurorax/search/sources/classes/data_source_stats.py             22      0   100%
 pyaurorax/search/util/__init__.py                                 11      0   100%
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
-pyaurorax/tools/__init__.py                                       61     12    80%   93, 100, 107, 114, 121, 128, 135, 142, 222, 256, 298, 313
-pyaurorax/tools/_display.py                                       35     31    11%   22-84
-pyaurorax/tools/_movie.py                                         37     32    14%   21, 34-95
+pyaurorax/tools/__init__.py                                       61      9    85%   93, 100, 107, 114, 121, 128, 135, 142, 298
+pyaurorax/tools/_display.py                                       35      0   100%
+pyaurorax/tools/_movie.py                                         34      0   100%
 pyaurorax/tools/_scale_intensity.py                               45     42     7%   20-63, 67-102
-pyaurorax/tools/_util.py                                          10      7    30%   20-27
+pyaurorax/tools/_util.py                                          10      0   100%
 pyaurorax/tools/bounding_box/__init__.py                           9      1    89%   45
 pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      5    78%   80, 118, 161, 207, 257
 pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           57     54     5%   21-99
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5833   2147    63%
+TOTAL                                                           5830   2073    64%
 
 13 empty files skipped.
 ```

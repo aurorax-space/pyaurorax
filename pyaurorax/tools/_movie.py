@@ -17,10 +17,10 @@ from tqdm.contrib.concurrent import process_map as tqdm_process_map
 from concurrent.futures import ProcessPoolExecutor
 
 
-def __process_frame(fname):
+def __process_frame(fname):  # pragma: nocover-ok
     return {
         "fname": fname,
-        "img": cv2.imread(fname),
+        "img": cv2.imread(fname, cv2.IMREAD_UNCHANGED),
     }
 
 
@@ -72,7 +72,7 @@ def movie(aurorax_obj, input_filenames, output_filename, n_parallel, fps, progre
     elif (len(frame_list[0].shape) == 2 or len(frame_list[0].shape) == 3):
         width = frame_list[0].shape[0]
         height = frame_list[0].shape[1]
-    else:
+    else:  # pragma: nocover
         # some unexpected image shape
         raise IOError("Unexpected shape of image data. Found shape %s, but was expecting only 2 or 3 dimensions." % (frame_list[0].shape))
 
