@@ -33,6 +33,7 @@ EPHEMERIS_SEARCH_REQUEST_ID = None
 DATA_PRODUCTS_SEARCH_REQUEST_ID = None
 tools_data_single_themis_file = None
 tools_data_themis_movie_filenames = None
+tools_data_single_trex_rgb_file = None
 
 
 def pytest_addoption(parser):
@@ -260,6 +261,11 @@ def themis_single_file():
 
 
 @pytest.fixture(scope="session")
+def trex_rgb_single_file():
+    return tools_data_single_trex_rgb_file
+
+
+@pytest.fixture(scope="session")
 def themis_movie_filenames():
     return tools_data_themis_movie_filenames
 
@@ -279,6 +285,7 @@ def pytest_sessionstart(session):
     global DATA_PRODUCTS_SEARCH_REQUEST_ID
     global tools_data_single_themis_file
     global tools_data_themis_movie_filenames
+    global tools_data_single_trex_rgb_file
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -377,6 +384,17 @@ def pytest_sessionstart(session):
             )
             setup_task_dict["themis_single_file"] = aurorax.data.ucalgary.read(r.dataset, r.filenames)
 
+        def init_task_download_read_trex_rgb_single_minute():
+            # read in a minute of THEMIS raw data
+            r = aurorax.data.ucalgary.download(
+                "TREX_RGB_RAW_NOMINAL",
+                datetime.datetime(2021, 11, 4, 9, 0),
+                datetime.datetime(2021, 11, 4, 9, 0),
+                site_uid="rabb",
+                progress_bar_disable=True,
+            )
+            setup_task_dict["trex_rgb_single_file"] = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
         def init_task_generate_themis_movie_frames():
             # read in a minute of THEMIS raw data
             r = aurorax.data.ucalgary.download(
@@ -402,14 +420,18 @@ def pytest_sessionstart(session):
         # start and wait for threads
         thread1 = threading.Thread(target=init_task_download_read_themis_single_minute)
         thread2 = threading.Thread(target=init_task_generate_themis_movie_frames)
+        thread3 = threading.Thread(target=init_task_download_read_trex_rgb_single_minute)
         thread1.start()
         thread2.start()
+        thread3.start()
         thread1.join()
         thread2.join()
+        thread3.join()
 
         # set results
         tools_data_single_themis_file = setup_task_dict["themis_single_file"]
         tools_data_themis_movie_filenames = setup_task_dict["themis_movie_filenames"]
+        tools_data_single_trex_rgb_file = setup_task_dict["trex_rgb_single_file"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 

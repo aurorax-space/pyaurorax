@@ -78,7 +78,7 @@ def scale_intensity(data, min, max, top, memory_saver):
         elif (len(data.shape) == 4):
             # three channel
             n_channels = 3
-        else:
+        else:  # pragma: nocover
             raise ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
                              "[rows,cols,images] or [rows,cols,channels,images] sized array.")
 
