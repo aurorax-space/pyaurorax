@@ -98,8 +98,7 @@ def test_savefig_warnins(mock_show, at, plot_cleanup, themis_single_file):
 
 
 @pytest.mark.tools
-@patch("matplotlib.pyplot.show")
-def test_savefig(mock_show, plot_cleanup, at, themis_single_file):
+def test_savefig(at, themis_single_file):
     # check filename missing
     with pytest.raises(ValueError) as e_info:
         at.display(themis_single_file.data[:, :, 0], savefig=True)

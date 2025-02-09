@@ -49,7 +49,7 @@ def azimuth(aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, sho
         raise ValueError("Azimuth bounds defined with zero area.")
 
     # Obtain azimuth array from skymap
-    if (skymap.full_azimuth is None):
+    if (skymap.full_azimuth is None):  # pragma: nocover
         raise ValueError("Skymap 'full_azimuth' value is None. Unable to perform function")
     az = np.squeeze(skymap.full_azimuth)
 
@@ -57,13 +57,13 @@ def azimuth(aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, sho
     bound_idx = np.where(np.logical_and(az > float(az_0), az < float(az_1)))
 
     # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
+    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:  # pragma: nocover
         raise ValueError("No data within desired bounds. Try a larger area.")
 
     # Slice out the bounded data, and plot preview if requested
-    if n_channels == 1:
+    if (n_channels == 1):
         bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
+        if (show_preview is True):
             preview_img = aurorax_obj.tools.scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
@@ -71,9 +71,9 @@ def azimuth(aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, sho
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
-    elif n_channels == 3:
+    elif (n_channels == 3):
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
+        if (show_preview is True):
             preview_img = aurorax_obj.tools.scale_intensity(images[:, :, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1], 0] = 255
             preview_img[bound_idx[0], bound_idx[1], 1:] = 0
@@ -86,11 +86,11 @@ def azimuth(aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, sho
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
     # Compute metric of interest
-    if metric == 'median':
+    if metric == "median":
         result = np.median(bound_data, axis=0)
-    elif metric == 'mean':
+    elif metric == "mean":
         result = np.mean(bound_data, axis=0)
-    elif metric == 'sum':
+    elif metric == "sum":
         result = np.sum(bound_data, axis=0)
     else:
         raise ValueError("Metric " + str(metric) + " is not recognized.")

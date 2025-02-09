@@ -56,14 +56,14 @@ pyaurorax/search/sources/classes/data_source.py                   66      0   10
 pyaurorax/search/sources/classes/data_source_stats.py             22      0   100%
 pyaurorax/search/util/__init__.py                                 11      0   100%
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
-pyaurorax/tools/__init__.py                                       61      8    87%   93, 100, 107, 114, 121, 128, 135, 142
+pyaurorax/tools/__init__.py                                       61      7    89%   100, 107, 114, 121, 128, 135, 142
 pyaurorax/tools/_display.py                                       35      0   100%
 pyaurorax/tools/_movie.py                                         34      0   100%
 pyaurorax/tools/_scale_intensity.py                               44      0   100%
 pyaurorax/tools/_util.py                                          10      0   100%
-pyaurorax/tools/bounding_box/__init__.py                           9      1    89%   45
-pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      5    78%   80, 118, 161, 207, 257
-pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           57     54     5%   21-99
+pyaurorax/tools/bounding_box/__init__.py                           9      0   100%
+pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      4    83%   118, 161, 207, 257
+pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           53      0   100%
 pyaurorax/tools/bounding_box/extract_metric/_ccd.py               61     58     5%   21-98
 pyaurorax/tools/bounding_box/extract_metric/_elevation.py         55     52     5%   21-97
 pyaurorax/tools/bounding_box/extract_metric/_geo.py               95     92     3%   21-152
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5829   2030    65%
+TOTAL                                                           5825   1973    66%
 
 13 empty files skipped.
 ```

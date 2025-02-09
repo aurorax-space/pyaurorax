@@ -34,6 +34,7 @@ DATA_PRODUCTS_SEARCH_REQUEST_ID = None
 tools_data_single_themis_file = None
 tools_data_themis_movie_filenames = None
 tools_data_single_trex_rgb_file = None
+tools_data_bounding_box_data = None
 
 
 def pytest_addoption(parser):
@@ -270,6 +271,11 @@ def themis_movie_filenames():
     return tools_data_themis_movie_filenames
 
 
+@pytest.fixture(scope="session")
+def bounding_box_data():
+    return tools_data_bounding_box_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -286,6 +292,7 @@ def pytest_sessionstart(session):
     global tools_data_single_themis_file
     global tools_data_themis_movie_filenames
     global tools_data_single_trex_rgb_file
+    global tools_data_bounding_box_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -417,21 +424,56 @@ def pytest_sessionstart(session):
             # set data for later
             setup_task_dict["themis_movie_filenames"] = filenames
 
+        def init_task_prep_bounding_box():
+            # get THEMIS data
+            start_dt = datetime.datetime(2021, 11, 4, 9, 2)
+            end_dt = datetime.datetime(2021, 11, 4, 9, 2)
+            site_uid = "atha"
+            r = aurorax.data.ucalgary.download("THEMIS_ASI_RAW", start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+            themis_data = aurorax.data.ucalgary.read(r.dataset, r.filenames, n_parallel=5)
+
+            # get the applicable THEMIS skymap
+            r = aurorax.data.ucalgary.download_best_skymap("THEMIS_ASI_SKYMAP_IDLSAV", site_uid, start_dt)
+            themis_skymap = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # get RGB data
+            start_dt = datetime.datetime(2021, 11, 4, 3, 0)
+            end_dt = datetime.datetime(2021, 11, 4, 3, 0)
+            site_uid = "gill"
+            r = aurorax.data.ucalgary.download("TREX_RGB_RAW_NOMINAL", start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+            trex_rgb_data = aurorax.data.ucalgary.read(r.dataset, r.filenames, n_parallel=5)
+
+            # get the applicable RGB skymap
+            r = aurorax.data.ucalgary.download_best_skymap("TREX_RGB_SKYMAP_IDLSAV", site_uid, start_dt)
+            trex_rgb_skymap = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # set variable for later usage
+            setup_task_dict["bounding_box_data"] = {
+                "themis_data": themis_data,
+                "themis_skymap": themis_skymap,
+                "trex_rgb_data": trex_rgb_data,
+                "trex_rgb_skymap": trex_rgb_skymap,
+            }
+
         # start and wait for threads
         thread1 = threading.Thread(target=init_task_download_read_themis_single_minute)
         thread2 = threading.Thread(target=init_task_generate_themis_movie_frames)
         thread3 = threading.Thread(target=init_task_download_read_trex_rgb_single_minute)
+        thread4 = threading.Thread(target=init_task_prep_bounding_box)
         thread1.start()
         thread2.start()
         thread3.start()
+        thread4.start()
         thread1.join()
         thread2.join()
         thread3.join()
+        thread4.join()
 
         # set results
         tools_data_single_themis_file = setup_task_dict["themis_single_file"]
         tools_data_themis_movie_filenames = setup_task_dict["themis_movie_filenames"]
         tools_data_single_trex_rgb_file = setup_task_dict["trex_rgb_single_file"]
+        tools_data_bounding_box_data = setup_task_dict["bounding_box_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 
