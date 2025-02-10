@@ -49,10 +49,10 @@ test-bandit:
 	@printf "\n\n"
 
 test-pytest:
-	pytest -n auto --dist loadfile --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "not search_rw"
+	pytest -n auto --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "not search_rw"
 
 test-pytest-search-rw:
-	pytest -n 4 --dist loadfile --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "search_rw"
+	pytest -n 4 --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "search_rw"
 
 test-pytest-notebooks test-notebooks:
 	pytest -n 6 --nbmake examples/notebooks --ignore-glob=examples/notebooks/**/in_development/*.ipynb

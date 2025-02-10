@@ -48,7 +48,7 @@ def test_three_channel(at, bounding_box_data):
     imgs = bounding_box_data["trex_rgb_data"].data
     skymap = bounding_box_data["trex_rgb_skymap"]
     el_range = [25, 45]
-    bb_data = at.bounding_box.extract_metric.elevation(imgs, skymap, el_range, metric="sum")
+    bb_data = at.bounding_box.extract_metric.elevation(imgs, skymap, el_range)
     assert bb_data.shape == (3, imgs.shape[-1])
 
 
