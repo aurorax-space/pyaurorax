@@ -44,7 +44,7 @@ def test_simple_sum(at, bounding_box_data):
 
 
 @pytest.mark.tools
-def test_simple_three_channel(at, bounding_box_data):
+def test_three_channel(at, bounding_box_data):
     imgs = bounding_box_data["trex_rgb_data"].data
     skymap = bounding_box_data["trex_rgb_skymap"]
     az_range = [140, 173]
@@ -54,7 +54,7 @@ def test_simple_three_channel(at, bounding_box_data):
 
 @pytest.mark.tools
 @patch("matplotlib.pyplot.show")
-def test_simple_three_channel_show_preview(mock_show, at, plot_cleanup, bounding_box_data):
+def test_show_preview(mock_show, at, plot_cleanup, bounding_box_data):
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
     az_range = [140, 173]
@@ -65,7 +65,7 @@ def test_simple_three_channel_show_preview(mock_show, at, plot_cleanup, bounding
 
 @pytest.mark.tools
 @patch("matplotlib.pyplot.show")
-def test_simple_show_preview(mock_show, at, plot_cleanup, bounding_box_data):
+def test_three_channel_show_preview(mock_show, at, plot_cleanup, bounding_box_data):
     imgs = bounding_box_data["trex_rgb_data"].data
     skymap = bounding_box_data["trex_rgb_skymap"]
     az_range = [140, 173]
@@ -94,11 +94,9 @@ def test_order(at, bounding_box_data):
 
 @pytest.mark.tools
 def test_bad_azimuth1(at, bounding_box_data):
-    # init
+    # check first azimuth value
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
-
-    # check first azimuth value
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [-180, 90])
     assert "Invalid Azimuth" in str(e_info)
@@ -109,11 +107,9 @@ def test_bad_azimuth1(at, bounding_box_data):
 
 @pytest.mark.tools
 def test_bad_azimuth2(at, bounding_box_data):
-    # init
+    # check second azimuth value
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
-
-    # check second azimuth value
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [90, -180])
     assert "Invalid Azimuth" in str(e_info)
@@ -124,11 +120,9 @@ def test_bad_azimuth2(at, bounding_box_data):
 
 @pytest.mark.tools
 def test_bad_azimuth3(at, bounding_box_data):
-    # init
+    # check azimuth value when same
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
-
-    # check azimuth value when same
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [90, 90])
     assert "Azimuth bounds defined with zero area" in str(e_info)
@@ -136,11 +130,8 @@ def test_bad_azimuth3(at, bounding_box_data):
 
 @pytest.mark.tools
 def test_bad_metric(at, bounding_box_data):
-    # init
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
-
-    # check azimuth value when same
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [90, 100], metric="bad_metric")
     assert "Metric" in str(e_info) and "is not recognized" in str(e_info)
