@@ -56,7 +56,7 @@ def display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, s
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (".jpg" == f_extension or ".jpeg" == f_extension):
             # check quality setting
-            if (savefig_quality is not None):
+            if (savefig_quality is not None):  # pragma: nocover-ok
                 plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
             else:
                 plt.savefig(savefig_filename, bbox_inches="tight")

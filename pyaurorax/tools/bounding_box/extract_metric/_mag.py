@@ -39,15 +39,15 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
 
     # Ensure that coordinates are valid
     if lat_0 > 90 or lat_0 < -90:
-        raise ValueError("Invalid Latitude: " + str(lat_0))
+        raise ValueError("Invalid latitude: " + str(lat_0))
     elif lat_1 > 90 or lat_1 < -90:
-        raise ValueError("Invalid Latitude: " + str(lat_1))
+        raise ValueError("Invalid latitude: " + str(lat_1))
     elif lon_0 > 360 or lon_0 < -180:
-        raise ValueError("Invalid Longitude: " + str(lon_0))
+        raise ValueError("Invalid longitude: " + str(lon_0))
     elif lon_1 > 360 or lon_1 < -180:
-        raise ValueError("Invalid Longitude: " + str(lon_1))
+        raise ValueError("Invalid longitude: " + str(lon_1))
 
-    # Convert(0,360) longitudes to (-180,180) if entered as such
+    # Convert (0,360) longitudes to (-180,180) if entered as such
     if lon_0 > 180:
         lon_0 -= 360.0
     if lon_1 > 180:
@@ -94,7 +94,7 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
         lons[np.where(lons > 180)] -= 360.0  # Fix skymap to be in (-180,180) format
 
     # Convert skymap to magnetic coords
-    mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code="G2A")
+    mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code="G2A")
     mag_lats = np.reshape(mag_lats, lats.shape)
     mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -106,7 +106,7 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
     if (lat_0 <= min_skymap_lat) or (lat_1 >= max_skymap_lat):
         raise ValueError(f"Latitude range supplied is outside the valid range for this skymap {(min_skymap_lat,max_skymap_lat)}.")
     if (lon_0 <= min_skymap_lon) or (lon_1 >= max_skymap_lon):
-        raise ValueError(f"Latitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.")
+        raise ValueError(f"Longitude range supplied is outside the valid range for this skymap {(min_skymap_lon,max_skymap_lon)}.")
 
     # Obtain indices into skymap within lat/lon range
     bound_idx = np.where(
@@ -118,7 +118,7 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
         )))
 
     # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
+    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:  # pragma: nocover
         raise ValueError("No data within desired bounds. Try a larger area.")
 
     # Convert from skymap coords to image coords
@@ -126,9 +126,9 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
     bound_idx = tuple(np.maximum(idx, 0) for idx in bound_idx)
 
     # Slice out the bounded data
-    if n_channels == 1:
+    if (n_channels == 1):
         bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
+        if (show_preview is True):
             preview_img = aurorax_obj.tools.scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
@@ -136,9 +136,9 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
-    elif n_channels == 3:
+    elif (n_channels == 3):
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
+        if (show_preview is True):
             preview_img = aurorax_obj.tools.scale_intensity(images[:, :, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1], 0] = 255
             preview_img[bound_idx[0], bound_idx[1], 1:] = 0
@@ -147,7 +147,7 @@ def mag(aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metr
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
-    else:
+    else:  # pragma: nocover
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
     # Compute metric of interest

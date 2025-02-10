@@ -15,6 +15,7 @@
 import os
 import random
 import string
+import warnings
 import pytest
 
 
@@ -26,7 +27,8 @@ def test_get_url(aurorax, conjunction_search_obj):
 
 @pytest.mark.search_ro
 def test_open_in_browser(aurorax, conjunction_search_obj):
-    aurorax.search.conjunctions.swarmaurora.open_in_browser(conjunction_search_obj)
+    with warnings.catch_warnings(record=True):
+        aurorax.search.conjunctions.swarmaurora.open_in_browser(conjunction_search_obj)
     assert True
 
 

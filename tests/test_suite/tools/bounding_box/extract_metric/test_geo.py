@@ -167,6 +167,19 @@ def test_bad_coords4(at, bounding_box_data):
 
 
 @pytest.mark.tools
+def test_bad_coords5(at, bounding_box_data):
+    imgs = bounding_box_data["themis_data"].data
+    skymap = bounding_box_data["themis_skymap"]
+    altitude_km = 110
+    with pytest.raises(ValueError) as e_info:
+        _ = at.bounding_box.extract_metric.geo(imgs, skymap, altitude_km, [-52, -50, 85., 89.])
+    assert "Latitude range supplied is outside the valid range for this skymap" in str(e_info)
+    with pytest.raises(ValueError) as e_info:
+        _ = at.bounding_box.extract_metric.geo(imgs, skymap, altitude_km, [-70, -75, 62, 61.1])
+    assert "Longitude range supplied is outside the valid range for this skymap" in str(e_info)
+
+
+@pytest.mark.tools
 def test_same_coords(at, bounding_box_data):
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
@@ -180,6 +193,16 @@ def test_same_coords(at, bounding_box_data):
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.geo(imgs, skymap, altitude_km, [-112, -112, 55.4, 55.4])
     assert "Polygon defined with zero area" in str(e_info)
+
+
+@pytest.mark.tools
+def test_bad_altitude(at, bounding_box_data):
+    imgs = bounding_box_data["themis_data"].data
+    skymap = bounding_box_data["themis_skymap"]
+    altitude_km = 1000
+    with pytest.raises(ValueError) as e_info:
+        _ = at.bounding_box.extract_metric.geo(imgs, skymap, altitude_km, [-112, -120, 55.4, 58.9])
+    assert "Altitude" in str(e_info) and "outside valid range of" in str(e_info)
 
 
 @pytest.mark.tools

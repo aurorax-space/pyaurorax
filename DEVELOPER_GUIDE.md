@@ -104,3 +104,10 @@ The example notebooks CAN be included in the coverage by including `--cov=pyauro
 ### General
 
 Attempted to use @overload decorator for `__init__` function of ConjunctionSearch to allow normal instantiation and also query dict instantiation. This didn't pan out because we would have to change arguments to be all keyword based (**kwargs) and not allow any positional args. Don't really want to make that change. 
+
+### Tests
+
+Some quick commands for when working on certain test markers:
+
+- `pytest -n 4 --cov=pyaurorax --cov-report= --cov-append --do-tools-tasks -m tools && make coverage | grep "pyaurorax/tools"`
+- `pytest -n auto --cov=pyaurorax --cov-report= --cov-append --do-search-tasks -m search_ro && make coverage | grep "pyaurorax/search"`

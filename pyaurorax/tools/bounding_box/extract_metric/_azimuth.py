@@ -82,7 +82,7 @@ def azimuth(aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, sho
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
-    else:
+    else:  # pragma: nocover
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
     # Compute metric of interest

@@ -120,7 +120,6 @@ filterwarnings = [
 ]
 testpaths = [
     "tests/test_suite/**/*.py",
-    "tests/test_suite/*.py",
 ]
 markers = [
     "top_level: top level PyAuroraX object tests",

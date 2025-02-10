@@ -53,6 +53,13 @@ def test_specific_floor_and_ceiling(at, themis_single_file):
 
 
 @pytest.mark.tools
+def test_same_floor_and_ceiling(at, themis_single_file):
+    img = themis_single_file.data[:, :, 0:5]
+    img_scaled = at.scale_intensity(img, min=1000, max=1000)
+    assert img_scaled.shape == img.shape
+
+
+@pytest.mark.tools
 def test_three_channel(at, trex_rgb_single_file):
     img = trex_rgb_single_file.data[:, :, :, 0]
     img_scaled = at.scale_intensity(img)

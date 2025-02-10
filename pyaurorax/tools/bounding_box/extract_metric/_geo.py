@@ -105,7 +105,7 @@ def geo(aurorax_obj, images, skymap, altitude_km, lonlat_bounds, metric, n_chann
     bound_idx = np.where(np.logical_and.reduce((lats >= float(lat_0), lats <= float(lat_1), lons >= float(lon_0), lons <= float(lon_1))))
 
     # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
+    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:  # pragma: nocover
         raise ValueError("No data within desired bounds. Try a larger area.")
 
     # Convert from skymap coords to image coords

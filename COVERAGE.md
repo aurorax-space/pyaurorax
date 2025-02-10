@@ -57,17 +57,17 @@ pyaurorax/search/sources/classes/data_source_stats.py             22      0   10
 pyaurorax/search/util/__init__.py                                 11      0   100%
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
 pyaurorax/tools/__init__.py                                       61      7    89%   100, 107, 114, 121, 128, 135, 142
-pyaurorax/tools/_display.py                                       35      0   100%
+pyaurorax/tools/_display.py                                       33      0   100%
 pyaurorax/tools/_movie.py                                         34      0   100%
 pyaurorax/tools/_scale_intensity.py                               44      0   100%
 pyaurorax/tools/_util.py                                          10      0   100%
 pyaurorax/tools/bounding_box/__init__.py                           9      0   100%
-pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      1    96%   257
-pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           53      0   100%
+pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      0   100%
+pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           52      0   100%
 pyaurorax/tools/bounding_box/extract_metric/_ccd.py               60      0   100%
 pyaurorax/tools/bounding_box/extract_metric/_elevation.py         52      0   100%
-pyaurorax/tools/bounding_box/extract_metric/_geo.py               94      0   100%
-pyaurorax/tools/bounding_box/extract_metric/_mag.py               99     95     4%   22-163
+pyaurorax/tools/bounding_box/extract_metric/_geo.py               92      0   100%
+pyaurorax/tools/bounding_box/extract_metric/_mag.py               96      0   100%
 pyaurorax/tools/calibration/__init__.py                           13      2    85%   81, 135
 pyaurorax/tools/calibration/_common.py                            34     29    15%   27-55, 60-73, 78-94
 pyaurorax/tools/calibration/_rego.py                              14     12    14%   35-58
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5820   1768    70%
+TOTAL                                                           5812   1672    71%
 
 13 empty files skipped.
 ```
