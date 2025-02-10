@@ -119,8 +119,9 @@ filterwarnings = [
     "ignore::DeprecationWarning:aacgmv2.*",  # aacgmv2 v1.7.2 has a DeprecationWarning showing up, so we ignore it (https://github.com/aburrell/aacgmv2/issues/94)
 ]
 testpaths = [
-    "tests/test_suite/**/*.py",
+    "tests/test_suite",
 ]
+python_files = "test_*.py"
 markers = [
     "top_level: top level PyAuroraX object tests",
     "search_ro: search engine read-only tests",

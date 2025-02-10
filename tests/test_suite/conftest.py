@@ -13,19 +13,19 @@
 # limitations under the License.
 
 import os
+import gc
+import cv2
+import time
 import copy
 import glob
 import shutil
 import pytest
 import datetime
-import gc
 import pyaurorax
-import threading
-import cv2
-import time
 from click.testing import CliRunner
 from pathlib import Path
 from dotenv import load_dotenv
+from concurrent.futures import ThreadPoolExecutor
 
 # globals
 CONJUNCTION_SEARCH_REQUEST_ID = None
@@ -35,6 +35,8 @@ tools_data_single_themis_file = None
 tools_data_themis_movie_filenames = None
 tools_data_single_trex_rgb_file = None
 tools_data_bounding_box_data = None
+tools_data_rego_calibration_data = None
+tools_data_trex_nir_calibration_data = None
 
 
 def pytest_addoption(parser):
@@ -276,6 +278,16 @@ def bounding_box_data():
     return tools_data_bounding_box_data
 
 
+@pytest.fixture(scope="session")
+def rego_calibration_data():
+    return tools_data_rego_calibration_data
+
+
+@pytest.fixture(scope="session")
+def trex_nir_calibration_data():
+    return tools_data_trex_nir_calibration_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -293,6 +305,8 @@ def pytest_sessionstart(session):
     global tools_data_themis_movie_filenames
     global tools_data_single_trex_rgb_file
     global tools_data_bounding_box_data
+    global tools_data_rego_calibration_data
+    global tools_data_trex_nir_calibration_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -303,7 +317,7 @@ def pytest_sessionstart(session):
         api_key = os.environ["AURORAX_API_KEY"]
     aurorax = pyaurorax.PyAuroraX(api_base_url=api_url, api_key=api_key)
 
-    def search_task1():
+    def init_task_search_data_source():
         # create the generic data source that will be used for
         # ephemeris and data products upload/delete tests
         program = "test-program"
@@ -321,8 +335,9 @@ def pytest_sessionstart(session):
                                              display_name=display_name,
                                              source_type=source_type)
             aurorax.search.sources.add(ds)
+            print("[SETUP]   Finished setting up data source")
 
-    def search_task2():
+    def init_task_search_conjunctions():
         # perform simple conjunction search, set the request ID
         s = aurorax.search.conjunctions.search(datetime.datetime(2020, 1, 1, 0, 0, 0),
                                                datetime.datetime(2020, 1, 1, 6, 59, 59),
@@ -330,8 +345,9 @@ def pytest_sessionstart(session):
                                                ground=[aurorax.search.GroundCriteriaBlock(programs=["themis-asi"])],
                                                space=[aurorax.search.SpaceCriteriaBlock(programs=["swarm"])])
         setup_task_dict["conjunction_search_id"] = s.request_id
+        print("[SETUP]   Finished setting up conjunction search")
 
-    def search_task3():
+    def init_task_search_ephemeris():
         # perform simple ephemeris search, set the request ID
         s = aurorax.search.ephemeris.search(datetime.datetime(2019, 1, 1, 0, 0, 0),
                                             datetime.datetime(2019, 1, 1, 0, 9, 59),
@@ -340,7 +356,7 @@ def pytest_sessionstart(session):
                                             instrument_types=["footprint"])
         setup_task_dict["ephemeris_search_id"] = s.request_id
 
-    def search_task4():
+    def init_task_search_data_products():
         # perform simple data product search, set the request ID
         s = aurorax.search.data_products.search(datetime.datetime(2020, 1, 1, 6, 0, 0),
                                                 datetime.datetime(2020, 1, 1, 6, 59, 59),
@@ -354,18 +370,16 @@ def pytest_sessionstart(session):
         print("[SETUP] Running search setup tasks ...")
 
         # setup threads and wait
-        thread1 = threading.Thread(target=search_task1)
-        thread2 = threading.Thread(target=search_task2)
-        thread3 = threading.Thread(target=search_task3)
-        thread4 = threading.Thread(target=search_task4)
-        thread1.start()
-        thread2.start()
-        thread3.start()
-        thread4.start()
-        thread1.join()
-        thread2.join()
-        thread3.join()
-        thread4.join()
+        tasks = [
+            init_task_search_data_source,
+            init_task_search_conjunctions,
+            init_task_search_ephemeris,
+            init_task_search_data_products,
+        ]
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = [executor.submit(task) for task in tasks]
+            for future in futures:
+                future.result()
 
         # set results
         CONJUNCTION_SEARCH_REQUEST_ID = setup_task_dict["conjunction_search_id"]
@@ -390,6 +404,7 @@ def pytest_sessionstart(session):
                 progress_bar_disable=True,
             )
             setup_task_dict["themis_single_file"] = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+            print("[SETUP]   Finished setting up a minute of THEMIS data")
 
         def init_task_download_read_trex_rgb_single_minute():
             # read in a minute of THEMIS raw data
@@ -401,6 +416,7 @@ def pytest_sessionstart(session):
                 progress_bar_disable=True,
             )
             setup_task_dict["trex_rgb_single_file"] = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+            print("[SETUP]   Finished setting up a minute of TREx RGB data")
 
         def init_task_generate_themis_movie_frames():
             # read in a minute of THEMIS raw data
@@ -423,6 +439,7 @@ def pytest_sessionstart(session):
 
             # set data for later
             setup_task_dict["themis_movie_filenames"] = filenames
+            print("[SETUP]   Finished setting up THEMIS movie data")
 
         def init_task_prep_bounding_box():
             # get THEMIS data
@@ -430,7 +447,7 @@ def pytest_sessionstart(session):
             end_dt = datetime.datetime(2021, 11, 4, 9, 2)
             site_uid = "atha"
             r = aurorax.data.ucalgary.download("THEMIS_ASI_RAW", start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
-            themis_data = aurorax.data.ucalgary.read(r.dataset, r.filenames, n_parallel=5)
+            themis_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
 
             # get the applicable THEMIS skymap
             r = aurorax.data.ucalgary.download_best_skymap("THEMIS_ASI_SKYMAP_IDLSAV", site_uid, start_dt)
@@ -441,7 +458,7 @@ def pytest_sessionstart(session):
             end_dt = datetime.datetime(2021, 11, 4, 3, 0)
             site_uid = "gill"
             r = aurorax.data.ucalgary.download("TREX_RGB_RAW_NOMINAL", start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
-            trex_rgb_data = aurorax.data.ucalgary.read(r.dataset, r.filenames, n_parallel=5)
+            trex_rgb_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
 
             # get the applicable RGB skymap
             r = aurorax.data.ucalgary.download_best_skymap("TREX_RGB_SKYMAP_IDLSAV", site_uid, start_dt)
@@ -454,26 +471,83 @@ def pytest_sessionstart(session):
                 "trex_rgb_data": trex_rgb_data,
                 "trex_rgb_skymap": trex_rgb_skymap,
             }
+            print("[SETUP]   Finished setting up bounding box data")
+
+        def init_task_prep_calibration_rego():
+            # get raw data
+            dataset_name = "REGO_RAW"
+            dt = datetime.datetime(2021, 11, 4, 3, 30)
+            site_uid = "gill"
+            r = aurorax.data.ucalgary.download(dataset_name, dt, dt, site_uid=site_uid, progress_bar_disable=True)
+            raw_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+            device_uid = raw_data.metadata[0]["Imager unique ID"][5:]
+
+            # download rayleighs calibration
+            dataset_name = "REGO_CALIBRATION_RAYLEIGHS_IDLSAV"
+            r = aurorax.data.ucalgary.download_best_rayleighs_calibration(dataset_name, device_uid, dt)
+            data_cal_rayleighs = aurorax.data.ucalgary.read(r.dataset, r.filenames[0])
+
+            # download flatfield calibration
+            dataset_name = "REGO_CALIBRATION_FLATFIELD_IDLSAV"
+            r = aurorax.data.ucalgary.download_best_rayleighs_calibration(dataset_name, device_uid, dt)
+            data_cal_flatfield = aurorax.data.ucalgary.read(r.dataset, r.filenames[0])
+
+            # set variable for later usage
+            setup_task_dict["rego_calibration_data"] = {
+                "raw_data": raw_data,
+                "rayleighs_data": data_cal_rayleighs,
+                "flatfield_data": data_cal_flatfield,
+            }
+            print("[SETUP]   Finished setting up REGO calibration data")
+
+        def init_task_prep_calibration_trex_nir():
+            # get raw data
+            dataset_name = "TREX_NIR_RAW"
+            dt = datetime.datetime(2021, 11, 4, 3, 30)
+            site_uid = "gill"
+            r = aurorax.data.ucalgary.download(dataset_name, dt, dt, site_uid=site_uid, progress_bar_disable=True)
+            raw_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+            device_uid = raw_data.metadata[0]["Imager unique ID"][5:]
+
+            # download rayleighs calibration
+            dataset_name = "TREX_NIR_CALIBRATION_RAYLEIGHS_IDLSAV"
+            r = aurorax.data.ucalgary.download_best_rayleighs_calibration(dataset_name, device_uid, dt)
+            data_cal_rayleighs = aurorax.data.ucalgary.read(r.dataset, r.filenames[0])
+
+            # download flatfield calibration
+            dataset_name = "TREX_NIR_CALIBRATION_FLATFIELD_IDLSAV"
+            r = aurorax.data.ucalgary.download_best_rayleighs_calibration(dataset_name, device_uid, dt)
+            data_cal_flatfield = aurorax.data.ucalgary.read(r.dataset, r.filenames[0])
+
+            # set variable for later usage
+            setup_task_dict["trex_nir_calibration_data"] = {
+                "raw_data": raw_data,
+                "rayleighs_data": data_cal_rayleighs,
+                "flatfield_data": data_cal_flatfield,
+            }
+            print("[SETUP]   Finished setting up TREx NIR calibration data")
 
         # start and wait for threads
-        thread1 = threading.Thread(target=init_task_download_read_themis_single_minute)
-        thread2 = threading.Thread(target=init_task_generate_themis_movie_frames)
-        thread3 = threading.Thread(target=init_task_download_read_trex_rgb_single_minute)
-        thread4 = threading.Thread(target=init_task_prep_bounding_box)
-        thread1.start()
-        thread2.start()
-        thread3.start()
-        thread4.start()
-        thread1.join()
-        thread2.join()
-        thread3.join()
-        thread4.join()
+        tasks = [
+            init_task_download_read_themis_single_minute,
+            init_task_generate_themis_movie_frames,
+            init_task_download_read_trex_rgb_single_minute,
+            init_task_prep_bounding_box,
+            init_task_prep_calibration_rego,
+            init_task_prep_calibration_trex_nir,
+        ]
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = [executor.submit(task) for task in tasks]
+            for future in futures:
+                future.result()
 
         # set results
         tools_data_single_themis_file = setup_task_dict["themis_single_file"]
         tools_data_themis_movie_filenames = setup_task_dict["themis_movie_filenames"]
         tools_data_single_trex_rgb_file = setup_task_dict["trex_rgb_single_file"]
         tools_data_bounding_box_data = setup_task_dict["bounding_box_data"]
+        tools_data_rego_calibration_data = setup_task_dict["rego_calibration_data"]
+        tools_data_trex_nir_calibration_data = setup_task_dict["trex_nir_calibration_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 
