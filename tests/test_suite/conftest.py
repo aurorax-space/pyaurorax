@@ -25,9 +25,10 @@ import pyaurorax
 from click.testing import CliRunner
 from pathlib import Path
 from dotenv import load_dotenv
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # globals
+MAX_INIT_WORKERS = 4
 CONJUNCTION_SEARCH_REQUEST_ID = None
 EPHEMERIS_SEARCH_REQUEST_ID = None
 DATA_PRODUCTS_SEARCH_REQUEST_ID = None
@@ -38,6 +39,8 @@ tools_data_bounding_box_data = None
 tools_data_rego_calibration_data = None
 tools_data_trex_nir_calibration_data = None
 tools_data_ccd_contour_data = None
+tools_data_themis_keogram_data = None
+tools_data_trex_rgb_keogram_data = None
 
 
 def pytest_addoption(parser):
@@ -294,6 +297,16 @@ def ccd_contour_data():
     return tools_data_ccd_contour_data
 
 
+@pytest.fixture(scope="session")
+def themis_keogram_data():
+    return tools_data_themis_keogram_data
+
+
+@pytest.fixture(scope="session")
+def trex_rgb_keogram_data():
+    return tools_data_trex_rgb_keogram_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -314,6 +327,8 @@ def pytest_sessionstart(session):
     global tools_data_rego_calibration_data
     global tools_data_trex_nir_calibration_data
     global tools_data_ccd_contour_data
+    global tools_data_themis_keogram_data
+    global tools_data_trex_rgb_keogram_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -385,9 +400,9 @@ def pytest_sessionstart(session):
             init_task_search_ephemeris,
             init_task_search_data_products,
         ]
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=MAX_INIT_WORKERS) as executor:
             futures = [executor.submit(task) for task in tasks]
-            for future in futures:
+            for future in as_completed(futures):
                 future.result()
 
         # set results
@@ -556,6 +571,46 @@ def pytest_sessionstart(session):
             }
             print("[SETUP]   Finished setting up CCD contour data")
 
+        def init_task_prep_themis_keogram():
+            # download 10 minutes of THEMIS ASI data
+            dataset_name = "THEMIS_ASI_RAW"
+            start_dt = datetime.datetime(2021, 11, 4, 9, 0)
+            end_dt = datetime.datetime(2021, 11, 4, 9, 9)
+            site_uid = "atha"
+            r = aurorax.data.ucalgary.download(dataset_name, start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+            data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
+            # get skymap
+            r = aurorax.data.ucalgary.download_best_skymap("THEMIS_ASI_SKYMAP_IDLSAV", site_uid, start_dt)
+            skymap_data = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # set variable for later usage
+            setup_task_dict["themis_keogram_data"] = {
+                "raw_data": data,
+                "skymap": skymap_data,
+            }
+            print("[SETUP]   Finished setting up THEMIS keogram data")
+
+        def init_task_prep_trex_rgb_keogram():
+            # download 10 minutes of RGB data
+            dataset_name = "TREX_RGB_RAW_NOMINAL"
+            start_dt = datetime.datetime(2021, 11, 4, 3, 30)
+            end_dt = datetime.datetime(2021, 11, 4, 3, 39)
+            site_uid = "rabb"
+            r = aurorax.data.ucalgary.download(dataset_name, start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+            data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
+            # get skymap
+            r = aurorax.data.ucalgary.download_best_skymap("TREX_RGB_SKYMAP_IDLSAV", site_uid, start_dt)
+            skymap_data = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # set variable for later usage
+            setup_task_dict["trex_rgb_keogram_data"] = {
+                "raw_data": data,
+                "skymap": skymap_data,
+            }
+            print("[SETUP]   Finished setting up TREx RGB keogram data")
+
         # start and wait for threads
         tasks = [
             init_task_download_read_themis_single_minute,
@@ -565,10 +620,12 @@ def pytest_sessionstart(session):
             init_task_prep_calibration_rego,
             init_task_prep_calibration_trex_nir,
             init_task_prep_ccd_contour,
+            init_task_prep_themis_keogram,
+            init_task_prep_trex_rgb_keogram,
         ]
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=MAX_INIT_WORKERS) as executor:
             futures = [executor.submit(task) for task in tasks]
-            for future in futures:
+            for future in as_completed(futures):
                 future.result()
 
         # set results
@@ -579,6 +636,8 @@ def pytest_sessionstart(session):
         tools_data_rego_calibration_data = setup_task_dict["rego_calibration_data"]
         tools_data_trex_nir_calibration_data = setup_task_dict["trex_nir_calibration_data"]
         tools_data_ccd_contour_data = setup_task_dict["ccd_contour_data"]
+        tools_data_themis_keogram_data = setup_task_dict["themis_keogram_data"]
+        tools_data_trex_rgb_keogram_data = setup_task_dict["trex_rgb_keogram_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 

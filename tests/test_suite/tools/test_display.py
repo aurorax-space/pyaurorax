@@ -71,7 +71,7 @@ def test_returnfig_warnings(at, themis_single_file):
 
 @pytest.mark.tools
 @patch("matplotlib.pyplot.show")
-def test_savefig_warnins(mock_show, at, plot_cleanup, themis_single_file):
+def test_savefig_warnings(mock_show, at, plot_cleanup, themis_single_file):
     # check savefig_filename
     with warnings.catch_warnings(record=True) as w:
         at.display(themis_single_file.data[:, :, 0], savefig_filename="some_filename")

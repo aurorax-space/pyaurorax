@@ -124,7 +124,7 @@ class Keogram:
         """
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError("Unable to set the geographic latitudes since the slice_idx is None. If this keogram " +
+            raise ValueError("Unable to set the geographic latitudes since the private slice_idx is None. If this keogram " +
                              "object was created as part of the custom_keogram routines or is a spectrogaph keogram, " +
                              "this is expected and performing this action is not supported at this time.")
 
@@ -436,7 +436,7 @@ class Keogram:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (".jpg" == f_extension or ".jpeg" == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):
+                if (savefig_quality is not None):  # pragma: nocover
                     plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
                 else:
                     plt.savefig(savefig_filename, bbox_inches="tight")
