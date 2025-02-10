@@ -37,26 +37,11 @@ There exist several makefile targets to help run these tests quicker/easier. Bel
 
 - `make test-linting` Run all linting tests
 - `make test-pytest` Run all automated functional tests
-- `make test-flake8` Run Flake8 styling tests
-- `make test-pylint` Run PyLint styling tests
-- `make test-pycodestyle` Run pycodestyle styling tests
-- `make test-bandit` Run Bandit security test
-- `make test-mypy` Run mypy type checking test
 - `make test-coverage` View test coverage report (must be done after `make test-pytest` or other coverage command)
 
 The PyTest functionality tests include several categories of tests. You can run each category separately if you want using the "markers" feature of PyTest. All markers are found in the pytest.ini file at the root of the repository.
 
 - `poetry run pytest --markers` List all markers
-- `poetry run pytest -v -m accounts` Perform only the tests for the "accounts" marker
-- `poetry run pytest -v -m availability` Perform only the tests for the "availability" marker
-- `poetry run pytest -v -m conjunctions` Perform only the tests for the "conjunctions" marker
-- `poetry run pytest -v -m ephemeris` Perform only the tests for the "ephemeris" marker
-- `poetry run pytest -v -m exceptions` Perform only the tests for the "exceptions" marker
-- `poetry run pytest -v -m location` Perform only the tests for the "location" marker
-- `poetry run pytest -v -m metadata` Perform only the tests for the "metadata" marker
-- `poetry run pytest -v -m requests` Perform only the tests for the "request" marker
-- `poetry run pytest -v -m sources` Perform only the tests for the "sources" marker
-- `poetry run pytest -v -m util` Perform only the tests for the "util" marker
 
 Below are some more commands for advanced usages of PyTest.
 
@@ -64,7 +49,6 @@ Below are some more commands for advanced usages of PyTest.
 - `poetry run pytest --collect-only` List all available tests
 - `poetry run pytest --markers` List all markers (includes builtin, plugin and per-project ones)
 - `cat pytest.ini` List custom markers
-- `poetry run pytest tests/test_suite/ephemeris/test_ephemeris.py::test_get_request_url -v` Run a single specific test
 
 You can also run Pytest against a different API. By default, it runs agains the staging API, but you can alternatively tell it to run against the production API, or a local instance.
 
