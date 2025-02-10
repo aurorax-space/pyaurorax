@@ -36,9 +36,9 @@ def elevation(aurorax_obj, images, skymap, elevation_bounds, metric, n_channels,
 
     # Ensure that coordinates are valid
     if elev_0 > 90 or elev_0 < 0:
-        raise ValueError("Invalid Elevation: " + str(elev_0))
+        raise ValueError("Invalid elevation: " + str(elev_0))
     elif elev_1 > 90 or elev_1 < 0:
-        raise ValueError("Invalid Elevation: " + str(elev_1))
+        raise ValueError("Invalid elevation: " + str(elev_1))
 
     # Ensure that elevations are properly ordered
     if elev_0 > elev_1:
@@ -55,13 +55,13 @@ def elevation(aurorax_obj, images, skymap, elevation_bounds, metric, n_channels,
     bound_idx = np.where(np.logical_and(elev >= float(elev_0), elev <= float(elev_1)))
 
     # If boundaries contain no data, raise error
-    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:
+    if len(bound_idx[0]) == 0 or len(bound_idx[1]) == 0:  # pragma: nocover
         raise ValueError("No data within desired bounds. Try a larger area.")
 
     # Slice out the bounded data
-    if n_channels == 1:
+    if (n_channels == 1):
         bound_data = images[bound_idx[0], bound_idx[1], :]
-        if show_preview:
+        if (show_preview is True):
             preview_img = aurorax_obj.tools.scale_intensity(images[:, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1]] = 255
             plt.figure()
@@ -69,9 +69,9 @@ def elevation(aurorax_obj, images, skymap, elevation_bounds, metric, n_channels,
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
-    elif n_channels == 3:
+    elif (n_channels == 3):
         bound_data = images[bound_idx[0], bound_idx[1], :, :]
-        if show_preview:
+        if (show_preview is True):
             preview_img = aurorax_obj.tools.scale_intensity(images[:, :, :, 0], top=230)
             preview_img[bound_idx[0], bound_idx[1], 0] = 255
             preview_img[bound_idx[0], bound_idx[1], 1:] = 0
@@ -80,7 +80,7 @@ def elevation(aurorax_obj, images, skymap, elevation_bounds, metric, n_channels,
             plt.title("Bounded Area Preview")
             plt.axis("off")
             plt.show()
-    else:
+    else:  # pragma: nocover
         raise ValueError("Unrecognized image format with shape: " + str(images.shape))
 
     # Compute metric of interest

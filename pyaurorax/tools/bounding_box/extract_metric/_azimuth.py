@@ -36,9 +36,9 @@ def azimuth(aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, sho
 
     # Ensure that coordinates are valid
     if az_0 > 360 or az_0 < 0:
-        raise ValueError("Invalid Azimuth: " + str(az_0))
+        raise ValueError("Invalid azimuth: " + str(az_0))
     elif az_1 > 360 or az_1 < 0:
-        raise ValueError("Invalid Azimuth: " + str(az_1))
+        raise ValueError("Invalid azimuth: " + str(az_1))
 
     # Ensure that azimuths are properly ordered
     if az_0 > az_1:

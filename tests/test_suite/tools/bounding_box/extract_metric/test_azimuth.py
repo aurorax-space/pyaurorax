@@ -53,6 +53,15 @@ def test_three_channel(at, bounding_box_data):
 
 
 @pytest.mark.tools
+def test_n_channels(at, bounding_box_data):
+    imgs = bounding_box_data["themis_data"].data
+    skymap = bounding_box_data["themis_skymap"]
+    az_range = [140, 173]
+    bb_data = at.bounding_box.extract_metric.azimuth(imgs, skymap, az_range, n_channels=1)
+    assert bb_data.shape == (imgs.shape[-1], )
+
+
+@pytest.mark.tools
 @patch("matplotlib.pyplot.show")
 def test_show_preview(mock_show, at, plot_cleanup, bounding_box_data):
     imgs = bounding_box_data["themis_data"].data
@@ -75,15 +84,6 @@ def test_three_channel_show_preview(mock_show, at, plot_cleanup, bounding_box_da
 
 
 @pytest.mark.tools
-def test_n_channels(at, bounding_box_data):
-    imgs = bounding_box_data["themis_data"].data
-    skymap = bounding_box_data["themis_skymap"]
-    az_range = [140, 173]
-    bb_data = at.bounding_box.extract_metric.azimuth(imgs, skymap, az_range, n_channels=1)
-    assert bb_data.shape == (imgs.shape[-1], )
-
-
-@pytest.mark.tools
 def test_order(at, bounding_box_data):
     imgs = bounding_box_data["themis_data"].data
     skymap = bounding_box_data["themis_skymap"]
@@ -99,10 +99,10 @@ def test_bad_azimuth1(at, bounding_box_data):
     skymap = bounding_box_data["themis_skymap"]
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [-180, 90])
-    assert "Invalid Azimuth" in str(e_info)
+    assert "Invalid azimuth" in str(e_info)
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [390, 90])
-    assert "Invalid Azimuth" in str(e_info)
+    assert "Invalid azimuth" in str(e_info)
 
 
 @pytest.mark.tools
@@ -112,10 +112,10 @@ def test_bad_azimuth2(at, bounding_box_data):
     skymap = bounding_box_data["themis_skymap"]
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [90, -180])
-    assert "Invalid Azimuth" in str(e_info)
+    assert "Invalid azimuth" in str(e_info)
     with pytest.raises(ValueError) as e_info:
         _ = at.bounding_box.extract_metric.azimuth(imgs, skymap, [90, 390])
-    assert "Invalid Azimuth" in str(e_info)
+    assert "Invalid azimuth" in str(e_info)
 
 
 @pytest.mark.tools

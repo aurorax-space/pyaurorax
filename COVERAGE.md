@@ -62,10 +62,10 @@ pyaurorax/tools/_movie.py                                         34      0   10
 pyaurorax/tools/_scale_intensity.py                               44      0   100%
 pyaurorax/tools/_util.py                                          10      0   100%
 pyaurorax/tools/bounding_box/__init__.py                           9      0   100%
-pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      3    87%   161, 207, 257
+pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      2    91%   207, 257
 pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           53      0   100%
 pyaurorax/tools/bounding_box/extract_metric/_ccd.py               60      0   100%
-pyaurorax/tools/bounding_box/extract_metric/_elevation.py         55     52     5%   21-97
+pyaurorax/tools/bounding_box/extract_metric/_elevation.py         52      0   100%
 pyaurorax/tools/bounding_box/extract_metric/_geo.py               95     92     3%   21-152
 pyaurorax/tools/bounding_box/extract_metric/_mag.py               99     95     4%   22-163
 pyaurorax/tools/calibration/__init__.py                           13      2    85%   81, 135
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5824   1914    67%
+TOTAL                                                           5821   1861    68%
 
 13 empty files skipped.
 ```
