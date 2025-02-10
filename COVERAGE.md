@@ -56,7 +56,7 @@ pyaurorax/search/sources/classes/data_source.py                   66      0   10
 pyaurorax/search/sources/classes/data_source_stats.py             22      0   100%
 pyaurorax/search/util/__init__.py                                 11      0   100%
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
-pyaurorax/tools/__init__.py                                       61      6    90%   107, 114, 121, 128, 135, 142
+pyaurorax/tools/__init__.py                                       61      5    92%   114, 121, 128, 135, 142
 pyaurorax/tools/_display.py                                       33      0   100%
 pyaurorax/tools/_movie.py                                         34      0   100%
 pyaurorax/tools/_scale_intensity.py                               44      0   100%
@@ -72,11 +72,11 @@ pyaurorax/tools/calibration/__init__.py                           13      0   10
 pyaurorax/tools/calibration/_common.py                            34      0   100%
 pyaurorax/tools/calibration/_rego.py                              14      0   100%
 pyaurorax/tools/calibration/_trex_nir.py                          14      0   100%
-pyaurorax/tools/ccd_contour/__init__.py                           20      4    80%   80, 115, 167, 223
-pyaurorax/tools/ccd_contour/_azimuth.py                           46     44     4%   20-89
-pyaurorax/tools/ccd_contour/_elevation.py                         41     39     5%   20-81
-pyaurorax/tools/ccd_contour/_geo.py                              123    120     2%   24-36, 41-234
-pyaurorax/tools/ccd_contour/_mag.py                              133    129     3%   25-37, 42-254
+pyaurorax/tools/ccd_contour/__init__.py                           20      0   100%
+pyaurorax/tools/ccd_contour/_azimuth.py                           47      0   100%
+pyaurorax/tools/ccd_contour/_elevation.py                         39      0   100%
+pyaurorax/tools/ccd_contour/_geo.py                              106      0   100%
+pyaurorax/tools/ccd_contour/_mag.py                              112      0   100%
 pyaurorax/tools/classes/keogram.py                               152    134    12%   63-71, 74, 77-83, 90-103, 126-155, 183-237, 332-464
 pyaurorax/tools/classes/montage.py                                64     50    22%   42-46, 49, 52-55, 62-68, 163-253
 pyaurorax/tools/classes/mosaic.py                                313    265    15%   65, 69-82, 93-110, 143, 147-152, 159-169, 201, 204-215, 222-238, 350-522, 572-678, 732-838
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5812   1616    72%
+TOTAL                                                           5773   1279    78%
 
 13 empty files skipped.
 ```

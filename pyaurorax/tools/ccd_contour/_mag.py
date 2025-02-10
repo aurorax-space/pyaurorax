@@ -42,8 +42,8 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
     if (contour_lats is None) != (contour_lons is None):
         raise ValueError("When defining a custom contour, both 'contour_lats' and 'contour_lons' must be supplied.")
     if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) > 1:
-        raise ValueError(
-            "Only one contour can be defined per call: Pass only one of 'contour_lats & contour_lons', 'constant_lat', or 'constant_lon'.")
+        raise ValueError("Only one contour can be defined per call: Pass only one of " +
+                         "'contour_lats & contour_lons', 'constant_lat', or 'constant_lon'.")
     if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) == 0:
         raise ValueError("No contour defined in input: Pass one of 'contour_lats & contour_lons', 'constant_lat', or 'constant_lon'.")
 
@@ -84,12 +84,12 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
         lats = np.reshape(mag_lats, lats.shape)
         lons = np.reshape(mag_lons, lons.shape)
 
-    # First handle case of a contour of constant latidude:
+    # First handle case of a contour of constant latitude:
     if (constant_lat is not None):
         # First check that the supplied latitude is valid for this skymap
-        if (constant_lat < np.nanmin(lats)) or (constant_lat > np.nanmax(lats)):
+        if (constant_lat < np.nanmin(lats)) or (constant_lat > np.nanmax(lats)):  # pragma: nocover
             raise ValueError(f"Latitude {constant_lat} does not coincide with input skymap: magnetic latitude " +
-                             f"range at {altitude_km} km is ({np.nanmin(lats), np.nanmax(lats)}).")
+                             f"range at {altitude_km} km is {np.nanmin(lats), np.nanmax(lats)}.")
 
         # Get the longitude bounds of the skymap
         min_skymap_lon, max_skymap_lon = np.nanmin(lons), np.nanmax(lons)
@@ -115,14 +115,14 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
             diffs = np.abs(masked_lats - constant_lat)
             y, x = np.where(diffs == np.nanmin(diffs))
 
-            if x.shape == (0, ) or y.shape == (0, ):
+            if x.shape == (0, ) or y.shape == (0, ):  # pragma: nocover
                 continue
 
             # Add to master lists
             x_list.append(x[0])
             y_list.append(y[0])
 
-        if remove_edge_cases:
+        if (remove_edge_cases is True):
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)
@@ -137,9 +137,9 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
     # Next handle case of a contour of constant longitude:
     elif (constant_lon is not None):
         # First check that the supplied longitude is valid for this skymap
-        if (constant_lon < np.nanmin(lons)) or (constant_lon > np.nanmax(lons)):
+        if (constant_lon < np.nanmin(lons)) or (constant_lon > np.nanmax(lons)):  # pragma: nocover
             raise ValueError(f"Longitude {constant_lat} does not coincide with input skymap: magnetic longitude " +
-                             f"range at {altitude_km} km is ({np.nanmin(lons), np.nanmax(lons)}).")
+                             f"range at {altitude_km} km is {np.nanmin(lons), np.nanmax(lons)}.")
 
         # Get the latitude bounds of the skymap
         min_skymap_lat, max_skymap_lat = np.nanmin(lats), np.nanmax(lats)
@@ -165,14 +165,14 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
             diffs = np.abs(masked_lons - constant_lon)
             y, x = np.where(diffs == np.nanmin(diffs))
 
-            if x.shape == (0, ) or y.shape == (0, ):
+            if x.shape == (0, ) or y.shape == (0, ):  # pragma: nocover
                 continue
 
             # Add to master lists
             x_list.append(x[0])
             y_list.append(y[0])
 
-        if remove_edge_cases:
+        if (remove_edge_cases is True):
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)
@@ -187,10 +187,10 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
     # Finally, handle case of a custom contour
     elif (contour_lats is not None) and (contour_lons is not None):
         # Convert lists to ndarrays if necessary
-        if isinstance(contour_lats, list):
-            lats = np.array(contour_lats)
-        if isinstance(contour_lons, list):
-            lons = np.array(contour_lons)
+        if (isinstance(contour_lats, list)):
+            contour_lats = np.asarray(contour_lats)
+        if (isinstance(contour_lons, list)):
+            contour_lons = np.asarray(contour_lons)
 
         # Remove any invalid lat/lon pairs
         invalid_mask = (contour_lons < np.nanmin(lons)) | (contour_lons > np.nanmax(lons)) | (contour_lats < np.nanmin(lats)) | (contour_lats
@@ -202,9 +202,9 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
         # Check if any lat/lons are actually valid for skymap
         invalid_lats_mask = (contour_lats < np.nanmin(lats)) | (contour_lats > np.nanmax(lats))
         invalid_lons_mask = (contour_lons < np.nanmin(lons)) | (contour_lons > np.nanmax(lons))
-        if contour_lats[~invalid_lats_mask].shape == (0, ):
-            raise ValueError(f"Magnetic coordinates provided are outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
-        if contour_lons[~invalid_lons_mask].shape == (0, ):
+        if contour_lats[~invalid_lats_mask].shape == (0, ):  # pragma: nocover
+            raise ValueError(f"Magnetic latitudes provided are outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
+        if contour_lons[~invalid_lons_mask].shape == (0, ):  # pragma: nocover
             raise ValueError(f"Magnetic longitudes provided are outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
 
         # Get the latitude bounds of the skymap
@@ -213,9 +213,9 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
         y_list = []
         for target_lat, target_lon in zip(valid_contour_lats, valid_contour_lons):
             # Make sure lat/lon falls within skymap
-            if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):
+            if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):  # pragma: nocover
                 raise ValueError(f"Magnetic latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
-            if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):
+            if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):  # pragma: nocover
                 raise ValueError(f"Magnetic longitude {target_lon} is outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
 
             # Compute haversine distance between all points in skymap
@@ -228,16 +228,16 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
 
             # Convert indices to CCD Coordinates
             y_loc = nearest_indices[0] - 1
-            if y_loc < 0:
+            if y_loc < 0:  # pragma: nocover
                 y_loc = 0
             x_loc = nearest_indices[1] - 1
-            if x_loc < 0:
+            if x_loc < 0:  # pragma: nocover
                 x_loc = 0
 
             x_list.append(x_loc)
             y_list.append(y_loc)
 
-        if remove_edge_cases:
+        if (remove_edge_cases is True):
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)
@@ -249,6 +249,6 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
             # Convert to arrays, return
             return (np.array(x_list), np.array(y_list))
 
-    else:
+    else:  # pragma: nocover
         # This shouldn't occur, but typing claims there is a missed case somewhere that could not be identified...
-        raise ValueError("Something went wrong. Please verify your inputs are in expected format.")
+        raise ValueError("Something unexpected happened, please verify your inputs are in expected format. Otherwise, contact the PyAuroraX team.")

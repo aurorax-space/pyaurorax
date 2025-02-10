@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import numpy as np
+import warnings
 
 
 def azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, remove_edge_cases):
@@ -23,20 +24,20 @@ def azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, re
     # Check that min/max elevations are valid if supplied
     if (min_elevation is not None):
         if (min_elevation < 0) or (min_elevation > 90):
-            raise ValueError(f"Min_elevation of {min_elevation} is outside of valid range (0,90).")
+            raise ValueError(f"Minimum elevation of {min_elevation} is outside of valid range (0,90).")
     if (max_elevation is not None):
         if (max_elevation < 0) or (max_elevation > 90):
-            raise ValueError(f"Minimum elevation of {min_elevation} is outside of valid range (0,90).")
+            raise ValueError(f"Maximum elevation of {min_elevation} is outside of valid range (0,90).")
     if (min_elevation is not None) and (max_elevation is not None):
         if (min_elevation >= max_elevation):
-            raise ValueError(f"Min_elevation of {min_elevation} is outside of valid range (0,90).")
+            raise ValueError("Minimum elevation is lower than maximum elevation.")
 
     # Pull azimuth and elevation arrays from skymap
     azimuth = skymap.full_azimuth
     elevation = skymap.full_elevation
 
     # Check if azimuth is None (in case someone tries this with a spectrograph skymap)
-    if (azimuth is None):
+    if (azimuth is None):  # pragma: nocover
         raise ValueError("Skymap's 'azimuth' value is None, cannot perform this function")
 
     # 360 degrees is just zero in skymap
@@ -67,8 +68,9 @@ def azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, re
         # Get index of pixel nearest to target azimuth
         masked_azimuth = np.where(el_slice_idx, azimuth, np.nan)
         diffs = np.abs(masked_azimuth - constant_azimuth)
-        y, x = np.where(diffs == np.nanmin(diffs))
-
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning, message="All-NaN slice encountered")
+            y, x = np.where(diffs == np.nanmin(diffs))
         if x.shape == (0, ) or y.shape == (0, ):
             continue
 
@@ -76,7 +78,7 @@ def azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, re
         x_list.append(x[0])
         y_list.append(y[0])
 
-    if remove_edge_cases:
+    if (remove_edge_cases is True):
         # Remove any points lying on the edge of CCD bounds and return
         x_list = np.array(x_list)
         y_list = np.array(y_list)

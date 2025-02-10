@@ -28,7 +28,7 @@ def elevation(skymap, constant_elevation, n_points, remove_edge_cases):
     if constant_elevation == 90:
         diffs = np.abs(elevation - constant_elevation)
         y, x = np.where(diffs == np.nanmin(diffs))
-        return (np.array(x[0]), np.array(y[0]))
+        return (np.array([x[0]]), np.array([y[0]]))
 
     # Take a guess at a good number of points if None is supplied
     if n_points is None:
@@ -57,7 +57,7 @@ def elevation(skymap, constant_elevation, n_points, remove_edge_cases):
         diffs = np.abs(masked_elevation - constant_elevation)
         y, x = np.where(diffs == np.nanmin(diffs))
 
-        if x.shape == (0, ) or y.shape == (0, ):
+        if x.shape == (0, ) or y.shape == (0, ):  # pragma: nocover
             continue
 
         # Add to master lists
@@ -68,7 +68,7 @@ def elevation(skymap, constant_elevation, n_points, remove_edge_cases):
     x_list.append(x_list[0])
     y_list.append(y_list[0])
 
-    if remove_edge_cases:
+    if (remove_edge_cases is True):
         # Remove any points lying on the edge of CCD bounds and return
         x_list = np.array(x_list)
         y_list = np.array(y_list)

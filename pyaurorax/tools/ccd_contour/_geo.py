@@ -41,8 +41,8 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
     if (contour_lats is None) != (contour_lons is None):
         raise ValueError("When defining a custom contour, both 'contour_lats' and 'contour_lons' must be supplied.")
     if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) > 1:
-        raise ValueError(
-            "Only one contour can be defined per call: Pass only one of 'contour_lats & contour_lons', 'constant_lat', or 'constant_lon'.")
+        raise ValueError("Only one contour can be defined per call: Pass only one of " +
+                         "'contour_lats & contour_lons', 'constant_lat', or 'constant_lon'.")
     if sum([((contour_lats is not None) and (contour_lons is not None)), (constant_lat is not None), (constant_lon is not None)]) == 0:
         raise ValueError("No contour defined in input: Pass one of 'contour_lats & contour_lons', 'constant_lat', or 'constant_lon'.")
 
@@ -53,7 +53,6 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
         lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
         lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
         lons[np.where(lons > 180)] -= 360.0  # Fix skymap to be in (-180,180) format
-
     else:
         # Make sure altitude is in range that can be interpolated
         if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
@@ -72,12 +71,12 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
 
         lons[np.where(lons > 180)] -= 360.0  # Fix skymap to be in (-180,180) format
 
-    # First handle case of a contour of constant latidude:
+    # First handle case of a contour of constant latitude:
     if (constant_lat is not None):
         # First check that the supplied latitude is valid for this skymap
-        if (constant_lat < np.nanmin(lats)) or (constant_lat > np.nanmax(lats)):
+        if (constant_lat < np.nanmin(lats)) or (constant_lat > np.nanmax(lats)):  # pragma: nocover
             raise ValueError(f"Latitude {constant_lat} does not coincide with input skymap: latitude range " +
-                             f"at {altitude_km} km is ({np.nanmin(lats), np.nanmax(lats)}).")
+                             f"at {altitude_km} km is {np.nanmin(lats), np.nanmax(lats)}.")
 
         # Get the longitude bounds of the skymap
         min_skymap_lon, max_skymap_lon = np.nanmin(lons), np.nanmax(lons)
@@ -103,14 +102,14 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
             diffs = np.abs(masked_lats - constant_lat)
             y, x = np.where(diffs == np.nanmin(diffs))
 
-            if x.shape == (0, ) or y.shape == (0, ):
+            if x.shape == (0, ) or y.shape == (0, ):  # pragma: nocover
                 continue
 
             # Add to master lists
             x_list.append(x[0])
             y_list.append(y[0])
 
-        if remove_edge_cases:
+        if (remove_edge_cases is True):
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)
@@ -125,9 +124,9 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
     # Next handle case of a contour of constant longitude:
     elif (constant_lon is not None):
         # First check that the supplied longitude is valid for this skymap
-        if (constant_lon < np.nanmin(lons)) or (constant_lon > np.nanmax(lons)):
+        if (constant_lon < np.nanmin(lons)) or (constant_lon > np.nanmax(lons)):  # pragma: nocover
             raise ValueError(f"Longitude {constant_lat} does not coincide with input skymap: longitude range " +
-                             f"at {altitude_km} km is ({np.nanmin(lons), np.nanmax(lons)}).")
+                             f"at {altitude_km} km is {np.nanmin(lons), np.nanmax(lons)}.")
 
         # Get the latitude bounds of the skymap
         min_skymap_lat, max_skymap_lat = np.nanmin(lats), np.nanmax(lats)
@@ -153,14 +152,14 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
             diffs = np.abs(masked_lons - constant_lon)
             y, x = np.where(diffs == np.nanmin(diffs))
 
-            if x.shape == (0, ) or y.shape == (0, ):
+            if x.shape == (0, ) or y.shape == (0, ):  # pragma: nocover
                 continue
 
             # Add to master lists
             x_list.append(x[0])
             y_list.append(y[0])
 
-        if remove_edge_cases:
+        if (remove_edge_cases is True):
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)
@@ -175,14 +174,15 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
     # Finally, handle case of a custom contour
     elif (contour_lats is not None) and (contour_lons is not None):
         # Convert lists to ndarrays if necessary
-        if isinstance(lats, list):
-            lats = np.array(lats)
-        if isinstance(lons, list):
-            lons = np.array(lons)
+        if (isinstance(contour_lats, list)):
+            contour_lats = np.asarray(contour_lats)
+        if (isinstance(contour_lons, list)):
+            contour_lons = np.asarray(contour_lons)
 
         # Remove any invalid lat/lon pairs
         invalid_mask = (contour_lons < np.nanmin(lons)) | (contour_lons > np.nanmax(lons)) | (contour_lats < np.nanmin(lats)) | (contour_lats
                                                                                                                                  > np.nanmax(lats))
+
         # Filter out invalid contour points
         valid_contour_lats = contour_lats[~invalid_mask]
         valid_contour_lons = contour_lons[~invalid_mask]
@@ -193,9 +193,9 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
         y_list = []
         for target_lat, target_lon in zip(valid_contour_lats, valid_contour_lons):
             # Make sure lat/lon falls within skymap
-            if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):
+            if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):  # pragma: nocover
                 raise ValueError(f"Latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
-            if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):
+            if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):  # pragma: nocover
                 raise ValueError(f"Longitude {target_lon} is outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
 
             # Compute haversine distance between all points in skymap
@@ -208,16 +208,16 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
 
             # Convert indices to CCD Coordinates
             y_loc = nearest_indices[0] - 1
-            if y_loc < 0:
+            if y_loc < 0:  # pragma: nocover
                 y_loc = 0
             x_loc = nearest_indices[1] - 1
-            if x_loc < 0:
+            if x_loc < 0:  # pragma: nocover
                 x_loc = 0
 
             x_list.append(x_loc)
             y_list.append(y_loc)
 
-        if remove_edge_cases:
+        if (remove_edge_cases is True):
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)
@@ -229,6 +229,6 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
             # Convert to arrays, return
             return (np.array(x_list), np.array(y_list))
 
-    else:
+    else:  # pragma: nocover
         # This shouldn't occur, but typing claims there is a missed case somewhere that could not be identified...
-        raise ValueError("Something went wrong. Please verify your inputs are in expected format.")
+        raise ValueError("Something unexpected happened, please verify your inputs are in expected format. Otherwise, contact the PyAuroraX team.")

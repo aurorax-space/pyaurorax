@@ -37,6 +37,7 @@ tools_data_single_trex_rgb_file = None
 tools_data_bounding_box_data = None
 tools_data_rego_calibration_data = None
 tools_data_trex_nir_calibration_data = None
+tools_data_ccd_contour_data = None
 
 
 def pytest_addoption(parser):
@@ -288,6 +289,11 @@ def trex_nir_calibration_data():
     return tools_data_trex_nir_calibration_data
 
 
+@pytest.fixture(scope="session")
+def ccd_contour_data():
+    return tools_data_ccd_contour_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -307,6 +313,7 @@ def pytest_sessionstart(session):
     global tools_data_bounding_box_data
     global tools_data_rego_calibration_data
     global tools_data_trex_nir_calibration_data
+    global tools_data_ccd_contour_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -335,7 +342,7 @@ def pytest_sessionstart(session):
                                              display_name=display_name,
                                              source_type=source_type)
             aurorax.search.sources.add(ds)
-            print("[SETUP]   Finished setting up data source")
+        print("[SETUP]   Finished setting up data source")
 
     def init_task_search_conjunctions():
         # perform simple conjunction search, set the request ID
@@ -355,6 +362,7 @@ def pytest_sessionstart(session):
                                             platforms=["swarma"],
                                             instrument_types=["footprint"])
         setup_task_dict["ephemeris_search_id"] = s.request_id
+        print("[SETUP]   Finished setting up ephemeris search")
 
     def init_task_search_data_products():
         # perform simple data product search, set the request ID
@@ -363,6 +371,7 @@ def pytest_sessionstart(session):
                                                 programs=["auroramax"],
                                                 data_product_types=["keogram"])
         setup_task_dict["data_products_search_id"] = s.request_id
+        print("[SETUP]   Finished setting up data product search")
 
     # do search initialization tasks
     if (session.config.getoption("--do-search-tasks") is True):
@@ -527,6 +536,26 @@ def pytest_sessionstart(session):
             }
             print("[SETUP]   Finished setting up TREx NIR calibration data")
 
+        def init_task_prep_ccd_contour():
+            # download a minute of TREx RGB data from Gillam
+            dataset_name = "TREX_RGB_RAW_NOMINAL"
+            dt = datetime.datetime(2023, 2, 24, 6, 15)
+            site_uid = "gill"
+            r = aurorax.data.ucalgary.download(dataset_name, dt, dt, site_uid=site_uid, progress_bar_disable=True)
+            trex_rgb_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
+            # download the corresponding skymap
+            dataset_name = "TREX_RGB_SKYMAP_IDLSAV"
+            r = aurorax.data.ucalgary.download_best_skymap(dataset_name, site_uid, dt)
+            trex_rgb_skymap = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # set variable for later usage
+            setup_task_dict["ccd_contour_data"] = {
+                "trex_rgb_data": trex_rgb_data,
+                "trex_rgb_skymap": trex_rgb_skymap,
+            }
+            print("[SETUP]   Finished setting up CCD contour data")
+
         # start and wait for threads
         tasks = [
             init_task_download_read_themis_single_minute,
@@ -535,6 +564,7 @@ def pytest_sessionstart(session):
             init_task_prep_bounding_box,
             init_task_prep_calibration_rego,
             init_task_prep_calibration_trex_nir,
+            init_task_prep_ccd_contour,
         ]
         with ThreadPoolExecutor(max_workers=4) as executor:
             futures = [executor.submit(task) for task in tasks]
@@ -548,6 +578,7 @@ def pytest_sessionstart(session):
         tools_data_bounding_box_data = setup_task_dict["bounding_box_data"]
         tools_data_rego_calibration_data = setup_task_dict["rego_calibration_data"]
         tools_data_trex_nir_calibration_data = setup_task_dict["trex_nir_calibration_data"]
+        tools_data_ccd_contour_data = setup_task_dict["ccd_contour_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 
