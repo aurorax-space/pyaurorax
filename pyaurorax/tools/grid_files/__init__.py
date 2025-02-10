@@ -39,18 +39,30 @@ class GridFilesManager:
         cmap: Optional[str] = "Greys_r",
     ) -> np.ndarray:
         """
-        Takes a grid array, and converts it to RGBA format, masking all empty cells with max
+        Takes a grid image, and converts it to RGBA format, masking all empty cells with max
         transparency, so that it can be plotted overtop of a map.
+
+        NOTE: the grid data passed in must be for a single grid image. Multiple images in a single
+        call to this function is presently not supported.
 
         Args:
             grid (numpy.ndarray): 
-                The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.
+                The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from 
+                said file. 
+                
+                Please note that the data must be a single frame; multiple frames are currently not supported.
+
             fill_val (int or float): 
-                The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file's metadata.
+                The fill value that was used to fill grid cells containing no data. Usually obtained from the 
+                grid file's metadata.
+
             scale (list or numpy.ndarray): 
-                A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max).
+                A two-element vector specifying the minimum and maximum values to scale data between. This parameter
+                is optional. Defaults to data min/max.
+
             cmap (str): 
-                A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to "Greys_r").
+                A string giving the name of a matplotlib colormap to prep single-channel image data using. This parameter
+                is optional. Defaults to "Greys_r".
 
         Returns:
             The prepared RGBA grid array.

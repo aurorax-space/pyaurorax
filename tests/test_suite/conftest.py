@@ -41,6 +41,8 @@ tools_data_trex_nir_calibration_data = None
 tools_data_ccd_contour_data = None
 tools_data_themis_keogram_data = None
 tools_data_trex_rgb_keogram_data = None
+tools_data_themis_grid_data = None
+tools_data_trex_rgb_grid_data = None
 
 
 def pytest_addoption(parser):
@@ -307,6 +309,26 @@ def trex_rgb_keogram_data():
     return tools_data_trex_rgb_keogram_data
 
 
+@pytest.fixture(scope="session")
+def themis_montage_data():
+    return tools_data_themis_keogram_data
+
+
+@pytest.fixture(scope="session")
+def trex_rgb_montage_data():
+    return tools_data_trex_rgb_keogram_data
+
+
+@pytest.fixture(scope="session")
+def themis_grid_data():
+    return tools_data_themis_grid_data
+
+
+@pytest.fixture(scope="session")
+def trex_rgb_grid_data():
+    return tools_data_trex_rgb_grid_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -329,6 +351,8 @@ def pytest_sessionstart(session):
     global tools_data_ccd_contour_data
     global tools_data_themis_keogram_data
     global tools_data_trex_rgb_keogram_data
+    global tools_data_themis_grid_data
+    global tools_data_trex_rgb_grid_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -611,6 +635,34 @@ def pytest_sessionstart(session):
             }
             print("[SETUP]   Finished setting up TREx RGB keogram data")
 
+        def init_task_prep_themis_grid():
+            # download a single one-minute THEMIS grid file
+            dataset = "THEMIS_ASI_GRID_MOSV001"
+            start_dt = datetime.datetime(2023, 3, 24, 8, 10, 0)
+            end_dt = datetime.datetime(2023, 3, 24, 8, 10, 0)
+            download_obj = aurorax.data.ucalgary.download(dataset, start_dt, end_dt, progress_bar_disable=True)
+
+            # read the grid file
+            data = aurorax.data.ucalgary.read(download_obj.dataset, download_obj.filenames)
+
+            # set variable for later usage
+            setup_task_dict["themis_grid_data"] = data
+            print("[SETUP]   Finished setting up THEMIS grid data")
+
+        def init_task_prep_trex_rgb_grid():
+            # download a single one-minute TREx RGB grid file
+            dataset = "TREX_RGB_GRID_MOSV001"
+            start_dt = datetime.datetime(2023, 3, 24, 8, 10, 0)
+            end_dt = datetime.datetime(2023, 3, 24, 8, 10, 0)
+            download_obj = aurorax.data.ucalgary.download(dataset, start_dt, end_dt, progress_bar_disable=True)
+
+            # read the grid file
+            data = aurorax.data.ucalgary.read(download_obj.dataset, download_obj.filenames)
+
+            # set variable for later usage
+            setup_task_dict["trex_rgb_grid_data"] = data
+            print("[SETUP]   Finished setting up TREx RGB grid data")
+
         # start and wait for threads
         tasks = [
             init_task_download_read_themis_single_minute,
@@ -622,6 +674,8 @@ def pytest_sessionstart(session):
             init_task_prep_ccd_contour,
             init_task_prep_themis_keogram,
             init_task_prep_trex_rgb_keogram,
+            init_task_prep_themis_grid,
+            init_task_prep_trex_rgb_grid,
         ]
         with ThreadPoolExecutor(max_workers=MAX_INIT_WORKERS) as executor:
             futures = [executor.submit(task) for task in tasks]
@@ -638,6 +692,8 @@ def pytest_sessionstart(session):
         tools_data_ccd_contour_data = setup_task_dict["ccd_contour_data"]
         tools_data_themis_keogram_data = setup_task_dict["themis_keogram_data"]
         tools_data_trex_rgb_keogram_data = setup_task_dict["trex_rgb_keogram_data"]
+        tools_data_themis_grid_data = setup_task_dict["themis_grid_data"]
+        tools_data_trex_rgb_grid_data = setup_task_dict["trex_rgb_grid_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 

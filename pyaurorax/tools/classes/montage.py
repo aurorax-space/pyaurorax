@@ -198,7 +198,7 @@ class Montage:
             elif (self.__n_channels == 3):
                 # single channel
                 ax.imshow(self.data[:, :, :, i], cmap=cmap, origin="lower", interpolation="nearest")
-            else:
+            else:  # pragma: nocover
                 raise ValueError("Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s" %
                                  (self.data.shape))
 
@@ -225,7 +225,7 @@ class Montage:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (".jpg" == f_extension or ".jpeg" == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):
+                if (savefig_quality is not None):  # pragma: nocover
                     plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
                 else:
                     plt.savefig(savefig_filename, bbox_inches="tight")

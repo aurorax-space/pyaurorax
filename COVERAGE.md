@@ -56,7 +56,7 @@ pyaurorax/search/sources/classes/data_source.py                   66      0   10
 pyaurorax/search/sources/classes/data_source_stats.py             22      0   100%
 pyaurorax/search/util/__init__.py                                 11      0   100%
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
-pyaurorax/tools/__init__.py                                       61      4    93%   114, 128, 135, 142
+pyaurorax/tools/__init__.py                                       61      2    97%   135, 142
 pyaurorax/tools/_display.py                                       33      0   100%
 pyaurorax/tools/_movie.py                                         34      0   100%
 pyaurorax/tools/_scale_intensity.py                               44      0   100%
@@ -77,16 +77,16 @@ pyaurorax/tools/ccd_contour/_azimuth.py                           47      0   10
 pyaurorax/tools/ccd_contour/_elevation.py                         39      0   100%
 pyaurorax/tools/ccd_contour/_geo.py                              106      0   100%
 pyaurorax/tools/ccd_contour/_mag.py                              112      0   100%
-pyaurorax/tools/classes/keogram.py                               150      3    98%   127, 184, 393
-pyaurorax/tools/classes/montage.py                                64     50    22%   42-46, 49, 52-55, 62-68, 163-253
+pyaurorax/tools/classes/keogram.py                               150      2    99%   127, 184
+pyaurorax/tools/classes/montage.py                                61      0   100%
 pyaurorax/tools/classes/mosaic.py                                313    265    15%   65, 69-82, 93-110, 143, 147-152, 159-169, 201, 204-215, 222-238, 350-522, 572-678, 732-838
-pyaurorax/tools/grid_files/__init__.py                             9      1    89%   61
-pyaurorax/tools/grid_files/_prep_grid_image.py                    34     31     9%   21-89
-pyaurorax/tools/keogram/__init__.py                               15      1    93%   152
+pyaurorax/tools/grid_files/__init__.py                             9      0   100%
+pyaurorax/tools/grid_files/_prep_grid_image.py                    36      0   100%
+pyaurorax/tools/keogram/__init__.py                               15      0   100%
 pyaurorax/tools/keogram/_create.py                                66     44    33%   24-103, 117-121, 130, 142-144
-pyaurorax/tools/keogram/_create_custom.py                        174    164     6%   31-43, 52-64, 75-147, 152-329
-pyaurorax/tools/montage/__init__.py                               11      1    91%   53
-pyaurorax/tools/montage/_create.py                                10      8    20%   23-42
+pyaurorax/tools/keogram/_create_custom.py                        174     30    83%   76-80, 119, 122, 136, 139, 168, 175, 177, 179, 184, 188, 209, 211, 220, 223, 269, 281-286, 297-305, 314
+pyaurorax/tools/montage/__init__.py                               11      0   100%
+pyaurorax/tools/montage/_create.py                                 9      0   100%
 pyaurorax/tools/mosaic/__init__.py                                33     17    48%   119-144, 182, 220
 pyaurorax/tools/mosaic/_create.py                                197    183     7%   38-379
 pyaurorax/tools/mosaic/_prep_images.py                           142    135     5%   30-51, 56-273
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119    112     
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5771   1128    80%
+TOTAL                                                           5769    899    84%
 
 13 empty files skipped.
 ```

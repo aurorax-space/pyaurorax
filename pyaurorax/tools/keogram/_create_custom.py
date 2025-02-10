@@ -150,7 +150,7 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
 def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric):
     # If using CCD coordinates we don't need a skymao or altitude
     if (coordinate_system == "ccd") and (skymap is not None or altitude_km is not None):
-        raise ValueError("Conflict in passing a Skymap in when working in CCD coordinates. Skymap is obsolete.")
+        raise ValueError("Conflict in passing in a skymap or altitude when working in CCD coordinates. This value will be ignored.")
 
     # convert any lists to np.arrays  and check shape
     x_locs = np.array(x_locs)

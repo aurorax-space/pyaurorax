@@ -32,9 +32,11 @@ def prep_grid_image(aurorax_obj, grid, fill_val, scale, cmap):
     # Check that scale input is defined properly
     if scale is not None:
         # convert list to array
-        if type(scale) is not np.ndarray:
-            scale = np.array(scale)
-        if scale.shape[0] != 2 or len(scale) != 2:
+        if (isinstance(scale, tuple) or isinstance(scale, list)):
+            scale = np.asarray(scale)
+        elif (isinstance(scale, int) or isinstance(scale, float)):
+            raise ValueError("Scale must be provided as a two-element vector, i.e. [scale_min, scale_max].")
+        if len(scale) != 2:
             raise ValueError("Scale must be provided as a two-element vector, i.e. [scale_min, scale_max].")
 
     # Handle RGB data first as it is straightforward
