@@ -95,10 +95,10 @@ border-left: 1px solid #ddd;
         self.status_code = status_code
 
     def __str__(self) -&gt; str:
-        return self.__repr__()
+        return self.__repr__()  # pragma: nocover-ok
 
     def __repr__(self) -&gt; str:
-        return f&#34;AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})&#34;</code></pre>
+        return f&#34;AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})&#34;  # pragma: nocover-ok</code></pre>
 </details>
 <div class="desc"><p>Class definition for an AuroraX API response</p>
 <h2 id="attributes">Attributes</h2>

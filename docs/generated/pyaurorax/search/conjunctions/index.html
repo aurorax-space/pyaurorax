@@ -278,7 +278,7 @@ here instead of digging in deeper to the submodules.</p>
 
     def create_advanced_distance_combos(
         self,
-        distance: int,
+        distance: Optional[int] = None,
         ground: int = 0,
         space: int = 0,
         events: int = 0,
@@ -306,7 +306,148 @@ here instead of digging in deeper to the submodules.</p>
         Returns:
             The advanced distances combinations
         &#34;&#34;&#34;
-        return func_create_advanced_distance_combos(distance, ground, space, events, custom)</code></pre>
+        return func_create_advanced_distance_combos(distance, ground, space, events, custom)
+
+    def create_response_format_template(self, default: bool = False) -&gt; Dict:
+        &#34;&#34;&#34;
+        Generate a template dictionary that can be used as the response_format parameter
+        in a conjunction search.
+
+        Args:
+            default (bool): 
+                The default value to set for every parameter that can be returned, defaults
+                to False.
+
+        Returns:
+            A template dictionary for the response format
+        &#34;&#34;&#34;
+        return {
+            &#34;conjunction_type&#34;: default,
+            &#34;start&#34;: default,
+            &#34;end&#34;: default,
+            &#34;min_distance&#34;: default,
+            &#34;max_distance&#34;: default,
+            &#34;closest_epoch&#34;: default,
+            &#34;farthest_epoch&#34;: default,
+            &#34;data_sources&#34;: {
+                &#34;identifier&#34;: default,
+                &#34;program&#34;: default,
+                &#34;platform&#34;: default,
+                &#34;instrument_type&#34;: default,
+                &#34;source_type&#34;: default,
+                &#34;display_name&#34;: default,
+                &#34;ephemeris_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;data_product_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;owner&#34;: default,
+                &#34;maintainers&#34;: default,
+                &#34;metadata&#34;: default
+            },
+            &#34;events&#34;: {
+                &#34;conjunction_type&#34;: default,
+                &#34;e1_source&#34;: {
+                    &#34;identifier&#34;: default,
+                    &#34;program&#34;: default,
+                    &#34;platform&#34;: default,
+                    &#34;instrument_type&#34;: default,
+                    &#34;source_type&#34;: default,
+                    &#34;display_name&#34;: default,
+                    &#34;ephemeris_metadata_schema&#34;: {
+                        &#34;field_name&#34;: default,
+                        &#34;description&#34;: default,
+                        &#34;data_type&#34;: default,
+                        &#34;allowed_values&#34;: default,
+                        &#34;additional_description&#34;: default
+                    },
+                    &#34;data_product_metadata_schema&#34;: {
+                        &#34;field_name&#34;: default,
+                        &#34;description&#34;: default,
+                        &#34;data_type&#34;: default,
+                        &#34;allowed_values&#34;: default,
+                        &#34;additional_description&#34;: default
+                    },
+                    &#34;owner&#34;: default,
+                    &#34;maintainers&#34;: default,
+                    &#34;metadata&#34;: default
+                },
+                &#34;e2_source&#34;: {
+                    &#34;identifier&#34;: default,
+                    &#34;program&#34;: default,
+                    &#34;platform&#34;: default,
+                    &#34;instrument_type&#34;: default,
+                    &#34;source_type&#34;: default,
+                    &#34;display_name&#34;: default,
+                    &#34;ephemeris_metadata_schema&#34;: {
+                        &#34;field_name&#34;: default,
+                        &#34;description&#34;: default,
+                        &#34;data_type&#34;: default,
+                        &#34;allowed_values&#34;: default,
+                        &#34;additional_description&#34;: default
+                    },
+                    &#34;data_product_metadata_schema&#34;: {
+                        &#34;field_name&#34;: default,
+                        &#34;description&#34;: default,
+                        &#34;data_type&#34;: default,
+                        &#34;allowed_values&#34;: default,
+                        &#34;additional_description&#34;: default
+                    },
+                    &#34;owner&#34;: default,
+                    &#34;maintainers&#34;: default,
+                    &#34;metadata&#34;: default
+                },
+                &#34;start&#34;: default,
+                &#34;end&#34;: default,
+                &#34;min_distance&#34;: default,
+                &#34;max_distance&#34;: default,
+                &#34;generated_e1_ephemeris_query&#34;: {
+                    &#34;request_id&#34;: default,
+                    &#34;data_sources&#34;: {
+                        &#34;programs&#34;: default,
+                        &#34;platforms&#34;: default,
+                        &#34;instrument_types&#34;: default,
+                        &#34;ephemeris_metadata_filters&#34;: {
+                            &#34;logicalOperator&#34;: default,
+                            &#34;expressions&#34;: {
+                                &#34;key&#34;: default,
+                                &#34;operator&#34;: default,
+                                &#34;values&#34;: default
+                            }
+                        }
+                    },
+                    &#34;start&#34;: default,
+                    &#34;end&#34;: default
+                },
+                &#34;generated_e2_ephemeris_query&#34;: {
+                    &#34;request_id&#34;: default,
+                    &#34;data_sources&#34;: {
+                        &#34;programs&#34;: default,
+                        &#34;platforms&#34;: default,
+                        &#34;instrument_types&#34;: default,
+                        &#34;ephemeris_metadata_filters&#34;: {
+                            &#34;logicalOperator&#34;: default,
+                            &#34;expressions&#34;: {
+                                &#34;key&#34;: default,
+                                &#34;operator&#34;: default,
+                                &#34;values&#34;: default
+                            }
+                        }
+                    },
+                    &#34;start&#34;: default,
+                    &#34;end&#34;: default
+                }
+            }
+        }</code></pre>
 </details>
 <div class="desc"><p>The ConjunctionsManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
@@ -331,7 +472,7 @@ def swarmaurora(self):
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos"><code class="name flex">
-<span>def <span class="ident">create_advanced_distance_combos</span></span>(<span>self,<br>distance: int,<br>ground: int = 0,<br>space: int = 0,<br>events: int = 0,<br>custom: int = 0) ‑> Dict</span>
+<span>def <span class="ident">create_advanced_distance_combos</span></span>(<span>self,<br>distance: int | None = None,<br>ground: int = 0,<br>space: int = 0,<br>events: int = 0,<br>custom: int = 0) ‑> Dict</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -340,7 +481,7 @@ def swarmaurora(self):
 </summary>
 <pre><code class="python">def create_advanced_distance_combos(
     self,
-    distance: int,
+    distance: Optional[int] = None,
     ground: int = 0,
     space: int = 0,
     events: int = 0,
@@ -386,6 +527,166 @@ def swarmaurora(self):
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The advanced distances combinations</p></div>
+</dd>
+<dt id="pyaurorax.search.conjunctions.ConjunctionsManager.create_response_format_template"><code class="name flex">
+<span>def <span class="ident">create_response_format_template</span></span>(<span>self, default: bool = False) ‑> Dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_response_format_template(self, default: bool = False) -&gt; Dict:
+    &#34;&#34;&#34;
+    Generate a template dictionary that can be used as the response_format parameter
+    in a conjunction search.
+
+    Args:
+        default (bool): 
+            The default value to set for every parameter that can be returned, defaults
+            to False.
+
+    Returns:
+        A template dictionary for the response format
+    &#34;&#34;&#34;
+    return {
+        &#34;conjunction_type&#34;: default,
+        &#34;start&#34;: default,
+        &#34;end&#34;: default,
+        &#34;min_distance&#34;: default,
+        &#34;max_distance&#34;: default,
+        &#34;closest_epoch&#34;: default,
+        &#34;farthest_epoch&#34;: default,
+        &#34;data_sources&#34;: {
+            &#34;identifier&#34;: default,
+            &#34;program&#34;: default,
+            &#34;platform&#34;: default,
+            &#34;instrument_type&#34;: default,
+            &#34;source_type&#34;: default,
+            &#34;display_name&#34;: default,
+            &#34;ephemeris_metadata_schema&#34;: {
+                &#34;field_name&#34;: default,
+                &#34;description&#34;: default,
+                &#34;data_type&#34;: default,
+                &#34;allowed_values&#34;: default,
+                &#34;additional_description&#34;: default
+            },
+            &#34;data_product_metadata_schema&#34;: {
+                &#34;field_name&#34;: default,
+                &#34;description&#34;: default,
+                &#34;data_type&#34;: default,
+                &#34;allowed_values&#34;: default,
+                &#34;additional_description&#34;: default
+            },
+            &#34;owner&#34;: default,
+            &#34;maintainers&#34;: default,
+            &#34;metadata&#34;: default
+        },
+        &#34;events&#34;: {
+            &#34;conjunction_type&#34;: default,
+            &#34;e1_source&#34;: {
+                &#34;identifier&#34;: default,
+                &#34;program&#34;: default,
+                &#34;platform&#34;: default,
+                &#34;instrument_type&#34;: default,
+                &#34;source_type&#34;: default,
+                &#34;display_name&#34;: default,
+                &#34;ephemeris_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;data_product_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;owner&#34;: default,
+                &#34;maintainers&#34;: default,
+                &#34;metadata&#34;: default
+            },
+            &#34;e2_source&#34;: {
+                &#34;identifier&#34;: default,
+                &#34;program&#34;: default,
+                &#34;platform&#34;: default,
+                &#34;instrument_type&#34;: default,
+                &#34;source_type&#34;: default,
+                &#34;display_name&#34;: default,
+                &#34;ephemeris_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;data_product_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;owner&#34;: default,
+                &#34;maintainers&#34;: default,
+                &#34;metadata&#34;: default
+            },
+            &#34;start&#34;: default,
+            &#34;end&#34;: default,
+            &#34;min_distance&#34;: default,
+            &#34;max_distance&#34;: default,
+            &#34;generated_e1_ephemeris_query&#34;: {
+                &#34;request_id&#34;: default,
+                &#34;data_sources&#34;: {
+                    &#34;programs&#34;: default,
+                    &#34;platforms&#34;: default,
+                    &#34;instrument_types&#34;: default,
+                    &#34;ephemeris_metadata_filters&#34;: {
+                        &#34;logicalOperator&#34;: default,
+                        &#34;expressions&#34;: {
+                            &#34;key&#34;: default,
+                            &#34;operator&#34;: default,
+                            &#34;values&#34;: default
+                        }
+                    }
+                },
+                &#34;start&#34;: default,
+                &#34;end&#34;: default
+            },
+            &#34;generated_e2_ephemeris_query&#34;: {
+                &#34;request_id&#34;: default,
+                &#34;data_sources&#34;: {
+                    &#34;programs&#34;: default,
+                    &#34;platforms&#34;: default,
+                    &#34;instrument_types&#34;: default,
+                    &#34;ephemeris_metadata_filters&#34;: {
+                        &#34;logicalOperator&#34;: default,
+                        &#34;expressions&#34;: {
+                            &#34;key&#34;: default,
+                            &#34;operator&#34;: default,
+                            &#34;values&#34;: default
+                        }
+                    }
+                },
+                &#34;start&#34;: default,
+                &#34;end&#34;: default
+            }
+        }
+    }</code></pre>
+</details>
+<div class="desc"><p>Generate a template dictionary that can be used as the response_format parameter
+in a conjunction search.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>default</code></strong> :&ensp;<code>bool</code></dt>
+<dd>The default value to set for every parameter that can be returned, defaults
+to False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A template dictionary for the response format</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.describe"><code class="name flex">
 <span>def <span class="ident">describe</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a> | None = None,<br>query_dict: Dict | None = None) ‑> str</span>
@@ -765,6 +1066,7 @@ setTimeout(() => input.focus(), 100);
 <h4><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager" href="#pyaurorax.search.conjunctions.ConjunctionsManager">ConjunctionsManager</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos" href="#pyaurorax.search.conjunctions.ConjunctionsManager.create_advanced_distance_combos">create_advanced_distance_combos</a></code></li>
+<li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.create_response_format_template" href="#pyaurorax.search.conjunctions.ConjunctionsManager.create_response_format_template">create_response_format_template</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.describe" href="#pyaurorax.search.conjunctions.ConjunctionsManager.describe">describe</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url" href="#pyaurorax.search.conjunctions.ConjunctionsManager.get_request_url">get_request_url</a></code></li>
 <li><code><a title="pyaurorax.search.conjunctions.ConjunctionsManager.search" href="#pyaurorax.search.conjunctions.ConjunctionsManager.search">search</a></code></li>

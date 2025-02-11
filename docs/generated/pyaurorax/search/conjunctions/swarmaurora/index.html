@@ -106,13 +106,13 @@ border-left: 1px solid #ddd;
                 A conjunction search object, must be a completed search with 
                 the &#39;request_id&#39; value populated
 
-            browser (str)): 
+            browser (str): 
                 The browser type to load using. Default is your default browser. Some common other 
                 options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
                 to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
         
         Raises:
-            pyaurorax.exceptions.AuroraXError: Unsupported browser specified
+            ValueError: Unsupported browser specified
         &#34;&#34;&#34;
         return func_open_in_browser(search_obj, browser)
 
@@ -239,13 +239,13 @@ the 'request_id' value populated</dd>
             A conjunction search object, must be a completed search with 
             the &#39;request_id&#39; value populated
 
-        browser (str)): 
+        browser (str): 
             The browser type to load using. Default is your default browser. Some common other 
             options are &#34;google-chrome&#34;, &#34;firefox&#34;, or &#34;safari&#34;. For all available options, refer 
             to https://docs.python.org/3/library/webbrowser.html#webbrowser.get
     
     Raises:
-        pyaurorax.exceptions.AuroraXError: Unsupported browser specified
+        ValueError: Unsupported browser specified
     &#34;&#34;&#34;
     return func_open_in_browser(search_obj, browser)</code></pre>
 </details>
@@ -255,14 +255,14 @@ the 'request_id' value populated</dd>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
 <dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
-</dl>
-<p>browser (str)):
-The browser type to load using. Default is your default browser. Some common other
+<dt><strong><code>browser</code></strong> :&ensp;<code>str</code></dt>
+<dd>The browser type to load using. Default is your default browser. Some common other
 options are "google-chrome", "firefox", or "safari". For all available options, refer
-to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></p>
+to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></dd>
+</dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dt><code>ValueError</code></dt>
 <dd>Unsupported browser specified</dd>
 </dl></div>
 </dd>

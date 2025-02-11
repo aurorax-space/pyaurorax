@@ -133,8 +133,9 @@ border-left: 1px solid #ddd;
         status (Dict): 
             The status of the query
 
-        data (List[Conjunction]): 
-            The conjunctions found
+        data (List[Conjunction, Dict]): 
+            A list of the conjunctions found. The results will be dictionaries only if the
+            response_format parameter was supplied.
 
         logs (List[Dict]): 
             All log messages outputted by the AuroraX API for this request
@@ -153,6 +154,27 @@ border-left: 1px solid #ddd;
                  custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                  conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [&#34;nbtrace&#34;],
                  response_format: Optional[Dict] = None):
+
+        # some verification
+        for item in ground:
+            if (isinstance(item, dict) is False and isinstance(item, GroundCriteriaBlock) is False):
+                raise ValueError(
+                    &#34;A %s object was found in the &#39;ground&#39; parameter. Only GroundCriteriaBlock objects are allowed in the ground parameter.&#34; %
+                    (item.__class__.__name__))
+        for item in space:
+            if (isinstance(item, dict) is False and isinstance(item, SpaceCriteriaBlock) is False):
+                raise ValueError(
+                    &#34;A %s object was found in the &#39;space&#39; parameter. Only SpaceCriteriaBlock objects are allowed in the ground parameter.&#34; %
+                    (item.__class__.__name__))
+        for item in events:
+            if (isinstance(item, dict) is False and isinstance(item, EventsCriteriaBlock) is False):
+                raise ValueError(
+                    &#34;A %s object was found in the &#39;events&#39; parameter. Only EventsCriteriaBlock objects are allowed in the ground parameter.&#34; %
+                    (item.__class__.__name__))
+        for item in custom_locations:
+            if (isinstance(item, dict) is False and isinstance(item, CustomLocationsCriteriaBlock) is False):
+                raise ValueError((&#34;A %s object was found in the &#39;custom_locations&#39; parameter. Only CustomLocationsCriteriaBlock objects &#34; +
+                                  &#34;are allowed in the ground parameter.&#34;) % (item.__class__.__name__))
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
@@ -203,9 +225,7 @@ border-left: 1px solid #ddd;
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = &#34;[0 conjunction results]&#34;
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = &#34;[1 conjunction result]&#34;
             else:
                 data_str = &#34;[%d conjunction results]&#34; % (len(self.data))
@@ -214,9 +234,7 @@ border-left: 1px solid #ddd;
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = &#34;[0 log messages]&#34;
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = &#34;[1 log message]&#34;
             else:
                 logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -379,7 +397,7 @@ border-left: 1px solid #ddd;
                 this_dict[&#34;programs&#34;] = [&#34;events&#34;]
                 del this_dict[&#34;metadata_filters&#34;]
                 if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
-                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()  # pragma: nocover
                 events_param.append(this_dict)
 
         # set custom locations
@@ -405,10 +423,6 @@ border-left: 1px solid #ddd;
             &#34;epoch_search_precision&#34;: 60,
         }
         return self.__query
-
-    @query.setter
-    def query(self, query: Dict) -&gt; None:
-        self.__query = query
 
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
@@ -453,7 +467,7 @@ border-left: 1px solid #ddd;
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
         # update request status by checking if data URI is set
@@ -608,8 +622,9 @@ options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.</dd>
 <dd>The query for this request as JSON</dd>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>The status of the query</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>List[Conjunction]</code></dt>
-<dd>The conjunctions found</dd>
+<dt><strong><code>data</code></strong> :&ensp;<code>List[Conjunction, Dict]</code></dt>
+<dd>A list of the conjunctions found. The results will be dictionaries only if the
+response_format parameter was supplied.</dd>
 <dt><strong><code>logs</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>All log messages outputted by the AuroraX API for this request</dd>
 </dl></div>
@@ -689,7 +704,7 @@ def query(self) -&gt; Dict:
             this_dict[&#34;programs&#34;] = [&#34;events&#34;]
             del this_dict[&#34;metadata_filters&#34;]
             if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
-                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()  # pragma: nocover
             events_param.append(this_dict)
 
     # set custom locations
@@ -1041,9 +1056,7 @@ search request</p>
 
     # set results string
     if (self.executed is True):
-        if (len(self.data) == 0):
-            data_str = &#34;[0 conjunction results]&#34;
-        elif (len(self.data) == 1):
+        if (len(self.data) == 1):
             data_str = &#34;[1 conjunction result]&#34;
         else:
             data_str = &#34;[%d conjunction results]&#34; % (len(self.data))
@@ -1052,9 +1065,7 @@ search request</p>
 
     # set logs string
     if (self.executed is True):
-        if (len(self.logs) == 0):
-            logs_str = &#34;[0 log messages]&#34;
-        elif (len(self.logs) == 1):
+        if (len(self.logs) == 1):  # pragma: nocover-ok
             logs_str = &#34;[1 log message]&#34;
         else:
             logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -1101,7 +1112,7 @@ search request</p>
         status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
-    if (status is None):
+    if (status is None):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
     # update request status by checking if data URI is set

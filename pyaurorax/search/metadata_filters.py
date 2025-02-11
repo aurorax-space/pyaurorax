@@ -39,7 +39,7 @@ class MetadataFilterExpression:
             are multiple values (ie. the values parameter is a list of strings).
         
     Raises:
-        pyaurorax.exceptions.ValueError: if invalid operator was specified.
+        ValueError: if invalid operator was specified.
     """
 
     def __init__(
@@ -120,7 +120,7 @@ class MetadataFilter:
             choices are 'and' or 'or'.
 
     Raises:
-        pyaurorax.exceptions.ValueError: if invalid operator was specified.
+        ValueError: if invalid operator was specified.
     """
 
     def __init__(

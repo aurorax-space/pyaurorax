@@ -243,7 +243,33 @@ class AvailabilityResult:
 
     def __repr__(self) -&gt; str:
         return f&#34;Conjunction(start={repr(self.start)}, end={repr(self.end)}, min_distance={self.min_distance:.2f}, &#34; \
-            f&#34;max_distance={self.max_distance:.2f}, data_sources=[...], events=[...])&#34;</code></pre>
+            f&#34;max_distance={self.max_distance:.2f}, data_sources=[...], events=[...])&#34;
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        if (len(self.data_sources) == 1):  # pragma: nocover-ok
+            data_sources_str = &#34;[%d data source]&#34; % (len(self.data_sources))
+        else:
+            data_sources_str = &#34;[%d data sources]&#34; % (len(self.data_sources))
+        if (len(self.events) == 1):
+            events_str = &#34;[%d event]&#34; % (len(self.events))
+        else:
+            events_str = &#34;[%d events]&#34; % (len(self.events))
+
+        # print
+        print(&#34;Conjunction:&#34;)
+        print(&#34;  %-18s: %s&#34; % (&#34;conjunction_type&#34;, self.conjunction_type))
+        print(&#34;  %-18s: %s&#34; % (&#34;start&#34;, self.start))
+        print(&#34;  %-18s: %s&#34; % (&#34;end&#34;, self.end))
+        print(&#34;  %-18s: %s&#34; % (&#34;data_sources&#34;, data_sources_str))
+        print(&#34;  %-18s: %s&#34; % (&#34;min_distance&#34;, self.min_distance))
+        print(&#34;  %-18s: %s&#34; % (&#34;max_distance&#34;, self.max_distance))
+        print(&#34;  %-18s: %s&#34; % (&#34;events&#34;, events_str))
+        print(&#34;  %-18s: %s&#34; % (&#34;closest_epoch&#34;, self.closest_epoch))
+        print(&#34;  %-18s: %s&#34; % (&#34;farthest_epoch&#34;, self.farthest_epoch))</code></pre>
 </details>
 <div class="desc"><p>Conjunction object</p>
 <h2 id="attributes">Attributes</h2>
@@ -269,6 +295,45 @@ between each set of two data sources)</dd>
 <dt><strong><code>farthest_epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Timestamp for when data sources were farthest</dd>
 </dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.search.Conjunction.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    if (len(self.data_sources) == 1):  # pragma: nocover-ok
+        data_sources_str = &#34;[%d data source]&#34; % (len(self.data_sources))
+    else:
+        data_sources_str = &#34;[%d data sources]&#34; % (len(self.data_sources))
+    if (len(self.events) == 1):
+        events_str = &#34;[%d event]&#34; % (len(self.events))
+    else:
+        events_str = &#34;[%d events]&#34; % (len(self.events))
+
+    # print
+    print(&#34;Conjunction:&#34;)
+    print(&#34;  %-18s: %s&#34; % (&#34;conjunction_type&#34;, self.conjunction_type))
+    print(&#34;  %-18s: %s&#34; % (&#34;start&#34;, self.start))
+    print(&#34;  %-18s: %s&#34; % (&#34;end&#34;, self.end))
+    print(&#34;  %-18s: %s&#34; % (&#34;data_sources&#34;, data_sources_str))
+    print(&#34;  %-18s: %s&#34; % (&#34;min_distance&#34;, self.min_distance))
+    print(&#34;  %-18s: %s&#34; % (&#34;max_distance&#34;, self.max_distance))
+    print(&#34;  %-18s: %s&#34; % (&#34;events&#34;, events_str))
+    print(&#34;  %-18s: %s&#34; % (&#34;closest_epoch&#34;, self.closest_epoch))
+    print(&#34;  %-18s: %s&#34; % (&#34;farthest_epoch&#34;, self.farthest_epoch))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
 </dd>
 <dt id="pyaurorax.search.ConjunctionSearch"><code class="flex name class">
 <span>class <span class="ident">ConjunctionSearch</span></span>
@@ -338,8 +403,9 @@ between each set of two data sources)</dd>
         status (Dict): 
             The status of the query
 
-        data (List[Conjunction]): 
-            The conjunctions found
+        data (List[Conjunction, Dict]): 
+            A list of the conjunctions found. The results will be dictionaries only if the
+            response_format parameter was supplied.
 
         logs (List[Dict]): 
             All log messages outputted by the AuroraX API for this request
@@ -358,6 +424,27 @@ between each set of two data sources)</dd>
                  custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                  conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [&#34;nbtrace&#34;],
                  response_format: Optional[Dict] = None):
+
+        # some verification
+        for item in ground:
+            if (isinstance(item, dict) is False and isinstance(item, GroundCriteriaBlock) is False):
+                raise ValueError(
+                    &#34;A %s object was found in the &#39;ground&#39; parameter. Only GroundCriteriaBlock objects are allowed in the ground parameter.&#34; %
+                    (item.__class__.__name__))
+        for item in space:
+            if (isinstance(item, dict) is False and isinstance(item, SpaceCriteriaBlock) is False):
+                raise ValueError(
+                    &#34;A %s object was found in the &#39;space&#39; parameter. Only SpaceCriteriaBlock objects are allowed in the ground parameter.&#34; %
+                    (item.__class__.__name__))
+        for item in events:
+            if (isinstance(item, dict) is False and isinstance(item, EventsCriteriaBlock) is False):
+                raise ValueError(
+                    &#34;A %s object was found in the &#39;events&#39; parameter. Only EventsCriteriaBlock objects are allowed in the ground parameter.&#34; %
+                    (item.__class__.__name__))
+        for item in custom_locations:
+            if (isinstance(item, dict) is False and isinstance(item, CustomLocationsCriteriaBlock) is False):
+                raise ValueError((&#34;A %s object was found in the &#39;custom_locations&#39; parameter. Only CustomLocationsCriteriaBlock objects &#34; +
+                                  &#34;are allowed in the ground parameter.&#34;) % (item.__class__.__name__))
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
@@ -408,9 +495,7 @@ between each set of two data sources)</dd>
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = &#34;[0 conjunction results]&#34;
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = &#34;[1 conjunction result]&#34;
             else:
                 data_str = &#34;[%d conjunction results]&#34; % (len(self.data))
@@ -419,9 +504,7 @@ between each set of two data sources)</dd>
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = &#34;[0 log messages]&#34;
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = &#34;[1 log message]&#34;
             else:
                 logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -584,7 +667,7 @@ between each set of two data sources)</dd>
                 this_dict[&#34;programs&#34;] = [&#34;events&#34;]
                 del this_dict[&#34;metadata_filters&#34;]
                 if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
-                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                    this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()  # pragma: nocover
                 events_param.append(this_dict)
 
         # set custom locations
@@ -610,10 +693,6 @@ between each set of two data sources)</dd>
             &#34;epoch_search_precision&#34;: 60,
         }
         return self.__query
-
-    @query.setter
-    def query(self, query: Dict) -&gt; None:
-        self.__query = query
 
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
@@ -658,7 +737,7 @@ between each set of two data sources)</dd>
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
         # update request status by checking if data URI is set
@@ -813,8 +892,9 @@ options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.</dd>
 <dd>The query for this request as JSON</dd>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>The status of the query</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.Conjunction" href="#pyaurorax.search.Conjunction">Conjunction</a>]</code></dt>
-<dd>The conjunctions found</dd>
+<dt><strong><code>data</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.Conjunction" href="#pyaurorax.search.Conjunction">Conjunction</a>, Dict]</code></dt>
+<dd>A list of the conjunctions found. The results will be dictionaries only if the
+response_format parameter was supplied.</dd>
 <dt><strong><code>logs</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>All log messages outputted by the AuroraX API for this request</dd>
 </dl></div>
@@ -894,7 +974,7 @@ def query(self) -&gt; Dict:
             this_dict[&#34;programs&#34;] = [&#34;events&#34;]
             del this_dict[&#34;metadata_filters&#34;]
             if (this_dict[&#34;ephemeris_metadata_filters&#34;] is not None):
-                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()
+                this_dict[&#34;ephemeris_metadata_filters&#34;] = this_dict[&#34;ephemeris_metadata_filters&#34;].to_query_dict()  # pragma: nocover
             events_param.append(this_dict)
 
     # set custom locations
@@ -1246,9 +1326,7 @@ search request</p>
 
     # set results string
     if (self.executed is True):
-        if (len(self.data) == 0):
-            data_str = &#34;[0 conjunction results]&#34;
-        elif (len(self.data) == 1):
+        if (len(self.data) == 1):
             data_str = &#34;[1 conjunction result]&#34;
         else:
             data_str = &#34;[%d conjunction results]&#34; % (len(self.data))
@@ -1257,9 +1335,7 @@ search request</p>
 
     # set logs string
     if (self.executed is True):
-        if (len(self.logs) == 0):
-            logs_str = &#34;[0 log messages]&#34;
-        elif (len(self.logs) == 1):
+        if (len(self.logs) == 1):  # pragma: nocover-ok
             logs_str = &#34;[1 log message]&#34;
         else:
             logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -1306,7 +1382,7 @@ search request</p>
         status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
-    if (status is None):
+    if (status is None):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
     # update request status by checking if data URI is set
@@ -1539,9 +1615,7 @@ values must be between -180 and 180. Optional, default is <code>[]</code>.</dd>
         if (self.metadata is not None):
             for key, value in self.metadata.items():
                 if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
-        # if (isinstance(self.metadata, list) is True):
-        #     self.metadata = {}
+                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)  # pragma: nocover
 
         # format data source fields for query
         d[&#34;program&#34;] = self.data_source.program
@@ -1616,9 +1690,7 @@ values must be between -180 and 180. Optional, default is <code>[]</code>.</dd>
     if (self.metadata is not None):
         for key, value in self.metadata.items():
             if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
-    # if (isinstance(self.metadata, list) is True):
-    #     self.metadata = {}
+                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)  # pragma: nocover
 
     # format data source fields for query
     d[&#34;program&#34;] = self.data_source.program
@@ -1638,7 +1710,7 @@ datetime objects to strings)</p>
 </dd>
 <dt id="pyaurorax.search.DataProductSearch"><code class="flex name class">
 <span>class <span class="ident">DataProductSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: "Optional[Literal['keogram', 'montage', 'movie', 'summary_plot', 'data_availability']]" = None,<br>metadata_filters: Optional[Union[<a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a>, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: "Optional[List[Literal['keogram', 'montage', 'movie', 'summary_plot', 'data_availability']]]" = None,<br>metadata_filters: Optional[Union[<a title="pyaurorax.search.MetadataFilter" href="#pyaurorax.search.MetadataFilter">MetadataFilter</a>, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1721,10 +1793,17 @@ datetime objects to strings)</p>
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_types: Optional[Literal[&#34;keogram&#34;, &#34;montage&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, &#34;data_availability&#34;]] = None,
+                 data_product_types: Optional[List[Literal[&#34;keogram&#34;, &#34;montage&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, &#34;data_availability&#34;]]] = None,
                  metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
                  metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
+
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning(&#34;Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator &#34; +
+                         &#34;parameter is redundant. Only the MetadataFilter object is needed. The &#34; +
+                         &#34;metadata_filters_logical_operator parameter will be ignored&#34;)
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
@@ -1775,9 +1854,7 @@ datetime objects to strings)</p>
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = &#34;[0 data product results]&#34;
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = &#34;[1 data product result]&#34;
             else:
                 data_str = &#34;[%d data product results]&#34; % (len(self.data))
@@ -1786,9 +1863,7 @@ datetime objects to strings)</p>
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = &#34;[0 log messages]&#34;
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = &#34;[1 log message]&#34;
             else:
                 logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -1842,10 +1917,6 @@ datetime objects to strings)</p>
         # return
         return self.__query
 
-    @query.setter
-    def query(self, query):
-        self.__query = query
-
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
         Initiate a data product search request
@@ -1880,7 +1951,7 @@ datetime objects to strings)</p>
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
         # update request status by checking if data URI is set
@@ -2281,9 +2352,7 @@ search request</p>
 
     # set results string
     if (self.executed is True):
-        if (len(self.data) == 0):
-            data_str = &#34;[0 data product results]&#34;
-        elif (len(self.data) == 1):
+        if (len(self.data) == 1):
             data_str = &#34;[1 data product result]&#34;
         else:
             data_str = &#34;[%d data product results]&#34; % (len(self.data))
@@ -2292,9 +2361,7 @@ search request</p>
 
     # set logs string
     if (self.executed is True):
-        if (len(self.logs) == 0):
-            logs_str = &#34;[0 log messages]&#34;
-        elif (len(self.logs) == 1):
+        if (len(self.logs) == 1):  # pragma: nocover-ok
             logs_str = &#34;[1 log message]&#34;
         else:
             logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -2338,7 +2405,7 @@ search request</p>
         status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
-    if (status is None):
+    if (status is None):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
     # update request status by checking if data URI is set
@@ -2520,7 +2587,7 @@ for retrieval</p>
         else:
             data_product_metadata_schema_str = self.data_product_metadata_schema
         print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
-        if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+        if (self.stats is not None and len(str(self.stats)) &gt; max_len):  # pragma: nocover
             stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
         else:
             stats_str = self.data_product_metadata_schema
@@ -2599,7 +2666,7 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     else:
         data_product_metadata_schema_str = self.data_product_metadata_schema
     print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
-    if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+    if (self.stats is not None and len(str(self.stats)) &gt; max_len):  # pragma: nocover
         stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
     else:
         stats_str = self.data_product_metadata_schema
@@ -2692,9 +2759,7 @@ the pyaurorax.search.FORMAT_* variables.</dd>
         if (self.metadata is not None):
             for key, value in self.metadata.items():
                 if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
-        # if (isinstance(self.metadata, list) is True):
-        #     self.metadata = {}
+                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)  # pragma: nocover
 
         # format data source fields for query
         d[&#34;program&#34;] = self.data_source.program
@@ -2778,9 +2843,7 @@ sources with a type of 'ground')</dd>
     if (self.metadata is not None):
         for key, value in self.metadata.items():
             if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
-    # if (isinstance(self.metadata, list) is True):
-    #     self.metadata = {}
+                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)  # pragma: nocover
 
     # format data source fields for query
     d[&#34;program&#34;] = self.data_source.program
@@ -2885,6 +2948,13 @@ datetime objects to strings)</p>
                  metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
 
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning(&#34;Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator &#34; +
+                         &#34;parameter is redundant. Only the MetadataFilter object is needed. The &#34; +
+                         &#34;metadata_filters_logical_operator parameter will be ignored&#34;)
+
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
         self.start = start
@@ -2933,9 +3003,7 @@ datetime objects to strings)</p>
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = &#34;[0 ephemeris results]&#34;
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = &#34;[1 ephemeris result]&#34;
             else:
                 data_str = &#34;[%d ephemeris results]&#34; % (len(self.data))
@@ -2944,9 +3012,7 @@ datetime objects to strings)</p>
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = &#34;[0 log messages]&#34;
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = &#34;[1 log message]&#34;
             else:
                 logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -2999,10 +3065,6 @@ datetime objects to strings)</p>
         # return
         return self.__query
 
-    @query.setter
-    def query(self, query):
-        self.__query = query
-
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
         Initiate ephemeris search request
@@ -3011,7 +3073,7 @@ datetime objects to strings)</p>
             pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         &#34;&#34;&#34;
         # check for at least one filter criteria
-        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover-ok
             raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
 
         # do request
@@ -3044,7 +3106,7 @@ datetime objects to strings)</p>
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
         # update request status by checking if data URI is set
@@ -3369,7 +3431,7 @@ several minutes)</dd>
         pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
     &#34;&#34;&#34;
     # check for at least one filter criteria
-    if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+    if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover-ok
         raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
 
     # do request
@@ -3452,9 +3514,7 @@ several minutes)</dd>
 
     # set results string
     if (self.executed is True):
-        if (len(self.data) == 0):
-            data_str = &#34;[0 ephemeris results]&#34;
-        elif (len(self.data) == 1):
+        if (len(self.data) == 1):
             data_str = &#34;[1 ephemeris result]&#34;
         else:
             data_str = &#34;[%d ephemeris results]&#34; % (len(self.data))
@@ -3463,9 +3523,7 @@ several minutes)</dd>
 
     # set logs string
     if (self.executed is True):
-        if (len(self.logs) == 0):
-            logs_str = &#34;[0 log messages]&#34;
-        elif (len(self.logs) == 1):
+        if (len(self.logs) == 1):  # pragma: nocover-ok
             logs_str = &#34;[1 log message]&#34;
         else:
             logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -3509,7 +3567,7 @@ several minutes)</dd>
         status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
-    if (status is None):
+    if (status is None):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
     # update request status by checking if data URI is set
@@ -3605,17 +3663,11 @@ from the API again), defaults to None</dd>
         &#34;&#34;&#34;
         A special print output for this class.
         &#34;&#34;&#34;
-        # set special strings
-        max_len = 80
-        metadata_filters_str = str(self.metadata_filters)
-        if (len(metadata_filters_str) &gt; max_len):
-            metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
-
         # print
         print(&#34;EventsCriteriaBlock:&#34;)
         print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
         print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
-        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, self.metadata_filters))</code></pre>
 </details>
 <div class="desc"><p>Representation of a event criteria block used for conjunction searches. </p>
 <h2 id="attributes">Attributes</h2>
@@ -3641,17 +3693,11 @@ from the API again), defaults to None</dd>
     &#34;&#34;&#34;
     A special print output for this class.
     &#34;&#34;&#34;
-    # set special strings
-    max_len = 80
-    metadata_filters_str = str(self.metadata_filters)
-    if (len(metadata_filters_str) &gt; max_len):
-        metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
-
     # print
     print(&#34;EventsCriteriaBlock:&#34;)
     print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
     print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
-    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, self.metadata_filters))</code></pre>
 </details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
@@ -3709,18 +3755,12 @@ from the API again), defaults to None</dd>
         &#34;&#34;&#34;
         A special print output for this class.
         &#34;&#34;&#34;
-        # set special strings
-        max_len = 80
-        metadata_filters_str = str(self.metadata_filters)
-        if (len(metadata_filters_str) &gt; max_len):
-            metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
-
         # print
         print(&#34;GroundCriteriaBlock:&#34;)
         print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
         print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
         print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
-        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, self.metadata_filters))</code></pre>
 </details>
 <div class="desc"><p>Representation of a ground criteria block used for conjunction searches. </p>
 <h2 id="attributes">Attributes</h2>
@@ -3748,18 +3788,12 @@ from the API again), defaults to None</dd>
     &#34;&#34;&#34;
     A special print output for this class.
     &#34;&#34;&#34;
-    # set special strings
-    max_len = 80
-    metadata_filters_str = str(self.metadata_filters)
-    if (len(metadata_filters_str) &gt; max_len):
-        metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
-
     # print
     print(&#34;GroundCriteriaBlock:&#34;)
     print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
     print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
     print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
-    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, self.metadata_filters))</code></pre>
 </details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
@@ -3933,7 +3967,7 @@ datetime objects to strings)</p>
             choices are &#39;and&#39; or &#39;or&#39;.
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+        ValueError: if invalid operator was specified.
     &#34;&#34;&#34;
 
     def __init__(
@@ -3942,6 +3976,10 @@ datetime objects to strings)</p>
         operator: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;,
     ):
         self.expressions = expressions
+
+        # set operator
+        if (operator.lower() not in [&#34;and&#34;, &#34;or&#34;]):
+            raise ValueError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (operator))
         self.__operator = operator
 
     @property
@@ -3951,7 +3989,7 @@ datetime objects to strings)</p>
     @operator.setter
     def operator(self, val: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;):
         if (val.lower() not in [&#34;and&#34;, &#34;or&#34;]):
-            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (val))
+            raise ValueError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (val))
         self.__operator = val.lower()
 
     def __str__(self) -&gt; str:
@@ -3959,9 +3997,7 @@ datetime objects to strings)</p>
 
     def __repr__(self) -&gt; str:
         # set special strings
-        if (len(self.expressions) == 0):
-            expressions_str = &#34;[0 expressions]&#34;
-        elif (len(self.expressions) == 1):
+        if (len(self.expressions) == 1):
             expressions_str = &#34;[1 expression]&#34;
         else:
             expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
@@ -3974,9 +4010,7 @@ datetime objects to strings)</p>
         A special print output for this class.
         &#34;&#34;&#34;
         # set special strings
-        if (len(self.expressions) == 0):
-            expressions_str = &#34;[0 expressions]&#34;
-        elif (len(self.expressions) == 1):
+        if (len(self.expressions) == 1):
             expressions_str = &#34;[1 expression]&#34;
         else:
             expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
@@ -4009,7 +4043,7 @@ choices are 'and' or 'or'.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dt><code>ValueError</code></dt>
 <dd>if invalid operator was specified.</dd>
 </dl></div>
 <h3>Instance variables</h3>
@@ -4042,9 +4076,7 @@ def operator(self):
     A special print output for this class.
     &#34;&#34;&#34;
     # set special strings
-    if (len(self.expressions) == 0):
-        expressions_str = &#34;[0 expressions]&#34;
-    elif (len(self.expressions) == 1):
+    if (len(self.expressions) == 1):
         expressions_str = &#34;[1 expression]&#34;
     else:
         expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
@@ -4107,7 +4139,7 @@ def operator(self):
             are multiple values (ie. the values parameter is a list of strings).
         
     Raises:
-        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+        ValueError: if invalid operator was specified.
     &#34;&#34;&#34;
 
     def __init__(
@@ -4119,6 +4151,12 @@ def operator(self):
         # set required parameters
         self.key = key
         self.values = values
+
+        # set operator
+        if (operator not in [&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
+            raise ValueError(
+                &#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; %
+                (operator))
         self.__operator = operator
 
     @property
@@ -4128,8 +4166,8 @@ def operator(self):
     @operator.setter
     def operator(self, val: Literal[&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
         if (val not in [&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
-            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#34; +
-                         &#34;&#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; % (val))
+            raise ValueError(
+                &#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; % (val))
         self.__operator = val
 
     def __str__(self) -&gt; str:
@@ -4184,7 +4222,7 @@ are multiple values (ie. the values parameter is a list of strings).</p>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dt><code>ValueError</code></dt>
 <dd>if invalid operator was specified.</dd>
 </dl></div>
 <h3>Instance variables</h3>
@@ -4576,25 +4614,13 @@ def util(self):
         &#34;&#34;&#34;
         A special print output for this class.
         &#34;&#34;&#34;
-        # set special strings
-        max_len = 80
-        metadata_filters_str = str(self.metadata_filters)
-        if (len(metadata_filters_str) &gt; max_len):
-            metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
-
         # print
         print(&#34;SpaceCriteriaBlock:&#34;)
         print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
         print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
         print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
         print(&#34;  %-18s: %s&#34; % (&#34;hemisphere&#34;, self.hemisphere))
-        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))
-
-    def to_search_query_dict(self):
-        query_dict = self.__dict__
-        query_dict[&#34;ephemeris_metadata_filters&#34;] = None if self.metadata_filters is None else self.metadata_filters.__dict__
-        del query_dict[&#34;metadata_filters&#34;]
-        return query_dict</code></pre>
+        print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, self.metadata_filters))</code></pre>
 </details>
 <div class="desc"><p>Representation of a space criteria block used for conjunction searches. </p>
 <h2 id="attributes">Attributes</h2>
@@ -4625,37 +4651,15 @@ or 'southern'. Optional, default is <code>[]</code>.</dd>
     &#34;&#34;&#34;
     A special print output for this class.
     &#34;&#34;&#34;
-    # set special strings
-    max_len = 80
-    metadata_filters_str = str(self.metadata_filters)
-    if (len(metadata_filters_str) &gt; max_len):
-        metadata_filters_str = &#34;%s...)&#34; % (metadata_filters_str[0:max_len])
-
     # print
     print(&#34;SpaceCriteriaBlock:&#34;)
     print(&#34;  %-18s: %s&#34; % (&#34;programs&#34;, self.programs))
     print(&#34;  %-18s: %s&#34; % (&#34;platforms&#34;, self.platforms))
     print(&#34;  %-18s: %s&#34; % (&#34;instrument_types&#34;, self.instrument_types))
     print(&#34;  %-18s: %s&#34; % (&#34;hemisphere&#34;, self.hemisphere))
-    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, metadata_filters_str))</code></pre>
+    print(&#34;  %-18s: %s&#34; % (&#34;metadata_filters&#34;, self.metadata_filters))</code></pre>
 </details>
 <div class="desc"><p>A special print output for this class.</p></div>
-</dd>
-<dt id="pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict"><code class="name flex">
-<span>def <span class="ident">to_search_query_dict</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def to_search_query_dict(self):
-    query_dict = self.__dict__
-    query_dict[&#34;ephemeris_metadata_filters&#34;] = None if self.metadata_filters is None else self.metadata_filters.__dict__
-    del query_dict[&#34;metadata_filters&#34;]
-    return query_dict</code></pre>
-</details>
-<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -4745,6 +4749,9 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li>
 <h4><code><a title="pyaurorax.search.Conjunction" href="#pyaurorax.search.Conjunction">Conjunction</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.search.Conjunction.pretty_print" href="#pyaurorax.search.Conjunction.pretty_print">pretty_print</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="pyaurorax.search.ConjunctionSearch" href="#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code></h4>
@@ -4870,7 +4877,6 @@ setTimeout(() => input.focus(), 100);
 <h4><code><a title="pyaurorax.search.SpaceCriteriaBlock" href="#pyaurorax.search.SpaceCriteriaBlock">SpaceCriteriaBlock</a></code></h4>
 <ul class="">
 <li><code><a title="pyaurorax.search.SpaceCriteriaBlock.pretty_print" href="#pyaurorax.search.SpaceCriteriaBlock.pretty_print">pretty_print</a></code></li>
-<li><code><a title="pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict" href="#pyaurorax.search.SpaceCriteriaBlock.to_search_query_dict">to_search_query_dict</a></code></li>
 </ul>
 </li>
 </ul>

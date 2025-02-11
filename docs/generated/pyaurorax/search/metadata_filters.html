@@ -90,7 +90,7 @@ border-left: 1px solid #ddd;
             choices are &#39;and&#39; or &#39;or&#39;.
 
     Raises:
-        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+        ValueError: if invalid operator was specified.
     &#34;&#34;&#34;
 
     def __init__(
@@ -99,6 +99,10 @@ border-left: 1px solid #ddd;
         operator: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;,
     ):
         self.expressions = expressions
+
+        # set operator
+        if (operator.lower() not in [&#34;and&#34;, &#34;or&#34;]):
+            raise ValueError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (operator))
         self.__operator = operator
 
     @property
@@ -108,7 +112,7 @@ border-left: 1px solid #ddd;
     @operator.setter
     def operator(self, val: Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;] = &#34;and&#34;):
         if (val.lower() not in [&#34;and&#34;, &#34;or&#34;]):
-            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (val))
+            raise ValueError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;and&#39;, &#39;or&#39;]&#34; % (val))
         self.__operator = val.lower()
 
     def __str__(self) -&gt; str:
@@ -116,9 +120,7 @@ border-left: 1px solid #ddd;
 
     def __repr__(self) -&gt; str:
         # set special strings
-        if (len(self.expressions) == 0):
-            expressions_str = &#34;[0 expressions]&#34;
-        elif (len(self.expressions) == 1):
+        if (len(self.expressions) == 1):
             expressions_str = &#34;[1 expression]&#34;
         else:
             expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
@@ -131,9 +133,7 @@ border-left: 1px solid #ddd;
         A special print output for this class.
         &#34;&#34;&#34;
         # set special strings
-        if (len(self.expressions) == 0):
-            expressions_str = &#34;[0 expressions]&#34;
-        elif (len(self.expressions) == 1):
+        if (len(self.expressions) == 1):
             expressions_str = &#34;[1 expression]&#34;
         else:
             expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
@@ -166,7 +166,7 @@ choices are 'and' or 'or'.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dt><code>ValueError</code></dt>
 <dd>if invalid operator was specified.</dd>
 </dl></div>
 <h3>Instance variables</h3>
@@ -199,9 +199,7 @@ def operator(self):
     A special print output for this class.
     &#34;&#34;&#34;
     # set special strings
-    if (len(self.expressions) == 0):
-        expressions_str = &#34;[0 expressions]&#34;
-    elif (len(self.expressions) == 1):
+    if (len(self.expressions) == 1):
         expressions_str = &#34;[1 expression]&#34;
     else:
         expressions_str = &#34;[%d expressions]&#34; % (len(self.expressions))
@@ -264,7 +262,7 @@ def operator(self):
             are multiple values (ie. the values parameter is a list of strings).
         
     Raises:
-        pyaurorax.exceptions.AuroraXError: if invalid operator was specified.
+        ValueError: if invalid operator was specified.
     &#34;&#34;&#34;
 
     def __init__(
@@ -276,6 +274,12 @@ def operator(self):
         # set required parameters
         self.key = key
         self.values = values
+
+        # set operator
+        if (operator not in [&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
+            raise ValueError(
+                &#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; %
+                (operator))
         self.__operator = operator
 
     @property
@@ -285,8 +289,8 @@ def operator(self):
     @operator.setter
     def operator(self, val: Literal[&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
         if (val not in [&#34;=&#34;, &#34;!=&#34;, &#34;&gt;&#34;, &#34;&lt;&#34;, &#34;&gt;=&#34;, &#34;&lt;=&#34;, &#34;between&#34;, &#34;in&#34;, &#34;not in&#34;]):
-            AuroraXError(&#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#34; +
-                         &#34;&#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; % (val))
+            raise ValueError(
+                &#34;Operator &#39;%s&#39; not allowed. You must use one of the following: [&#39;=&#39;, &#39;!=&#39;, &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;between&#39;, &#39;in&#39;, &#39;not in&#39;]&#34; % (val))
         self.__operator = val
 
     def __str__(self) -&gt; str:
@@ -341,7 +345,7 @@ are multiple values (ie. the values parameter is a list of strings).</p>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dt><code>ValueError</code></dt>
 <dd>if invalid operator was specified.</dd>
 </dl></div>
 <h3>Instance variables</h3>

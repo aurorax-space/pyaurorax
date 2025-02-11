@@ -91,18 +91,30 @@ border-left: 1px solid #ddd;
         cmap: Optional[str] = &#34;Greys_r&#34;,
     ) -&gt; np.ndarray:
         &#34;&#34;&#34;
-        Takes a grid array, and converts it to RGBA format, masking all empty cells with max
+        Takes a grid image, and converts it to RGBA format, masking all empty cells with max
         transparency, so that it can be plotted overtop of a map.
+
+        NOTE: the grid data passed in must be for a single grid image. Multiple images in a single
+        call to this function is presently not supported.
 
         Args:
             grid (numpy.ndarray): 
-                The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.
+                The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from 
+                said file. 
+                
+                Please note that the data must be a single frame; multiple frames are currently not supported.
+
             fill_val (int or float): 
-                The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file&#39;s metadata.
+                The fill value that was used to fill grid cells containing no data. Usually obtained from the 
+                grid file&#39;s metadata.
+
             scale (list or numpy.ndarray): 
-                A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max).
+                A two-element vector specifying the minimum and maximum values to scale data between. This parameter
+                is optional. Defaults to data min/max.
+
             cmap (str): 
-                A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to &#34;Greys_r&#34;).
+                A string giving the name of a matplotlib colormap to prep single-channel image data using. This parameter
+                is optional. Defaults to &#34;Greys_r&#34;.
 
         Returns:
             The prepared RGBA grid array.
@@ -132,18 +144,30 @@ the submodules and carry over configuration information in the super class.</p><
     cmap: Optional[str] = &#34;Greys_r&#34;,
 ) -&gt; np.ndarray:
     &#34;&#34;&#34;
-    Takes a grid array, and converts it to RGBA format, masking all empty cells with max
+    Takes a grid image, and converts it to RGBA format, masking all empty cells with max
     transparency, so that it can be plotted overtop of a map.
+
+    NOTE: the grid data passed in must be for a single grid image. Multiple images in a single
+    call to this function is presently not supported.
 
     Args:
         grid (numpy.ndarray): 
-            The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.
+            The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from 
+            said file. 
+            
+            Please note that the data must be a single frame; multiple frames are currently not supported.
+
         fill_val (int or float): 
-            The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file&#39;s metadata.
+            The fill value that was used to fill grid cells containing no data. Usually obtained from the 
+            grid file&#39;s metadata.
+
         scale (list or numpy.ndarray): 
-            A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max).
+            A two-element vector specifying the minimum and maximum values to scale data between. This parameter
+            is optional. Defaults to data min/max.
+
         cmap (str): 
-            A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to &#34;Greys_r&#34;).
+            A string giving the name of a matplotlib colormap to prep single-channel image data using. This parameter
+            is optional. Defaults to &#34;Greys_r&#34;.
 
     Returns:
         The prepared RGBA grid array.
@@ -153,18 +177,27 @@ the submodules and carry over configuration information in the super class.</p><
     &#34;&#34;&#34;
     return func_prep_grid_image(self.__aurorax_obj, grid, fill_val, scale, cmap)</code></pre>
 </details>
-<div class="desc"><p>Takes a grid array, and converts it to RGBA format, masking all empty cells with max
+<div class="desc"><p>Takes a grid image, and converts it to RGBA format, masking all empty cells with max
 transparency, so that it can be plotted overtop of a map.</p>
+<p>NOTE: the grid data passed in must be for a single grid image. Multiple images in a single
+call to this function is presently not supported.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>grid</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
-<dd>The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from said file.</dd>
+<dd>
+<p>The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from
+said file. </p>
+<p>Please note that the data must be a single frame; multiple frames are currently not supported.</p>
+</dd>
 <dt><strong><code>fill_val</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
-<dd>The fill value that was used to fill grid cells containing no data. Usually obtained from the grid file's metadata.</dd>
+<dd>The fill value that was used to fill grid cells containing no data. Usually obtained from the
+grid file's metadata.</dd>
 <dt><strong><code>scale</code></strong> :&ensp;<code>list</code> or <code>numpy.ndarray</code></dt>
-<dd>A two-element vector specifying the minimum and maximum values to scale data between, optional (defaults to data min/max).</dd>
+<dd>A two-element vector specifying the minimum and maximum values to scale data between. This parameter
+is optional. Defaults to data min/max.</dd>
 <dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
-<dd>A string giving the name of a matplotlib colormap to prep single-channel image data using, optional (defaults to "Greys_r").</dd>
+<dd>A string giving the name of a matplotlib colormap to prep single-channel image data using. This parameter
+is optional. Defaults to "Greys_r".</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The prepared RGBA grid array.</p>

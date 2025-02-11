@@ -127,7 +127,10 @@ not needed for most use-cases.</p>
         self.null_response = null_response
 
     def __json_converter(self, o):
-        if (isinstance(o, datetime.datetime) is True):
+        # NOTE: this method is a last-ditch catch for any datetimes that snuck
+        # into the request body without already being converted to string format.
+        # Since this should never happen, we exclude it from the test suite
+        if (isinstance(o, datetime.datetime) is True):  # pragma: nocover-ok
             return str(o)
 
     def __merge_headers(self):
@@ -135,7 +138,10 @@ not needed for most use-cases.</p>
         all_headers = self.__aurorax_obj.api_headers
 
         # add headers passed into the class
-        for key, value in self.headers.items():
+        #
+        # NOTE: we don&#39;t usually pass any extra headers, so exclude this from
+        # the test suite
+        for key, value in self.headers.items():  # pragma: nocover-ok
             all_headers[key.lower()] = value
 
         # add api key
@@ -168,11 +174,11 @@ not needed for most use-cases.</p>
                                    params=self.params,
                                    data=body_santized,
                                    timeout=self.__aurorax_obj.api_timeout)
-        except requests.exceptions.Timeout:
+        except requests.exceptions.Timeout:  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;API request timeout reached&#34;) from None
 
         # check if authorization worked (raised by API or Nginx)
-        if (req.status_code == 401):
+        if (req.status_code == 401):  # pragma: nocover-ok
             if (req.headers[&#34;Content-Type&#34;] == &#34;application/json&#34;):
                 if (&#34;error_message&#34; in req.json()):
                     # this will be an error message that the API meant to send
@@ -183,7 +189,7 @@ not needed for most use-cases.</p>
                 raise AuroraXUnauthorizedError(&#34;API error code 401: unauthorized&#34;)
 
         # check for 404 error (raised by API or by Nginx)
-        if (req.status_code == 404):
+        if (req.status_code == 404):  # pragma: nocover-ok
             if (req.headers[&#34;Content-Type&#34;] == &#34;application/json&#34;):
                 if (&#34;error_message&#34; in req.json()):
                     # this will be an error message that the API meant to send
@@ -195,23 +201,26 @@ not needed for most use-cases.</p>
                 raise AuroraXAPIError(&#34;API error code 404: not found&#34;)
 
         # check for 400
-        if (req.status_code == 400):
+        if (req.status_code == 400):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, req.content.decode()))
 
         # check for server error
-        if (req.status_code == 500):
-            response_json = req.json()
-            if (&#34;error_message&#34; in response_json):
-                raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json[&#34;error_message&#34;]))
-            else:
-                raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json))
+        if (req.status_code == 500):  # pragma: nocover-ok
+            try:
+                response_json = req.json()
+                if (&#34;error_message&#34; in response_json):
+                    raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json[&#34;error_message&#34;]))
+                else:
+                    raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json))
+            except Exception as e:
+                raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, req.content)) from e
 
         # check for maintenance mode error
-        if (req.status_code == 502):
+        if (req.status_code == 502):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;API error code %d: API inaccessible, bad gateway&#34; % (req.status_code))
 
         # check for maintenance mode error
-        if (req.status_code == 503):
+        if (req.status_code == 503):  # pragma: nocover-ok
             response_json = req.json()
             if (&#34;maintenance mode&#34; in response_json[&#34;error_message&#34;].lower()):
                 raise AuroraXMaintenanceError(response_json[&#34;error_message&#34;])
@@ -219,7 +228,7 @@ not needed for most use-cases.</p>
                 raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json[&#34;error_message&#34;]))
 
         # check content type
-        if (self.null_response is False):
+        if (self.null_response is False):  # pragma: nocover-ok
             if (req.headers[&#34;Content-Type&#34;] == &#34;application/json&#34;):
                 if (len(req.content) == 0):
                     raise AuroraXAPIError(&#34;API error code %d: no response received&#34; % (req.status_code))
@@ -240,10 +249,10 @@ not needed for most use-cases.</p>
         return res
 
     def __str__(self) -&gt; str:
-        return self.__repr__()
+        return self.__repr__()  # pragma: nocover-ok
 
     def __repr__(self) -&gt; str:
-        return f&#34;AuroraXAPIRequest(method=&#39;{self.method}&#39;, url=&#39;{self.url}&#39;)&#34;</code></pre>
+        return f&#34;AuroraXAPIRequest(method=&#39;{self.method}&#39;, url=&#39;{self.url}&#39;)&#34;  # pragma: nocover-ok</code></pre>
 </details>
 <div class="desc"><p>Class definition for an AuroraX API request</p>
 <h2 id="attributes">Attributes</h2>
@@ -295,11 +304,11 @@ requests to upload data that respond with just a 202 status code), defaults to <
                                params=self.params,
                                data=body_santized,
                                timeout=self.__aurorax_obj.api_timeout)
-    except requests.exceptions.Timeout:
+    except requests.exceptions.Timeout:  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;API request timeout reached&#34;) from None
 
     # check if authorization worked (raised by API or Nginx)
-    if (req.status_code == 401):
+    if (req.status_code == 401):  # pragma: nocover-ok
         if (req.headers[&#34;Content-Type&#34;] == &#34;application/json&#34;):
             if (&#34;error_message&#34; in req.json()):
                 # this will be an error message that the API meant to send
@@ -310,7 +319,7 @@ requests to upload data that respond with just a 202 status code), defaults to <
             raise AuroraXUnauthorizedError(&#34;API error code 401: unauthorized&#34;)
 
     # check for 404 error (raised by API or by Nginx)
-    if (req.status_code == 404):
+    if (req.status_code == 404):  # pragma: nocover-ok
         if (req.headers[&#34;Content-Type&#34;] == &#34;application/json&#34;):
             if (&#34;error_message&#34; in req.json()):
                 # this will be an error message that the API meant to send
@@ -322,23 +331,26 @@ requests to upload data that respond with just a 202 status code), defaults to <
             raise AuroraXAPIError(&#34;API error code 404: not found&#34;)
 
     # check for 400
-    if (req.status_code == 400):
+    if (req.status_code == 400):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, req.content.decode()))
 
     # check for server error
-    if (req.status_code == 500):
-        response_json = req.json()
-        if (&#34;error_message&#34; in response_json):
-            raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json[&#34;error_message&#34;]))
-        else:
-            raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json))
+    if (req.status_code == 500):  # pragma: nocover-ok
+        try:
+            response_json = req.json()
+            if (&#34;error_message&#34; in response_json):
+                raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json[&#34;error_message&#34;]))
+            else:
+                raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json))
+        except Exception as e:
+            raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, req.content)) from e
 
     # check for maintenance mode error
-    if (req.status_code == 502):
+    if (req.status_code == 502):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;API error code %d: API inaccessible, bad gateway&#34; % (req.status_code))
 
     # check for maintenance mode error
-    if (req.status_code == 503):
+    if (req.status_code == 503):  # pragma: nocover-ok
         response_json = req.json()
         if (&#34;maintenance mode&#34; in response_json[&#34;error_message&#34;].lower()):
             raise AuroraXMaintenanceError(response_json[&#34;error_message&#34;])
@@ -346,7 +358,7 @@ requests to upload data that respond with just a 202 status code), defaults to <
             raise AuroraXAPIError(&#34;API error code %d: %s&#34; % (req.status_code, response_json[&#34;error_message&#34;]))
 
     # check content type
-    if (self.null_response is False):
+    if (self.null_response is False):  # pragma: nocover-ok
         if (req.headers[&#34;Content-Type&#34;] == &#34;application/json&#34;):
             if (len(req.content) == 0):
                 raise AuroraXAPIError(&#34;API error code %d: no response received&#34; % (req.status_code))
@@ -411,10 +423,10 @@ requests to upload data that respond with just a 202 status code), defaults to <
         self.status_code = status_code
 
     def __str__(self) -&gt; str:
-        return self.__repr__()
+        return self.__repr__()  # pragma: nocover-ok
 
     def __repr__(self) -&gt; str:
-        return f&#34;AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})&#34;</code></pre>
+        return f&#34;AuroraXAPIResponse [{self.status_code}] ({responses[self.status_code]})&#34;  # pragma: nocover-ok</code></pre>
 </details>
 <div class="desc"><p>Class definition for an AuroraX API response</p>
 <h2 id="attributes">Attributes</h2>

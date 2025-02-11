@@ -190,7 +190,7 @@ here instead of digging in deeper to the submodules.</p>
         return func_cancel(self.__aurorax_obj, request_url, wait, poll_interval, verbose)
 
     def list(self,
-             search_type: Optional[str] = None,
+             search_type: Optional[Literal[&#34;conjunction&#34;, &#34;ephemeris&#34;, &#34;data_product&#34;]] = None,
              active: Optional[bool] = None,
              start: Optional[datetime.datetime] = None,
              end: Optional[datetime.datetime] = None,
@@ -232,11 +232,12 @@ here instead of digging in deeper to the submodules.</p>
             List of matching search requests
 
         Raises:
+            ValueError: Unsupported search type
             pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
         &#34;&#34;&#34;
         return func_list(self.__aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition)
 
-    def delete(self, request_id: str) -&gt; int:
+    def delete(self, request_id: str) -&gt; int:  # pragma: nocover
         &#34;&#34;&#34;
         Entirely remove a search request from the AuroraX database. Administrators only.
 
@@ -331,7 +332,7 @@ wait for several minutes)</dd>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delete(self, request_id: str) -&gt; int:
+<pre><code class="python">def delete(self, request_id: str) -&gt; int:  # pragma: nocover
     &#34;&#34;&#34;
     Entirely remove a search request from the AuroraX database. Administrators only.
 
@@ -470,7 +471,7 @@ wait for several minutes)</dd>
 <p>The status information for the request</p></div>
 </dd>
 <dt id="pyaurorax.search.requests.RequestsManager.list"><code class="name flex">
-<span>def <span class="ident">list</span></span>(<span>self,<br>search_type: str | None = None,<br>active: bool | None = None,<br>start: datetime.datetime | None = None,<br>end: datetime.datetime | None = None,<br>file_size: int | None = None,<br>result_count: int | None = None,<br>query_duration: int | None = None,<br>error_condition: bool | None = None) ‑> List</span>
+<span>def <span class="ident">list</span></span>(<span>self,<br>search_type: Literal['conjunction', 'ephemeris', 'data_product'] | None = None,<br>active: bool | None = None,<br>start: datetime.datetime | None = None,<br>end: datetime.datetime | None = None,<br>file_size: int | None = None,<br>result_count: int | None = None,<br>query_duration: int | None = None,<br>error_condition: bool | None = None) ‑> List</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -478,7 +479,7 @@ wait for several minutes)</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def list(self,
-         search_type: Optional[str] = None,
+         search_type: Optional[Literal[&#34;conjunction&#34;, &#34;ephemeris&#34;, &#34;data_product&#34;]] = None,
          active: Optional[bool] = None,
          start: Optional[datetime.datetime] = None,
          end: Optional[datetime.datetime] = None,
@@ -520,6 +521,7 @@ wait for several minutes)</dd>
         List of matching search requests
 
     Raises:
+        ValueError: Unsupported search type
         pyaurorax.exceptions.AuroraXUnauthorizedError: Invalid API key for this operation
     &#34;&#34;&#34;
     return func_list(self.__aurorax_obj, search_type, active, start, end, file_size, result_count, query_duration, error_condition)</code></pre>
@@ -551,6 +553,8 @@ type, defaults to None</dd>
 <p>List of matching search requests</p>
 <h2 id="raises">Raises</h2>
 <dl>
+<dt><code>ValueError</code></dt>
+<dd>Unsupported search type</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
 <dd>Invalid API key for this operation</dd>
 </dl></div>

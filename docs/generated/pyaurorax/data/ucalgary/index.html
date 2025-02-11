@@ -366,15 +366,15 @@ class Data:
                 if (len(self.data) == 1):
                     data_str = &#34;[1 RiometerData object]&#34;
                 else:
-                    data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
+                    data_str = &#34;[%d RiometerData objects]&#34; % (len(self.data))
             elif (isinstance(self.data[0], HSRData) is True):
                 if (len(self.data) == 1):
                     data_str = &#34;[1 HSRData object]&#34;
                 else:
                     data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
-            elif (len(self.data) == 1):
+            elif (len(self.data) == 1):  # pragma: nocover
                 data_str = &#34;[1 item]&#34;
-            else:
+            else:  # pragma: nocover
                 data_str = &#34;[%d items]&#34; % (len(self.data))
         else:
             data_str = self.data.__repr__()
@@ -488,15 +488,15 @@ until calibrated data is inserted manually.</dd>
             if (len(self.data) == 1):
                 data_str = &#34;[1 RiometerData object]&#34;
             else:
-                data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
+                data_str = &#34;[%d RiometerData objects]&#34; % (len(self.data))
         elif (isinstance(self.data[0], HSRData) is True):
             if (len(self.data) == 1):
                 data_str = &#34;[1 HSRData object]&#34;
             else:
                 data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
-        elif (len(self.data) == 1):
+        elif (len(self.data) == 1):  # pragma: nocover
             data_str = &#34;[1 item]&#34;
-        else:
+        else:  # pragma: nocover
             data_str = &#34;[%d items]&#34; % (len(self.data))
     else:
         data_str = self.data.__repr__()
@@ -1638,9 +1638,9 @@ class Skymap:
                 progress_bar_desc=progress_bar_desc,
                 timeout=timeout,
             )
-        except SRSDownloadError as e:
+        except SRSDownloadError as e:  # pragma: nocover
             raise AuroraXDownloadError(e) from e
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def download_using_urls(self,
@@ -1742,9 +1742,9 @@ class Skymap:
                 progress_bar_desc=progress_bar_desc,
                 timeout=timeout,
             )
-        except SRSDownloadError as e:
+        except SRSDownloadError as e:  # pragma: nocover
             raise AuroraXDownloadError(e) from e
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def get_urls(self,
@@ -1815,7 +1815,7 @@ class Skymap:
                 device_uid=device_uid,
                 timeout=timeout,
             )
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def read(self,
@@ -1974,7 +1974,7 @@ class Skymap:
                 best_skymap_filename = url
 
         # check if we found a skymap
-        if (best_skymap_filename is None):
+        if (best_skymap_filename is None):  # pragma: nocover-ok
             raise ValueError(&#34;Unable to determine a skymap recommendation&#34;)
 
         # set the filename
@@ -2310,9 +2310,9 @@ def readers(self):
             progress_bar_desc=progress_bar_desc,
             timeout=timeout,
         )
-    except SRSDownloadError as e:
+    except SRSDownloadError as e:  # pragma: nocover
         raise AuroraXDownloadError(e) from e
-    except SRSAPIError as e:
+    except SRSAPIError as e:  # pragma: nocover
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>Download data from the UCalgary Space Remote Sensing Open Data Platform.</p>
@@ -2713,7 +2713,7 @@ object containing details about what data files were downloaded.</p>
             best_skymap_filename = url
 
     # check if we found a skymap
-    if (best_skymap_filename is None):
+    if (best_skymap_filename is None):  # pragma: nocover-ok
         raise ValueError(&#34;Unable to determine a skymap recommendation&#34;)
 
     # set the filename
@@ -2866,9 +2866,9 @@ object containing details about what data files were downloaded.</p>
             progress_bar_desc=progress_bar_desc,
             timeout=timeout,
         )
-    except SRSDownloadError as e:
+    except SRSDownloadError as e:  # pragma: nocover
         raise AuroraXDownloadError(e) from e
-    except SRSAPIError as e:
+    except SRSAPIError as e:  # pragma: nocover
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>Download data from the UCalgary Space Remote Sensing Open Data Platform using
@@ -3067,7 +3067,7 @@ object. Raises an exception if not found.</p>
             device_uid=device_uid,
             timeout=timeout,
         )
-    except SRSAPIError as e:
+    except SRSAPIError as e:  # pragma: nocover
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>Get URLs of data files</p>

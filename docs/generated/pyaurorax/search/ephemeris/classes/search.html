@@ -152,6 +152,13 @@ border-left: 1px solid #ddd;
                  metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
 
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning(&#34;Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator &#34; +
+                         &#34;parameter is redundant. Only the MetadataFilter object is needed. The &#34; +
+                         &#34;metadata_filters_logical_operator parameter will be ignored&#34;)
+
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
         self.start = start
@@ -200,9 +207,7 @@ border-left: 1px solid #ddd;
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = &#34;[0 ephemeris results]&#34;
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = &#34;[1 ephemeris result]&#34;
             else:
                 data_str = &#34;[%d ephemeris results]&#34; % (len(self.data))
@@ -211,9 +216,7 @@ border-left: 1px solid #ddd;
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = &#34;[0 log messages]&#34;
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = &#34;[1 log message]&#34;
             else:
                 logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -266,10 +269,6 @@ border-left: 1px solid #ddd;
         # return
         return self.__query
 
-    @query.setter
-    def query(self, query):
-        self.__query = query
-
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
         Initiate ephemeris search request
@@ -278,7 +277,7 @@ border-left: 1px solid #ddd;
             pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
         &#34;&#34;&#34;
         # check for at least one filter criteria
-        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+        if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover-ok
             raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
 
         # do request
@@ -311,7 +310,7 @@ border-left: 1px solid #ddd;
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
         # update request status by checking if data URI is set
@@ -636,7 +635,7 @@ several minutes)</dd>
         pyaurorax.exceptions.AuroraXError: Invalid request parameters are set
     &#34;&#34;&#34;
     # check for at least one filter criteria
-    if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):
+    if not (self.programs or self.platforms or self.instrument_types or self.metadata_filters):  # pragma: nocover-ok
         raise AuroraXError(&#34;At least one filter criteria parameter besides &#39;start&#39; and &#39;end&#39; must be specified&#34;)
 
     # do request
@@ -719,9 +718,7 @@ several minutes)</dd>
 
     # set results string
     if (self.executed is True):
-        if (len(self.data) == 0):
-            data_str = &#34;[0 ephemeris results]&#34;
-        elif (len(self.data) == 1):
+        if (len(self.data) == 1):
             data_str = &#34;[1 ephemeris result]&#34;
         else:
             data_str = &#34;[%d ephemeris results]&#34; % (len(self.data))
@@ -730,9 +727,7 @@ several minutes)</dd>
 
     # set logs string
     if (self.executed is True):
-        if (len(self.logs) == 0):
-            logs_str = &#34;[0 log messages]&#34;
-        elif (len(self.logs) == 1):
+        if (len(self.logs) == 1):  # pragma: nocover-ok
             logs_str = &#34;[1 log message]&#34;
         else:
             logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -776,7 +771,7 @@ several minutes)</dd>
         status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
-    if (status is None):
+    if (status is None):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
     # update request status by checking if data URI is set

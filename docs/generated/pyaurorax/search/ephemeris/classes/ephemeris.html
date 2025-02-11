@@ -147,9 +147,7 @@ border-left: 1px solid #ddd;
         if (self.metadata is not None):
             for key, value in self.metadata.items():
                 if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
-        # if (isinstance(self.metadata, list) is True):
-        #     self.metadata = {}
+                    self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)  # pragma: nocover
 
         # format data source fields for query
         d[&#34;program&#34;] = self.data_source.program
@@ -233,9 +231,7 @@ sources with a type of 'ground')</dd>
     if (self.metadata is not None):
         for key, value in self.metadata.items():
             if (isinstance(value, datetime.datetime) is True or isinstance(value, datetime.date) is True):
-                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)
-    # if (isinstance(self.metadata, list) is True):
-    #     self.metadata = {}
+                self.metadata[key] = self.metadata[key].strftime(&#34;%Y-%m-%dT%H:%M:%S.%f&#34;)  # pragma: nocover
 
     # format data source fields for query
     d[&#34;program&#34;] = self.data_source.program

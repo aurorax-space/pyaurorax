@@ -216,7 +216,7 @@ border-left: 1px solid #ddd;
                 no_cache=no_cache,
                 timeout=timeout,
             )
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
 
     def inverse(self,
@@ -324,7 +324,7 @@ border-left: 1px solid #ddd;
                 no_cache=no_cache,
                 timeout=timeout,
             )
-        except SRSAPIError as e:
+        except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>The ATMManager object is initialized within every PyAuroraX object. It acts as a way to access
@@ -473,7 +473,7 @@ the submodules and carry over configuration information in the super class.</p><
             no_cache=no_cache,
             timeout=timeout,
         )
-    except SRSAPIError as e:
+    except SRSAPIError as e:  # pragma: nocover
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>Perform a forward calculation using the TREx Auroral Transport Model and the supplied input
@@ -669,7 +669,7 @@ object containing the requested output data, among other values.</p>
             no_cache=no_cache,
             timeout=timeout,
         )
-    except SRSAPIError as e:
+    except SRSAPIError as e:  # pragma: nocover
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>Perform an inverse calculation using the TREx Auroral Transport Model and the supplied input

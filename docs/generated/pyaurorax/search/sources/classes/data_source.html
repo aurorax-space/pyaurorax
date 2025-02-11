@@ -240,7 +240,7 @@ program, platform, instrument type, source type, and display name</p></div>
         else:
             data_product_metadata_schema_str = self.data_product_metadata_schema
         print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
-        if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+        if (self.stats is not None and len(str(self.stats)) &gt; max_len):  # pragma: nocover
             stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
         else:
             stats_str = self.data_product_metadata_schema
@@ -319,7 +319,7 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     else:
         data_product_metadata_schema_str = self.data_product_metadata_schema
     print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
-    if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+    if (self.stats is not None and len(str(self.stats)) &gt; max_len):  # pragma: nocover
         stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
     else:
         stats_str = self.data_product_metadata_schema

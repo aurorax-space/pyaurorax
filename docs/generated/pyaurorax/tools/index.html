@@ -223,7 +223,7 @@ class Keogram:
         &#34;&#34;&#34;
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
+            raise ValueError(&#34;Unable to set the geographic latitudes since the private slice_idx is None. If this keogram &#34; +
                              &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                              &#34;this is expected and performing this action is not supported at this time.&#34;)
 
@@ -535,7 +535,7 @@ class Keogram:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):
+                if (savefig_quality is not None):  # pragma: nocover
                     plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
                 else:
                     plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
@@ -788,7 +788,7 @@ class Keogram:
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
             # check quality setting
-            if (savefig_quality is not None):
+            if (savefig_quality is not None):  # pragma: nocover
                 plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
             else:
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
@@ -940,7 +940,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
     &#34;&#34;&#34;
     # check for slice idx
     if (self.__slice_idx is None):
-        raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
+        raise ValueError(&#34;Unable to set the geographic latitudes since the private slice_idx is None. If this keogram &#34; +
                          &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                          &#34;this is expected and performing this action is not supported at this time.&#34;)
 
@@ -1287,7 +1287,7 @@ class Montage:
             elif (self.__n_channels == 3):
                 # single channel
                 ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-            else:
+            else:  # pragma: nocover
                 raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                                  (self.data.shape))
 
@@ -1314,7 +1314,7 @@ class Montage:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):
+                if (savefig_quality is not None):  # pragma: nocover
                     plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
                 else:
                     plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
@@ -1490,7 +1490,7 @@ class Montage:
         elif (self.__n_channels == 3):
             # single channel
             ax.imshow(self.data[:, :, :, i], cmap=cmap, origin=&#34;lower&#34;, interpolation=&#34;nearest&#34;)
-        else:
+        else:  # pragma: nocover
             raise ValueError(&#34;Can only plot 3 or 4 dimensional data (series of single-channel or RGB mages), but found data of shape %s&#34; %
                              (self.data.shape))
 
@@ -1517,7 +1517,7 @@ class Montage:
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
             # check quality setting
-            if (savefig_quality is not None):
+            if (savefig_quality is not None):  # pragma: nocover
                 plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
             else:
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)

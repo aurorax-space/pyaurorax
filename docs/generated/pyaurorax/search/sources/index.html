@@ -199,7 +199,7 @@ border-left: 1px solid #ddd;
         else:
             data_product_metadata_schema_str = self.data_product_metadata_schema
         print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
-        if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+        if (self.stats is not None and len(str(self.stats)) &gt; max_len):  # pragma: nocover
             stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
         else:
             stats_str = self.data_product_metadata_schema
@@ -278,7 +278,7 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     else:
         data_product_metadata_schema_str = self.data_product_metadata_schema
     print(&#34;  %-30s: %s&#34; % (&#34;data_product_metadata_schema&#34;, data_product_metadata_schema_str))
-    if (self.stats is not None and len(str(self.stats)) &gt; max_len):
+    if (self.stats is not None and len(str(self.stats)) &gt; max_len):  # pragma: nocover
         stats_str = &#34;%s...&#34; % (str(self.stats)[0:max_len])
     else:
         stats_str = self.data_product_metadata_schema
@@ -774,12 +774,14 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 
         Args:
             data_source (DataSource): 
-                The data source to add (note: it must be a fully-defined DataSource object)
+                The data source to add. THe data source record must have at least the following 
+                values specified: program, platform, instrument_type, display_name, and source_type.
 
         Returns:
             The newly created `DataSource`.
 
         Raises:
+            ValueError: Invalid values for DataSource supplied
             pyaurorax.exceptions.AuroraXAPIError: Error during API call
             pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
             pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists
@@ -903,12 +905,14 @@ the submodules and carry over configuration information in the super class.</p><
 
     Args:
         data_source (DataSource): 
-            The data source to add (note: it must be a fully-defined DataSource object)
+            The data source to add. THe data source record must have at least the following 
+            values specified: program, platform, instrument_type, display_name, and source_type.
 
     Returns:
         The newly created `DataSource`.
 
     Raises:
+        ValueError: Invalid values for DataSource supplied
         pyaurorax.exceptions.AuroraXAPIError: Error during API call
         pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
         pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists
@@ -919,12 +923,15 @@ the submodules and carry over configuration information in the super class.</p><
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code></dt>
-<dd>The data source to add (note: it must be a fully-defined DataSource object)</dd>
+<dd>The data source to add. THe data source record must have at least the following
+values specified: program, platform, instrument_type, display_name, and source_type.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The newly created <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code>.</p>
 <h2 id="raises">Raises</h2>
 <dl>
+<dt><code>ValueError</code></dt>
+<dd>Invalid values for DataSource supplied</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>

@@ -67,7 +67,7 @@ border-left: 1px solid #ddd;
 <dl>
 <dt id="pyaurorax.search.data_products.classes.search.DataProductSearch"><code class="flex name class">
 <span>class <span class="ident">DataProductSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: "Optional[Literal['keogram', 'montage', 'movie', 'summary_plot', 'data_availability']]" = None,<br>metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: Optional[List[str]] = None,<br>platforms: Optional[List[str]] = None,<br>instrument_types: Optional[List[str]] = None,<br>data_product_types: "Optional[List[Literal['keogram', 'montage', 'movie', 'summary_plot', 'data_availability']]]" = None,<br>metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,<br>metadata_filters_logical_operator: "Optional[Literal['and', 'or', 'AND', 'OR']]" = None,<br>response_format: Optional[Dict] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -150,10 +150,17 @@ border-left: 1px solid #ddd;
                  programs: Optional[List[str]] = None,
                  platforms: Optional[List[str]] = None,
                  instrument_types: Optional[List[str]] = None,
-                 data_product_types: Optional[Literal[&#34;keogram&#34;, &#34;montage&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, &#34;data_availability&#34;]] = None,
+                 data_product_types: Optional[List[Literal[&#34;keogram&#34;, &#34;montage&#34;, &#34;movie&#34;, &#34;summary_plot&#34;, &#34;data_availability&#34;]]] = None,
                  metadata_filters: Optional[Union[MetadataFilter, List[Dict]]] = None,
                  metadata_filters_logical_operator: Optional[Literal[&#34;and&#34;, &#34;or&#34;, &#34;AND&#34;, &#34;OR&#34;]] = None,
                  response_format: Optional[Dict] = None) -&gt; None:
+
+        # show warnings
+        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
+            # logical operator supplied, but MetadataFilter supplied too
+            show_warning(&#34;Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator &#34; +
+                         &#34;parameter is redundant. Only the MetadataFilter object is needed. The &#34; +
+                         &#34;metadata_filters_logical_operator parameter will be ignored&#34;)
 
         # set variables using passed in args
         self.__aurorax_obj = aurorax_obj
@@ -204,9 +211,7 @@ border-left: 1px solid #ddd;
 
         # set results string
         if (self.executed is True):
-            if (len(self.data) == 0):
-                data_str = &#34;[0 data product results]&#34;
-            elif (len(self.data) == 1):
+            if (len(self.data) == 1):
                 data_str = &#34;[1 data product result]&#34;
             else:
                 data_str = &#34;[%d data product results]&#34; % (len(self.data))
@@ -215,9 +220,7 @@ border-left: 1px solid #ddd;
 
         # set logs string
         if (self.executed is True):
-            if (len(self.logs) == 0):
-                logs_str = &#34;[0 log messages]&#34;
-            elif (len(self.logs) == 1):
+            if (len(self.logs) == 1):  # pragma: nocover-ok
                 logs_str = &#34;[1 log message]&#34;
             else:
                 logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -271,10 +274,6 @@ border-left: 1px solid #ddd;
         # return
         return self.__query
 
-    @query.setter
-    def query(self, query):
-        self.__query = query
-
     def execute(self) -&gt; None:
         &#34;&#34;&#34;
         Initiate a data product search request
@@ -309,7 +308,7 @@ border-left: 1px solid #ddd;
             status = requests_get_status(self.__aurorax_obj, self.request_url)
 
         # check response
-        if (status is None):
+        if (status is None):  # pragma: nocover-ok
             raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
         # update request status by checking if data URI is set
@@ -710,9 +709,7 @@ search request</p>
 
     # set results string
     if (self.executed is True):
-        if (len(self.data) == 0):
-            data_str = &#34;[0 data product results]&#34;
-        elif (len(self.data) == 1):
+        if (len(self.data) == 1):
             data_str = &#34;[1 data product result]&#34;
         else:
             data_str = &#34;[%d data product results]&#34; % (len(self.data))
@@ -721,9 +718,7 @@ search request</p>
 
     # set logs string
     if (self.executed is True):
-        if (len(self.logs) == 0):
-            logs_str = &#34;[0 log messages]&#34;
-        elif (len(self.logs) == 1):
+        if (len(self.logs) == 1):  # pragma: nocover-ok
             logs_str = &#34;[1 log message]&#34;
         else:
             logs_str = &#34;[%d log messages]&#34; % (len(self.logs))
@@ -767,7 +762,7 @@ search request</p>
         status = requests_get_status(self.__aurorax_obj, self.request_url)
 
     # check response
-    if (status is None):
+    if (status is None):  # pragma: nocover-ok
         raise AuroraXAPIError(&#34;Could not retrieve status for this request&#34;)
 
     # update request status by checking if data URI is set

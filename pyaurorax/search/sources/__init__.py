@@ -431,7 +431,7 @@ class SourcesManager:
             The newly created `DataSource`.
 
         Raises:
-            pyaurorax.exceptions.ValueError: Invalid values for DataSource supplied
+            ValueError: Invalid values for DataSource supplied
             pyaurorax.exceptions.AuroraXAPIError: Error during API call
             pyaurorax.exceptions.AuroraXUnauthorizedError: Not allowed to perform task, or API key / user permissions are invalid
             pyaurorax.exceptions.AuroraXDuplicateError: Duplicate data source, already exists

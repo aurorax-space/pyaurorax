@@ -106,7 +106,7 @@ AuroraX platform …</p></div>
 <dl>
 <dt id="pyaurorax.PyAuroraX"><code class="flex name class">
 <span>class <span class="ident">PyAuroraX</span></span>
-<span>(</span><span>download_output_root_path: str | None = None,<br>read_tar_temp_path: str | None = None,<br>api_base_url: str | None = None,<br>api_timeout: int | None = None,<br>api_headers: Dict | None = None,<br>api_key: str | None = None,<br>progress_bar_backend: Literal['auto', 'standard', 'notebook'] = 'auto',<br>srs_obj: pyucalgarysrs.pyucalgarysrs.PyUCalgarySRS | None = None)</span>
+<span>(</span><span>download_output_root_path: str | None = None,<br>read_tar_temp_path: str | None = None,<br>api_base_url: str | None = None,<br>api_timeout: int | None = None,<br>api_key: str | None = None,<br>progress_bar_backend: Literal['auto', 'standard', 'notebook'] = 'auto')</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -146,10 +146,8 @@ AuroraX platform …</p></div>
         read_tar_temp_path: Optional[str] = None,
         api_base_url: Optional[str] = None,
         api_timeout: Optional[int] = None,
-        api_headers: Optional[Dict] = None,
         api_key: Optional[str] = None,
         progress_bar_backend: Literal[&#34;auto&#34;, &#34;standard&#34;, &#34;notebook&#34;] = &#34;auto&#34;,
-        srs_obj: Optional[pyucalgarysrs.PyUCalgarySRS] = None,
     ):
         &#34;&#34;&#34;
         Attributes:
@@ -173,11 +171,6 @@ AuroraX platform …</p></div>
                 The timeout used when communicating with the Aurorax API. This value is represented in 
                 seconds, and by default is `10 seconds`.
             
-            api_headers (Dict): 
-                HTTP headers used when communicating with the AuroraX API. The default for this value 
-                consists of several standard headers. Any changes to this parameter are in addition to 
-                the default standard headers.
-
             api_key (str): 
                 API key to use when interacting with the AuroraX API. The default value is None. Please note
                 that an API key is only required for write operations to the AuroraX search API, such as
@@ -204,13 +197,11 @@ AuroraX platform …</p></div>
         self.__api_base_url = api_base_url
         if (api_base_url is None):
             self.__api_base_url = self.__DEFAULT_API_BASE_URL
-        self.__api_headers = api_headers
-        if (api_headers is None):
-            self.__api_headers = self.__DEFAULT_API_HEADERS
         self.__api_timeout = api_timeout
         if (api_timeout is None):
             self.__api_timeout = self.__DEFAULT_API_TIMEOUT
         self.__api_key = api_key
+        self.__api_headers = self.__DEFAULT_API_HEADERS
 
         # initialize progress bar parameters
         self.__progress_bar_backend = progress_bar_backend
@@ -220,16 +211,13 @@ AuroraX platform …</p></div>
         self.__initialize_paths()
 
         # initialize PyUCalgarySRS object
-        if (srs_obj is None):
-            self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
-                api_headers=self.__api_headers,
-                api_timeout=self.__api_timeout,
-                download_output_root_path=self.download_output_root_path,
-                read_tar_temp_path=self.read_tar_temp_path,
-                progress_bar_backend=progress_bar_backend,
-            )
-        else:
-            self.__srs_obj = srs_obj
+        self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
+            api_headers=self.__api_headers,
+            api_timeout=self.__api_timeout,
+            download_output_root_path=self.download_output_root_path,
+            read_tar_temp_path=self.read_tar_temp_path,
+            progress_bar_backend=progress_bar_backend,
+        )
 
         # initialize progress bar tqdm object (by pulling it from srs_obj)
         self._tqdm = self.__srs_obj._tqdm
@@ -282,7 +270,7 @@ AuroraX platform …</p></div>
         return self.__api_base_url
 
     @api_base_url.setter
-    def api_base_url(self, value: str):
+    def api_base_url(self, value: Optional[str] = None):
         if (value is None):
             self.__api_base_url = self.__DEFAULT_API_BASE_URL
         else:
@@ -302,20 +290,6 @@ AuroraX platform …</p></div>
         Property for the API headers. See above for details.
         &#34;&#34;&#34;
         return self.__api_headers
-
-    @api_headers.setter
-    def api_headers(self, value: Dict):
-        new_headers = self.__DEFAULT_API_HEADERS
-        if (value is not None):
-            for k, v in value.items():
-                k = k.lower()
-                if (k in new_headers):
-                    show_warning(&#34;Cannot override default &#39;%s&#39; header&#34; % (k), stacklevel=1)
-                else:
-                    new_headers[k] = v
-        self.__api_headers = new_headers
-        if (&#34;user-agent&#34; in new_headers):
-            self.__srs_obj.api_headers = {&#34;user-agent&#34;: new_headers[&#34;user-agent&#34;]}
 
     @property
     def api_timeout(self):
@@ -340,8 +314,17 @@ AuroraX platform …</p></div>
         return self.__api_key
 
     @api_key.setter
-    def api_key(self, value: str):
+    def api_key(self, value: Optional[str] = None):
+        # set the private var
         self.__api_key = value
+
+        # update the headers
+        if (value is None or value == &#34;&#34;) and &#34;x-aurorax-api-key&#34; in self.__api_headers:
+            # remove it
+            del self.__api_headers[&#34;x-aurorax-api-key&#34;]
+        else:
+            # add/update it
+            self.__api_headers[&#34;x-aurorax-api-key&#34;] = self.__api_key  # type: ignore
 
     @property
     def download_output_root_path(self):
@@ -377,8 +360,11 @@ AuroraX platform …</p></div>
         return self.__progress_bar_backend
 
     @progress_bar_backend.setter
-    def progress_bar_backend(self, value: Literal[&#34;auto&#34;, &#34;standard&#34;, &#34;notebook&#34;]):
-        value = value.lower()  # type: ignore
+    def progress_bar_backend(self, value: Optional[Literal[&#34;auto&#34;, &#34;standard&#34;, &#34;notebook&#34;]] = None):
+        if (value is None):
+            value = &#34;auto&#34;
+        else:
+            value = value.lower()  # type: ignore
         if (value != &#34;auto&#34; and value != &#34;standard&#34; and value != &#34;notebook&#34;):
             raise AuroraXInitializationError(&#34;Invalid progress bar backend. Allowed values are &#39;auto&#39;, &#39;standard&#39; or &#39;notebook&#39;.&#34;)
         self.__progress_bar_backend = value
@@ -392,10 +378,6 @@ AuroraX platform …</p></div>
         &#34;&#34;&#34;
         return self.__srs_obj
 
-    @srs_obj.setter
-    def srs_obj(self, new_obj: pyucalgarysrs.PyUCalgarySRS):
-        self.__srs_obj = new_obj
-
     # -----------------------------
     # special methods
     # -----------------------------
@@ -404,14 +386,14 @@ AuroraX platform …</p></div>
 
     def __repr__(self) -&gt; str:
         return (&#34;PyAuroraX(download_output_root_path=&#39;%s&#39;, read_tar_temp_path=&#39;%s&#39;, api_base_url=&#39;%s&#39;, &#34; +
-                &#34;api_headers=%s, api_timeout=%s, api_key=&#39;%s&#39;, progress_bar_backend=&#39;%s&#39;, srs_obj=PyUCalgarySRS(...))&#34;) % (
+                &#34;api_headers=%s, api_timeout=%s, api_key=%s, progress_bar_backend=&#39;%s&#39;, srs_obj=PyUCalgarySRS(...))&#34;) % (
                     self.__download_output_root_path,
                     self.__read_tar_temp_path,
                     self.api_base_url,
                     self.api_headers,
                     self.api_timeout,
+                    &#34;None&#34; if self.api_key is None else &#34;&#39;%s&#39;&#34; % (self.api_key),
                     self.progress_bar_backend,
-                    self.api_key,
                 )
 
     def pretty_print(self):
@@ -449,7 +431,7 @@ AuroraX platform …</p></div>
         try:
             os.makedirs(self.download_output_root_path, exist_ok=True)
             os.makedirs(self.read_tar_temp_path, exist_ok=True)
-        except IOError as e:  # pragma: nocover
+        except IOError as e:  # pragma: nocover-ok
             raise AuroraXInitializationError(&#34;Error during output path creation: %s&#34; % str(e)) from e
 
     # -----------------------------
@@ -484,7 +466,7 @@ AuroraX platform …</p></div>
                         shutil.rmtree(item)
                     elif (os.path.isfile(item) is True):
                         os.remove(item)
-        except Exception as e:  # pragma: nocover
+        except Exception as e:  # pragma: nocover-ok
             raise AuroraXPurgeError(&#34;Error while purging download output root path: %s&#34; % (str(e))) from e
 
     def purge_read_tar_temp_path(self):
@@ -508,13 +490,13 @@ AuroraX platform …</p></div>
             for item in os.listdir(self.read_tar_temp_path):
                 item = Path(self.read_tar_temp_path) / item
                 if (os.path.isdir(item) is True and self.download_output_root_path not in str(item)):
-                    shutil.rmtree(item)
+                    shutil.rmtree(item)  # pragma: nocover
                 elif (os.path.isfile(item) is True):
                     os.remove(item)
 
             # purge pyucalgarysrs path
             self.__srs_obj.purge_read_tar_temp_path()
-        except Exception as e:  # pragma: nocover
+        except Exception as e:  # pragma: nocover-ok
             raise AuroraXPurgeError(&#34;Error while purging read tar temp path: %s&#34; % (str(e))) from e
 
     def show_data_usage(self, order: Literal[&#34;name&#34;, &#34;size&#34;] = &#34;size&#34;, return_dict: bool = False) -&gt; Any:
@@ -653,10 +635,6 @@ team to test and build new functions using the private staging API.</dd>
 <dt><strong><code>api_timeout</code></strong> :&ensp;<code>int</code></dt>
 <dd>The timeout used when communicating with the Aurorax API. This value is represented in
 seconds, and by default is <code>10 seconds</code>.</dd>
-<dt><strong><code>api_headers</code></strong> :&ensp;<code>Dict</code></dt>
-<dd>HTTP headers used when communicating with the AuroraX API. The default for this value
-consists of several standard headers. Any changes to this parameter are in addition to
-the default standard headers.</dd>
 <dt><strong><code>api_key</code></strong> :&ensp;<code>str</code></dt>
 <dd>API key to use when interacting with the AuroraX API. The default value is None. Please note
 that an API key is only required for write operations to the AuroraX search API, such as
@@ -924,7 +902,7 @@ def tools(self):
                     shutil.rmtree(item)
                 elif (os.path.isfile(item) is True):
                     os.remove(item)
-    except Exception as e:  # pragma: nocover
+    except Exception as e:  # pragma: nocover-ok
         raise AuroraXPurgeError(&#34;Error while purging download output root path: %s&#34; % (str(e))) from e</code></pre>
 </details>
 <div class="desc"><p>Delete all files in the <code>download_output_root_path</code> directory. Since the
@@ -974,13 +952,13 @@ same, but it can be different if the user specifically changes it. </p>
         for item in os.listdir(self.read_tar_temp_path):
             item = Path(self.read_tar_temp_path) / item
             if (os.path.isdir(item) is True and self.download_output_root_path not in str(item)):
-                shutil.rmtree(item)
+                shutil.rmtree(item)  # pragma: nocover
             elif (os.path.isfile(item) is True):
                 os.remove(item)
 
         # purge pyucalgarysrs path
         self.__srs_obj.purge_read_tar_temp_path()
-    except Exception as e:  # pragma: nocover
+    except Exception as e:  # pragma: nocover-ok
         raise AuroraXPurgeError(&#34;Error while purging read tar temp path: %s&#34; % (str(e))) from e</code></pre>
 </details>
 <div class="desc"><p>Delete all files in the <code>read_tar_temp_path</code> directory. Since the library

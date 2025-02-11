@@ -162,13 +162,6 @@ here instead of digging in deeper to the submodules.</p>
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         &#34;&#34;&#34;
-        # show warnings
-        if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
-            # logical operator supplied, but MetadataFilter supplied too
-            show_warning(&#34;Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator &#34; +
-                         &#34;parameter is redundant. Only the MetadataFilter object is needed. The &#34; +
-                         &#34;metadata_filters_logical_operator parameter will be ignored&#34;)
-
         # return
         return func_search(
             self.__aurorax_obj,
@@ -270,12 +263,149 @@ here instead of digging in deeper to the submodules.</p>
         Returns:
             The request URL
         &#34;&#34;&#34;
-        return func_get_request_url(self.__aurorax_obj, request_id)</code></pre>
+        return func_get_request_url(self.__aurorax_obj, request_id)
+
+    def create_response_format_template(self, default: bool = False) -&gt; Dict:
+        &#34;&#34;&#34;
+        Generate a template dictionary that can be used as the response_format parameter
+        in an ephemeris search.
+
+        Args:
+            default (bool): 
+                The default value to set for every parameter that can be returned, defaults
+                to False.
+
+        Returns:
+            A template dictionary for the response format
+        &#34;&#34;&#34;
+        return {
+            &#34;data_source&#34;: {
+                &#34;identifier&#34;: default,
+                &#34;program&#34;: default,
+                &#34;platform&#34;: default,
+                &#34;instrument_type&#34;: default,
+                &#34;source_type&#34;: default,
+                &#34;display_name&#34;: default,
+                &#34;ephemeris_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;data_product_metadata_schema&#34;: {
+                    &#34;field_name&#34;: default,
+                    &#34;description&#34;: default,
+                    &#34;data_type&#34;: default,
+                    &#34;allowed_values&#34;: default,
+                    &#34;additional_description&#34;: default
+                },
+                &#34;owner&#34;: default,
+                &#34;maintainers&#34;: default,
+                &#34;metadata&#34;: default
+            },
+            &#34;epoch&#34;: default,
+            &#34;location_geo&#34;: {
+                &#34;lat&#34;: default,
+                &#34;lon&#34;: default
+            },
+            &#34;location_gsm&#34;: {
+                &#34;lat&#34;: default,
+                &#34;lon&#34;: default
+            },
+            &#34;nbtrace&#34;: {
+                &#34;lat&#34;: default,
+                &#34;lon&#34;: default
+            },
+            &#34;sbtrace&#34;: {
+                &#34;lat&#34;: default,
+                &#34;lon&#34;: default
+            },
+            &#34;metadata&#34;: default
+        }</code></pre>
 </details>
 <div class="desc"><p>The EphemerisManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.search.ephemeris.EphemerisManager.create_response_format_template"><code class="name flex">
+<span>def <span class="ident">create_response_format_template</span></span>(<span>self, default: bool = False) ‑> Dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_response_format_template(self, default: bool = False) -&gt; Dict:
+    &#34;&#34;&#34;
+    Generate a template dictionary that can be used as the response_format parameter
+    in an ephemeris search.
+
+    Args:
+        default (bool): 
+            The default value to set for every parameter that can be returned, defaults
+            to False.
+
+    Returns:
+        A template dictionary for the response format
+    &#34;&#34;&#34;
+    return {
+        &#34;data_source&#34;: {
+            &#34;identifier&#34;: default,
+            &#34;program&#34;: default,
+            &#34;platform&#34;: default,
+            &#34;instrument_type&#34;: default,
+            &#34;source_type&#34;: default,
+            &#34;display_name&#34;: default,
+            &#34;ephemeris_metadata_schema&#34;: {
+                &#34;field_name&#34;: default,
+                &#34;description&#34;: default,
+                &#34;data_type&#34;: default,
+                &#34;allowed_values&#34;: default,
+                &#34;additional_description&#34;: default
+            },
+            &#34;data_product_metadata_schema&#34;: {
+                &#34;field_name&#34;: default,
+                &#34;description&#34;: default,
+                &#34;data_type&#34;: default,
+                &#34;allowed_values&#34;: default,
+                &#34;additional_description&#34;: default
+            },
+            &#34;owner&#34;: default,
+            &#34;maintainers&#34;: default,
+            &#34;metadata&#34;: default
+        },
+        &#34;epoch&#34;: default,
+        &#34;location_geo&#34;: {
+            &#34;lat&#34;: default,
+            &#34;lon&#34;: default
+        },
+        &#34;location_gsm&#34;: {
+            &#34;lat&#34;: default,
+            &#34;lon&#34;: default
+        },
+        &#34;nbtrace&#34;: {
+            &#34;lat&#34;: default,
+            &#34;lon&#34;: default
+        },
+        &#34;sbtrace&#34;: {
+            &#34;lat&#34;: default,
+            &#34;lon&#34;: default
+        },
+        &#34;metadata&#34;: default
+    }</code></pre>
+</details>
+<div class="desc"><p>Generate a template dictionary that can be used as the response_format parameter
+in an ephemeris search.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>default</code></strong> :&ensp;<code>bool</code></dt>
+<dd>The default value to set for every parameter that can be returned, defaults
+to False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A template dictionary for the response format</p></div>
+</dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.delete"><code class="name flex">
 <span>def <span class="ident">delete</span></span>(<span>self,<br>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="../sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>,<br>start: datetime.datetime,<br>end: datetime.datetime) ‑> int</span>
 </code></dt>
@@ -484,13 +614,6 @@ searches.</p>
     Raises:
         pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
     &#34;&#34;&#34;
-    # show warnings
-    if (isinstance(metadata_filters, MetadataFilter) and metadata_filters_logical_operator is not None):
-        # logical operator supplied, but MetadataFilter supplied too
-        show_warning(&#34;Supplying a MetadataFilter object in addition to the metadata_filters_logical_operator &#34; +
-                     &#34;parameter is redundant. Only the MetadataFilter object is needed. The &#34; +
-                     &#34;metadata_filters_logical_operator parameter will be ignored&#34;)
-
     # return
     return func_search(
         self.__aurorax_obj,
@@ -677,6 +800,7 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.search.ephemeris.EphemerisManager" href="#pyaurorax.search.ephemeris.EphemerisManager">EphemerisManager</a></code></h4>
 <ul class="">
+<li><code><a title="pyaurorax.search.ephemeris.EphemerisManager.create_response_format_template" href="#pyaurorax.search.ephemeris.EphemerisManager.create_response_format_template">create_response_format_template</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.EphemerisManager.delete" href="#pyaurorax.search.ephemeris.EphemerisManager.delete">delete</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.EphemerisManager.describe" href="#pyaurorax.search.ephemeris.EphemerisManager.describe">describe</a></code></li>
 <li><code><a title="pyaurorax.search.ephemeris.EphemerisManager.get_request_url" href="#pyaurorax.search.ephemeris.EphemerisManager.get_request_url">get_request_url</a></code></li>
