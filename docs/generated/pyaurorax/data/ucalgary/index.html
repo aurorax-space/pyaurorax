@@ -372,9 +372,9 @@ class Data:
                     data_str = &#34;[1 HSRData object]&#34;
                 else:
                     data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
-            elif (len(self.data) == 1):  # pragma: nocover
+            elif (len(self.data) == 1):  # pragma: nocover-ok
                 data_str = &#34;[1 item]&#34;
-            else:  # pragma: nocover
+            else:  # pragma: nocover-ok
                 data_str = &#34;[%d items]&#34; % (len(self.data))
         else:
             data_str = self.data.__repr__()
@@ -494,9 +494,9 @@ until calibrated data is inserted manually.</dd>
                 data_str = &#34;[1 HSRData object]&#34;
             else:
                 data_str = &#34;[%d HSRData objects]&#34; % (len(self.data))
-        elif (len(self.data) == 1):  # pragma: nocover
+        elif (len(self.data) == 1):  # pragma: nocover-ok
             data_str = &#34;[1 item]&#34;
-        else:  # pragma: nocover
+        else:  # pragma: nocover-ok
             data_str = &#34;[%d items]&#34; % (len(self.data))
     else:
         data_str = self.data.__repr__()

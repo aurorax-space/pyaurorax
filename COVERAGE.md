@@ -90,11 +90,11 @@ pyaurorax/tools/montage/_create.py                                 9      0   10
 pyaurorax/tools/mosaic/__init__.py                                33      9    73%   122-123, 125-127, 134-144
 pyaurorax/tools/mosaic/_create.py                                197     64    68%   53, 64, 66, 80, 83, 93-102, 124, 147, 154-165, 178-179, 185, 208, 228, 249, 259, 272-275, 291-332, 358, 362-368, 376
 pyaurorax/tools/mosaic/_prep_images.py                           142     49    65%   60-77, 96-104, 144, 147-148, 152-153, 160, 168-176, 187-191, 196-202, 230, 236-253, 257
-pyaurorax/tools/mosaic/_prep_skymaps.py                          119     44    63%   32-74, 130, 159-165, 179-181, 214-233
+pyaurorax/tools/mosaic/_prep_skymaps.py                          119     49    59%   32-74, 130, 159-165, 179-181, 207-233
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5769    601    90%
+TOTAL                                                           5769    606    89%
 
 13 empty files skipped.
 ```

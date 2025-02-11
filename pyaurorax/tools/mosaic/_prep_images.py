@@ -241,11 +241,11 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
                         if wavelength_bg_range is not None:
                             int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
 
-                    rayleighs = np.trapz(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
+                    rayleighs = np.trapezoid(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
 
                     if wavelength_bg_range is not None:
                         if int_bg_w is not None:
-                            rayleighs -= np.trapz(spectra[int_bg_w[0], :], x=wavelength[int_bg_w[0]], axis=0)
+                            rayleighs -= np.trapezoid(spectra[int_bg_w[0], :], x=wavelength[int_bg_w[0]], axis=0)
 
                     rayleighs = np.nan_to_num(rayleighs, nan=0.0)
                     rayleighs[np.where(rayleighs < 0.0)] = 0.0
