@@ -88,11 +88,11 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
             # Integrate over wavelengths to get Rayleighs
             iter_spectra = images[:, :, i]
 
-            rayleighs = np.trapezoid(iter_spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
+            rayleighs = np.trapz(iter_spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
 
             if wavelength_bg_range is not None:
                 if int_bg_w is not None:  # type: ignore
-                    rayleighs -= np.trapezoid(
+                    rayleighs -= np.trapz(
                         iter_spectra[int_bg_w[0], :],  # type: ignore
                         x=wavelength[int_bg_w[0]],  # type: ignore
                         axis=0)
