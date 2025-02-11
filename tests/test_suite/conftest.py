@@ -43,6 +43,7 @@ tools_data_themis_keogram_data = None
 tools_data_trex_rgb_keogram_data = None
 tools_data_themis_grid_data = None
 tools_data_trex_rgb_grid_data = None
+tools_data_themis_mosaic_data = None
 
 
 def pytest_addoption(parser):
@@ -329,6 +330,11 @@ def trex_rgb_grid_data():
     return tools_data_trex_rgb_grid_data
 
 
+@pytest.fixture(scope="session")
+def themis_mosaic_data():
+    return tools_data_themis_mosaic_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -353,6 +359,7 @@ def pytest_sessionstart(session):
     global tools_data_trex_rgb_keogram_data
     global tools_data_themis_grid_data
     global tools_data_trex_rgb_grid_data
+    global tools_data_themis_mosaic_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -663,6 +670,40 @@ def pytest_sessionstart(session):
             setup_task_dict["trex_rgb_grid_data"] = data
             print("[SETUP]   Finished setting up TREx RGB grid data")
 
+        def init_task_prep_themis_mosaic():
+            # download a minute of THEMIS data from several sites
+            dataset_name = "THEMIS_ASI_RAW"
+            dt = datetime.datetime(2023, 2, 24, 6, 40)
+            site_uid_list = ["atha", "fsmi"]
+            data_list = []
+            for site_uid in site_uid_list:
+                r = aurorax.data.ucalgary.download(dataset_name, dt, dt, site_uid=site_uid, progress_bar_disable=True)
+                data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+                data_list.append(data)
+
+            # download and read skymaps
+            skymaps = []
+            for site_uid in site_uid_list:
+                download_obj = aurorax.data.ucalgary.download_best_skymap("THEMIS_ASI_SKYMAP_IDLSAV", site_uid, dt)
+                skymap = aurorax.data.ucalgary.read(download_obj.dataset, download_obj.filenames[-1])
+                skymaps.append(skymap.data[0])
+
+            # prep skymaps
+            prepped_skymaps = aurorax.tools.mosaic.prep_skymaps(skymaps, 110, progress_bar_disable=True)
+
+            # prepare the image data
+            prepped_images = aurorax.tools.mosaic.prep_images(data_list)
+
+            # set variable for later usage
+            setup_task_dict["themis_mosaic_data"] = {
+                "raw_data": data_list,
+                "skymaps": skymaps,
+                "prepped_skymaps": prepped_skymaps,
+                "prepped_images": prepped_images,
+                "dt": dt,
+            }
+            print("[SETUP]   Finished setting up THEMIS mosaic data")
+
         # start and wait for threads
         tasks = [
             init_task_download_read_themis_single_minute,
@@ -676,6 +717,7 @@ def pytest_sessionstart(session):
             init_task_prep_trex_rgb_keogram,
             init_task_prep_themis_grid,
             init_task_prep_trex_rgb_grid,
+            init_task_prep_themis_mosaic,
         ]
         with ThreadPoolExecutor(max_workers=MAX_INIT_WORKERS) as executor:
             futures = [executor.submit(task) for task in tasks]
@@ -694,6 +736,7 @@ def pytest_sessionstart(session):
         tools_data_trex_rgb_keogram_data = setup_task_dict["trex_rgb_keogram_data"]
         tools_data_themis_grid_data = setup_task_dict["themis_grid_data"]
         tools_data_trex_rgb_grid_data = setup_task_dict["trex_rgb_grid_data"]
+        tools_data_themis_mosaic_data = setup_task_dict["themis_mosaic_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 
