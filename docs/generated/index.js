@@ -1846,7 +1846,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.ephemeris.EphemerisManager.create_response_format_template",
 "url":22,
-"doc":"Generate a template dictionary that can be used as the response_format parameter in an ephemeris search. Args: default (bool): The default value to set for every parameter that can be returned, defaults to False. Returns: A template dictionary for the response format",
+"doc":"Generate a template dictionary that can be used as the response_format parameter in an ephemeris search. Args: default (bool): The default value to set for every parameter that can be returned, defaults to True. Returns: A template dictionary for the response format",
 "func":1
 },
 {
@@ -1982,7 +1982,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.data_products.DataProductsManager.create_response_format_template",
 "url":26,
-"doc":"Generate a template dictionary that can be used as the response_format parameter in a data products search. Args: default (bool): The default value to set for every parameter that can be returned, defaults to False. Returns: A template dictionary for the response format",
+"doc":"Generate a template dictionary that can be used as the response_format parameter in a data products search. Args: default (bool): The default value to set for every parameter that can be returned, defaults to True. Returns: A template dictionary for the response format",
 "func":1
 },
 {
@@ -2142,7 +2142,7 @@ INDEX=[
 {
 "ref":"pyaurorax.search.conjunctions.ConjunctionsManager.create_response_format_template",
 "url":30,
-"doc":"Generate a template dictionary that can be used as the response_format parameter in a conjunction search. Args: default (bool): The default value to set for every parameter that can be returned, defaults to False. Returns: A template dictionary for the response format",
+"doc":"Generate a template dictionary that can be used as the response_format parameter in a conjunction search. Args: default (bool): The default value to set for every parameter that can be returned, defaults to True. Returns: A template dictionary for the response format",
 "func":1
 },
 {

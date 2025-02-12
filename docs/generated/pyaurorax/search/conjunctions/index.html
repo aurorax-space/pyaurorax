@@ -308,7 +308,7 @@ here instead of digging in deeper to the submodules.</p>
         &#34;&#34;&#34;
         return func_create_advanced_distance_combos(distance, ground, space, events, custom)
 
-    def create_response_format_template(self, default: bool = False) -&gt; Dict:
+    def create_response_format_template(self, default: bool = True) -&gt; Dict:
         &#34;&#34;&#34;
         Generate a template dictionary that can be used as the response_format parameter
         in a conjunction search.
@@ -316,7 +316,7 @@ here instead of digging in deeper to the submodules.</p>
         Args:
             default (bool): 
                 The default value to set for every parameter that can be returned, defaults
-                to False.
+                to True.
 
         Returns:
             A template dictionary for the response format
@@ -529,14 +529,14 @@ def swarmaurora(self):
 <p>The advanced distances combinations</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.create_response_format_template"><code class="name flex">
-<span>def <span class="ident">create_response_format_template</span></span>(<span>self, default: bool = False) ‑> Dict</span>
+<span>def <span class="ident">create_response_format_template</span></span>(<span>self, default: bool = True) ‑> Dict</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_response_format_template(self, default: bool = False) -&gt; Dict:
+<pre><code class="python">def create_response_format_template(self, default: bool = True) -&gt; Dict:
     &#34;&#34;&#34;
     Generate a template dictionary that can be used as the response_format parameter
     in a conjunction search.
@@ -544,7 +544,7 @@ def swarmaurora(self):
     Args:
         default (bool): 
             The default value to set for every parameter that can be returned, defaults
-            to False.
+            to True.
 
     Returns:
         A template dictionary for the response format
@@ -683,7 +683,7 @@ in a conjunction search.</p>
 <dl>
 <dt><strong><code>default</code></strong> :&ensp;<code>bool</code></dt>
 <dd>The default value to set for every parameter that can be returned, defaults
-to False.</dd>
+to True.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A template dictionary for the response format</p></div>
