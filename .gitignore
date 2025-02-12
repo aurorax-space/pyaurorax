@@ -36,3 +36,7 @@ MANIFEST
 .pytest_cache
 .coverage
 .coverage.*
+.coverage_main
+.coverage_search_rw
+.coverage_main.*
+.coverage_search_rw.*

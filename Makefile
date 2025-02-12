@@ -49,18 +49,20 @@ test-bandit:
 	@printf "\n\n"
 
 test-pytest:
-	pytest -n auto --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "not search_rw"
+	COVERAGE_FILE=.coverage_main pytest -n auto --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "not search_rw"
 
 test-pytest-search-rw:
-	pytest -n 4 --cov=pyaurorax --cov-report= --cov-append --do-search-tasks -m "search_rw"
+	COVERAGE_FILE=.coverage_search_rw pytest -n 4 --cov=pyaurorax --cov-report= --cov-append --do-search-tasks -m "search_rw"
 
 test-pytest-notebooks test-notebooks:
 	pytest -n 6 --nbmake examples/notebooks --ignore-glob=examples/notebooks/**/in_development/*.ipynb
 
 test-pytest-clear:
-	rm .coverage
+	rm .coverage_main
+	rm .coverage_search_rw
 
 test-coverage coverage:
+	coverage combine --keep .coverage_main .coverage_search_rw
 	coverage report
 	@tools/update_coverage_file.py
 
