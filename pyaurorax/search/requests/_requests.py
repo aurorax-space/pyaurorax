@@ -58,19 +58,48 @@ def get_data(aurorax_obj, data_url, response_format, skip_serializing):
     # set data var
     data_result = res.data["result"]
 
-    # serialize epochs and locations into datetimes and Locations
+    # serialize certain values into objects
+    #
+    # NOTE: this is primarily used when searches were done where the response_format
+    # parameter was specified. So we like to serialize a few fields
     if (skip_serializing is False):
         for i in range(0, len(data_result)):
-            if ("epoch" in data_result[i]):
-                data_result[i]["epoch"] = datetime.datetime.strptime(data_result[i]["epoch"], "%Y-%m-%dT%H:%M:%S")
-            if ("location_geo" in data_result[i]):
-                data_result[i]["location_geo"] = Location(lat=data_result[i]["location_geo"]["lat"], lon=data_result[i]["location_geo"]["lon"])
-            if ("location_gsm" in data_result[i]):
-                data_result[i]["location_gsm"] = Location(lat=data_result[i]["location_gsm"]["lat"], lon=data_result[i]["location_gsm"]["lon"])
-            if ("nbtrace" in data_result[i]):
-                data_result[i]["nbtrace"] = Location(lat=data_result[i]["nbtrace"]["lat"], lon=data_result[i]["nbtrace"]["lon"])
-            if ("sbtrace" in data_result[i]):
-                data_result[i]["sbtrace"] = Location(lat=data_result[i]["sbtrace"]["lat"], lon=data_result[i]["sbtrace"]["lon"])
+            # ephemeris serializing
+            if ("ephemeris" in data_url):
+                if ("epoch" in data_result[i]):
+                    data_result[i]["epoch"] = datetime.datetime.strptime(data_result[i]["epoch"], "%Y-%m-%dT%H:%M:%S")
+                if ("location_geo" in data_result[i]):
+                    data_result[i]["location_geo"] = Location(lat=data_result[i]["location_geo"]["lat"], lon=data_result[i]["location_geo"]["lon"])
+                if ("location_gsm" in data_result[i]):
+                    data_result[i]["location_gsm"] = Location(lat=data_result[i]["location_gsm"]["lat"], lon=data_result[i]["location_gsm"]["lon"])
+                if ("nbtrace" in data_result[i]):
+                    data_result[i]["nbtrace"] = Location(lat=data_result[i]["nbtrace"]["lat"], lon=data_result[i]["nbtrace"]["lon"])
+                if ("sbtrace" in data_result[i]):
+                    data_result[i]["sbtrace"] = Location(lat=data_result[i]["sbtrace"]["lat"], lon=data_result[i]["sbtrace"]["lon"])
+
+            # conjunction serializing
+            if ("conjunctions" in data_url):
+                if ("farthest_epoch" in data_result[i]):
+                    data_result[i]["farthest_epoch"] = datetime.datetime.strptime(data_result[i]["farthest_epoch"], "%Y-%m-%dT%H:%M:%S")
+                if ("closest_epoch" in data_result[i]):
+                    data_result[i]["closest_epoch"] = datetime.datetime.strptime(data_result[i]["closest_epoch"], "%Y-%m-%dT%H:%M:%S")
+                if ("start" in data_result[i]):
+                    data_result[i]["start"] = datetime.datetime.strptime(data_result[i]["start"], "%Y-%m-%dT%H:%M:%S")
+                if ("end" in data_result[i]):
+                    data_result[i]["end"] = datetime.datetime.strptime(data_result[i]["end"], "%Y-%m-%dT%H:%M:%S")
+                if ("events" in data_result[i]):
+                    for j in range(0, len(data_result[i]["events"])):
+                        if ("start" in data_result[i]["events"][j]):
+                            data_result[i]["events"][j]["start"] = datetime.datetime.strptime(data_result[i]["events"][j]["start"],
+                                                                                              "%Y-%m-%dT%H:%M:%S")
+                        if ("end" in data_result[i]["events"][j]):
+                            data_result[i]["events"][j]["end"] = datetime.datetime.strptime(data_result[i]["events"][j]["end"], "%Y-%m-%dT%H:%M:%S")
+
+            if ("data_products" in data_url):
+                if ("start" in data_result[i]):
+                    data_result[i]["start"] = datetime.datetime.strptime(data_result[i]["start"], "%Y-%m-%dT%H:%M:%S")
+                if ("end" in data_result[i]):
+                    data_result[i]["end"] = datetime.datetime.strptime(data_result[i]["end"], "%Y-%m-%dT%H:%M:%S")
 
     # return
     return data_result

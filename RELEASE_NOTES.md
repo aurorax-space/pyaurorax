@@ -1,3 +1,10 @@
+Version 1.15.0
+-------------------
+- updates for serialization of data when `response_format` parameter is used for conjunction/ephemeris/data product searching
+- default changed to `True` for the `create_response_format_template()` helper functions
+- example notebooks for conjunction/ephemeris/data product updated to include example of using the response format parameter
+
+
 Version 1.14.0
 -------------------
 - added support for NumPy 2.0+

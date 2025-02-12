@@ -49,7 +49,7 @@ pyaurorax/search/metadata/__init__.py                             14      0   10
 pyaurorax/search/metadata/_metadata.py                            16      0   100%
 pyaurorax/search/metadata_filters.py                              60      0   100%
 pyaurorax/search/requests/__init__.py                             26      0   100%
-pyaurorax/search/requests/_requests.py                            80      0   100%
+pyaurorax/search/requests/_requests.py                           101      0   100%
 pyaurorax/search/sources/__init__.py                              59      0   100%
 pyaurorax/search/sources/_sources.py                             110      0   100%
 pyaurorax/search/sources/classes/data_source.py                   66      0   100%
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119     49    5
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5769    606    89%
+TOTAL                                                           5790    606    90%
 
 13 empty files skipped.
 ```

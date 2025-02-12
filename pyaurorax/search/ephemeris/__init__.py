@@ -215,7 +215,7 @@ class EphemerisManager:
         """
         return func_get_request_url(self.__aurorax_obj, request_id)
 
-    def create_response_format_template(self, default: bool = False) -> Dict:
+    def create_response_format_template(self, default: bool = True) -> Dict:
         """
         Generate a template dictionary that can be used as the response_format parameter
         in an ephemeris search.
@@ -223,7 +223,7 @@ class EphemerisManager:
         Args:
             default (bool): 
                 The default value to set for every parameter that can be returned, defaults
-                to False.
+                to True.
 
         Returns:
             A template dictionary for the response format
