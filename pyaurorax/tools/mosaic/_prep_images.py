@@ -47,6 +47,36 @@ def __determine_cadence(timestamp_arr: List[datetime.datetime]):
     # identify the most common diff second
     most_frequent_diff_second = max(diff_seconds_list, key=diff_seconds_list.count)
 
+    # the above search only works to determine the cadence in seconds as an integer,
+    # if burst data is passed in, this will result in a cadence of zero. In this case
+    # we must get an estimate of the cadence in microseconds. We will essentially
+    # repeat the above process without rounding microseconds to zero.
+    if most_frequent_diff_second == 0:
+
+        # go through timestamps and extracting the diffs between each
+        diff_milliseconds_list = []
+        curr_ts = None
+        checked_timestamps = 0
+        for i in range(0, len(timestamp_arr)):
+            if (checked_timestamps > 10):
+                # bail out of we've checked 10 timestamps, that'll be enough
+                break
+            if (curr_ts is None):
+                # first iteration, initialize curr_ts variable
+                curr_ts = timestamp_arr[i]
+            else:
+                # calculate difference in milliseconds
+                diff_dt = timestamp_arr[i] - curr_ts
+                diff_milliseconds_list.append(round(diff_dt.microseconds * 10**(-4)))
+                curr_ts = timestamp_arr[i]
+            checked_timestamps += 1
+
+        # identify the most common diff second
+        most_frequent_diff_microsecond = max(diff_milliseconds_list, key=diff_milliseconds_list.count)
+
+        # obtain seconds in decimal form
+        most_frequent_diff_second = most_frequent_diff_microsecond * 10**(-2)
+
     # return
     return most_frequent_diff_second
 
@@ -54,7 +84,7 @@ def __determine_cadence(timestamp_arr: List[datetime.datetime]):
 def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_band_bg):
     # set image dimensions and number of sites
     if (data_attribute == "data"):
-        # check that the timestamp and calibrated data match in size
+        # check that the timestamp and data match in size
         for i in range(0, len(image_list)):
             if (image_list[i].data.shape[-1] != len(image_list[i].timestamp)):
                 raise ValueError(("Number of frames does not match number of timestamp records. There are %d timestamp " +
@@ -123,13 +153,32 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
         if (this_end_dt > end_dt):
             end_dt = this_end_dt
     cadence = __determine_cadence(image_list[0].timestamp)
-    curr_dt = start_dt.replace(microsecond=0)
-    expected_num_frames = 0
-    expected_timestamps = []
-    while (curr_dt <= end_dt):
-        expected_timestamps.append(curr_dt)
-        expected_num_frames += 1
-        curr_dt += datetime.timedelta(seconds=cadence)
+
+    # cadence will be a float if and only if __determine_cadence() decides that burst
+    # data has been passed in. If that's the case, we need to be careful with
+    # milliseconds
+    if isinstance(cadence, float):
+
+        is_burst = True
+        # round to 2 decimal places (microseconds)
+        curr_dt = start_dt.replace(microsecond=(round(start_dt.microsecond * 10**(-4)) * 10**4))
+        expected_num_frames = 0
+        expected_timestamps = []
+        while (curr_dt <= end_dt):
+            expected_timestamps.append(curr_dt)
+            expected_num_frames += 1
+            curr_dt += datetime.timedelta(seconds=cadence)
+
+    # Otherwise, we just handle the timestamps/cadence in terms of integer seconds
+    else:
+        is_burst = False
+        curr_dt = start_dt.replace(microsecond=0)
+        expected_num_frames = 0
+        expected_timestamps = []
+        while (curr_dt <= end_dt):
+            expected_timestamps.append(curr_dt)
+            expected_num_frames += 1
+            curr_dt += datetime.timedelta(seconds=cadence)
 
     # for each site
     data_type_list = []
@@ -205,24 +254,34 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
         # initialize this site's data destination variables
         images_dict[site_uid] = np.squeeze(np.full((height, width, n_channels, expected_num_frames), np.nan))
 
-        # use binary search to find the index in the data corresponding to each
-        # expected timestamp (we assume it is already sorted)
+        # find the index in the data corresponding to each expected timestamp 
         for i in range(0, len(expected_timestamps)):
-            searching_dt = expected_timestamps[i]
-            found_idx = None
-            low = 0
-            high = len(site_image_data.timestamp) - 1
-            while (low <= high):
-                mid = low + (high - low) // 2
-                this_ts = site_image_data.timestamp[mid].replace(microsecond=0)
 
-                if (this_ts == searching_dt):
-                    found_idx = mid
-                    break
-                elif (this_ts > searching_dt):
-                    high = mid - 1
-                else:
-                    low = mid + 1
+            # If we are working with burst data, we simply grab the *closest* frame
+            # from each image for each timestamp, as cadence is not consistent enough
+            # to restrict to exact matches
+            if is_burst:
+                searching_dt = expected_timestamps[i]
+                found_idx = min(range(len(site_image_data.timestamp)),key=lambda j: abs(site_image_data.timestamp[j] - searching_dt))
+
+            # If we are not working with burst data, use a binary search (we assume it is already sorted) 
+            # to find the location in image_data that exactly matches each expected timestamp
+            else:
+                searching_dt = expected_timestamps[i]
+                found_idx = None
+                low = 0
+                high = len(site_image_data.timestamp) - 1
+                while (low <= high):
+                    mid = low + (high - low) // 2
+                    this_ts = site_image_data.timestamp[mid].replace(microsecond=0)
+
+                    if (this_ts == searching_dt):
+                        found_idx = mid
+                        break
+                    elif (this_ts > searching_dt):
+                        high = mid - 1
+                    else:
+                        low = mid + 1
 
             if (found_idx is None):
                 # didn't find the timestamp, just move on because there will be no data
