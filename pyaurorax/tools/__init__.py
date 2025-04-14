@@ -265,7 +265,7 @@ class ToolsManager:
     ) -> np.ndarray:
         """
         Scale all values of an array that lie in the range min<=x<=max in to 
-        the range 0<=x<=high.
+        the range 0<=x<=top.
         
         Args:
             data (numpy.ndarray): 

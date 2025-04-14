@@ -22,7 +22,7 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
     if spectra:
 
         instrument_type = 'spectrograph'
-        middle_column_idx = None
+        middle_column_idx = 0
 
         if axis != 0:
             raise ValueError(f"Cannot create keogram for spectrograph data along axis other than 0, received axis: {axis}.")

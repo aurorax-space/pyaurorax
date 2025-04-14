@@ -124,9 +124,21 @@ class Keogram:
         """
         # check for slice idx
         if (self.__slice_idx is None):
+
             raise ValueError("Unable to set the geographic latitudes since the private slice_idx is None. If this keogram " +
                              "object was created as part of the custom_keogram routines or is a spectrogaph keogram, " +
                              "this is expected and performing this action is not supported at this time.")
+
+        # Check the dimensions of the skymap lat/lon arrays
+        # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+        # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+        # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+        # the same as it would be for ASI data
+        if len(skymap.full_map_latitude.shape) == 2:
+            # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+            skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+            skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+            skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -221,6 +233,13 @@ class Keogram:
             mag_lats = np.reshape(mag_lats, lats.shape)
             mag_lons = np.reshape(mag_lons, lons.shape)
 
+            # If lat/lon arrays are 1-dimensional then we know it is a spectrograph skymap. In this case, we will simply
+            # reform to add an additional dimension, so that self.__slice_idx (which is always zero for spectrograph data
+            # as there is only one longitudinal bin) can be used to index into the array the same as it would be for ASI data
+            if len(mag_lats.shape) == 1:
+                mag_lats = mag_lats[:, np.newaxis]
+                mag_lons = mag_lons[:, np.newaxis]
+
             # Set the y axis to the desired slice index of the magnetic latitudes
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
         else:
@@ -232,6 +251,13 @@ class Keogram:
                                                                       method_code='G2A')
             mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
             mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
+
+            # If lat/lon arrays are 1-dimensional then we know it is a spectrograph skymap. In this case, we will simply
+            # reform to add an additional dimension, so that self.__slice_idx (which is always zero for spectrograph data
+            # as there is only one longitudinal bin) can be used to index into the array the same as it would be for ASI data
+            if len(mag_lats.shape) == 1:
+                mag_lats = mag_lats[:, np.newaxis]
+                mag_lons = mag_lons[:, np.newaxis]
 
             # Set the y axis to the desired slice index of the magnetic latitudes
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
