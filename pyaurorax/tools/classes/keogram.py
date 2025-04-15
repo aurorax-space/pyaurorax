@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, Literal, Union, Any
 from ...data.ucalgary import Skymap
 from ..._util import show_warning
+from ..mosaic._prep_images import __determine_cadence as _determine_cadence
 
 
 @dataclass
@@ -369,7 +370,14 @@ class Keogram:
         # init figure and plot data
         fig = plt.figure(figsize=figsize)
         ax = fig.add_axes((0, 0, 1, 1))
-        ax.imshow(self.data, origin="lower", cmap=cmap, aspect=aspect)
+
+        # If RGB, we need to normalize for matplotlib
+        if len(self.data.shape) == 3:
+            img_arr = self.data / 255.0
+        else:
+            img_arr = self.data
+
+        ax.imshow(img_arr, origin="lower", cmap=cmap, aspect=aspect)
 
         # set title
         if (title is not None):
@@ -488,3 +496,143 @@ class Keogram:
 
         # return
         return None
+
+    def inject_nans(
+        self,
+        cadence: Optional[Union[int, float]] = None,
+    ) -> None:
+        """
+        Fill keogram columns that do not have data with NaNs.
+
+        Args:
+            cadence (int | float):
+                The cadence, in seconds, of the data for the keogram. Default is to automatically
+                determine the cadence based on the keogram's timestamp data
+        
+        Returns:
+            None. If there is missing data, the Keogram object's data and timestamp attributes
+            will be updated accordingly.
+
+        # Raises:
+            ValueError if called on a keogram with improper / corrupted data format / shape.
+        """
+
+        # First, regardless of whether or not the user supplies a cadence, determine the cadence
+        # based on the keograms timestamp attribute. If the user provided cadence is different
+        # then that calculated, we will raise a Warning
+        apparent_cadence = _determine_cadence(self.timestamp)
+        if not isinstance(apparent_cadence, (float, int)):
+            raise ValueError("Could not determine cadence from object Keogram.timestamp.")
+
+        if (cadence is not None) and (apparent_cadence != cadence):
+            warning_str = ("Based on the keogram's timestamp attribute, the apparent cadence is %.2f s, but %.2f s was "
+                           "passed in as an argument. Ensure that the selected cadence of %.2f s is correct for the dataset being used.")
+            show_warning(warning_str % (apparent_cadence, cadence, cadence), stacklevel=1)
+
+        # If a cadence was not supplied by the user, then use the apparent cadence calculated based on timestamps
+        if cadence is None:
+            cadence = apparent_cadence
+
+        # The first step is checking if there actually is any missing data in this keogram. To do this we
+        # find the total number of frames that there should be, based on the first and last timestamp, and
+        # check if there are indeed that many frames in the keogram
+        start_dt = self.timestamp[0]
+        end_dt = self.timestamp[-1]
+
+        # If cadence is supplied as or calculated to be (burst) a float, it needs to be
+        # handled on the order of milliseconds
+        if isinstance(cadence, float):
+
+            n_desired_frames = round(((end_dt - start_dt).seconds + (end_dt - start_dt).microseconds * 10**(-6)) / cadence + 1)
+            n_keogram_frames = (self.data.shape)[1]
+
+            if cadence < 1.0:
+                is_burst = True
+            else:
+                is_burst = False
+
+        # Otherwise, handle timestamps on the order of seconds
+        else:
+            n_desired_frames = round(((end_dt - start_dt).seconds) / cadence + 1)
+            n_keogram_frames = (self.data.shape)[1]
+            is_burst = False
+
+        # If the keogram is not missing any data, nothing is changed
+        if n_desired_frames == n_keogram_frames:
+            return
+
+        # Otherwise, we need to find which desired timestamps are missing
+
+        # First, create a new keogram array and new timestamp list with the correct size for the desired number of frames
+        if len(self.data.shape) == 2:
+            desired_keogram_shape = (self.data.shape[0], n_desired_frames)
+        elif len(self.data.shape) == 3:
+            desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
+        else:
+            raise ValueError(f"Could not inject NaNs into keogram with data shape {self.data.shape}")
+
+        desired_keogram = np.empty(shape=desired_keogram_shape)
+        desired_timestamp = []
+        desired_timestamp_indices = []
+
+        if is_burst:
+            tol = datetime.timedelta(seconds=(1.0 / 6.0))
+        else:
+            tol = datetime.timedelta(seconds=1.0)
+
+        # Fill the list of desired timestamps based on the cadence
+
+        # For each *desired* timestamp, we use a binary search to determine whether
+        # or not that timestamp already exists in the data, within tolerance
+        target_dt = start_dt
+        for _ in range(n_desired_frames):
+
+            low = 0
+            high = len(self.timestamp) - 1
+            match_idx = None
+
+            # binary search
+            while low <= high:
+                mid = (low + high) // 2
+                mid_ts = self.timestamp[mid]
+
+                if mid_ts < target_dt - tol:
+                    low = mid + 1
+                elif mid_ts > target_dt + tol:
+                    high = mid - 1
+                else:
+                    # Match, within tolerance, has been found
+                    match_idx = mid
+
+                    high = mid - 1
+
+            # If we've found a matching timestamp, insert it into the new timestamp array, and
+            # otherwise insert the desired timestamp
+            if match_idx is not None:
+                desired_timestamp.append(self.timestamp[match_idx])
+            else:
+                desired_timestamp.append(target_dt)
+
+            # Add the index into the original keogram corresponding to this timestamp if it exists
+            # and otherwise add None to the index tracking list, which we will use to insert the
+            # data and NaN columns
+            desired_timestamp_indices.append(match_idx)
+
+            # Update the desired datetime according to the cadence
+            target_dt += datetime.timedelta(seconds=cadence)
+
+        # Now that we have our desired timestamps, we can go through and fill the new keogram array
+        for i in range(len(desired_timestamp)):
+
+            keo_idx = desired_timestamp_indices[i]
+
+            # If this desired timestamp had no data, fill the keogram column with nans
+            if keo_idx is None:
+                desired_keogram[:, i] = np.nan
+            # Otherwise, keep the data intact for this column
+            else:
+                desired_keogram[:, i] = self.data[:, keo_idx]
+
+        # Update the keogram object with the new data and timestamp arrays
+        self.data = desired_keogram
+        self.timestamp = desired_timestamp
