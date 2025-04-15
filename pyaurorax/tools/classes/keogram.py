@@ -505,7 +505,7 @@ class Keogram:
         Fill keogram columns that do not have data with NaNs.
 
         Args:
-            cadence (int | float):
+            cadence (int | float): 
                 The cadence, in seconds, of the data for the keogram. Default is to automatically
                 determine the cadence based on the keogram's timestamp data
         
