@@ -77,7 +77,7 @@ pyaurorax/tools/ccd_contour/_azimuth.py                           47      0   10
 pyaurorax/tools/ccd_contour/_elevation.py                         39      0   100%
 pyaurorax/tools/ccd_contour/_geo.py                              106      0   100%
 pyaurorax/tools/ccd_contour/_mag.py                              112      0   100%
-pyaurorax/tools/classes/keogram.py                               150      2    99%   127, 184
+pyaurorax/tools/classes/keogram.py                               223     62    72%   129, 197, 260-261, 523-638
 pyaurorax/tools/classes/montage.py                                61      0   100%
 pyaurorax/tools/classes/mosaic.py                                313    249    20%   65, 69-82, 93-110, 143, 147-152, 159-169, 205, 210, 223, 228, 350-522, 572-678, 732-838
 pyaurorax/tools/grid_files/__init__.py                             9      0   100%
@@ -89,12 +89,12 @@ pyaurorax/tools/montage/__init__.py                               11      0   10
 pyaurorax/tools/montage/_create.py                                 9      0   100%
 pyaurorax/tools/mosaic/__init__.py                                33      9    73%   122-123, 125-127, 134-144
 pyaurorax/tools/mosaic/_create.py                                197     64    68%   53, 64, 66, 80, 83, 93-102, 124, 147, 154-165, 178-179, 185, 208, 228, 249, 259, 272-275, 291-332, 358, 362-368, 376
-pyaurorax/tools/mosaic/_prep_images.py                           142     49    65%   60-77, 96-104, 144, 147-148, 152-153, 160, 168-176, 187-191, 196-202, 230, 236-253, 257
+pyaurorax/tools/mosaic/_prep_images.py                           170     56    67%   57, 60-78, 96-107, 134, 168-170, 193, 196-197, 201-202, 209, 218, 224, 236-240, 245-251, 264-265, 289, 295-312, 316
 pyaurorax/tools/mosaic/_prep_skymaps.py                          119     49    59%   32-74, 130, 159-165, 179-181, 207-233
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5790    606    90%
+TOTAL                                                           5891    673    89%
 
 13 empty files skipped.
 ```
