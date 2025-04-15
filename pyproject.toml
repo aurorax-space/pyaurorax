@@ -70,7 +70,7 @@ cartopy = [
     {version = "^0.23.0", python = ">=3.9,<3.10"},
     {version = "^0.24.0", python = ">=3.10"}
 ]
-pyucalgarysrs = "1.20.0"
+pyucalgarysrs = "1.20.1"
 
 [tool.poetry.scripts]
 aurorax-cli = "pyaurorax.cli.cli:cli"
