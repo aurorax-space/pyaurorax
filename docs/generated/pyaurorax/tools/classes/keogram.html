@@ -172,9 +172,21 @@ class Keogram:
         &#34;&#34;&#34;
         # check for slice idx
         if (self.__slice_idx is None):
+
             raise ValueError(&#34;Unable to set the geographic latitudes since the private slice_idx is None. If this keogram &#34; +
                              &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                              &#34;this is expected and performing this action is not supported at this time.&#34;)
+
+        # Check the dimensions of the skymap lat/lon arrays
+        # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+        # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+        # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+        # the same as it would be for ASI data
+        if len(skymap.full_map_latitude.shape) == 2:
+            # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+            skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+            skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+            skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -269,6 +281,13 @@ class Keogram:
             mag_lats = np.reshape(mag_lats, lats.shape)
             mag_lons = np.reshape(mag_lons, lons.shape)
 
+            # If lat/lon arrays are 1-dimensional then we know it is a spectrograph skymap. In this case, we will simply
+            # reform to add an additional dimension, so that self.__slice_idx (which is always zero for spectrograph data
+            # as there is only one longitudinal bin) can be used to index into the array the same as it would be for ASI data
+            if len(mag_lats.shape) == 1:
+                mag_lats = mag_lats[:, np.newaxis]
+                mag_lons = mag_lons[:, np.newaxis]
+
             # Set the y axis to the desired slice index of the magnetic latitudes
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
         else:
@@ -280,6 +299,13 @@ class Keogram:
                                                                       method_code=&#39;G2A&#39;)
             mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
             mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
+
+            # If lat/lon arrays are 1-dimensional then we know it is a spectrograph skymap. In this case, we will simply
+            # reform to add an additional dimension, so that self.__slice_idx (which is always zero for spectrograph data
+            # as there is only one longitudinal bin) can be used to index into the array the same as it would be for ASI data
+            if len(mag_lats.shape) == 1:
+                mag_lats = mag_lats[:, np.newaxis]
+                mag_lons = mag_lons[:, np.newaxis]
 
             # Set the y axis to the desired slice index of the magnetic latitudes
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
@@ -391,7 +417,14 @@ class Keogram:
         # init figure and plot data
         fig = plt.figure(figsize=figsize)
         ax = fig.add_axes((0, 0, 1, 1))
-        ax.imshow(self.data, origin=&#34;lower&#34;, cmap=cmap, aspect=aspect)
+
+        # If RGB, we need to normalize for matplotlib
+        if len(self.data.shape) == 3:
+            img_arr = self.data / 255.0
+        else:
+            img_arr = self.data
+
+        ax.imshow(img_arr, origin=&#34;lower&#34;, cmap=cmap, aspect=aspect)
 
         # set title
         if (title is not None):
@@ -509,7 +542,147 @@ class Keogram:
             plt.close(fig)
 
         # return
-        return None</code></pre>
+        return None
+
+    def inject_nans(
+        self,
+        cadence: Optional[Union[int, float]] = None,
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Fill keogram columns that do not have data with NaNs.
+
+        Args:
+            cadence (int | float): 
+                The cadence, in seconds, of the data for the keogram. Default is to automatically
+                determine the cadence based on the keogram&#39;s timestamp data
+        
+        Returns:
+            None. If there is missing data, the Keogram object&#39;s data and timestamp attributes
+            will be updated accordingly.
+
+        # Raises:
+            ValueError if called on a keogram with improper / corrupted data format / shape.
+        &#34;&#34;&#34;
+
+        # First, regardless of whether or not the user supplies a cadence, determine the cadence
+        # based on the keograms timestamp attribute. If the user provided cadence is different
+        # then that calculated, we will raise a Warning
+        apparent_cadence = _determine_cadence(self.timestamp)
+        if not isinstance(apparent_cadence, (float, int)):
+            raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)
+
+        if (cadence is not None) and (apparent_cadence != cadence):
+            warning_str = (&#34;Based on the keogram&#39;s timestamp attribute, the apparent cadence is %.2f s, but %.2f s was &#34;
+                           &#34;passed in as an argument. Ensure that the selected cadence of %.2f s is correct for the dataset being used.&#34;)
+            show_warning(warning_str % (apparent_cadence, cadence, cadence), stacklevel=1)
+
+        # If a cadence was not supplied by the user, then use the apparent cadence calculated based on timestamps
+        if cadence is None:
+            cadence = apparent_cadence
+
+        # The first step is checking if there actually is any missing data in this keogram. To do this we
+        # find the total number of frames that there should be, based on the first and last timestamp, and
+        # check if there are indeed that many frames in the keogram
+        start_dt = self.timestamp[0]
+        end_dt = self.timestamp[-1]
+
+        # If cadence is supplied as or calculated to be (burst) a float, it needs to be
+        # handled on the order of milliseconds
+        if isinstance(cadence, float):
+
+            n_desired_frames = round(((end_dt - start_dt).seconds + (end_dt - start_dt).microseconds * 10**(-6)) / cadence + 1)
+            n_keogram_frames = (self.data.shape)[1]
+
+            if cadence &lt; 1.0:
+                is_burst = True
+            else:
+                is_burst = False
+
+        # Otherwise, handle timestamps on the order of seconds
+        else:
+            n_desired_frames = round(((end_dt - start_dt).seconds) / cadence + 1)
+            n_keogram_frames = (self.data.shape)[1]
+            is_burst = False
+
+        # If the keogram is not missing any data, nothing is changed
+        if n_desired_frames == n_keogram_frames:
+            return
+
+        # Otherwise, we need to find which desired timestamps are missing
+
+        # First, create a new keogram array and new timestamp list with the correct size for the desired number of frames
+        if len(self.data.shape) == 2:
+            desired_keogram_shape = (self.data.shape[0], n_desired_frames)
+        elif len(self.data.shape) == 3:
+            desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
+        else:
+            raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)
+
+        desired_keogram = np.empty(shape=desired_keogram_shape)
+        desired_timestamp = []
+        desired_timestamp_indices = []
+
+        if is_burst:
+            tol = datetime.timedelta(seconds=(1.0 / 6.0))
+        else:
+            tol = datetime.timedelta(seconds=1.0)
+
+        # Fill the list of desired timestamps based on the cadence
+
+        # For each *desired* timestamp, we use a binary search to determine whether
+        # or not that timestamp already exists in the data, within tolerance
+        target_dt = start_dt
+        for _ in range(n_desired_frames):
+
+            low = 0
+            high = len(self.timestamp) - 1
+            match_idx = None
+
+            # binary search
+            while low &lt;= high:
+                mid = (low + high) // 2
+                mid_ts = self.timestamp[mid]
+
+                if mid_ts &lt; target_dt - tol:
+                    low = mid + 1
+                elif mid_ts &gt; target_dt + tol:
+                    high = mid - 1
+                else:
+                    # Match, within tolerance, has been found
+                    match_idx = mid
+
+                    high = mid - 1
+
+            # If we&#39;ve found a matching timestamp, insert it into the new timestamp array, and
+            # otherwise insert the desired timestamp
+            if match_idx is not None:
+                desired_timestamp.append(self.timestamp[match_idx])
+            else:
+                desired_timestamp.append(target_dt)
+
+            # Add the index into the original keogram corresponding to this timestamp if it exists
+            # and otherwise add None to the index tracking list, which we will use to insert the
+            # data and NaN columns
+            desired_timestamp_indices.append(match_idx)
+
+            # Update the desired datetime according to the cadence
+            target_dt += datetime.timedelta(seconds=cadence)
+
+        # Now that we have our desired timestamps, we can go through and fill the new keogram array
+        for i in range(len(desired_timestamp)):
+
+            keo_idx = desired_timestamp_indices[i]
+
+            # If this desired timestamp had no data, fill the keogram column with nans
+            if keo_idx is None:
+                desired_keogram[:, i] = np.nan
+            # Otherwise, keep the data intact for this column
+            else:
+                desired_keogram[:, i] = self.data[:, keo_idx]
+
+        # Update the keogram object with the new data and timestamp arrays
+        self.data = desired_keogram
+        self.timestamp = desired_timestamp</code></pre>
 </details>
 <div class="desc"><p>Class representation for a keogram</p>
 <h2 id="attributes">Attributes</h2>
@@ -529,6 +702,168 @@ class Keogram:
 </dl></div>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.tools.classes.keogram.Keogram.inject_nans"><code class="name flex">
+<span>def <span class="ident">inject_nans</span></span>(<span>self, cadence: int | float | None = None) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inject_nans(
+    self,
+    cadence: Optional[Union[int, float]] = None,
+) -&gt; None:
+    &#34;&#34;&#34;
+    Fill keogram columns that do not have data with NaNs.
+
+    Args:
+        cadence (int | float): 
+            The cadence, in seconds, of the data for the keogram. Default is to automatically
+            determine the cadence based on the keogram&#39;s timestamp data
+    
+    Returns:
+        None. If there is missing data, the Keogram object&#39;s data and timestamp attributes
+        will be updated accordingly.
+
+    # Raises:
+        ValueError if called on a keogram with improper / corrupted data format / shape.
+    &#34;&#34;&#34;
+
+    # First, regardless of whether or not the user supplies a cadence, determine the cadence
+    # based on the keograms timestamp attribute. If the user provided cadence is different
+    # then that calculated, we will raise a Warning
+    apparent_cadence = _determine_cadence(self.timestamp)
+    if not isinstance(apparent_cadence, (float, int)):
+        raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)
+
+    if (cadence is not None) and (apparent_cadence != cadence):
+        warning_str = (&#34;Based on the keogram&#39;s timestamp attribute, the apparent cadence is %.2f s, but %.2f s was &#34;
+                       &#34;passed in as an argument. Ensure that the selected cadence of %.2f s is correct for the dataset being used.&#34;)
+        show_warning(warning_str % (apparent_cadence, cadence, cadence), stacklevel=1)
+
+    # If a cadence was not supplied by the user, then use the apparent cadence calculated based on timestamps
+    if cadence is None:
+        cadence = apparent_cadence
+
+    # The first step is checking if there actually is any missing data in this keogram. To do this we
+    # find the total number of frames that there should be, based on the first and last timestamp, and
+    # check if there are indeed that many frames in the keogram
+    start_dt = self.timestamp[0]
+    end_dt = self.timestamp[-1]
+
+    # If cadence is supplied as or calculated to be (burst) a float, it needs to be
+    # handled on the order of milliseconds
+    if isinstance(cadence, float):
+
+        n_desired_frames = round(((end_dt - start_dt).seconds + (end_dt - start_dt).microseconds * 10**(-6)) / cadence + 1)
+        n_keogram_frames = (self.data.shape)[1]
+
+        if cadence &lt; 1.0:
+            is_burst = True
+        else:
+            is_burst = False
+
+    # Otherwise, handle timestamps on the order of seconds
+    else:
+        n_desired_frames = round(((end_dt - start_dt).seconds) / cadence + 1)
+        n_keogram_frames = (self.data.shape)[1]
+        is_burst = False
+
+    # If the keogram is not missing any data, nothing is changed
+    if n_desired_frames == n_keogram_frames:
+        return
+
+    # Otherwise, we need to find which desired timestamps are missing
+
+    # First, create a new keogram array and new timestamp list with the correct size for the desired number of frames
+    if len(self.data.shape) == 2:
+        desired_keogram_shape = (self.data.shape[0], n_desired_frames)
+    elif len(self.data.shape) == 3:
+        desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
+    else:
+        raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)
+
+    desired_keogram = np.empty(shape=desired_keogram_shape)
+    desired_timestamp = []
+    desired_timestamp_indices = []
+
+    if is_burst:
+        tol = datetime.timedelta(seconds=(1.0 / 6.0))
+    else:
+        tol = datetime.timedelta(seconds=1.0)
+
+    # Fill the list of desired timestamps based on the cadence
+
+    # For each *desired* timestamp, we use a binary search to determine whether
+    # or not that timestamp already exists in the data, within tolerance
+    target_dt = start_dt
+    for _ in range(n_desired_frames):
+
+        low = 0
+        high = len(self.timestamp) - 1
+        match_idx = None
+
+        # binary search
+        while low &lt;= high:
+            mid = (low + high) // 2
+            mid_ts = self.timestamp[mid]
+
+            if mid_ts &lt; target_dt - tol:
+                low = mid + 1
+            elif mid_ts &gt; target_dt + tol:
+                high = mid - 1
+            else:
+                # Match, within tolerance, has been found
+                match_idx = mid
+
+                high = mid - 1
+
+        # If we&#39;ve found a matching timestamp, insert it into the new timestamp array, and
+        # otherwise insert the desired timestamp
+        if match_idx is not None:
+            desired_timestamp.append(self.timestamp[match_idx])
+        else:
+            desired_timestamp.append(target_dt)
+
+        # Add the index into the original keogram corresponding to this timestamp if it exists
+        # and otherwise add None to the index tracking list, which we will use to insert the
+        # data and NaN columns
+        desired_timestamp_indices.append(match_idx)
+
+        # Update the desired datetime according to the cadence
+        target_dt += datetime.timedelta(seconds=cadence)
+
+    # Now that we have our desired timestamps, we can go through and fill the new keogram array
+    for i in range(len(desired_timestamp)):
+
+        keo_idx = desired_timestamp_indices[i]
+
+        # If this desired timestamp had no data, fill the keogram column with nans
+        if keo_idx is None:
+            desired_keogram[:, i] = np.nan
+        # Otherwise, keep the data intact for this column
+        else:
+            desired_keogram[:, i] = self.data[:, keo_idx]
+
+    # Update the keogram object with the new data and timestamp arrays
+    self.data = desired_keogram
+    self.timestamp = desired_timestamp</code></pre>
+</details>
+<div class="desc"><p>Fill keogram columns that do not have data with NaNs.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>cadence</code></strong> :&ensp;<code>int | float</code></dt>
+<dd>The cadence, in seconds, of the data for the keogram. Default is to automatically
+determine the cadence based on the keogram's timestamp data</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None. If there is missing data, the Keogram object's data and timestamp attributes
+will be updated accordingly.</p>
+<h1 id="raises">Raises:</h1>
+<pre><code>ValueError if called on a keogram with improper / corrupted data format / shape.
+</code></pre></div>
+</dd>
 <dt id="pyaurorax.tools.classes.keogram.Keogram.plot"><code class="name flex">
 <span>def <span class="ident">plot</span></span>(<span>self,<br>y_type: Literal['ccd', 'mag', 'geo'] = 'ccd',<br>title: str | None = None,<br>figsize: Tuple[int, int] | None = None,<br>cmap: str | None = None,<br>aspect: Literal['equal', 'auto'] | float | None = None,<br>axes_visible: bool = True,<br>xlabel: str = 'Time (UTC)',<br>ylabel: str | None = None,<br>xtick_increment: int | None = None,<br>ytick_increment: int | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
@@ -644,7 +979,14 @@ class Keogram:
     # init figure and plot data
     fig = plt.figure(figsize=figsize)
     ax = fig.add_axes((0, 0, 1, 1))
-    ax.imshow(self.data, origin=&#34;lower&#34;, cmap=cmap, aspect=aspect)
+
+    # If RGB, we need to normalize for matplotlib
+    if len(self.data.shape) == 3:
+        img_arr = self.data / 255.0
+    else:
+        img_arr = self.data
+
+    ax.imshow(img_arr, origin=&#34;lower&#34;, cmap=cmap, aspect=aspect)
 
     # set title
     if (title is not None):
@@ -889,9 +1231,21 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
     &#34;&#34;&#34;
     # check for slice idx
     if (self.__slice_idx is None):
+
         raise ValueError(&#34;Unable to set the geographic latitudes since the private slice_idx is None. If this keogram &#34; +
                          &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                          &#34;this is expected and performing this action is not supported at this time.&#34;)
+
+    # Check the dimensions of the skymap lat/lon arrays
+    # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+    # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+    # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+    # the same as it would be for ASI data
+    if len(skymap.full_map_latitude.shape) == 2:
+        # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+        skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+        skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+        skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
     # determine altitude index to use
     if (altitude_km is not None):
@@ -1013,6 +1367,13 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
         mag_lats = np.reshape(mag_lats, lats.shape)
         mag_lons = np.reshape(mag_lons, lons.shape)
 
+        # If lat/lon arrays are 1-dimensional then we know it is a spectrograph skymap. In this case, we will simply
+        # reform to add an additional dimension, so that self.__slice_idx (which is always zero for spectrograph data
+        # as there is only one longitudinal bin) can be used to index into the array the same as it would be for ASI data
+        if len(mag_lats.shape) == 1:
+            mag_lats = mag_lats[:, np.newaxis]
+            mag_lons = mag_lons[:, np.newaxis]
+
         # Set the y axis to the desired slice index of the magnetic latitudes
         self.mag_y = mag_lats[:, self.__slice_idx].copy()
     else:
@@ -1024,6 +1385,13 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
                                                                   method_code=&#39;G2A&#39;)
         mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
         mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
+
+        # If lat/lon arrays are 1-dimensional then we know it is a spectrograph skymap. In this case, we will simply
+        # reform to add an additional dimension, so that self.__slice_idx (which is always zero for spectrograph data
+        # as there is only one longitudinal bin) can be used to index into the array the same as it would be for ASI data
+        if len(mag_lats.shape) == 1:
+            mag_lats = mag_lats[:, np.newaxis]
+            mag_lons = mag_lons[:, np.newaxis]
 
         # Set the y axis to the desired slice index of the magnetic latitudes
         self.mag_y = mag_lats[:, self.__slice_idx].copy()</code></pre>
@@ -1117,6 +1485,7 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.tools.classes.keogram.Keogram" href="#pyaurorax.tools.classes.keogram.Keogram">Keogram</a></code></h4>
 <ul class="">
+<li><code><a title="pyaurorax.tools.classes.keogram.Keogram.inject_nans" href="#pyaurorax.tools.classes.keogram.Keogram.inject_nans">inject_nans</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.keogram.Keogram.plot" href="#pyaurorax.tools.classes.keogram.Keogram.plot">plot</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.keogram.Keogram.pretty_print" href="#pyaurorax.tools.classes.keogram.Keogram.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes" href="#pyaurorax.tools.classes.keogram.Keogram.set_geographic_latitudes">set_geographic_latitudes</a></code></li>
