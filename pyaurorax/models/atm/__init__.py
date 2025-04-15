@@ -225,16 +225,20 @@ class ATMManager:
                 parameter is required.
 
             intensity_4278 (float): 
-                Intensity of the 427.8nm (blue) wavelength in Rayleighs. This parameter is required.                
+                Intensity of the 427.8nm (blue) wavelength. This is expected to be a height-integrated value, 
+                represented in Rayleighs. This parameter is required.
 
             intensity_5577 (float): 
-                Intensity of the 557.7nm (green) wavelength in Rayleighs. This parameter is required.                
+                Intensity of the 557.7nm (green) wavelength. This is expected to be a height-integrated value, 
+                represented in Rayleighs. This parameter is required.
 
             intensity_6300 (float): 
-                Intensity of the 630.0nm (red) wavelength in Rayleighs. This parameter is required.                
+                Intensity of the 630.0nm (red) wavelength. This is expected to be a height-integrated value, 
+                represented in Rayleighs. This parameter is required.
 
             intensity_8446 (float): 
-                Intensity of the 844.6nm (near infrared) wavelength in Rayleighs. This parameter is required.                
+                Intensity of the 844.6nm (near infrared) wavelength. This is expected to be a height-integrated value, 
+                represented in Rayleighs. This parameter is required.
 
             output (ATMInverseOutputFlags): 
                 Flags to indicate which values are included in the output. See 

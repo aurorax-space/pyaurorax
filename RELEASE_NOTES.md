@@ -1,3 +1,11 @@
+Version 1.16.0
+-------------------
+- added `inject_nans()` function to `Keogram` object, updated example notebooks to show usage
+- added example for TREx RGB 'burst' data mosaic generation
+- added geo/mag coordinate compatibility for TREx Spectrograph keogram generation, updated example notebook
+- adjustments to ATM inverse documentation and example
+
+
 Version 1.15.0
 -------------------
 - updates for serialization of data when `response_format` parameter is used for conjunction/ephemeris/data product searching
