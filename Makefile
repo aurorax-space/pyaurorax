@@ -2,7 +2,7 @@
 
 all:
 
-install: poetry
+install:
 	pip install poetry
 	poetry install
 	${MAKE} get-test-data
