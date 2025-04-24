@@ -34,6 +34,7 @@ Example:
 from .classes.keogram import Keogram
 from .classes.montage import Montage
 from .classes.mosaic import Mosaic, MosaicData, MosaicSkymap
+from .classes.fov import FOV, FOVData
 
 # imports for this file
 from .bounding_box import BoundingBoxManager
@@ -44,6 +45,7 @@ from .keogram import KeogramManager
 from .montage import MontageManager
 from .mosaic import MosaicManager
 from .spectra import SpectraManager
+from .fov import FOVManager
 from ._display import display as func_display
 from ._movie import movie as func_movie
 from ._scale_intensity import scale_intensity as func_scale_intensity
@@ -60,6 +62,8 @@ __all__ = [
     "Mosaic",
     "MosaicData",
     "MosaicSkymap",
+    "FOV",
+    "FOVData"
 ]
 
 
@@ -81,6 +85,7 @@ class ToolsManager:
         self.__montage = MontageManager()
         self.__mosaic = MosaicManager(self.__aurorax_obj)
         self.__spectra = SpectraManager()
+        self.__fov = FOVManager()
 
     # ------------------------------------------
     # properties for submodule managers
@@ -140,6 +145,13 @@ class ToolsManager:
         Access to the `spectra` submodule from within a PyAuroraX object.
         """
         return self.__spectra
+
+    @property
+    def fov(self):
+        """
+        Access to the `fov` submodule from within a PyAuroraX object.
+        """
+        return self.__fov
 
     # ------------------------------------------
     # functions available at this manager level
