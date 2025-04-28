@@ -2,11 +2,9 @@ import math
 import numpy as np
 import datetime
 import aacgmv2
-import pyaurorax.pyaurorax as pyaurorax
 from pyproj import Geod
 from ..classes.fov import FOVData
 from ..._util import show_warning
-
 
 # Helper function that computes the fov for an imager (ASI or spectrograph)
 # at a given location, assuming some altitude and masking below min_elevation
@@ -50,7 +48,7 @@ def __compute_fov_contour(lat, lon, height_km, min_elevation, spectrograph=False
     rho0 = height_km * (2 * re + height_km) / (2 * re * math.sin(min_elevation * deg2rad))
     rho = height_km * (2 * re + height_km) / (2 * re * math.sin(min_elevation * deg2rad) + rho0)
 
-    # Create empty array for lat lon at every 1deg along 360deg azimuth range
+    # Create empty array for lat/lon at every 1deg along 360deg azimuth range
     azimuth_angle = np.linspace(0, 360, num=361)
     fov_latlon = np.zeros((2, len(azimuth_angle)))
 
@@ -127,7 +125,7 @@ def __compute_fov_contour(lat, lon, height_km, min_elevation, spectrograph=False
     return fov_latlon
 
 
-def create_data(sites, instrument_array, height_km, min_elevation, color, linewidth, linestyle):
+def create_data(aurorax_obj, sites, instrument_array, data_availability, height_km, min_elevation, color, linewidth, linestyle):
 
     # First, check that we have enough information to create the FoVs with the given inputs
     if not isinstance(sites, list):
@@ -139,7 +137,7 @@ def create_data(sites, instrument_array, height_km, min_elevation, color, linewi
     if sites[0] is None:
 
         # Get all site records for this instrument
-        result = pyaurorax.PyAuroraX().data.ucalgary.list_observatories(instrument_array)
+        result = aurorax_obj.data.ucalgary.list_observatories(instrument_array)
 
         for r in result:
             site_dict[r.uid] = (r.geodetic_latitude, r.geodetic_longitude)
@@ -157,7 +155,7 @@ def create_data(sites, instrument_array, height_km, min_elevation, color, linewi
                         'If specifying sites by site_uid string, instrument_array must also be supplied (e.g., instrument_array="themis_asi").')
 
                 # Get the site location of this site_uid for the chosen instrument_array, from the API
-                result = pyaurorax.PyAuroraX().data.ucalgary.list_observatories(instrument_array, uid=site)
+                result = aurorax_obj.data.ucalgary.list_observatories(instrument_array, uid=site)
 
                 # Check if a site record was actually returned
                 if len(result) == 0:
@@ -234,4 +232,12 @@ def create_data(sites, instrument_array, height_km, min_elevation, color, linewi
         fovs_dimensions[site_uid] = fov_latlon.shape
 
     # Create and return the FOVData object
-    return FOVData(site_uid_list=site_uid_list, fovs=fovs, fovs_dimensions=fovs_dimensions, color=color, linewidth=linewidth, linestyle=linestyle)
+    return FOVData(site_uid_list=site_uid_list,
+                   fovs=fovs,
+                   fovs_dimensions=fovs_dimensions,
+                   instrument_array=instrument_array,
+                   color=color,
+                   linewidth=linewidth,
+                   linestyle=linestyle,
+                   data_availability=data_availability,
+                   aurorax_obj=aurorax_obj)

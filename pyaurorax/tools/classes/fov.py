@@ -29,9 +29,11 @@ from typing import List, Dict, Tuple, Sequence, Union, Optional, Any
 from numpy import ndarray
 from cartopy.crs import Projection
 from ..._util import show_warning
+# from typing import TYPE_CHECKING
+# if TYPE_CHECKING:
+#     from ...pyaurorax import PyAuroraX  # pragma: nocover-ok
 
 
-@dataclass
 class FOVData:
     """
     Prepared ASI FoV data for use by FOV routines or manual plotting.
@@ -45,6 +47,9 @@ class FOVData:
             
         fovs_dimension (Dict[str, numpy.ndarray]):
             Dictionary that holds the shape of each set of lat/lon data.
+
+        instrument_array (str):
+            String giving the name of the instrument array this FOVData object corresponds to (optional).
             
         color (str):
             String specifying the color to use when plotting this FOVData.
@@ -56,12 +61,21 @@ class FOVData:
             String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.
     """
 
-    site_uid_list: List[str]
-    fovs: Dict[str, ndarray]
-    fovs_dimensions: Dict[str, Tuple]
-    color: str
-    linewidth: int
-    linestyle: str
+    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: str,
+                 data_availability: Optional[Dict[str, bool]], color: str, linewidth: int, linestyle: str, aurorax_obj):
+
+        # Public vars
+        self.site_uid_list = site_uid_list
+        self.fovs = fovs
+        self.fovs_dimensions = fovs_dimensions
+        self.instrument_array = instrument_array
+        self.data_availability = data_availability
+        self.color = color
+        self.linewidth = linewidth
+        self.linestyle = linestyle
+
+        # Private vars
+        self.__aurorax_obj = aurorax_obj
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -72,7 +86,7 @@ class FOVData:
         fovs_str = "Dict[%d site(s) of array(dims=%s)]" % (len(self.fovs.keys()), unique_dimensions_str)
 
         # return
-        return "FOVData(fovs=%s, site_uid_list=%s)" % (fovs_str, self.site_uid_list.__repr__())
+        return "FOVData(fovs=%s, site_uid_list=%s, instrument_array=%s)" % (fovs_str, self.site_uid_list.__repr__(), self.instrument_array)
 
     def pretty_print(self):
         """
@@ -83,9 +97,42 @@ class FOVData:
         fovs_str = "Dict[%d site(s) of array(dims=%s)]" % (len(self.fovs.keys()), unique_dimensions_str)
 
         # print
-        print("MosaicData:")
+        print("FovData:")
+        print("  %-19s: %s" % ("instrument_array", self.instrument_array))
         print("  %-19s: %s" % ("site_uid_list", self.site_uid_list))
         print("  %-19s: %s" % ("fovs", fovs_str))
+
+    def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
+
+        # TODO: ADD DOCSTRING
+
+        if (self.instrument_array is None):
+            raise ValueError("Cannot add data availability to an FOVData object with no associated instrument_array. Please specify " +
+                             "instrument_array upon creation of FOVData object to enforce data availability.")
+
+        # Check if the requested dataset makes sense for the FOVData
+        fov_instrument = self.instrument_array.upper()
+        if (fov_instrument == "TREX_SPECTROGRAPH"):
+            fov_instrument = "TREX_SPECT"
+
+        if (fov_instrument not in dataset_name):
+            raise ValueError("Requested dataset_name does not match the instrument_array contained in this FOVData object.")
+
+        # Create a dictionary corresponding to the FoV data, that will hold
+        # booleans specifying whether or not there is data for each site
+        availability_dict = {}
+        for site in self.fovs.keys():
+
+            # Request list of all files of requested dataset at requested site
+            result = self.__aurorax_obj.data.ucalgary.get_urls(dataset_name, start, end, site_uid=site)
+
+            # If there are any files within the desired time-range then update availability dict with True, otherwise update False
+            if (result.count > 0):
+                availability_dict[site] = True
+            else:
+                availability_dict[site] = False
+
+        self.data_availability = availability_dict
 
 
 @dataclass
@@ -172,6 +219,7 @@ class FOV:
     def plot(self,
              map_extent: Sequence[Union[float, int]],
              label: bool = True,
+             enforce_data_availability: bool = False,
              figsize: Optional[Tuple[int, int]] = None,
              title: Optional[str] = None,
              ocean_color: Optional[str] = None,
@@ -184,7 +232,7 @@ class FOV:
              savefig_filename: Optional[str] = None,
              savefig_quality: Optional[int] = None) -> Any:
         """
-        Generate a plot of the mosaic data. 
+        Generate a plot of the FoV data. 
         
         Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
         return the matplotlib plot object for further usage (using the `returnfig` parameter).
@@ -201,7 +249,7 @@ class FOV:
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
             title (str): 
-                The title to display above the plotted mosaic. Default is no title.
+                The title to display above the plotted Fov Map. Default is no title.
 
             ocean_color (str): 
                 Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
@@ -261,12 +309,12 @@ class FOV:
                          "savefig option parameters will be ignored.",
                          stacklevel=1)
 
-        # initialize figure
+        # Initialize figure
         fig = plt.figure(figsize=figsize)
         ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
         ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
-        # add ocean
+        # Add ocean
         #
         # NOTE: we use the default ocean color
         if (ocean_color is not None):
@@ -286,10 +334,26 @@ class FOV:
 
         # Go through and plot all of the FoVs within each of the Object's FOVData objects
         if self.fov_data is not None:
+
+            # If requesting enforcement of data availability, check that data availability exists in
+            # the object first
+            if (enforce_data_availability is True):
+                for fov_data in self.fov_data:
+                    if (fov_data.data_availability is None):
+                        raise ValueError("Before plotting FOV object with enforce_data_availability=True, FOVData.add_availability(...) " +
+                                         "must be called for all included FOVData objects.")
+
             for fov_data in self.fov_data:
                 latlon_dict = fov_data.fovs
 
                 for site in fov_data.site_uid_list:
+
+                    # If data_availability has been enforced and is False for this site, don't plot it
+                    if (enforce_data_availability is True) and (fov_data.data_availability is not None) and (site
+                                                                                                             in fov_data.data_availability.keys()):
+                        if (fov_data.data_availability[site] is False):
+                            continue
+
                     latlon = latlon_dict[site]
 
                     ax.plot(np.squeeze(latlon[1, :]),
@@ -300,6 +364,7 @@ class FOV:
                             linewidth=fov_data.linewidth,
                             transform=cartopy.crs.Geodetic())
 
+                    # Add site_uid labels to the FoV plot, in the center of each ASI FoV
                     if label:
                         center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
                         center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
@@ -404,7 +469,7 @@ class FOV:
                          marker: str = "",
                          bring_to_front: bool = False):
         """
-        Add geographic contours to a mosaic.
+        Add geographic contours to a FoV map.
 
         Args:
             lats (ndarray or list): 
@@ -476,7 +541,7 @@ class FOV:
         if self.contour_data is None:
             self.contour_data = {"x": [], "y": [], "color": [], "linewidth": [], "linestyle": [], "marker": [], "zorder": []}
 
-        # Obtain the mosaic's projection
+        # Obtain the Fov map's projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
         mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
         transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
@@ -561,7 +626,7 @@ class FOV:
                          marker: str = "",
                          bring_to_front: bool = False):
         """
-        Add geomagnetic contours to a mosaic.
+        Add geomagnetic contours to a FoV map.
 
         Args:
             timestamp (datetime.datetime): 
@@ -632,7 +697,7 @@ class FOV:
         if self.contour_data is None:
             self.contour_data = {"x": [], "y": [], "color": [], "linewidth": [], "linestyle": [], "marker": [], "zorder": []}
 
-        # Obtain the mosaic's projection
+        # Obtain the FoV map's projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
         mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
         transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)

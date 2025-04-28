@@ -55,16 +55,7 @@ from ._util import set_theme as func_set_theme
 import numpy as np
 from typing import Literal, Optional, Tuple, Union, Any, List
 
-__all__ = [
-    "ToolsManager",
-    "Keogram",
-    "Montage",
-    "Mosaic",
-    "MosaicData",
-    "MosaicSkymap",
-    "FOV",
-    "FOVData"
-]
+__all__ = ["ToolsManager", "Keogram", "Montage", "Mosaic", "MosaicData", "MosaicSkymap", "FOV", "FOVData"]
 
 
 class ToolsManager:
@@ -85,7 +76,7 @@ class ToolsManager:
         self.__montage = MontageManager()
         self.__mosaic = MosaicManager(self.__aurorax_obj)
         self.__spectra = SpectraManager()
-        self.__fov = FOVManager()
+        self.__fov = FOVManager(self.__aurorax_obj)
 
     # ------------------------------------------
     # properties for submodule managers

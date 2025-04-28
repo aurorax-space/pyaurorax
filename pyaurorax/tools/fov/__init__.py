@@ -16,10 +16,11 @@ Obtain FoVs of ASIs and create plots.
 """
 
 import cartopy.crs
-from typing import Optional, List, Literal, Tuple, Union
+from typing import Optional, List, Literal, Tuple, Union, Dict
 from ..classes.fov import FOVData, FOV
 from ._create_data import create_data as func_create_data
 from ._create_map import create_map as func_create_map
+
 
 __all__ = ["FOVManager"]
 
@@ -29,6 +30,9 @@ class FOVManager:
     The FOVManager object is initialized within every PyAuroraX object. It acts as a way to access 
     the submodules and carry over configuration information in the super class.
     """
+
+    def __init__(self, aurorax_obj):
+        self.__aurorax_obj = aurorax_obj
 
     def create_map(self, cartopy_projection: cartopy.crs.Projection, fov_data: Optional[Union[FOVData, List[FOVData]]] = None) -> FOV:
         """
@@ -56,6 +60,7 @@ class FOVManager:
     def create_data(self,
                     sites: Optional[Union[Union[str, Tuple[str, float, float]], List[Union[str, Tuple[str, float, float]]]]] = None,
                     instrument_array: Optional[Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph"]] = None,
+                    data_availability: Optional[Dict[str, bool]] = None,
                     height_km: Optional[float] = None,
                     min_elevation: float = 5,
                     color: str = 'black',
@@ -72,8 +77,10 @@ class FOVManager:
         Raises:
             ValueError: issues encountered with supplied parameters
         """
-        return func_create_data(sites=sites,
+        return func_create_data(self.__aurorax_obj,
+                                sites=sites,
                                 instrument_array=instrument_array,
+                                data_availability=data_availability,
                                 height_km=height_km,
                                 min_elevation=min_elevation,
                                 color=color,
