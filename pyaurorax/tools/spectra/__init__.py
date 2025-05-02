@@ -16,9 +16,10 @@ Work with spectrograph data.
 """
 
 import datetime
-from typing import Union, List, Optional, Tuple, Any
+from typing import Union, List, Optional, Tuple, Any, Literal
 from ...data.ucalgary import Data
 from ._plot import plot as func_plot
+from ._get_intensity import get_intensity as func_get_intensity
 
 __all__ = ["SpectraManager"]
 
@@ -128,3 +129,54 @@ class SpectraManager:
         """
         return func_plot(spect_data, timestamp, spect_loc, title, figsize, color, ylog, xlabel, ylabel, ylim, xlim, plot_line, plot_line_color,
                          returnfig, savefig, savefig_filename, savefig_quality)
+
+    def get_intensity(self,
+                      spect_data: Data,
+                      timestamp: Union[datetime.datetime, List[
+                          datetime.datetime,
+                      ]],
+                      spect_loc: int,
+                      spect_emission: Optional[Literal["green", "red", "blue", "hbeta"]] = None,
+                      spect_band: Optional[Union[Tuple[float, float], List[float]]] = None,
+                      spect_band_bg: Optional[Union[Tuple[float, float], List[float]]] = None) -> Union[List[float], float]:
+        """
+        Integrate spectrograph data to obtain absolute intensity, for a given common auroral emission
+        or a manually selected wavelength band. 
+
+        Args:
+            spect_data (pyaurorax.data.ucalgary.Data): 
+                The data object containing spectrograph data.
+
+            timestamp (datetime.datetime): 
+                A timestamp or list of timestamps for which to plot spectra from.
+
+            spect_loc (int): 
+                An int or list of ints giving the spectrograph spatial bin indices to plot.
+            
+            spect_emission (str):
+                A string to specify that the absolute intensity should be calculated for a
+                common auroral emission. Available options are:
+
+                    "green" - 557.7 nm (Green-line) emission
+                    "red"   - 630.0 nm (Red-Line) emission
+                    "blue"  - 427.8 nm (Blue-Line) emission
+                    "hbeta" - 481.6 nm (H-Beta) emission
+
+            spect_band (tuple):
+                If manually selecting the integration region, this should specify the min and
+                max wavelength to integrate over for the emission.
+
+            spect_band_bg (tuple):
+                If manually selecting the integration region, optionally allows for the selection
+                of another wavelength region to subtract from the emission intensity.
+
+        Returns:
+            A list of floats (or a single float) giving the absolute intensity of the
+            selected emission, in Rayleighs for the provided spectrograph data at the
+            input timestamp(s).
+
+        Raises:
+            ValueError: issues encountered with supplied parameters
+        """
+
+        return func_get_intensity(spect_data, timestamp, spect_loc, spect_emission, spect_band, spect_band_bg)
