@@ -98,7 +98,8 @@ class KeogramManager:
         preview: bool = False,
         skymap: Optional[Skymap] = None,
         altitude_km: Optional[Union[float, int]] = None,
-        metric: Literal["mean", "median", "sum"] = "median",
+        metric: Literal["mean", "median", "sum", "percentile"] = "median",
+        percentile: Optional[float] = None,
     ) -> Keogram:
         """
         Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points, 
@@ -141,7 +142,13 @@ class KeogramManager:
 
             metric (str): 
                 The metric used to compute values for each keogram pixel. Valid options are "median", "mean",
-                and "sum". Defaults to "median".
+                "sum", and "percentile". Defaults to "median".
+
+            percentile (float):
+                Sets the brightness percentile to calculate within each keogram bin. For each bin defined along
+                the keogram contour, this percentile is computed over all included ASI pixels, and used as the
+                value for that keogram bin. This argument is required if metric is set to "percentile" and
+                should be omitted otherwise.
             
         Returns:
             A `pyaurorax.tools.Keogram` object.
@@ -149,4 +156,4 @@ class KeogramManager:
         Raises:
             ValueError: issues encountered with supplied parameters
         """
-        return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric)
+        return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric, percentile)

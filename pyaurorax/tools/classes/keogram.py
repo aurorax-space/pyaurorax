@@ -425,10 +425,11 @@ class Keogram:
             # do check for ccd_y
             if (self.ccd_y is None):
                 show_warning(
-                    "Unable to plot y-axis. If this keogram object was create as part of the custom_keogram " +
+                    "Unable to plot CCD y-axis. If this keogram object was create as part of the custom_keogram " +
                     "routines, this is expected and plotting a custom keogram with axes is not supported at this time.",
                     stacklevel=1,
                 )
+                ylabel = "Keogram Y"
             else:
                 # generate y ticks and labels
                 if (y_type == "ccd"):

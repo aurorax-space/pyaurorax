@@ -16,8 +16,8 @@ Prepare grid data for plotting.
 """
 
 import numpy as np
-from typing import Optional, Union
 from ._prep_grid_image import prep_grid_image as func_prep_grid_image
+from typing import Union, Optional
 
 __all__ = ["GridFilesManager"]
 

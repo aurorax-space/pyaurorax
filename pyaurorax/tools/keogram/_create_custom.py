@@ -147,10 +147,27 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
     return x_locs, y_locs
 
 
-def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric):
+def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric, percentile):
+
     # If using CCD coordinates we don't need a skymao or altitude
     if (coordinate_system == "ccd") and (skymap is not None or altitude_km is not None):
         raise ValueError("Conflict in passing in a skymap or altitude when working in CCD coordinates. This value will be ignored.")
+
+    # If metric is set to percentile, make sure a percentile is given.
+    if (metric == "percentile"):
+        if (percentile is None):
+            raise ValueError("When using metric='percentile', a value must be passed in the percentile argument.")
+
+        # Check that percentile is valid (0-100)
+        if (percentile > 100.0) or (percentile < 0.0):
+            raise ValueError(
+                f"Received invalid 'percentile' value of {percentile}. Please ensure that percentile is given as a float within [0,100].")
+
+    # If metric is not set to percentile make sure that no percentile argument is passed.
+    if (metric != "percentile"):
+        if (percentile is not None):
+            raise ValueError(
+                f"Metric 'f{metric}' is not compatible with percentile argument. To use a percentile calculation, set metric='percentile'.")
 
     # convert any lists to np.arrays  and check shape
     x_locs = np.array(x_locs)
@@ -177,7 +194,7 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
         raise ValueError(f"Y coordinates may not be multidimensional. Sequence passed with shape {y_locs.shape}")
     if len(x_locs.shape) != len(y_locs.shape):
         raise ValueError(f"X and Y coordinates must have same length. Sequences passed with shapes {x_locs.shape} and {y_locs.shape}")
-
+    
     # Convert lat/lon coordinates to CCD
     if coordinate_system == "mag":
         if (skymap is None or altitude_km is None):
@@ -281,9 +298,15 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
             elif metric == "mean":
                 # mean metric
                 pixel_keogram = np.mean(images[row_idx, col_idx, :], axis=0)
-            else:
+            elif metric == "sum":
                 # sum metric
                 pixel_keogram = np.sum(images[row_idx, col_idx, :], axis=0)
+            elif metric == "percentile":
+                # percentile metric
+                pixel_keogram = np.nanpercentile(images[row_idx, col_idx, :], percentile, axis=0)
+            else:
+                raise ValueError(f"Metric '{metric}' is not recognized. Currently supported metrics are ['median', 'mean', 'sum', 'percentile'].")
+
             keo_arr[i, :] = pixel_keogram
         elif n_channels == 3:
             # Update the preview image
@@ -298,11 +321,18 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
                 r_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.mean(images[row_idx, col_idx, 2, :], axis=0))
-            else:
+            elif metric == "sum":
                 # sum metric
                 r_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 0, :], axis=0))
                 g_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 1, :], axis=0))
                 b_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 2, :], axis=0))
+            elif metric == "percentile":
+                # percentile metric
+                r_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 0, :], percentile, axis=0))
+                g_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 1, :], percentile, axis=0))
+                b_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 2, :], percentile, axis=0))
+            else:
+                raise ValueError(f"Metric '{metric}' is not recognized. Currently supported metrics are ['median', 'mean', 'sum', 'percentile'].")
 
             keo_arr[i, :, 0] = r_pixel_keogram
             keo_arr[i, :, 1] = g_pixel_keogram

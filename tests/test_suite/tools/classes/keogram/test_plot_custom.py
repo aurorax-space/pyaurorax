@@ -33,7 +33,7 @@ def test_simple(mock_show, plot_cleanup, at, themis_keogram_data):
         keogram.plot()
     assert len(w) == 1
     assert issubclass(w[-1].category, UserWarning)
-    assert "Unable to plot y-axis" in str(w[-1].message)
+    assert "Unable to plot CCD y-axis" in str(w[-1].message)
     assert mock_show.call_count == 1
 
 
@@ -63,7 +63,7 @@ def test_geo_rgb(mock_show, plot_cleanup, at, trex_rgb_keogram_data):
         keogram.plot()
     assert len(w) == 1
     assert issubclass(w[-1].category, UserWarning)
-    assert "Unable to plot y-axis" in str(w[-1].message)
+    assert "Unable to plot CCD y-axis" in str(w[-1].message)
     assert mock_show.call_count == 2
 
 
@@ -93,7 +93,7 @@ def test_mag_rgb(mock_show, plot_cleanup, at, trex_rgb_keogram_data):
         keogram.plot()
     assert len(w) == 1
     assert issubclass(w[-1].category, UserWarning)
-    assert "Unable to plot y-axis" in str(w[-1].message)
+    assert "Unable to plot CCD y-axis" in str(w[-1].message)
     assert mock_show.call_count == 2
 
 
