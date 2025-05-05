@@ -16,11 +16,10 @@ Obtain FoVs of ASIs and create plots.
 """
 
 import cartopy.crs
-from typing import Optional, List, Literal, Tuple, Union, Dict
+from typing import Optional, List, Literal, Tuple, Union
 from ..classes.fov import FOVData, FOV
 from ._create_data import create_data as func_create_data
 from ._create_map import create_map as func_create_map
-
 
 __all__ = ["FOVManager"]
 
@@ -60,7 +59,6 @@ class FOVManager:
     def create_data(self,
                     sites: Optional[Union[Union[str, Tuple[str, float, float]], List[Union[str, Tuple[str, float, float]]]]] = None,
                     instrument_array: Optional[Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph"]] = None,
-                    data_availability: Optional[Dict[str, bool]] = None,
                     height_km: Optional[float] = None,
                     min_elevation: float = 5,
                     color: str = 'black',
@@ -70,9 +68,32 @@ class FOVManager:
         Prepare FOV data for use.
 
         Args:
+            
+            site_uid_list (list of str or tuples):
+                The sites to be included in the FOVData object. Can be passed as a list of either one of or both of site_uid strings and/or
+                ('uid', lat, lon) tuples. If passing lone site_uid strings, the instrument_array argument must be provided.
+
+            instrument_array (str):
+                The instrument array name to add FOVs for each site (e.g. 'themis_asi')
+            
+            height_km (float):
+                The altitude to map the FoVs at, in kilometers. Defaults to 110, unless instrument_array='rego', in which case the
+                altitude defaults to 230.
+
+            min_elevation (float):
+                The minimum elevation for which the FoV is defined, in degrees. Default is 5.
+
+            color (str):
+                String giving the matplotlib color to use for plotting this FOVData. Default is 'black'.
+
+            linewidth (int):
+                Gives the linewidth used for plotting this FOVData. Default is 1.
+
+            linestyle (str):
+                matplotlib formatting string specifying the linestyle for plotting FOVData. Default is '-' (solid line).
 
         Returns:
-            The prepared data, as a `pyaurorax.tools.FOVData` object.
+            The 'prepared data, as a `pyaurorax.tools.FOVData` object.'
 
         Raises:
             ValueError: issues encountered with supplied parameters
@@ -80,7 +101,6 @@ class FOVManager:
         return func_create_data(self.__aurorax_obj,
                                 sites=sites,
                                 instrument_array=instrument_array,
-                                data_availability=data_availability,
                                 height_km=height_km,
                                 min_elevation=min_elevation,
                                 color=color,

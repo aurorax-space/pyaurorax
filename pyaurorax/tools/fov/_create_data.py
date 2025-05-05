@@ -20,6 +20,7 @@ from pyproj import Geod
 from ..classes.fov import FOVData
 from ..._util import show_warning
 
+
 # Helper function that computes the fov for an imager (ASI or spectrograph)
 # at a given location, assuming some altitude and masking below min_elevation
 def __compute_fov_contour(lat, lon, height_km, min_elevation, spectrograph=False):
@@ -139,7 +140,7 @@ def __compute_fov_contour(lat, lon, height_km, min_elevation, spectrograph=False
     return fov_latlon
 
 
-def create_data(aurorax_obj, sites, instrument_array, data_availability, height_km, min_elevation, color, linewidth, linestyle):
+def create_data(aurorax_obj, sites, instrument_array, height_km, min_elevation, color, linewidth, linestyle):
 
     # First, check that we have enough information to create the FoVs with the given inputs
     if not isinstance(sites, list):
@@ -253,5 +254,5 @@ def create_data(aurorax_obj, sites, instrument_array, data_availability, height_
                    color=color,
                    linewidth=linewidth,
                    linestyle=linestyle,
-                   data_availability=data_availability,
+                   data_availability=None,
                    aurorax_obj=aurorax_obj)
