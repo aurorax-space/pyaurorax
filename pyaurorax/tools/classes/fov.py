@@ -103,8 +103,28 @@ class FOVData:
         print("  %-19s: %s" % ("fovs", fovs_str))
 
     def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
+        """
+        Generate a plot of the FoV data. 
+        
+        Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
+        return the matplotlib plot object for further usage (using the `returnfig` parameter).
 
-        # TODO: ADD DOCSTRING
+        Args:
+            dataset_name (str):
+                The name of the dataset to check for data availability (e.g. "REGO_RAW")
+
+            start (datetime.datetime):
+                Defines the start time of the interval to check for data availability.
+                
+            end (datetime.datetime):
+                Defines the end time of the interval to check for data availability.
+
+        Returns:
+            The FOVData object is updated to hold data availability information, that can be used when
+            plotting to omit sites that did not take data during the time interval defined by start and end.
+
+        Raises:
+        """
 
         if (self.instrument_array is None):
             raise ValueError("Cannot add data availability to an FOVData object with no associated instrument_array. Please specify " +
