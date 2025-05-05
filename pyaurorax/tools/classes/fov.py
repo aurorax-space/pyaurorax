@@ -104,10 +104,10 @@ class FOVData:
 
     def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
         """
-        Generate a plot of the FoV data. 
-        
-        Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
-        return the matplotlib plot object for further usage (using the `returnfig` parameter).
+        Add data availability information to an FOVData object. Given a start and end time, information
+        will be added to the object regarding whether or not each site included in the FOVData object
+        took data in that time range. This is useful for plotting FOVs for only those sites that took
+        data in a given time interval.
 
         Args:
             dataset_name (str):
