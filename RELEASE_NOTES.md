@@ -1,4 +1,9 @@
-Version 1.16.0
+Version 1.16.1 (2025-05-05)
+-------------------
+- relaxed `termcolor` dependency versions
+
+
+Version 1.16.0 (2025-04-15)
 -------------------
 - added `inject_nans()` function to `Keogram` object, updated example notebooks to show usage
 - added example for TREx RGB 'burst' data mosaic generation
@@ -6,20 +11,20 @@ Version 1.16.0
 - adjustments to ATM inverse documentation and example
 
 
-Version 1.15.0
+Version 1.15.0 (2025-02-12)
 -------------------
 - updates for serialization of data when `response_format` parameter is used for conjunction/ephemeris/data product searching
 - default changed to `True` for the `create_response_format_template()` helper functions
 - example notebooks for conjunction/ephemeris/data product updated to include example of using the response format parameter
 
 
-Version 1.14.0
+Version 1.14.0 (2025-02-11)
 -------------------
 - added support for NumPy 2.0+
 - updated dependency ranges to add more flexibility
 
 
-Version 1.13.0
+Version 1.13.0 (2025-02-10)
 -------------------
 - major updates to test suite
 - bugfixes
@@ -39,7 +44,7 @@ Version 1.13.0
 - bump PyUCalgarySRS dependency to latest
 
 
-Version 1.12.0
+Version 1.12.0 (2025-01-27)
 -------------------
 - updates to conjunction, ephemeris, and data product searching in the `aurorax.search` module
   - added support for custom lat/lon searching (#81)
@@ -55,98 +60,98 @@ Version 1.12.0
 - bump PyUCalgarySRS dependency to latest
 
 
-Version 1.11.0
+Version 1.11.0 (2025-01-23)
 -------------------
 - updates to docstrings
 - added `title` parameter to montage `create()` function
 - bump PyUCalgarySRS dependency to latest
 
 
-Version 1.10.0
+Version 1.10.0 (2025-01-21)
 -------------------
 - refactor `tools` modules to be integrated with `PyAuroraX()` object
 - added `progress_bar_backend` parameter to `PyAuroraX()` object
 - bump PyUCalgarySRS dependency to latest
 
 
-Version 1.9.0
+Version 1.9.0 (2025-01-20)
 -------------------
 - bump PyUCalgarySRS dependency to latest
 
 
-Version 1.8.0
+Version 1.8.0 (2024-12-29)
 -------------------
 - bump PyUCalgarySRS dependency to latest
 - added `pretty_print()` functions to all `at.tools` classes
 - added level filtering for dataset listing functions
 
 
-Version 1.7.0
+Version 1.7.0 (2024-12-14)
 -------------------
 - added `pretty_print()` functions to several classes: `DataSource`, `DataSourceStatistics`, `ConjunctionSearch`, `DataProductSearch`, `EphemerisSearch`
 
 
-Version 1.6.0
+Version 1.6.0 (2024-12-10)
 -------------------
 - added dataset_name optional parameter to the `purge_download_output_root_path()` function
 
 
-Version 1.5.0
+Version 1.5.0 (2024-12-07)
 -------------------
 - added support for downloading, reading, and analysis of the TREx Spectrograph data
 - added support for `start_time` and `end_time` parameters to all read functions
 - added `get_dataset()` function for retrieving a specific single dataset
 
 
-Version 1.4.0
+Version 1.4.0 (2024-11-29)
 -------------------
 - updates for filtering datasets specifically supported by this library
 
 
-Version 1.3.3
+Version 1.3.3 (2024-11-27)
 -------------------
 - pinned PyUCalgarySRS dependency
 
 
-Version 1.3.2
+Version 1.3.2 (2024-10-29)
 --------------------
 - bugfix to `scale_intensity()` function to handle scaling a single RGB image
 
 
-Version 1.3.1
+Version 1.3.1 (2024-07-09)
 --------------------
 - increase PyUCalgarySRS dependency version
 
 
-Version 1.3.0
+Version 1.3.0 (2024-07-09)
 --------------------
 - adjustment to ATM `forward()` function `timescale_transport` default value. Changed from 5 minutes to 10 minutes.
 
 
-Version 1.2.0
+Version 1.2.0 (2024-07-09)
 --------------------
 - addition of `prep_grid_image()` function for turning grid data to RGBA for plotting
 - added examples for plotting various gridded data
 
 
-Version 1.1.0
+Version 1.1.0 (2024-06-26)
 --------------------
 - increase PyUCalgarySRS dependency version to support new grid file datasets
 
 
-Version 1.0.2
+Version 1.0.2 (2024-06-25)
 --------------------
 - bugfix for search engine `get_data` calls where an extra slash in the URL was causing errors
 
 
-Version 1.0.1
+Version 1.0.1 (2024-06-24)
 --------------------
 - bugfix for TREx RGB mosaic scaling
 - added ATM inverse `atmospheric_attenuation_correction` flag
 - forced PyUCalgarySRS version 1.0.8 or higher to support the above two fixes
 
 
-Version 1.0.0
+Version 1.0.0 (2024-06-23)
 --------------------
 Please note that this release contains major breaking changes.
 
@@ -174,27 +179,27 @@ functionality.
   - Updates to adding data sources (#79)
 
 
-Version 0.13.3
+Version 0.13.3 (2023-06-20)
 --------------------
 Bugfix for `pyaurorax.Location` class validator
 
 
-Version 0.13.2
+Version 0.13.2 (2023-02-25)
 --------------------
 Updated data source retrieval to handle new adhoc sources
 
 
-Version 0.13.1
+Version 0.13.1 (2023-02-15)
 --------------------
 Minor bugfix for Ephemeris class output string
 
 
-Version 0.13.0
+Version 0.13.0 (2022-11-08)
 --------------------
 Additional error handling for search requests.
 
 
-Version 0.12.0
+Version 0.12.0 (2022-11-02)
 --------------------
 - Add search request listing to CLI program (#65)
 - Remove search_async functions (#49)
@@ -202,19 +207,19 @@ Version 0.12.0
 - Add support for Python 3.10 (#40)
 
 
-Version 0.11.0
+Version 0.11.0 (2022-10-22)
 --------------------
 Dropped support for Python 3.6 and added support for Python 3.10. Updated various dependency versions.
 
 
-Version 0.10.0
+Version 0.10.0 (2022-07-25)
 --------------------
 - Add functions for interacting with Swarm-Aurora using conjunction searches (#73)
 - Remove default conjunction types of only nbtrace (#72)
 - Add functions for getting the request URL (#74)
 
 
-Version 0.9.0
+Version 0.9.2 (2022-02-11)
 --------------------
 - Final updates for 0.9.0 release (#69)
 - Switch data products delete and delete_daterange functions (#68)
@@ -248,6 +253,6 @@ Version 0.9.0
 - Add MacOS and Windows tests to the CI pipeline (#39)
 
 
-Version 0.8.0 or earlier
+Version 0.8.0 or earlier (2020-06-13 to 2021-12-30)
 --------------------
 Active development. Changes not documented.
