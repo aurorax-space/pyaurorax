@@ -311,7 +311,7 @@ class FOV:
                 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.
 
         Returns:
-            The displayed montage, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+            The displayed fov map, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
