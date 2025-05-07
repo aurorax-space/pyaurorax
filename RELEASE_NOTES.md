@@ -1,3 +1,8 @@
+Version 1.17.0 (unreleased)
+-------------------
+- bugfix for `DataSource` object's `pretty_print()` function
+
+
 Version 1.16.1 (2025-05-05)
 -------------------
 - relaxed `termcolor` dependency versions
