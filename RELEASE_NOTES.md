@@ -1,6 +1,7 @@
-Version 1.17.0 (unreleased)
+Version 1.17.0 (2025-05-14)
 -------------------
 - bugfix for `DataSource` object's `pretty_print()` function
+- adjustments to data download path initialization logic
 
 
 Version 1.16.1 (2025-05-05)
