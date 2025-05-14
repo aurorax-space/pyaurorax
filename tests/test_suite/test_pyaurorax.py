@@ -30,6 +30,7 @@ def test_top_level_class_instantiation_noparams(capsys):
     aurorax = pyaurorax.PyAuroraX()
 
     # check paths
+    aurorax.initialize_paths()
     assert os.path.exists(aurorax.download_output_root_path)
     assert os.path.exists(aurorax.read_tar_temp_path)
 
@@ -90,12 +91,8 @@ def test_top_level_class_instantiation_usingparams():
     assert aurorax.api_key == testing_api_key
     assert aurorax.api_headers != {} and "user-agent" in aurorax.api_headers and "python-pyaurorax" in aurorax.api_headers["user-agent"]
     assert aurorax.api_timeout == testing_api_timeout
-    assert os.path.exists(testing_download_path)
-    assert os.path.exists(testing_tar_path)
-
-    # cleanup
-    shutil.rmtree(testing_download_path, ignore_errors=True)
-    shutil.rmtree(testing_tar_path, ignore_errors=True)
+    assert os.path.exists(testing_download_path) is False
+    assert os.path.exists(testing_tar_path) is False
 
 
 @pytest.mark.top_level
@@ -108,9 +105,11 @@ def test_bad_paths_noparams(aurorax):
         new_path = "/dev/bad_path"
         with pytest.raises(pyaurorax.AuroraXInitializationError) as e_info:
             aurorax.download_output_root_path = new_path
+            aurorax.initialize_paths()
         assert "Error during output path creation" in str(e_info)
         with pytest.raises(pyaurorax.AuroraXInitializationError) as e_info:
             aurorax.read_tar_temp_path = new_path
+            aurorax.initialize_paths()
         assert "Error during output path creation" in str(e_info)
 
 
@@ -181,7 +180,8 @@ def test_purge_download_path(aurorax):
                    (Path.home(), ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))))
     aurorax.download_output_root_path = new_path
     assert aurorax.download_output_root_path == new_path
-    assert os.path.exists(aurorax.download_output_root_path)
+    aurorax.initialize_paths()
+    assert os.path.exists(aurorax.download_output_root_path) is True
 
     # create some dummy files and folders
     os.makedirs("%s/testing1" % (aurorax.download_output_root_path), exist_ok=True)
@@ -192,7 +192,7 @@ def test_purge_download_path(aurorax):
 
     # check purge function
     aurorax.purge_download_output_root_path()
-    assert len(os.listdir(aurorax.download_output_root_path)) == 0
+    assert len(os.listdir(aurorax.download_output_root_path)) <= 1  # only the tar_temp_dir should be there
 
     # cleanup
     shutil.rmtree(aurorax.download_output_root_path, ignore_errors=True)
@@ -207,7 +207,8 @@ def test_purge_tar_temp_path(aurorax):
     ))
     aurorax.read_tar_temp_path = new_path
     assert aurorax.read_tar_temp_path == new_path
-    assert os.path.exists(aurorax.read_tar_temp_path)
+    aurorax.initialize_paths()
+    assert os.path.exists(aurorax.read_tar_temp_path) is True
 
     # create some dummy files and folders
     os.makedirs("%s/testing1" % (aurorax.read_tar_temp_path), exist_ok=True)

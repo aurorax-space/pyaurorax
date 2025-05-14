@@ -21,7 +21,7 @@ pyaurorax/data/ucalgary/read/__init__.py                          36      0   10
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
 pyaurorax/models/atm/__init__.py                                  17      0   100%
-pyaurorax/pyaurorax.py                                           206      0   100%
+pyaurorax/pyaurorax.py                                           210      0   100%
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -94,7 +94,7 @@ pyaurorax/tools/mosaic/_prep_skymaps.py                          119     49    5
 pyaurorax/tools/spectra/__init__.py                               10      1    90%   129
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           5891    673    89%
+TOTAL                                                           5895    673    89%
 
 13 empty files skipped.
 ```
