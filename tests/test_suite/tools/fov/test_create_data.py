@@ -33,7 +33,7 @@ def test_themis_sites(at, capsys):
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 
-
+@pytest.mark.tools
 def test_all_rego(at, capsys):
 
     # create FOVData for all REGO sites
@@ -49,7 +49,7 @@ def test_all_rego(at, capsys):
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 
-
+@pytest.mark.tools
 def test_spect(at, capsys):
 
     # create FOVData for two THEMIS sites
@@ -65,7 +65,7 @@ def test_spect(at, capsys):
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 
-
+@pytest.mark.tools
 def test_with_tuple_sites(at, capsys):
 
     # create FOVData for two THEMIS sites
@@ -101,6 +101,7 @@ def test_with_tuple_sites(at, capsys):
     assert captured_stdout != ""
 
 
+@pytest.mark.tools
 def test_improper_inputs(at):
 
     # attempt to create FOVData with site names without specifying instrument

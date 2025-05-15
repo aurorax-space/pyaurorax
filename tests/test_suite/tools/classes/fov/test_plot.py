@@ -17,7 +17,6 @@ import warnings
 import os
 import string
 import random
-import datetime
 import cartopy.crs
 from matplotlib import pyplot as plt
 from unittest.mock import patch
@@ -230,8 +229,7 @@ def test_plot_with_data_availability(mock_show, at):
 
     assert ("Before plotting FOV object with enforce_data_availability=True, " +
             "FOVData.add_availability(...) must be called for all included FOVData objects.") in str(e_info)
-    
-    
+
 
 @pytest.mark.tools
 @patch("matplotlib.pyplot.show")

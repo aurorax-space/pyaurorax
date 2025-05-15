@@ -13,13 +13,7 @@
 # limitations under the License.
 
 import pytest
-import warnings
-import os
-import string
-import random
 import datetime
-import cartopy.crs
-from matplotlib import pyplot as plt
 from unittest.mock import patch
 
 

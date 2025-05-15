@@ -15,7 +15,6 @@
 import pytest
 import cartopy.crs
 from pyaurorax.tools import FOV
-import numpy as np
 
 @pytest.mark.tools
 def test_single_data(at, capsys):
@@ -41,7 +40,7 @@ def test_single_data(at, capsys):
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 
-
+@pytest.mark.tools
 def test_multi_data(at, capsys):
 
     # create two FOVData objects for THEMIS and REGO
@@ -66,11 +65,9 @@ def test_multi_data(at, capsys):
     captured_stdout = capsys.readouterr().out
     assert captured_stdout != ""
 
-
+@pytest.mark.tools
 def test_no_data(at, capsys):
 
-
-    array = np.empty(shape=(512,512,3,1200), dtype=int)
     # create projection
     center_lat = -100.0
     center_lon = 55.0
