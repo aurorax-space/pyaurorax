@@ -386,8 +386,12 @@ class FOV:
 
                     # Add site_uid labels to the FoV plot, in the center of each ASI FoV
                     if label:
-                        center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
-                        center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
+                        if (fov_data.instrument_array != "trex_spectrograph"):
+                            center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
+                            center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
+                        else:
+                            center_lat = (latlon[0, 0] + latlon[0, -1]) / 2.0
+                            center_lon = (latlon[1, 0] + latlon[1, -1]) / 2.0
 
                         ax.text(center_lon,
                                 center_lat,
@@ -424,7 +428,7 @@ class FOV:
             if (".jpg" == f_extension or ".jpeg" == f_extension):
                 # check quality setting
                 if (savefig_quality is not None):
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
+                    plt.savefig(savefig_filename, pil_kwargs={"quality": savefig_quality}, bbox_inches="tight")
                 else:
                     plt.savefig(savefig_filename, bbox_inches="tight")
             else:
@@ -703,7 +707,11 @@ class FOV:
 
         # Check that linewidth is valid
         if linewidth <= 0:
-            raise ValueError("linewidth must be greater than zero.")
+            raise ValueError("Linewidth must be greater than zero.")
+
+        # Check that marker is valid
+        if marker not in ["", "o", ".", "p", "*", "x", "+", "X"]:
+            raise ValueError(f"Marker '{marker}' is not currently supported.")
 
         # Convert numerics to lists if necessary
         if constant_lats is not None:
@@ -734,7 +742,7 @@ class FOV:
                 raise ValueError("Lat/Lon data must be of the same size.")
 
             # Create specified contour from magnetic coords
-            y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code="A2G")
+            y, x, _ = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code="A2G")
             x, y = transformer.transform(x, y)
 
             # Add contour to dict, along with color and linewidth
@@ -755,7 +763,7 @@ class FOV:
             for lat in constant_lats:
                 # Create line of constant lat from magnetic coords
                 const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
-                const_lat_y, const_lat_x, alt = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code="A2G")
+                const_lat_y, const_lat_x, _ = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code="A2G")
                 sort_idx = np.argsort(const_lat_x)
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
@@ -779,7 +787,7 @@ class FOV:
             for lon in constant_lons:
                 # Create line of constant lon from magnetic coords
                 const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
-                const_lon_y, const_lon_x, alt = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code="A2G")
+                const_lon_y, const_lon_x, _ = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code="A2G")
                 sort_idx = np.argsort(const_lon_y)
                 const_lon_x = const_lon_x[sort_idx]
                 const_lon_y = const_lon_y[sort_idx]

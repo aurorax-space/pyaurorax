@@ -495,7 +495,7 @@ class Mosaic:
             if (".jpg" == f_extension or ".jpeg" == f_extension):
                 # check quality setting
                 if (savefig_quality is not None):
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
+                    plt.savefig(savefig_filename, pil_kwargs={"quality": savefig_quality}, bbox_inches="tight")
                 else:
                     plt.savefig(savefig_filename, bbox_inches="tight")
             else:

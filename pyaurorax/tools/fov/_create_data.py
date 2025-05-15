@@ -167,14 +167,14 @@ def create_data(aurorax_obj, sites, instrument_array, height_km, min_elevation, 
                 # If we're given site_uid codes we need to know the instrument_array
                 if instrument_array is None:
                     raise ValueError(
-                        'If specifying sites by site_uid string, instrument_array must also be supplied (e.g., instrument_array="themis_asi").')
+                        "If specifying sites by site_uid string, instrument_array must also be supplied (e.g., instrument_array='themis_asi').")
 
                 # Get the site location of this site_uid for the chosen instrument_array, from the API
                 result = aurorax_obj.data.ucalgary.list_observatories(instrument_array, uid=site)
 
                 # Check if a site record was actually returned
                 if len(result) == 0:
-                    raise ValueError(f'Could not find requested site_uid "{site}" for instrument_array "{instrument_array}".')
+                    raise ValueError(f"Could not find requested site_uid '{site}' for instrument_array '{instrument_array}'.")
                 else:
                     site_record = result[0]
 
@@ -185,7 +185,7 @@ def create_data(aurorax_obj, sites, instrument_array, height_km, min_elevation, 
 
                 # If the site is passed as a Tuple, it should be in format ("site_uid", lat, lon)
                 if (len(site) != 3) or (not isinstance(site[0], str)) or (not isinstance(site[1], float)) or (not isinstance(site[2], float)):
-                    raise ValueError(f'Improper site format for input {site}. Specifying a site by a tuple requires format ("site_uid", lat, lon).')
+                    raise ValueError(f"Improper site format for input {site}. Specifying a site by a tuple requires format ('site_uid', lat, lon).")
 
                 # Extract pieces of manual site specification
                 custom_uid = site[0]
@@ -194,10 +194,10 @@ def create_data(aurorax_obj, sites, instrument_array, height_km, min_elevation, 
 
                 # Check that lats and lons are in valid range
                 if (custom_lat > 90.0) or (custom_lat < -90.0):
-                    raise ValueError(f'Latitude {custom_lat} for site {site} is outside of the valid range [-90, 90].')
+                    raise ValueError(f"Latitude {custom_lat} for site {site} is outside of the valid range [-90, 90].")
 
                 if (custom_lon > 180.0) or (custom_lon < -180.0):
-                    raise ValueError(f'Longitude {custom_lon} for site {site} is outside of the valid range [-180, 180].')
+                    raise ValueError(f"Longitude {custom_lon} for site {site} is outside of the valid range [-180, 180].")
 
                 # If everything is valid, add this record to the dictionary
                 site_dict[custom_uid] = (custom_lat, custom_lon)
@@ -220,12 +220,12 @@ def create_data(aurorax_obj, sites, instrument_array, height_km, min_elevation, 
                 height_km = 110.0
 
     # Check that height_km is reasonable
-    if (height_km < 50.0) or (height_km > 500.0):
-        raise ValueError(f'Received "height_km" of {height_km}, outside the valid range [50.0, 500.0].')
+    if (height_km < 10.0) or (height_km > 1000.0):
+        raise ValueError(f"Received 'height_km' of {height_km}, outside the valid range [10.0, 1000.0].")
 
     # Check that min_elevation is valid
     if (min_elevation < 0.0) or (min_elevation > 90.0):
-        raise ValueError(f'Received "min_elevation" of {min_elevation}, outside the valid range [0.0, 90.0].')
+        raise ValueError(f"Received 'min_elevation' of {min_elevation}, outside the valid range [0.0, 90.0].")
 
     # Create site_uid list and dictionaries to hold fov coords and shapes, to put in the FOVData object
     site_uid_list = []
