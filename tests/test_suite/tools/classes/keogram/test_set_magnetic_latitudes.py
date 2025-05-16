@@ -102,7 +102,7 @@ def test_set_mag_on_custom_keo(at, themis_keogram_data):
         custom_keogram.set_magnetic_latitudes(timestamp, skymap_data, altitude_km=110)
 
     assert ("Unable to set the magnetic latitudes since the slice_idx is None. If this keogram" in str(e_info)
-        and ("this is expected and performing this action is not supported at this time.") in str(e_info))
+            and ("this is expected and performing this action is not supported at this time.") in str(e_info))
 
 
 @pytest.mark.tools

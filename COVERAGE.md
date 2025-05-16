@@ -79,7 +79,7 @@ pyaurorax/tools/ccd_contour/_geo.py                              106      0   10
 pyaurorax/tools/ccd_contour/_mag.py                              112      0   100%
 pyaurorax/tools/classes/fov.py                                   293      0   100%
 pyaurorax/tools/classes/keogram.py                               232      0   100%
-pyaurorax/tools/classes/montage.py                                63      1    98%   229
+pyaurorax/tools/classes/montage.py                                63      0   100%
 pyaurorax/tools/classes/mosaic.py                                313    249    20%   65, 69-82, 93-110, 143, 147-152, 159-169, 205, 210, 223, 228, 350-522, 572-678, 732-838
 pyaurorax/tools/fov/__init__.py                                   13      0   100%
 pyaurorax/tools/fov/_create_data.py                              122      0   100%
@@ -99,7 +99,7 @@ pyaurorax/tools/spectra/__init__.py                               13      2    8
 pyaurorax/tools/spectra/_get_intensity.py                         50     47     6%   23-116
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6413    588    91%
+TOTAL                                                           6413    587    91%
 
 13 empty files skipped.
 ```

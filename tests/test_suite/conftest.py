@@ -674,7 +674,7 @@ def pytest_sessionstart(session):
                 "raw_data": data,
                 "skymap": skymap_data,
             }
-            print("[SETUP]   Finished setting up TREx SPECT keogram data")
+            print("[SETUP]   Finished setting up TREx Spect keogram data")
 
         def init_task_prep_trex_rgb_burst_keogram():
             # download an hour of TREx RGB Burst data

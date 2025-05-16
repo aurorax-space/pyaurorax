@@ -154,6 +154,12 @@ def test_savefig(at, themis_keogram_data):
     assert os.path.exists(output_filename)
     os.remove(output_filename)
 
+    # savefig with quality and is a jpg 
+    output_filename = "/tmp/pyaurorax_testing_%s.jpg" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
+    montage.plot(2, 5, savefig=True, savefig_filename=output_filename, savefig_quality=90)
+    assert os.path.exists(output_filename)
+    os.remove(output_filename)
+
 
 @pytest.mark.tools
 def test_bad_rows_cols(at, themis_keogram_data):
