@@ -117,10 +117,8 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
         # Make sure lat/lon falls within skymap
         if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):
             continue
-            # raise ValueError(f"Latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
         if target_lon < np.nanmin(lons) or target_lon > np.nanmax(lons):
             continue
-            # raise ValueError(f"Longitude {target_lon} is outside this skymap's valid range of {(np.nanmin(lons),np.nanmax(lons))}.")
 
         # Compute haversine distance between all points in skymap
         haversine_diff = __haversine_distances(target_lat, target_lon, lats, lons)
@@ -192,9 +190,9 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
         raise ValueError(f"X coordinates may not be multidimensional. Sequence passed with shape {x_locs.shape}")
     if len(y_locs.shape) != 1:
         raise ValueError(f"Y coordinates may not be multidimensional. Sequence passed with shape {y_locs.shape}")
-    if len(x_locs.shape) != len(y_locs.shape):
+    if x_locs.shape[0] != y_locs.shape[0]:
         raise ValueError(f"X and Y coordinates must have same length. Sequences passed with shapes {x_locs.shape} and {y_locs.shape}")
-    
+
     # Convert lat/lon coordinates to CCD
     if coordinate_system == "mag":
         if (skymap is None or altitude_km is None):
@@ -223,7 +221,7 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
         y = y_locs[i]
 
         if x < 0 or x > x_max:
-            continue
+            continue  # pragma: nocover
         if y < 0 or y > y_max:
             continue
 

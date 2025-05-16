@@ -41,6 +41,8 @@ tools_data_trex_nir_calibration_data = None
 tools_data_ccd_contour_data = None
 tools_data_themis_keogram_data = None
 tools_data_trex_rgb_keogram_data = None
+tools_data_trex_spect_keogram_data = None
+tools_data_trex_rgb_burst_keogram_data = None
 tools_data_themis_grid_data = None
 tools_data_trex_rgb_grid_data = None
 tools_data_themis_mosaic_data = None
@@ -311,6 +313,16 @@ def trex_rgb_keogram_data():
 
 
 @pytest.fixture(scope="session")
+def trex_spect_keogram_data():
+    return tools_data_trex_spect_keogram_data
+
+
+@pytest.fixture(scope="session")
+def trex_rgb_burst_keogram_data():
+    return tools_data_trex_rgb_burst_keogram_data
+
+
+@pytest.fixture(scope="session")
 def themis_montage_data():
     return tools_data_themis_keogram_data
 
@@ -357,6 +369,8 @@ def pytest_sessionstart(session):
     global tools_data_ccd_contour_data
     global tools_data_themis_keogram_data
     global tools_data_trex_rgb_keogram_data
+    global tools_data_trex_spect_keogram_data
+    global tools_data_trex_rgb_burst_keogram_data
     global tools_data_themis_grid_data
     global tools_data_trex_rgb_grid_data
     global tools_data_themis_mosaic_data
@@ -642,6 +656,46 @@ def pytest_sessionstart(session):
             }
             print("[SETUP]   Finished setting up TREx RGB keogram data")
 
+        def init_task_prep_trex_spect_keogram():
+            # download an hour of TREx Spectrograph data
+            dataset_name = "TREX_SPECT_PROCESSED_V1"
+            start_dt = datetime.datetime(2021, 2, 16, 9, 0)
+            end_dt = datetime.datetime(2021, 2, 16, 9, 59)
+            site_uid = "rabb"
+            r = aurorax.data.ucalgary.download(dataset_name, start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+            data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
+            # download skymap file
+            r = aurorax.data.ucalgary.download_best_skymap("TREX_SPECT_SKYMAP_IDLSAV", site_uid, start_dt)
+            skymap_data = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # set variable for later usage
+            setup_task_dict["trex_spect_keogram_data"] = {
+                "raw_data": data,
+                "skymap": skymap_data,
+            }
+            print("[SETUP]   Finished setting up TREx SPECT keogram data")
+
+        def init_task_prep_trex_rgb_burst_keogram():
+            # download an hour of TREx RGB Burst data
+            dataset_name = "TREX_RGB_RAW_BURST"
+            start_dt = datetime.datetime(2023, 2, 24, 6, 0)
+            end_dt = datetime.datetime(2023, 2, 24, 6, 0)
+            site_uid = "rabb"
+            r = aurorax.data.ucalgary.download(dataset_name, start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+            data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+
+            # download skymap file
+            r = aurorax.data.ucalgary.download_best_skymap("TREX_RGB_SKYMAP_IDLSAV", site_uid, start_dt)
+            skymap_data = aurorax.data.ucalgary.read(r.dataset, r.filenames).data[0]
+
+            # set variable for later usage
+            setup_task_dict["trex_rgb_burst_keogram_data"] = {
+                "raw_data": data,
+                "skymap": skymap_data,
+            }
+            print("[SETUP]   Finished setting up TREx RGB Burst keogram data")
+
         def init_task_prep_themis_grid():
             # download a single one-minute THEMIS grid file
             dataset = "THEMIS_ASI_GRID_MOSV001"
@@ -715,6 +769,8 @@ def pytest_sessionstart(session):
             init_task_prep_ccd_contour,
             init_task_prep_themis_keogram,
             init_task_prep_trex_rgb_keogram,
+            init_task_prep_trex_spect_keogram,
+            init_task_prep_trex_rgb_burst_keogram,
             init_task_prep_themis_grid,
             init_task_prep_trex_rgb_grid,
             init_task_prep_themis_mosaic,
@@ -734,6 +790,8 @@ def pytest_sessionstart(session):
         tools_data_ccd_contour_data = setup_task_dict["ccd_contour_data"]
         tools_data_themis_keogram_data = setup_task_dict["themis_keogram_data"]
         tools_data_trex_rgb_keogram_data = setup_task_dict["trex_rgb_keogram_data"]
+        tools_data_trex_spect_keogram_data = setup_task_dict["trex_spect_keogram_data"]
+        tools_data_trex_rgb_burst_keogram_data = setup_task_dict["trex_rgb_burst_keogram_data"]
         tools_data_themis_grid_data = setup_task_dict["themis_grid_data"]
         tools_data_trex_rgb_grid_data = setup_task_dict["trex_rgb_grid_data"]
         tools_data_themis_mosaic_data = setup_task_dict["themis_mosaic_data"]

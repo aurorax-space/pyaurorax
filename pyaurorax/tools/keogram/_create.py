@@ -75,7 +75,7 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
         if n_wavelengths != n_wavelengths_in_spectra:
             raise ValueError(f"Mismatched wavelength dimensions. Received {n_wavelengths} "
                              f"wavelengths for spectrograph data with {n_wavelengths_in_spectra} wavelengths.")
-        
+
         # set y-axis
         ccd_y = np.arange(0, n_spatial_bins)
 
@@ -88,11 +88,11 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
             # Integrate over wavelengths to get Rayleighs
             iter_spectra = images[:, :, i]
 
-            rayleighs = np.trapz(iter_spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
+            rayleighs = np.trapezoid(iter_spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
 
             if wavelength_bg_range is not None:
                 if int_bg_w is not None:  # type: ignore
-                    rayleighs -= np.trapz(
+                    rayleighs -= np.trapezoid(
                         iter_spectra[int_bg_w[0], :],  # type: ignore
                         x=wavelength[int_bg_w[0]],  # type: ignore
                         axis=0)
@@ -118,8 +118,8 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
             # three channel
             n_channels = 3
         else:
-            ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
-                       "[rows,cols,images] or [rows,cols,channels,images] sized array.")
+            raise ValueError("Unable to determine number of channels based on the supplied images. Make sure you are supplying a " +
+                             "[rows,cols,images] or [rows,cols,channels,images] sized array.")
 
         # initialize keogram data
         n_rows = images.shape[0]

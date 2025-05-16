@@ -147,7 +147,10 @@ class Keogram:
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
                 altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
-                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
+                if skymap.full_map_latitude.shape[-1] == 1:
+                    self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
+                else:
+                    self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
             else:
                 # Make sure altitude is in range that can be interpolated
                 if (altitude_km * 1000.0 < skymap.full_map_altitude[0]) or (altitude_km * 1000.0 > skymap.full_map_altitude[2]):
@@ -165,7 +168,10 @@ class Keogram:
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
-            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
+            if skymap.full_map_latitude.shape[-1] == 1:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, 0]).copy()
+            else:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
 
     def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -> None:
         """
@@ -192,11 +198,23 @@ class Keogram:
         Raises:
             ValueError: Issues with specified altitude.
         """
+
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError("Unable to set the geographic latitudes since the slice_idx is None. If this keogram " +
+            raise ValueError("Unable to set the magnetic latitudes since the slice_idx is None. If this keogram " +
                              "object was created as part of the custom_keogram routines or is a spectrogaph keogram, " +
                              "this is expected and performing this action is not supported at this time.")
+
+        # Check the dimensions of the skymap lat/lon arrays
+        # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+        # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+        # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+        # the same as it would be for ASI data
+        if len(skymap.full_map_latitude.shape) == 2:
+            # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+            skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+            skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+            skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -227,10 +245,7 @@ class Keogram:
                 lons[np.where(lons > 180)] -= 360.0
 
             # Convert lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
-                                                                      lons.flatten(), (lons * 0.0).flatten(),
-                                                                      timestamp,
-                                                                      method_code='G2A')
+            mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code='G2A')
             mag_lats = np.reshape(mag_lats, lats.shape)
             mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -245,11 +260,11 @@ class Keogram:
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
         else:
             # Convert middle altitude lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
-                                                                      np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
-                                                                      (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
-                                                                      timestamp,
-                                                                      method_code='G2A')
+            mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
+                                                               np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
+                                                               (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
+                                                               timestamp,
+                                                               method_code='G2A')
             mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
             mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
 
@@ -523,7 +538,7 @@ class Keogram:
         # then that calculated, we will raise a Warning
         apparent_cadence = _determine_cadence(self.timestamp)
         if not isinstance(apparent_cadence, (float, int)):
-            raise ValueError("Could not determine cadence from object Keogram.timestamp.")
+            raise ValueError("Could not determine cadence from object Keogram.timestamp.")  # pragma: nocover
 
         if (cadence is not None) and (apparent_cadence != cadence):
             warning_str = ("Based on the keogram's timestamp attribute, the apparent cadence is %.2f s, but %.2f s was "
@@ -570,7 +585,7 @@ class Keogram:
         elif len(self.data.shape) == 3:
             desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
         else:
-            raise ValueError(f"Could not inject NaNs into keogram with data shape {self.data.shape}")
+            raise ValueError(f"Could not inject NaNs into keogram with data shape {self.data.shape}")  # pragma: nocover
 
         desired_keogram = np.empty(shape=desired_keogram_shape)
         desired_timestamp = []

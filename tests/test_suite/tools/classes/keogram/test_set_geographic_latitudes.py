@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import pytest
+import numpy as np
 from pyaurorax.tools import Keogram
 
 
@@ -69,3 +70,71 @@ def test_bad_altitude(at, themis_keogram_data):
     with pytest.raises(ValueError) as e_info:
         keogram.set_geographic_latitudes(skymap_data, altitude_km=altitude)
     assert "Altitude" in str(e_info) and "outside valid range" in str(e_info)
+
+
+@pytest.mark.tools
+def test_set_geo_on_custom_keo(at, themis_keogram_data):
+    # create the custom keogram object
+    data = themis_keogram_data["raw_data"].data
+    timestamp = themis_keogram_data["raw_data"].timestamp
+
+    # define a curve in CCD space
+    ccd_y = np.linspace(0, 255, 50)
+    ccd_x = 127.5 + 80 * np.sin(np.pi * ccd_y / 255)
+
+    # create the custom keogram
+    custom_keogram = at.keogram.create_custom(
+        data,
+        timestamp,
+        coordinate_system="ccd",
+        width=2,
+        x_locs=ccd_x,
+        y_locs=ccd_y,
+    )
+
+    assert isinstance(custom_keogram, Keogram) is True
+    assert custom_keogram.data.shape[-1] == data.shape[-1]
+
+    # incorrectly try to set lats on custom keogram
+    skymap_data = themis_keogram_data["skymap"]
+    with pytest.raises(ValueError) as e_info:
+        custom_keogram.set_geographic_latitudes(skymap_data, altitude_km=110)
+
+    assert ("Unable to set the geographic latitudes since" + " the private slice_idx is None. If this keogram" in str(e_info)
+            and ("this is expected " + "and performing this action is not supported at this time.") in str(e_info))
+
+@pytest.mark.tools
+def test_set_geo_on_spect(at, trex_spect_keogram_data, capsys):
+
+    # create the custom keogram object
+    data = trex_spect_keogram_data["raw_data"].data
+    timestamp = trex_spect_keogram_data["raw_data"].timestamp
+    keogram = at.keogram.create(data, timestamp)
+    assert isinstance(keogram, Keogram) is True
+    assert keogram.data.shape[-1] == data.shape[-1]
+
+    # add lats
+    skymap_data = trex_spect_keogram_data["skymap"]
+    keogram.set_geographic_latitudes(skymap_data)
+
+    # check __str__ and __repr__ for Keogram type
+    print_str = str(keogram)
+    assert print_str != ""
+    assert isinstance(str(keogram), str) is True
+    assert isinstance(repr(keogram), str) is True
+    keogram.pretty_print()
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""
+
+    # add lats
+    skymap_data = trex_spect_keogram_data["skymap"]
+    keogram.set_geographic_latitudes(skymap_data, altitude_km=110.0)
+
+    # check __str__ and __repr__ for Keogram type
+    print_str = str(keogram)
+    assert print_str != ""
+    assert isinstance(str(keogram), str) is True
+    assert isinstance(repr(keogram), str) is True
+    keogram.pretty_print()
+    captured_stdout = capsys.readouterr().out
+    assert captured_stdout != ""

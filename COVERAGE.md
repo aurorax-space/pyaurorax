@@ -78,7 +78,7 @@ pyaurorax/tools/ccd_contour/_elevation.py                         39      0   10
 pyaurorax/tools/ccd_contour/_geo.py                              106      0   100%
 pyaurorax/tools/ccd_contour/_mag.py                              112      0   100%
 pyaurorax/tools/classes/fov.py                                   293      0   100%
-pyaurorax/tools/classes/keogram.py                               226     63    72%   129, 197, 260-261, 475, 524-639
+pyaurorax/tools/classes/keogram.py                               232      0   100%
 pyaurorax/tools/classes/montage.py                                63      1    98%   229
 pyaurorax/tools/classes/mosaic.py                                313    249    20%   65, 69-82, 93-110, 143, 147-152, 159-169, 205, 210, 223, 228, 350-522, 572-678, 732-838
 pyaurorax/tools/fov/__init__.py                                   13      0   100%
@@ -87,19 +87,19 @@ pyaurorax/tools/fov/_create_map.py                                 7      0   10
 pyaurorax/tools/grid_files/__init__.py                             9      0   100%
 pyaurorax/tools/grid_files/_prep_grid_image.py                    36      0   100%
 pyaurorax/tools/keogram/__init__.py                               15      0   100%
-pyaurorax/tools/keogram/_create.py                                66     44    33%   24-103, 117-121, 130, 142-144
-pyaurorax/tools/keogram/_create_custom.py                        192     31    84%   76-80, 119, 122, 136, 139, 158-162, 169, 194, 196, 201, 226, 286, 298-306, 320, 327-328, 331-335, 344
+pyaurorax/tools/keogram/_create.py                                66      0   100%
+pyaurorax/tools/keogram/_create_custom.py                        191      0   100%
 pyaurorax/tools/montage/__init__.py                               11      0   100%
 pyaurorax/tools/montage/_create.py                                 9      0   100%
 pyaurorax/tools/mosaic/__init__.py                                33      9    73%   122-123, 125-127, 134-144
 pyaurorax/tools/mosaic/_create.py                                197     64    68%   53, 64, 66, 80, 83, 93-102, 124, 147, 154-165, 178-179, 185, 208, 228, 249, 259, 272-275, 291-332, 358, 362-368, 376
-pyaurorax/tools/mosaic/_prep_images.py                           170     73    57%   57-78, 90-107, 126-134, 162-170, 193, 196-197, 201-202, 209, 217-225, 236-240, 245-251, 264-265, 289, 295-312, 316
+pyaurorax/tools/mosaic/_prep_images.py                           170     59    65%   90-107, 126-134, 162-170, 193, 196-197, 201-202, 209, 217-225, 236-240, 245-251, 264-265, 289, 295-312, 316
 pyaurorax/tools/mosaic/_prep_skymaps.py                          119     49    59%   32-74, 130, 159-165, 179-181, 207-233
 pyaurorax/tools/spectra/__init__.py                               13      2    85%   130, 182
 pyaurorax/tools/spectra/_get_intensity.py                         50     47     6%   23-116
 pyaurorax/tools/spectra/_plot.py                                 114    108     5%   42-233
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6408    740    88%
+TOTAL                                                           6413    588    91%
 
 13 empty files skipped.
 ```
