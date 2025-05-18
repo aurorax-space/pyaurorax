@@ -115,11 +115,13 @@ def plot(
             for i in range(len(timestamp)):
                 auto_legend.append(f"spatial bin {spect_loc[i]}")
 
-        else:
-            auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} Spectrograph"
-            auto_legend = []
-            for _i in range(len(timestamp)):
-                auto_legend.append(f"{timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC (spatial bin {spect_loc[0]})")
+    elif len(timestamp) > 1:
+        auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} Spectrograph"
+
+        auto_legend = []
+        for i in range(len(timestamp)):
+            for j in range(len(spect_loc)):
+                auto_legend.append(f"{timestamp[i].strftime('%Y-%m-%d %H:%M:%S')} UTC (spatial bin {spect_loc[j]})")
 
     # Extract spectrograph data from Data object
     spectra = spect_data.data
@@ -206,7 +208,7 @@ def plot(
         if (".jpg" == f_extension or ".jpeg" == f_extension):
             # check quality setting
             if (savefig_quality is not None):
-                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches="tight")
+                plt.savefig(savefig_filename, pil_kwargs={"quality": savefig_quality}, bbox_inches="tight")
             else:
                 plt.savefig(savefig_filename, bbox_inches="tight")
         else:

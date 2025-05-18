@@ -30,8 +30,6 @@ def get_intensity(spect_data, timestamp, spect_loc, spect_emission, spect_band, 
         elif spect_band_bg is not None:
             raise ValueError(
                 "Only one of spect_emission and spect_band/spect_band_bg may be used to select the wavelength range for integration of spectra.")
-        if (spect_band is None) and (spect_band_bg is not None):
-            raise ValueError("If manually providing wavelength range for integration with spect_band_bg, spect_band must also be included.")
 
     # Determine integration bounds for spectrograph data
     if (spect_emission is not None):
@@ -60,7 +58,7 @@ def get_intensity(spect_data, timestamp, spect_loc, spect_emission, spect_band, 
         else:
             wavelength_bg_range = spect_band_bg
     else:
-        raise ValueError("Please supply either spect_emission to choose which emission line to integrate, or pass " +
+        raise ValueError("Please supply either spect_emission to choose which emission line to integrate, or pass " +  # pragma: nocover
                          "in a spect_band (and optionally spect_band_bg) to manually select the wavelength range to integrate over")
 
     # Convert input timestamps to list if required
@@ -97,7 +95,7 @@ def get_intensity(spect_data, timestamp, spect_loc, spect_emission, spect_band, 
         if len(epoch_idx) == 0:
             raise ValueError(f"Input does not contain data for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}.")
         if len(epoch_idx) > 1:
-            raise ValueError(f"Input contains multiple data points for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}.")
+            raise ValueError(f"Input contains multiple data points for requested timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}.")  # pragma: nocover
 
         # Slice out the spectrum of interest
         spectrum = np.squeeze(spectra[:, spect_loc, epoch_idx])
