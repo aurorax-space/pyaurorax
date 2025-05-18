@@ -182,7 +182,10 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
 
                 if (np.sum(tmp) == 0.0):
                     # If it's sum is zero, we know there is no data so we can simply continue.
-                    continue
+                    continue  # pragma: nocover
+
+                if "_asi" in site:
+                    site = site.replace("_asi", "")
 
                 # Scale this site's data based on previously defined scaling bounds
                 tmp = scale_intensity(
@@ -283,7 +286,7 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
             # Only iterate through the sites that actually have data
             for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
 
-                # Skip spectrograph data for now as that should always be plotted last
+                # Now doing spect data
                 if datatypes_with_data[site_idx] != "spect":
                     continue
 
@@ -300,36 +303,24 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
                 el_lvl_fill_lons = polyfill_lon[site_idx][:, el_idx]
 
                 # Grab this level's data values
-                if n_channels == 1:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx]
-                else:
-                    el_lvl_cmap_vals = all_images[site_id][el_idx, :]
+                el_lvl_cmap_vals = all_images[site_id][el_idx]
 
                 # # Mask any nans that may have slipped through - done as a precaution
                 nan_mask = ~np.isnan(el_lvl_fill_lats).any(axis=0) & ~np.isnan(el_lvl_fill_lons).any(axis=0)
 
                 el_lvl_fill_lats = el_lvl_fill_lats[:, nan_mask]
                 el_lvl_fill_lons = el_lvl_fill_lons[:, nan_mask]
-                if n_channels == 1:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
-                else:
-                    el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask, :]
+                el_lvl_cmap_vals = el_lvl_cmap_vals[nan_mask]
 
                 # Convert pixel values to a normalized float
                 el_lvl_colors = el_lvl_cmap_vals.astype(np.float32) / 255.0
 
                 # Append polygon lat/lons and values to master lists
-                if n_channels == 1:
-                    cmap = plt.get_cmap(iter_spect_cmap)
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(cmap(el_lvl_colors[k]))
-                else:
-                    for k in range(len(el_lvl_fill_lats[0, :])):
-                        lon_list.append(el_lvl_fill_lons[:, k])
-                        lat_list.append(el_lvl_fill_lats[:, k])
-                        cmap_vals.append(el_lvl_colors[k, :])
+                cmap = plt.get_cmap(iter_spect_cmap)
+                for k in range(len(el_lvl_fill_lats[0, :])):
+                    lon_list.append(el_lvl_fill_lons[:, k])
+                    lat_list.append(el_lvl_fill_lats[:, k])
+                    cmap_vals.append(cmap(el_lvl_colors[k]))
 
             el += elev_delta
 
@@ -343,12 +334,11 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
 
         # generate a PolyCollection object, containing all of the Polygons shaded with
         # their corresponding RGB value
-
         img_data_poly = matplotlib.collections.PolyCollection(
             lonlat_polygons,  # type: ignore
             facecolors=cmap_vals,
             array=None,
-            clim=[0.0, 1.0],
+            # clim=[0.0, 1.0],
             edgecolors="face",
         )
 

@@ -46,6 +46,8 @@ tools_data_trex_rgb_burst_keogram_data = None
 tools_data_themis_grid_data = None
 tools_data_trex_rgb_grid_data = None
 tools_data_themis_mosaic_data = None
+tools_data_trex_rgb_mosaic_data = None
+tools_data_trex_spect_mosaic_data = None
 
 
 def pytest_addoption(parser):
@@ -347,6 +349,16 @@ def themis_mosaic_data():
     return tools_data_themis_mosaic_data
 
 
+@pytest.fixture(scope="session")
+def trex_rgb_mosaic_data():
+    return tools_data_trex_rgb_mosaic_data
+
+
+@pytest.fixture(scope="session")
+def trex_spect_mosaic_data():
+    return tools_data_trex_spect_mosaic_data
+
+
 #---------------------------------------------------
 # SETUP and TEARDOWN routines
 #---------------------------------------------------
@@ -374,6 +386,8 @@ def pytest_sessionstart(session):
     global tools_data_themis_grid_data
     global tools_data_trex_rgb_grid_data
     global tools_data_themis_mosaic_data
+    global tools_data_trex_rgb_mosaic_data
+    global tools_data_trex_spect_mosaic_data
 
     # initial setup
     print("[SETUP] Setting up API URL and API key ...")
@@ -758,6 +772,92 @@ def pytest_sessionstart(session):
             }
             print("[SETUP]   Finished setting up THEMIS mosaic data")
 
+        def init_task_prep_trex_rgb_mosaic():
+            # download a minute of THEMIS data from several sites
+            dataset_name = "TREX_RGB_RAW_NOMINAL"
+            dt = datetime.datetime(2023, 2, 24, 6, 15)
+            site_uid_list = ["yknf", "gill", "rabb"]
+            data_list = []
+            for site_uid in site_uid_list:
+                r = aurorax.data.ucalgary.download(dataset_name, dt, dt, site_uid=site_uid, progress_bar_disable=True)
+                data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+                data_list.append(data)
+
+            # download and read skymaps
+            skymaps = []
+            for site_uid in site_uid_list:
+                download_obj = aurorax.data.ucalgary.download_best_skymap("TREX_RGB_SKYMAP_IDLSAV", site_uid, dt)
+                skymap = aurorax.data.ucalgary.read(download_obj.dataset, download_obj.filenames[-1])
+                skymaps.append(skymap.data[0])
+
+            # prep skymaps
+            prepped_skymaps = aurorax.tools.mosaic.prep_skymaps(skymaps, 110, progress_bar_disable=True, n_parallel=2)
+
+            # prepare the image data
+            prepped_images = aurorax.tools.mosaic.prep_images(data_list)
+
+            # set variable for later usage
+            setup_task_dict["trex_rgb_mosaic_data"] = {
+                "raw_data": data_list,
+                "skymaps": skymaps,
+                "prepped_skymaps": prepped_skymaps,
+                "prepped_images": prepped_images,
+                "dt": dt,
+            }
+            print("[SETUP]   Finished setting up TREx RGB mosaic data")
+
+        def init_task_prep_trex_spect_mosaic():
+
+            # download some spect data
+            start_dt = datetime.datetime(2021, 3, 13, 9, 40, 15)
+            end_dt = datetime.datetime(2021, 3, 13, 9, 40, 45)
+            data_list = []
+            data_list_spect = []
+            rgb_site_list = ["gill"]
+            for site_uid in rgb_site_list:
+                r = aurorax.data.ucalgary.download("TREX_RGB_RAW_NOMINAL", start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+                data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+                data_list.append(data)
+            spect_site_list = ["luck"]
+            for site_uid in spect_site_list:
+                r = aurorax.data.ucalgary.download("TREX_SPECT_PROCESSED_V1", start_dt, end_dt, site_uid=site_uid, progress_bar_disable=True)
+                data = aurorax.data.ucalgary.read(r.dataset, r.filenames, start_time=start_dt, end_time=end_dt)
+                data_list.append(data)
+                data_list_spect.append(data)
+
+            # download and read the TREx Spectrograph skymaps
+            skymaps = []
+            skymaps_spect = []
+            for site_uid in rgb_site_list:
+                r = aurorax.data.ucalgary.download_best_skymap("TREX_RGB_SKYMAP_IDLSAV", site_uid, start_dt)
+                skymap_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+                skymaps.append(skymap_data.data[0])
+            for site_uid in spect_site_list:
+                r = aurorax.data.ucalgary.download_best_skymap("TREX_SPECT_SKYMAP_IDLSAV", site_uid, start_dt)
+                skymap_data = aurorax.data.ucalgary.read(r.dataset, r.filenames)
+                skymaps.append(skymap_data.data[0])
+                skymaps_spect.append(skymap_data.data[0])
+
+            # prep skymaps
+            prepped_skymaps = aurorax.tools.mosaic.prep_skymaps(skymaps, 110, progress_bar_disable=True, n_parallel=2)
+            prepped_spect_skymaps = aurorax.tools.mosaic.prep_skymaps(skymaps_spect, 110, progress_bar_disable=True, n_parallel=2)
+
+            # prepare the image data
+            prepped_images = aurorax.tools.mosaic.prep_images(data_list, spect_emission="green")
+            prepped_spect_images = aurorax.tools.mosaic.prep_images(data_list_spect, spect_emission="green")
+
+            # set variable for later usage
+            setup_task_dict["trex_spect_mosaic_data"] = {
+                "raw_data": data_list,
+                "skymaps": skymaps,
+                "prepped_skymaps": prepped_skymaps,
+                "prepped_spect_skymaps": prepped_spect_skymaps,
+                "prepped_images": prepped_images,
+                "prepped_spect_images": prepped_spect_images,
+                "dt": datetime.datetime(2021, 3, 13, 9, 40, 30),
+            }
+            print("[SETUP]   Finished setting up TREx Spect mosaic data")
+
         # start and wait for threads
         tasks = [
             init_task_download_read_themis_single_minute,
@@ -774,6 +874,8 @@ def pytest_sessionstart(session):
             init_task_prep_themis_grid,
             init_task_prep_trex_rgb_grid,
             init_task_prep_themis_mosaic,
+            init_task_prep_trex_rgb_mosaic,
+            init_task_prep_trex_spect_mosaic,
         ]
         with ThreadPoolExecutor(max_workers=MAX_INIT_WORKERS) as executor:
             futures = [executor.submit(task) for task in tasks]
@@ -795,6 +897,8 @@ def pytest_sessionstart(session):
         tools_data_themis_grid_data = setup_task_dict["themis_grid_data"]
         tools_data_trex_rgb_grid_data = setup_task_dict["trex_rgb_grid_data"]
         tools_data_themis_mosaic_data = setup_task_dict["themis_mosaic_data"]
+        tools_data_trex_rgb_mosaic_data = setup_task_dict["trex_rgb_mosaic_data"]
+        tools_data_trex_spect_mosaic_data = setup_task_dict["trex_spect_mosaic_data"]
     else:
         print("[SETUP] Skipping tools setup tasks")
 

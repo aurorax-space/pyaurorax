@@ -224,7 +224,7 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
             if wavelength_bg_range is not None:
                 int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
         else:
-            current_data_type = 'asi'
+            current_data_type = "asi"
             data_type_list.append(current_data_type)
 
         # add to site uid list - must use try as metadata differs between networks
@@ -254,7 +254,7 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
         # initialize this site's data destination variables
         images_dict[site_uid] = np.squeeze(np.full((height, width, n_channels, expected_num_frames), np.nan))
 
-        # find the index in the data corresponding to each expected timestamp 
+        # find the index in the data corresponding to each expected timestamp
         for i in range(0, len(expected_timestamps)):
 
             # If we are working with burst data, we simply grab the *closest* frame
@@ -262,9 +262,9 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
             # to restrict to exact matches
             if is_burst:
                 searching_dt = expected_timestamps[i]
-                found_idx = min(range(len(site_image_data.timestamp)),key=lambda j: abs(site_image_data.timestamp[j] - searching_dt))
+                found_idx = min(range(len(site_image_data.timestamp)), key=lambda j: abs(site_image_data.timestamp[j] - searching_dt))
 
-            # If we are not working with burst data, use a binary search (we assume it is already sorted) 
+            # If we are not working with burst data, use a binary search (we assume it is already sorted)
             # to find the location in image_data that exactly matches each expected timestamp
             else:
                 searching_dt = expected_timestamps[i]
@@ -300,11 +300,11 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
                         if wavelength_bg_range is not None:
                             int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
 
-                    rayleighs = np.trapz(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
+                    rayleighs = np.trapezoid(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)
 
                     if wavelength_bg_range is not None:
                         if int_bg_w is not None:
-                            rayleighs -= np.trapz(spectra[int_bg_w[0], :], x=wavelength[int_bg_w[0]], axis=0)  # type: ignore
+                            rayleighs -= np.trapezoid(spectra[int_bg_w[0], :], x=wavelength[int_bg_w[0]], axis=0)  # type: ignore
 
                     rayleighs = np.nan_to_num(rayleighs, nan=0.0)
                     rayleighs[np.where(rayleighs < 0.0)] = 0.0  # type: ignore
