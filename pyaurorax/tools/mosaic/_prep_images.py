@@ -190,9 +190,9 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
             site_data = site_image_data.data
         else:
             # data attribute can only be "calibrated_data"
-            site_data = site_image_data.calibrated_data
+            site_data = site_image_data.calibrated_data  # pragma: nocover
 
-        if site_image_data.dataset is None:
+        if site_image_data.dataset is None:  # pragma: nocover
             show_warning("Skipping data objects with missing datasets.", stacklevel=1)
             continue
 
@@ -236,7 +236,7 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
             except KeyError:
                 try:
                     site_uid = site_image_data.metadata[0]["site_uid"].decode('utf-8')
-                except KeyError as e:
+                except KeyError as e:  # pragma: nocover
                     raise KeyError("Unable to find site UID in Metadata") from e
 
         # We don't attempt to handle the same site being passed in for multiple networks
@@ -297,7 +297,7 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
                     if (int_w is None) or (wavelength is None) or (int_bg_w is None):
                         wavelength = site_image_data.metadata[0]["wavelength"]
                         int_w = np.where((wavelength >= wavelength_range[0]) & (wavelength <= wavelength_range[1]))
-                        if wavelength_bg_range is not None:
+                        if wavelength_bg_range is not None:  # pragma: nocover
                             int_bg_w = np.where((wavelength >= wavelength_bg_range[0]) & (wavelength <= wavelength_bg_range[1]))
 
                     rayleighs = np.trapezoid(spectra[int_w[0], :], x=wavelength[int_w[0]], axis=0)

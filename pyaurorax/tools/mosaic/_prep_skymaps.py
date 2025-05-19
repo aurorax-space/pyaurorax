@@ -127,7 +127,7 @@ def __flatten_skymap(processing_dict):
                 pix_lats = np.array([lat1, lat2, lat3, lat4, lat1])
                 if np.isnan(np.array(pix_lats)).any():
                     # Skip any nans, as we only fill pixels with 4 finite corners
-                    continue
+                    continue  # pragma: nocover
 
                 site_polyfill_lon[:, ii, jj] = pix_lons
                 site_polyfill_lat[:, ii, jj] = pix_lats

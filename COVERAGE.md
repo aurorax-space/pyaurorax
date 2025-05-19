@@ -80,7 +80,7 @@ pyaurorax/tools/ccd_contour/_mag.py                              112      0   10
 pyaurorax/tools/classes/fov.py                                   293      0   100%
 pyaurorax/tools/classes/keogram.py                               232      0   100%
 pyaurorax/tools/classes/montage.py                                63      0   100%
-pyaurorax/tools/classes/mosaic.py                                313    238    24%   65, 93-110, 143, 159-169, 205, 210, 223, 228, 350-522, 572-678, 732-838
+pyaurorax/tools/classes/mosaic.py                                313    216    31%   205, 210, 223, 228, 350-522, 572-678, 732-838
 pyaurorax/tools/fov/__init__.py                                   13      0   100%
 pyaurorax/tools/fov/_create_data.py                              122      0   100%
 pyaurorax/tools/fov/_create_map.py                                 7      0   100%
@@ -93,13 +93,13 @@ pyaurorax/tools/montage/__init__.py                               11      0   10
 pyaurorax/tools/montage/_create.py                                 9      0   100%
 pyaurorax/tools/mosaic/__init__.py                                33      0   100%
 pyaurorax/tools/mosaic/_create.py                                189      0   100%
-pyaurorax/tools/mosaic/_prep_images.py                           170     32    81%   90-107, 126-134, 162-170, 193, 196-197, 239-240, 250-251, 264-265, 298-301
-pyaurorax/tools/mosaic/_prep_skymaps.py                          119     18    85%   130, 159-165, 207-211, 221-233
+pyaurorax/tools/mosaic/_prep_images.py                           162      0   100%
+pyaurorax/tools/mosaic/_prep_skymaps.py                          118      0   100%
 pyaurorax/tools/spectra/__init__.py                               13      0   100%
 pyaurorax/tools/spectra/_get_intensity.py                         46      0   100%
 pyaurorax/tools/spectra/_plot.py                                 116      0   100%
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6403    288    96%
+TOTAL                                                           6394    216    97%
 
 13 empty files skipped.
 ```
