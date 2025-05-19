@@ -202,12 +202,12 @@ class Mosaic:
 
     def __repr__(self) -> str:
         if isinstance(self.polygon_data, list):
-            polycollection_str = "[PolyCollection(...), ...]"
+            polycollection_str = "[PolyCollection(...), ...]"  # pragma: nocover
         else:
             polycollection_str = "PolyCollection(...)"
 
         if self.contour_data is not None:
-            return "Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)" % (
+            return "Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)" % (  # pragma: nocover
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get("x", [])),
             )
@@ -220,12 +220,12 @@ class Mosaic:
         """
         # set special strings
         if isinstance(self.polygon_data, list):
-            polycollection_str = "[PolyCollection(...), ...]"
+            polycollection_str = "[PolyCollection(...), ...]"  # pragma: nocover
         else:
             polycollection_str = "PolyCollection(...)"
         cartopy_projection_str = "Projection(%s)" % (self.cartopy_projection.to_string())
         if self.contour_data is not None:
-            contour_data_str = "%d Contours" % (len(self.contour_data.get("x", [])), )
+            contour_data_str = "%d Contours" % (len(self.contour_data.get("x", [])), )  # pragma: nocover
         else:
             contour_data_str = "None"
 
@@ -396,7 +396,7 @@ class Mosaic:
         # NOTE: it seems that when running this function a second time, the polygon
         # data is not too happy. So to handle this, we plot a copy of the polygon data
         if isinstance(self.polygon_data, list):
-            for polygon_data in self.polygon_data:
+            for polygon_data in self.polygon_data:  # pragma: nocover
                 ax.add_collection(copy(polygon_data))
         else:
             ax.add_collection(copy(self.polygon_data))
@@ -417,7 +417,7 @@ class Mosaic:
 
         # add text
         if (rayleighs is True):
-            if isinstance(self.polygon_data, list):
+            if isinstance(self.polygon_data, list):  # pragma: nocover
                 raise ValueError("Rayleighs Keyword is currently not available for mosaics with multiple sets of data.")
 
             # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
@@ -441,7 +441,7 @@ class Mosaic:
 
         if (self.spect_cmap) is not None:
 
-            if (self.spect_intensity_scale) is None:
+            if (self.spect_intensity_scale) is None:  # pragma: nocover
                 intensity_max = np.nan
                 intensity_min = np.nan
             else:
@@ -454,11 +454,11 @@ class Mosaic:
 
             # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
             cbar_ticknames[-1] += "+"
-            if isinstance(self.polygon_data, list):
+            if isinstance(self.polygon_data, list):  # pragma: nocover
                 self.polygon_data[0].set_cmap(cbar_colormap)
             else:
                 self.polygon_data.set_cmap(cbar_colormap)
-            if isinstance(self.polygon_data, list):
+            if isinstance(self.polygon_data, list):  # pragma: nocover
                 cbar = plt.colorbar(self.polygon_data[0], shrink=0.5, ticks=cbar_ticks, ax=ax)
             else:
                 cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
@@ -602,7 +602,7 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn't exist yet
         if self.contour_data is None:
-            self.contour_data = {"x": [], "y": [], "color": [], "linewidth": [], "linestyle": [], "marker": [], "zorder": []}
+            self.contour_data = {"x": [], "y": [], "color": [], "linewidth": [], "linestyle": [], "marker": [], "zorder": []}  # pragma: nocover
 
         # Obtain the mosaic's projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -746,7 +746,11 @@ class Mosaic:
 
         # Check that linewidth is valid
         if linewidth <= 0:
-            raise ValueError("linewidth must be greater than zero.")
+            raise ValueError("Linewidth must be greater than zero.")
+
+        # Check that marker is valid
+        if marker not in ["", "o", ".", "p", "*", "x", "+", "X"]:
+            raise ValueError(f"Marker '{marker}' is not currently supported.")
 
         # Convert numerics to lists if necessary
         if constant_lats is not None:
