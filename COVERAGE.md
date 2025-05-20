@@ -21,7 +21,7 @@ pyaurorax/data/ucalgary/read/__init__.py                          36      0   10
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
 pyaurorax/models/atm/__init__.py                                  17      0   100%
-pyaurorax/pyaurorax.py                                           206      0   100%
+pyaurorax/pyaurorax.py                                           210      0   100%
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -99,7 +99,11 @@ pyaurorax/tools/spectra/__init__.py                               13      0   10
 pyaurorax/tools/spectra/_get_intensity.py                         46      0   100%
 pyaurorax/tools/spectra/_plot.py                                 116      0   100%
 --------------------------------------------------------------------------------------------
+<<<<<<< HEAD
 TOTAL                                                           6380      0   100%
+=======
+TOTAL                                                           5895    673    89%
+>>>>>>> main
 
 13 empty files skipped.
 ```

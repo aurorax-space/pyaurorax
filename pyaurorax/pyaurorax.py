@@ -105,7 +105,11 @@ class PyAuroraX:
         """
         # initialize path parameters
         self.__download_output_root_path = download_output_root_path
+        if (self.__download_output_root_path is None):
+            self.__download_output_root_path = Path("%s/pyaurorax_data" % (str(Path.home())))
         self.__read_tar_temp_path = read_tar_temp_path
+        if (self.__read_tar_temp_path is None):
+            self.__read_tar_temp_path = Path("%s/tar_temp_working" % (self.__download_output_root_path))
 
         # initialize api parameters
         self.__api_base_url = api_base_url
@@ -120,9 +124,6 @@ class PyAuroraX:
         # initialize progress bar parameters
         self.__progress_bar_backend = progress_bar_backend
         self._tqdm = None
-
-        # initialize paths
-        self.__initialize_paths()
 
         # initialize PyUCalgarySRS object
         self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
@@ -250,7 +251,7 @@ class PyAuroraX:
     @download_output_root_path.setter
     def download_output_root_path(self, value: str):
         self.__download_output_root_path = value
-        self.__initialize_paths()
+        self.initialize_paths()
         self.__srs_obj.download_output_root_path = self.__download_output_root_path
 
     @property
@@ -263,7 +264,7 @@ class PyAuroraX:
     @read_tar_temp_path.setter
     def read_tar_temp_path(self, value: str):
         self.__read_tar_temp_path = value
-        self.__initialize_paths()
+        self.initialize_paths()
         self.__srs_obj.read_tar_temp_path = self.__read_tar_temp_path
 
     @property
@@ -328,9 +329,9 @@ class PyAuroraX:
         print("  %-27s: %s" % ("srs_obj", "PyUCalgarySRS(...)"))
 
     # -----------------------------
-    # private methods
+    # public methods
     # -----------------------------
-    def __initialize_paths(self):
+    def initialize_paths(self):
         """
         Initialize the `download_output_root_path` and `read_tar_temp_path` directories.
 
@@ -348,9 +349,6 @@ class PyAuroraX:
         except IOError as e:  # pragma: nocover-ok
             raise AuroraXInitializationError("Error during output path creation: %s" % str(e)) from e
 
-    # -----------------------------
-    # public methods
-    # -----------------------------
     def purge_download_output_root_path(self, dataset_name: Optional[str] = None):
         """
         Delete all files in the `download_output_root_path` directory. Since the
@@ -442,10 +440,11 @@ class PyAuroraX:
 
         # get list of dataset paths
         dataset_paths = []
-        for f in os.listdir(download_pathlib_path):
-            path_f = download_pathlib_path / f
-            if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
-                dataset_paths.append(path_f)
+        if (download_pathlib_path.exists() is True):
+            for f in os.listdir(download_pathlib_path):
+                path_f = download_pathlib_path / f
+                if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
+                    dataset_paths.append(path_f)
 
         # get size of each dataset path
         dataset_dict = {}
