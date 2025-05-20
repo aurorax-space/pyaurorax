@@ -99,11 +99,7 @@ pyaurorax/tools/spectra/__init__.py                               13      0   10
 pyaurorax/tools/spectra/_get_intensity.py                         46      0   100%
 pyaurorax/tools/spectra/_plot.py                                 116      0   100%
 --------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-TOTAL                                                           6380      0   100%
-=======
-TOTAL                                                           5895    673    89%
->>>>>>> main
+TOTAL                                                           6384      0   100%
 
 13 empty files skipped.
 ```
