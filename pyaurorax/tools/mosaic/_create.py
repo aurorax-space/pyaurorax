@@ -121,7 +121,7 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
         minimum_timestamp = (np.array(data.timestamps))[np.argmin(np.array(data.timestamps))]
         maximum_timestamp = (np.array(data.timestamps))[np.argmax(np.array(data.timestamps))]
         if timestamp < minimum_timestamp or timestamp > maximum_timestamp:
-            raise ValueError("Could not create mosaic for timestamp" + timestamp.strftime("%Y/%m/%d %H:%M:%S") +
+            raise ValueError("Could not create mosaic for timestamp " + timestamp.strftime("%Y/%m/%d %H:%M:%S") +
                              " as image data was only supplied for the timestamp range: " + minimum_timestamp.strftime("%Y/%m/%d %H:%M:%S") + " to " +
                              maximum_timestamp.strftime("%Y/%m/%d %H:%M:%S"))
 
