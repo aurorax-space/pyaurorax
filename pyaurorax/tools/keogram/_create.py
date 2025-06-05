@@ -21,7 +21,7 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
     # First check if we are dealing with spectrograph data
     if spectra:
 
-        instrument_type = 'spectrograph'
+        instrument_type = "spectrograph"
         middle_column_idx = 0
 
         if axis != 0:
@@ -31,17 +31,17 @@ def create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_b
 
         # Determine integration bounds for spectrograph data
         wavelength_range = {
-            'green': [557.0 - 1.5, 557.0 + 1.5],
-            'red': [630.0 - 1.5, 630.0 + 1.5],
-            'blue': [427.8 - 3.0, 427.8 + 0.5],
-            'hbeta': [486.1 - 1.5, 486.1 + 1.5]
+            "green": [557.0 - 1.5, 557.0 + 1.5],
+            "red": [630.0 - 1.5, 630.0 + 1.5],
+            "blue": [427.8 - 3.0, 427.8 + 0.5],
+            "hbeta": [486.1 - 1.5, 486.1 + 1.5]
         }[spect_emission]
 
         wavelength_bg_range = {
-            'green': [552.0 - 1.5, 552.0 + 1.5],
-            'red': [625.0 - 1.5, 625.0 + 1.5],
-            'blue': [430.0 - 1.0, 430.0 + 1.0],
-            'hbeta': [480.0 - 1.0, 480.0 + 1.0]
+            "green": [552.0 - 1.5, 552.0 + 1.5],
+            "red": [625.0 - 1.5, 625.0 + 1.5],
+            "blue": [430.0 - 1.0, 430.0 + 1.0],
+            "hbeta": [480.0 - 1.0, 480.0 + 1.0]
         }[spect_emission]
 
         # Check if manual integration bands were supplied
