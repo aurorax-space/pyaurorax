@@ -71,6 +71,9 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
 
         lons[np.where(lons > 180)] -= 360.0  # Fix skymap to be in (-180,180) format
 
+    if (len(lats.shape) < 2) or (len(lons.shape) < 2):
+        raise ValueError("Latitude/Longitude arrays within skymap must be multi-dimensional for ASI data.")
+    
     # First handle case of a contour of constant latitude:
     if (constant_lat is not None):
         # First check that the supplied latitude is valid for this skymap
@@ -110,6 +113,7 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
             y_list.append(y[0])
 
         if (remove_edge_cases is True):
+
             # Remove any points lying on the edge of CCD bounds and return
             x_list = np.array(x_list)
             y_list = np.array(y_list)

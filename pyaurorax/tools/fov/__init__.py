@@ -42,7 +42,7 @@ class FOVManager:
             cartopy_projection (cartopy.crs.Projection): 
                 The cartopy projection to use when creating the FoV map.
 
-            fov_data (pyaurorax.tools.FOVData):
+            fov_data (pyaurorax.tools.FOVData): 
                 A single or list of FOVData objects, that will be added to the
                 FOV object map upon initialization. Otherwise the object will be
                 created without any associated data (an empty map).
@@ -69,28 +69,28 @@ class FOVManager:
 
         Args:
             
-            site_uid_list (list of str or tuples):
+            sites (list of str or tuples): 
                 The sites to be included in the FOVData object. Can be passed as a list of either one of or both of site_uid strings and/or
                 ('uid', lat, lon) tuples. If passing lone site_uid strings, the instrument_array argument must be provided.
 
-            instrument_array (str):
+            instrument_array (str): 
                 The instrument array name to add FOVs for each site (e.g. 'themis_asi')
             
-            height_km (float):
+            height_km (float): 
                 The altitude to map the FoVs at, in kilometers. Defaults to 110, unless instrument_array='rego', in which case the
                 altitude defaults to 230.
 
-            min_elevation (float):
+            min_elevation (float): 
                 The minimum elevation for which the FoV is defined, in degrees. Default is 5.
 
-            color (str):
+            color (str): 
                 String giving the matplotlib color to use for plotting this FOVData. Default is 'black'.
 
-            linewidth (int):
+            linewidth (int): 
                 Gives the linewidth used for plotting this FOVData. Default is 1.
 
-            linestyle (str):
-                matplotlib formatting string specifying the linestyle for plotting FOVData. Default is '-' (solid line).
+            linestyle (str): 
+                Matplotlib formatting string specifying the linestyle for plotting FOVData. Default is '-' (solid line).
 
         Returns:
             The 'prepared data, as a `pyaurorax.tools.FOVData` object.'

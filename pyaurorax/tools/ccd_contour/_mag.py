@@ -84,6 +84,9 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
         lats = np.reshape(mag_lats, lats.shape)
         lons = np.reshape(mag_lons, lons.shape)
 
+    if (len(lats.shape) < 2) or (len(lons.shape) < 2):
+        raise ValueError("Latitude/Longitude arrays within skymap must be multi-dimensional for ASI data.")
+    
     # First handle case of a contour of constant latitude:
     if (constant_lat is not None):
         # First check that the supplied latitude is valid for this skymap

@@ -144,7 +144,7 @@ class KeogramManager:
                 The metric used to compute values for each keogram pixel. Valid options are "median", "mean",
                 "sum", and "percentile". Defaults to "median".
 
-            percentile (float):
+            percentile (float): 
                 Sets the brightness percentile to calculate within each keogram bin. For each bin defined along
                 the keogram contour, this percentile is computed over all included ASI pixels, and used as the
                 value for that keogram bin. This argument is required if metric is set to "percentile" and

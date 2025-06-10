@@ -153,7 +153,7 @@ class SpectraManager:
             spect_loc (int): 
                 An int or list of ints giving the spectrograph spatial bin indices to plot.
             
-            spect_emission (str):
+            spect_emission (str): 
                 A string to specify that the absolute intensity should be calculated for a
                 common auroral emission. Available options are:
 
@@ -162,11 +162,11 @@ class SpectraManager:
                     "blue"  - 427.8 nm (Blue-Line) emission
                     "hbeta" - 481.6 nm (H-Beta) emission
 
-            spect_band (tuple):
+            spect_band (tuple): 
                 If manually selecting the integration region, this should specify the min and
                 max wavelength to integrate over for the emission.
 
-            spect_band_bg (tuple):
+            spect_band_bg (tuple): 
                 If manually selecting the integration region, optionally allows for the selection
                 of another wavelength region to subtract from the emission intensity.
 

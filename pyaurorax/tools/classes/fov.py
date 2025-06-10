@@ -42,22 +42,27 @@ class FOVData:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
 
-        fovs (Dict[str, numpy.ndarray]):
+        fovs (Dict[str, numpy.ndarray]): 
             Dictionary that holds the lat/lon data in a 2xN numpy array giving the FoV, for each site UID.
             
-        fovs_dimension (Dict[str, numpy.ndarray]):
+        fovs_dimensions (Dict[str, numpy.ndarray]): 
             Dictionary that holds the shape of each set of lat/lon data.
 
-        instrument_array (str):
+        instrument_array (str): 
             String giving the name of the instrument array this FOVData object corresponds to (optional).
             
-        color (str):
+        data_availability (dict): 
+            An optional dictionary containing information about which sites included in the FOVData actually
+            have available data for a given time range. Usually created using the FOVData.add_Availability()
+            method.
+
+        color (str): 
             String specifying the color to use when plotting this FOVData.
         
-        linewidth (str):
+        linewidth (str): 
             Integer specifying the linewidth to use when plotting this FOVData.
         
-        linestyle(str):
+        linestyle (str): 
             String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.
     """
 
@@ -110,13 +115,13 @@ class FOVData:
         data in a given time interval.
 
         Args:
-            dataset_name (str):
+            dataset_name (str): 
                 The name of the dataset to check for data availability (e.g. "REGO_RAW")
 
-            start (datetime.datetime):
+            start (datetime.datetime): 
                 Defines the start time of the interval to check for data availability.
                 
-            end (datetime.datetime):
+            end (datetime.datetime): 
                 Defines the end time of the interval to check for data availability.
 
         Returns:
@@ -165,7 +170,7 @@ class FOV:
         cartopy_projection (cartopy.crs.Projection): 
             Cartopy projection to utilize.
 
-        fov_data (FOVData or list of FOVData objects):
+        fov_data (FOVData or list of FOVData objects): 
             FoV contours included in FOV object.
 
         contour_data (Dict[str, List[Any]]): 
@@ -262,9 +267,14 @@ class FOV:
                 Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers 
                 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].
 
-            label (bool):
+            label (bool): 
                 Specifies wether individual FoVs will be labelled with their site_uid.
                 
+            enforce_data_availability (bool): 
+                Specifies whether or not data availability information associated with the FOV object
+                should be used to omit sites with no available data. Note that data availability information
+                is typically created using the FOVData.add_availability method.
+
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
@@ -460,7 +470,7 @@ class FOV:
 
         Args:
 
-            fov_data (pyaurorax.tools.FOVData or list):
+            fov_data (pyaurorax.tools.FOVData or list): 
                 A single or list of FOVData objects, that will be added to the
                 FOV object map upon initialization.
 
