@@ -49,7 +49,7 @@ test-bandit:
 	@printf "\n\n"
 
 test-pytest:
-	COVERAGE_FILE=.coverage_main pytest -n auto --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "not search_rw"
+	COVERAGE_FILE=.coverage_main pytest -n 8 --cov=pyaurorax --cov-report= --cov-append --do-search-tasks --do-tools-tasks -m "not search_rw"
 
 test-pytest-search-rw:
 	COVERAGE_FILE=.coverage_search_rw pytest -n 4 --cov=pyaurorax --cov-report= --cov-append --do-search-tasks -m "search_rw"
