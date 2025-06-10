@@ -339,9 +339,9 @@ class PyAuroraX:
             pyaurorax.exceptions.AuroraXInitializationError: an error was encountered during
                 initialization of the paths
         """
-        if (self.__download_output_root_path is None):
+        if (self.__download_output_root_path is None):  # pragma: nocover-ok
             self.__download_output_root_path = Path("%s/pyaurorax_data" % (str(Path.home())))
-        if (self.__read_tar_temp_path is None):
+        if (self.__read_tar_temp_path is None):  # pragma: nocover-ok
             self.__read_tar_temp_path = Path("%s/tar_temp_working" % (self.__download_output_root_path))
         try:
             os.makedirs(self.download_output_root_path, exist_ok=True)

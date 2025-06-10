@@ -95,6 +95,14 @@ def test_read_trex_spect_reader(aurorax):
 
 
 @pytest.mark.data
+def test_read_smile_reader(aurorax):
+    # read a file using the specific reader
+    filename = "%s/read_smile/20250315_0600_atha_smile-31_rgb-full.h5" % (DATA_DIR)
+    data = aurorax.data.ucalgary.readers.read_smile(filename)
+    assert isinstance(data, pyaurorax.data.ucalgary.Data)
+
+
+@pytest.mark.data
 def test_read_skymap_reader(aurorax):
     # read a file using the specific reader
     filename = "%s/read_skymap/themis_skymap_atha_20230115-+_v02.sav" % (DATA_DIR)

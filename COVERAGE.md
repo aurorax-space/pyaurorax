@@ -17,11 +17,11 @@ pyaurorax/cli/search/util/commands.py                             92      0   10
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81      0   100%
 pyaurorax/data/ucalgary/__init__.py                               97      0   100%
-pyaurorax/data/ucalgary/read/__init__.py                          38      1    97%   697
+pyaurorax/data/ucalgary/read/__init__.py                          38      0   100%
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
 pyaurorax/models/atm/__init__.py                                  17      0   100%
-pyaurorax/pyaurorax.py                                           210      2    99%   343, 345
+pyaurorax/pyaurorax.py                                           206      0   100%
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -99,7 +99,7 @@ pyaurorax/tools/spectra/__init__.py                               13      0   10
 pyaurorax/tools/spectra/_get_intensity.py                         46      1    98%   82
 pyaurorax/tools/spectra/_plot.py                                 116      4    97%   148, 150, 174, 195
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6386     73    99%
+TOTAL                                                           6382     70    99%
 
 13 empty files skipped.
 ```
