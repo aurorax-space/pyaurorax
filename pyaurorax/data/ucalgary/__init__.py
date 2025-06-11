@@ -129,7 +129,7 @@ class UCalgaryManager:
             raise AuroraXAPIError(e) from e
 
     def list_observatories(self,
-                           instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph"],
+                           instrument_array: Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph", "smile_asi"],
                            uid: Optional[str] = None,
                            timeout: Optional[int] = None) -> List[Observatory]:
         """
