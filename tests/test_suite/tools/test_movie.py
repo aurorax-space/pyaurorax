@@ -16,6 +16,8 @@ import os
 import pytest
 import random
 import string
+import shutil
+import matplotlib.pyplot as plt
 
 
 @pytest.mark.tools
@@ -57,3 +59,31 @@ def test_no_filenames(at):
         at.movie([], output_filename)
     assert "No images read in" in str(e_info)
     assert os.path.exists(output_filename) is False
+
+
+@pytest.mark.tools
+def test_corrupt_videofile(at, themis_single_file):
+
+    # First, create a test movie with 1 minute of themis data
+    img = themis_single_file.data
+    output_filename = "/tmp/pyaurorax_testing_%s.mp4" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
+    image_filenames = []
+
+    # Plot each image, save it to a temporary dir, then append filename to list
+    for i in range(0, img.shape[-1]):
+        _, _ = at.display(img[:, :, i], cmap="gray", returnfig=True)
+        filename = "/tmp/pyaurorax_testing_dir/%s_themis.png" % (''.join(random.choices(string.ascii_lowercase + string.digits, k=8)))
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        plt.savefig(filename, bbox_inches="tight")
+        plt.close()
+        image_filenames.append(filename)
+
+    # Create the movie
+    at.movie(image_filenames, output_filename, n_parallel=5)
+
+    # Check that file size is > 5 kb, indicating it was not corrupted
+    size_kib = os.stat(output_filename).st_size / 1024.0
+    assert size_kib > 5
+
+    # Delete temporary files from system
+    shutil.rmtree("/tmp/pyaurorax_testing_dir")

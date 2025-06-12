@@ -58,7 +58,8 @@ class FOVManager:
 
     def create_data(self,
                     sites: Optional[Union[Union[str, Tuple[str, float, float]], List[Union[str, Tuple[str, float, float]]]]] = None,
-                    instrument_array: Optional[Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph", "smile_asi"]] = None,
+                    instrument_array: Optional[Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph",
+                                                       "smile_asi"]] = None,
                     height_km: Optional[float] = None,
                     min_elevation: float = 5,
                     color: str = 'black',
