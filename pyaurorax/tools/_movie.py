@@ -20,7 +20,7 @@ from concurrent.futures import ProcessPoolExecutor
 def __process_frame(fname):  # pragma: nocover-ok
     return {
         "fname": fname,
-        "img": cv2.imread(fname, cv2.IMREAD_UNCHANGED),
+        "img": cv2.imread(fname),
     }
 
 

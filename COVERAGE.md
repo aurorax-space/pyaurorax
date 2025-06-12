@@ -75,10 +75,10 @@ pyaurorax/tools/calibration/_trex_nir.py                          14      0   10
 pyaurorax/tools/ccd_contour/__init__.py                           20      0   100%
 pyaurorax/tools/ccd_contour/_azimuth.py                           47      0   100%
 pyaurorax/tools/ccd_contour/_elevation.py                         39      0   100%
-pyaurorax/tools/ccd_contour/_geo.py                              106      0   100%
-pyaurorax/tools/ccd_contour/_mag.py                              112      0   100%
-pyaurorax/tools/classes/fov.py                                   293     10    97%   139, 153, 204, 219, 374-375, 393-394, 559, 562
-pyaurorax/tools/classes/keogram.py                               232      4    98%   215-217, 490
+pyaurorax/tools/ccd_contour/_geo.py                              108      1    99%   75
+pyaurorax/tools/ccd_contour/_mag.py                              114      1    99%   88
+pyaurorax/tools/classes/fov.py                                   293      8    97%   144, 224, 384-385, 403-404, 569, 572
+pyaurorax/tools/classes/keogram.py                               232      1    99%   490
 pyaurorax/tools/classes/montage.py                                63      0   100%
 pyaurorax/tools/classes/mosaic.py                                299      2    99%   467, 781
 pyaurorax/tools/fov/__init__.py                                   13      0   100%
@@ -99,7 +99,7 @@ pyaurorax/tools/spectra/__init__.py                               13      0   10
 pyaurorax/tools/spectra/_get_intensity.py                         46      1    98%   82
 pyaurorax/tools/spectra/_plot.py                                 116      4    97%   148, 150, 174, 195
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6382     70    99%
+TOTAL                                                           6386     67    99%
 
 13 empty files skipped.
 ```
