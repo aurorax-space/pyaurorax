@@ -58,7 +58,7 @@ class FOVManager:
 
     def create_data(self,
                     sites: Optional[Union[Union[str, Tuple[str, float, float]], List[Union[str, Tuple[str, float, float]]]]] = None,
-                    instrument_array: Optional[Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph"]] = None,
+                    instrument_array: Optional[Literal["themis_asi", "rego", "trex_rgb", "trex_nir", "trex_blue", "trex_spectrograph", "smile_asi"]] = None,
                     height_km: Optional[float] = None,
                     min_elevation: float = 5,
                     color: str = 'black',
@@ -74,7 +74,7 @@ class FOVManager:
                 ('uid', lat, lon) tuples. If passing lone site_uid strings, the instrument_array argument must be provided.
 
             instrument_array (str): 
-                The instrument array name to add FOVs for each site (e.g. 'themis_asi')
+                The instrument array name to add FOVs for each site (e.g. 'themis_asi' or 'smile_asi')
             
             height_km (float): 
                 The altitude to map the FoVs at, in kilometers. Defaults to 110, unless instrument_array='rego', in which case the
