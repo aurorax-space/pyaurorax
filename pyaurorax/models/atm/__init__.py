@@ -22,10 +22,19 @@ from pyucalgarysrs.models.atm import (
     ATMInverseOutputFlags,
     ATMInverseResult,
     ATM_DEFAULT_MAXWELLIAN_ENERGY_FLUX,
-    ATM_DEFAULT_GAUSSIAN_ENERGY_FLUX,
     ATM_DEFAULT_MAXWELLIAN_CHARACTERISTIC_ENERGY,
+    ATM_DEFAULT_GAUSSIAN_ENERGY_FLUX,
     ATM_DEFAULT_GAUSSIAN_PEAK_ENERGY,
     ATM_DEFAULT_GAUSSIAN_SPECTRAL_WIDTH,
+    ATM_DEFAULT_KAPPA_ENERGY_FLUX,
+    ATM_DEFAULT_KAPPA_MEAN_ENERGY,
+    ATM_DEFAULT_KAPPA_K_INDEX,
+    ATM_DEFAULT_EXPONENTIAL_ENERGY_FLUX,
+    ATM_DEFAULT_EXPONENTIAL_CHARACTERISTIC_ENERGY,
+    ATM_DEFAULT_EXPONENTIAL_STARTING_ENERGY,
+    ATM_DEFAULT_PROTON_ENERGY_FLUX,
+    ATM_DEFAULT_PROTON_CHARACTERISTIC_ENERGY,
+    ATM_DEFAULT_D_REGION_FLAG,
     ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
     ATM_DEFAULT_OXYGEN_CORRECTION_FACTOR,
     ATM_DEFAULT_TIMESCALE_AURORAL,
@@ -57,16 +66,26 @@ class ATMManager:
                 geodetic_longitude: float,
                 output: ATMForwardOutputFlags,
                 maxwellian_energy_flux: float = ATM_DEFAULT_MAXWELLIAN_ENERGY_FLUX,
-                gaussian_energy_flux: float = ATM_DEFAULT_GAUSSIAN_ENERGY_FLUX,
                 maxwellian_characteristic_energy: float = ATM_DEFAULT_MAXWELLIAN_CHARACTERISTIC_ENERGY,
+                gaussian_energy_flux: float = ATM_DEFAULT_GAUSSIAN_ENERGY_FLUX,
                 gaussian_peak_energy: float = ATM_DEFAULT_GAUSSIAN_PEAK_ENERGY,
                 gaussian_spectral_width: float = ATM_DEFAULT_GAUSSIAN_SPECTRAL_WIDTH,
+                kappa_energy_flux: float = ATM_DEFAULT_KAPPA_ENERGY_FLUX,
+                kappa_mean_energy: float = ATM_DEFAULT_KAPPA_MEAN_ENERGY,
+                kappa_k_index: float = ATM_DEFAULT_KAPPA_K_INDEX,
+                exponential_energy_flux: float = ATM_DEFAULT_EXPONENTIAL_ENERGY_FLUX,
+                exponential_characteristic_energy: float = ATM_DEFAULT_EXPONENTIAL_CHARACTERISTIC_ENERGY,
+                exponential_starting_energy: float = ATM_DEFAULT_EXPONENTIAL_STARTING_ENERGY,
+                proton_energy_flux: float = ATM_DEFAULT_PROTON_ENERGY_FLUX,
+                proton_characteristic_energy: float = ATM_DEFAULT_PROTON_CHARACTERISTIC_ENERGY,
+                d_region: bool = ATM_DEFAULT_D_REGION_FLAG,
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 oxygen_correction_factor: float = ATM_DEFAULT_OXYGEN_CORRECTION_FACTOR,
                 timescale_auroral: int = ATM_DEFAULT_TIMESCALE_AURORAL,
                 timescale_transport: int = ATM_DEFAULT_TIMESCALE_TRANSPORT,
-                atm_model_version: Literal["1.0"] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
                 custom_spectrum: Optional[ndarray] = None,
+                custom_neutral_profile: Optional[ndarray] = None,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -> ATMForwardResult:
         """
@@ -82,11 +101,23 @@ class ATMManager:
         square input (with time duration T0 and spatial width L) input of precipitation. The initial/boundary 
         conditions are given by IRI. The output yields the mean density/VER over [0-L] at time T0.
 
+        Please note that some of the inputs and outputs are only supported by ATM version 2.0. The following
+        inputs are only supported by version 2.0: `kappa_*`, `exponential_*`, `proton_*`, `d_region`, and 
+        `custom_neutral_profile`. The following outputs are only supported by version 2.0: `production_rate_*`.
+
+        **NOTE**: All spectral shapes are super-imposable except exponential (maxwellian, gaussian, kappa). The 
+        exponential spectrum should be only be used for high-energy tail and, starting from E0 (proton_starting_energy), 
+        will override any other spectral specification.
+
+        **NOTE**: proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
+        not nominal TREx characteristics and currently not computed in this version of the model.
+
+        **NOTE**: when using the d_region flag, enabling proton parameters is not permitted.
+
         Args:
             timestamp (datetime.datetime): 
-                Timestamp for the calculation. This value is expected to be in UTC, and is valid for 
-                any value up to the end of the previous day. Any timezone data will be ignored. This 
-                parameter is required.
+                Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the 
+                end of the previous day. Any timezone data will be ignored. This parameter is required.
 
             geodetic_latitude (float): 
                 Latitude in geodetic coordinates: -90.0 to 90.0. This parameter is required.
@@ -102,23 +133,61 @@ class ATMManager:
             maxwellian_energy_flux (float): 
                 Maxwellian energy flux in erg/cm2/s. Default is 10. This parameter is optional.
 
-            gaussian_energy_flux (float): 
-                Gaussian energy flux in erg/cm2/s. Default is 0.0. Note that `gaussian_peak_energy` and
-                `gaussian_spectral_width` must be specified if the `gaussian_energy_flux` is not 0. 
-                This parameter is optional.
-
             maxwellian_characteristic_energy (float): 
                 Maxwellian characteristic energy in eV. Default is 5000. Note that `maxwellian_characteristic_energy` 
-                must be specified if the `maxwellian_energy_flux` is not 0. This parameter 
-                is optional.
+                should be specified if the `maxwellian_energy_flux` is not 0. If it is not, then the default will be used. This 
+                parameter is optional.
+
+            gaussian_energy_flux (float): 
+                Gaussian energy flux in erg/cm2/s. Default is 0, meaning all gaussian parameters will be disabled. 
+                Note that `gaussian_peak_energy` and `gaussian_spectral_width` should be specified if the `gaussian_energy_flux` 
+                is not 0. If they are not, then their defaults will be used. This parameter is optional.
 
             gaussian_peak_energy (float): 
-                Gaussian peak energy in eV. Default is 1000. Note this parameter must be specified if 
-                the `gaussian_energy_flux` is not 0. This parameter is optional.
+                Gaussian peak energy in eV. Default is 1000. Note this parameter should be specified if the `gaussian_energy_flux` 
+                is not 0. This parameter is optional.
 
             gaussian_spectral_width (float): 
-                Gaussian spectral width in eV. Default is 100. Note this parameter must be specified if 
-                the `gaussian_energy_flux` is not 0. This parameter is optional.
+                Gaussian spectral width in eV. Default is 100. Note this parameter should be specified if the `gaussian_energy_flux` 
+                is not 0. This parameter is optional.
+
+            kappa_energy_flux (float): 
+                Kappa energy flux in erg/cm2/s. Default is 0, meaning all kappa parameters will be disabled. Note that 
+                `kappa_mean_energy` and `kappa_k_index` should be specified if `kappa_energy_flux` is not 0. If they are not, then
+                their defaults will be used. This parameter is optional.
+
+            kappa_mean_energy (float): 
+                Kappa mean energy in eV. Default is 30000. Note this parameter should be specified if the `kappa_energy_flux` 
+                is not 0. This parameter is optional.
+
+            kappa_k_index (float): 
+                Kappa k-index. Default is 5. Note this parameter should be specified if the `kappa_energy_flux` is not 0. This 
+                parameter is optional.
+
+            exponential_energy_flux (float): 
+                Exponential energy flux, in erg/cm2/s. Default is 0, meaning all exponential parameters will be disabled. Note that
+                `exponential_characteristic_energy` and `exponential_starting_energy` should be specified if `exponential_energy_flux` 
+                is not 0. If it is not, then the default will be used. This parameter is optional.
+
+            exponential_characteristic_energy (float): 
+                Exponential characteristic energy, in eV. Default is 50000. Note this parameter should be specified if the 
+                `exponential_energy_flux` is not 0. This parameter is optional.
+
+            exponential_starting_energy (float): 
+                Exponential starting energy, in eV. Default is 50000. Note this parameter should be specified if the 
+                `exponential_energy_flux` is not 0. This parameter is optional.
+
+            proton_energy_flux (float): 
+                Proton energy flux, in erg/cm2/s. Default is 0, meaning all proton parameters will be disabled. Note that
+                `proton_characteristic_energy` should be specified if `proton_energy_flux` is not 0. If it is not, then the default
+                will be used. This parameter is optional.
+
+            proton_characteristic_energy (float): 
+                Proton characteristic energy, in eV. Default is 10000. Not this parameter should be specified if the 
+                `proton_energy_flux` is not 0. This parameter is optional.
+
+            d_region (bool): 
+                Flag to enable D-region evaluation. Default is False. 
 
             nrlmsis_model_version (str): 
                 NRLMSIS version number. Possible values are `00` or `2.0`. Default is `2.0`. This parameter is
@@ -129,6 +198,23 @@ class ATMManager:
                 Oxygen correction factor used to multiply by in the empirical model. Default is 1. This parameter
                 is optional.
 
+            custom_spectrum (ndarray): 
+                A 2-dimensional numpy array (dtype is any float type) containing values representing the
+                energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in
+                [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError 
+                will be raised if so). This parameter is optional.
+
+            custom_neutral_profile (ndarray): 
+                A 2-D numpy array (dtype is any float type) containing values representing altitude, densities for O, O2, N2, N, 
+                and NO, and lastly temperature. Altitude is expected to be in kilometers, all densities in cm^-3, and 
+                temperature in Kelvin. This parameter is optional.
+
+                The shape of the array is expected to be [N, 7], with the order matching the above mentioned values. Note that
+                this array cannot contain and negative values (SRSAPIError will be raised if so).
+                
+                Users are responsible for fully covering the altitude range of interest in the provided profile (80-800 km if 
+                d_region_flag=0, or 50-500 km if d_region_flag=1). The model only performs interpolation, not extrapolation.
+
             timescale_auroral (int): 
                 The duration of the precipitation, in seconds. Default is 600 (10 minutes). This parameter is optional.
 
@@ -137,14 +223,10 @@ class ATMManager:
                 speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are only '1.0' at this time, but will have
-                additional possible values in the future. This parameter is optional.
-
-            custom_spectrum (ndarray): 
-                A 2-dimensional numpy array (dtype is any float type) containing values representing the
-                energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in
-                [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError 
-                will be raised if so). This parameter is optional.
+                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". 
+                
+                **IMPORTANT**: Please note that certain inputs and outputs are only available in version "2.0". See above for 
+                more details. This parameter is optional.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -165,6 +247,36 @@ class ATMManager:
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
+        # return func_forward(
+        #     self.__srs_obj,
+        #     timestamp,
+        #     geodetic_latitude,
+        #     geodetic_longitude,
+        #     output,
+        #     maxwellian_energy_flux,
+        #     maxwellian_characteristic_energy,
+        #     gaussian_energy_flux,
+        #     gaussian_peak_energy,
+        #     gaussian_spectral_width,
+        #     kappa_energy_flux,
+        #     kappa_mean_energy,
+        #     kappa_k_index,
+        #     exponential_energy_flux,
+        #     exponential_characteristic_energy,
+        #     exponential_starting_energy,
+        #     proton_energy_flux,
+        #     proton_characteristic_energy,
+        #     d_region,
+        #     nrlmsis_model_version,
+        #     oxygen_correction_factor,
+        #     timescale_auroral,
+        #     timescale_transport,
+        #     atm_model_version,
+        #     custom_spectrum,
+        #     custom_neutral_profile,
+        #     no_cache,
+        #     timeout,
+        # )
         try:
             return self.__aurorax_obj.srs_obj.models.atm.forward(
                 timestamp,
@@ -172,16 +284,26 @@ class ATMManager:
                 geodetic_longitude,
                 output,
                 maxwellian_energy_flux=maxwellian_energy_flux,
-                gaussian_energy_flux=gaussian_energy_flux,
                 maxwellian_characteristic_energy=maxwellian_characteristic_energy,
+                gaussian_energy_flux=gaussian_energy_flux,
                 gaussian_peak_energy=gaussian_peak_energy,
                 gaussian_spectral_width=gaussian_spectral_width,
+                kappa_energy_flux=kappa_energy_flux,
+                kappa_mean_energy=kappa_mean_energy,
+                kappa_k_index=kappa_k_index,
+                exponential_energy_flux=exponential_energy_flux,
+                exponential_characteristic_energy=exponential_characteristic_energy,
+                exponential_starting_energy=exponential_starting_energy,
+                proton_energy_flux=proton_energy_flux,
+                proton_characteristic_energy=proton_characteristic_energy,
+                d_region=d_region,
                 nrlmsis_model_version=nrlmsis_model_version,
                 oxygen_correction_factor=oxygen_correction_factor,
+                custom_spectrum=custom_spectrum,
+                custom_neutral_profile=custom_neutral_profile,
                 timescale_auroral=timescale_auroral,
                 timescale_transport=timescale_transport,
                 atm_model_version=atm_model_version,
-                custom_spectrum=custom_spectrum,
                 no_cache=no_cache,
                 timeout=timeout,
             )
@@ -200,7 +322,7 @@ class ATMManager:
                 precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 atmospheric_attenuation_correction: bool = False,
-                atm_model_version: Literal["1.0"] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -> ATMInverseResult:
         """
@@ -208,9 +330,12 @@ class ATMManager:
         parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
         the calculation.
 
+        **NOTE**: The 'atmospheric_attenuation_correction' parameter has been deprecated. Please ensure you perform 
+        this conversion yourself on the results, if desired.
+
         Args:
             timestamp (datetime.datetime): 
-                Timestamp for the calculation. This value is expected to be in UTC, and is valid a pre-defined 
+                Timestamp for the calculation. This value is expected to be in UTC, and is valid for a pre-defined 
                 timeframe. An error will be raised if outside of the valid timeframe. Any timezone data will be 
                 ignored. This parameter is required.
 
@@ -256,6 +381,8 @@ class ATMManager:
 
             atmospheric_attenuation_correction (bool): 
                 Apply an atmospheric attenuation correction factor. Default is `False`.
+
+                This parameter has been deprecated and will be removed in a future release.
 
             atm_model_version (str): 
                 ATM model version number. Possible values are only '1.0' at this time, but will have
