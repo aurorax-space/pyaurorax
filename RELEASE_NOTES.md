@@ -1,3 +1,18 @@
+Version 1.18.0 (2025-06-23)
+-------------------
+- added support for SMILE ASI data
+- added ability to create field-of-view (FoV) maps for any instrument network
+- added support for TREx ATM model version 2.0; enabled by default for 'forward' calculation function, will enable by default for inversion in near-future release
+- added `Keogram.inject_nans()` function to allow for dynamic handling of missing data
+- added `percentile` parameter for custom keogram function
+- created several additional crib sheets
+- bugfix for TREx Spectrograph geo/mag coordinates in keograms
+- bugfix for movie generation
+- updated test suite to include tests for all the latest analysis support functions, coverage now at ~100% (see COVERAGE.md for full details)
+- updated numpy dependency version range
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.17.0 (2025-05-14)
 -------------------
 - bugfix for `DataSource` object's `pretty_print()` function

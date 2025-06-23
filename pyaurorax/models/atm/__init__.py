@@ -223,7 +223,7 @@ class ATMManager:
                 speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". 
+                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0".
                 
                 **IMPORTANT**: Please note that certain inputs and outputs are only available in version "2.0". See above for 
                 more details. This parameter is optional.
@@ -247,36 +247,6 @@ class ATMManager:
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
         """
-        # return func_forward(
-        #     self.__srs_obj,
-        #     timestamp,
-        #     geodetic_latitude,
-        #     geodetic_longitude,
-        #     output,
-        #     maxwellian_energy_flux,
-        #     maxwellian_characteristic_energy,
-        #     gaussian_energy_flux,
-        #     gaussian_peak_energy,
-        #     gaussian_spectral_width,
-        #     kappa_energy_flux,
-        #     kappa_mean_energy,
-        #     kappa_k_index,
-        #     exponential_energy_flux,
-        #     exponential_characteristic_energy,
-        #     exponential_starting_energy,
-        #     proton_energy_flux,
-        #     proton_characteristic_energy,
-        #     d_region,
-        #     nrlmsis_model_version,
-        #     oxygen_correction_factor,
-        #     timescale_auroral,
-        #     timescale_transport,
-        #     atm_model_version,
-        #     custom_spectrum,
-        #     custom_neutral_profile,
-        #     no_cache,
-        #     timeout,
-        # )
         try:
             return self.__aurorax_obj.srs_obj.models.atm.forward(
                 timestamp,
@@ -322,7 +292,7 @@ class ATMManager:
                 precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 atmospheric_attenuation_correction: bool = False,
-                atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal["1.0"] = "1.0",
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -> ATMInverseResult:
         """
@@ -385,8 +355,8 @@ class ATMManager:
                 This parameter has been deprecated and will be removed in a future release.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are only '1.0' at this time, but will have
-                additional possible values in the future. This parameter is optional.
+                ATM model version number. Possible values are currently only '1.0' at this time. Version '2.0' will be available 
+                in a future release, anticipated to be published in late June 2025. This parameter is optional.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
