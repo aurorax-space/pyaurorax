@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax.data.ucalgary.read API documentation</title>
 <meta name="description" content="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -668,6 +668,84 @@ border-left: 1px solid #ddd;
             pyaurorax.exceptions.AuroraXError: a generic read error was encountered
         &#34;&#34;&#34;
         return self.__aurorax_obj.srs_obj.data.readers.read_trex_spectrograph(
+            file_list,
+            n_parallel=n_parallel,
+            first_record=first_record,
+            no_metadata=no_metadata,
+            start_time=start_time,
+            end_time=end_time,
+            quiet=quiet,
+            dataset=dataset,
+        )
+
+    def read_smile(self,
+                   file_list: Union[List[str], List[Path], str, Path],
+                   n_parallel: int = 1,
+                   first_record: bool = False,
+                   no_metadata: bool = False,
+                   start_time: Optional[datetime.datetime] = None,
+                   end_time: Optional[datetime.datetime] = None,
+                   quiet: bool = False,
+                   dataset: Optional[Dataset] = None) -&gt; Data:
+        &#34;&#34;&#34;
+        Read in SMILE ASI raw data (L0 raw h5 files).
+
+        Args:
+            file_list (List[str], List[Path], str, Path): 
+                The files to read in. Absolute paths are recommended, but not technically
+                necessary. This can be a single string for a file, or a list of strings to read
+                in multiple files. This parameter is required.
+
+            n_parallel (int): 
+                Number of data files to read in parallel using multiprocessing. Default value 
+                is 1. Adjust according to your computer&#39;s available resources. This parameter 
+                is optional.
+            
+            first_record (bool): 
+                Only read in the first record in each file. This is the same as the first_frame
+                parameter in the themis-imager-readfile and trex-imager-readfile libraries, and
+                is a read optimization if you only need one image per minute, as opposed to the
+                full temporal resolution of data (e.g., 3sec cadence). This parameter is optional.
+            
+            no_metadata (bool): 
+                Skip reading of metadata. This is a minor optimization if the metadata is not needed.
+                Default is `False`. This parameter is optional.
+
+            start_time (datetime.datetime): 
+                The start timestamp to read data onwards from (inclusive). This can be utilized to 
+                read a portion of a data file, and could be paired with the `end_time` parameter. 
+                This tends to be utilized for datasets that are hour or day-long files where it is 
+                possible to only read a smaller bit of that file. An example is the TREx Spectrograph 
+                processed data (1 hour files), or the riometer data (1 day files). If not supplied, 
+                it will assume the start time is the timestamp of the first record in the first 
+                file supplied (ie. beginning of the supplied data). This parameter is optional.
+
+            end_time (datetime.datetime): 
+                The end timestamp to read data up to (inclusive). This can be utilized to read a 
+                portion of a data file, and could be paired with the `start_time` parameter. This 
+                tends to be utilized for datasets that are hour or day-long files where it is possible 
+                to only read a smaller bit of that file. An example is the TREx Spectrograph processed 
+                data (1 hour files), or the riometer data (1 day files). If not supplied, it will
+                it will assume the end time is the timestamp of the last record in the last file
+                supplied (ie. end of the supplied data). This parameter is optional.
+
+            quiet (bool): 
+                Do not print out errors while reading data files, if any are encountered. Any files
+                that encounter errors will be, as usual, accessible via the `problematic_files` 
+                attribute of the returned `Data` object. This parameter is optional.
+
+            dataset (Dataset): 
+                The dataset object for which the files are associated with. This parameter is
+                optional.
+
+        Returns:
+            A [`Data`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Data) 
+            object containing the data read in, among other values.
+        
+        Raises:
+            pyaurorax.exceptions.AuroraXError: a generic read error was encountered
+        &#34;&#34;&#34;
+        return self.__aurorax_obj.srs_obj.data.readers.read_smile(
             file_list,
             n_parallel=n_parallel,
             first_record=first_record,
@@ -1515,6 +1593,144 @@ object containing the data read in, among other values.</p>
 <dd>a generic read error was encountered</dd>
 </dl></div>
 </dd>
+<dt id="pyaurorax.data.ucalgary.read.ReadManager.read_smile"><code class="name flex">
+<span>def <span class="ident">read_smile</span></span>(<span>self,<br>file_list: List[str] | List[pathlib.Path] | str | pathlib.Path,<br>n_parallel: int = 1,<br>first_record: bool = False,<br>no_metadata: bool = False,<br>start_time: datetime.datetime | None = None,<br>end_time: datetime.datetime | None = None,<br>quiet: bool = False,<br>dataset: pyucalgarysrs.data.classes.Dataset | None = None) ‑> pyucalgarysrs.data.classes.Data</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def read_smile(self,
+               file_list: Union[List[str], List[Path], str, Path],
+               n_parallel: int = 1,
+               first_record: bool = False,
+               no_metadata: bool = False,
+               start_time: Optional[datetime.datetime] = None,
+               end_time: Optional[datetime.datetime] = None,
+               quiet: bool = False,
+               dataset: Optional[Dataset] = None) -&gt; Data:
+    &#34;&#34;&#34;
+    Read in SMILE ASI raw data (L0 raw h5 files).
+
+    Args:
+        file_list (List[str], List[Path], str, Path): 
+            The files to read in. Absolute paths are recommended, but not technically
+            necessary. This can be a single string for a file, or a list of strings to read
+            in multiple files. This parameter is required.
+
+        n_parallel (int): 
+            Number of data files to read in parallel using multiprocessing. Default value 
+            is 1. Adjust according to your computer&#39;s available resources. This parameter 
+            is optional.
+        
+        first_record (bool): 
+            Only read in the first record in each file. This is the same as the first_frame
+            parameter in the themis-imager-readfile and trex-imager-readfile libraries, and
+            is a read optimization if you only need one image per minute, as opposed to the
+            full temporal resolution of data (e.g., 3sec cadence). This parameter is optional.
+        
+        no_metadata (bool): 
+            Skip reading of metadata. This is a minor optimization if the metadata is not needed.
+            Default is `False`. This parameter is optional.
+
+        start_time (datetime.datetime): 
+            The start timestamp to read data onwards from (inclusive). This can be utilized to 
+            read a portion of a data file, and could be paired with the `end_time` parameter. 
+            This tends to be utilized for datasets that are hour or day-long files where it is 
+            possible to only read a smaller bit of that file. An example is the TREx Spectrograph 
+            processed data (1 hour files), or the riometer data (1 day files). If not supplied, 
+            it will assume the start time is the timestamp of the first record in the first 
+            file supplied (ie. beginning of the supplied data). This parameter is optional.
+
+        end_time (datetime.datetime): 
+            The end timestamp to read data up to (inclusive). This can be utilized to read a 
+            portion of a data file, and could be paired with the `start_time` parameter. This 
+            tends to be utilized for datasets that are hour or day-long files where it is possible 
+            to only read a smaller bit of that file. An example is the TREx Spectrograph processed 
+            data (1 hour files), or the riometer data (1 day files). If not supplied, it will
+            it will assume the end time is the timestamp of the last record in the last file
+            supplied (ie. end of the supplied data). This parameter is optional.
+
+        quiet (bool): 
+            Do not print out errors while reading data files, if any are encountered. Any files
+            that encounter errors will be, as usual, accessible via the `problematic_files` 
+            attribute of the returned `Data` object. This parameter is optional.
+
+        dataset (Dataset): 
+            The dataset object for which the files are associated with. This parameter is
+            optional.
+
+    Returns:
+        A [`Data`](https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Data) 
+        object containing the data read in, among other values.
+    
+    Raises:
+        pyaurorax.exceptions.AuroraXError: a generic read error was encountered
+    &#34;&#34;&#34;
+    return self.__aurorax_obj.srs_obj.data.readers.read_smile(
+        file_list,
+        n_parallel=n_parallel,
+        first_record=first_record,
+        no_metadata=no_metadata,
+        start_time=start_time,
+        end_time=end_time,
+        quiet=quiet,
+        dataset=dataset,
+    )</code></pre>
+</details>
+<div class="desc"><p>Read in SMILE ASI raw data (L0 raw h5 files).</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_list</code></strong> :&ensp;<code>List[str], List[Path], str, Path</code></dt>
+<dd>The files to read in. Absolute paths are recommended, but not technically
+necessary. This can be a single string for a file, or a list of strings to read
+in multiple files. This parameter is required.</dd>
+<dt><strong><code>n_parallel</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of data files to read in parallel using multiprocessing. Default value
+is 1. Adjust according to your computer's available resources. This parameter
+is optional.</dd>
+<dt><strong><code>first_record</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Only read in the first record in each file. This is the same as the first_frame
+parameter in the themis-imager-readfile and trex-imager-readfile libraries, and
+is a read optimization if you only need one image per minute, as opposed to the
+full temporal resolution of data (e.g., 3sec cadence). This parameter is optional.</dd>
+<dt><strong><code>no_metadata</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Skip reading of metadata. This is a minor optimization if the metadata is not needed.
+Default is <code>False</code>. This parameter is optional.</dd>
+<dt><strong><code>start_time</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The start timestamp to read data onwards from (inclusive). This can be utilized to
+read a portion of a data file, and could be paired with the <code>end_time</code> parameter.
+This tends to be utilized for datasets that are hour or day-long files where it is
+possible to only read a smaller bit of that file. An example is the TREx Spectrograph
+processed data (1 hour files), or the riometer data (1 day files). If not supplied,
+it will assume the start time is the timestamp of the first record in the first
+file supplied (ie. beginning of the supplied data). This parameter is optional.</dd>
+<dt><strong><code>end_time</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The end timestamp to read data up to (inclusive). This can be utilized to read a
+portion of a data file, and could be paired with the <code>start_time</code> parameter. This
+tends to be utilized for datasets that are hour or day-long files where it is possible
+to only read a smaller bit of that file. An example is the TREx Spectrograph processed
+data (1 hour files), or the riometer data (1 day files). If not supplied, it will
+it will assume the end time is the timestamp of the last record in the last file
+supplied (ie. end of the supplied data). This parameter is optional.</dd>
+<dt><strong><code>quiet</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Do not print out errors while reading data files, if any are encountered. Any files
+that encounter errors will be, as usual, accessible via the <code>problematic_files</code>
+attribute of the returned <code>Data</code> object. This parameter is optional.</dd>
+<dt><strong><code>dataset</code></strong> :&ensp;<code>Dataset</code></dt>
+<dd>The dataset object for which the files are associated with. This parameter is
+optional.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Data"><code>Data</code></a>
+object containing the data read in, among other values.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
+<dd>a generic read error was encountered</dd>
+</dl></div>
+</dd>
 <dt id="pyaurorax.data.ucalgary.read.ReadManager.read_themis"><code class="name flex">
 <span>def <span class="ident">read_themis</span></span>(<span>self,<br>file_list: List[str] | List[pathlib.Path] | str | pathlib.Path,<br>n_parallel: int = 1,<br>first_record: bool = False,<br>no_metadata: bool = False,<br>start_time: datetime.datetime | None = None,<br>end_time: datetime.datetime | None = None,<br>quiet: bool = False,<br>dataset: pyucalgarysrs.data.classes.Dataset | None = None) ‑> pyucalgarysrs.data.classes.Data</span>
 </code></dt>
@@ -2285,6 +2501,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_grid" href="#pyaurorax.data.ucalgary.read.ReadManager.read_grid">read_grid</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_rego" href="#pyaurorax.data.ucalgary.read.ReadManager.read_rego">read_rego</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_skymap" href="#pyaurorax.data.ucalgary.read.ReadManager.read_skymap">read_skymap</a></code></li>
+<li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_smile" href="#pyaurorax.data.ucalgary.read.ReadManager.read_smile">read_smile</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_themis" href="#pyaurorax.data.ucalgary.read.ReadManager.read_themis">read_themis</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_trex_blue" href="#pyaurorax.data.ucalgary.read.ReadManager.read_trex_blue">read_trex_blue</a></code></li>
 <li><code><a title="pyaurorax.data.ucalgary.read.ReadManager.read_trex_nir" href="#pyaurorax.data.ucalgary.read.ReadManager.read_trex_nir">read_trex_nir</a></code></li>
@@ -2298,7 +2515,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

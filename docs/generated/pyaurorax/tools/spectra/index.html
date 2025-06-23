@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax.tools.spectra API documentation</title>
 <meta name="description" content="Work with spectrograph data.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -177,12 +177,157 @@ border-left: 1px solid #ddd;
             ValueError: issues encountered with supplied parameters
         &#34;&#34;&#34;
         return func_plot(spect_data, timestamp, spect_loc, title, figsize, color, ylog, xlabel, ylabel, ylim, xlim, plot_line, plot_line_color,
-                         returnfig, savefig, savefig_filename, savefig_quality)</code></pre>
+                         returnfig, savefig, savefig_filename, savefig_quality)
+
+    def get_intensity(self,
+                      spect_data: Data,
+                      timestamp: Union[datetime.datetime, List[
+                          datetime.datetime,
+                      ]],
+                      spect_loc: int,
+                      spect_emission: Optional[Literal[&#34;green&#34;, &#34;red&#34;, &#34;blue&#34;, &#34;hbeta&#34;]] = None,
+                      spect_band: Optional[Union[Tuple[float, float], List[float]]] = None,
+                      spect_band_bg: Optional[Union[Tuple[float, float], List[float]]] = None) -&gt; Union[List[float], float]:
+        &#34;&#34;&#34;
+        Integrate spectrograph data to obtain absolute intensity, for a given common auroral emission
+        or a manually selected wavelength band. 
+
+        Args:
+            spect_data (pyaurorax.data.ucalgary.Data): 
+                The data object containing spectrograph data.
+
+            timestamp (datetime.datetime): 
+                A timestamp or list of timestamps for which to plot spectra from.
+
+            spect_loc (int): 
+                An int or list of ints giving the spectrograph spatial bin indices to plot.
+            
+            spect_emission (str): 
+                A string to specify that the absolute intensity should be calculated for a
+                common auroral emission. Available options are:
+
+                    &#34;green&#34; - 557.7 nm (Green-line) emission
+                    &#34;red&#34;   - 630.0 nm (Red-Line) emission
+                    &#34;blue&#34;  - 427.8 nm (Blue-Line) emission
+                    &#34;hbeta&#34; - 481.6 nm (H-Beta) emission
+
+            spect_band (tuple): 
+                If manually selecting the integration region, this should specify the min and
+                max wavelength to integrate over for the emission.
+
+            spect_band_bg (tuple): 
+                If manually selecting the integration region, optionally allows for the selection
+                of another wavelength region to subtract from the emission intensity.
+
+        Returns:
+            A list of floats (or a single float) giving the absolute intensity of the
+            selected emission, in Rayleighs for the provided spectrograph data at the
+            input timestamp(s).
+
+        Raises:
+            ValueError: issues encountered with supplied parameters
+        &#34;&#34;&#34;
+
+        return func_get_intensity(spect_data, timestamp, spect_loc, spect_emission, spect_band, spect_band_bg)</code></pre>
 </details>
 <div class="desc"><p>The SpectraManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.tools.spectra.SpectraManager.get_intensity"><code class="name flex">
+<span>def <span class="ident">get_intensity</span></span>(<span>self,<br>spect_data: pyucalgarysrs.data.classes.Data,<br>timestamp: datetime.datetime | List[datetime.datetime],<br>spect_loc: int,<br>spect_emission: Literal['green', 'red', 'blue', 'hbeta'] | None = None,<br>spect_band: Tuple[float, float] | List[float] | None = None,<br>spect_band_bg: Tuple[float, float] | List[float] | None = None) ‑> List[float] | float</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_intensity(self,
+                  spect_data: Data,
+                  timestamp: Union[datetime.datetime, List[
+                      datetime.datetime,
+                  ]],
+                  spect_loc: int,
+                  spect_emission: Optional[Literal[&#34;green&#34;, &#34;red&#34;, &#34;blue&#34;, &#34;hbeta&#34;]] = None,
+                  spect_band: Optional[Union[Tuple[float, float], List[float]]] = None,
+                  spect_band_bg: Optional[Union[Tuple[float, float], List[float]]] = None) -&gt; Union[List[float], float]:
+    &#34;&#34;&#34;
+    Integrate spectrograph data to obtain absolute intensity, for a given common auroral emission
+    or a manually selected wavelength band. 
+
+    Args:
+        spect_data (pyaurorax.data.ucalgary.Data): 
+            The data object containing spectrograph data.
+
+        timestamp (datetime.datetime): 
+            A timestamp or list of timestamps for which to plot spectra from.
+
+        spect_loc (int): 
+            An int or list of ints giving the spectrograph spatial bin indices to plot.
+        
+        spect_emission (str): 
+            A string to specify that the absolute intensity should be calculated for a
+            common auroral emission. Available options are:
+
+                &#34;green&#34; - 557.7 nm (Green-line) emission
+                &#34;red&#34;   - 630.0 nm (Red-Line) emission
+                &#34;blue&#34;  - 427.8 nm (Blue-Line) emission
+                &#34;hbeta&#34; - 481.6 nm (H-Beta) emission
+
+        spect_band (tuple): 
+            If manually selecting the integration region, this should specify the min and
+            max wavelength to integrate over for the emission.
+
+        spect_band_bg (tuple): 
+            If manually selecting the integration region, optionally allows for the selection
+            of another wavelength region to subtract from the emission intensity.
+
+    Returns:
+        A list of floats (or a single float) giving the absolute intensity of the
+        selected emission, in Rayleighs for the provided spectrograph data at the
+        input timestamp(s).
+
+    Raises:
+        ValueError: issues encountered with supplied parameters
+    &#34;&#34;&#34;
+
+    return func_get_intensity(spect_data, timestamp, spect_loc, spect_emission, spect_band, spect_band_bg)</code></pre>
+</details>
+<div class="desc"><p>Integrate spectrograph data to obtain absolute intensity, for a given common auroral emission
+or a manually selected wavelength band. </p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>spect_data</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Data" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Data">Data</a></code></dt>
+<dd>The data object containing spectrograph data.</dd>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>A timestamp or list of timestamps for which to plot spectra from.</dd>
+<dt><strong><code>spect_loc</code></strong> :&ensp;<code>int</code></dt>
+<dd>An int or list of ints giving the spectrograph spatial bin indices to plot.</dd>
+<dt><strong><code>spect_emission</code></strong> :&ensp;<code>str</code></dt>
+<dd>A string to specify that the absolute intensity should be calculated for a
+common auroral emission. Available options are:<pre><code>"green" - 557.7 nm (Green-line) emission
+"red"   - 630.0 nm (Red-Line) emission
+"blue"  - 427.8 nm (Blue-Line) emission
+"hbeta" - 481.6 nm (H-Beta) emission
+</code></pre>
+</dd>
+<dt><strong><code>spect_band</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>If manually selecting the integration region, this should specify the min and
+max wavelength to integrate over for the emission.</dd>
+<dt><strong><code>spect_band_bg</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>If manually selecting the integration region, optionally allows for the selection
+of another wavelength region to subtract from the emission intensity.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list of floats (or a single float) giving the absolute intensity of the
+selected emission, in Rayleighs for the provided spectrograph data at the
+input timestamp(s).</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>issues encountered with supplied parameters</dd>
+</dl></div>
+</dd>
 <dt id="pyaurorax.tools.spectra.SpectraManager.plot"><code class="name flex">
 <span>def <span class="ident">plot</span></span>(<span>self,<br>spect_data: pyucalgarysrs.data.classes.Data,<br>timestamp: datetime.datetime | List[datetime.datetime],<br>spect_loc: int | List[int],<br>title: str | None = None,<br>figsize: Tuple[int, int] | None = None,<br>color: str | List | None = None,<br>ylog: bool = False,<br>xlabel: str = 'Wavelength (nm)',<br>ylabel: str = 'Intensity (R/nm)',<br>ylim: Tuple[int, int] | None = None,<br>xlim: Tuple[int, int] | None = None,<br>plot_line: float | List[float] | None = None,<br>plot_line_color: str | List[str] | None = None,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
@@ -412,6 +557,7 @@ setTimeout(() => input.focus(), 100);
 <li>
 <h4><code><a title="pyaurorax.tools.spectra.SpectraManager" href="#pyaurorax.tools.spectra.SpectraManager">SpectraManager</a></code></h4>
 <ul class="">
+<li><code><a title="pyaurorax.tools.spectra.SpectraManager.get_intensity" href="#pyaurorax.tools.spectra.SpectraManager.get_intensity">get_intensity</a></code></li>
 <li><code><a title="pyaurorax.tools.spectra.SpectraManager.plot" href="#pyaurorax.tools.spectra.SpectraManager.plot">plot</a></code></li>
 </ul>
 </li>
@@ -421,7 +567,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax.tools.keogram API documentation</title>
 <meta name="description" content="Generate keograms.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -145,7 +145,8 @@ border-left: 1px solid #ddd;
         preview: bool = False,
         skymap: Optional[Skymap] = None,
         altitude_km: Optional[Union[float, int]] = None,
-        metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
+        metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;, &#34;percentile&#34;] = &#34;median&#34;,
+        percentile: Optional[float] = None,
     ) -&gt; Keogram:
         &#34;&#34;&#34;
         Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points, 
@@ -188,7 +189,13 @@ border-left: 1px solid #ddd;
 
             metric (str): 
                 The metric used to compute values for each keogram pixel. Valid options are &#34;median&#34;, &#34;mean&#34;,
-                and &#34;sum&#34;. Defaults to &#34;median&#34;.
+                &#34;sum&#34;, and &#34;percentile&#34;. Defaults to &#34;median&#34;.
+
+            percentile (float): 
+                Sets the brightness percentile to calculate within each keogram bin. For each bin defined along
+                the keogram contour, this percentile is computed over all included ASI pixels, and used as the
+                value for that keogram bin. This argument is required if metric is set to &#34;percentile&#34; and
+                should be omitted otherwise.
             
         Returns:
             A `pyaurorax.tools.Keogram` object.
@@ -196,7 +203,7 @@ border-left: 1px solid #ddd;
         Raises:
             ValueError: issues encountered with supplied parameters
         &#34;&#34;&#34;
-        return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric)</code></pre>
+        return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric, percentile)</code></pre>
 </details>
 <div class="desc"><p>The KeogramManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
@@ -298,7 +305,7 @@ chosen emissions, via the spect_band argument.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.keogram.KeogramManager.create_custom"><code class="name flex">
-<span>def <span class="ident">create_custom</span></span>(<span>self,<br>images: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>coordinate_system: Literal['ccd', 'mag', 'geo'],<br>width: int,<br>x_locs: List[float | int] | numpy.ndarray,<br>y_locs: List[float | int] | numpy.ndarray,<br>preview: bool = False,<br>skymap: pyucalgarysrs.data.classes.Skymap | None = None,<br>altitude_km: int | float | None = None,<br>metric: Literal['mean', 'median', 'sum'] = 'median') ‑> <a title="pyaurorax.tools.classes.keogram.Keogram" href="../classes/keogram.html#pyaurorax.tools.classes.keogram.Keogram">Keogram</a></span>
+<span>def <span class="ident">create_custom</span></span>(<span>self,<br>images: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>coordinate_system: Literal['ccd', 'mag', 'geo'],<br>width: int,<br>x_locs: List[float | int] | numpy.ndarray,<br>y_locs: List[float | int] | numpy.ndarray,<br>preview: bool = False,<br>skymap: pyucalgarysrs.data.classes.Skymap | None = None,<br>altitude_km: int | float | None = None,<br>metric: Literal['mean', 'median', 'sum', 'percentile'] = 'median',<br>percentile: float | None = None) ‑> <a title="pyaurorax.tools.classes.keogram.Keogram" href="../classes/keogram.html#pyaurorax.tools.classes.keogram.Keogram">Keogram</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -316,7 +323,8 @@ chosen emissions, via the spect_band argument.</dd>
     preview: bool = False,
     skymap: Optional[Skymap] = None,
     altitude_km: Optional[Union[float, int]] = None,
-    metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;] = &#34;median&#34;,
+    metric: Literal[&#34;mean&#34;, &#34;median&#34;, &#34;sum&#34;, &#34;percentile&#34;] = &#34;median&#34;,
+    percentile: Optional[float] = None,
 ) -&gt; Keogram:
     &#34;&#34;&#34;
     Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points, 
@@ -359,7 +367,13 @@ chosen emissions, via the spect_band argument.</dd>
 
         metric (str): 
             The metric used to compute values for each keogram pixel. Valid options are &#34;median&#34;, &#34;mean&#34;,
-            and &#34;sum&#34;. Defaults to &#34;median&#34;.
+            &#34;sum&#34;, and &#34;percentile&#34;. Defaults to &#34;median&#34;.
+
+        percentile (float): 
+            Sets the brightness percentile to calculate within each keogram bin. For each bin defined along
+            the keogram contour, this percentile is computed over all included ASI pixels, and used as the
+            value for that keogram bin. This argument is required if metric is set to &#34;percentile&#34; and
+            should be omitted otherwise.
         
     Returns:
         A `pyaurorax.tools.Keogram` object.
@@ -367,7 +381,7 @@ chosen emissions, via the spect_band argument.</dd>
     Raises:
         ValueError: issues encountered with supplied parameters
     &#34;&#34;&#34;
-    return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric)</code></pre>
+    return func_create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, preview, skymap, altitude_km, metric, percentile)</code></pre>
 </details>
 <div class="desc"><p>Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points,
 in CCD, geographic, or geomagnetic coordinates, within the bounds of the image data. Keogram is created
@@ -400,7 +414,12 @@ which to build the keogram.</dd>
 or magnetic coordinates.</dd>
 <dt><strong><code>metric</code></strong> :&ensp;<code>str</code></dt>
 <dd>The metric used to compute values for each keogram pixel. Valid options are "median", "mean",
-and "sum". Defaults to "median".</dd>
+"sum", and "percentile". Defaults to "median".</dd>
+<dt><strong><code>percentile</code></strong> :&ensp;<code>float</code></dt>
+<dd>Sets the brightness percentile to calculate within each keogram bin. For each bin defined along
+the keogram contour, this percentile is computed over all included ASI pixels, and used as the
+value for that keogram bin. This argument is required if metric is set to "percentile" and
+should be omitted otherwise.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
@@ -486,7 +505,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

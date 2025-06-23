@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax.data.ucalgary API documentation</title>
 <meta name="description" content="Data downloading and reading routines for data provided by the University of Calgary.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -164,7 +164,7 @@ read instead of a flatfield calibration file.</dd>
 <dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
 <dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Calibration.dataset"><code class="name">var <span class="ident">dataset</span> : pyucalgarysrs.data.classes.Dataset | None</code></dt>
 <dd>
@@ -427,7 +427,7 @@ until calibrated data is inserted manually.</dd>
 <dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
 <dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Data.calibrated_data"><code class="name">var <span class="ident">calibrated_data</span> : Any</code></dt>
 <dd>
@@ -789,7 +789,7 @@ class FileDownloadResult:
 <dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
 <dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
 <dd>
@@ -927,7 +927,7 @@ structure compared to the UCalgary Open Data archive.</dd>
 <dt><strong><code>total_bytes</code></strong> :&ensp;<code>int</code></dt>
 <dd>The cumulative amount of bytes for the available URLs.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
 <dd>
@@ -1238,7 +1238,7 @@ class Skymap:
 <dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
 <dd>The <code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code> object for this data.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Skymap.filename"><code class="name">var <span class="ident">filename</span> : str</code></dt>
 <dd>
@@ -1444,7 +1444,7 @@ class Skymap:
             raise AuroraXAPIError(e) from e
 
     def list_observatories(self,
-                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;],
+                           instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;, &#34;smile_asi&#34;],
                            uid: Optional[str] = None,
                            timeout: Optional[int] = None) -&gt; List[Observatory]:
         &#34;&#34;&#34;
@@ -3230,7 +3230,7 @@ objects.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.list_observatories"><code class="name flex">
-<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue', 'trex_spectrograph'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
+<span>def <span class="ident">list_observatories</span></span>(<span>self,<br>instrument_array: Literal['themis_asi', 'rego', 'trex_rgb', 'trex_nir', 'trex_blue', 'trex_spectrograph', 'smile_asi'],<br>uid: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Observatory]</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -3238,7 +3238,7 @@ objects.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def list_observatories(self,
-                       instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;],
+                       instrument_array: Literal[&#34;themis_asi&#34;, &#34;rego&#34;, &#34;trex_rgb&#34;, &#34;trex_nir&#34;, &#34;trex_blue&#34;, &#34;trex_spectrograph&#34;, &#34;smile_asi&#34;],
                        uid: Optional[str] = None,
                        timeout: Optional[int] = None) -&gt; List[Observatory]:
     &#34;&#34;&#34;
@@ -3648,7 +3648,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

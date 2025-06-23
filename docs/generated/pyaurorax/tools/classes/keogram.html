@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax.tools.classes.keogram API documentation</title>
 <meta name="description" content="Class representation for a keogram.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -194,7 +194,10 @@ class Keogram:
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
                 altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
-                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
+                if skymap.full_map_latitude.shape[-1] == 1:
+                    self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
+                else:
+                    self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
             else:
                 # Make sure altitude is in range that can be interpolated
                 if (altitude_km * 1000.0 &lt; skymap.full_map_altitude[0]) or (altitude_km * 1000.0 &gt; skymap.full_map_altitude[2]):
@@ -212,7 +215,10 @@ class Keogram:
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
-            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
+            if skymap.full_map_latitude.shape[-1] == 1:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, 0]).copy()
+            else:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
 
     def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -239,11 +245,23 @@ class Keogram:
         Raises:
             ValueError: Issues with specified altitude.
         &#34;&#34;&#34;
+
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
+            raise ValueError(&#34;Unable to set the magnetic latitudes since the slice_idx is None. If this keogram &#34; +
                              &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                              &#34;this is expected and performing this action is not supported at this time.&#34;)
+
+        # Check the dimensions of the skymap lat/lon arrays
+        # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+        # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+        # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+        # the same as it would be for ASI data
+        if len(skymap.full_map_latitude.shape) == 2:
+            # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+            skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+            skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+            skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -274,10 +292,7 @@ class Keogram:
                 lons[np.where(lons &gt; 180)] -= 360.0
 
             # Convert lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
-                                                                      lons.flatten(), (lons * 0.0).flatten(),
-                                                                      timestamp,
-                                                                      method_code=&#39;G2A&#39;)
+            mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code=&#39;G2A&#39;)
             mag_lats = np.reshape(mag_lats, lats.shape)
             mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -292,11 +307,11 @@ class Keogram:
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
         else:
             # Convert middle altitude lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
-                                                                      np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
-                                                                      (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
-                                                                      timestamp,
-                                                                      method_code=&#39;G2A&#39;)
+            mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
+                                                               np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
+                                                               (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
+                                                               timestamp,
+                                                               method_code=&#39;G2A&#39;)
             mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
             mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
 
@@ -472,10 +487,11 @@ class Keogram:
             # do check for ccd_y
             if (self.ccd_y is None):
                 show_warning(
-                    &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
+                    &#34;Unable to plot CCD y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                     &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                     stacklevel=1,
                 )
+                ylabel = &#34;Keogram Y&#34;
             else:
                 # generate y ticks and labels
                 if (y_type == &#34;ccd&#34;):
@@ -517,8 +533,8 @@ class Keogram:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):  # pragma: nocover
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+                if (savefig_quality is not None):
+                    plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
                 else:
                     plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
             else:
@@ -552,7 +568,7 @@ class Keogram:
         Fill keogram columns that do not have data with NaNs.
 
         Args:
-            cadence (int | float): 
+            cadence (int or float): 
                 The cadence, in seconds, of the data for the keogram. Default is to automatically
                 determine the cadence based on the keogram&#39;s timestamp data
         
@@ -569,7 +585,7 @@ class Keogram:
         # then that calculated, we will raise a Warning
         apparent_cadence = _determine_cadence(self.timestamp)
         if not isinstance(apparent_cadence, (float, int)):
-            raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)
+            raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)  # pragma: nocover
 
         if (cadence is not None) and (apparent_cadence != cadence):
             warning_str = (&#34;Based on the keogram&#39;s timestamp attribute, the apparent cadence is %.2f s, but %.2f s was &#34;
@@ -616,7 +632,7 @@ class Keogram:
         elif len(self.data.shape) == 3:
             desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
         else:
-            raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)
+            raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)  # pragma: nocover
 
         desired_keogram = np.empty(shape=desired_keogram_shape)
         desired_timestamp = []
@@ -718,7 +734,7 @@ class Keogram:
     Fill keogram columns that do not have data with NaNs.
 
     Args:
-        cadence (int | float): 
+        cadence (int or float): 
             The cadence, in seconds, of the data for the keogram. Default is to automatically
             determine the cadence based on the keogram&#39;s timestamp data
     
@@ -735,7 +751,7 @@ class Keogram:
     # then that calculated, we will raise a Warning
     apparent_cadence = _determine_cadence(self.timestamp)
     if not isinstance(apparent_cadence, (float, int)):
-        raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)
+        raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)  # pragma: nocover
 
     if (cadence is not None) and (apparent_cadence != cadence):
         warning_str = (&#34;Based on the keogram&#39;s timestamp attribute, the apparent cadence is %.2f s, but %.2f s was &#34;
@@ -782,7 +798,7 @@ class Keogram:
     elif len(self.data.shape) == 3:
         desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
     else:
-        raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)
+        raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)  # pragma: nocover
 
     desired_keogram = np.empty(shape=desired_keogram_shape)
     desired_timestamp = []
@@ -853,7 +869,7 @@ class Keogram:
 <div class="desc"><p>Fill keogram columns that do not have data with NaNs.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>cadence</code></strong> :&ensp;<code>int | float</code></dt>
+<dt><strong><code>cadence</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The cadence, in seconds, of the data for the keogram. Default is to automatically
 determine the cadence based on the keogram's timestamp data</dd>
 </dl>
@@ -1034,10 +1050,11 @@ will be updated accordingly.</p>
         # do check for ccd_y
         if (self.ccd_y is None):
             show_warning(
-                &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
+                &#34;Unable to plot CCD y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                 &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                 stacklevel=1,
             )
+            ylabel = &#34;Keogram Y&#34;
         else:
             # generate y ticks and labels
             if (y_type == &#34;ccd&#34;):
@@ -1079,8 +1096,8 @@ will be updated accordingly.</p>
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
             # check quality setting
-            if (savefig_quality is not None):  # pragma: nocover
-                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+            if (savefig_quality is not None):
+                plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
             else:
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
         else:
@@ -1253,7 +1270,10 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
         if (altitude_km * 1000.0 in skymap.full_map_altitude):
             altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
-            self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
+            if skymap.full_map_latitude.shape[-1] == 1:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
+            else:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
         else:
             # Make sure altitude is in range that can be interpolated
             if (altitude_km * 1000.0 &lt; skymap.full_map_altitude[0]) or (altitude_km * 1000.0 &gt; skymap.full_map_altitude[2]):
@@ -1271,7 +1291,10 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
             self.geo_y = lats[:, self.__slice_idx].copy()
     else:
         # use default middle altitude
-        self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()</code></pre>
+        if skymap.full_map_latitude.shape[-1] == 1:
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, 0]).copy()
+        else:
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()</code></pre>
 </details>
 <div class="desc"><p>Set the geographic latitude values for this keogram, using the specified skymap
 data. The data will be set to the geo_y attribute of this Keogram object, which
@@ -1325,11 +1348,23 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
     Raises:
         ValueError: Issues with specified altitude.
     &#34;&#34;&#34;
+
     # check for slice idx
     if (self.__slice_idx is None):
-        raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
+        raise ValueError(&#34;Unable to set the magnetic latitudes since the slice_idx is None. If this keogram &#34; +
                          &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                          &#34;this is expected and performing this action is not supported at this time.&#34;)
+
+    # Check the dimensions of the skymap lat/lon arrays
+    # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+    # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+    # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+    # the same as it would be for ASI data
+    if len(skymap.full_map_latitude.shape) == 2:
+        # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+        skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+        skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+        skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
     # determine altitude index to use
     if (altitude_km is not None):
@@ -1360,10 +1395,7 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
             lons[np.where(lons &gt; 180)] -= 360.0
 
         # Convert lats and lons to geomagnetic coordinates
-        mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
-                                                                  lons.flatten(), (lons * 0.0).flatten(),
-                                                                  timestamp,
-                                                                  method_code=&#39;G2A&#39;)
+        mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code=&#39;G2A&#39;)
         mag_lats = np.reshape(mag_lats, lats.shape)
         mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -1378,11 +1410,11 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
         self.mag_y = mag_lats[:, self.__slice_idx].copy()
     else:
         # Convert middle altitude lats and lons to geomagnetic coordinates
-        mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
-                                                                  np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
-                                                                  (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
-                                                                  timestamp,
-                                                                  method_code=&#39;G2A&#39;)
+        mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
+                                                           np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
+                                                           (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
+                                                           timestamp,
+                                                           method_code=&#39;G2A&#39;)
         mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
         mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
 
@@ -1498,7 +1530,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

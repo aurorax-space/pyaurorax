@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
-<title>pyaurorax.tools.classes.mosaic API documentation</title>
-<meta name="description" content="Class representation for a mosaic.">
+<title>pyaurorax.tools.classes.fov API documentation</title>
+<meta name="description" content="Class representation for a FoV map.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -51,10 +51,10 @@ border-left: 1px solid #ddd;
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>pyaurorax.tools.classes.mosaic</code></h1>
+<h1 class="title">Module <code>pyaurorax.tools.classes.fov</code></h1>
 </header>
 <section id="section-intro">
-<p>Class representation for a mosaic.</p>
+<p>Class representation for a FoV map.</p>
 </section>
 <section>
 </section>
@@ -65,9 +65,9 @@ border-left: 1px solid #ddd;
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic"><code class="flex name class">
-<span>class <span class="ident">Mosaic</span></span>
-<span>(</span><span>polygon_data: matplotlib.collections.PolyCollection | List[matplotlib.collections.PolyCollection],<br>cartopy_projection: cartopy.crs.Projection,<br>contour_data: Dict[str, List[Any]] | None = None,<br>spect_cmap: str | None = None,<br>spect_intensity_scale: Tuple[int, int] | None = None)</span>
+<dt id="pyaurorax.tools.classes.fov.FOV"><code class="flex name class">
+<span>class <span class="ident">FOV</span></span>
+<span>(</span><span>cartopy_projection: cartopy.crs.Projection,<br>fov_data: List[<a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a>] | None = None,<br>contour_data: Dict[str, List[Any]] | None = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -75,94 +75,103 @@ border-left: 1px solid #ddd;
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@dataclass
-class Mosaic:
+class FOV:
     &#34;&#34;&#34;
-    Class representation for a generated mosaic.
+    Class representation for a FoV map.
 
     Attributes:
-        polygon_data (matplotlib.collections.PolyCollection): 
-            Generated polygons containing rendered data.
 
         cartopy_projection (cartopy.crs.Projection): 
             Cartopy projection to utilize.
 
-        contour_data (Dict[str, List[Any]]): 
-            Generated contour data.
+        fov_data (FOVData or list of FOVData objects): 
+            FoV contours included in FOV object.
 
-        spect_cmap (str): 
-            String giving the cmap to use for spect legend.
-            
-        spect_intensity_scale (Tuple[int]): 
-            The min and max values that spectrograph data
-            is scaled to in the mosaic, if any is present.
+        contour_data (Dict[str, List[Any]]): 
+            Other contour data included in FOV object.
+
     &#34;&#34;&#34;
-    polygon_data: Union[PolyCollection, List[PolyCollection]]
     cartopy_projection: Projection
+    fov_data: Optional[List[FOVData]] = None
     contour_data: Optional[Dict[str, List[Any]]] = None
-    spect_cmap: Optional[str] = None
-    spect_intensity_scale: Optional[Tuple[int, int]] = None
 
     def __str__(self) -&gt; str:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
-        if isinstance(self.polygon_data, list):
-            polycollection_str = &#34;[PolyCollection(...), ...]&#34;  # pragma: nocover
-        else:
-            polycollection_str = &#34;PolyCollection(...)&#34;
 
-        if self.contour_data is not None:
-            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)&#34; % (  # pragma: nocover
-                self.cartopy_projection.to_string(),
-                len(self.contour_data.get(&#34;x&#34;, [])),
-            )
+        if self.fov_data is not None:
+
+            n_fovs = 0
+            for fov in self.fov_data:
+                n_fovs += len(fov.fovs.keys())
+
+            if self.contour_data is not None:
+                return &#34;FOV(cartopy_projection=Projection(%s), %d FOVData Object(s), %d Contour(s))&#34; % (
+                    self.cartopy_projection.to_string(),
+                    n_fovs,
+                    len(self.contour_data.get(&#34;x&#34;, [])),
+                )
+            else:
+                return &#34;FOV(cartopy_projection=Projection(%s), %d FOVData Object(s))&#34; % (
+                    self.cartopy_projection.to_string(),
+                    n_fovs,
+                )
         else:
-            return &#34;Mosaic(polygon_data=&#34; + polycollection_str + &#34;, cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
+
+            if self.contour_data is not None:
+                return &#34;FOV(cartopy_projection=Projection(%s), %d Contour(s))&#34; % (
+                    self.cartopy_projection.to_string(),
+                    len(self.contour_data.get(&#34;x&#34;, [])),
+                )
+            else:
+                return &#34;FOV(cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
 
     def pretty_print(self):
         &#34;&#34;&#34;
         A special print output for this class.
         &#34;&#34;&#34;
         # set special strings
-        if isinstance(self.polygon_data, list):
-            polycollection_str = &#34;[PolyCollection(...), ...]&#34;  # pragma: nocover
-        else:
-            polycollection_str = &#34;PolyCollection(...)&#34;
         cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+
         if self.contour_data is not None:
-            contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )  # pragma: nocover
+            contour_data_str = &#34;%d Contour(s)&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
         else:
             contour_data_str = &#34;None&#34;
 
-        # print
-        print(&#34;Mosaic:&#34;)
-        print(&#34;  %-23s: %s&#34; % (&#34;polygon_data&#34;, polycollection_str))
-        print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
-        print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
-        print(&#34;  %-23s: %s&#34; % (&#34;spect_cmap&#34;, self.spect_cmap))
-        print(&#34;  %-23s: %s&#34; % (&#34;spect_intensity_scale&#34;, self.spect_intensity_scale))
+        if self.fov_data is not None:
+            n_fovs = 0
 
-    def plot(
-            self,
-            map_extent: Sequence[Union[float, int]],
-            figsize: Optional[Tuple[int, int]] = None,
-            rayleighs: bool = False,
-            max_rayleighs: int = 20000,
-            title: Optional[str] = None,
-            ocean_color: Optional[str] = None,
-            land_color: str = &#34;gray&#34;,
-            land_edgecolor: str = &#34;#8A8A8A&#34;,
-            borders_color: str = &#34;#AEAEAE&#34;,
-            borders_disable: bool = False,
-            colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
-            cbar_title: Optional[str] = None,
-            cbar_colormap: str = &#34;&#34;,
-            returnfig: bool = False,
-            savefig: bool = False,
-            savefig_filename: Optional[str] = None,
-            savefig_quality: Optional[int] = None) -&gt; Any:
+            for fov in self.fov_data:
+                n_fovs += len(fov.fovs.keys())
+
+            fov_data_str = &#34;%d FoVData Object(s)&#34; % (n_fovs)
+        else:
+            fov_data_str = &#34;None&#34;
+
+        # print
+        print(&#34;FOV:&#34;)
+        print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;fov_data&#34;, fov_data_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
+
+    def plot(self,
+             map_extent: Sequence[Union[float, int]],
+             label: bool = True,
+             enforce_data_availability: bool = False,
+             figsize: Optional[Tuple[int, int]] = None,
+             title: Optional[str] = None,
+             ocean_color: Optional[str] = None,
+             land_color: str = &#34;gray&#34;,
+             land_edgecolor: str = &#34;#8A8A8A&#34;,
+             borders_color: str = &#34;#AEAEAE&#34;,
+             borders_disable: bool = False,
+             returnfig: bool = False,
+             savefig: bool = False,
+             savefig_filename: Optional[str] = None,
+             savefig_quality: Optional[int] = None) -&gt; Any:
         &#34;&#34;&#34;
-        Generate a plot of the mosaic data. 
+        Generate a plot of the FoV data. 
         
         Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
         return the matplotlib plot object for further usage (using the `returnfig` parameter).
@@ -172,17 +181,19 @@ class Mosaic:
                 Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers 
                 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].
 
+            label (bool): 
+                Specifies wether individual FoVs will be labelled with their site_uid.
+                
+            enforce_data_availability (bool): 
+                Specifies whether or not data availability information associated with the FOV object
+                should be used to omit sites with no available data. Note that data availability information
+                is typically created using the FOVData.add_availability method.
+
             figsize (tuple): 
                 The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
-            rayleighs (bool): 
-                Set to `True` if the data being plotted is in Rayleighs. Defaults to `False`.
-
-            max_rayleighs (int): 
-                Max intensity scale for Rayleighs. Defaults to `20000`.
-
             title (str): 
-                The title to display above the plotted mosaic. Default is no title.
+                The title to display above the plotted Fov Map. Default is no title.
 
             ocean_color (str): 
                 Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
@@ -202,28 +213,6 @@ class Mosaic:
             
             borders_disable (bool): 
                 Disbale rendering of the borders. Default is `False`.
-
-            cbar_title (str): 
-                Title for the colorbar. Default is no title.
-
-            colorbar_title (str): 
-                Deprecated as of v1.10.0. Use &#39;cbar_title&#39; instead in the exact same way.
-
-            cbar_colormap (str): 
-                The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
-                mosaic was created with spectrograph data, in which case defaults to the colormap
-                used for spectrograph data..
-
-                Commonly used colormaps are:
-
-                - REGO: `gist_heat`
-                - THEMIS ASI: `gray`
-                - TREx Blue: `Blues_r`
-                - TREx NIR: `gray`
-                - TREx RGB: `None`
-
-                A list of all available colormaps can be found on the 
-                [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
 
             returnfig (bool): 
                 Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
@@ -246,16 +235,11 @@ class Mosaic:
                 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
 
         Returns:
-            The displayed montage, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+            The displayed fov map, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
             set to True, the plotting variables `(fig, ax)` will be returned.
 
         Raises:
         &#34;&#34;&#34;
-        # handle deprecation warnings
-        if (colorbar_title is not None):
-            show_warning(&#34;The parameter &#39;colorbar_title&#39; was deprecated in v1.11.0. Please use &#39;cbar_title&#39; instead (usage is identical).&#34;,
-                         stacklevel=1)
-            cbar_title = colorbar_title
 
         # check return mode
         if (returnfig is True and savefig is True):
@@ -269,16 +253,12 @@ class Mosaic:
                          &#34;savefig option parameters will be ignored.&#34;,
                          stacklevel=1)
 
-        # get colormap if there is spectrograph data
-        if self.spect_cmap is not None:
-            cbar_colormap = self.spect_cmap
-
-        # initialize figure
+        # Initialize figure
         fig = plt.figure(figsize=figsize)
         ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
         ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
-        # add ocean
+        # Add ocean
         #
         # NOTE: we use the default ocean color
         if (ocean_color is not None):
@@ -296,16 +276,57 @@ class Mosaic:
             ax.add_feature(  # type: ignore
                 cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)
 
-        # add polygon data
-        #
-        # NOTE: it seems that when running this function a second time, the polygon
-        # data is not too happy. So to handle this, we plot a copy of the polygon data
-        if isinstance(self.polygon_data, list):
-            for polygon_data in self.polygon_data:  # pragma: nocover
-                ax.add_collection(copy(polygon_data))
-        else:
-            ax.add_collection(copy(self.polygon_data))
+        # Go through and plot all of the FoVs within each of the Object&#39;s FOVData objects
+        if self.fov_data is not None:
 
+            # If requesting enforcement of data availability, check that data availability exists in
+            # the object first
+            if (enforce_data_availability is True):
+                for fov_data in self.fov_data:
+                    if (fov_data.data_availability is None):
+                        raise ValueError(&#34;Before plotting FOV object with enforce_data_availability=True, FOVData.add_availability(...) &#34; +
+                                         &#34;must be called for all included FOVData objects.&#34;)
+
+            for fov_data in self.fov_data:
+                latlon_dict = fov_data.fovs
+
+                for site in fov_data.site_uid_list:
+
+                    # If data_availability has been enforced and is False for this site, don&#39;t plot it
+                    if (enforce_data_availability is True) and (fov_data.data_availability is not None) and (site
+                                                                                                             in fov_data.data_availability.keys()):
+                        if (fov_data.data_availability[site] is False):
+                            continue
+
+                    latlon = latlon_dict[site]
+
+                    ax.plot(np.squeeze(latlon[1, :]),
+                            np.squeeze(latlon[0, :]),
+                            color=fov_data.color,
+                            linestyle=fov_data.linestyle,
+                            zorder=1,
+                            linewidth=fov_data.linewidth,
+                            transform=cartopy.crs.Geodetic())
+
+                    # Add site_uid labels to the FoV plot, in the center of each ASI FoV
+                    if label:
+                        if (fov_data.instrument_array != &#34;trex_spectrograph&#34;):
+                            center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
+                            center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
+                        else:
+                            center_lat = (latlon[0, 0] + latlon[0, -1]) / 2.0
+                            center_lon = (latlon[1, 0] + latlon[1, -1]) / 2.0
+
+                        ax.text(center_lon,
+                                center_lat,
+                                site,
+                                ha=&#34;center&#34;,
+                                va=&#34;center&#34;,
+                                color=fov_data.color,
+                                transform=cartopy.crs.Geodetic(),
+                                clip_on=True)
+
+        # Go through and plot all of the contour data included in the Object
         if self.contour_data is not None:
             for i in range(len(self.contour_data[&#34;x&#34;])):
                 ax.plot(self.contour_data[&#34;x&#34;][i],
@@ -319,75 +340,6 @@ class Mosaic:
         # set title
         if (title is not None):
             ax.set_title(title)
-
-        # add text
-        if (rayleighs is True):
-            if isinstance(self.polygon_data, list):  # pragma: nocover
-                raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
-
-            # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
-            cbar_ticks = [float(j) / 5. for j in range(0, 6)]
-            cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]
-
-            # Any pixels with the max Rayleigh value could be greater than it, so we include the plus sign
-            cbar_ticknames[-1] += &#34;+&#34;
-            self.polygon_data.set_cmap(cbar_colormap)
-            cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
-            cbar.ax.set_yticklabels(cbar_ticknames)
-            plt.text(1.025,
-                     0.5,
-                     &#34;Intensity (Rayleighs)&#34;,
-                     fontsize=14,
-                     transform=ax.transAxes,
-                     va=&#34;center&#34;,
-                     rotation=&#34;vertical&#34;,
-                     weight=&#34;bold&#34;,
-                     style=&#34;oblique&#34;)
-
-        if (self.spect_cmap) is not None:
-
-            if (self.spect_intensity_scale) is None:  # pragma: nocover
-                intensity_max = np.nan
-                intensity_min = np.nan
-            else:
-                intensity_max = self.spect_intensity_scale[1]
-                intensity_min = self.spect_intensity_scale[0]
-
-            # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
-            cbar_ticks = [float(j) / 5. for j in range(0, 6)]
-            cbar_ticknames = [str(int((intensity_max / 5) + intensity_min) * j) for j in range(0, 6)]
-
-            # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
-            cbar_ticknames[-1] += &#34;+&#34;
-            if isinstance(self.polygon_data, list):  # pragma: nocover
-                self.polygon_data[0].set_cmap(cbar_colormap)
-            else:
-                self.polygon_data.set_cmap(cbar_colormap)
-            if isinstance(self.polygon_data, list):  # pragma: nocover
-                cbar = plt.colorbar(self.polygon_data[0], shrink=0.5, ticks=cbar_ticks, ax=ax)
-            else:
-                cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
-            cbar.ax.set_yticklabels(cbar_ticknames)
-            if (cbar_title is None):
-                plt.text(1.025,
-                         0.5,
-                         &#34;Spectrograph Intensity (Rayleighs)&#34;,
-                         fontsize=10,
-                         transform=ax.transAxes,
-                         va=&#34;center&#34;,
-                         rotation=&#34;vertical&#34;,
-                         weight=&#34;bold&#34;,
-                         style=&#34;oblique&#34;)
-            else:
-                plt.text(1.025,
-                         0.5,
-                         cbar_title,
-                         fontsize=10,
-                         transform=ax.transAxes,
-                         va=&#34;center&#34;,
-                         rotation=&#34;vertical&#34;,
-                         weight=&#34;bold&#34;,
-                         style=&#34;oblique&#34;)
 
         # save figure or show it
         if (savefig is True):
@@ -426,6 +378,34 @@ class Mosaic:
         # return
         return None
 
+    def add_fov(self, fov_data: Union[FOVData, List[FOVData]]):
+        &#34;&#34;&#34;
+        Add one or more FOVData objects to the FOV object.
+
+        Args:
+
+            fov_data (pyaurorax.tools.FOVData or list): 
+                A single or list of FOVData objects, that will be added to the
+                FOV object map upon initialization.
+
+        Returns:
+            The object&#39;s fov_data parameter is updated appropriately.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+
+        if isinstance(fov_data, list):
+            fovs_to_add = fov_data
+        else:
+            fovs_to_add = [fov_data]
+
+        if self.fov_data is None:
+            self.fov_data = fovs_to_add
+        else:
+            for data in fovs_to_add:
+                self.fov_data.append(data)
+
     def add_geo_contours(self,
                          lats: Optional[Union[ndarray, list]] = None,
                          lons: Optional[Union[ndarray, list]] = None,
@@ -437,7 +417,7 @@ class Mosaic:
                          marker: str = &#34;&#34;,
                          bring_to_front: bool = False):
         &#34;&#34;&#34;
-        Add geographic contours to a mosaic.
+        Add geographic contours to a FoV map.
 
         Args:
             lats (ndarray or list): 
@@ -507,9 +487,9 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn&#39;t exist yet
         if self.contour_data is None:
-            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}  # pragma: nocover
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
-        # Obtain the mosaic&#39;s projection
+        # Obtain the Fov map&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
         mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
         transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
@@ -594,7 +574,7 @@ class Mosaic:
                          marker: str = &#34;&#34;,
                          bring_to_front: bool = False):
         &#34;&#34;&#34;
-        Add geomagnetic contours to a mosaic.
+        Add geomagnetic contours to a FoV map.
 
         Args:
             timestamp (datetime.datetime): 
@@ -669,7 +649,7 @@ class Mosaic:
         if self.contour_data is None:
             self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
-        # Obtain the mosaic&#39;s projection
+        # Obtain the FoV map&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
         mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
         transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
@@ -686,7 +666,7 @@ class Mosaic:
                 raise ValueError(&#34;Lat/Lon data must be of the same size.&#34;)
 
             # Create specified contour from magnetic coords
-            y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
+            y, x, _ = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
             x, y = transformer.transform(x, y)
 
             # Add contour to dict, along with color and linewidth
@@ -707,7 +687,7 @@ class Mosaic:
             for lat in constant_lats:
                 # Create line of constant lat from magnetic coords
                 const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
-                const_lat_y, const_lat_x, alt = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+                const_lat_y, const_lat_x, _ = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
                 sort_idx = np.argsort(const_lat_x)
                 const_lat_y = const_lat_y[sort_idx]
                 const_lat_x = const_lat_x[sort_idx]
@@ -731,7 +711,7 @@ class Mosaic:
             for lon in constant_lons:
                 # Create line of constant lon from magnetic coords
                 const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
-                const_lon_y, const_lon_x, alt = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+                const_lon_y, const_lon_x, _ = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
                 sort_idx = np.argsort(const_lon_y)
                 const_lon_x = const_lon_x[sort_idx]
                 const_lon_y = const_lon_y[sort_idx]
@@ -746,47 +726,85 @@ class Mosaic:
                 self.contour_data[&#34;marker&#34;].append(marker)
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
-<div class="desc"><p>Class representation for a generated mosaic.</p>
+<div class="desc"><p>Class representation for a FoV map.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
-<dt><strong><code>polygon_data</code></strong> :&ensp;<code>matplotlib.collections.PolyCollection</code></dt>
-<dd>Generated polygons containing rendered data.</dd>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
 <dd>Cartopy projection to utilize.</dd>
+<dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a></code> or <code>list</code> of <code><a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a> objects</code></dt>
+<dd>FoV contours included in FOV object.</dd>
 <dt><strong><code>contour_data</code></strong> :&ensp;<code>Dict[str, List[Any]]</code></dt>
-<dd>Generated contour data.</dd>
-<dt><strong><code>spect_cmap</code></strong> :&ensp;<code>str</code></dt>
-<dd>String giving the cmap to use for spect legend.</dd>
-<dt><strong><code>spect_intensity_scale</code></strong> :&ensp;<code>Tuple[int]</code></dt>
-<dd>The min and max values that spectrograph data
-is scaled to in the mosaic, if any is present.</dd>
+<dd>Other contour data included in FOV object.</dd>
 </dl></div>
 <h3>Instance variables</h3>
 <dl>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection"><code class="name">var <span class="ident">cartopy_projection</span> : cartopy.crs.Projection</code></dt>
+<dt id="pyaurorax.tools.classes.fov.FOV.cartopy_projection"><code class="name">var <span class="ident">cartopy_projection</span> : cartopy.crs.Projection</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.contour_data"><code class="name">var <span class="ident">contour_data</span> : Dict[str, List[Any]] | None</code></dt>
+<dt id="pyaurorax.tools.classes.fov.FOV.contour_data"><code class="name">var <span class="ident">contour_data</span> : Dict[str, List[Any]] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.polygon_data"><code class="name">var <span class="ident">polygon_data</span> : matplotlib.collections.PolyCollection | List[matplotlib.collections.PolyCollection]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap"><code class="name">var <span class="ident">spect_cmap</span> : str | None</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale"><code class="name">var <span class="ident">spect_intensity_scale</span> : Tuple[int, int] | None</code></dt>
+<dt id="pyaurorax.tools.classes.fov.FOV.fov_data"><code class="name">var <span class="ident">fov_data</span> : List[<a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a>] | None</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours"><code class="name flex">
+<dt id="pyaurorax.tools.classes.fov.FOV.add_fov"><code class="name flex">
+<span>def <span class="ident">add_fov</span></span>(<span>self,<br>fov_data: <a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a> | List[<a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a>])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_fov(self, fov_data: Union[FOVData, List[FOVData]]):
+    &#34;&#34;&#34;
+    Add one or more FOVData objects to the FOV object.
+
+    Args:
+
+        fov_data (pyaurorax.tools.FOVData or list): 
+            A single or list of FOVData objects, that will be added to the
+            FOV object map upon initialization.
+
+    Returns:
+        The object&#39;s fov_data parameter is updated appropriately.
+
+    Raises:
+        ValueError: issues encountered with supplied parameters.
+    &#34;&#34;&#34;
+
+    if isinstance(fov_data, list):
+        fovs_to_add = fov_data
+    else:
+        fovs_to_add = [fov_data]
+
+    if self.fov_data is None:
+        self.fov_data = fovs_to_add
+    else:
+        for data in fovs_to_add:
+            self.fov_data.append(data)</code></pre>
+</details>
+<div class="desc"><p>Add one or more FOVData objects to the FOV object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="../index.html#pyaurorax.tools.FOVData">FOVData</a></code> or <code>list</code></dt>
+<dd>A single or list of FOVData objects, that will be added to the
+FOV object map upon initialization.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The object's fov_data parameter is updated appropriately.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>issues encountered with supplied parameters.</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.classes.fov.FOV.add_geo_contours"><code class="name flex">
 <span>def <span class="ident">add_geo_contours</span></span>(<span>self,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
@@ -805,7 +823,7 @@ is scaled to in the mosaic, if any is present.</dd>
                      marker: str = &#34;&#34;,
                      bring_to_front: bool = False):
     &#34;&#34;&#34;
-    Add geographic contours to a mosaic.
+    Add geographic contours to a FoV map.
 
     Args:
         lats (ndarray or list): 
@@ -875,9 +893,9 @@ is scaled to in the mosaic, if any is present.</dd>
 
     # Initialize contour data dict if it doesn&#39;t exist yet
     if self.contour_data is None:
-        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}  # pragma: nocover
+        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
-    # Obtain the mosaic&#39;s projection
+    # Obtain the Fov map&#39;s projection
     source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
     mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
     transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
@@ -950,7 +968,7 @@ is scaled to in the mosaic, if any is present.</dd>
             self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
-<div class="desc"><p>Add geographic contours to a mosaic.</p>
+<div class="desc"><p>Add geographic contours to a FoV map.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -980,7 +998,7 @@ is scaled to in the mosaic, if any is present.</dd>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours"><code class="name flex">
+<dt id="pyaurorax.tools.classes.fov.FOV.add_mag_contours"><code class="name flex">
 <span>def <span class="ident">add_mag_contours</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
@@ -1000,7 +1018,7 @@ is scaled to in the mosaic, if any is present.</dd>
                      marker: str = &#34;&#34;,
                      bring_to_front: bool = False):
     &#34;&#34;&#34;
-    Add geomagnetic contours to a mosaic.
+    Add geomagnetic contours to a FoV map.
 
     Args:
         timestamp (datetime.datetime): 
@@ -1075,7 +1093,7 @@ is scaled to in the mosaic, if any is present.</dd>
     if self.contour_data is None:
         self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
 
-    # Obtain the mosaic&#39;s projection
+    # Obtain the FoV map&#39;s projection
     source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
     mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
     transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
@@ -1092,7 +1110,7 @@ is scaled to in the mosaic, if any is present.</dd>
             raise ValueError(&#34;Lat/Lon data must be of the same size.&#34;)
 
         # Create specified contour from magnetic coords
-        y, x, alt = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
+        y, x, _ = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
         x, y = transformer.transform(x, y)
 
         # Add contour to dict, along with color and linewidth
@@ -1113,7 +1131,7 @@ is scaled to in the mosaic, if any is present.</dd>
         for lat in constant_lats:
             # Create line of constant lat from magnetic coords
             const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
-            const_lat_y, const_lat_x, alt = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+            const_lat_y, const_lat_x, _ = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
             sort_idx = np.argsort(const_lat_x)
             const_lat_y = const_lat_y[sort_idx]
             const_lat_x = const_lat_x[sort_idx]
@@ -1137,7 +1155,7 @@ is scaled to in the mosaic, if any is present.</dd>
         for lon in constant_lons:
             # Create line of constant lon from magnetic coords
             const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
-            const_lon_y, const_lon_x, alt = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+            const_lon_y, const_lon_x, _ = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
             sort_idx = np.argsort(const_lon_y)
             const_lon_x = const_lon_x[sort_idx]
             const_lon_y = const_lon_y[sort_idx]
@@ -1152,7 +1170,7 @@ is scaled to in the mosaic, if any is present.</dd>
             self.contour_data[&#34;marker&#34;].append(marker)
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
-<div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
+<div class="desc"><p>Add geomagnetic contours to a FoV map.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -1184,35 +1202,31 @@ is scaled to in the mosaic, if any is present.</dd>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.plot"><code class="name flex">
-<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>figsize: Tuple[int, int] | None = None,<br>rayleighs: bool = False,<br>max_rayleighs: int = 20000,<br>title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>colorbar_title: str | None = None,<br>cbar_title: str | None = None,<br>cbar_colormap: str = '',<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+<dt id="pyaurorax.tools.classes.fov.FOV.plot"><code class="name flex">
+<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>label: bool = True,<br>enforce_data_availability: bool = False,<br>figsize: Tuple[int, int] | None = None,<br>title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def plot(
-        self,
-        map_extent: Sequence[Union[float, int]],
-        figsize: Optional[Tuple[int, int]] = None,
-        rayleighs: bool = False,
-        max_rayleighs: int = 20000,
-        title: Optional[str] = None,
-        ocean_color: Optional[str] = None,
-        land_color: str = &#34;gray&#34;,
-        land_edgecolor: str = &#34;#8A8A8A&#34;,
-        borders_color: str = &#34;#AEAEAE&#34;,
-        borders_disable: bool = False,
-        colorbar_title: Optional[str] = None,  # deprecated in v1.11.0, use cbar_title instead
-        cbar_title: Optional[str] = None,
-        cbar_colormap: str = &#34;&#34;,
-        returnfig: bool = False,
-        savefig: bool = False,
-        savefig_filename: Optional[str] = None,
-        savefig_quality: Optional[int] = None) -&gt; Any:
+<pre><code class="python">def plot(self,
+         map_extent: Sequence[Union[float, int]],
+         label: bool = True,
+         enforce_data_availability: bool = False,
+         figsize: Optional[Tuple[int, int]] = None,
+         title: Optional[str] = None,
+         ocean_color: Optional[str] = None,
+         land_color: str = &#34;gray&#34;,
+         land_edgecolor: str = &#34;#8A8A8A&#34;,
+         borders_color: str = &#34;#AEAEAE&#34;,
+         borders_disable: bool = False,
+         returnfig: bool = False,
+         savefig: bool = False,
+         savefig_filename: Optional[str] = None,
+         savefig_quality: Optional[int] = None) -&gt; Any:
     &#34;&#34;&#34;
-    Generate a plot of the mosaic data. 
+    Generate a plot of the FoV data. 
     
     Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
     return the matplotlib plot object for further usage (using the `returnfig` parameter).
@@ -1222,17 +1236,19 @@ is scaled to in the mosaic, if any is present.</dd>
             Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers 
             and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].
 
+        label (bool): 
+            Specifies wether individual FoVs will be labelled with their site_uid.
+            
+        enforce_data_availability (bool): 
+            Specifies whether or not data availability information associated with the FOV object
+            should be used to omit sites with no available data. Note that data availability information
+            is typically created using the FOVData.add_availability method.
+
         figsize (tuple): 
             The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
 
-        rayleighs (bool): 
-            Set to `True` if the data being plotted is in Rayleighs. Defaults to `False`.
-
-        max_rayleighs (int): 
-            Max intensity scale for Rayleighs. Defaults to `20000`.
-
         title (str): 
-            The title to display above the plotted mosaic. Default is no title.
+            The title to display above the plotted Fov Map. Default is no title.
 
         ocean_color (str): 
             Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
@@ -1252,28 +1268,6 @@ is scaled to in the mosaic, if any is present.</dd>
         
         borders_disable (bool): 
             Disbale rendering of the borders. Default is `False`.
-
-        cbar_title (str): 
-            Title for the colorbar. Default is no title.
-
-        colorbar_title (str): 
-            Deprecated as of v1.10.0. Use &#39;cbar_title&#39; instead in the exact same way.
-
-        cbar_colormap (str): 
-            The matplotlib colormap to use for the plotted color bar. Default is `gray`, unless
-            mosaic was created with spectrograph data, in which case defaults to the colormap
-            used for spectrograph data..
-
-            Commonly used colormaps are:
-
-            - REGO: `gist_heat`
-            - THEMIS ASI: `gray`
-            - TREx Blue: `Blues_r`
-            - TREx NIR: `gray`
-            - TREx RGB: `None`
-
-            A list of all available colormaps can be found on the 
-            [matplotlib documentation](https://matplotlib.org/stable/gallery/color/colormap_reference.html).
 
         returnfig (bool): 
             Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
@@ -1296,16 +1290,11 @@ is scaled to in the mosaic, if any is present.</dd>
             is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
 
     Returns:
-        The displayed montage, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+        The displayed fov map, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
         set to True, the plotting variables `(fig, ax)` will be returned.
 
     Raises:
     &#34;&#34;&#34;
-    # handle deprecation warnings
-    if (colorbar_title is not None):
-        show_warning(&#34;The parameter &#39;colorbar_title&#39; was deprecated in v1.11.0. Please use &#39;cbar_title&#39; instead (usage is identical).&#34;,
-                     stacklevel=1)
-        cbar_title = colorbar_title
 
     # check return mode
     if (returnfig is True and savefig is True):
@@ -1319,16 +1308,12 @@ is scaled to in the mosaic, if any is present.</dd>
                      &#34;savefig option parameters will be ignored.&#34;,
                      stacklevel=1)
 
-    # get colormap if there is spectrograph data
-    if self.spect_cmap is not None:
-        cbar_colormap = self.spect_cmap
-
-    # initialize figure
+    # Initialize figure
     fig = plt.figure(figsize=figsize)
     ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
     ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
-    # add ocean
+    # Add ocean
     #
     # NOTE: we use the default ocean color
     if (ocean_color is not None):
@@ -1346,16 +1331,57 @@ is scaled to in the mosaic, if any is present.</dd>
         ax.add_feature(  # type: ignore
             cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)
 
-    # add polygon data
-    #
-    # NOTE: it seems that when running this function a second time, the polygon
-    # data is not too happy. So to handle this, we plot a copy of the polygon data
-    if isinstance(self.polygon_data, list):
-        for polygon_data in self.polygon_data:  # pragma: nocover
-            ax.add_collection(copy(polygon_data))
-    else:
-        ax.add_collection(copy(self.polygon_data))
+    # Go through and plot all of the FoVs within each of the Object&#39;s FOVData objects
+    if self.fov_data is not None:
 
+        # If requesting enforcement of data availability, check that data availability exists in
+        # the object first
+        if (enforce_data_availability is True):
+            for fov_data in self.fov_data:
+                if (fov_data.data_availability is None):
+                    raise ValueError(&#34;Before plotting FOV object with enforce_data_availability=True, FOVData.add_availability(...) &#34; +
+                                     &#34;must be called for all included FOVData objects.&#34;)
+
+        for fov_data in self.fov_data:
+            latlon_dict = fov_data.fovs
+
+            for site in fov_data.site_uid_list:
+
+                # If data_availability has been enforced and is False for this site, don&#39;t plot it
+                if (enforce_data_availability is True) and (fov_data.data_availability is not None) and (site
+                                                                                                         in fov_data.data_availability.keys()):
+                    if (fov_data.data_availability[site] is False):
+                        continue
+
+                latlon = latlon_dict[site]
+
+                ax.plot(np.squeeze(latlon[1, :]),
+                        np.squeeze(latlon[0, :]),
+                        color=fov_data.color,
+                        linestyle=fov_data.linestyle,
+                        zorder=1,
+                        linewidth=fov_data.linewidth,
+                        transform=cartopy.crs.Geodetic())
+
+                # Add site_uid labels to the FoV plot, in the center of each ASI FoV
+                if label:
+                    if (fov_data.instrument_array != &#34;trex_spectrograph&#34;):
+                        center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
+                        center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
+                    else:
+                        center_lat = (latlon[0, 0] + latlon[0, -1]) / 2.0
+                        center_lon = (latlon[1, 0] + latlon[1, -1]) / 2.0
+
+                    ax.text(center_lon,
+                            center_lat,
+                            site,
+                            ha=&#34;center&#34;,
+                            va=&#34;center&#34;,
+                            color=fov_data.color,
+                            transform=cartopy.crs.Geodetic(),
+                            clip_on=True)
+
+    # Go through and plot all of the contour data included in the Object
     if self.contour_data is not None:
         for i in range(len(self.contour_data[&#34;x&#34;])):
             ax.plot(self.contour_data[&#34;x&#34;][i],
@@ -1369,75 +1395,6 @@ is scaled to in the mosaic, if any is present.</dd>
     # set title
     if (title is not None):
         ax.set_title(title)
-
-    # add text
-    if (rayleighs is True):
-        if isinstance(self.polygon_data, list):  # pragma: nocover
-            raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
-
-        # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
-        cbar_ticks = [float(j) / 5. for j in range(0, 6)]
-        cbar_ticknames = [str(int(max_rayleighs / 5) * j) for j in range(0, 6)]
-
-        # Any pixels with the max Rayleigh value could be greater than it, so we include the plus sign
-        cbar_ticknames[-1] += &#34;+&#34;
-        self.polygon_data.set_cmap(cbar_colormap)
-        cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
-        cbar.ax.set_yticklabels(cbar_ticknames)
-        plt.text(1.025,
-                 0.5,
-                 &#34;Intensity (Rayleighs)&#34;,
-                 fontsize=14,
-                 transform=ax.transAxes,
-                 va=&#34;center&#34;,
-                 rotation=&#34;vertical&#34;,
-                 weight=&#34;bold&#34;,
-                 style=&#34;oblique&#34;)
-
-    if (self.spect_cmap) is not None:
-
-        if (self.spect_intensity_scale) is None:  # pragma: nocover
-            intensity_max = np.nan
-            intensity_min = np.nan
-        else:
-            intensity_max = self.spect_intensity_scale[1]
-            intensity_min = self.spect_intensity_scale[0]
-
-        # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
-        cbar_ticks = [float(j) / 5. for j in range(0, 6)]
-        cbar_ticknames = [str(int((intensity_max / 5) + intensity_min) * j) for j in range(0, 6)]
-
-        # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
-        cbar_ticknames[-1] += &#34;+&#34;
-        if isinstance(self.polygon_data, list):  # pragma: nocover
-            self.polygon_data[0].set_cmap(cbar_colormap)
-        else:
-            self.polygon_data.set_cmap(cbar_colormap)
-        if isinstance(self.polygon_data, list):  # pragma: nocover
-            cbar = plt.colorbar(self.polygon_data[0], shrink=0.5, ticks=cbar_ticks, ax=ax)
-        else:
-            cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
-        cbar.ax.set_yticklabels(cbar_ticknames)
-        if (cbar_title is None):
-            plt.text(1.025,
-                     0.5,
-                     &#34;Spectrograph Intensity (Rayleighs)&#34;,
-                     fontsize=10,
-                     transform=ax.transAxes,
-                     va=&#34;center&#34;,
-                     rotation=&#34;vertical&#34;,
-                     weight=&#34;bold&#34;,
-                     style=&#34;oblique&#34;)
-        else:
-            plt.text(1.025,
-                     0.5,
-                     cbar_title,
-                     fontsize=10,
-                     transform=ax.transAxes,
-                     va=&#34;center&#34;,
-                     rotation=&#34;vertical&#34;,
-                     weight=&#34;bold&#34;,
-                     style=&#34;oblique&#34;)
 
     # save figure or show it
     if (savefig is True):
@@ -1476,7 +1433,7 @@ is scaled to in the mosaic, if any is present.</dd>
     # return
     return None</code></pre>
 </details>
-<div class="desc"><p>Generate a plot of the mosaic data. </p>
+<div class="desc"><p>Generate a plot of the FoV data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
 <h2 id="args">Args</h2>
@@ -1484,14 +1441,16 @@ return the matplotlib plot object for further usage (using the <code>returnfig</
 <dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
+<dt><strong><code>label</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Specifies wether individual FoVs will be labelled with their site_uid.</dd>
+<dt><strong><code>enforce_data_availability</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Specifies whether or not data availability information associated with the FOV object
+should be used to omit sites with no available data. Note that data availability information
+is typically created using the FOVData.add_availability method.</dd>
 <dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
 <dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
-<dt><strong><code>rayleighs</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Set to <code>True</code> if the data being plotted is in Rayleighs. Defaults to <code>False</code>.</dd>
-<dt><strong><code>max_rayleighs</code></strong> :&ensp;<code>int</code></dt>
-<dd>Max intensity scale for Rayleighs. Defaults to <code>20000</code>.</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
-<dd>The title to display above the plotted mosaic. Default is no title.</dd>
+<dd>The title to display above the plotted Fov Map. Default is no title.</dd>
 <dt><strong><code>ocean_color</code></strong> :&ensp;<code>str</code></dt>
 <dd>Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
 as a word, or hexcode prefixed with a '#' character (ie. <code>#55AADD</code>).</dd>
@@ -1506,26 +1465,6 @@ hexcode prefixed with a '#' character.</dd>
 hexcode prefixed with a '#' character.</dd>
 <dt><strong><code>borders_disable</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Disbale rendering of the borders. Default is <code>False</code>.</dd>
-<dt><strong><code>cbar_title</code></strong> :&ensp;<code>str</code></dt>
-<dd>Title for the colorbar. Default is no title.</dd>
-<dt><strong><code>colorbar_title</code></strong> :&ensp;<code>str</code></dt>
-<dd>Deprecated as of v1.10.0. Use 'cbar_title' instead in the exact same way.</dd>
-<dt><strong><code>cbar_colormap</code></strong> :&ensp;<code>str</code></dt>
-<dd>
-<p>The matplotlib colormap to use for the plotted color bar. Default is <code>gray</code>, unless
-mosaic was created with spectrograph data, in which case defaults to the colormap
-used for spectrograph data..</p>
-<p>Commonly used colormaps are:</p>
-<ul>
-<li>REGO: <code>gist_heat</code></li>
-<li>THEMIS ASI: <code>gray</code></li>
-<li>TREx Blue: <code>Blues_r</code></li>
-<li>TREx NIR: <code>gray</code></li>
-<li>TREx RGB: <code>None</code></li>
-</ul>
-<p>A list of all available colormaps can be found on the
-<a href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">matplotlib documentation</a>.</p>
-</dd>
 <dt><strong><code>returnfig</code></strong> :&ensp;<code>bool</code></dt>
 <dd>
 <p>Instead of displaying the image, return the matplotlib figure object. This allows for further plot
@@ -1544,11 +1483,11 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<p>The displayed fov map, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.Mosaic.pretty_print"><code class="name flex">
+<dt id="pyaurorax.tools.classes.fov.FOV.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1561,136 +1500,270 @@ Raises:</p></div>
     A special print output for this class.
     &#34;&#34;&#34;
     # set special strings
-    if isinstance(self.polygon_data, list):
-        polycollection_str = &#34;[PolyCollection(...), ...]&#34;  # pragma: nocover
-    else:
-        polycollection_str = &#34;PolyCollection(...)&#34;
     cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+
     if self.contour_data is not None:
-        contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )  # pragma: nocover
+        contour_data_str = &#34;%d Contour(s)&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
     else:
         contour_data_str = &#34;None&#34;
 
+    if self.fov_data is not None:
+        n_fovs = 0
+
+        for fov in self.fov_data:
+            n_fovs += len(fov.fovs.keys())
+
+        fov_data_str = &#34;%d FoVData Object(s)&#34; % (n_fovs)
+    else:
+        fov_data_str = &#34;None&#34;
+
     # print
-    print(&#34;Mosaic:&#34;)
-    print(&#34;  %-23s: %s&#34; % (&#34;polygon_data&#34;, polycollection_str))
+    print(&#34;FOV:&#34;)
     print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
-    print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
-    print(&#34;  %-23s: %s&#34; % (&#34;spect_cmap&#34;, self.spect_cmap))
-    print(&#34;  %-23s: %s&#34; % (&#34;spect_intensity_scale&#34;, self.spect_intensity_scale))</code></pre>
+    print(&#34;  %-23s: %s&#34; % (&#34;fov_data&#34;, fov_data_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))</code></pre>
 </details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
 </dl>
 </dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData"><code class="flex name class">
-<span>class <span class="ident">MosaicData</span></span>
-<span>(</span><span>site_uid_list: List[str],<br>timestamps: List[datetime.datetime],<br>images: Dict[str, numpy.ndarray],<br>images_dimensions: Dict[str, Tuple],<br>data_types: List[str])</span>
+<dt id="pyaurorax.tools.classes.fov.FOVData"><code class="flex name class">
+<span>class <span class="ident">FOVData</span></span>
+<span>(</span><span>site_uid_list: List[str],<br>fovs: Dict[str, numpy.ndarray],<br>fovs_dimensions: Dict[str, Tuple],<br>instrument_array: str,<br>data_availability: Dict[str, bool] | None,<br>color: str,<br>linewidth: int,<br>linestyle: str,<br>aurorax_obj)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@dataclass
-class MosaicData:
+<pre><code class="python">class FOVData:
     &#34;&#34;&#34;
-    Prepared image data for use by mosaic routines.
+    Prepared ASI FoV data for use by FOV routines or manual plotting.
 
     Attributes:
         site_uid_list (List[str]): 
             List of site unique identifiers contained within this object.
 
-        timestamps (List[datetime.datetime]): 
-            Timestamps of corresponding images.
+        fovs (Dict[str, numpy.ndarray]): 
+            Dictionary that holds the lat/lon data in a 2xN numpy array giving the FoV, for each site UID.
+            
+        fovs_dimensions (Dict[str, numpy.ndarray]): 
+            Dictionary that holds the shape of each set of lat/lon data.
 
-        images (Dict[str, numpy.ndarray]): 
-            Image data prepared into the necessary format; a dictionary. Keys are the site UID, 
-            ndarray is the prepared data.
+        instrument_array (str): 
+            String giving the name of the instrument array this FOVData object corresponds to (optional).
+            
+        data_availability (dict): 
+            An optional dictionary containing information about which sites included in the FOVData actually
+            have available data for a given time range. Usually created using the FOVData.add_Availability()
+            method.
 
-        images_dimensions (Dict[str, Tuple]): 
-            The image dimensions.
-
-        data_types (List[str]): 
-            The data types for each data object.    
+        color (str): 
+            String specifying the color to use when plotting this FOVData.
+        
+        linewidth (str): 
+            Integer specifying the linewidth to use when plotting this FOVData.
+        
+        linestyle (str): 
+            String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.
     &#34;&#34;&#34;
 
-    site_uid_list: List[str]
-    timestamps: List[datetime.datetime]
-    images: Dict[str, ndarray]
-    images_dimensions: Dict[str, Tuple]
-    data_types: List[str]
+    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: str,
+                 data_availability: Optional[Dict[str, bool]], color: str, linewidth: int, linestyle: str, aurorax_obj):
+
+        # Public vars
+        self.site_uid_list = site_uid_list
+        self.fovs = fovs
+        self.fovs_dimensions = fovs_dimensions
+        self.instrument_array = instrument_array
+        self.data_availability = data_availability
+        self.color = color
+        self.linewidth = linewidth
+        self.linestyle = linestyle
+
+        # Private vars
+        self.__aurorax_obj = aurorax_obj
 
     def __str__(self) -&gt; str:
         return self.__repr__()
 
     def __repr__(self) -&gt; str:
         # set special strings
-        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
-        timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+        unique_dimensions_str = str(list(dict.fromkeys(self.fovs_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        fovs_str = &#34;Dict[%d site(s) of array(dims=%s)]&#34; % (len(self.fovs.keys()), unique_dimensions_str)
 
         # return
-        return &#34;MosaicData(images=%s, timestamps=%s, site_uid_list=%s)&#34; % (images_str, timestamps_str, self.site_uid_list.__repr__())
+        return &#34;FOVData(fovs=%s, site_uid_list=%s, instrument_array=%s)&#34; % (fovs_str, self.site_uid_list.__repr__(), self.instrument_array)
 
     def pretty_print(self):
         &#34;&#34;&#34;
         A special print output for this class.
         &#34;&#34;&#34;
         # set special strings
-        unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
-        timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+        unique_dimensions_str = str(list(dict.fromkeys(self.fovs_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        fovs_str = &#34;Dict[%d site(s) of array(dims=%s)]&#34; % (len(self.fovs.keys()), unique_dimensions_str)
 
         # print
-        print(&#34;MosaicData:&#34;)
+        print(&#34;FovData:&#34;)
+        print(&#34;  %-19s: %s&#34; % (&#34;instrument_array&#34;, self.instrument_array))
         print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
-        print(&#34;  %-19s: %s&#34; % (&#34;timestamps&#34;, timestamps_str))
-        print(&#34;  %-19s: %s&#34; % (&#34;images&#34;, images_str))
-        print(&#34;  %-19s: %s&#34; % (&#34;images_dimensions&#34;, self.images_dimensions))
-        print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
+        print(&#34;  %-19s: %s&#34; % (&#34;fovs&#34;, fovs_str))
+
+    def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
+        &#34;&#34;&#34;
+        Add data availability information to an FOVData object. Given a start and end time, information
+        will be added to the object regarding whether or not each site included in the FOVData object
+        took data in that time range. This is useful for plotting FOVs for only those sites that took
+        data in a given time interval.
+
+        Args:
+            dataset_name (str): 
+                The name of the dataset to check for data availability (e.g. &#34;REGO_RAW&#34;)
+
+            start (datetime.datetime): 
+                Defines the start time of the interval to check for data availability.
+                
+            end (datetime.datetime): 
+                Defines the end time of the interval to check for data availability.
+
+        Returns:
+            The FOVData object is updated to hold data availability information, that can be used when
+            plotting to omit sites that did not take data during the time interval defined by start and end.
+
+        Raises:
+        &#34;&#34;&#34;
+
+        if (self.instrument_array is None):
+            raise ValueError(&#34;Cannot add data availability to an FOVData object with no associated instrument_array. Please specify &#34; +
+                             &#34;instrument_array upon creation of FOVData object to enforce data availability.&#34;)
+
+        # Check if the requested dataset makes sense for the FOVData
+        fov_instrument = self.instrument_array.upper()
+        if (fov_instrument == &#34;TREX_SPECTROGRAPH&#34;):
+            fov_instrument = &#34;TREX_SPECT&#34;
+
+        if (fov_instrument not in dataset_name):
+            raise ValueError(&#34;Requested dataset_name does not match the instrument_array contained in this FOVData object.&#34;)
+
+        # Create a dictionary corresponding to the FoV data, that will hold
+        # booleans specifying whether or not there is data for each site
+        availability_dict = {}
+        for site in self.fovs.keys():
+
+            # Request list of all files of requested dataset at requested site
+            result = self.__aurorax_obj.data.ucalgary.get_urls(dataset_name, start, end, site_uid=site)
+
+            # If there are any files within the desired time-range then update availability dict with True, otherwise update False
+            if (result.count &gt; 0):
+                availability_dict[site] = True
+            else:
+                availability_dict[site] = False
+
+        self.data_availability = availability_dict</code></pre>
 </details>
-<div class="desc"><p>Prepared image data for use by mosaic routines.</p>
+<div class="desc"><p>Prepared ASI FoV data for use by FOV routines or manual plotting.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
-<dt><strong><code>timestamps</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
-<dd>Timestamps of corresponding images.</dd>
-<dt><strong><code>images</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
-<dd>Image data prepared into the necessary format; a dictionary. Keys are the site UID,
-ndarray is the prepared data.</dd>
-<dt><strong><code>images_dimensions</code></strong> :&ensp;<code>Dict[str, Tuple]</code></dt>
-<dd>The image dimensions.</dd>
-<dt><strong><code>data_types</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>The data types for each data object.</dd>
+<dt><strong><code>fovs</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
+<dd>Dictionary that holds the lat/lon data in a 2xN numpy array giving the FoV, for each site UID.</dd>
+<dt><strong><code>fovs_dimensions</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
+<dd>Dictionary that holds the shape of each set of lat/lon data.</dd>
+<dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
+<dd>String giving the name of the instrument array this FOVData object corresponds to (optional).</dd>
+<dt><strong><code>data_availability</code></strong> :&ensp;<code>dict</code></dt>
+<dd>An optional dictionary containing information about which sites included in the FOVData actually
+have available data for a given time range. Usually created using the FOVData.add_Availability()
+method.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>String specifying the color to use when plotting this FOVData.</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>str</code></dt>
+<dd>Integer specifying the linewidth to use when plotting this FOVData.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.</dd>
 </dl></div>
-<h3>Instance variables</h3>
-<dl>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData.data_types"><code class="name">var <span class="ident">data_types</span> : List[str]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData.images"><code class="name">var <span class="ident">images</span> : Dict[str, numpy.ndarray]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions"><code class="name">var <span class="ident">images_dimensions</span> : Dict[str, Tuple]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list"><code class="name">var <span class="ident">site_uid_list</span> : List[str]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData.timestamps"><code class="name">var <span class="ident">timestamps</span> : List[datetime.datetime]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicData.pretty_print"><code class="name flex">
+<dt id="pyaurorax.tools.classes.fov.FOVData.add_availability"><code class="name flex">
+<span>def <span class="ident">add_availability</span></span>(<span>self, dataset_name: str, start: datetime.datetime, end: datetime.datetime)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
+    &#34;&#34;&#34;
+    Add data availability information to an FOVData object. Given a start and end time, information
+    will be added to the object regarding whether or not each site included in the FOVData object
+    took data in that time range. This is useful for plotting FOVs for only those sites that took
+    data in a given time interval.
+
+    Args:
+        dataset_name (str): 
+            The name of the dataset to check for data availability (e.g. &#34;REGO_RAW&#34;)
+
+        start (datetime.datetime): 
+            Defines the start time of the interval to check for data availability.
+            
+        end (datetime.datetime): 
+            Defines the end time of the interval to check for data availability.
+
+    Returns:
+        The FOVData object is updated to hold data availability information, that can be used when
+        plotting to omit sites that did not take data during the time interval defined by start and end.
+
+    Raises:
+    &#34;&#34;&#34;
+
+    if (self.instrument_array is None):
+        raise ValueError(&#34;Cannot add data availability to an FOVData object with no associated instrument_array. Please specify &#34; +
+                         &#34;instrument_array upon creation of FOVData object to enforce data availability.&#34;)
+
+    # Check if the requested dataset makes sense for the FOVData
+    fov_instrument = self.instrument_array.upper()
+    if (fov_instrument == &#34;TREX_SPECTROGRAPH&#34;):
+        fov_instrument = &#34;TREX_SPECT&#34;
+
+    if (fov_instrument not in dataset_name):
+        raise ValueError(&#34;Requested dataset_name does not match the instrument_array contained in this FOVData object.&#34;)
+
+    # Create a dictionary corresponding to the FoV data, that will hold
+    # booleans specifying whether or not there is data for each site
+    availability_dict = {}
+    for site in self.fovs.keys():
+
+        # Request list of all files of requested dataset at requested site
+        result = self.__aurorax_obj.data.ucalgary.get_urls(dataset_name, start, end, site_uid=site)
+
+        # If there are any files within the desired time-range then update availability dict with True, otherwise update False
+        if (result.count &gt; 0):
+            availability_dict[site] = True
+        else:
+            availability_dict[site] = False
+
+    self.data_availability = availability_dict</code></pre>
+</details>
+<div class="desc"><p>Add data availability information to an FOVData object. Given a start and end time, information
+will be added to the object regarding whether or not each site included in the FOVData object
+took data in that time range. This is useful for plotting FOVs for only those sites that took
+data in a given time interval.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the dataset to check for data availability (e.g. "REGO_RAW")</dd>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>Defines the start time of the interval to check for data availability.</dd>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>Defines the end time of the interval to check for data availability.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The FOVData object is updated to hold data availability information, that can be used when
+plotting to omit sites that did not take data during the time interval defined by start and end.
+Raises:</p></div>
+</dd>
+<dt id="pyaurorax.tools.classes.fov.FOVData.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1703,173 +1776,14 @@ ndarray is the prepared data.</dd>
     A special print output for this class.
     &#34;&#34;&#34;
     # set special strings
-    unique_dimensions_str = str(list(dict.fromkeys(self.images_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-    images_str = &#34;Dict[%d sites of array(dims=%s)]&#34; % (len(self.images.keys()), unique_dimensions_str)
-    timestamps_str = &#34;[%d timestamps]&#34; % (len(self.timestamps))
+    unique_dimensions_str = str(list(dict.fromkeys(self.fovs_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    fovs_str = &#34;Dict[%d site(s) of array(dims=%s)]&#34; % (len(self.fovs.keys()), unique_dimensions_str)
 
     # print
-    print(&#34;MosaicData:&#34;)
+    print(&#34;FovData:&#34;)
+    print(&#34;  %-19s: %s&#34; % (&#34;instrument_array&#34;, self.instrument_array))
     print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
-    print(&#34;  %-19s: %s&#34; % (&#34;timestamps&#34;, timestamps_str))
-    print(&#34;  %-19s: %s&#34; % (&#34;images&#34;, images_str))
-    print(&#34;  %-19s: %s&#34; % (&#34;images_dimensions&#34;, self.images_dimensions))
-    print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
-</details>
-<div class="desc"><p>A special print output for this class.</p></div>
-</dd>
-</dl>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap"><code class="flex name class">
-<span>class <span class="ident">MosaicSkymap</span></span>
-<span>(</span><span>site_uid_list: List[str],<br>elevation: List[numpy.ndarray],<br>polyfill_lat: List[numpy.ndarray],<br>polyfill_lon: List[numpy.ndarray])</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class MosaicSkymap:
-    &#34;&#34;&#34;
-    Prepared skymap data for use by mosaic routines.
-
-    Attributes:
-        site_uid_list (List[str]): 
-            List of site unique identifiers contained within this object.
-
-        elevation (List[numpy.ndarray]): 
-            List of elevation data, with each element corresponding to each site. Order 
-            matches that of the `site_uid_list` attribute.
-
-        polyfill_lat (List[numpy.ndarray]): 
-            List of latitude polygon data, with each element corresponding to each site. 
-            Order matches that of the `site_uid_list` attribute. 
-
-        polyfill_lon (List[numpy.ndarray]): 
-            List of longitude polygon data, with each element corresponding to each site. 
-            Order matches that of the `site_uid_list` attribute. 
-
-    &#34;&#34;&#34;
-
-    site_uid_list: List[str]
-    elevation: List[ndarray]
-    polyfill_lat: List[ndarray]
-    polyfill_lon: List[ndarray]
-
-    def __str__(self) -&gt; str:
-        return self.__repr__()
-
-    def __repr__(self) -&gt; str:
-        # set special strings
-        unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                          for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
-                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                          for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
-                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-
-        polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
-        polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
-        elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
-
-        # return
-        return &#34;MosaicSkymap(polyfill_lat=%s, polyfill_lon=%s, elevation=%s, site_uid_list=%s)&#34; % (
-            polyfill_lat_str,
-            polyfill_lon_str,
-            elevation_str,
-            self.site_uid_list.__repr__(),
-        )
-
-    def pretty_print(self):
-        &#34;&#34;&#34;
-        A special print output for this class.
-        &#34;&#34;&#34;
-        unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                          for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
-                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                          for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
-                                                                                                                        &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-        unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-
-        polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
-        polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
-        elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
-
-        # print
-        print(&#34;MosaicSkymap:&#34;)
-        print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lat&#34;, polyfill_lat_str))
-        print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lon&#34;, polyfill_lon_str))
-        print(&#34;  %-15s: %s&#34; % (&#34;elevation&#34;, elevation_str))
-        print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
-</details>
-<div class="desc"><p>Prepared skymap data for use by mosaic routines.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
-<dd>List of site unique identifiers contained within this object.</dd>
-<dt><strong><code>elevation</code></strong> :&ensp;<code>List[numpy.ndarray]</code></dt>
-<dd>List of elevation data, with each element corresponding to each site. Order
-matches that of the <code>site_uid_list</code> attribute.</dd>
-<dt><strong><code>polyfill_lat</code></strong> :&ensp;<code>List[numpy.ndarray]</code></dt>
-<dd>List of latitude polygon data, with each element corresponding to each site.
-Order matches that of the <code>site_uid_list</code> attribute. </dd>
-<dt><strong><code>polyfill_lon</code></strong> :&ensp;<code>List[numpy.ndarray]</code></dt>
-<dd>List of longitude polygon data, with each element corresponding to each site.
-Order matches that of the <code>site_uid_list</code> attribute.</dd>
-</dl></div>
-<h3>Instance variables</h3>
-<dl>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation"><code class="name">var <span class="ident">elevation</span> : List[numpy.ndarray]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat"><code class="name">var <span class="ident">polyfill_lat</span> : List[numpy.ndarray]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon"><code class="name">var <span class="ident">polyfill_lon</span> : List[numpy.ndarray]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list"><code class="name">var <span class="ident">site_uid_list</span> : List[str]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-<h3>Methods</h3>
-<dl>
-<dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print"><code class="name flex">
-<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def pretty_print(self):
-    &#34;&#34;&#34;
-    A special print output for this class.
-    &#34;&#34;&#34;
-    unique_polyfill_lat_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                      for fill_arr in self.polyfill_lat))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
-                                                                                                                    &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-    unique_polyfill_lon_dims = str(list(dict.fromkeys(fill_arr.shape
-                                                      for fill_arr in self.polyfill_lon))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;,
-                                                                                                                    &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-    unique_elevation_dims = str(list(dict.fromkeys(el.shape for el in self.elevation))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
-
-    polyfill_lat_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lat_dims, self.polyfill_lat[0].dtype)
-    polyfill_lon_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_polyfill_lon_dims, self.polyfill_lon[0].dtype)
-    elevation_str = &#34;array(dims=%s, dtype=%s)&#34; % (unique_elevation_dims, self.elevation[0].dtype)
-
-    # print
-    print(&#34;MosaicSkymap:&#34;)
-    print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lat&#34;, polyfill_lat_str))
-    print(&#34;  %-15s: %s&#34; % (&#34;polyfill_lon&#34;, polyfill_lon_str))
-    print(&#34;  %-15s: %s&#34; % (&#34;elevation&#34;, elevation_str))
-    print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
+    print(&#34;  %-19s: %s&#34; % (&#34;fovs&#34;, fovs_str))</code></pre>
 </details>
 <div class="desc"><p>A special print output for this class.</p></div>
 </dd>
@@ -1937,38 +1851,23 @@ setTimeout(() => input.focus(), 100);
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="pyaurorax.tools.classes.mosaic.Mosaic" href="#pyaurorax.tools.classes.mosaic.Mosaic">Mosaic</a></code></h4>
-<ul class="">
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours" href="#pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours">add_geo_contours</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours" href="#pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours">add_mag_contours</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection" href="#pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection">cartopy_projection</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.contour_data" href="#pyaurorax.tools.classes.mosaic.Mosaic.contour_data">contour_data</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.plot" href="#pyaurorax.tools.classes.mosaic.Mosaic.plot">plot</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.polygon_data" href="#pyaurorax.tools.classes.mosaic.Mosaic.polygon_data">polygon_data</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.pretty_print" href="#pyaurorax.tools.classes.mosaic.Mosaic.pretty_print">pretty_print</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap" href="#pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap">spect_cmap</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale" href="#pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale">spect_intensity_scale</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="pyaurorax.tools.classes.mosaic.MosaicData" href="#pyaurorax.tools.classes.mosaic.MosaicData">MosaicData</a></code></h4>
+<h4><code><a title="pyaurorax.tools.classes.fov.FOV" href="#pyaurorax.tools.classes.fov.FOV">FOV</a></code></h4>
 <ul class="two-column">
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.data_types" href="#pyaurorax.tools.classes.mosaic.MosaicData.data_types">data_types</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.images" href="#pyaurorax.tools.classes.mosaic.MosaicData.images">images</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions" href="#pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions">images_dimensions</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.pretty_print" href="#pyaurorax.tools.classes.mosaic.MosaicData.pretty_print">pretty_print</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list" href="#pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list">site_uid_list</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicData.timestamps" href="#pyaurorax.tools.classes.mosaic.MosaicData.timestamps">timestamps</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.add_fov" href="#pyaurorax.tools.classes.fov.FOV.add_fov">add_fov</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.add_geo_contours" href="#pyaurorax.tools.classes.fov.FOV.add_geo_contours">add_geo_contours</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.add_mag_contours" href="#pyaurorax.tools.classes.fov.FOV.add_mag_contours">add_mag_contours</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.cartopy_projection" href="#pyaurorax.tools.classes.fov.FOV.cartopy_projection">cartopy_projection</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.contour_data" href="#pyaurorax.tools.classes.fov.FOV.contour_data">contour_data</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.fov_data" href="#pyaurorax.tools.classes.fov.FOV.fov_data">fov_data</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.plot" href="#pyaurorax.tools.classes.fov.FOV.plot">plot</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOV.pretty_print" href="#pyaurorax.tools.classes.fov.FOV.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap">MosaicSkymap</a></code></h4>
+<h4><code><a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a></code></h4>
 <ul class="">
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation">elevation</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat">polyfill_lat</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon">polyfill_lon</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.pretty_print">pretty_print</a></code></li>
-<li><code><a title="pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list" href="#pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list">site_uid_list</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOVData.add_availability" href="#pyaurorax.tools.classes.fov.FOVData.add_availability">add_availability</a></code></li>
+<li><code><a title="pyaurorax.tools.classes.fov.FOVData.pretty_print" href="#pyaurorax.tools.classes.fov.FOVData.pretty_print">pretty_print</a></code></li>
 </ul>
 </li>
 </ul>

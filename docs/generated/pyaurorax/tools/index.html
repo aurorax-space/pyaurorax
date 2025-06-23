@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax.tools API documentation</title>
 <meta name="description" content="Data analysis toolkit for working with all-sky imager data available within the
 AuroraX platform …">
@@ -87,6 +87,10 @@ at = aurorax.tools
 <dd>
 <div class="desc"><p>Class definitions for data analysis objects.</p></div>
 </dd>
+<dt><code class="name"><a title="pyaurorax.tools.fov" href="fov/index.html">pyaurorax.tools.fov</a></code></dt>
+<dd>
+<div class="desc"><p>Obtain FoVs of ASIs and create plots.</p></div>
+</dd>
 <dt><code class="name"><a title="pyaurorax.tools.grid_files" href="grid_files/index.html">pyaurorax.tools.grid_files</a></code></dt>
 <dd>
 <div class="desc"><p>Prepare grid data for plotting.</p></div>
@@ -116,6 +120,1730 @@ at = aurorax.tools
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="pyaurorax.tools.FOV"><code class="flex name class">
+<span>class <span class="ident">FOV</span></span>
+<span>(</span><span>cartopy_projection: cartopy.crs.Projection,<br>fov_data: List[<a title="pyaurorax.tools.classes.fov.FOVData" href="classes/fov.html#pyaurorax.tools.classes.fov.FOVData">FOVData</a>] | None = None,<br>contour_data: Dict[str, List[Any]] | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class FOV:
+    &#34;&#34;&#34;
+    Class representation for a FoV map.
+
+    Attributes:
+
+        cartopy_projection (cartopy.crs.Projection): 
+            Cartopy projection to utilize.
+
+        fov_data (FOVData or list of FOVData objects): 
+            FoV contours included in FOV object.
+
+        contour_data (Dict[str, List[Any]]): 
+            Other contour data included in FOV object.
+
+    &#34;&#34;&#34;
+    cartopy_projection: Projection
+    fov_data: Optional[List[FOVData]] = None
+    contour_data: Optional[Dict[str, List[Any]]] = None
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+
+        if self.fov_data is not None:
+
+            n_fovs = 0
+            for fov in self.fov_data:
+                n_fovs += len(fov.fovs.keys())
+
+            if self.contour_data is not None:
+                return &#34;FOV(cartopy_projection=Projection(%s), %d FOVData Object(s), %d Contour(s))&#34; % (
+                    self.cartopy_projection.to_string(),
+                    n_fovs,
+                    len(self.contour_data.get(&#34;x&#34;, [])),
+                )
+            else:
+                return &#34;FOV(cartopy_projection=Projection(%s), %d FOVData Object(s))&#34; % (
+                    self.cartopy_projection.to_string(),
+                    n_fovs,
+                )
+        else:
+
+            if self.contour_data is not None:
+                return &#34;FOV(cartopy_projection=Projection(%s), %d Contour(s))&#34; % (
+                    self.cartopy_projection.to_string(),
+                    len(self.contour_data.get(&#34;x&#34;, [])),
+                )
+            else:
+                return &#34;FOV(cartopy_projection=Projection(%s))&#34; % (self.cartopy_projection.to_string())
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+
+        if self.contour_data is not None:
+            contour_data_str = &#34;%d Contour(s)&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+        else:
+            contour_data_str = &#34;None&#34;
+
+        if self.fov_data is not None:
+            n_fovs = 0
+
+            for fov in self.fov_data:
+                n_fovs += len(fov.fovs.keys())
+
+            fov_data_str = &#34;%d FoVData Object(s)&#34; % (n_fovs)
+        else:
+            fov_data_str = &#34;None&#34;
+
+        # print
+        print(&#34;FOV:&#34;)
+        print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;fov_data&#34;, fov_data_str))
+        print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))
+
+    def plot(self,
+             map_extent: Sequence[Union[float, int]],
+             label: bool = True,
+             enforce_data_availability: bool = False,
+             figsize: Optional[Tuple[int, int]] = None,
+             title: Optional[str] = None,
+             ocean_color: Optional[str] = None,
+             land_color: str = &#34;gray&#34;,
+             land_edgecolor: str = &#34;#8A8A8A&#34;,
+             borders_color: str = &#34;#AEAEAE&#34;,
+             borders_disable: bool = False,
+             returnfig: bool = False,
+             savefig: bool = False,
+             savefig_filename: Optional[str] = None,
+             savefig_quality: Optional[int] = None) -&gt; Any:
+        &#34;&#34;&#34;
+        Generate a plot of the FoV data. 
+        
+        Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
+        return the matplotlib plot object for further usage (using the `returnfig` parameter).
+
+        Args:
+            map_extent (List[int]): 
+                Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers 
+                and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].
+
+            label (bool): 
+                Specifies wether individual FoVs will be labelled with their site_uid.
+                
+            enforce_data_availability (bool): 
+                Specifies whether or not data availability information associated with the FOV object
+                should be used to omit sites with no available data. Note that data availability information
+                is typically created using the FOVData.add_availability method.
+
+            figsize (tuple): 
+                The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+            title (str): 
+                The title to display above the plotted Fov Map. Default is no title.
+
+            ocean_color (str): 
+                Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
+                as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
+            
+            land_color (str): 
+                Colour of the land. Default is `gray`. Colours can be supplied as a word, or hexcode 
+                prefixed with a &#39;#&#39; character (ie. `#41BB87`).
+
+            land_edgecolor (str): 
+                Color of the land edges. Default is `#8A8A8A`. Colours can be supplied as a word, or
+                hexcode prefixed with a &#39;#&#39; character.
+
+            borders_color (str): 
+                Color of the country borders. Default is `AEAEAE`. Colours can be supplied as a word, or
+                hexcode prefixed with a &#39;#&#39; character.
+            
+            borders_disable (bool): 
+                Disbale rendering of the borders. Default is `False`.
+
+            returnfig (bool): 
+                Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
+                manipulation, for example, adding labels or a title in a different location than the default. 
+                
+                Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
+                with it. This can be achieved by doing `plt.close(fig)`. 
+                
+                Note that this method cannot be used in combination with `savefig`.
+
+            savefig (bool): 
+                Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
+                this parameter is set to True. Defaults to `False`.
+
+            savefig_filename (str): 
+                Filename to save the image to. Must be specified if the savefig parameter is set to True.
+
+            savefig_quality (int): 
+                Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+                is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
+
+        Returns:
+            The displayed fov map, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+            set to True, the plotting variables `(fig, ax)` will be returned.
+
+        Raises:
+        &#34;&#34;&#34;
+
+        # check return mode
+        if (returnfig is True and savefig is True):
+            raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
+        if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
+            show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                         &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                         stacklevel=1)
+        elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
+            show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                         &#34;savefig option parameters will be ignored.&#34;,
+                         stacklevel=1)
+
+        # Initialize figure
+        fig = plt.figure(figsize=figsize)
+        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+        ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
+
+        # Add ocean
+        #
+        # NOTE: we use the default ocean color
+        if (ocean_color is not None):
+            ax.add_feature(  # type: ignore
+                cartopy.feature.OCEAN, facecolor=ocean_color, zorder=0)
+        else:
+            ax.add_feature(cartopy.feature.OCEAN, zorder=0)  # type: ignore
+
+        # add land
+        ax.add_feature(  # type: ignore
+            cartopy.feature.LAND, facecolor=land_color, edgecolor=land_edgecolor, zorder=0)
+
+        # add borders
+        if (borders_disable is False):
+            ax.add_feature(  # type: ignore
+                cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)
+
+        # Go through and plot all of the FoVs within each of the Object&#39;s FOVData objects
+        if self.fov_data is not None:
+
+            # If requesting enforcement of data availability, check that data availability exists in
+            # the object first
+            if (enforce_data_availability is True):
+                for fov_data in self.fov_data:
+                    if (fov_data.data_availability is None):
+                        raise ValueError(&#34;Before plotting FOV object with enforce_data_availability=True, FOVData.add_availability(...) &#34; +
+                                         &#34;must be called for all included FOVData objects.&#34;)
+
+            for fov_data in self.fov_data:
+                latlon_dict = fov_data.fovs
+
+                for site in fov_data.site_uid_list:
+
+                    # If data_availability has been enforced and is False for this site, don&#39;t plot it
+                    if (enforce_data_availability is True) and (fov_data.data_availability is not None) and (site
+                                                                                                             in fov_data.data_availability.keys()):
+                        if (fov_data.data_availability[site] is False):
+                            continue
+
+                    latlon = latlon_dict[site]
+
+                    ax.plot(np.squeeze(latlon[1, :]),
+                            np.squeeze(latlon[0, :]),
+                            color=fov_data.color,
+                            linestyle=fov_data.linestyle,
+                            zorder=1,
+                            linewidth=fov_data.linewidth,
+                            transform=cartopy.crs.Geodetic())
+
+                    # Add site_uid labels to the FoV plot, in the center of each ASI FoV
+                    if label:
+                        if (fov_data.instrument_array != &#34;trex_spectrograph&#34;):
+                            center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
+                            center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
+                        else:
+                            center_lat = (latlon[0, 0] + latlon[0, -1]) / 2.0
+                            center_lon = (latlon[1, 0] + latlon[1, -1]) / 2.0
+
+                        ax.text(center_lon,
+                                center_lat,
+                                site,
+                                ha=&#34;center&#34;,
+                                va=&#34;center&#34;,
+                                color=fov_data.color,
+                                transform=cartopy.crs.Geodetic(),
+                                clip_on=True)
+
+        # Go through and plot all of the contour data included in the Object
+        if self.contour_data is not None:
+            for i in range(len(self.contour_data[&#34;x&#34;])):
+                ax.plot(self.contour_data[&#34;x&#34;][i],
+                        self.contour_data[&#34;y&#34;][i],
+                        color=self.contour_data[&#34;color&#34;][i],
+                        linewidth=self.contour_data[&#34;linewidth&#34;][i],
+                        linestyle=self.contour_data[&#34;linestyle&#34;][i],
+                        marker=self.contour_data[&#34;marker&#34;][i],
+                        zorder=self.contour_data[&#34;zorder&#34;][i])
+
+        # set title
+        if (title is not None):
+            ax.set_title(title)
+
+        # save figure or show it
+        if (savefig is True):
+            # check that filename has been set
+            if (savefig_filename is None):
+                raise ValueError(&#34;The savefig_filename parameter is missing, but required since savefig was set to True.&#34;)
+
+            # save the figure
+            f_extension = os.path.splitext(savefig_filename)[-1].lower()
+            if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
+                # check quality setting
+                if (savefig_quality is not None):
+                    plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
+                else:
+                    plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
+            else:
+                if (savefig_quality is not None):
+                    # quality specified, but output filename is not a JPG, so show a warning
+                    show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                                 &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                                 stacklevel=1)
+                plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
+
+            # clean up by closing the figure
+            plt.close(fig)
+        elif (returnfig is True):
+            # return the figure and axis objects
+            return (fig, ax)
+        else:
+            # show the figure
+            plt.show(fig)
+
+            # cleanup by closing the figure
+            plt.close(fig)
+
+        # return
+        return None
+
+    def add_fov(self, fov_data: Union[FOVData, List[FOVData]]):
+        &#34;&#34;&#34;
+        Add one or more FOVData objects to the FOV object.
+
+        Args:
+
+            fov_data (pyaurorax.tools.FOVData or list): 
+                A single or list of FOVData objects, that will be added to the
+                FOV object map upon initialization.
+
+        Returns:
+            The object&#39;s fov_data parameter is updated appropriately.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+
+        if isinstance(fov_data, list):
+            fovs_to_add = fov_data
+        else:
+            fovs_to_add = [fov_data]
+
+        if self.fov_data is None:
+            self.fov_data = fovs_to_add
+        else:
+            for data in fovs_to_add:
+                self.fov_data.append(data)
+
+    def add_geo_contours(self,
+                         lats: Optional[Union[ndarray, list]] = None,
+                         lons: Optional[Union[ndarray, list]] = None,
+                         constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                         constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                         color: str = &#34;black&#34;,
+                         linewidth: Union[float, int] = 1,
+                         linestyle: str = &#34;solid&#34;,
+                         marker: str = &#34;&#34;,
+                         bring_to_front: bool = False):
+        &#34;&#34;&#34;
+        Add geographic contours to a FoV map.
+
+        Args:
+            lats (ndarray or list): 
+                Sequence of geographic latitudes defining a contour.
+            
+            lons (ndarray or list): 
+                Sequence of geographic longitudes defining a contour.
+
+            constant_lats (float, int, or Sequence): 
+                Geographic Latitude(s) at which to add line(s) of constant latitude.
+            
+            constant_lons (float, int, or Sequence): 
+                Geographic Longitude(s) at which to add line(s) of constant longitude.
+
+            color (str): 
+                The matplotlib color used for the contour(s).
+
+            linewidth (float or int): 
+                The contour thickness.
+            
+            linestyle (str): 
+                The matplotlib linestyle used for the contour(s).
+
+            marker (str): 
+                The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
+
+        Returns:
+            The object&#39;s contour_data parameter is populated appropriately.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters.
+        &#34;&#34;&#34;
+        # Make sure some form of lat/lon is provided
+        if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
+            raise ValueError(&#34;No latitudes or longitudes provided.&#34;)
+
+        # If manually passing in lats &amp; lons, make sure both are provided
+        if (lats is not None or lons is not None) and (lats is None or lons is None):
+            raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
+
+        # Check that color exists in matplotlib
+        if color not in matplotlib.colors.CSS4_COLORS:
+            raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
+
+        # Check that linestyle is valid
+        if linestyle not in [&#34;-&#34;, &#34;--&#34;, &#34;-.&#34;, &#34;:&#34;, &#34;solid&#34;, &#34;dashed&#34;, &#34;dashdot&#34;, &#34;dotted&#34;]:
+            raise ValueError(f&#34;Linestyle &#39;{linestyle}&#39; not recognized by matplotlib.&#34;)
+
+        # Check that linewidth is valid
+        if linewidth &lt;= 0:
+            raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
+
+        # Check that marker is valid
+        if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+            raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+
+        # Convert numerics to lists if necessary
+        if constant_lats is not None:
+            if isinstance(constant_lats, (float, int)):
+                constant_lats = [constant_lats]
+        if constant_lons is not None:
+            if isinstance(constant_lons, (float, int)):
+                constant_lons = [constant_lons]
+
+        # Initialize contour data dict if it doesn&#39;t exist yet
+        if self.contour_data is None:
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
+
+        # Obtain the Fov map&#39;s projection
+        source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
+        mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
+        transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
+
+        # First handling manually supplied lat/lon arrays
+        if (lats is not None) and (lons is not None):
+            # Convert lists to ndarrays if necessary
+            if isinstance(lats, list):
+                lats = np.array(lats)
+            if isinstance(lons, list):
+                lons = np.array(lons)
+
+            if len(lats) != len(lons):
+                raise ValueError(&#34;Lat/Lon data must be of the same size.&#34;)
+
+            # Create specified contour from geographic coords
+            x, y = transformer.transform(lons, lats)
+            # Add contour to dict, along with color and linewidth
+            self.contour_data[&#34;x&#34;].append(x)
+            self.contour_data[&#34;y&#34;].append(y)
+            self.contour_data[&#34;color&#34;].append(color)
+            self.contour_data[&#34;linewidth&#34;].append(linewidth)
+            self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
+            self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+        # Next handling lines of constant latitude
+        if constant_lats is not None:
+            # Generate longitudinal domain of the lat line (full globe)
+            lon_domain = np.arange(-180, 180 + 0.2, 0.2)
+
+            # Iterate through all lines of constant lat requested
+            for lat in constant_lats:
+                # Create line of constant lat
+                const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
+                sort_idx = np.argsort(const_lat_x)
+                const_lat_y = const_lat_y[sort_idx]
+                const_lat_x = const_lat_x[sort_idx]
+                const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
+                # Add contour to dict, along with color and linewidth
+                self.contour_data[&#34;x&#34;].append(const_lat_x)
+                self.contour_data[&#34;y&#34;].append(const_lat_y)
+                self.contour_data[&#34;color&#34;].append(color)
+                self.contour_data[&#34;linewidth&#34;].append(linewidth)
+                self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
+                self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+        # Now handling lines of constant longitude
+        if constant_lons is not None:
+            # Generate latitudinal domain of the lon line (full globe)
+            lat_domain = np.arange(-90, 90 + 0.1, 0.1)
+
+            # Iterate through all lines of constant lon requested
+            for lon in constant_lons:
+                # Create line of constant lon and add to dict
+                const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
+                sort_idx = np.argsort(const_lon_y)
+                const_lon_x = const_lon_x[sort_idx]
+                const_lon_y = const_lon_y[sort_idx]
+                const_lon_x, const_lon_y = transformer.transform(const_lon_x, const_lon_y)
+
+                # Add contour to dict, along with color and linewidth
+                self.contour_data[&#34;x&#34;].append(const_lon_x)
+                self.contour_data[&#34;y&#34;].append(const_lon_y)
+                self.contour_data[&#34;color&#34;].append(color)
+                self.contour_data[&#34;linewidth&#34;].append(linewidth)
+                self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
+                self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+    def add_mag_contours(self,
+                         timestamp: datetime.datetime,
+                         constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                         constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                         lats: Optional[Union[ndarray, list]] = None,
+                         lons: Optional[Union[ndarray, list]] = None,
+                         color: str = &#34;black&#34;,
+                         linewidth: Union[float, int] = 1,
+                         linestyle: str = &#34;solid&#34;,
+                         marker: str = &#34;&#34;,
+                         bring_to_front: bool = False):
+        &#34;&#34;&#34;
+        Add geomagnetic contours to a FoV map.
+
+        Args:
+            timestamp (datetime.datetime): 
+                The timestamp used in computing AACGM coordinates.
+
+            lats (ndarray or list): 
+                Sequence of geomagnetic latitudes defining a contour.
+            
+            lons (ndarray or list): 
+                Sequence of geomagnetic longitudes defining a contour.
+
+            constant_lats (float, int, Sequence): 
+                Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
+            
+            constant_lons (float, int, Sequence): 
+                Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
+
+            color (str): 
+                The matplotlib color used for the contour(s).
+
+            linewidth (float or int): 
+                The contour thickness.
+
+            linestyle (str): 
+                The matplotlib linestyle used for the contour(s).
+
+            marker (str): 
+                The matplotlib marker used for the contour(s).
+
+            bring_to_front (bool): 
+                Plots the contour on top of all other currently plotted objects.
+
+        Returns:
+            The object&#39;s contour_data parameter is populated appropriately.
+
+        Raises:
+            ValueError: issues encountered with supplied parameters
+        &#34;&#34;&#34;
+        # Make sure some form of lat/lon is provided
+        if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
+            raise ValueError(&#34;No latitudes or longitudes provided.&#34;)
+
+        # If manually passing in lats &amp; lons, make sure both are provided
+        if (lats is not None or lons is not None) and (lats is None or lons is None):
+            raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
+
+        # Check that color exists in matplotlib
+        if color not in matplotlib.colors.CSS4_COLORS:
+            raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
+
+        # Check that linestyle is valid
+        if linestyle not in [&#34;-&#34;, &#34;--&#34;, &#34;-.&#34;, &#34;:&#34;, &#34;solid&#34;, &#34;dashed&#34;, &#34;dashdot&#34;, &#34;dotted&#34;]:
+            raise ValueError(f&#34;Linestyle &#39;{linestyle}&#39; not recognized by matplotlib.&#34;)
+
+        # Check that linewidth is valid
+        if linewidth &lt;= 0:
+            raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
+
+        # Check that marker is valid
+        if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+            raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+
+        # Convert numerics to lists if necessary
+        if constant_lats is not None:
+            if isinstance(constant_lats, (float, int)):
+                constant_lats = [constant_lats]
+        if constant_lons is not None:
+            if isinstance(constant_lons, (float, int)):
+                constant_lons = [constant_lons]
+
+        # Initialize contour data dict if it doesn&#39;t exist yet
+        if self.contour_data is None:
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
+
+        # Obtain the FoV map&#39;s projection
+        source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
+        mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
+        transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
+
+        # First handling manually supplied lat/lon arrays
+        if (lats is not None) and (lons is not None):
+            # Convert lists to ndarrays if necessary
+            if isinstance(lats, list):
+                lats = np.array(lats)
+            if isinstance(lons, list):
+                lons = np.array(lons)
+
+            if len(lats) != len(lons):
+                raise ValueError(&#34;Lat/Lon data must be of the same size.&#34;)
+
+            # Create specified contour from magnetic coords
+            y, x, _ = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
+            x, y = transformer.transform(x, y)
+
+            # Add contour to dict, along with color and linewidth
+            self.contour_data[&#34;x&#34;].append(x)
+            self.contour_data[&#34;y&#34;].append(y)
+            self.contour_data[&#34;color&#34;].append(color)
+            self.contour_data[&#34;linewidth&#34;].append(linewidth)
+            self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
+            self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+        # Next handling lines of constant latitude
+        if constant_lats is not None:
+            # Generate longitudinal domain of the lat line (full globe)
+            lon_domain = np.arange(-180, 180 + 0.2, 0.2)
+
+            # iterate through all lines of constant lat requested
+            for lat in constant_lats:
+                # Create line of constant lat from magnetic coords
+                const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
+                const_lat_y, const_lat_x, _ = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+                sort_idx = np.argsort(const_lat_x)
+                const_lat_y = const_lat_y[sort_idx]
+                const_lat_x = const_lat_x[sort_idx]
+                const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
+                # Add contour to dict, along with color and linewidth
+                self.contour_data[&#34;x&#34;].append(const_lat_x)
+                self.contour_data[&#34;y&#34;].append(const_lat_y)
+                self.contour_data[&#34;color&#34;].append(color)
+                self.contour_data[&#34;linewidth&#34;].append(linewidth)
+                self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
+                self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+        # Now handling lines of constant longitude
+        if constant_lons is not None:
+            # Generate latitudinal domain of the lon line (full globe)
+            lat_domain = np.arange(-90, 90 + 0.1, 0.1)
+
+            # iterate through all lines of constant lon requested
+            for lon in constant_lons:
+                # Create line of constant lon from magnetic coords
+                const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
+                const_lon_y, const_lon_x, _ = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+                sort_idx = np.argsort(const_lon_y)
+                const_lon_x = const_lon_x[sort_idx]
+                const_lon_y = const_lon_y[sort_idx]
+                const_lon_x, const_lon_y = transformer.transform(const_lon_x, const_lon_y)
+
+                # Add contour to dict, along with color and linewidth
+                self.contour_data[&#34;x&#34;].append(const_lon_x)
+                self.contour_data[&#34;y&#34;].append(const_lon_y)
+                self.contour_data[&#34;color&#34;].append(color)
+                self.contour_data[&#34;linewidth&#34;].append(linewidth)
+                self.contour_data[&#34;linestyle&#34;].append(linestyle)
+                self.contour_data[&#34;marker&#34;].append(marker)
+                self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
+</details>
+<div class="desc"><p>Class representation for a FoV map.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
+<dd>Cartopy projection to utilize.</dd>
+<dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a></code> or <code>list</code> of <code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a> objects</code></dt>
+<dd>FoV contours included in FOV object.</dd>
+<dt><strong><code>contour_data</code></strong> :&ensp;<code>Dict[str, List[Any]]</code></dt>
+<dd>Other contour data included in FOV object.</dd>
+</dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyaurorax.tools.FOV.cartopy_projection"><code class="name">var <span class="ident">cartopy_projection</span> : cartopy.crs.Projection</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pyaurorax.tools.FOV.contour_data"><code class="name">var <span class="ident">contour_data</span> : Dict[str, List[Any]] | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pyaurorax.tools.FOV.fov_data"><code class="name">var <span class="ident">fov_data</span> : List[<a title="pyaurorax.tools.classes.fov.FOVData" href="classes/fov.html#pyaurorax.tools.classes.fov.FOVData">FOVData</a>] | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.FOV.add_fov"><code class="name flex">
+<span>def <span class="ident">add_fov</span></span>(<span>self,<br>fov_data: <a title="pyaurorax.tools.classes.fov.FOVData" href="classes/fov.html#pyaurorax.tools.classes.fov.FOVData">FOVData</a> | List[<a title="pyaurorax.tools.classes.fov.FOVData" href="classes/fov.html#pyaurorax.tools.classes.fov.FOVData">FOVData</a>])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_fov(self, fov_data: Union[FOVData, List[FOVData]]):
+    &#34;&#34;&#34;
+    Add one or more FOVData objects to the FOV object.
+
+    Args:
+
+        fov_data (pyaurorax.tools.FOVData or list): 
+            A single or list of FOVData objects, that will be added to the
+            FOV object map upon initialization.
+
+    Returns:
+        The object&#39;s fov_data parameter is updated appropriately.
+
+    Raises:
+        ValueError: issues encountered with supplied parameters.
+    &#34;&#34;&#34;
+
+    if isinstance(fov_data, list):
+        fovs_to_add = fov_data
+    else:
+        fovs_to_add = [fov_data]
+
+    if self.fov_data is None:
+        self.fov_data = fovs_to_add
+    else:
+        for data in fovs_to_add:
+            self.fov_data.append(data)</code></pre>
+</details>
+<div class="desc"><p>Add one or more FOVData objects to the FOV object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a></code> or <code>list</code></dt>
+<dd>A single or list of FOVData objects, that will be added to the
+FOV object map upon initialization.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The object's fov_data parameter is updated appropriately.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>issues encountered with supplied parameters.</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.FOV.add_geo_contours"><code class="name flex">
+<span>def <span class="ident">add_geo_contours</span></span>(<span>self,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_geo_contours(self,
+                     lats: Optional[Union[ndarray, list]] = None,
+                     lons: Optional[Union[ndarray, list]] = None,
+                     constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                     constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                     color: str = &#34;black&#34;,
+                     linewidth: Union[float, int] = 1,
+                     linestyle: str = &#34;solid&#34;,
+                     marker: str = &#34;&#34;,
+                     bring_to_front: bool = False):
+    &#34;&#34;&#34;
+    Add geographic contours to a FoV map.
+
+    Args:
+        lats (ndarray or list): 
+            Sequence of geographic latitudes defining a contour.
+        
+        lons (ndarray or list): 
+            Sequence of geographic longitudes defining a contour.
+
+        constant_lats (float, int, or Sequence): 
+            Geographic Latitude(s) at which to add line(s) of constant latitude.
+        
+        constant_lons (float, int, or Sequence): 
+            Geographic Longitude(s) at which to add line(s) of constant longitude.
+
+        color (str): 
+            The matplotlib color used for the contour(s).
+
+        linewidth (float or int): 
+            The contour thickness.
+        
+        linestyle (str): 
+            The matplotlib linestyle used for the contour(s).
+
+        marker (str): 
+            The matplotlib marker used for the contour(s).
+
+        bring_to_front (bool): 
+            Plots the contour on top of all other currently plotted objects.
+
+    Returns:
+        The object&#39;s contour_data parameter is populated appropriately.
+
+    Raises:
+        ValueError: issues encountered with supplied parameters.
+    &#34;&#34;&#34;
+    # Make sure some form of lat/lon is provided
+    if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
+        raise ValueError(&#34;No latitudes or longitudes provided.&#34;)
+
+    # If manually passing in lats &amp; lons, make sure both are provided
+    if (lats is not None or lons is not None) and (lats is None or lons is None):
+        raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
+
+    # Check that color exists in matplotlib
+    if color not in matplotlib.colors.CSS4_COLORS:
+        raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
+
+    # Check that linestyle is valid
+    if linestyle not in [&#34;-&#34;, &#34;--&#34;, &#34;-.&#34;, &#34;:&#34;, &#34;solid&#34;, &#34;dashed&#34;, &#34;dashdot&#34;, &#34;dotted&#34;]:
+        raise ValueError(f&#34;Linestyle &#39;{linestyle}&#39; not recognized by matplotlib.&#34;)
+
+    # Check that linewidth is valid
+    if linewidth &lt;= 0:
+        raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
+
+    # Check that marker is valid
+    if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+        raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+
+    # Convert numerics to lists if necessary
+    if constant_lats is not None:
+        if isinstance(constant_lats, (float, int)):
+            constant_lats = [constant_lats]
+    if constant_lons is not None:
+        if isinstance(constant_lons, (float, int)):
+            constant_lons = [constant_lons]
+
+    # Initialize contour data dict if it doesn&#39;t exist yet
+    if self.contour_data is None:
+        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
+
+    # Obtain the Fov map&#39;s projection
+    source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
+    mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
+    transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
+
+    # First handling manually supplied lat/lon arrays
+    if (lats is not None) and (lons is not None):
+        # Convert lists to ndarrays if necessary
+        if isinstance(lats, list):
+            lats = np.array(lats)
+        if isinstance(lons, list):
+            lons = np.array(lons)
+
+        if len(lats) != len(lons):
+            raise ValueError(&#34;Lat/Lon data must be of the same size.&#34;)
+
+        # Create specified contour from geographic coords
+        x, y = transformer.transform(lons, lats)
+        # Add contour to dict, along with color and linewidth
+        self.contour_data[&#34;x&#34;].append(x)
+        self.contour_data[&#34;y&#34;].append(y)
+        self.contour_data[&#34;color&#34;].append(color)
+        self.contour_data[&#34;linewidth&#34;].append(linewidth)
+        self.contour_data[&#34;linestyle&#34;].append(linestyle)
+        self.contour_data[&#34;marker&#34;].append(marker)
+        self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+    # Next handling lines of constant latitude
+    if constant_lats is not None:
+        # Generate longitudinal domain of the lat line (full globe)
+        lon_domain = np.arange(-180, 180 + 0.2, 0.2)
+
+        # Iterate through all lines of constant lat requested
+        for lat in constant_lats:
+            # Create line of constant lat
+            const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
+            sort_idx = np.argsort(const_lat_x)
+            const_lat_y = const_lat_y[sort_idx]
+            const_lat_x = const_lat_x[sort_idx]
+            const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
+            # Add contour to dict, along with color and linewidth
+            self.contour_data[&#34;x&#34;].append(const_lat_x)
+            self.contour_data[&#34;y&#34;].append(const_lat_y)
+            self.contour_data[&#34;color&#34;].append(color)
+            self.contour_data[&#34;linewidth&#34;].append(linewidth)
+            self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
+            self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+    # Now handling lines of constant longitude
+    if constant_lons is not None:
+        # Generate latitudinal domain of the lon line (full globe)
+        lat_domain = np.arange(-90, 90 + 0.1, 0.1)
+
+        # Iterate through all lines of constant lon requested
+        for lon in constant_lons:
+            # Create line of constant lon and add to dict
+            const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
+            sort_idx = np.argsort(const_lon_y)
+            const_lon_x = const_lon_x[sort_idx]
+            const_lon_y = const_lon_y[sort_idx]
+            const_lon_x, const_lon_y = transformer.transform(const_lon_x, const_lon_y)
+
+            # Add contour to dict, along with color and linewidth
+            self.contour_data[&#34;x&#34;].append(const_lon_x)
+            self.contour_data[&#34;y&#34;].append(const_lon_y)
+            self.contour_data[&#34;color&#34;].append(color)
+            self.contour_data[&#34;linewidth&#34;].append(linewidth)
+            self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
+            self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
+</details>
+<div class="desc"><p>Add geographic contours to a FoV map.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic latitudes defining a contour.</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geographic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
+<dd>Geographic Latitude(s) at which to add line(s) of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
+<dd>Geographic Longitude(s) at which to add line(s) of constant longitude.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>The contour thickness.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib linestyle used for the contour(s).</dd>
+<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib marker used for the contour(s).</dd>
+<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plots the contour on top of all other currently plotted objects.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>issues encountered with supplied parameters.</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.FOV.add_mag_contours"><code class="name flex">
+<span>def <span class="ident">add_mag_contours</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_mag_contours(self,
+                     timestamp: datetime.datetime,
+                     constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                     constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
+                     lats: Optional[Union[ndarray, list]] = None,
+                     lons: Optional[Union[ndarray, list]] = None,
+                     color: str = &#34;black&#34;,
+                     linewidth: Union[float, int] = 1,
+                     linestyle: str = &#34;solid&#34;,
+                     marker: str = &#34;&#34;,
+                     bring_to_front: bool = False):
+    &#34;&#34;&#34;
+    Add geomagnetic contours to a FoV map.
+
+    Args:
+        timestamp (datetime.datetime): 
+            The timestamp used in computing AACGM coordinates.
+
+        lats (ndarray or list): 
+            Sequence of geomagnetic latitudes defining a contour.
+        
+        lons (ndarray or list): 
+            Sequence of geomagnetic longitudes defining a contour.
+
+        constant_lats (float, int, Sequence): 
+            Geomagnetic latitude(s) at which to add contour(s) of constant latitude.
+        
+        constant_lons (float, int, Sequence): 
+            Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
+
+        color (str): 
+            The matplotlib color used for the contour(s).
+
+        linewidth (float or int): 
+            The contour thickness.
+
+        linestyle (str): 
+            The matplotlib linestyle used for the contour(s).
+
+        marker (str): 
+            The matplotlib marker used for the contour(s).
+
+        bring_to_front (bool): 
+            Plots the contour on top of all other currently plotted objects.
+
+    Returns:
+        The object&#39;s contour_data parameter is populated appropriately.
+
+    Raises:
+        ValueError: issues encountered with supplied parameters
+    &#34;&#34;&#34;
+    # Make sure some form of lat/lon is provided
+    if (constant_lats is None) and (constant_lons is None) and (lats is None) and (lons is None):
+        raise ValueError(&#34;No latitudes or longitudes provided.&#34;)
+
+    # If manually passing in lats &amp; lons, make sure both are provided
+    if (lats is not None or lons is not None) and (lats is None or lons is None):
+        raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
+
+    # Check that color exists in matplotlib
+    if color not in matplotlib.colors.CSS4_COLORS:
+        raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
+
+    # Check that linestyle is valid
+    if linestyle not in [&#34;-&#34;, &#34;--&#34;, &#34;-.&#34;, &#34;:&#34;, &#34;solid&#34;, &#34;dashed&#34;, &#34;dashdot&#34;, &#34;dotted&#34;]:
+        raise ValueError(f&#34;Linestyle &#39;{linestyle}&#39; not recognized by matplotlib.&#34;)
+
+    # Check that linewidth is valid
+    if linewidth &lt;= 0:
+        raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
+
+    # Check that marker is valid
+    if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+        raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
+
+    # Convert numerics to lists if necessary
+    if constant_lats is not None:
+        if isinstance(constant_lats, (float, int)):
+            constant_lats = [constant_lats]
+    if constant_lons is not None:
+        if isinstance(constant_lons, (float, int)):
+            constant_lons = [constant_lons]
+
+    # Initialize contour data dict if it doesn&#39;t exist yet
+    if self.contour_data is None:
+        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
+
+    # Obtain the FoV map&#39;s projection
+    source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
+    mosaic_proj = pyproj.CRS.from_user_input(self.cartopy_projection)
+    transformer = pyproj.Transformer.from_crs(source_proj, mosaic_proj, always_xy=True)
+
+    # First handling manually supplied lat/lon arrays
+    if (lats is not None) and (lons is not None):
+        # Convert lists to ndarrays if necessary
+        if isinstance(lats, list):
+            lats = np.array(lats)
+        if isinstance(lons, list):
+            lons = np.array(lons)
+
+        if len(lats) != len(lons):
+            raise ValueError(&#34;Lat/Lon data must be of the same size.&#34;)
+
+        # Create specified contour from magnetic coords
+        y, x, _ = aacgmv2.convert_latlon_arr(lats, lons, lats * 0.0, timestamp, method_code=&#34;A2G&#34;)
+        x, y = transformer.transform(x, y)
+
+        # Add contour to dict, along with color and linewidth
+        self.contour_data[&#34;x&#34;].append(x)
+        self.contour_data[&#34;y&#34;].append(y)
+        self.contour_data[&#34;color&#34;].append(color)
+        self.contour_data[&#34;linewidth&#34;].append(linewidth)
+        self.contour_data[&#34;linestyle&#34;].append(linestyle)
+        self.contour_data[&#34;marker&#34;].append(marker)
+        self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+    # Next handling lines of constant latitude
+    if constant_lats is not None:
+        # Generate longitudinal domain of the lat line (full globe)
+        lon_domain = np.arange(-180, 180 + 0.2, 0.2)
+
+        # iterate through all lines of constant lat requested
+        for lat in constant_lats:
+            # Create line of constant lat from magnetic coords
+            const_lat_x, const_lat_y = (lon_domain, lon_domain * 0 + lat)
+            const_lat_y, const_lat_x, _ = aacgmv2.convert_latlon_arr(const_lat_y, const_lat_x, const_lat_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+            sort_idx = np.argsort(const_lat_x)
+            const_lat_y = const_lat_y[sort_idx]
+            const_lat_x = const_lat_x[sort_idx]
+            const_lat_x, const_lat_y = transformer.transform(const_lat_x, const_lat_y)
+
+            # Add contour to dict, along with color and linewidth
+            self.contour_data[&#34;x&#34;].append(const_lat_x)
+            self.contour_data[&#34;y&#34;].append(const_lat_y)
+            self.contour_data[&#34;color&#34;].append(color)
+            self.contour_data[&#34;linewidth&#34;].append(linewidth)
+            self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
+            self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))
+
+    # Now handling lines of constant longitude
+    if constant_lons is not None:
+        # Generate latitudinal domain of the lon line (full globe)
+        lat_domain = np.arange(-90, 90 + 0.1, 0.1)
+
+        # iterate through all lines of constant lon requested
+        for lon in constant_lons:
+            # Create line of constant lon from magnetic coords
+            const_lon_x, const_lon_y = (lat_domain * 0 + lon, lat_domain)
+            const_lon_y, const_lon_x, _ = aacgmv2.convert_latlon_arr(const_lon_y, const_lon_x, const_lon_x * 0.0, timestamp, method_code=&#34;A2G&#34;)
+            sort_idx = np.argsort(const_lon_y)
+            const_lon_x = const_lon_x[sort_idx]
+            const_lon_y = const_lon_y[sort_idx]
+            const_lon_x, const_lon_y = transformer.transform(const_lon_x, const_lon_y)
+
+            # Add contour to dict, along with color and linewidth
+            self.contour_data[&#34;x&#34;].append(const_lon_x)
+            self.contour_data[&#34;y&#34;].append(const_lon_y)
+            self.contour_data[&#34;color&#34;].append(color)
+            self.contour_data[&#34;linewidth&#34;].append(linewidth)
+            self.contour_data[&#34;linestyle&#34;].append(linestyle)
+            self.contour_data[&#34;marker&#34;].append(marker)
+            self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
+</details>
+<div class="desc"><p>Add geomagnetic contours to a FoV map.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>The timestamp used in computing AACGM coordinates.</dd>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geomagnetic latitudes defining a contour.</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
+<dd>Sequence of geomagnetic longitudes defining a contour.</dd>
+<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
+<dd>Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</dd>
+<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
+<dd>Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
+<dd>The contour thickness.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib linestyle used for the contour(s).</dd>
+<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
+<dd>The matplotlib marker used for the contour(s).</dd>
+<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Plots the contour on top of all other currently plotted objects.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>issues encountered with supplied parameters</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.FOV.plot"><code class="name flex">
+<span>def <span class="ident">plot</span></span>(<span>self,<br>map_extent: Sequence[float | int],<br>label: bool = True,<br>enforce_data_availability: bool = False,<br>figsize: Tuple[int, int] | None = None,<br>title: str | None = None,<br>ocean_color: str | None = None,<br>land_color: str = 'gray',<br>land_edgecolor: str = '#8A8A8A',<br>borders_color: str = '#AEAEAE',<br>borders_disable: bool = False,<br>returnfig: bool = False,<br>savefig: bool = False,<br>savefig_filename: str | None = None,<br>savefig_quality: int | None = None) ‑> Any</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot(self,
+         map_extent: Sequence[Union[float, int]],
+         label: bool = True,
+         enforce_data_availability: bool = False,
+         figsize: Optional[Tuple[int, int]] = None,
+         title: Optional[str] = None,
+         ocean_color: Optional[str] = None,
+         land_color: str = &#34;gray&#34;,
+         land_edgecolor: str = &#34;#8A8A8A&#34;,
+         borders_color: str = &#34;#AEAEAE&#34;,
+         borders_disable: bool = False,
+         returnfig: bool = False,
+         savefig: bool = False,
+         savefig_filename: Optional[str] = None,
+         savefig_quality: Optional[int] = None) -&gt; Any:
+    &#34;&#34;&#34;
+    Generate a plot of the FoV data. 
+    
+    Either display it (default behaviour), save it to disk (using the `savefig` parameter), or 
+    return the matplotlib plot object for further usage (using the `returnfig` parameter).
+
+    Args:
+        map_extent (List[int]): 
+            Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers 
+            and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].
+
+        label (bool): 
+            Specifies wether individual FoVs will be labelled with their site_uid.
+            
+        enforce_data_availability (bool): 
+            Specifies whether or not data availability information associated with the FOV object
+            should be used to omit sites with no available data. Note that data availability information
+            is typically created using the FOVData.add_availability method.
+
+        figsize (tuple): 
+            The matplotlib figure size to use when plotting. For example `figsize=(14,4)`.
+
+        title (str): 
+            The title to display above the plotted Fov Map. Default is no title.
+
+        ocean_color (str): 
+            Colour of the ocean. Default is cartopy&#39;s default shade of blue. Colours can be supplied
+            as a word, or hexcode prefixed with a &#39;#&#39; character (ie. `#55AADD`).
+        
+        land_color (str): 
+            Colour of the land. Default is `gray`. Colours can be supplied as a word, or hexcode 
+            prefixed with a &#39;#&#39; character (ie. `#41BB87`).
+
+        land_edgecolor (str): 
+            Color of the land edges. Default is `#8A8A8A`. Colours can be supplied as a word, or
+            hexcode prefixed with a &#39;#&#39; character.
+
+        borders_color (str): 
+            Color of the country borders. Default is `AEAEAE`. Colours can be supplied as a word, or
+            hexcode prefixed with a &#39;#&#39; character.
+        
+        borders_disable (bool): 
+            Disbale rendering of the borders. Default is `False`.
+
+        returnfig (bool): 
+            Instead of displaying the image, return the matplotlib figure object. This allows for further plot 
+            manipulation, for example, adding labels or a title in a different location than the default. 
+            
+            Remember - if this parameter is supplied, be sure that you close your plot after finishing work 
+            with it. This can be achieved by doing `plt.close(fig)`. 
+            
+            Note that this method cannot be used in combination with `savefig`.
+
+        savefig (bool): 
+            Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if 
+            this parameter is set to True. Defaults to `False`.
+
+        savefig_filename (str): 
+            Filename to save the image to. Must be specified if the savefig parameter is set to True.
+
+        savefig_quality (int): 
+            Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+            is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow&#39;s default of 75%.
+
+    Returns:
+        The displayed fov map, by default. If `savefig` is set to True, nothing will be returned. If `returnfig` is 
+        set to True, the plotting variables `(fig, ax)` will be returned.
+
+    Raises:
+    &#34;&#34;&#34;
+
+    # check return mode
+    if (returnfig is True and savefig is True):
+        raise ValueError(&#34;Only one of returnfig or savefig can be set to True&#34;)
+    if returnfig is True and (savefig_filename is not None or savefig_quality is not None):
+        show_warning(&#34;The figure will be returned, but a savefig option parameter was supplied. Consider &#34; +
+                     &#34;removing the savefig option parameter(s) as they will be ignored.&#34;,
+                     stacklevel=1)
+    elif (savefig is False and (savefig_filename is not None or savefig_quality is not None)):
+        show_warning(&#34;A savefig option parameter was supplied, but the savefig parameter is False. The &#34; +
+                     &#34;savefig option parameters will be ignored.&#34;,
+                     stacklevel=1)
+
+    # Initialize figure
+    fig = plt.figure(figsize=figsize)
+    ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+    ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
+
+    # Add ocean
+    #
+    # NOTE: we use the default ocean color
+    if (ocean_color is not None):
+        ax.add_feature(  # type: ignore
+            cartopy.feature.OCEAN, facecolor=ocean_color, zorder=0)
+    else:
+        ax.add_feature(cartopy.feature.OCEAN, zorder=0)  # type: ignore
+
+    # add land
+    ax.add_feature(  # type: ignore
+        cartopy.feature.LAND, facecolor=land_color, edgecolor=land_edgecolor, zorder=0)
+
+    # add borders
+    if (borders_disable is False):
+        ax.add_feature(  # type: ignore
+            cartopy.feature.BORDERS, edgecolor=borders_color, zorder=0)
+
+    # Go through and plot all of the FoVs within each of the Object&#39;s FOVData objects
+    if self.fov_data is not None:
+
+        # If requesting enforcement of data availability, check that data availability exists in
+        # the object first
+        if (enforce_data_availability is True):
+            for fov_data in self.fov_data:
+                if (fov_data.data_availability is None):
+                    raise ValueError(&#34;Before plotting FOV object with enforce_data_availability=True, FOVData.add_availability(...) &#34; +
+                                     &#34;must be called for all included FOVData objects.&#34;)
+
+        for fov_data in self.fov_data:
+            latlon_dict = fov_data.fovs
+
+            for site in fov_data.site_uid_list:
+
+                # If data_availability has been enforced and is False for this site, don&#39;t plot it
+                if (enforce_data_availability is True) and (fov_data.data_availability is not None) and (site
+                                                                                                         in fov_data.data_availability.keys()):
+                    if (fov_data.data_availability[site] is False):
+                        continue
+
+                latlon = latlon_dict[site]
+
+                ax.plot(np.squeeze(latlon[1, :]),
+                        np.squeeze(latlon[0, :]),
+                        color=fov_data.color,
+                        linestyle=fov_data.linestyle,
+                        zorder=1,
+                        linewidth=fov_data.linewidth,
+                        transform=cartopy.crs.Geodetic())
+
+                # Add site_uid labels to the FoV plot, in the center of each ASI FoV
+                if label:
+                    if (fov_data.instrument_array != &#34;trex_spectrograph&#34;):
+                        center_lat = (latlon[0, 0] + latlon[0, 179]) / 2.0
+                        center_lon = (latlon[1, 89] + latlon[1, 269]) / 2.0
+                    else:
+                        center_lat = (latlon[0, 0] + latlon[0, -1]) / 2.0
+                        center_lon = (latlon[1, 0] + latlon[1, -1]) / 2.0
+
+                    ax.text(center_lon,
+                            center_lat,
+                            site,
+                            ha=&#34;center&#34;,
+                            va=&#34;center&#34;,
+                            color=fov_data.color,
+                            transform=cartopy.crs.Geodetic(),
+                            clip_on=True)
+
+    # Go through and plot all of the contour data included in the Object
+    if self.contour_data is not None:
+        for i in range(len(self.contour_data[&#34;x&#34;])):
+            ax.plot(self.contour_data[&#34;x&#34;][i],
+                    self.contour_data[&#34;y&#34;][i],
+                    color=self.contour_data[&#34;color&#34;][i],
+                    linewidth=self.contour_data[&#34;linewidth&#34;][i],
+                    linestyle=self.contour_data[&#34;linestyle&#34;][i],
+                    marker=self.contour_data[&#34;marker&#34;][i],
+                    zorder=self.contour_data[&#34;zorder&#34;][i])
+
+    # set title
+    if (title is not None):
+        ax.set_title(title)
+
+    # save figure or show it
+    if (savefig is True):
+        # check that filename has been set
+        if (savefig_filename is None):
+            raise ValueError(&#34;The savefig_filename parameter is missing, but required since savefig was set to True.&#34;)
+
+        # save the figure
+        f_extension = os.path.splitext(savefig_filename)[-1].lower()
+        if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
+            # check quality setting
+            if (savefig_quality is not None):
+                plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
+            else:
+                plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
+        else:
+            if (savefig_quality is not None):
+                # quality specified, but output filename is not a JPG, so show a warning
+                show_warning(&#34;The savefig_quality parameter was specified, but is only used for saving JPG files. The &#34; +
+                             &#34;savefig_filename parameter was determined to not be a JPG file, so the quality will be ignored&#34;,
+                             stacklevel=1)
+            plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
+
+        # clean up by closing the figure
+        plt.close(fig)
+    elif (returnfig is True):
+        # return the figure and axis objects
+        return (fig, ax)
+    else:
+        # show the figure
+        plt.show(fig)
+
+        # cleanup by closing the figure
+        plt.close(fig)
+
+    # return
+    return None</code></pre>
+</details>
+<div class="desc"><p>Generate a plot of the FoV data. </p>
+<p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
+return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
+<dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
+and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
+<dt><strong><code>label</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Specifies wether individual FoVs will be labelled with their site_uid.</dd>
+<dt><strong><code>enforce_data_availability</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Specifies whether or not data availability information associated with the FOV object
+should be used to omit sites with no available data. Note that data availability information
+is typically created using the FOVData.add_availability method.</dd>
+<dt><strong><code>figsize</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>The matplotlib figure size to use when plotting. For example <code>figsize=(14,4)</code>.</dd>
+<dt><strong><code>title</code></strong> :&ensp;<code>str</code></dt>
+<dd>The title to display above the plotted Fov Map. Default is no title.</dd>
+<dt><strong><code>ocean_color</code></strong> :&ensp;<code>str</code></dt>
+<dd>Colour of the ocean. Default is cartopy's default shade of blue. Colours can be supplied
+as a word, or hexcode prefixed with a '#' character (ie. <code>#55AADD</code>).</dd>
+<dt><strong><code>land_color</code></strong> :&ensp;<code>str</code></dt>
+<dd>Colour of the land. Default is <code>gray</code>. Colours can be supplied as a word, or hexcode
+prefixed with a '#' character (ie. <code>#41BB87</code>).</dd>
+<dt><strong><code>land_edgecolor</code></strong> :&ensp;<code>str</code></dt>
+<dd>Color of the land edges. Default is <code>#8A8A8A</code>. Colours can be supplied as a word, or
+hexcode prefixed with a '#' character.</dd>
+<dt><strong><code>borders_color</code></strong> :&ensp;<code>str</code></dt>
+<dd>Color of the country borders. Default is <code>AEAEAE</code>. Colours can be supplied as a word, or
+hexcode prefixed with a '#' character.</dd>
+<dt><strong><code>borders_disable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Disbale rendering of the borders. Default is <code>False</code>.</dd>
+<dt><strong><code>returnfig</code></strong> :&ensp;<code>bool</code></dt>
+<dd>
+<p>Instead of displaying the image, return the matplotlib figure object. This allows for further plot
+manipulation, for example, adding labels or a title in a different location than the default. </p>
+<p>Remember - if this parameter is supplied, be sure that you close your plot after finishing work
+with it. This can be achieved by doing <code>plt.close(fig)</code>. </p>
+<p>Note that this method cannot be used in combination with <code>savefig</code>.</p>
+</dd>
+<dt><strong><code>savefig</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Save the displayed image to disk instead of displaying it. The parameter savefig_filename is required if
+this parameter is set to True. Defaults to <code>False</code>.</dd>
+<dt><strong><code>savefig_filename</code></strong> :&ensp;<code>str</code></dt>
+<dd>Filename to save the image to. Must be specified if the savefig parameter is set to True.</dd>
+<dt><strong><code>savefig_quality</code></strong> :&ensp;<code>int</code></dt>
+<dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
+is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The displayed fov map, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+set to True, the plotting variables <code>(fig, ax)</code> will be returned.
+Raises:</p></div>
+</dd>
+<dt id="pyaurorax.tools.FOV.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
+
+    if self.contour_data is not None:
+        contour_data_str = &#34;%d Contour(s)&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+    else:
+        contour_data_str = &#34;None&#34;
+
+    if self.fov_data is not None:
+        n_fovs = 0
+
+        for fov in self.fov_data:
+            n_fovs += len(fov.fovs.keys())
+
+        fov_data_str = &#34;%d FoVData Object(s)&#34; % (n_fovs)
+    else:
+        fov_data_str = &#34;None&#34;
+
+    # print
+    print(&#34;FOV:&#34;)
+    print(&#34;  %-23s: %s&#34; % (&#34;cartopy_projection&#34;, cartopy_projection_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;fov_data&#34;, fov_data_str))
+    print(&#34;  %-23s: %s&#34; % (&#34;contour_data&#34;, contour_data_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyaurorax.tools.FOVData"><code class="flex name class">
+<span>class <span class="ident">FOVData</span></span>
+<span>(</span><span>site_uid_list: List[str],<br>fovs: Dict[str, numpy.ndarray],<br>fovs_dimensions: Dict[str, Tuple],<br>instrument_array: str,<br>data_availability: Dict[str, bool] | None,<br>color: str,<br>linewidth: int,<br>linestyle: str,<br>aurorax_obj)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FOVData:
+    &#34;&#34;&#34;
+    Prepared ASI FoV data for use by FOV routines or manual plotting.
+
+    Attributes:
+        site_uid_list (List[str]): 
+            List of site unique identifiers contained within this object.
+
+        fovs (Dict[str, numpy.ndarray]): 
+            Dictionary that holds the lat/lon data in a 2xN numpy array giving the FoV, for each site UID.
+            
+        fovs_dimensions (Dict[str, numpy.ndarray]): 
+            Dictionary that holds the shape of each set of lat/lon data.
+
+        instrument_array (str): 
+            String giving the name of the instrument array this FOVData object corresponds to (optional).
+            
+        data_availability (dict): 
+            An optional dictionary containing information about which sites included in the FOVData actually
+            have available data for a given time range. Usually created using the FOVData.add_Availability()
+            method.
+
+        color (str): 
+            String specifying the color to use when plotting this FOVData.
+        
+        linewidth (str): 
+            Integer specifying the linewidth to use when plotting this FOVData.
+        
+        linestyle (str): 
+            String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.
+    &#34;&#34;&#34;
+
+    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: str,
+                 data_availability: Optional[Dict[str, bool]], color: str, linewidth: int, linestyle: str, aurorax_obj):
+
+        # Public vars
+        self.site_uid_list = site_uid_list
+        self.fovs = fovs
+        self.fovs_dimensions = fovs_dimensions
+        self.instrument_array = instrument_array
+        self.data_availability = data_availability
+        self.color = color
+        self.linewidth = linewidth
+        self.linestyle = linestyle
+
+        # Private vars
+        self.__aurorax_obj = aurorax_obj
+
+    def __str__(self) -&gt; str:
+        return self.__repr__()
+
+    def __repr__(self) -&gt; str:
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.fovs_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        fovs_str = &#34;Dict[%d site(s) of array(dims=%s)]&#34; % (len(self.fovs.keys()), unique_dimensions_str)
+
+        # return
+        return &#34;FOVData(fovs=%s, site_uid_list=%s, instrument_array=%s)&#34; % (fovs_str, self.site_uid_list.__repr__(), self.instrument_array)
+
+    def pretty_print(self):
+        &#34;&#34;&#34;
+        A special print output for this class.
+        &#34;&#34;&#34;
+        # set special strings
+        unique_dimensions_str = str(list(dict.fromkeys(self.fovs_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+        fovs_str = &#34;Dict[%d site(s) of array(dims=%s)]&#34; % (len(self.fovs.keys()), unique_dimensions_str)
+
+        # print
+        print(&#34;FovData:&#34;)
+        print(&#34;  %-19s: %s&#34; % (&#34;instrument_array&#34;, self.instrument_array))
+        print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
+        print(&#34;  %-19s: %s&#34; % (&#34;fovs&#34;, fovs_str))
+
+    def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
+        &#34;&#34;&#34;
+        Add data availability information to an FOVData object. Given a start and end time, information
+        will be added to the object regarding whether or not each site included in the FOVData object
+        took data in that time range. This is useful for plotting FOVs for only those sites that took
+        data in a given time interval.
+
+        Args:
+            dataset_name (str): 
+                The name of the dataset to check for data availability (e.g. &#34;REGO_RAW&#34;)
+
+            start (datetime.datetime): 
+                Defines the start time of the interval to check for data availability.
+                
+            end (datetime.datetime): 
+                Defines the end time of the interval to check for data availability.
+
+        Returns:
+            The FOVData object is updated to hold data availability information, that can be used when
+            plotting to omit sites that did not take data during the time interval defined by start and end.
+
+        Raises:
+        &#34;&#34;&#34;
+
+        if (self.instrument_array is None):
+            raise ValueError(&#34;Cannot add data availability to an FOVData object with no associated instrument_array. Please specify &#34; +
+                             &#34;instrument_array upon creation of FOVData object to enforce data availability.&#34;)
+
+        # Check if the requested dataset makes sense for the FOVData
+        fov_instrument = self.instrument_array.upper()
+        if (fov_instrument == &#34;TREX_SPECTROGRAPH&#34;):
+            fov_instrument = &#34;TREX_SPECT&#34;
+
+        if (fov_instrument not in dataset_name):
+            raise ValueError(&#34;Requested dataset_name does not match the instrument_array contained in this FOVData object.&#34;)
+
+        # Create a dictionary corresponding to the FoV data, that will hold
+        # booleans specifying whether or not there is data for each site
+        availability_dict = {}
+        for site in self.fovs.keys():
+
+            # Request list of all files of requested dataset at requested site
+            result = self.__aurorax_obj.data.ucalgary.get_urls(dataset_name, start, end, site_uid=site)
+
+            # If there are any files within the desired time-range then update availability dict with True, otherwise update False
+            if (result.count &gt; 0):
+                availability_dict[site] = True
+            else:
+                availability_dict[site] = False
+
+        self.data_availability = availability_dict</code></pre>
+</details>
+<div class="desc"><p>Prepared ASI FoV data for use by FOV routines or manual plotting.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>List of site unique identifiers contained within this object.</dd>
+<dt><strong><code>fovs</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
+<dd>Dictionary that holds the lat/lon data in a 2xN numpy array giving the FoV, for each site UID.</dd>
+<dt><strong><code>fovs_dimensions</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
+<dd>Dictionary that holds the shape of each set of lat/lon data.</dd>
+<dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
+<dd>String giving the name of the instrument array this FOVData object corresponds to (optional).</dd>
+<dt><strong><code>data_availability</code></strong> :&ensp;<code>dict</code></dt>
+<dd>An optional dictionary containing information about which sites included in the FOVData actually
+have available data for a given time range. Usually created using the FOVData.add_Availability()
+method.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
+<dd>String specifying the color to use when plotting this FOVData.</dd>
+<dt><strong><code>linewidth</code></strong> :&ensp;<code>str</code></dt>
+<dd>Integer specifying the linewidth to use when plotting this FOVData.</dd>
+<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
+<dd>String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="pyaurorax.tools.FOVData.add_availability"><code class="name flex">
+<span>def <span class="ident">add_availability</span></span>(<span>self, dataset_name: str, start: datetime.datetime, end: datetime.datetime)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_availability(self, dataset_name: str, start: datetime.datetime, end: datetime.datetime):
+    &#34;&#34;&#34;
+    Add data availability information to an FOVData object. Given a start and end time, information
+    will be added to the object regarding whether or not each site included in the FOVData object
+    took data in that time range. This is useful for plotting FOVs for only those sites that took
+    data in a given time interval.
+
+    Args:
+        dataset_name (str): 
+            The name of the dataset to check for data availability (e.g. &#34;REGO_RAW&#34;)
+
+        start (datetime.datetime): 
+            Defines the start time of the interval to check for data availability.
+            
+        end (datetime.datetime): 
+            Defines the end time of the interval to check for data availability.
+
+    Returns:
+        The FOVData object is updated to hold data availability information, that can be used when
+        plotting to omit sites that did not take data during the time interval defined by start and end.
+
+    Raises:
+    &#34;&#34;&#34;
+
+    if (self.instrument_array is None):
+        raise ValueError(&#34;Cannot add data availability to an FOVData object with no associated instrument_array. Please specify &#34; +
+                         &#34;instrument_array upon creation of FOVData object to enforce data availability.&#34;)
+
+    # Check if the requested dataset makes sense for the FOVData
+    fov_instrument = self.instrument_array.upper()
+    if (fov_instrument == &#34;TREX_SPECTROGRAPH&#34;):
+        fov_instrument = &#34;TREX_SPECT&#34;
+
+    if (fov_instrument not in dataset_name):
+        raise ValueError(&#34;Requested dataset_name does not match the instrument_array contained in this FOVData object.&#34;)
+
+    # Create a dictionary corresponding to the FoV data, that will hold
+    # booleans specifying whether or not there is data for each site
+    availability_dict = {}
+    for site in self.fovs.keys():
+
+        # Request list of all files of requested dataset at requested site
+        result = self.__aurorax_obj.data.ucalgary.get_urls(dataset_name, start, end, site_uid=site)
+
+        # If there are any files within the desired time-range then update availability dict with True, otherwise update False
+        if (result.count &gt; 0):
+            availability_dict[site] = True
+        else:
+            availability_dict[site] = False
+
+    self.data_availability = availability_dict</code></pre>
+</details>
+<div class="desc"><p>Add data availability information to an FOVData object. Given a start and end time, information
+will be added to the object regarding whether or not each site included in the FOVData object
+took data in that time range. This is useful for plotting FOVs for only those sites that took
+data in a given time interval.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the dataset to check for data availability (e.g. "REGO_RAW")</dd>
+<dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>Defines the start time of the interval to check for data availability.</dd>
+<dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
+<dd>Defines the end time of the interval to check for data availability.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The FOVData object is updated to hold data availability information, that can be used when
+plotting to omit sites that did not take data during the time interval defined by start and end.
+Raises:</p></div>
+</dd>
+<dt id="pyaurorax.tools.FOVData.pretty_print"><code class="name flex">
+<span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pretty_print(self):
+    &#34;&#34;&#34;
+    A special print output for this class.
+    &#34;&#34;&#34;
+    # set special strings
+    unique_dimensions_str = str(list(dict.fromkeys(self.fovs_dimensions.values()))).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).replace(&#34;), (&#34;, &#34;),(&#34;)
+    fovs_str = &#34;Dict[%d site(s) of array(dims=%s)]&#34; % (len(self.fovs.keys()), unique_dimensions_str)
+
+    # print
+    print(&#34;FovData:&#34;)
+    print(&#34;  %-19s: %s&#34; % (&#34;instrument_array&#34;, self.instrument_array))
+    print(&#34;  %-19s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))
+    print(&#34;  %-19s: %s&#34; % (&#34;fovs&#34;, fovs_str))</code></pre>
+</details>
+<div class="desc"><p>A special print output for this class.</p></div>
+</dd>
+</dl>
+</dd>
 <dt id="pyaurorax.tools.Keogram"><code class="flex name class">
 <span>class <span class="ident">Keogram</span></span>
 <span>(</span><span>data: numpy.ndarray,<br>timestamp: List[datetime.datetime],<br>instrument_type: str,<br>slice_idx: int | None = None,<br>ccd_y: numpy.ndarray | None = None,<br>mag_y: numpy.ndarray | None = None,<br>geo_y: numpy.ndarray | None = None)</span>
@@ -245,7 +1973,10 @@ class Keogram:
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
                 altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
-                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
+                if skymap.full_map_latitude.shape[-1] == 1:
+                    self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
+                else:
+                    self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
             else:
                 # Make sure altitude is in range that can be interpolated
                 if (altitude_km * 1000.0 &lt; skymap.full_map_altitude[0]) or (altitude_km * 1000.0 &gt; skymap.full_map_altitude[2]):
@@ -263,7 +1994,10 @@ class Keogram:
                 self.geo_y = lats[:, self.__slice_idx].copy()
         else:
             # use default middle altitude
-            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
+            if skymap.full_map_latitude.shape[-1] == 1:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, 0]).copy()
+            else:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()
 
     def set_magnetic_latitudes(self, skymap: Skymap, timestamp: datetime.datetime, altitude_km: Optional[Union[int, float]] = None) -&gt; None:
         &#34;&#34;&#34;
@@ -290,11 +2024,23 @@ class Keogram:
         Raises:
             ValueError: Issues with specified altitude.
         &#34;&#34;&#34;
+
         # check for slice idx
         if (self.__slice_idx is None):
-            raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
+            raise ValueError(&#34;Unable to set the magnetic latitudes since the slice_idx is None. If this keogram &#34; +
                              &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                              &#34;this is expected and performing this action is not supported at this time.&#34;)
+
+        # Check the dimensions of the skymap lat/lon arrays
+        # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+        # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+        # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+        # the same as it would be for ASI data
+        if len(skymap.full_map_latitude.shape) == 2:
+            # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+            skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+            skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+            skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
         # determine altitude index to use
         if (altitude_km is not None):
@@ -325,10 +2071,7 @@ class Keogram:
                 lons[np.where(lons &gt; 180)] -= 360.0
 
             # Convert lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
-                                                                      lons.flatten(), (lons * 0.0).flatten(),
-                                                                      timestamp,
-                                                                      method_code=&#39;G2A&#39;)
+            mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code=&#39;G2A&#39;)
             mag_lats = np.reshape(mag_lats, lats.shape)
             mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -343,11 +2086,11 @@ class Keogram:
             self.mag_y = mag_lats[:, self.__slice_idx].copy()
         else:
             # Convert middle altitude lats and lons to geomagnetic coordinates
-            mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
-                                                                      np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
-                                                                      (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
-                                                                      timestamp,
-                                                                      method_code=&#39;G2A&#39;)
+            mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
+                                                               np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
+                                                               (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
+                                                               timestamp,
+                                                               method_code=&#39;G2A&#39;)
             mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
             mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
 
@@ -523,10 +2266,11 @@ class Keogram:
             # do check for ccd_y
             if (self.ccd_y is None):
                 show_warning(
-                    &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
+                    &#34;Unable to plot CCD y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                     &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                     stacklevel=1,
                 )
+                ylabel = &#34;Keogram Y&#34;
             else:
                 # generate y ticks and labels
                 if (y_type == &#34;ccd&#34;):
@@ -568,8 +2312,8 @@ class Keogram:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):  # pragma: nocover
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+                if (savefig_quality is not None):
+                    plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
                 else:
                     plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
             else:
@@ -603,7 +2347,7 @@ class Keogram:
         Fill keogram columns that do not have data with NaNs.
 
         Args:
-            cadence (int | float): 
+            cadence (int or float): 
                 The cadence, in seconds, of the data for the keogram. Default is to automatically
                 determine the cadence based on the keogram&#39;s timestamp data
         
@@ -620,7 +2364,7 @@ class Keogram:
         # then that calculated, we will raise a Warning
         apparent_cadence = _determine_cadence(self.timestamp)
         if not isinstance(apparent_cadence, (float, int)):
-            raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)
+            raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)  # pragma: nocover
 
         if (cadence is not None) and (apparent_cadence != cadence):
             warning_str = (&#34;Based on the keogram&#39;s timestamp attribute, the apparent cadence is %.2f s, but %.2f s was &#34;
@@ -667,7 +2411,7 @@ class Keogram:
         elif len(self.data.shape) == 3:
             desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
         else:
-            raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)
+            raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)  # pragma: nocover
 
         desired_keogram = np.empty(shape=desired_keogram_shape)
         desired_timestamp = []
@@ -769,7 +2513,7 @@ class Keogram:
     Fill keogram columns that do not have data with NaNs.
 
     Args:
-        cadence (int | float): 
+        cadence (int or float): 
             The cadence, in seconds, of the data for the keogram. Default is to automatically
             determine the cadence based on the keogram&#39;s timestamp data
     
@@ -786,7 +2530,7 @@ class Keogram:
     # then that calculated, we will raise a Warning
     apparent_cadence = _determine_cadence(self.timestamp)
     if not isinstance(apparent_cadence, (float, int)):
-        raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)
+        raise ValueError(&#34;Could not determine cadence from object Keogram.timestamp.&#34;)  # pragma: nocover
 
     if (cadence is not None) and (apparent_cadence != cadence):
         warning_str = (&#34;Based on the keogram&#39;s timestamp attribute, the apparent cadence is %.2f s, but %.2f s was &#34;
@@ -833,7 +2577,7 @@ class Keogram:
     elif len(self.data.shape) == 3:
         desired_keogram_shape = (self.data.shape[0], n_desired_frames, self.data.shape[2])
     else:
-        raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)
+        raise ValueError(f&#34;Could not inject NaNs into keogram with data shape {self.data.shape}&#34;)  # pragma: nocover
 
     desired_keogram = np.empty(shape=desired_keogram_shape)
     desired_timestamp = []
@@ -904,7 +2648,7 @@ class Keogram:
 <div class="desc"><p>Fill keogram columns that do not have data with NaNs.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>cadence</code></strong> :&ensp;<code>int | float</code></dt>
+<dt><strong><code>cadence</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The cadence, in seconds, of the data for the keogram. Default is to automatically
 determine the cadence based on the keogram's timestamp data</dd>
 </dl>
@@ -1085,10 +2829,11 @@ will be updated accordingly.</p>
         # do check for ccd_y
         if (self.ccd_y is None):
             show_warning(
-                &#34;Unable to plot y-axis. If this keogram object was create as part of the custom_keogram &#34; +
+                &#34;Unable to plot CCD y-axis. If this keogram object was create as part of the custom_keogram &#34; +
                 &#34;routines, this is expected and plotting a custom keogram with axes is not supported at this time.&#34;,
                 stacklevel=1,
             )
+            ylabel = &#34;Keogram Y&#34;
         else:
             # generate y ticks and labels
             if (y_type == &#34;ccd&#34;):
@@ -1130,8 +2875,8 @@ will be updated accordingly.</p>
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
             # check quality setting
-            if (savefig_quality is not None):  # pragma: nocover
-                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+            if (savefig_quality is not None):
+                plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
             else:
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
         else:
@@ -1304,7 +3049,10 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
         if (altitude_km * 1000.0 in skymap.full_map_altitude):
             altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
 
-            self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
+            if skymap.full_map_latitude.shape[-1] == 1:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
+            else:
+                self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, self.__slice_idx]).copy()
         else:
             # Make sure altitude is in range that can be interpolated
             if (altitude_km * 1000.0 &lt; skymap.full_map_altitude[0]) or (altitude_km * 1000.0 &gt; skymap.full_map_altitude[2]):
@@ -1322,7 +3070,10 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
             self.geo_y = lats[:, self.__slice_idx].copy()
     else:
         # use default middle altitude
-        self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()</code></pre>
+        if skymap.full_map_latitude.shape[-1] == 1:
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, 0]).copy()
+        else:
+            self.geo_y = np.squeeze(skymap.full_map_latitude[1, :, self.__slice_idx]).copy()</code></pre>
 </details>
 <div class="desc"><p>Set the geographic latitude values for this keogram, using the specified skymap
 data. The data will be set to the geo_y attribute of this Keogram object, which
@@ -1376,11 +3127,23 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
     Raises:
         ValueError: Issues with specified altitude.
     &#34;&#34;&#34;
+
     # check for slice idx
     if (self.__slice_idx is None):
-        raise ValueError(&#34;Unable to set the geographic latitudes since the slice_idx is None. If this keogram &#34; +
+        raise ValueError(&#34;Unable to set the magnetic latitudes since the slice_idx is None. If this keogram &#34; +
                          &#34;object was created as part of the custom_keogram routines or is a spectrogaph keogram, &#34; +
                          &#34;this is expected and performing this action is not supported at this time.&#34;)
+
+    # Check the dimensions of the skymap lat/lon arrays
+    # If they are 2-dimensional [altitude_idx, y] instead of [altitude_idx, y, x] then we know it is a spectrograph
+    # skymap. In this case, we will simply reform to add an additional dimension, so that self.__slice_idx (which is
+    # always zero for spectrograph data as there is only one longitudinal bin) can be used to index into the array
+    # the same as it would be for ASI data
+    if len(skymap.full_map_latitude.shape) == 2:
+        # Reform all spectrograph skymap arrays to have an extra dimension, for indexing purposes
+        skymap.full_map_latitude = skymap.full_map_latitude[:, :, np.newaxis]
+        skymap.full_map_longitude = skymap.full_map_longitude[:, :, np.newaxis]
+        skymap.full_elevation = skymap.full_elevation[:, np.newaxis]
 
     # determine altitude index to use
     if (altitude_km is not None):
@@ -1411,10 +3174,7 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
             lons[np.where(lons &gt; 180)] -= 360.0
 
         # Convert lats and lons to geomagnetic coordinates
-        mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(lats.flatten(),
-                                                                  lons.flatten(), (lons * 0.0).flatten(),
-                                                                  timestamp,
-                                                                  method_code=&#39;G2A&#39;)
+        mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(lats.flatten(), lons.flatten(), (lons * 0.0).flatten(), timestamp, method_code=&#39;G2A&#39;)
         mag_lats = np.reshape(mag_lats, lats.shape)
         mag_lons = np.reshape(mag_lons, lons.shape)
 
@@ -1429,11 +3189,11 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
         self.mag_y = mag_lats[:, self.__slice_idx].copy()
     else:
         # Convert middle altitude lats and lons to geomagnetic coordinates
-        mag_lats, mag_lons, mag_alts = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
-                                                                  np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
-                                                                  (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
-                                                                  timestamp,
-                                                                  method_code=&#39;G2A&#39;)
+        mag_lats, mag_lons, _ = aacgmv2.convert_latlon_arr(np.squeeze(skymap.full_map_latitude[1, :, :]).flatten(),
+                                                           np.squeeze(skymap.full_map_longitude[1, :, :]).flatten(),
+                                                           (skymap.full_map_longitude[1, :, :] * 0.0).flatten(),
+                                                           timestamp,
+                                                           method_code=&#39;G2A&#39;)
         mag_lats = np.reshape(mag_lats, np.squeeze(skymap.full_map_latitude[1, :, :]).shape)
         mag_lons = np.reshape(mag_lons, np.squeeze(skymap.full_map_longitude[1, :, :]).shape)
 
@@ -1682,8 +3442,8 @@ class Montage:
             f_extension = os.path.splitext(savefig_filename)[-1].lower()
             if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
                 # check quality setting
-                if (savefig_quality is not None):  # pragma: nocover
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+                if (savefig_quality is not None):
+                    plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
                 else:
                     plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
             else:
@@ -1885,8 +3645,8 @@ class Montage:
         f_extension = os.path.splitext(savefig_filename)[-1].lower()
         if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
             # check quality setting
-            if (savefig_quality is not None):  # pragma: nocover
-                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+            if (savefig_quality is not None):
+                plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
             else:
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
         else:
@@ -2048,12 +3808,12 @@ class Mosaic:
 
     def __repr__(self) -&gt; str:
         if isinstance(self.polygon_data, list):
-            polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+            polycollection_str = &#34;[PolyCollection(...), ...]&#34;  # pragma: nocover
         else:
             polycollection_str = &#34;PolyCollection(...)&#34;
 
         if self.contour_data is not None:
-            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)&#34; % (
+            return &#34;Mosaic(polygon_data=PolyCollection(...), cartopy_projection=Projection(%s), %d Contours)&#34; % (  # pragma: nocover
                 self.cartopy_projection.to_string(),
                 len(self.contour_data.get(&#34;x&#34;, [])),
             )
@@ -2066,12 +3826,12 @@ class Mosaic:
         &#34;&#34;&#34;
         # set special strings
         if isinstance(self.polygon_data, list):
-            polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+            polycollection_str = &#34;[PolyCollection(...), ...]&#34;  # pragma: nocover
         else:
             polycollection_str = &#34;PolyCollection(...)&#34;
         cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
         if self.contour_data is not None:
-            contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+            contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )  # pragma: nocover
         else:
             contour_data_str = &#34;None&#34;
 
@@ -2242,7 +4002,7 @@ class Mosaic:
         # NOTE: it seems that when running this function a second time, the polygon
         # data is not too happy. So to handle this, we plot a copy of the polygon data
         if isinstance(self.polygon_data, list):
-            for polygon_data in self.polygon_data:
+            for polygon_data in self.polygon_data:  # pragma: nocover
                 ax.add_collection(copy(polygon_data))
         else:
             ax.add_collection(copy(self.polygon_data))
@@ -2263,7 +4023,7 @@ class Mosaic:
 
         # add text
         if (rayleighs is True):
-            if isinstance(self.polygon_data, list):
+            if isinstance(self.polygon_data, list):  # pragma: nocover
                 raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
 
             # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
@@ -2287,7 +4047,7 @@ class Mosaic:
 
         if (self.spect_cmap) is not None:
 
-            if (self.spect_intensity_scale) is None:
+            if (self.spect_intensity_scale) is None:  # pragma: nocover
                 intensity_max = np.nan
                 intensity_min = np.nan
             else:
@@ -2300,11 +4060,11 @@ class Mosaic:
 
             # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
             cbar_ticknames[-1] += &#34;+&#34;
-            if isinstance(self.polygon_data, list):
+            if isinstance(self.polygon_data, list):  # pragma: nocover
                 self.polygon_data[0].set_cmap(cbar_colormap)
             else:
                 self.polygon_data.set_cmap(cbar_colormap)
-            if isinstance(self.polygon_data, list):
+            if isinstance(self.polygon_data, list):  # pragma: nocover
                 cbar = plt.colorbar(self.polygon_data[0], shrink=0.5, ticks=cbar_ticks, ax=ax)
             else:
                 cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
@@ -2341,7 +4101,7 @@ class Mosaic:
             if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
                 # check quality setting
                 if (savefig_quality is not None):
-                    plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+                    plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
                 else:
                     plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
             else:
@@ -2448,7 +4208,7 @@ class Mosaic:
 
         # Initialize contour data dict if it doesn&#39;t exist yet
         if self.contour_data is None:
-            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
+            self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}  # pragma: nocover
 
         # Obtain the mosaic&#39;s projection
         source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -2592,7 +4352,11 @@ class Mosaic:
 
         # Check that linewidth is valid
         if linewidth &lt;= 0:
-            raise ValueError(&#34;linewidth must be greater than zero.&#34;)
+            raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
+
+        # Check that marker is valid
+        if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+            raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
 
         # Convert numerics to lists if necessary
         if constant_lats is not None:
@@ -2698,7 +4462,7 @@ class Mosaic:
 <dd>The min and max values that spectrograph data
 is scaled to in the mosaic, if any is present.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.tools.Mosaic.cartopy_projection"><code class="name">var <span class="ident">cartopy_projection</span> : cartopy.crs.Projection</code></dt>
 <dd>
@@ -2812,7 +4576,7 @@ is scaled to in the mosaic, if any is present.</dd>
 
     # Initialize contour data dict if it doesn&#39;t exist yet
     if self.contour_data is None:
-        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}
+        self.contour_data = {&#34;x&#34;: [], &#34;y&#34;: [], &#34;color&#34;: [], &#34;linewidth&#34;: [], &#34;linestyle&#34;: [], &#34;marker&#34;: [], &#34;zorder&#34;: []}  # pragma: nocover
 
     # Obtain the mosaic&#39;s projection
     source_proj = pyproj.CRS.from_user_input(cartopy.crs.Geodetic())
@@ -2994,7 +4758,11 @@ is scaled to in the mosaic, if any is present.</dd>
 
     # Check that linewidth is valid
     if linewidth &lt;= 0:
-        raise ValueError(&#34;linewidth must be greater than zero.&#34;)
+        raise ValueError(&#34;Linewidth must be greater than zero.&#34;)
+
+    # Check that marker is valid
+    if marker not in [&#34;&#34;, &#34;o&#34;, &#34;.&#34;, &#34;p&#34;, &#34;*&#34;, &#34;x&#34;, &#34;+&#34;, &#34;X&#34;]:
+        raise ValueError(f&#34;Marker &#39;{marker}&#39; is not currently supported.&#34;)
 
     # Convert numerics to lists if necessary
     if constant_lats is not None:
@@ -3284,7 +5052,7 @@ is scaled to in the mosaic, if any is present.</dd>
     # NOTE: it seems that when running this function a second time, the polygon
     # data is not too happy. So to handle this, we plot a copy of the polygon data
     if isinstance(self.polygon_data, list):
-        for polygon_data in self.polygon_data:
+        for polygon_data in self.polygon_data:  # pragma: nocover
             ax.add_collection(copy(polygon_data))
     else:
         ax.add_collection(copy(self.polygon_data))
@@ -3305,7 +5073,7 @@ is scaled to in the mosaic, if any is present.</dd>
 
     # add text
     if (rayleighs is True):
-        if isinstance(self.polygon_data, list):
+        if isinstance(self.polygon_data, list):  # pragma: nocover
             raise ValueError(&#34;Rayleighs Keyword is currently not available for mosaics with multiple sets of data.&#34;)
 
         # Create a colorbar, in Rayleighs, that accounts for the scaling limit we applied
@@ -3329,7 +5097,7 @@ is scaled to in the mosaic, if any is present.</dd>
 
     if (self.spect_cmap) is not None:
 
-        if (self.spect_intensity_scale) is None:
+        if (self.spect_intensity_scale) is None:  # pragma: nocover
             intensity_max = np.nan
             intensity_min = np.nan
         else:
@@ -3342,11 +5110,11 @@ is scaled to in the mosaic, if any is present.</dd>
 
         # Any specrograph bins with the max intensity value could be greater than it, so we include the plus sign
         cbar_ticknames[-1] += &#34;+&#34;
-        if isinstance(self.polygon_data, list):
+        if isinstance(self.polygon_data, list):  # pragma: nocover
             self.polygon_data[0].set_cmap(cbar_colormap)
         else:
             self.polygon_data.set_cmap(cbar_colormap)
-        if isinstance(self.polygon_data, list):
+        if isinstance(self.polygon_data, list):  # pragma: nocover
             cbar = plt.colorbar(self.polygon_data[0], shrink=0.5, ticks=cbar_ticks, ax=ax)
         else:
             cbar = plt.colorbar(self.polygon_data, shrink=0.5, ticks=cbar_ticks, ax=ax)
@@ -3383,7 +5151,7 @@ is scaled to in the mosaic, if any is present.</dd>
         if (&#34;.jpg&#34; == f_extension or &#34;.jpeg&#34; == f_extension):
             # check quality setting
             if (savefig_quality is not None):
-                plt.savefig(savefig_filename, quality=savefig_quality, bbox_inches=&#34;tight&#34;)
+                plt.savefig(savefig_filename, pil_kwargs={&#34;quality&#34;: savefig_quality}, bbox_inches=&#34;tight&#34;)
             else:
                 plt.savefig(savefig_filename, bbox_inches=&#34;tight&#34;)
         else:
@@ -3495,12 +5263,12 @@ Raises:</p></div>
     &#34;&#34;&#34;
     # set special strings
     if isinstance(self.polygon_data, list):
-        polycollection_str = &#34;[PolyCollection(...), ...]&#34;
+        polycollection_str = &#34;[PolyCollection(...), ...]&#34;  # pragma: nocover
     else:
         polycollection_str = &#34;PolyCollection(...)&#34;
     cartopy_projection_str = &#34;Projection(%s)&#34; % (self.cartopy_projection.to_string())
     if self.contour_data is not None:
-        contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )
+        contour_data_str = &#34;%d Contours&#34; % (len(self.contour_data.get(&#34;x&#34;, [])), )  # pragma: nocover
     else:
         contour_data_str = &#34;None&#34;
 
@@ -3598,7 +5366,7 @@ ndarray is the prepared data.</dd>
 <dt><strong><code>data_types</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>The data types for each data object.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.tools.MosaicData.data_types"><code class="name">var <span class="ident">data_types</span> : List[str]</code></dt>
 <dd>
@@ -3752,7 +5520,7 @@ Order matches that of the <code>site_uid_list</code> attribute. </dd>
 <dd>List of longitude polygon data, with each element corresponding to each site.
 Order matches that of the <code>site_uid_list</code> attribute.</dd>
 </dl></div>
-<h3>Class variables</h3>
+<h3>Instance variables</h3>
 <dl>
 <dt id="pyaurorax.tools.MosaicSkymap.elevation"><code class="name">var <span class="ident">elevation</span> : List[numpy.ndarray]</code></dt>
 <dd>
@@ -3835,6 +5603,7 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
         self.__montage = MontageManager()
         self.__mosaic = MosaicManager(self.__aurorax_obj)
         self.__spectra = SpectraManager()
+        self.__fov = FOVManager(self.__aurorax_obj)
 
     # ------------------------------------------
     # properties for submodule managers
@@ -3894,6 +5663,13 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
         Access to the `spectra` submodule from within a PyAuroraX object.
         &#34;&#34;&#34;
         return self.__spectra
+
+    @property
+    def fov(self):
+        &#34;&#34;&#34;
+        Access to the `fov` submodule from within a PyAuroraX object.
+        &#34;&#34;&#34;
+        return self.__fov
 
     # ------------------------------------------
     # functions available at this manager level
@@ -4114,6 +5890,21 @@ def ccd_contour(self):
     return self.__ccd_contour</code></pre>
 </details>
 <div class="desc"><p>Access to the <code><a title="pyaurorax.tools.ccd_contour" href="ccd_contour/index.html">pyaurorax.tools.ccd_contour</a></code> submodule from within a PyAuroraX object.</p></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.fov"><code class="name">prop <span class="ident">fov</span></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def fov(self):
+    &#34;&#34;&#34;
+    Access to the `fov` submodule from within a PyAuroraX object.
+    &#34;&#34;&#34;
+    return self.__fov</code></pre>
+</details>
+<div class="desc"><p>Access to the <code><a title="pyaurorax.tools.fov" href="fov/index.html">pyaurorax.tools.fov</a></code> submodule from within a PyAuroraX object.</p></div>
 </dd>
 <dt id="pyaurorax.tools.ToolsManager.grid_files"><code class="name">prop <span class="ident">grid_files</span></code></dt>
 <dd>
@@ -4581,6 +6372,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.calibration" href="calibration/index.html">pyaurorax.tools.calibration</a></code></li>
 <li><code><a title="pyaurorax.tools.ccd_contour" href="ccd_contour/index.html">pyaurorax.tools.ccd_contour</a></code></li>
 <li><code><a title="pyaurorax.tools.classes" href="classes/index.html">pyaurorax.tools.classes</a></code></li>
+<li><code><a title="pyaurorax.tools.fov" href="fov/index.html">pyaurorax.tools.fov</a></code></li>
 <li><code><a title="pyaurorax.tools.grid_files" href="grid_files/index.html">pyaurorax.tools.grid_files</a></code></li>
 <li><code><a title="pyaurorax.tools.keogram" href="keogram/index.html">pyaurorax.tools.keogram</a></code></li>
 <li><code><a title="pyaurorax.tools.montage" href="montage/index.html">pyaurorax.tools.montage</a></code></li>
@@ -4590,6 +6382,26 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="pyaurorax.tools.FOV" href="#pyaurorax.tools.FOV">FOV</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pyaurorax.tools.FOV.add_fov" href="#pyaurorax.tools.FOV.add_fov">add_fov</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.add_geo_contours" href="#pyaurorax.tools.FOV.add_geo_contours">add_geo_contours</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.add_mag_contours" href="#pyaurorax.tools.FOV.add_mag_contours">add_mag_contours</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.cartopy_projection" href="#pyaurorax.tools.FOV.cartopy_projection">cartopy_projection</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.contour_data" href="#pyaurorax.tools.FOV.contour_data">contour_data</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.fov_data" href="#pyaurorax.tools.FOV.fov_data">fov_data</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.plot" href="#pyaurorax.tools.FOV.plot">plot</a></code></li>
+<li><code><a title="pyaurorax.tools.FOV.pretty_print" href="#pyaurorax.tools.FOV.pretty_print">pretty_print</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a></code></h4>
+<ul class="">
+<li><code><a title="pyaurorax.tools.FOVData.add_availability" href="#pyaurorax.tools.FOVData.add_availability">add_availability</a></code></li>
+<li><code><a title="pyaurorax.tools.FOVData.pretty_print" href="#pyaurorax.tools.FOVData.pretty_print">pretty_print</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="pyaurorax.tools.Keogram" href="#pyaurorax.tools.Keogram">Keogram</a></code></h4>
 <ul class="">
@@ -4649,6 +6461,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.tools.ToolsManager.calibration" href="#pyaurorax.tools.ToolsManager.calibration">calibration</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.ccd_contour" href="#pyaurorax.tools.ToolsManager.ccd_contour">ccd_contour</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.display" href="#pyaurorax.tools.ToolsManager.display">display</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.fov" href="#pyaurorax.tools.ToolsManager.fov">fov</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.grid_files" href="#pyaurorax.tools.ToolsManager.grid_files">grid_files</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.keogram" href="#pyaurorax.tools.ToolsManager.keogram">keogram</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.montage" href="#pyaurorax.tools.ToolsManager.montage">montage</a></code></li>
@@ -4665,7 +6478,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

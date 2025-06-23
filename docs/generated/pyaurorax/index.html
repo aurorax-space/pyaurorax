@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>pyaurorax API documentation</title>
 <meta name="description" content="The PyAuroraX package provides a way to interact with the [AuroraX Data Platform](https://aurorax.space),
 facilitating programmatic usage of …">
@@ -191,7 +191,11 @@ AuroraX platform …</p></div>
         &#34;&#34;&#34;
         # initialize path parameters
         self.__download_output_root_path = download_output_root_path
+        if (self.__download_output_root_path is None):
+            self.__download_output_root_path = Path(&#34;%s/pyaurorax_data&#34; % (str(Path.home())))
         self.__read_tar_temp_path = read_tar_temp_path
+        if (self.__read_tar_temp_path is None):
+            self.__read_tar_temp_path = Path(&#34;%s/tar_temp_working&#34; % (self.__download_output_root_path))
 
         # initialize api parameters
         self.__api_base_url = api_base_url
@@ -206,9 +210,6 @@ AuroraX platform …</p></div>
         # initialize progress bar parameters
         self.__progress_bar_backend = progress_bar_backend
         self._tqdm = None
-
-        # initialize paths
-        self.__initialize_paths()
 
         # initialize PyUCalgarySRS object
         self.__srs_obj = pyucalgarysrs.PyUCalgarySRS(
@@ -336,7 +337,7 @@ AuroraX platform …</p></div>
     @download_output_root_path.setter
     def download_output_root_path(self, value: str):
         self.__download_output_root_path = value
-        self.__initialize_paths()
+        self.initialize_paths()
         self.__srs_obj.download_output_root_path = self.__download_output_root_path
 
     @property
@@ -349,7 +350,7 @@ AuroraX platform …</p></div>
     @read_tar_temp_path.setter
     def read_tar_temp_path(self, value: str):
         self.__read_tar_temp_path = value
-        self.__initialize_paths()
+        self.initialize_paths()
         self.__srs_obj.read_tar_temp_path = self.__read_tar_temp_path
 
     @property
@@ -414,9 +415,9 @@ AuroraX platform …</p></div>
         print(&#34;  %-27s: %s&#34; % (&#34;srs_obj&#34;, &#34;PyUCalgarySRS(...)&#34;))
 
     # -----------------------------
-    # private methods
+    # public methods
     # -----------------------------
-    def __initialize_paths(self):
+    def initialize_paths(self):
         &#34;&#34;&#34;
         Initialize the `download_output_root_path` and `read_tar_temp_path` directories.
 
@@ -424,9 +425,9 @@ AuroraX platform …</p></div>
             pyaurorax.exceptions.AuroraXInitializationError: an error was encountered during
                 initialization of the paths
         &#34;&#34;&#34;
-        if (self.__download_output_root_path is None):
+        if (self.__download_output_root_path is None):  # pragma: nocover-ok
             self.__download_output_root_path = Path(&#34;%s/pyaurorax_data&#34; % (str(Path.home())))
-        if (self.__read_tar_temp_path is None):
+        if (self.__read_tar_temp_path is None):  # pragma: nocover-ok
             self.__read_tar_temp_path = Path(&#34;%s/tar_temp_working&#34; % (self.__download_output_root_path))
         try:
             os.makedirs(self.download_output_root_path, exist_ok=True)
@@ -434,9 +435,6 @@ AuroraX platform …</p></div>
         except IOError as e:  # pragma: nocover-ok
             raise AuroraXInitializationError(&#34;Error during output path creation: %s&#34; % str(e)) from e
 
-    # -----------------------------
-    # public methods
-    # -----------------------------
     def purge_download_output_root_path(self, dataset_name: Optional[str] = None):
         &#34;&#34;&#34;
         Delete all files in the `download_output_root_path` directory. Since the
@@ -528,10 +526,11 @@ AuroraX platform …</p></div>
 
         # get list of dataset paths
         dataset_paths = []
-        for f in os.listdir(download_pathlib_path):
-            path_f = download_pathlib_path / f
-            if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
-                dataset_paths.append(path_f)
+        if (download_pathlib_path.exists() is True):
+            for f in os.listdir(download_pathlib_path):
+                path_f = download_pathlib_path / f
+                if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
+                    dataset_paths.append(path_f)
 
         # get size of each dataset path
         dataset_dict = {}
@@ -838,6 +837,40 @@ def tools(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="pyaurorax.PyAuroraX.initialize_paths"><code class="name flex">
+<span>def <span class="ident">initialize_paths</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def initialize_paths(self):
+    &#34;&#34;&#34;
+    Initialize the `download_output_root_path` and `read_tar_temp_path` directories.
+
+    Raises:
+        pyaurorax.exceptions.AuroraXInitializationError: an error was encountered during
+            initialization of the paths
+    &#34;&#34;&#34;
+    if (self.__download_output_root_path is None):  # pragma: nocover-ok
+        self.__download_output_root_path = Path(&#34;%s/pyaurorax_data&#34; % (str(Path.home())))
+    if (self.__read_tar_temp_path is None):  # pragma: nocover-ok
+        self.__read_tar_temp_path = Path(&#34;%s/tar_temp_working&#34; % (self.__download_output_root_path))
+    try:
+        os.makedirs(self.download_output_root_path, exist_ok=True)
+        os.makedirs(self.read_tar_temp_path, exist_ok=True)
+    except IOError as e:  # pragma: nocover-ok
+        raise AuroraXInitializationError(&#34;Error during output path creation: %s&#34; % str(e)) from e</code></pre>
+</details>
+<div class="desc"><p>Initialize the <code>download_output_root_path</code> and <code>read_tar_temp_path</code> directories.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="pyaurorax.exceptions.AuroraXInitializationError" href="exceptions.html#pyaurorax.exceptions.AuroraXInitializationError">AuroraXInitializationError</a></code></dt>
+<dd>an error was encountered during
+initialization of the paths</dd>
+</dl></div>
+</dd>
 <dt id="pyaurorax.PyAuroraX.pretty_print"><code class="name flex">
 <span>def <span class="ident">pretty_print</span></span>(<span>self)</span>
 </code></dt>
@@ -1013,10 +1046,11 @@ same, but it can be different if the user specifically changes it. </p>
 
     # get list of dataset paths
     dataset_paths = []
-    for f in os.listdir(download_pathlib_path):
-        path_f = download_pathlib_path / f
-        if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
-            dataset_paths.append(path_f)
+    if (download_pathlib_path.exists() is True):
+        for f in os.listdir(download_pathlib_path):
+            path_f = download_pathlib_path / f
+            if (os.path.isdir(path_f) is True and str(path_f) != self.read_tar_temp_path):
+                dataset_paths.append(path_f)
 
     # get size of each dataset path
     dataset_dict = {}
@@ -1182,6 +1216,7 @@ setTimeout(() => input.focus(), 100);
 <li><code><a title="pyaurorax.PyAuroraX.api_timeout" href="#pyaurorax.PyAuroraX.api_timeout">api_timeout</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.data" href="#pyaurorax.PyAuroraX.data">data</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.download_output_root_path" href="#pyaurorax.PyAuroraX.download_output_root_path">download_output_root_path</a></code></li>
+<li><code><a title="pyaurorax.PyAuroraX.initialize_paths" href="#pyaurorax.PyAuroraX.initialize_paths">initialize_paths</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.models" href="#pyaurorax.PyAuroraX.models">models</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.pretty_print" href="#pyaurorax.PyAuroraX.pretty_print">pretty_print</a></code></li>
 <li><code><a title="pyaurorax.PyAuroraX.progress_bar_backend" href="#pyaurorax.PyAuroraX.progress_bar_backend">progress_bar_backend</a></code></li>
@@ -1200,7 +1235,7 @@ setTimeout(() => input.focus(), 100);
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>
