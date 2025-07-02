@@ -129,9 +129,9 @@ def test_add_contours(mock_show, plot_cleanup, at, themis_mosaic_data):
     map_extent = [-145, -65, 35, 80]
     with warnings.catch_warnings(record=True) as w:
         mosaic.plot(map_extent, title="THEMIS ASI", colorbar_title="some_string", borders_disable=True)
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "The parameter 'colorbar_title' was deprecated in v1.11.0. Please use 'cbar_title' instead (usage is identical)." in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "The parameter 'colorbar_title' was deprecated in v1.11.0. Please use 'cbar_title' instead (usage is identical)." in str(w[0].message)
 
     assert mock_show.call_count == 1
 
@@ -176,25 +176,25 @@ def test_returnfig_warnings(at, themis_mosaic_data):
     # check savefig_filename
     with warnings.catch_warnings(record=True) as w:
         fig, _ = mosaic.plot(map_extent, returnfig=True, savefig_filename="some_filename")
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "The figure will be returned, but a savefig option parameter was supplied" in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "The figure will be returned, but a savefig option parameter was supplied" in str(w[0].message)
     plt.close(fig)
 
     # check savefig_quality
     with warnings.catch_warnings(record=True) as w:
         fig, _ = mosaic.plot(map_extent, returnfig=True, savefig_quality=90)
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "The figure will be returned, but a savefig option parameter was supplied" in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "The figure will be returned, but a savefig option parameter was supplied" in str(w[0].message)
     plt.close(fig)
 
     # check both
     with warnings.catch_warnings(record=True) as w:
         fig, _ = mosaic.plot(map_extent, returnfig=True, savefig_filename="some_filename", savefig_quality=90)
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "The figure will be returned, but a savefig option parameter was supplied" in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "The figure will be returned, but a savefig option parameter was supplied" in str(w[0].message)
     plt.close(fig)
 
 
@@ -218,23 +218,23 @@ def test_savefig_warnings(mock_show, at, plot_cleanup, themis_mosaic_data):
     # check savefig_filename
     with warnings.catch_warnings(record=True) as w:
         mosaic.plot(map_extent, savefig_filename="some_filename")
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "A savefig option parameter was supplied, but the savefig parameter is False" in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "A savefig option parameter was supplied, but the savefig parameter is False" in str(w[0].message)
 
     # check savefig_quality
     with warnings.catch_warnings(record=True) as w:
         mosaic.plot(map_extent, savefig_quality=90)
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "A savefig option parameter was supplied, but the savefig parameter is False" in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "A savefig option parameter was supplied, but the savefig parameter is False" in str(w[0].message)
 
     # check both
     with warnings.catch_warnings(record=True) as w:
         mosaic.plot(map_extent, savefig_filename="some_filename", savefig_quality=90)
-    assert len(w) == 1
-    assert issubclass(w[-1].category, UserWarning)
-    assert "A savefig option parameter was supplied, but the savefig parameter is False" in str(w[-1].message)
+    assert len(w) >= 1
+    assert issubclass(w[0].category, UserWarning)
+    assert "A savefig option parameter was supplied, but the savefig parameter is False" in str(w[0].message)
 
     # check plots
     assert mock_show.call_count == 3

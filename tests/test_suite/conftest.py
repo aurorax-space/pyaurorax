@@ -21,6 +21,7 @@ import glob
 import shutil
 import pytest
 import datetime
+import warnings
 import pyaurorax
 from click.testing import CliRunner
 from pathlib import Path

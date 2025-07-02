@@ -19,6 +19,7 @@ import pyucalgarysrs
 from texttable import Texttable
 from pathlib import Path
 from typing import Optional, Any, Literal
+import warnings
 from . import __version__
 from .exceptions import AuroraXInitializationError, AuroraXPurgeError
 from .search import SearchManager
@@ -142,6 +143,11 @@ class PyAuroraX:
         self.__data = DataManager(self)
         self.__models = ModelsManager(self)
         self.__tools = ToolsManager(self)
+
+        # disable certain dependencies warnings
+        #
+        # pillow has deprecated a parameter that matplotlib uses, so matplotlib will eventually fix it
+        warnings.filterwarnings("ignore", message="'mode' parameter is deprecated and will be removed in Pillow 13")
 
     # ------------------------------------------
     # properties for submodule managers

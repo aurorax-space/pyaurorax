@@ -1,3 +1,10 @@
+Version 1.19.0 (2025-07-02)
+-------------------
+- enabled TREx ATM model version 2.0 by default for inversion calculation
+- updated crib sheets for ATM
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.18.0 (2025-06-23)
 -------------------
 - added support for SMILE ASI data

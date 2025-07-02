@@ -223,10 +223,11 @@ class ATMManager:
                 speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0".
+                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is
+                optional.
                 
                 **IMPORTANT**: Please note that certain inputs and outputs are only available in version "2.0". See above for 
-                more details. This parameter is optional.
+                more details.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -292,7 +293,7 @@ class ATMManager:
                 precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 atmospheric_attenuation_correction: bool = False,
-                atm_model_version: Literal["1.0"] = "1.0",
+                atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -> ATMInverseResult:
         """
@@ -311,12 +312,12 @@ class ATMManager:
 
             geodetic_latitude (float): 
                 Latitude in geodetic coordinates. Currently limited to the Transition Region Explorer (TREx)
-                region of >=50.0 and <61.5 degrees. An error will be raised if outside of this range. This 
+                region of >=50.0 and <71.5 degrees. An error will be raised if outside of this range. This 
                 parameter is required.
 
             geodetic_longitude (float): 
                 Longitude in geodetic coordinates. Currently limited to the Transition Region Explorer (TREx)
-                region of >=-110 and <-70 degrees. An error will be raised if outside of this range. This 
+                region of >=-160 and <-75 degrees. An error will be raised if outside of this range. This 
                 parameter is required.
 
             intensity_4278 (float): 
@@ -355,8 +356,11 @@ class ATMManager:
                 This parameter has been deprecated and will be removed in a future release.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are currently only '1.0' at this time. Version '2.0' will be available 
-                in a future release, anticipated to be published in late June 2025. This parameter is optional.
+                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is 
+                optional.
+                
+                **IMPORTANT**: Please note that certain inputs and outputs are only available in version "2.0". See above for 
+                more details.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM

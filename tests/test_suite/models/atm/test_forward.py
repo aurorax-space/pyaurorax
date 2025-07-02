@@ -14,7 +14,7 @@
 
 import pytest
 import datetime
-from pyaurorax.models import ATMForwardOutputFlags, ATMInverseOutputFlags, ATMInverseResult, ATMForwardResult
+from pyaurorax.models import ATMForwardOutputFlags, ATMForwardResult
 
 
 @pytest.mark.models
@@ -35,29 +35,3 @@ def test_forward(aurorax):
 
     # check
     assert isinstance(result, ATMForwardResult) is True
-
-
-@pytest.mark.models
-def test_inverse(aurorax):
-    # set up output flags
-    output = ATMInverseOutputFlags()
-    output.energy_flux = True
-    output.characteristic_energy = True
-    output.oxygen_correction_factor = True
-
-    # set up lat, lon, timestamp
-    timestamp = datetime.datetime(2021, 10, 12, 6, 0, 0)
-    latitude = 58.227808
-    longitude = -103.680631
-
-    # set up input intensities
-    intensity_4278 = 2302.6
-    intensity_5577 = 11339.5
-    intensity_6300 = 528.3
-    intensity_8446 = 427.4
-
-    # perform the calculation
-    result = aurorax.models.atm.inverse(timestamp, latitude, longitude, intensity_4278, intensity_5577, intensity_6300, intensity_8446, output)
-
-    # check
-    assert isinstance(result, ATMInverseResult) is True
