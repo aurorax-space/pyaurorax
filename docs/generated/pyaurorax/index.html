@@ -229,6 +229,11 @@ AuroraX platform …</p></div>
         self.__models = ModelsManager(self)
         self.__tools = ToolsManager(self)
 
+        # disable certain dependencies warnings
+        #
+        # pillow has deprecated a parameter that matplotlib uses, so matplotlib will eventually fix it
+        warnings.filterwarnings(&#34;ignore&#34;, message=&#34;&#39;mode&#39; parameter is deprecated and will be removed in Pillow 13&#34;)
+
     # ------------------------------------------
     # properties for submodule managers
     # ------------------------------------------
