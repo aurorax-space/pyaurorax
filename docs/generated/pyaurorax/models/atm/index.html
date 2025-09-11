@@ -315,6 +315,7 @@ border-left: 1px solid #ddd;
                 precipitation_flux_spectral_type: Literal[&#34;gaussian&#34;, &#34;maxwellian&#34;] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal[&#34;00&#34;, &#34;2.0&#34;] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 atmospheric_attenuation_correction: bool = False,
+                special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
                 atm_model_version: Literal[&#34;1.0&#34;, &#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -&gt; ATMInverseResult:
@@ -323,8 +324,11 @@ border-left: 1px solid #ddd;
         parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
         the calculation.
 
-        **NOTE**: The &#39;atmospheric_attenuation_correction&#39; parameter has been deprecated. Please ensure you perform 
-        this conversion yourself on the results, if desired.
+        **NOTE**: The &#39;atmospheric_attenuation_correction&#39; parameter was deprecated in v1.18.0. Please ensure 
+        you perform this conversion yourself on the results, if desired.
+
+        **NOTE**: As of PyAuroraX version 1.20.0, the `characteristic_energy` output flag was deprecated. Please use 
+        `mean_energy` instead.
 
         Args:
             timestamp (datetime.datetime): 
@@ -375,7 +379,11 @@ border-left: 1px solid #ddd;
             atmospheric_attenuation_correction (bool): 
                 Apply an atmospheric attenuation correction factor. Default is `False`.
 
-                This parameter has been deprecated and will be removed in a future release.
+                This parameter was deprecated in v1.23.0, and will be removed in a future release.
+
+            special_logic_keyword (str): 
+                Use a special keyword provided by UCalgary staff to apply alternative logic during an ATM inversion
+                request. This parameter is optional.
 
             atm_model_version (str): 
                 ATM model version number. Possible values are presently &#34;1.0&#34; or &#34;2.0&#34;. The default is &#34;2.0&#34;. This parameter is 
@@ -417,6 +425,7 @@ border-left: 1px solid #ddd;
                 nrlmsis_model_version=nrlmsis_model_version,
                 atm_model_version=atm_model_version,
                 atmospheric_attenuation_correction=atmospheric_attenuation_correction,
+                special_logic_keyword=special_logic_keyword,
                 no_cache=no_cache,
                 timeout=timeout,
             )
@@ -788,7 +797,7 @@ object containing the requested output data, among other values.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.models.atm.ATMManager.inverse"><code class="name flex">
-<span>def <span class="ident">inverse</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>geodetic_latitude: float,<br>geodetic_longitude: float,<br>intensity_4278: float,<br>intensity_5577: float,<br>intensity_6300: float,<br>intensity_8446: float,<br>output: pyucalgarysrs.models.atm.classes_inverse.ATMInverseOutputFlags,<br>precipitation_flux_spectral_type: Literal['gaussian', 'maxwellian'] = 'gaussian',<br>nrlmsis_model_version: Literal['00', '2.0'] = '2.0',<br>atmospheric_attenuation_correction: bool = False,<br>atm_model_version: Literal['1.0', '2.0'] = '2.0',<br>no_cache: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult</span>
+<span>def <span class="ident">inverse</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>geodetic_latitude: float,<br>geodetic_longitude: float,<br>intensity_4278: float,<br>intensity_5577: float,<br>intensity_6300: float,<br>intensity_8446: float,<br>output: pyucalgarysrs.models.atm.classes_inverse.ATMInverseOutputFlags,<br>precipitation_flux_spectral_type: Literal['gaussian', 'maxwellian'] = 'gaussian',<br>nrlmsis_model_version: Literal['00', '2.0'] = '2.0',<br>atmospheric_attenuation_correction: bool = False,<br>special_logic_keyword: str = 'not_applicable',<br>atm_model_version: Literal['1.0', '2.0'] = '2.0',<br>no_cache: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -807,6 +816,7 @@ object containing the requested output data, among other values.</p>
             precipitation_flux_spectral_type: Literal[&#34;gaussian&#34;, &#34;maxwellian&#34;] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
             nrlmsis_model_version: Literal[&#34;00&#34;, &#34;2.0&#34;] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
             atmospheric_attenuation_correction: bool = False,
+            special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
             atm_model_version: Literal[&#34;1.0&#34;, &#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
             no_cache: bool = False,
             timeout: Optional[int] = None) -&gt; ATMInverseResult:
@@ -815,8 +825,11 @@ object containing the requested output data, among other values.</p>
     parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
     the calculation.
 
-    **NOTE**: The &#39;atmospheric_attenuation_correction&#39; parameter has been deprecated. Please ensure you perform 
-    this conversion yourself on the results, if desired.
+    **NOTE**: The &#39;atmospheric_attenuation_correction&#39; parameter was deprecated in v1.18.0. Please ensure 
+    you perform this conversion yourself on the results, if desired.
+
+    **NOTE**: As of PyAuroraX version 1.20.0, the `characteristic_energy` output flag was deprecated. Please use 
+    `mean_energy` instead.
 
     Args:
         timestamp (datetime.datetime): 
@@ -867,7 +880,11 @@ object containing the requested output data, among other values.</p>
         atmospheric_attenuation_correction (bool): 
             Apply an atmospheric attenuation correction factor. Default is `False`.
 
-            This parameter has been deprecated and will be removed in a future release.
+            This parameter was deprecated in v1.23.0, and will be removed in a future release.
+
+        special_logic_keyword (str): 
+            Use a special keyword provided by UCalgary staff to apply alternative logic during an ATM inversion
+            request. This parameter is optional.
 
         atm_model_version (str): 
             ATM model version number. Possible values are presently &#34;1.0&#34; or &#34;2.0&#34;. The default is &#34;2.0&#34;. This parameter is 
@@ -909,6 +926,7 @@ object containing the requested output data, among other values.</p>
             nrlmsis_model_version=nrlmsis_model_version,
             atm_model_version=atm_model_version,
             atmospheric_attenuation_correction=atmospheric_attenuation_correction,
+            special_logic_keyword=special_logic_keyword,
             no_cache=no_cache,
             timeout=timeout,
         )
@@ -918,8 +936,10 @@ object containing the requested output data, among other values.</p>
 <div class="desc"><p>Perform an inverse calculation using the TREx Auroral Transport Model and the supplied input
 parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform
 the calculation.</p>
-<p><strong>NOTE</strong>: The 'atmospheric_attenuation_correction' parameter has been deprecated. Please ensure you perform
-this conversion yourself on the results, if desired.</p>
+<p><strong>NOTE</strong>: The 'atmospheric_attenuation_correction' parameter was deprecated in v1.18.0. Please ensure
+you perform this conversion yourself on the results, if desired.</p>
+<p><strong>NOTE</strong>: As of PyAuroraX version 1.20.0, the <code>characteristic_energy</code> output flag was deprecated. Please use
+<code>mean_energy</code> instead.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -960,8 +980,11 @@ and <a href="https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/">here</a>.</dd>
 <dt><strong><code>atmospheric_attenuation_correction</code></strong> :&ensp;<code>bool</code></dt>
 <dd>
 <p>Apply an atmospheric attenuation correction factor. Default is <code>False</code>.</p>
-<p>This parameter has been deprecated and will be removed in a future release.</p>
+<p>This parameter was deprecated in v1.23.0, and will be removed in a future release.</p>
 </dd>
+<dt><strong><code>special_logic_keyword</code></strong> :&ensp;<code>str</code></dt>
+<dd>Use a special keyword provided by UCalgary staff to apply alternative logic during an ATM inversion
+request. This parameter is optional.</dd>
 <dt><strong><code>atm_model_version</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is
