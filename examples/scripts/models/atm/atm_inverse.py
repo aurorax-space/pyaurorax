@@ -6,7 +6,7 @@ aurorax = pyaurorax.PyAuroraX()
 output = pyaurorax.models.ATMInverseOutputFlags()
 output.set_all_true()
 # output.energy_flux = True
-# output.characteristic_energy = True
+# output.mean_energy = True
 # output.oxygen_correction_factor = True
 # output.altitudes = True
 # output.emission_5577 = True

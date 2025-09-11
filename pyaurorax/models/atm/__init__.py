@@ -41,6 +41,7 @@ from pyucalgarysrs.models.atm import (
     ATM_DEFAULT_TIMESCALE_TRANSPORT,
     ATM_DEFAULT_MODEL_VERSION,
     ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
+    ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
 )
 from ...exceptions import AuroraXAPIError
 if TYPE_CHECKING:
@@ -293,6 +294,7 @@ class ATMManager:
                 precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 atmospheric_attenuation_correction: bool = False,
+                special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
                 atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -> ATMInverseResult:
@@ -301,8 +303,11 @@ class ATMManager:
         parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
         the calculation.
 
-        **NOTE**: The 'atmospheric_attenuation_correction' parameter has been deprecated. Please ensure you perform 
-        this conversion yourself on the results, if desired.
+        **NOTE**: The 'atmospheric_attenuation_correction' parameter was deprecated in v1.18.0. Please ensure 
+        you perform this conversion yourself on the results, if desired.
+
+        **NOTE**: As of PyAuroraX version 1.20.0, the `characteristic_energy` output flag was deprecated. Please use 
+        `mean_energy` instead.
 
         Args:
             timestamp (datetime.datetime): 
@@ -353,7 +358,11 @@ class ATMManager:
             atmospheric_attenuation_correction (bool): 
                 Apply an atmospheric attenuation correction factor. Default is `False`.
 
-                This parameter has been deprecated and will be removed in a future release.
+                This parameter was deprecated in v1.23.0, and will be removed in a future release.
+
+            special_logic_keyword (str): 
+                Use a special keyword provided by UCalgary staff to apply alternative logic during an ATM inversion
+                request. This parameter is optional.
 
             atm_model_version (str): 
                 ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is 
@@ -395,6 +404,7 @@ class ATMManager:
                 nrlmsis_model_version=nrlmsis_model_version,
                 atm_model_version=atm_model_version,
                 atmospheric_attenuation_correction=atmospheric_attenuation_correction,
+                special_logic_keyword=special_logic_keyword,
                 no_cache=no_cache,
                 timeout=timeout,
             )

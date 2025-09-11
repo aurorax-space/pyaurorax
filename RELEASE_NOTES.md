@@ -1,3 +1,11 @@
+Version 1.20.0 (2025-09-11)
+-------------------
+- updates for ATM inversion routine
+  - changed `characteristic_energy` output flag and data to `mean_energy`.
+  - added `special_logic_keyword` parameter to help handle specific non-standard use cases on the backend ATM API.
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.19.0 (2025-07-02)
 -------------------
 - enabled TREx ATM model version 2.0 by default for inversion calculation

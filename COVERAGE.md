@@ -12,16 +12,16 @@ pyaurorax/cli/search/conjunctions/commands.py                    166      0   10
 pyaurorax/cli/search/data_products/commands.py                   162      0   100%
 pyaurorax/cli/search/ephemeris/commands.py                       160      0   100%
 pyaurorax/cli/search/helpers.py                                  120      0   100%
-pyaurorax/cli/search/sources/commands.py                         242      0   100%
+pyaurorax/cli/search/sources/commands.py                         242      1    99%   95
 pyaurorax/cli/search/util/commands.py                             92      0   100%
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81      0   100%
-pyaurorax/data/ucalgary/__init__.py                               97      0   100%
-pyaurorax/data/ucalgary/read/__init__.py                          38      0   100%
+pyaurorax/data/ucalgary/__init__.py                               96      0   100%
+pyaurorax/data/ucalgary/read/__init__.py                          37      0   100%
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
-pyaurorax/models/atm/__init__.py                                  17      0   100%
-pyaurorax/pyaurorax.py                                           206      0   100%
+pyaurorax/models/atm/__init__.py                                  16      0   100%
+pyaurorax/pyaurorax.py                                           208      0   100%
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
 pyaurorax/search/api/classes/request.py                           33      0   100%
@@ -33,17 +33,17 @@ pyaurorax/search/conjunctions/__init__.py                         31      0   10
 pyaurorax/search/conjunctions/_conjunctions.py                    91      0   100%
 pyaurorax/search/conjunctions/classes/conjunction.py              39      0   100%
 pyaurorax/search/conjunctions/classes/criteria_block.py           67      0   100%
-pyaurorax/search/conjunctions/classes/search.py                  214      0   100%
+pyaurorax/search/conjunctions/classes/search.py                  213      0   100%
 pyaurorax/search/conjunctions/swarmaurora/__init__.py             15      0   100%
 pyaurorax/search/conjunctions/swarmaurora/_swarmaurora.py         24      0   100%
 pyaurorax/search/data_products/__init__.py                        32      0   100%
 pyaurorax/search/data_products/_data_products.py                  81      0   100%
 pyaurorax/search/data_products/classes/data_product.py            46      0   100%
-pyaurorax/search/data_products/classes/search.py                 119      0   100%
+pyaurorax/search/data_products/classes/search.py                 118      0   100%
 pyaurorax/search/ephemeris/__init__.py                            29      0   100%
 pyaurorax/search/ephemeris/_ephemeris.py                          75      0   100%
 pyaurorax/search/ephemeris/classes/ephemeris.py                   41      0   100%
-pyaurorax/search/ephemeris/classes/search.py                     118      0   100%
+pyaurorax/search/ephemeris/classes/search.py                     117      0   100%
 pyaurorax/search/location.py                                      29      0   100%
 pyaurorax/search/metadata/__init__.py                             14      0   100%
 pyaurorax/search/metadata/_metadata.py                            16      0   100%
@@ -77,7 +77,7 @@ pyaurorax/tools/ccd_contour/_azimuth.py                           47      0   10
 pyaurorax/tools/ccd_contour/_elevation.py                         39      0   100%
 pyaurorax/tools/ccd_contour/_geo.py                              108      1    99%   75
 pyaurorax/tools/ccd_contour/_mag.py                              114      1    99%   88
-pyaurorax/tools/classes/fov.py                                   293      8    97%   144, 224, 384-385, 403-404, 569, 572
+pyaurorax/tools/classes/fov.py                                   293     10    97%   144, 158, 209, 224, 384-385, 403-404, 569, 572
 pyaurorax/tools/classes/keogram.py                               232      1    99%   490
 pyaurorax/tools/classes/montage.py                                63      0   100%
 pyaurorax/tools/classes/mosaic.py                                299      2    99%   467, 781
@@ -99,7 +99,7 @@ pyaurorax/tools/spectra/__init__.py                               13      0   10
 pyaurorax/tools/spectra/_get_intensity.py                         46      1    98%   82
 pyaurorax/tools/spectra/_plot.py                                 116      4    97%   148, 150, 174, 195
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6386     67    99%
+TOTAL                                                           6382     70    99%
 
 13 empty files skipped.
 ```

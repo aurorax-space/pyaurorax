@@ -22,7 +22,7 @@ def test_inverse(aurorax):
     # set up output flags
     output = ATMInverseOutputFlags()
     output.energy_flux = True
-    output.characteristic_energy = True
+    output.mean_energy = True
     output.oxygen_correction_factor = True
 
     # set up lat, lon, timestamp
