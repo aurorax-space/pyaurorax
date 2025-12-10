@@ -191,7 +191,7 @@ class Montage:
             fig.suptitle(title)
 
         # for each image
-        for ax, i in zip(axs.flat, range(0, len(self.timestamp))):  # type: ignore
+        for ax, i in zip(axs.flat, range(0, len(self.timestamp)), strict=False):  # type: ignore
             if (self.__n_channels == 1):
                 # single channel
                 ax.imshow(self.data[:, :, i], cmap=cmap, origin="lower", interpolation="nearest")

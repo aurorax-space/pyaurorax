@@ -95,3 +95,11 @@ Some quick commands for when working on certain test markers:
 
 - `pytest -n 4 --cov=pyaurorax --cov-report= --cov-append --do-tools-tasks -m tools && make coverage | grep "pyaurorax/tools"`
 - `pytest -n auto --cov=pyaurorax --cov-report= --cov-append --do-search-tasks -m search_ro && make coverage | grep "pyaurorax/search"`
+
+### Getting to the bottom of dependencies not updating
+
+Sometimes, poetry will show that updates to dependencies are available but not happening when a `poetry show --outdated` and `poetry update` are done. Figuring out why can be tricky. A few commands below can be used to track them down.
+
+`poetry show --outdated`
+`poetry show --why --tree numpy`
+`poetry lock -vvv`

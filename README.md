@@ -7,7 +7,7 @@
 
 PyAuroraX is a Python library providing data access and analysis support for All-Sky Imager data (THEMIS, TREx, REGO, etc.), the ability to utilize the TREx Auroral Transport Model, and interact with the AuroraX Search Engine. [AuroraX](https://aurorax.space) is a project working to be the world's first and foremost data platform for auroral science. The primary objective is to enable mining and exploration of existing and future auroral data, enabling key science and enhancing the benefits of the world's investment in auroral instrumentation. We have developed key systems/standards for uniform metadata generation and search, image content analysis, interfaces to leading international tools, and a community involvement that includes more than 80% of the world's data providers.
 
-PyAuroraX officially supports Python 3.9+.
+PyAuroraX officially supports Python 3.10+.
 
 Some links to help:
 - [Example Gallery](https://data.phys.ucalgary.ca/working_with_data/index.html#python)

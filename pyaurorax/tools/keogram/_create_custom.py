@@ -112,7 +112,7 @@ def __convert_latlon_to_ccd(lon_locs, lat_locs, timestamp, skymap: Skymap, altit
     # Iterate through each target point
     x_locs = []
     y_locs = []
-    for target_lat, target_lon in zip(lat_locs, lon_locs):
+    for target_lat, target_lon in zip(lat_locs, lon_locs, strict=False):
 
         # Make sure lat/lon falls within skymap
         if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):
@@ -283,7 +283,7 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
         if np.any(np.array(indices_inside.shape) == 0):
             continue
 
-        row_idx, col_idx = zip(*indices_inside)
+        row_idx, col_idx = zip(*indices_inside, strict=False)
 
         if n_channels == 1:
             # Update the preview image

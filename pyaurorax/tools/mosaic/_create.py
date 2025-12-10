@@ -224,7 +224,7 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
         while el < 90:
 
             # Only iterate through the sites that actually have data
-            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
+            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx, strict=False):
 
                 # Skip spectrograph data for now as that should always be plotted last
                 if datatypes_with_data[site_idx] == "spect":
@@ -284,7 +284,7 @@ def create(prepped_data, prepped_skymap, timestamp, cartopy_projection, min_elev
         while el < 90:
 
             # Only iterate through the sites that actually have data
-            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx):
+            for site_id, site_idx in zip(sites_with_data, sites_with_data_idx, strict=False):
 
                 # Now doing spect data
                 if datatypes_with_data[site_idx] != "spect":

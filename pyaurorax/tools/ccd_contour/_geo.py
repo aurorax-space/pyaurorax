@@ -73,7 +73,7 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
 
     if (len(lats.shape) < 2) or (len(lons.shape) < 2):
         raise ValueError("Latitude/Longitude arrays within skymap must be multi-dimensional for ASI data.")
-    
+
     # First handle case of a contour of constant latitude:
     if (constant_lat is not None):
         # First check that the supplied latitude is valid for this skymap
@@ -195,7 +195,7 @@ def geo(skymap, altitude_km, contour_lats, contour_lons, constant_lat, constant_
         # Iterate through each target point
         x_list = []
         y_list = []
-        for target_lat, target_lon in zip(valid_contour_lats, valid_contour_lons):
+        for target_lat, target_lon in zip(valid_contour_lats, valid_contour_lons, strict=False):
             # Make sure lat/lon falls within skymap
             if target_lat < np.nanmin(lats) or target_lat > np.nanmax(lats):  # pragma: nocover
                 raise ValueError(f"Latitude {target_lat} is outside this skymap's valid range of {(np.nanmin(lats),np.nanmax(lats))}.")
