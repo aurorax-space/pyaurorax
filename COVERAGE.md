@@ -12,7 +12,7 @@ pyaurorax/cli/search/conjunctions/commands.py                    166      0   10
 pyaurorax/cli/search/data_products/commands.py                   162      0   100%
 pyaurorax/cli/search/ephemeris/commands.py                       160      0   100%
 pyaurorax/cli/search/helpers.py                                  120      0   100%
-pyaurorax/cli/search/sources/commands.py                         242      1    99%   95
+pyaurorax/cli/search/sources/commands.py                         242      0   100%
 pyaurorax/cli/search/util/commands.py                             92      0   100%
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81      0   100%
@@ -99,7 +99,7 @@ pyaurorax/tools/spectra/__init__.py                               13      0   10
 pyaurorax/tools/spectra/_get_intensity.py                         46      1    98%   82
 pyaurorax/tools/spectra/_plot.py                                 116      4    97%   148, 150, 174, 195
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6382     70    99%
+TOTAL                                                           6382     69    99%
 
 13 empty files skipped.
 ```
