@@ -1,3 +1,8 @@
+Version 1.21.0 (2025-12-10)
+-------------------
+- removed support for Python 3.9
+
+
 Version 1.20.0 (2025-09-11)
 -------------------
 - updates for ATM inversion routine

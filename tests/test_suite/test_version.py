@@ -16,4 +16,4 @@ from pyaurorax import __version__
 
 
 def test_version():
-    assert __version__ == "1.20.0"
+    assert __version__ == "1.21.0"

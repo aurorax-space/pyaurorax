@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "pyaurorax"
-version = "1.20.0"
+version = "1.21.0"
 description = "Python library for interacting with the AuroraX platform"
 readme = "README.md"
 homepage = "https://github.com/aurorax-space/pyaurorax"
