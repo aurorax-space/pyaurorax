@@ -54,6 +54,7 @@ texttable = "^1.6.4"
 aacgmv2 = "^2.6.2"
 termcolor = ">=2.0.1"
 python-dateutil = "^2.8.2"
+scipy = ">=1.10"
 numpy = [
     {version = ">=1.21.0,<2.3.0", python = ">=3.10,<3.11"},
     {version = ">=1.21.0,<3.0.0", python = ">=3.11"}

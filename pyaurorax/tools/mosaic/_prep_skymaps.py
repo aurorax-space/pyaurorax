@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import scipy
 import numpy as np
 from tqdm.contrib.concurrent import process_map as tqdm_process_map
 from concurrent.futures import ProcessPoolExecutor
@@ -49,11 +50,15 @@ def __flatten_skymap(processing_dict):
         for ii in range(0, height - 1):
 
             # Interpolate lats / lons
-            lon1 = np.interp(height_km, interpol_alts, lons[:, ii])
-            lon2 = np.interp(height_km, interpol_alts, lons[:, ii + 1])
+            # lon1 = np.interp(height_km, interpol_alts, lons[:, ii])
+            # lon2 = np.interp(height_km, interpol_alts, lons[:, ii + 1])
 
-            lat1 = np.interp(height_km, interpol_alts, lats[:, ii])
-            lat2 = np.interp(height_km, interpol_alts, lats[:, ii + 1])
+            # lat1 = np.interp(height_km, interpol_alts, lats[:, ii])
+            # lat2 = np.interp(height_km, interpol_alts, lats[:, ii + 1])
+            lon1 = scipy.interpolate.interp1d(interpol_alts, lons[:, ii], kind='linear', bounds_error=False, fill_value='extrapolate')(height_km)
+            lon2 = scipy.interpolate.interp1d(interpol_alts, lons[:, ii + 1], kind='linear', bounds_error=False, fill_value='extrapolate')(height_km)
+            lat1 = scipy.interpolate.interp1d(interpol_alts, lats[:, ii], kind='linear', bounds_error=False, fill_value='extrapolate')(height_km)
+            lat2 = scipy.interpolate.interp1d(interpol_alts, lats[:, ii + 1], kind='linear', bounds_error=False, fill_value='extrapolate')(height_km)
 
             # Get estimates of pixel corners based on spectrograph width in degrees
             pix_lons = np.array([
@@ -110,20 +115,38 @@ def __flatten_skymap(processing_dict):
                 # assumed altitudes included in the skymap, and then use interpolation to obtain
                 # the pixel corner coordinates at the input height. Then add this array of
                 # coordinates (polygon) to the filling array.
-                lon1 = np.interp(height_km, interpol_alts, lons[:, ii, jj])
-                lon2 = np.interp(height_km, interpol_alts, lons[:, ii, jj + 1])
-                lon3 = np.interp(height_km, interpol_alts, lons[:, ii + 1, jj + 1])
-                lon4 = np.interp(height_km, interpol_alts, lons[:, ii + 1, jj])
+                # lon1 = np.interp(height_km, interpol_alts, lons[:, ii, jj])
+                # lon2 = np.interp(height_km, interpol_alts, lons[:, ii, jj + 1])
+                # lon3 = np.interp(height_km, interpol_alts, lons[:, ii + 1, jj + 1])
+                # lon4 = np.interp(height_km, interpol_alts, lons[:, ii + 1, jj])
+                lon1 = scipy.interpolate.interp1d(interpol_alts, lons[:, ii, jj], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                lon2 = scipy.interpolate.interp1d(interpol_alts, lons[:, ii, jj + 1], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                lon3 = scipy.interpolate.interp1d(interpol_alts, lons[:, ii + 1, jj + 1], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                lon4 = scipy.interpolate.interp1d(interpol_alts, lons[:, ii + 1, jj], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                
                 pix_lons = np.array([lon1, lon2, lon3, lon4, lon1])
                 if np.isnan(pix_lons).any():
                     # Skip any nans, as we only fill pixels with 4 finite corners
                     continue
 
                 # repeat the above for latitudes.
-                lat1 = np.interp(height_km, interpol_alts, lats[:, ii, jj])
-                lat2 = np.interp(height_km, interpol_alts, lats[:, ii, jj + 1])
-                lat3 = np.interp(height_km, interpol_alts, lats[:, ii + 1, jj + 1])
-                lat4 = np.interp(height_km, interpol_alts, lats[:, ii + 1, jj])
+                # lat1 = np.interp(height_km, interpol_alts, lats[:, ii, jj])
+                # lat2 = np.interp(height_km, interpol_alts, lats[:, ii, jj + 1])
+                # lat3 = np.interp(height_km, interpol_alts, lats[:, ii + 1, jj + 1])
+                # lat4 = np.interp(height_km, interpol_alts, lats[:, ii + 1, jj])
+                lat1 = scipy.interpolate.interp1d(interpol_alts, lats[:, ii, jj], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                lat2 = scipy.interpolate.interp1d(interpol_alts, lats[:, ii, jj + 1], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                lat3 = scipy.interpolate.interp1d(interpol_alts, lats[:, ii + 1, jj + 1], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+                lat4 = scipy.interpolate.interp1d(interpol_alts, lats[:, ii + 1, jj], kind='linear', bounds_error=False,
+                                                  fill_value='extrapolate')(height_km)
+
                 pix_lats = np.array([lat1, lat2, lat3, lat4, lat1])
                 if np.isnan(np.array(pix_lats)).any():
                     # Skip any nans, as we only fill pixels with 4 finite corners
