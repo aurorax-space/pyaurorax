@@ -1,3 +1,9 @@
+Version 1.21.1 (2026-01-31)
+-------------------
+- bugfix for skymap altitude extrapolation above top precalculated value
+- adjust PyUCalgarySRS dependency limits
+
+
 Version 1.21.0 (2025-12-10)
 -------------------
 - removed support for Python 3.9
