@@ -12,7 +12,7 @@ pyaurorax/cli/search/conjunctions/commands.py                    166      0   10
 pyaurorax/cli/search/data_products/commands.py                   162      0   100%
 pyaurorax/cli/search/ephemeris/commands.py                       160      0   100%
 pyaurorax/cli/search/helpers.py                                  120      0   100%
-pyaurorax/cli/search/sources/commands.py                         242      0   100%
+pyaurorax/cli/search/sources/commands.py                         242      1    99%   95
 pyaurorax/cli/search/util/commands.py                             92      0   100%
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81      0   100%
@@ -94,12 +94,12 @@ pyaurorax/tools/montage/_create.py                                 9      0   10
 pyaurorax/tools/mosaic/__init__.py                                33      9    73%   122-123, 125-127, 134-144
 pyaurorax/tools/mosaic/_create.py                                189      4    98%   100, 188, 358, 366
 pyaurorax/tools/mosaic/_prep_images.py                           162      1    99%   247
-pyaurorax/tools/mosaic/_prep_skymaps.py                          119     21    82%   33-76
+pyaurorax/tools/mosaic/_prep_skymaps.py                          119     22    82%   33-79
 pyaurorax/tools/spectra/__init__.py                               13      0   100%
 pyaurorax/tools/spectra/_get_intensity.py                         46      1    98%   82
 pyaurorax/tools/spectra/_plot.py                                 116      4    97%   148, 150, 174, 195
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6383     68    99%
+TOTAL                                                           6383     70    99%
 
 13 empty files skipped.
 ```
