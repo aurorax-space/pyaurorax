@@ -105,7 +105,7 @@ border-left: 1px solid #ddd;
                 oxygen_correction_factor: float = ATM_DEFAULT_OXYGEN_CORRECTION_FACTOR,
                 timescale_auroral: int = ATM_DEFAULT_TIMESCALE_AURORAL,
                 timescale_transport: int = ATM_DEFAULT_TIMESCALE_TRANSPORT,
-                atm_model_version: Literal[&#34;1.0&#34;, &#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal[&#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
                 custom_spectrum: Optional[ndarray] = None,
                 custom_neutral_profile: Optional[ndarray] = None,
                 no_cache: bool = False,
@@ -123,18 +123,17 @@ border-left: 1px solid #ddd;
         square input (with time duration T0 and spatial width L) input of precipitation. The initial/boundary 
         conditions are given by IRI. The output yields the mean density/VER over [0-L] at time T0.
 
-        Please note that some of the inputs and outputs are only supported by ATM version 2.0. The following
-        inputs are only supported by version 2.0: `kappa_*`, `exponential_*`, `proton_*`, `d_region`, and 
-        `custom_neutral_profile`. The following outputs are only supported by version 2.0: `production_rate_*`.
+        **NOTE**: As of PyAuroraX version 1.22.0, support for model version &#39;1.0&#39; was removed. To
+        use this version of the model, please use a prior release of PyAuroraX.
 
         **NOTE**: All spectral shapes are super-imposable except exponential (maxwellian, gaussian, kappa). The 
         exponential spectrum should be only be used for high-energy tail and, starting from E0 (proton_starting_energy), 
         will override any other spectral specification.
 
-        **NOTE**: proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
+        **NOTE**: Proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
         not nominal TREx characteristics and currently not computed in this version of the model.
 
-        **NOTE**: when using the d_region flag, enabling proton parameters is not permitted.
+        **NOTE**: When using the d_region flag, enabling proton parameters is not permitted.
 
         Args:
             timestamp (datetime.datetime): 
@@ -245,11 +244,7 @@ border-left: 1px solid #ddd;
                 speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are presently &#34;1.0&#34; or &#34;2.0&#34;. The default is &#34;2.0&#34;. This parameter is
-                optional.
-                
-                **IMPORTANT**: Please note that certain inputs and outputs are only available in version &#34;2.0&#34;. See above for 
-                more details.
+                ATM model version number. The default is &#34;2.0&#34;. This parameter is optional.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -314,9 +309,8 @@ border-left: 1px solid #ddd;
                 output: ATMInverseOutputFlags,
                 precipitation_flux_spectral_type: Literal[&#34;gaussian&#34;, &#34;maxwellian&#34;] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal[&#34;00&#34;, &#34;2.0&#34;] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
-                atmospheric_attenuation_correction: bool = False,
                 special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
-                atm_model_version: Literal[&#34;1.0&#34;, &#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal[&#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -&gt; ATMInverseResult:
         &#34;&#34;&#34;
@@ -324,11 +318,8 @@ border-left: 1px solid #ddd;
         parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
         the calculation.
 
-        **NOTE**: The &#39;atmospheric_attenuation_correction&#39; parameter was deprecated in v1.18.0. Please ensure 
-        you perform this conversion yourself on the results, if desired.
-
-        **NOTE**: As of PyAuroraX version 1.20.0, the `characteristic_energy` output flag was deprecated. Please use 
-        `mean_energy` instead.
+        **NOTE**: As of PyAuroraX version 1.22.0, support for model version &#39;1.0&#39; was removed. To
+        use this version of the model, please use a prior release of PyAuroraX.
 
         Args:
             timestamp (datetime.datetime): 
@@ -376,9 +367,6 @@ border-left: 1px solid #ddd;
                 optional. More details about this empirical model can be found [here](https://ccmc.gsfc.nasa.gov/models/NRLMSIS~00/),
                 and [here](https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/).
 
-            atmospheric_attenuation_correction (bool): 
-                Apply an atmospheric attenuation correction factor. Default is `False`.
-
                 This parameter was deprecated in v1.23.0, and will be removed in a future release.
 
             special_logic_keyword (str): 
@@ -386,11 +374,7 @@ border-left: 1px solid #ddd;
                 request. This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are presently &#34;1.0&#34; or &#34;2.0&#34;. The default is &#34;2.0&#34;. This parameter is 
-                optional.
-                
-                **IMPORTANT**: Please note that certain inputs and outputs are only available in version &#34;2.0&#34;. See above for 
-                more details.
+                ATM model version number. The default is &#34;2.0&#34;. This parameter is optional.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -424,7 +408,6 @@ border-left: 1px solid #ddd;
                 precipitation_flux_spectral_type=precipitation_flux_spectral_type,
                 nrlmsis_model_version=nrlmsis_model_version,
                 atm_model_version=atm_model_version,
-                atmospheric_attenuation_correction=atmospheric_attenuation_correction,
                 special_logic_keyword=special_logic_keyword,
                 no_cache=no_cache,
                 timeout=timeout,
@@ -437,7 +420,7 @@ the submodules and carry over configuration information in the super class.</p><
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.models.atm.ATMManager.forward"><code class="name flex">
-<span>def <span class="ident">forward</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>geodetic_latitude: float,<br>geodetic_longitude: float,<br>output: pyucalgarysrs.models.atm.classes_forward.ATMForwardOutputFlags,<br>maxwellian_energy_flux: float = 10.0,<br>maxwellian_characteristic_energy: float = 5000.0,<br>gaussian_energy_flux: float = 0.0,<br>gaussian_peak_energy: float = 1000.0,<br>gaussian_spectral_width: float = 100.0,<br>kappa_energy_flux: float = 0.0,<br>kappa_mean_energy: float = 30000.0,<br>kappa_k_index: float = 5.0,<br>exponential_energy_flux: float = 0.0,<br>exponential_characteristic_energy: float = 50000.0,<br>exponential_starting_energy: float = 50000.0,<br>proton_energy_flux: float = 0.0,<br>proton_characteristic_energy: float = 10000.0,<br>d_region: bool = False,<br>nrlmsis_model_version: Literal['00', '2.0'] = '2.0',<br>oxygen_correction_factor: float = 1.0,<br>timescale_auroral: int = 600,<br>timescale_transport: int = 600,<br>atm_model_version: Literal['1.0', '2.0'] = '2.0',<br>custom_spectrum: numpy.ndarray | None = None,<br>custom_neutral_profile: numpy.ndarray | None = None,<br>no_cache: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.models.atm.classes_forward.ATMForwardResult</span>
+<span>def <span class="ident">forward</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>geodetic_latitude: float,<br>geodetic_longitude: float,<br>output: pyucalgarysrs.models.atm.classes_forward.ATMForwardOutputFlags,<br>maxwellian_energy_flux: float = 10.0,<br>maxwellian_characteristic_energy: float = 5000.0,<br>gaussian_energy_flux: float = 0.0,<br>gaussian_peak_energy: float = 1000.0,<br>gaussian_spectral_width: float = 100.0,<br>kappa_energy_flux: float = 0.0,<br>kappa_mean_energy: float = 30000.0,<br>kappa_k_index: float = 5.0,<br>exponential_energy_flux: float = 0.0,<br>exponential_characteristic_energy: float = 50000.0,<br>exponential_starting_energy: float = 50000.0,<br>proton_energy_flux: float = 0.0,<br>proton_characteristic_energy: float = 10000.0,<br>d_region: bool = False,<br>nrlmsis_model_version: Literal['00', '2.0'] = '2.0',<br>oxygen_correction_factor: float = 1.0,<br>timescale_auroral: int = 600,<br>timescale_transport: int = 600,<br>atm_model_version: Literal['2.0'] = '2.0',<br>custom_spectrum: numpy.ndarray | None = None,<br>custom_neutral_profile: numpy.ndarray | None = None,<br>no_cache: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.models.atm.classes_forward.ATMForwardResult</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -467,7 +450,7 @@ the submodules and carry over configuration information in the super class.</p><
             oxygen_correction_factor: float = ATM_DEFAULT_OXYGEN_CORRECTION_FACTOR,
             timescale_auroral: int = ATM_DEFAULT_TIMESCALE_AURORAL,
             timescale_transport: int = ATM_DEFAULT_TIMESCALE_TRANSPORT,
-            atm_model_version: Literal[&#34;1.0&#34;, &#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
+            atm_model_version: Literal[&#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
             custom_spectrum: Optional[ndarray] = None,
             custom_neutral_profile: Optional[ndarray] = None,
             no_cache: bool = False,
@@ -485,18 +468,17 @@ the submodules and carry over configuration information in the super class.</p><
     square input (with time duration T0 and spatial width L) input of precipitation. The initial/boundary 
     conditions are given by IRI. The output yields the mean density/VER over [0-L] at time T0.
 
-    Please note that some of the inputs and outputs are only supported by ATM version 2.0. The following
-    inputs are only supported by version 2.0: `kappa_*`, `exponential_*`, `proton_*`, `d_region`, and 
-    `custom_neutral_profile`. The following outputs are only supported by version 2.0: `production_rate_*`.
+    **NOTE**: As of PyAuroraX version 1.22.0, support for model version &#39;1.0&#39; was removed. To
+    use this version of the model, please use a prior release of PyAuroraX.
 
     **NOTE**: All spectral shapes are super-imposable except exponential (maxwellian, gaussian, kappa). The 
     exponential spectrum should be only be used for high-energy tail and, starting from E0 (proton_starting_energy), 
     will override any other spectral specification.
 
-    **NOTE**: proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
+    **NOTE**: Proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
     not nominal TREx characteristics and currently not computed in this version of the model.
 
-    **NOTE**: when using the d_region flag, enabling proton parameters is not permitted.
+    **NOTE**: When using the d_region flag, enabling proton parameters is not permitted.
 
     Args:
         timestamp (datetime.datetime): 
@@ -607,11 +589,7 @@ the submodules and carry over configuration information in the super class.</p><
             speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
         atm_model_version (str): 
-            ATM model version number. Possible values are presently &#34;1.0&#34; or &#34;2.0&#34;. The default is &#34;2.0&#34;. This parameter is
-            optional.
-            
-            **IMPORTANT**: Please note that certain inputs and outputs are only available in version &#34;2.0&#34;. See above for 
-            more details.
+            ATM model version number. The default is &#34;2.0&#34;. This parameter is optional.
 
         no_cache (bool): 
             The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -675,15 +653,14 @@ parameter is defined by L/v0, in which L is the dimension of the auroral structu
 cross-structure drift speed. The model quasi-analytically solves the continuity equation under a
 square input (with time duration T0 and spatial width L) input of precipitation. The initial/boundary
 conditions are given by IRI. The output yields the mean density/VER over [0-L] at time T0.</p>
-<p>Please note that some of the inputs and outputs are only supported by ATM version 2.0. The following
-inputs are only supported by version 2.0: <code>kappa_*</code>, <code>exponential_*</code>, <code>proton_*</code>, <code>d_region</code>, and
-<code>custom_neutral_profile</code>. The following outputs are only supported by version 2.0: <code>production_rate_*</code>.</p>
+<p><strong>NOTE</strong>: As of PyAuroraX version 1.22.0, support for model version '1.0' was removed. To
+use this version of the model, please use a prior release of PyAuroraX.</p>
 <p><strong>NOTE</strong>: All spectral shapes are super-imposable except exponential (maxwellian, gaussian, kappa). The
 exponential spectrum should be only be used for high-energy tail and, starting from E0 (proton_starting_energy),
 will override any other spectral specification.</p>
-<p><strong>NOTE</strong>: proton precipitation is presently only for ionization rate and density calculations. Proton auroras are
+<p><strong>NOTE</strong>: Proton precipitation is presently only for ionization rate and density calculations. Proton auroras are
 not nominal TREx characteristics and currently not computed in this version of the model.</p>
-<p><strong>NOTE</strong>: when using the d_region flag, enabling proton parameters is not permitted.</p>
+<p><strong>NOTE</strong>: When using the d_region flag, enabling proton parameters is not permitted.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -770,12 +747,7 @@ d_region_flag=0, or 50-500 km if d_region_flag=1). The model only performs inter
 <dd>Defined by L/v0, in which L is the dimension of the auroral structure, and v0 is the cross-structure drift
 speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.</dd>
 <dt><strong><code>atm_model_version</code></strong> :&ensp;<code>str</code></dt>
-<dd>
-<p>ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is
-optional.</p>
-<p><strong>IMPORTANT</strong>: Please note that certain inputs and outputs are only available in version "2.0". See above for
-more details.</p>
-</dd>
+<dd>ATM model version number. The default is "2.0". This parameter is optional.</dd>
 <dt><strong><code>no_cache</code></strong> :&ensp;<code>bool</code></dt>
 <dd>The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
 calculations. If this variation of input parameters has been run before (and the
@@ -797,7 +769,7 @@ object containing the requested output data, among other values.</p>
 </dl></div>
 </dd>
 <dt id="pyaurorax.models.atm.ATMManager.inverse"><code class="name flex">
-<span>def <span class="ident">inverse</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>geodetic_latitude: float,<br>geodetic_longitude: float,<br>intensity_4278: float,<br>intensity_5577: float,<br>intensity_6300: float,<br>intensity_8446: float,<br>output: pyucalgarysrs.models.atm.classes_inverse.ATMInverseOutputFlags,<br>precipitation_flux_spectral_type: Literal['gaussian', 'maxwellian'] = 'gaussian',<br>nrlmsis_model_version: Literal['00', '2.0'] = '2.0',<br>atmospheric_attenuation_correction: bool = False,<br>special_logic_keyword: str = 'not_applicable',<br>atm_model_version: Literal['1.0', '2.0'] = '2.0',<br>no_cache: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult</span>
+<span>def <span class="ident">inverse</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>geodetic_latitude: float,<br>geodetic_longitude: float,<br>intensity_4278: float,<br>intensity_5577: float,<br>intensity_6300: float,<br>intensity_8446: float,<br>output: pyucalgarysrs.models.atm.classes_inverse.ATMInverseOutputFlags,<br>precipitation_flux_spectral_type: Literal['gaussian', 'maxwellian'] = 'gaussian',<br>nrlmsis_model_version: Literal['00', '2.0'] = '2.0',<br>special_logic_keyword: str = 'not_applicable',<br>atm_model_version: Literal['2.0'] = '2.0',<br>no_cache: bool = False,<br>timeout: int | None = None) ‑> pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -815,9 +787,8 @@ object containing the requested output data, among other values.</p>
             output: ATMInverseOutputFlags,
             precipitation_flux_spectral_type: Literal[&#34;gaussian&#34;, &#34;maxwellian&#34;] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
             nrlmsis_model_version: Literal[&#34;00&#34;, &#34;2.0&#34;] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
-            atmospheric_attenuation_correction: bool = False,
             special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
-            atm_model_version: Literal[&#34;1.0&#34;, &#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
+            atm_model_version: Literal[&#34;2.0&#34;] = ATM_DEFAULT_MODEL_VERSION,
             no_cache: bool = False,
             timeout: Optional[int] = None) -&gt; ATMInverseResult:
     &#34;&#34;&#34;
@@ -825,11 +796,8 @@ object containing the requested output data, among other values.</p>
     parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
     the calculation.
 
-    **NOTE**: The &#39;atmospheric_attenuation_correction&#39; parameter was deprecated in v1.18.0. Please ensure 
-    you perform this conversion yourself on the results, if desired.
-
-    **NOTE**: As of PyAuroraX version 1.20.0, the `characteristic_energy` output flag was deprecated. Please use 
-    `mean_energy` instead.
+    **NOTE**: As of PyAuroraX version 1.22.0, support for model version &#39;1.0&#39; was removed. To
+    use this version of the model, please use a prior release of PyAuroraX.
 
     Args:
         timestamp (datetime.datetime): 
@@ -877,9 +845,6 @@ object containing the requested output data, among other values.</p>
             optional. More details about this empirical model can be found [here](https://ccmc.gsfc.nasa.gov/models/NRLMSIS~00/),
             and [here](https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/).
 
-        atmospheric_attenuation_correction (bool): 
-            Apply an atmospheric attenuation correction factor. Default is `False`.
-
             This parameter was deprecated in v1.23.0, and will be removed in a future release.
 
         special_logic_keyword (str): 
@@ -887,11 +852,7 @@ object containing the requested output data, among other values.</p>
             request. This parameter is optional.
 
         atm_model_version (str): 
-            ATM model version number. Possible values are presently &#34;1.0&#34; or &#34;2.0&#34;. The default is &#34;2.0&#34;. This parameter is 
-            optional.
-            
-            **IMPORTANT**: Please note that certain inputs and outputs are only available in version &#34;2.0&#34;. See above for 
-            more details.
+            ATM model version number. The default is &#34;2.0&#34;. This parameter is optional.
 
         no_cache (bool): 
             The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -925,7 +886,6 @@ object containing the requested output data, among other values.</p>
             precipitation_flux_spectral_type=precipitation_flux_spectral_type,
             nrlmsis_model_version=nrlmsis_model_version,
             atm_model_version=atm_model_version,
-            atmospheric_attenuation_correction=atmospheric_attenuation_correction,
             special_logic_keyword=special_logic_keyword,
             no_cache=no_cache,
             timeout=timeout,
@@ -936,10 +896,8 @@ object containing the requested output data, among other values.</p>
 <div class="desc"><p>Perform an inverse calculation using the TREx Auroral Transport Model and the supplied input
 parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform
 the calculation.</p>
-<p><strong>NOTE</strong>: The 'atmospheric_attenuation_correction' parameter was deprecated in v1.18.0. Please ensure
-you perform this conversion yourself on the results, if desired.</p>
-<p><strong>NOTE</strong>: As of PyAuroraX version 1.20.0, the <code>characteristic_energy</code> output flag was deprecated. Please use
-<code>mean_energy</code> instead.</p>
+<p><strong>NOTE</strong>: As of PyAuroraX version 1.22.0, support for model version '1.0' was removed. To
+use this version of the model, please use a prior release of PyAuroraX.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -974,24 +932,17 @@ for more details. This parameter is required.</dd>
 <dd>The precipitation flux spectral type to use. Possible values are <code>gaussian</code> or <code>maxwellian</code>. The
 default is <code>gaussian</code>. This parameter is optional.</dd>
 <dt><strong><code>nrlmsis_model_version</code></strong> :&ensp;<code>str</code></dt>
-<dd>NRLMSIS version number. Possible values are <code>00</code> or <code>2.0</code>. Default is <code>2.0</code>. This parameter is
-optional. More details about this empirical model can be found <a href="https://ccmc.gsfc.nasa.gov/models/NRLMSIS~00/">here</a>,
-and <a href="https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/">here</a>.</dd>
-<dt><strong><code>atmospheric_attenuation_correction</code></strong> :&ensp;<code>bool</code></dt>
 <dd>
-<p>Apply an atmospheric attenuation correction factor. Default is <code>False</code>.</p>
+<p>NRLMSIS version number. Possible values are <code>00</code> or <code>2.0</code>. Default is <code>2.0</code>. This parameter is
+optional. More details about this empirical model can be found <a href="https://ccmc.gsfc.nasa.gov/models/NRLMSIS~00/">here</a>,
+and <a href="https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/">here</a>.</p>
 <p>This parameter was deprecated in v1.23.0, and will be removed in a future release.</p>
 </dd>
 <dt><strong><code>special_logic_keyword</code></strong> :&ensp;<code>str</code></dt>
 <dd>Use a special keyword provided by UCalgary staff to apply alternative logic during an ATM inversion
 request. This parameter is optional.</dd>
 <dt><strong><code>atm_model_version</code></strong> :&ensp;<code>str</code></dt>
-<dd>
-<p>ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is
-optional.</p>
-<p><strong>IMPORTANT</strong>: Please note that certain inputs and outputs are only available in version "2.0". See above for
-more details.</p>
-</dd>
+<dd>ATM model version number. The default is "2.0". This parameter is optional.</dd>
 <dt><strong><code>no_cache</code></strong> :&ensp;<code>bool</code></dt>
 <dd>The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
 calculations. If this variation of input parameters has been run before (and the

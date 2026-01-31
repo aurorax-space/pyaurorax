@@ -1,6 +1,22 @@
+Version 1.22.0 (2026-01-31)
+-------------------
+- ATM model changes
+  - removed support for use of ATM model version 1.0. To use this version of the model, please use a previous version of this library.
+  - forward function
+    - renamed `height_integrated_rayleighs_lbh` output flag to `height_integrated_rayleighs_smile_uvi_lbh`
+    - renamed `emission_lbh` output flag to `emission_smile_uvi_lbh`
+    - renamed `plasma_pederson_conductivity` output flag to `plasma_pedersen_conductivity`
+  - inversion function
+    - removed the `atmospheric_attenuation_correction` parameter (was deprecated in v1.18.0)
+- updated crib sheets
+- test suite updates
+- bump PyUCalgarySRS dependency to latest
+
+
 Version 1.21.1 (2026-01-31)
 -------------------
 - bugfix for skymap altitude extrapolation above top precalculated value
+- updated crib sheets
 - adjust PyUCalgarySRS dependency limits
 
 

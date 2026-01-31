@@ -46,31 +46,26 @@ def test_spect_errors(at, trex_spect_keogram_data):
     # improperly try to create a keogram of spect data along non-zero axis
     with pytest.raises(ValueError) as e_info:
         _ = at.keogram.create(data, timestamp, axis=1, spectra=True, wavelength=meta[0]["wavelength"])
-
     assert ("Cannot create keogram for spectrograph data along axis other than 0, received axis:") in str(e_info)
 
     # improperly try to create spect keogram without passing wavelength
     with pytest.raises(ValueError) as e_info:
         _ = at.keogram.create(data, timestamp, spectra=True)
-
     assert ("Parameter 'wavelength' must be supplied when using spectrograph data.") in str(e_info)
 
     # attempt to create keogram with incorrect timestamp list
     with pytest.raises(ValueError) as e_info:
         _ = at.keogram.create(data, timestamp[0:50], spectra=True, wavelength=meta[0]["wavelength"])
-
     assert ("Mismatched timestamp dimensions. Received" in str(e_info)) and ("timestamps for spectrograph data with" in str(e_info))
 
     # attempt to create keogram with incorrect wavelength list
     with pytest.raises(ValueError) as e_info:
         _ = at.keogram.create(data, timestamp, spectra=True, wavelength=meta[0]["wavelength"][0:50])
-
     assert ("Mismatched wavelength dimensions. Received" in str(e_info)) and ("wavelengths for spectrograph data with" in str(e_info))
 
 
 @pytest.mark.tools
 def test_incorrect_data_size(at, themis_keogram_data):
-
     # get data
     data = themis_keogram_data["raw_data"].data
     timestamp = themis_keogram_data["raw_data"].timestamp
@@ -87,7 +82,6 @@ def test_incorrect_data_size(at, themis_keogram_data):
 
 @pytest.mark.tools
 def test_manual_spect_band(at, trex_spect_keogram_data, capsys):
-
     # create the keogram object with only a manual spect band
     data = trex_spect_keogram_data["raw_data"].data
     meta = trex_spect_keogram_data["raw_data"].metadata

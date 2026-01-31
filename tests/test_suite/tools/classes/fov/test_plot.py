@@ -234,7 +234,7 @@ def test_plot_with_data_availability(mock_show, at):
 
 @pytest.mark.tools
 @patch("matplotlib.pyplot.show")
-def test_plot_with_contours(mock_show, at):
+def test_plot_with_contours(mock_show, plot_cleanup, at):
 
     # Create FOVData
     fov_data = at.fov.create_data(

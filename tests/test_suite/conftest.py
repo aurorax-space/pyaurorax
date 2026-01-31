@@ -22,6 +22,7 @@ import shutil
 import pytest
 import datetime
 import pyaurorax
+from matplotlib import pyplot as plt
 from click.testing import CliRunner
 from pathlib import Path
 from dotenv import load_dotenv
@@ -260,6 +261,7 @@ def find_dataset(datasets, dataset_name):
 @pytest.fixture(scope="function")
 def plot_cleanup():
     yield  # do test
+    plt.close()
     gc.collect()
 
 

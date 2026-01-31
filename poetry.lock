@@ -3328,14 +3328,14 @@ files = [
 
 [[package]]
 name = "pyucalgarysrs"
-version = "1.25.0"
+version = "1.26.1"
 description = "Tools for interacting with UCalgary Space Remote Sensing data"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "pyucalgarysrs-1.25.0-py3-none-any.whl", hash = "sha256:30debe9d7cd0e0cb294c555839e9f595765c76bb34c492341dcedd1a8732c8ce"},
-    {file = "pyucalgarysrs-1.25.0.tar.gz", hash = "sha256:3b52e9659b147293feb2b27abcfcc8ee92988323a48b1c8b7c63ab6f6d4138c4"},
+    {file = "pyucalgarysrs-1.26.1-py3-none-any.whl", hash = "sha256:0fe2db0c6647e87df267687a39f1725e420572fcc2047f3921306cbdd9117331"},
+    {file = "pyucalgarysrs-1.26.1.tar.gz", hash = "sha256:7cad14b8cb185c9f19fda4f954f86a34b0b5c61ebad5844fa61cc1a61b561f33"},
 ]
 
 [package.dependencies]
@@ -4470,4 +4470,4 @@ tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "b50373d604b25858bb487a600a28800d657ee43f089deed6e39c480b12f2d974"
+content-hash = "b3aa302082bc62c0cc32d9f2a64268f9ce5bbfb2de746dccc87f666fa108cdfe"

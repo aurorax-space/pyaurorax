@@ -84,7 +84,7 @@ class ATMManager:
                 oxygen_correction_factor: float = ATM_DEFAULT_OXYGEN_CORRECTION_FACTOR,
                 timescale_auroral: int = ATM_DEFAULT_TIMESCALE_AURORAL,
                 timescale_transport: int = ATM_DEFAULT_TIMESCALE_TRANSPORT,
-                atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal["2.0"] = ATM_DEFAULT_MODEL_VERSION,
                 custom_spectrum: Optional[ndarray] = None,
                 custom_neutral_profile: Optional[ndarray] = None,
                 no_cache: bool = False,
@@ -102,18 +102,17 @@ class ATMManager:
         square input (with time duration T0 and spatial width L) input of precipitation. The initial/boundary 
         conditions are given by IRI. The output yields the mean density/VER over [0-L] at time T0.
 
-        Please note that some of the inputs and outputs are only supported by ATM version 2.0. The following
-        inputs are only supported by version 2.0: `kappa_*`, `exponential_*`, `proton_*`, `d_region`, and 
-        `custom_neutral_profile`. The following outputs are only supported by version 2.0: `production_rate_*`.
+        **NOTE**: As of PyAuroraX version 1.22.0, support for model version '1.0' was removed. To
+        use this version of the model, please use a prior release of PyAuroraX.
 
         **NOTE**: All spectral shapes are super-imposable except exponential (maxwellian, gaussian, kappa). The 
         exponential spectrum should be only be used for high-energy tail and, starting from E0 (proton_starting_energy), 
         will override any other spectral specification.
 
-        **NOTE**: proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
+        **NOTE**: Proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
         not nominal TREx characteristics and currently not computed in this version of the model.
 
-        **NOTE**: when using the d_region flag, enabling proton parameters is not permitted.
+        **NOTE**: When using the d_region flag, enabling proton parameters is not permitted.
 
         Args:
             timestamp (datetime.datetime): 
@@ -224,11 +223,7 @@ class ATMManager:
                 speed. Represented in seconds. Default is 600 (10 minutes). This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is
-                optional.
-                
-                **IMPORTANT**: Please note that certain inputs and outputs are only available in version "2.0". See above for 
-                more details.
+                ATM model version number. The default is "2.0". This parameter is optional.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -293,9 +288,8 @@ class ATMManager:
                 output: ATMInverseOutputFlags,
                 precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
-                atmospheric_attenuation_correction: bool = False,
                 special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
-                atm_model_version: Literal["1.0", "2.0"] = ATM_DEFAULT_MODEL_VERSION,
+                atm_model_version: Literal["2.0"] = ATM_DEFAULT_MODEL_VERSION,
                 no_cache: bool = False,
                 timeout: Optional[int] = None) -> ATMInverseResult:
         """
@@ -303,11 +297,8 @@ class ATMManager:
         parameters. Note that this function utilizes the UCalgary Space Remote Sensing API to perform 
         the calculation.
 
-        **NOTE**: The 'atmospheric_attenuation_correction' parameter was deprecated in v1.18.0. Please ensure 
-        you perform this conversion yourself on the results, if desired.
-
-        **NOTE**: As of PyAuroraX version 1.20.0, the `characteristic_energy` output flag was deprecated. Please use 
-        `mean_energy` instead.
+        **NOTE**: As of PyAuroraX version 1.22.0, support for model version '1.0' was removed. To
+        use this version of the model, please use a prior release of PyAuroraX.
 
         Args:
             timestamp (datetime.datetime): 
@@ -355,9 +346,6 @@ class ATMManager:
                 optional. More details about this empirical model can be found [here](https://ccmc.gsfc.nasa.gov/models/NRLMSIS~00/),
                 and [here](https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/).
 
-            atmospheric_attenuation_correction (bool): 
-                Apply an atmospheric attenuation correction factor. Default is `False`.
-
                 This parameter was deprecated in v1.23.0, and will be removed in a future release.
 
             special_logic_keyword (str): 
@@ -365,11 +353,7 @@ class ATMManager:
                 request. This parameter is optional.
 
             atm_model_version (str): 
-                ATM model version number. Possible values are presently "1.0" or "2.0". The default is "2.0". This parameter is 
-                optional.
-                
-                **IMPORTANT**: Please note that certain inputs and outputs are only available in version "2.0". See above for 
-                more details.
+                ATM model version number. The default is "2.0". This parameter is optional.
 
             no_cache (bool): 
                 The UCalgary Space Remote Sensing API utilizes a caching layer for performing ATM
@@ -403,7 +387,6 @@ class ATMManager:
                 precipitation_flux_spectral_type=precipitation_flux_spectral_type,
                 nrlmsis_model_version=nrlmsis_model_version,
                 atm_model_version=atm_model_version,
-                atmospheric_attenuation_correction=atmospheric_attenuation_correction,
                 special_logic_keyword=special_logic_keyword,
                 no_cache=no_cache,
                 timeout=timeout,
