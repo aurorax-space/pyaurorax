@@ -221,7 +221,7 @@ border-left: 1px solid #ddd;
 
             custom_spectrum (ndarray): 
                 A 2-dimensional numpy array (dtype is any float type) containing values representing the
-                energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in
+                energy in eV, and flux in 1/cm2/s/eV. The shape is expected to be [N, 2], with energy in
                 [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError 
                 will be raised if so). This parameter is optional.
 
@@ -566,7 +566,7 @@ the submodules and carry over configuration information in the super class.</p><
 
         custom_spectrum (ndarray): 
             A 2-dimensional numpy array (dtype is any float type) containing values representing the
-            energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in
+            energy in eV, and flux in 1/cm2/s/eV. The shape is expected to be [N, 2], with energy in
             [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError 
             will be raised if so). This parameter is optional.
 
@@ -728,7 +728,7 @@ and <a href="https://ccmc.gsfc.nasa.gov/models/NRLMSIS~2.0/">here</a>.</dd>
 is optional.</dd>
 <dt><strong><code>custom_spectrum</code></strong> :&ensp;<code>ndarray</code></dt>
 <dd>A 2-dimensional numpy array (dtype is any float type) containing values representing the
-energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in
+energy in eV, and flux in 1/cm2/s/eV. The shape is expected to be [N, 2], with energy in
 [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError
 will be raised if so). This parameter is optional.</dd>
 <dt><strong><code>custom_neutral_profile</code></strong> :&ensp;<code>ndarray</code></dt>

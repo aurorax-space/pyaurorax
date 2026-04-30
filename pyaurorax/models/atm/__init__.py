@@ -200,7 +200,7 @@ class ATMManager:
 
             custom_spectrum (ndarray): 
                 A 2-dimensional numpy array (dtype is any float type) containing values representing the
-                energy in eV, and flux in 1/cm2/sr/eV. The shape is expected to be [N, 2], with energy in
+                energy in eV, and flux in 1/cm2/s/eV. The shape is expected to be [N, 2], with energy in
                 [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError 
                 will be raised if so). This parameter is optional.
 
