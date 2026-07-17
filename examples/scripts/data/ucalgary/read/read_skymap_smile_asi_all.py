@@ -7,11 +7,11 @@ aurorax = pyaurorax.PyAuroraX()
 
 # get dataset
 print("\n[%s] Getting dataset ..." % (datetime.datetime.now()))
-dataset = aurorax.data.ucalgary.list_datasets("TREX_RGB_SKYMAP_IDLSAV")[0]
+dataset = aurorax.data.ucalgary.list_datasets("SMILE_ASI_SKYMAP_IDLSAV")[0]
 
 # download data
 print("\n[%s] Downloading data ..." % (datetime.datetime.now()))
-start_dt = datetime.datetime(2017, 1, 1, 0, 0, 0)
+start_dt = datetime.datetime(2022, 1, 1, 0, 0, 0)
 end_dt = datetime.datetime.now()
 download_obj = aurorax.data.ucalgary.download(dataset.name, start_dt, end_dt, overwrite=True)
 
