@@ -235,7 +235,9 @@ def prep_images(image_list, data_attribute, spect_emission, spect_band, spect_ba
                 site_uid = site_image_data.metadata[0]["Site unique ID"]
             except KeyError:
                 try:
-                    site_uid = site_image_data.metadata[0]["site_uid"].decode('utf-8')
+                    site_uid = site_image_data.metadata[0]["site_uid"]
+                    if isinstance(site_uid, bytes):
+                        site_uid = site_uid.decode('utf-8')
                 except KeyError as e:  # pragma: nocover
                     raise KeyError("Unable to find site UID in Metadata") from e
 

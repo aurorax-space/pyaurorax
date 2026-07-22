@@ -86,9 +86,13 @@ def plot(
     if not isinstance(spect_loc, list):
         spect_loc = [spect_loc]
 
+    _site_uid = spect_data.metadata[0]['site_uid']
+    if isinstance(_site_uid, bytes):
+        _site_uid = _site_uid.decode('utf-8')
+
     # Automatically generate a default title, as
     # well as default legend labels to use
-    auto_title = (f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} - "
+    auto_title = (f"{_site_uid.upper()} - "
                   f"{timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC (Spatial Bin {spect_loc[0]})")
     auto_legend = [None]
     if len(timestamp) != len(spect_loc):
@@ -100,7 +104,7 @@ def plot(
             spect_loc = []
             for _i in range(len(timestamp)):
                 spect_loc.append(single_spect_loc)
-            auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} - Spatial Bin {spect_loc[0]}"
+            auto_title = f"{_site_uid.upper()} - Spatial Bin {spect_loc[0]}"
             auto_legend = []
             for i in range(len(timestamp)):
                 auto_legend.append(f"{timestamp[i].strftime('%Y-%m-%d %H:%M:%S')} UTC")
@@ -110,13 +114,13 @@ def plot(
             timestamp = []
             for _i in range(len(spect_loc)):
                 timestamp.append(single_timestamp)
-            auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} - {timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC"
+            auto_title = f"{_site_uid.upper()} - {timestamp[0].strftime('%Y-%m-%d %H:%M:%S')} UTC"
             auto_legend = []
             for i in range(len(timestamp)):
                 auto_legend.append(f"spatial bin {spect_loc[i]}")
 
     elif len(timestamp) > 1:
-        auto_title = f"{spect_data.metadata[0]['site_uid'].decode('utf-8').upper()} Spectrograph"
+        auto_title = f"{_site_uid.upper()} Spectrograph"
 
         auto_legend = []
         for i in range(len(timestamp)):
