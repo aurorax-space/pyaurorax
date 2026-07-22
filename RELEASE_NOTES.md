@@ -1,3 +1,8 @@
+Version 1.22.1 (2026-07-22)
+-------------------
+- TREx Spectrograph bugfix for metadata parsing
+
+
 Version 1.22.0 (2026-01-31)
 -------------------
 - ATM model changes
