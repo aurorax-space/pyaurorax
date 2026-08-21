@@ -497,7 +497,7 @@ class FOV:
                          lons: Optional[Union[ndarray, list]] = None,
                          constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                          constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                         color: str = "black",
+                         color: Union[str, Tuple[float, ...]] = "black",
                          linewidth: Union[float, int] = 1,
                          linestyle: str = "solid",
                          marker: str = "",
@@ -518,8 +518,9 @@ class FOV:
             constant_lons (float, int, or Sequence): 
                 Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-            color (str): 
-                The matplotlib color used for the contour(s).
+            color (str or tuple): 
+                The matplotlib color used for the contour(s). Colours can be supplied as a 
+                word, hexcode, or RGB/RGBA tuple.
 
             linewidth (float or int): 
                 The contour thickness.
@@ -547,8 +548,8 @@ class FOV:
         if (lats is not None or lons is not None) and (lats is None or lons is None):
             raise (ValueError("Manually supplying contour requires both lats and lons."))
 
-        # Check that color exists in matplotlib
-        if color not in matplotlib.colors.CSS4_COLORS:
+        # Check that color is a valid matplotlib color
+        if not matplotlib.colors.is_color_like(color):
             raise ValueError(f"Color '{color}' not recognized by matplotlib.")
 
         # Check that linestyle is valid
@@ -654,7 +655,7 @@ class FOV:
                          constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                          lats: Optional[Union[ndarray, list]] = None,
                          lons: Optional[Union[ndarray, list]] = None,
-                         color: str = "black",
+                         color: Union[str, Tuple[float, ...]] = "black",
                          linewidth: Union[float, int] = 1,
                          linestyle: str = "solid",
                          marker: str = "",
@@ -678,8 +679,9 @@ class FOV:
             constant_lons (float, int, Sequence): 
                 Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-            color (str): 
-                The matplotlib color used for the contour(s).
+            color (str or tuple): 
+                The matplotlib color used for the contour(s). Colours can be supplied as a 
+                word, hexcode, or RGB/RGBA tuple.
 
             linewidth (float or int): 
                 The contour thickness.
@@ -707,8 +709,8 @@ class FOV:
         if (lats is not None or lons is not None) and (lats is None or lons is None):
             raise ValueError("Manually supplying contour requires both lats and lons.")
 
-        # Check that color exists in matplotlib
-        if color not in matplotlib.colors.CSS4_COLORS:
+        # Check that color is a valid matplotlib color
+        if not matplotlib.colors.is_color_like(color):
             raise ValueError(f"Color '{color}' not recognized by matplotlib.")
 
         # Check that linestyle is valid
