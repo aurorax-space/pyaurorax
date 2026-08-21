@@ -161,6 +161,11 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
             raise ValueError(
                 f"Received invalid 'percentile' value of {percentile}. Please ensure that percentile is given as a float within [0,100].")
 
+        percentile_value = float(percentile)
+    else:
+        # never used unless metric='percentile'
+        percentile_value = 0.0
+
     # If metric is not set to percentile make sure that no percentile argument is passed.
     if (metric != "percentile"):
         if (percentile is not None):
@@ -301,7 +306,7 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
                 pixel_keogram = np.sum(images[row_idx, col_idx, :], axis=0)
             elif metric == "percentile":
                 # percentile metric
-                pixel_keogram = np.nanpercentile(images[row_idx, col_idx, :], percentile, axis=0)
+                pixel_keogram = np.nanpercentile(images[row_idx, col_idx, :], percentile_value, axis=0)
             else:
                 raise ValueError(f"Metric '{metric}' is not recognized. Currently supported metrics are ['median', 'mean', 'sum', 'percentile'].")
 
@@ -326,9 +331,9 @@ def create_custom(images, timestamp, coordinate_system, width, x_locs, y_locs, p
                 b_pixel_keogram = np.floor(np.sum(images[row_idx, col_idx, 2, :], axis=0))
             elif metric == "percentile":
                 # percentile metric
-                r_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 0, :], percentile, axis=0))
-                g_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 1, :], percentile, axis=0))
-                b_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 2, :], percentile, axis=0))
+                r_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 0, :], percentile_value, axis=0))
+                g_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 1, :], percentile_value, axis=0))
+                b_pixel_keogram = np.floor(np.nanpercentile(images[row_idx, col_idx, 2, :], percentile_value, axis=0))
             else:
                 raise ValueError(f"Metric '{metric}' is not recognized. Currently supported metrics are ['median', 'mean', 'sum', 'percentile'].")
 

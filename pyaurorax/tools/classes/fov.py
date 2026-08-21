@@ -48,7 +48,7 @@ class FOVData:
         fovs_dimensions (Dict[str, numpy.ndarray]): 
             Dictionary that holds the shape of each set of lat/lon data.
 
-        instrument_array (str): 
+        instrument_array (Optional[str]):
             String giving the name of the instrument array this FOVData object corresponds to (optional).
             
         data_availability (dict): 
@@ -66,7 +66,7 @@ class FOVData:
             String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.
     """
 
-    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: str,
+    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: Optional[str],
                  data_availability: Optional[Dict[str, bool]], color: str, linewidth: int, linestyle: str, aurorax_obj):
 
         # Public vars
