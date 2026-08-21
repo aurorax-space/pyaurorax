@@ -20,7 +20,7 @@ from .classes.request import AuroraXAPIRequest
 from .classes.response import AuroraXAPIResponse
 
 URL_SUFFIX_DATA_SOURCES = "api/v1/data_sources"
-URL_SUFFIX_DATA_SOURCES_SEARCH = "/api/v1/data_sources/search"
+URL_SUFFIX_DATA_SOURCES_SEARCH = "api/v1/data_sources/search"
 URL_SUFFIX_EPHEMERIS_AVAILABILITY = "api/v1/availability/ephemeris"
 URL_SUFFIX_EPHEMERIS_UPLOAD = "api/v1/data_sources/{}/ephemeris"
 URL_SUFFIX_EPHEMERIS_SEARCH = "api/v1/ephemeris/search"
