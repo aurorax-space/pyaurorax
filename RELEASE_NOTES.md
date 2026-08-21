@@ -1,3 +1,8 @@
+Version 1.22.2 (2026-08-21)
+-------------------
+- Bugfix for contour color validation rejecting valid matplotlib colors
+
+
 Version 1.22.1 (2026-07-22)
 -------------------
 - TREx Spectrograph bugfix for metadata parsing

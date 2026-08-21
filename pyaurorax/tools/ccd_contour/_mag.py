@@ -49,7 +49,7 @@ def mag(skymap, timestamp, altitude_km, contour_lats, contour_lons, constant_lat
 
     # Obtain lat/lon arrays from skymap at desired altitude
     if (altitude_km * 1000.0 in skymap.full_map_altitude):
-        altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
+        altitude_idx = np.where(skymap.full_map_altitude == altitude_km * 1000.0)
 
         lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
         lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
