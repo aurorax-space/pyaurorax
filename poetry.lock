@@ -3818,14 +3818,14 @@ files = [
 
 [[package]]
 name = "pyucalgarysrs"
-version = "1.26.4"
+version = "1.26.5"
 description = "Tools for interacting with UCalgary Space Remote Sensing data"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "pyucalgarysrs-1.26.4-py3-none-any.whl", hash = "sha256:fd99bb0af242f39d6fd531747cf12b1bca437a3634bd67c4407a2389ffd19099"},
-    {file = "pyucalgarysrs-1.26.4.tar.gz", hash = "sha256:6acaa5020d00598b2adc05064e1786c82aa576da326979e606a2499009fedd70"},
+    {file = "pyucalgarysrs-1.26.5-py3-none-any.whl", hash = "sha256:17679a219f985156f33670839c575a9d42a010605b090244e5ca8a9f3a98a387"},
+    {file = "pyucalgarysrs-1.26.5.tar.gz", hash = "sha256:0686b384da7f2c1d4202621afa7a346034082f1e431cb1b6c1b54d24400079a3"},
 ]
 
 [package.dependencies]
