@@ -48,7 +48,7 @@ class FOVData:
         fovs_dimensions (Dict[str, numpy.ndarray]): 
             Dictionary that holds the shape of each set of lat/lon data.
 
-        instrument_array (Optional[str]):
+        instrument_array (Optional[str]): 
             String giving the name of the instrument array this FOVData object corresponds to (optional).
             
         data_availability (dict): 
