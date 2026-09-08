@@ -181,8 +181,9 @@ the submodules and carry over configuration information in the super class.</p><
 transparency, so that it can be plotted overtop of a map.</p>
 <p>NOTE: the grid data passed in must be for a single grid image. Multiple images in a single
 call to this function is presently not supported.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>grid</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>
 <p>The grid array to prepare. Usually a result of reading a grid file and obtaining grid data from
@@ -199,10 +200,12 @@ is optional. Defaults to data min/max.</dd>
 <dd>A string giving the name of a matplotlib colormap to prep single-channel image data using. This parameter
 is optional. Defaults to "Greys_r".</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The prepared RGBA grid array.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The prepared RGBA grid array.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>

@@ -411,7 +411,7 @@ class FOV:
                          lons: Optional[Union[ndarray, list]] = None,
                          constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                          constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                         color: str = &#34;black&#34;,
+                         color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
                          marker: str = &#34;&#34;,
@@ -432,8 +432,9 @@ class FOV:
             constant_lons (float, int, or Sequence): 
                 Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-            color (str): 
-                The matplotlib color used for the contour(s).
+            color (str or tuple): 
+                The matplotlib color used for the contour(s). Colours can be supplied as a 
+                word, hexcode, or RGB/RGBA tuple.
 
             linewidth (float or int): 
                 The contour thickness.
@@ -461,8 +462,8 @@ class FOV:
         if (lats is not None or lons is not None) and (lats is None or lons is None):
             raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
 
-        # Check that color exists in matplotlib
-        if color not in matplotlib.colors.CSS4_COLORS:
+        # Check that color is a valid matplotlib color
+        if not matplotlib.colors.is_color_like(color):
             raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
         # Check that linestyle is valid
@@ -568,7 +569,7 @@ class FOV:
                          constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                          lats: Optional[Union[ndarray, list]] = None,
                          lons: Optional[Union[ndarray, list]] = None,
-                         color: str = &#34;black&#34;,
+                         color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
                          marker: str = &#34;&#34;,
@@ -592,8 +593,9 @@ class FOV:
             constant_lons (float, int, Sequence): 
                 Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-            color (str): 
-                The matplotlib color used for the contour(s).
+            color (str or tuple): 
+                The matplotlib color used for the contour(s). Colours can be supplied as a 
+                word, hexcode, or RGB/RGBA tuple.
 
             linewidth (float or int): 
                 The contour thickness.
@@ -621,8 +623,8 @@ class FOV:
         if (lats is not None or lons is not None) and (lats is None or lons is None):
             raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
-        # Check that color exists in matplotlib
-        if color not in matplotlib.colors.CSS4_COLORS:
+        # Check that color is a valid matplotlib color
+        if not matplotlib.colors.is_color_like(color):
             raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
         # Check that linestyle is valid
@@ -727,8 +729,9 @@ class FOV:
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Class representation for a FoV map.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
 <dd>Cartopy projection to utilize.</dd>
 <dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a></code> or <code>list</code> of <code><a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a> objects</code></dt>
@@ -740,15 +743,15 @@ class FOV:
 <dl>
 <dt id="pyaurorax.tools.classes.fov.FOV.cartopy_projection"><code class="name">var <span class="ident">cartopy_projection</span> : cartopy.crs.Projection</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.fov.FOV.contour_data"><code class="name">var <span class="ident">contour_data</span> : Dict[str, List[Any]] | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.fov.FOV.fov_data"><code class="name">var <span class="ident">fov_data</span> : List[<a title="pyaurorax.tools.classes.fov.FOVData" href="#pyaurorax.tools.classes.fov.FOVData">FOVData</a>] | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -790,22 +793,25 @@ class FOV:
             self.fov_data.append(data)</code></pre>
 </details>
 <div class="desc"><p>Add one or more FOVData objects to the FOV object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="../index.html#pyaurorax.tools.FOVData">FOVData</a></code> or <code>list</code></dt>
 <dd>A single or list of FOVData objects, that will be added to the
 FOV object map upon initialization.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The object's fov_data parameter is updated appropriately.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The object's fov_data parameter is updated appropriately.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.classes.fov.FOV.add_geo_contours"><code class="name flex">
-<span>def <span class="ident">add_geo_contours</span></span>(<span>self,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
+<span>def <span class="ident">add_geo_contours</span></span>(<span>self,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>color: str | Tuple[float, ...] = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -817,7 +823,7 @@ FOV object map upon initialization.</dd>
                      lons: Optional[Union[ndarray, list]] = None,
                      constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                      constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                     color: str = &#34;black&#34;,
+                     color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                      linewidth: Union[float, int] = 1,
                      linestyle: str = &#34;solid&#34;,
                      marker: str = &#34;&#34;,
@@ -838,8 +844,9 @@ FOV object map upon initialization.</dd>
         constant_lons (float, int, or Sequence): 
             Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-        color (str): 
-            The matplotlib color used for the contour(s).
+        color (str or tuple): 
+            The matplotlib color used for the contour(s). Colours can be supplied as a 
+            word, hexcode, or RGB/RGBA tuple.
 
         linewidth (float or int): 
             The contour thickness.
@@ -867,8 +874,8 @@ FOV object map upon initialization.</dd>
     if (lats is not None or lons is not None) and (lats is None or lons is None):
         raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
 
-    # Check that color exists in matplotlib
-    if color not in matplotlib.colors.CSS4_COLORS:
+    # Check that color is a valid matplotlib color
+    if not matplotlib.colors.is_color_like(color):
         raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
     # Check that linestyle is valid
@@ -969,8 +976,9 @@ FOV object map upon initialization.</dd>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geographic contours to a FoV map.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of geographic latitudes defining a contour.</dd>
 <dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -979,8 +987,9 @@ FOV object map upon initialization.</dd>
 <dd>Geographic Latitude(s) at which to add line(s) of constant latitude.</dd>
 <dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
 <dd>Geographic Longitude(s) at which to add line(s) of constant longitude.</dd>
-<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
-<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code> or <code>tuple</code></dt>
+<dd>The matplotlib color used for the contour(s). Colours can be supplied as a
+word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>The contour thickness.</dd>
 <dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
@@ -990,16 +999,18 @@ FOV object map upon initialization.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The object's contour_data parameter is populated appropriately.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The object's contour_data parameter is populated appropriately.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.classes.fov.FOV.add_mag_contours"><code class="name flex">
-<span>def <span class="ident">add_mag_contours</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
+<span>def <span class="ident">add_mag_contours</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>color: str | Tuple[float, ...] = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1012,7 +1023,7 @@ FOV object map upon initialization.</dd>
                      constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                      lats: Optional[Union[ndarray, list]] = None,
                      lons: Optional[Union[ndarray, list]] = None,
-                     color: str = &#34;black&#34;,
+                     color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                      linewidth: Union[float, int] = 1,
                      linestyle: str = &#34;solid&#34;,
                      marker: str = &#34;&#34;,
@@ -1036,8 +1047,9 @@ FOV object map upon initialization.</dd>
         constant_lons (float, int, Sequence): 
             Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-        color (str): 
-            The matplotlib color used for the contour(s).
+        color (str or tuple): 
+            The matplotlib color used for the contour(s). Colours can be supplied as a 
+            word, hexcode, or RGB/RGBA tuple.
 
         linewidth (float or int): 
             The contour thickness.
@@ -1065,8 +1077,8 @@ FOV object map upon initialization.</dd>
     if (lats is not None or lons is not None) and (lats is None or lons is None):
         raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
-    # Check that color exists in matplotlib
-    if color not in matplotlib.colors.CSS4_COLORS:
+    # Check that color is a valid matplotlib color
+    if not matplotlib.colors.is_color_like(color):
         raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
     # Check that linestyle is valid
@@ -1171,8 +1183,9 @@ FOV object map upon initialization.</dd>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a FoV map.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>The timestamp used in computing AACGM coordinates.</dd>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -1183,8 +1196,9 @@ FOV object map upon initialization.</dd>
 <dd>Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</dd>
 <dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
 <dd>Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</dd>
-<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
-<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code> or <code>tuple</code></dt>
+<dd>The matplotlib color used for the contour(s). Colours can be supplied as a
+word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>The contour thickness.</dd>
 <dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
@@ -1194,10 +1208,12 @@ FOV object map upon initialization.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The object's contour_data parameter is populated appropriately.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The object's contour_data parameter is populated appropriately.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -1436,8 +1452,9 @@ FOV object map upon initialization.</dd>
 <div class="desc"><p>Generate a plot of the FoV data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
@@ -1482,8 +1499,9 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The displayed fov map, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<p>Returns
+-----=
+The displayed fov map, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
@@ -1529,7 +1547,7 @@ Raises:</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.fov.FOVData"><code class="flex name class">
 <span>class <span class="ident">FOVData</span></span>
-<span>(</span><span>site_uid_list: List[str],<br>fovs: Dict[str, numpy.ndarray],<br>fovs_dimensions: Dict[str, Tuple],<br>instrument_array: str,<br>data_availability: Dict[str, bool] | None,<br>color: str,<br>linewidth: int,<br>linestyle: str,<br>aurorax_obj)</span>
+<span>(</span><span>site_uid_list: List[str],<br>fovs: Dict[str, numpy.ndarray],<br>fovs_dimensions: Dict[str, Tuple],<br>instrument_array: str | None,<br>data_availability: Dict[str, bool] | None,<br>color: str,<br>linewidth: int,<br>linestyle: str,<br>aurorax_obj)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1550,7 +1568,7 @@ Raises:</p></div>
         fovs_dimensions (Dict[str, numpy.ndarray]): 
             Dictionary that holds the shape of each set of lat/lon data.
 
-        instrument_array (str): 
+        instrument_array (Optional[str]): 
             String giving the name of the instrument array this FOVData object corresponds to (optional).
             
         data_availability (dict): 
@@ -1568,7 +1586,7 @@ Raises:</p></div>
             String (matplotlib.pyplot format code) specifying the linestyle to use when plotting this FOVData.
     &#34;&#34;&#34;
 
-    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: str,
+    def __init__(self, site_uid_list: List[str], fovs: Dict[str, ndarray], fovs_dimensions: Dict[str, Tuple], instrument_array: Optional[str],
                  data_availability: Optional[Dict[str, bool]], color: str, linewidth: int, linestyle: str, aurorax_obj):
 
         # Public vars
@@ -1662,15 +1680,16 @@ Raises:</p></div>
         self.data_availability = availability_dict</code></pre>
 </details>
 <div class="desc"><p>Prepared ASI FoV data for use by FOV routines or manual plotting.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>fovs</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
 <dd>Dictionary that holds the lat/lon data in a 2xN numpy array giving the FoV, for each site UID.</dd>
 <dt><strong><code>fovs_dimensions</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
 <dd>Dictionary that holds the shape of each set of lat/lon data.</dd>
-<dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>instrument_array</code></strong> :&ensp;<code>Optional[str]</code></dt>
 <dd>String giving the name of the instrument array this FOVData object corresponds to (optional).</dd>
 <dt><strong><code>data_availability</code></strong> :&ensp;<code>dict</code></dt>
 <dd>An optional dictionary containing information about which sites included in the FOVData actually
@@ -1749,8 +1768,9 @@ method.</dd>
 will be added to the object regarding whether or not each site included in the FOVData object
 took data in that time range. This is useful for plotting FOVs for only those sites that took
 data in a given time interval.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the dataset to check for data availability (e.g. "REGO_RAW")</dd>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -1758,8 +1778,9 @@ data in a given time interval.</p>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Defines the end time of the interval to check for data availability.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The FOVData object is updated to hold data availability information, that can be used when
+<p>Returns
+-----=
+The FOVData object is updated to hold data availability information, that can be used when
 plotting to omit sites that did not take data during the time interval defined by start and end.
 Raises:</p></div>
 </dd>

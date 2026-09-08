@@ -418,8 +418,9 @@ border-left: 1px solid #ddd;
 <div class="desc"><p>Class representing an ephemeris search</p>
 <p>Note: At least one search criteria from programs, platforms, or instrument_types
 must be specified.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Start timestamp of the search (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -550,8 +551,9 @@ def query(self):
 this request asynchronously. If you would prefer to wait for it
 to be completed, set the 'wait' parameter to True. You can adjust
 the polling time using the 'poll_interval' parameter.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>wait</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Wait until the cancellation request has been completed (may wait for
 several minutes)</dd>
@@ -560,10 +562,12 @@ several minutes)</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>1 on success</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+1 on success</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
 <dd>Invalid API key for this operation</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
@@ -589,8 +593,9 @@ several minutes)</dd>
     return self.completed</code></pre>
 </details>
 <div class="desc"><p>Check to see if data is available for this ephemeris search request</p>
-<h2 id="returns">Returns</h2>
-<p>True if data is available, else False</p></div>
+<p>Returns
+-----=
+True if data is available, else False</p></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.describe"><code class="name flex">
 <span>def <span class="ident">describe</span></span>(<span>self)</span>
@@ -616,8 +621,9 @@ several minutes)</dd>
     return res.data</code></pre>
 </details>
 <div class="desc"><p>Describe the ephemeris search as an "SQL-like" string.</p>
-<h2 id="returns">Returns</h2>
-<p>The "SQL-like" string describing the ephemeris search object</p></div>
+<p>Returns
+-----=
+The "SQL-like" string describing the ephemeris search object</p></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.classes.search.EphemerisSearch.execute"><code class="name flex">
 <span>def <span class="ident">execute</span></span>(<span>self) ‑> None</span>
@@ -655,8 +661,9 @@ several minutes)</dd>
     self.request = res</code></pre>
 </details>
 <div class="desc"><p>Initiate ephemeris search request</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
 <dd>Invalid request parameters are set</dd>
 </dl></div>
@@ -784,8 +791,9 @@ several minutes)</dd>
     self.logs = status[&#34;logs&#34;]</code></pre>
 </details>
 <div class="desc"><p>Update the status of this ephemeris search request</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>status</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>The previously-retrieved status of this request (include to avoid requesting it
 from the API again), defaults to None</dd>
@@ -814,8 +822,9 @@ from the API again), defaults to None</dd>
     self.update_status(requests_wait_for_data(self.__aurorax_obj, url, poll_interval, verbose))</code></pre>
 </details>
 <div class="desc"><p>Block and wait for the request to complete and data is available for retrieval</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>float</code></dt>
 <dd>Time in seconds to wait between polling attempts, defaults to 1 second</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>

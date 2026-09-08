@@ -145,8 +145,9 @@ class Calibration:
             print(&#34;  %-27s: %s&#34; % (var_name, var_str))</code></pre>
 </details>
 <div class="desc"><p>Representation for a calibration file.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
 <dd>Filename for the calibration file, as an absolute path of its location on the local machine.</dd>
 <dt><strong><code>detector_uid</code></strong> :&ensp;<code>str</code></dt>
@@ -168,31 +169,31 @@ read instead of a flatfield calibration file.</dd>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Calibration.dataset"><code class="name">var <span class="ident">dataset</span> : pyucalgarysrs.data.classes.Dataset | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Calibration.detector_uid"><code class="name">var <span class="ident">detector_uid</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Calibration.filename"><code class="name">var <span class="ident">filename</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Calibration.flat_field_multiplier"><code class="name">var <span class="ident">flat_field_multiplier</span> : numpy.ndarray | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Calibration.generation_info"><code class="name">var <span class="ident">generation_info</span> : pyucalgarysrs.data.classes.CalibrationGenerationInfo</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Calibration.rayleighs_perdn_persecond"><code class="name">var <span class="ident">rayleighs_perdn_persecond</span> : float | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Calibration.version"><code class="name">var <span class="ident">version</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -411,8 +412,9 @@ class Data:
         print(&#34;  %-19s: %s&#34; % (&#34;dataset&#34;, dataset_str))</code></pre>
 </details>
 <div class="desc"><p>Representation of the data read in from a <code><a title="pyaurorax.data.ucalgary.read" href="read/index.html">pyaurorax.data.ucalgary.read</a></code> call.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>Any</code></dt>
 <dd>The loaded data. This can be one of the following types: ndarray, List[Skymap], List[Calibration].</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -431,27 +433,27 @@ until calibrated data is inserted manually.</dd>
 <dl>
 <dt id="pyaurorax.data.ucalgary.Data.calibrated_data"><code class="name">var <span class="ident">calibrated_data</span> : Any</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Data.data"><code class="name">var <span class="ident">data</span> : Any</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Data.dataset"><code class="name">var <span class="ident">dataset</span> : pyucalgarysrs.data.classes.Dataset | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Data.metadata"><code class="name">var <span class="ident">metadata</span> : List[Dict]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Data.problematic_files"><code class="name">var <span class="ident">problematic_files</span> : List[pyucalgarysrs.data.classes.ProblematicFile]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Data.timestamp"><code class="name">var <span class="ident">timestamp</span> : List[datetime.datetime]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -648,8 +650,9 @@ until calibrated data is inserted manually.</dd>
 </details>
 <div class="desc"><p>A dataset available from the UCalgary Space Remote Sensing API, with possibly
 support for downloading and/or reading.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Dataset name</dd>
 <dt><strong><code>short_description</code></strong> :&ensp;<code>str</code></dt>
@@ -776,8 +779,9 @@ class FileDownloadResult:
                 print(&#34;  %-18s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
 <div class="desc"><p>Representation of the results from a data download call.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>filenames</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of downloaded files, as absolute paths of their location on the local machine.</dd>
 <dt><strong><code>count</code></strong> :&ensp;<code>int</code></dt>
@@ -793,23 +797,23 @@ class FileDownloadResult:
 <dl>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.dataset"><code class="name">var <span class="ident">dataset</span> : pyucalgarysrs.data.classes.Dataset</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.filenames"><code class="name">var <span class="ident">filenames</span> : List[str]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.output_root_path"><code class="name">var <span class="ident">output_root_path</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileDownloadResult.total_bytes"><code class="name">var <span class="ident">total_bytes</span> : int</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -913,8 +917,9 @@ class FileListingResponse:
                 print(&#34;  %-13s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
 <div class="desc"><p>Representation of the file listing response from the UCalgary Space Remote Sensing API.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>urls</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>A list of URLs for available data files.</dd>
 <dt><strong><code>path_prefix</code></strong> :&ensp;<code>str</code></dt>
@@ -931,23 +936,23 @@ structure compared to the UCalgary Open Data archive.</dd>
 <dl>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.count"><code class="name">var <span class="ident">count</span> : int</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.dataset"><code class="name">var <span class="ident">dataset</span> : pyucalgarysrs.data.classes.Dataset</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.path_prefix"><code class="name">var <span class="ident">path_prefix</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.total_bytes"><code class="name">var <span class="ident">total_bytes</span> : int | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.FileListingResponse.urls"><code class="name">var <span class="ident">urls</span> : List[str]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1045,8 +1050,9 @@ structure compared to the UCalgary Open Data archive.</dd>
             print(&#34;  %-19s: %s&#34; % (var_name, None if var_value is None else var_value))</code></pre>
 </details>
 <div class="desc"><p>Representation for an observatory.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>uid</code></strong> :&ensp;<code>str</code></dt>
 <dd>The 4-letter unique identifier (traditionally referred to as the site UID)</dd>
 <dt><strong><code>full_name</code></strong> :&ensp;<code>str</code></dt>
@@ -1205,8 +1211,9 @@ class Skymap:
         return alts_km</code></pre>
 </details>
 <div class="desc"><p>Representation for a skymap file.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>filename</code></strong> :&ensp;<code>str</code></dt>
 <dd>Filename for the skymap file, as an absolute path of its location on the local machine.</dd>
 <dt><strong><code>project_uid</code></strong> :&ensp;<code>str</code></dt>
@@ -1242,59 +1249,59 @@ class Skymap:
 <dl>
 <dt id="pyaurorax.data.ucalgary.Skymap.filename"><code class="name">var <span class="ident">filename</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.full_azimuth"><code class="name">var <span class="ident">full_azimuth</span> : numpy.ndarray | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.full_elevation"><code class="name">var <span class="ident">full_elevation</span> : numpy.ndarray</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.full_map_altitude"><code class="name">var <span class="ident">full_map_altitude</span> : numpy.ndarray</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.full_map_latitude"><code class="name">var <span class="ident">full_map_latitude</span> : numpy.ndarray</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.full_map_longitude"><code class="name">var <span class="ident">full_map_longitude</span> : numpy.ndarray</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.generation_info"><code class="name">var <span class="ident">generation_info</span> : pyucalgarysrs.data.classes.SkymapGenerationInfo</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.imager_uid"><code class="name">var <span class="ident">imager_uid</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.project_uid"><code class="name">var <span class="ident">project_uid</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.site_map_altitude"><code class="name">var <span class="ident">site_map_altitude</span> : float</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.site_map_latitude"><code class="name">var <span class="ident">site_map_latitude</span> : float</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.site_map_longitude"><code class="name">var <span class="ident">site_map_longitude</span> : float</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.site_uid"><code class="name">var <span class="ident">site_uid</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.Skymap.version"><code class="name">var <span class="ident">version</span> : str</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -2323,8 +2330,9 @@ For example, both fields can be used for most raw and keogram data, but only sit
 be used for skymap datasets, and only device UID can be used for calibration datasets. If
 fields are specified during a call in which site or device UID is not used, a UserWarning
 is display to provide the user with feedback about this detail.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Name of the dataset to download data for. Use the <code>list_datasets()</code> function
 to get the possible values for this parameter. One example is "THEMIS_ASI_RAW".
@@ -2373,11 +2381,13 @@ See notes section below for further details.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
 object containing details about what data files were downloaded.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXDownloadError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXDownloadError">AuroraXDownloadError</a></code></dt>
 <dd>an error was encountered while downloading a
 specific file</dd>
@@ -2491,8 +2501,9 @@ aurorax.data.download(dataset_name, start, end)
     return download_obj</code></pre>
 </details>
 <div class="desc"><p>Download the flatfield calibration file that best matches the parameters supplied.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Name of the dataset to download data for. Use the <code>list_datasets()</code> function
 to get the possible values for this parameter. One example is "THEMIS_ASI_SKYMAP_IDLSAV".
@@ -2510,11 +2521,13 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
 object containing details about what data files were downloaded.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue with supplied timestamp</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
@@ -2610,8 +2623,9 @@ object containing details about what data files were downloaded.</p>
     return download_obj</code></pre>
 </details>
 <div class="desc"><p>Download the Rayleighs calibration file that best matches the parameters supplied.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Name of the dataset to download data for. Use the <code>list_datasets()</code> function
 to get the possible values for this parameter. One example is "REGO_CALIBRATION_RAYLEIGHS_IDLSAV".
@@ -2629,11 +2643,13 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
 object containing details about what data files were downloaded.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue with supplied timestamp</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
@@ -2729,8 +2745,9 @@ object containing details about what data files were downloaded.</p>
     return download_obj</code></pre>
 </details>
 <div class="desc"><p>Download the skymap file that best matches the parameters supplied.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Name of the dataset to download data for. Use the <code>list_datasets()</code> function
 to get the possible values for this parameter. One example is "THEMIS_ASI_SKYMAP_IDLSAV".
@@ -2748,11 +2765,13 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
 object containing details about what data files were downloaded.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue with supplied timestamp</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
@@ -2878,8 +2897,9 @@ is needed than the generic <code>download()</code> function. </p>
 list of URLs available for download, then further process this list to fewer files
 based on some other requirement (ie. time down-sampling such as one file per hour).
 Lastly using this function to download the new custom set URLs.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>file_listing_response</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.FileListingResponse" href="#pyaurorax.data.ucalgary.FileListingResponse">FileListingResponse</a></code></dt>
 <dd>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileListingResponse"><code>FileListingResponse</code></a>
 object returned from a <code>get_urls()</code> call, which contains a list of URLs to download
@@ -2910,11 +2930,13 @@ See notes section below for further details.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileDownloadResult"><code>FileDownloadResult</code></a>
 object containing details about what data files were downloaded.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXDownloadError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXDownloadError">AuroraXDownloadError</a></code></dt>
 <dd>an error was encountered while downloading a
 specific file</dd>
@@ -2973,8 +2995,9 @@ aurorax.data.download(dataset_name, start, end)
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>Get a specific dataset</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The dataset name to get. Case is insensitive.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
@@ -2982,11 +3005,13 @@ aurorax.data.download(dataset_name, start, end)
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The found <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
+<p>Returns
+-----=
+The found <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
 object. Raises an exception if not found.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -3078,8 +3103,9 @@ For example, both fields can be used for most raw and keogram data, but only sit
 be used for skymap datasets, and only device UID can be used for calibration datasets. If
 fields are specified during a call in which site or device UID is not used, a UserWarning
 is display to provide the user with feedback about this detail.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Name of the dataset to download data for. Use the <code>list_datasets()</code> function
 to get the possible values for this parameter. One example is "THEMIS_ASI_RAW".
@@ -3107,11 +3133,13 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileListingResponse"><code>FileListingResponse</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.FileListingResponse"><code>FileListingResponse</code></a>
 object containing a list of the available URLs, among other values.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>an API error was encountered</dd>
 </dl></div>
@@ -3152,14 +3180,16 @@ in basic formats such as JPG or PNG, so unique functions aren't necessary. We le
 it up to the user to open these basic files in whichever way they prefer. Use the
 <code>list_supported_read_datasets()</code> function to see all datasets that have special
 file reading functionality in this library.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The dataset name to check if file reading is supported. This parameter
 is required.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Boolean indicating if file reading is supported.</p></div>
+<p>Returns
+-----=
+Boolean indicating if file reading is supported.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.list_datasets"><code class="name flex">
 <span>def <span class="ident">list_datasets</span></span>(<span>self,<br>name: str | None = None,<br>level: str | None = None,<br>timeout: int | None = None) ‑> List[pyucalgarysrs.data.classes.Dataset]</span>
@@ -3206,8 +3236,9 @@ is required.</dd>
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>List available datasets</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Supply a name used for filtering. If that name is found in the available dataset
 names received from the API, it will be included in the results. This parameter is
@@ -3220,11 +3251,13 @@ is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
+<p>Returns
+-----=
+A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
 objects.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -3272,8 +3305,9 @@ objects.</p>
         raise AuroraXAPIError(e) from e</code></pre>
 </details>
 <div class="desc"><p>List information about observatories</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
 <dd>The instrument array to list observatories for. Valid values are: themis_asi, rego,
 trex_rgb, trex_nir, trex_blue, and trex_spectrograph.</dd>
@@ -3286,11 +3320,13 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory"><code>Observatory</code></a>
+<p>Returns
+-----=
+A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory"><code>Observatory</code></a>
 objects.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -3313,11 +3349,12 @@ objects.</p>
     return self.__aurorax_obj.srs_obj.data.list_supported_read_datasets()</code></pre>
 </details>
 <div class="desc"><p>List the datasets which have file reading capabilities supported.</p>
-<h2 id="returns">Returns</h2>
-<p>A list of the dataset names with file reading support.</p></div>
+<p>Returns
+-----=
+A list of the dataset names with file reading support.</p></div>
 </dd>
 <dt id="pyaurorax.data.ucalgary.UCalgaryManager.read"><code class="name flex">
-<span>def <span class="ident">read</span></span>(<span>self,<br>dataset: pyucalgarysrs.data.classes.Dataset,<br>file_list: List[str] | List[pathlib.Path] | str | pathlib.Path,<br>n_parallel: int = 1,<br>first_record: bool = False,<br>no_metadata: bool = False,<br>start_time: datetime.datetime | None = None,<br>end_time: datetime.datetime | None = None,<br>quiet: bool = False) ‑> pyucalgarysrs.data.classes.Data</span>
+<span>def <span class="ident">read</span></span>(<span>self,<br>dataset: pyucalgarysrs.data.classes.Dataset,<br>file_list: List[str] | List[pathlib._local.Path] | str | pathlib._local.Path,<br>n_parallel: int = 1,<br>first_record: bool = False,<br>no_metadata: bool = False,<br>start_time: datetime.datetime | None = None,<br>end_time: datetime.datetime | None = None,<br>quiet: bool = False) ‑> pyucalgarysrs.data.classes.Data</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -3417,8 +3454,9 @@ objects.</p>
 </details>
 <div class="desc"><p>Read in data files for a given dataset. Note that only one type of dataset's data
 should be read in using a single call.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Dataset" href="#pyaurorax.data.ucalgary.Dataset">Dataset</a></code></dt>
 <dd>The dataset object for which the files are associated with. This parameter is
 required.</dd>
@@ -3459,11 +3497,13 @@ supplied (ie. end of the supplied data). This parameter is optional.</dd>
 that encounter errors will be, as usual, accessible via the <code>problematic_files</code>
 attribute of the returned <code><a title="pyaurorax.data.ucalgary.Data" href="#pyaurorax.data.ucalgary.Data">Data</a></code> object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Data"><code>Data</code></a>
+<p>Returns
+-----=
+A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Data"><code>Data</code></a>
 object containing the data read in, among other values.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnsupportedReadError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnsupportedReadError">AuroraXUnsupportedReadError</a></code></dt>
 <dd>an unsupported dataset was used when
 trying to read files.</dd>

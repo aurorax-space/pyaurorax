@@ -303,8 +303,9 @@ class Montage:
         return None</code></pre>
 </details>
 <div class="desc"><p>Class representation for a montage</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The derived montage data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -508,8 +509,9 @@ class Montage:
 <div class="desc"><p>Generate a plot of the montage data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>rows</code></strong> :&ensp;<code>int</code></dt>
 <dd>The number of rows to use when displaying the images as a montage. The product of
 the <code>rows</code> and <code>cols</code> parameters must match the number of images supplied when creating
@@ -565,11 +567,13 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<p>Returns
+-----=
+The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues with the y-axis choice, or rows/cols choice.</dd>
 </dl></div>

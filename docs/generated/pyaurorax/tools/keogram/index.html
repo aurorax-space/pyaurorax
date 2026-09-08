@@ -270,8 +270,9 @@ the submodules and carry over configuration information in the super class.</p><
     return func_create(images, timestamp, axis, spectra, wavelength, spect_emission, spect_band, spect_band_bg)</code></pre>
 </details>
 <div class="desc"><p>Create a keogram from a set of images.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -296,10 +297,12 @@ to prepare emissions that are not available in spect_emission.</dd>
 <dd>Manual selection of the wavelength region to subtract from integration for manually
 chosen emissions, via the spect_band argument.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -386,8 +389,9 @@ chosen emissions, via the spect_band argument.</dd>
 <div class="desc"><p>Create a keogram, from a custom slice of a set of images. The slice used is defined by a set of points,
 in CCD, geographic, or geomagnetic coordinates, within the bounds of the image data. Keogram is created
 from the bottom up, meaning the first point will correspond to the bottom of the keogram data.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -421,10 +425,12 @@ the keogram contour, this percentile is computed over all included ASI pixels, a
 value for that keogram bin. This argument is required if metric is set to "percentile" and
 should be omitted otherwise.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A <code><a title="pyaurorax.tools.Keogram" href="../index.html#pyaurorax.tools.Keogram">Keogram</a></code> object.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>

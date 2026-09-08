@@ -259,8 +259,9 @@ the submodules and carry over configuration information in the super class.</p><
     )</code></pre>
 </details>
 <div class="desc"><p>Apply various calibration adjustments to a single or set of images raw images.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>Raw images to perform calibration procedures on.</dd>
 <dt><strong><code>cal_flatfield</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Calibration" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Calibration">Calibration</a></code></dt>
@@ -282,13 +283,15 @@ must be supplied if this is True.</dd>
 <dd>Force the exposure length to be a certain value. Default is TREx NIR's nominal operating mode
 exposure length of <code>2.0 seconds</code>. Adjusting this field should be done with caution.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The calibrated images. </p>
+<p>Returns
+-----=
+The calibrated images. </p>
 <p>The shape of the calibrated data will be same as the input images. The dtype of the calibrated data
 will depend on if the Rayleighs conversion was performed. If it was, a float32 array will be returned.
 If it wasn't, the dtype will be the same as input images' dtype.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
@@ -356,8 +359,9 @@ If it wasn't, the dtype will be the same as input images' dtype.</p>
     )</code></pre>
 </details>
 <div class="desc"><p>Apply various calibration adjustments to a single or set of images raw images.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>Raw images to perform calibration procedures on.</dd>
 <dt><strong><code>cal_flatfield</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Calibration" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Calibration">Calibration</a></code></dt>
@@ -378,13 +382,15 @@ must be supplied if this is True.</dd>
 <dd>Force the exposure length to be a certain value. Default is TREx NIR's nominal operating mode
 exposure length of <code>5.0 seconds</code>. Adjusting this field should be done with caution.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The calibrated images. </p>
+<p>Returns
+-----=
+The calibrated images. </p>
 <p>The shape of the calibrated data will be same as the input images. The dtype of the calibrated data
 will depend on if the Rayleighs conversion was performed. If it was, a float32 array will be returned.
 If it wasn't, the dtype will be the same as input images' dtype.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>

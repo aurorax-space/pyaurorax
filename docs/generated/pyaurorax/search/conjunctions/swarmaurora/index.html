@@ -173,8 +173,9 @@ the submodules and carry over configuration information in the super class.</p><
     return func_create_custom_import_file(self.__aurorax_obj, search_obj, filename, return_dict)</code></pre>
 </details>
 <div class="desc"><p>Generate a Swarm-Aurora custom import file for a given conjunction search</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
 <dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
@@ -184,8 +185,9 @@ the 'request_id' value populated</dd>
 <dd>Return the custom import file contents as a dictionary instead of saving
 a file, default is False</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The filename of the saved custom import file, or a dictionary with the file contents
+<p>Returns
+-----=
+The filename of the saved custom import file, or a dictionary with the file contents
 if <code>return_dict</code> is set to True</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.get_url"><code class="name flex">
@@ -213,14 +215,16 @@ if <code>return_dict</code> is set to True</p></div>
 </details>
 <div class="desc"><p>Get a URL that displays a conjunction search in the Swarm-Aurora
 Conjunction Finder</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
 <dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The Swarm-Aurora Conjunction Finder URL for this conjunction search</p></div>
+<p>Returns
+-----=
+The Swarm-Aurora Conjunction Finder URL for this conjunction search</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.swarmaurora.SwarmAuroraManager.open_in_browser"><code class="name flex">
 <span>def <span class="ident">open_in_browser</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="../classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a>,<br>browser: str | None = None) ‑> None</span>
@@ -250,8 +254,9 @@ the 'request_id' value populated</dd>
     return func_open_in_browser(search_obj, browser)</code></pre>
 </details>
 <div class="desc"><p>In a browser, open a conjunction search in the Swarm-Aurora Conjunction Finder.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
 <dd>A conjunction search object, must be a completed search with
 the 'request_id' value populated</dd>
@@ -259,9 +264,8 @@ the 'request_id' value populated</dd>
 <dd>The browser type to load using. Default is your default browser. Some common other
 options are "google-chrome", "firefox", or "safari". For all available options, refer
 to <a href="https://docs.python.org/3/library/webbrowser.html#webbrowser.get">https://docs.python.org/3/library/webbrowser.html#webbrowser.get</a></dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>Unsupported browser specified</dd>
 </dl></div>

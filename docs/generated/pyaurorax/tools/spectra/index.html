@@ -295,8 +295,9 @@ the submodules and carry over configuration information in the super class.</p><
 </details>
 <div class="desc"><p>Integrate spectrograph data to obtain absolute intensity, for a given common auroral emission
 or a manually selected wavelength band. </p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>spect_data</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Data" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Data">Data</a></code></dt>
 <dd>The data object containing spectrograph data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -318,12 +319,14 @@ max wavelength to integrate over for the emission.</dd>
 <dd>If manually selecting the integration region, optionally allows for the selection
 of another wavelength region to subtract from the emission intensity.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of floats (or a single float) giving the absolute intensity of the
+<p>Returns
+-----=
+A list of floats (or a single float) giving the absolute intensity of the
 selected emission, in Rayleighs for the provided spectrograph data at the
 input timestamp(s).</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -436,8 +439,9 @@ input timestamp(s).</p>
 <div class="desc"><p>Generate a plot of one or more spectra from spectrograph data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>spect_data</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Data" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Data">Data</a></code></dt>
 <dd>The data object containing spectrograph data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -482,11 +486,13 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The displayed spectra, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<p>Returns
+-----=
+The displayed spectra, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>

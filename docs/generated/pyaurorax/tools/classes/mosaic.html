@@ -431,7 +431,7 @@ class Mosaic:
                          lons: Optional[Union[ndarray, list]] = None,
                          constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                          constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                         color: str = &#34;black&#34;,
+                         color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
                          marker: str = &#34;&#34;,
@@ -452,8 +452,9 @@ class Mosaic:
             constant_lons (float, int, or Sequence): 
                 Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-            color (str): 
-                The matplotlib color used for the contour(s).
+            color (str or tuple): 
+                The matplotlib color used for the contour(s). Colours can be supplied as a 
+                word, hexcode, or RGB/RGBA tuple.
 
             linewidth (float or int): 
                 The contour thickness.
@@ -481,8 +482,8 @@ class Mosaic:
         if (lats is not None or lons is not None) and (lats is None or lons is None):
             raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
 
-        # Check that color exists in matplotlib
-        if color not in matplotlib.colors.CSS4_COLORS:
+        # Check that color is a valid matplotlib color
+        if not matplotlib.colors.is_color_like(color):
             raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
         # Check that linestyle is valid
@@ -588,7 +589,7 @@ class Mosaic:
                          constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                          lats: Optional[Union[ndarray, list]] = None,
                          lons: Optional[Union[ndarray, list]] = None,
-                         color: str = &#34;black&#34;,
+                         color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                          linewidth: Union[float, int] = 1,
                          linestyle: str = &#34;solid&#34;,
                          marker: str = &#34;&#34;,
@@ -612,8 +613,9 @@ class Mosaic:
             constant_lons (float, int, Sequence): 
                 Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-            color (str): 
-                The matplotlib color used for the contour(s).
+           color (str or tuple): 
+                The matplotlib color used for the contour(s). Colours can be supplied as a 
+                word, hexcode, or RGB/RGBA tuple.
 
             linewidth (float or int): 
                 The contour thickness.
@@ -641,8 +643,8 @@ class Mosaic:
         if (lats is not None or lons is not None) and (lats is None or lons is None):
             raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
-        # Check that color exists in matplotlib
-        if color not in matplotlib.colors.CSS4_COLORS:
+        # Check that color is a valid matplotlib color
+        if not matplotlib.colors.is_color_like(color):
             raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
         # Check that linestyle is valid
@@ -747,8 +749,9 @@ class Mosaic:
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Class representation for a generated mosaic.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>polygon_data</code></strong> :&ensp;<code>matplotlib.collections.PolyCollection</code></dt>
 <dd>Generated polygons containing rendered data.</dd>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
@@ -765,29 +768,29 @@ is scaled to in the mosaic, if any is present.</dd>
 <dl>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.cartopy_projection"><code class="name">var <span class="ident">cartopy_projection</span> : cartopy.crs.Projection</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.contour_data"><code class="name">var <span class="ident">contour_data</span> : Dict[str, List[Any]] | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.polygon_data"><code class="name">var <span class="ident">polygon_data</span> : matplotlib.collections.PolyCollection | List[matplotlib.collections.PolyCollection]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.spect_cmap"><code class="name">var <span class="ident">spect_cmap</span> : str | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.spect_intensity_scale"><code class="name">var <span class="ident">spect_intensity_scale</span> : Tuple[int, int] | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.add_geo_contours"><code class="name flex">
-<span>def <span class="ident">add_geo_contours</span></span>(<span>self,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
+<span>def <span class="ident">add_geo_contours</span></span>(<span>self,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>color: str | Tuple[float, ...] = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -799,7 +802,7 @@ is scaled to in the mosaic, if any is present.</dd>
                      lons: Optional[Union[ndarray, list]] = None,
                      constant_lats: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                      constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
-                     color: str = &#34;black&#34;,
+                     color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                      linewidth: Union[float, int] = 1,
                      linestyle: str = &#34;solid&#34;,
                      marker: str = &#34;&#34;,
@@ -820,8 +823,9 @@ is scaled to in the mosaic, if any is present.</dd>
         constant_lons (float, int, or Sequence): 
             Geographic Longitude(s) at which to add line(s) of constant longitude.
 
-        color (str): 
-            The matplotlib color used for the contour(s).
+        color (str or tuple): 
+            The matplotlib color used for the contour(s). Colours can be supplied as a 
+            word, hexcode, or RGB/RGBA tuple.
 
         linewidth (float or int): 
             The contour thickness.
@@ -849,8 +853,8 @@ is scaled to in the mosaic, if any is present.</dd>
     if (lats is not None or lons is not None) and (lats is None or lons is None):
         raise (ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;))
 
-    # Check that color exists in matplotlib
-    if color not in matplotlib.colors.CSS4_COLORS:
+    # Check that color is a valid matplotlib color
+    if not matplotlib.colors.is_color_like(color):
         raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
     # Check that linestyle is valid
@@ -951,8 +955,9 @@ is scaled to in the mosaic, if any is present.</dd>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geographic contours to a mosaic.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of geographic latitudes defining a contour.</dd>
 <dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -961,8 +966,9 @@ is scaled to in the mosaic, if any is present.</dd>
 <dd>Geographic Latitude(s) at which to add line(s) of constant latitude.</dd>
 <dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int,</code> or <code>Sequence</code></dt>
 <dd>Geographic Longitude(s) at which to add line(s) of constant longitude.</dd>
-<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
-<dd>The matplotlib color used for the contour(s).</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code> or <code>tuple</code></dt>
+<dd>The matplotlib color used for the contour(s). Colours can be supplied as a
+word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
 <dd>The contour thickness.</dd>
 <dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
@@ -972,16 +978,18 @@ is scaled to in the mosaic, if any is present.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The object's contour_data parameter is populated appropriately.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The object's contour_data parameter is populated appropriately.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.Mosaic.add_mag_contours"><code class="name flex">
-<span>def <span class="ident">add_mag_contours</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>color: str = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
+<span>def <span class="ident">add_mag_contours</span></span>(<span>self,<br>timestamp: datetime.datetime,<br>constant_lats: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>constant_lons: float | int | Sequence[float | int] | numpy.ndarray | None = None,<br>lats: numpy.ndarray | list | None = None,<br>lons: numpy.ndarray | list | None = None,<br>color: str | Tuple[float, ...] = 'black',<br>linewidth: float | int = 1,<br>linestyle: str = 'solid',<br>marker: str = '',<br>bring_to_front: bool = False)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -994,7 +1002,7 @@ is scaled to in the mosaic, if any is present.</dd>
                      constant_lons: Optional[Union[float, int, Sequence[Union[float, int]], ndarray]] = None,
                      lats: Optional[Union[ndarray, list]] = None,
                      lons: Optional[Union[ndarray, list]] = None,
-                     color: str = &#34;black&#34;,
+                     color: Union[str, Tuple[float, ...]] = &#34;black&#34;,
                      linewidth: Union[float, int] = 1,
                      linestyle: str = &#34;solid&#34;,
                      marker: str = &#34;&#34;,
@@ -1018,8 +1026,9 @@ is scaled to in the mosaic, if any is present.</dd>
         constant_lons (float, int, Sequence): 
             Geomagnetic longitude(s) at which to add contours(s) of constant longitude.
 
-        color (str): 
-            The matplotlib color used for the contour(s).
+       color (str or tuple): 
+            The matplotlib color used for the contour(s). Colours can be supplied as a 
+            word, hexcode, or RGB/RGBA tuple.
 
         linewidth (float or int): 
             The contour thickness.
@@ -1047,8 +1056,8 @@ is scaled to in the mosaic, if any is present.</dd>
     if (lats is not None or lons is not None) and (lats is None or lons is None):
         raise ValueError(&#34;Manually supplying contour requires both lats and lons.&#34;)
 
-    # Check that color exists in matplotlib
-    if color not in matplotlib.colors.CSS4_COLORS:
+    # Check that color is a valid matplotlib color
+    if not matplotlib.colors.is_color_like(color):
         raise ValueError(f&#34;Color &#39;{color}&#39; not recognized by matplotlib.&#34;)
 
     # Check that linestyle is valid
@@ -1153,33 +1162,37 @@ is scaled to in the mosaic, if any is present.</dd>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
-<h2 id="args">Args</h2>
+<p>Args
+-----=
+timestamp (datetime.datetime):
+The timestamp used in computing AACGM coordinates.</p>
+<p>lats (ndarray or list):
+Sequence of geomagnetic latitudes defining a contour.</p>
+<p>lons (ndarray or list):
+Sequence of geomagnetic longitudes defining a contour.</p>
+<p>constant_lats (float, int, Sequence):
+Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</p>
+<p>constant_lons (float, int, Sequence):
+Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</p>
 <dl>
-<dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
-<dd>The timestamp used in computing AACGM coordinates.</dd>
-<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
-<dd>Sequence of geomagnetic latitudes defining a contour.</dd>
-<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
-<dd>Sequence of geomagnetic longitudes defining a contour.</dd>
-<dt><strong><code>constant_lats</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
-<dd>Geomagnetic latitude(s) at which to add contour(s) of constant latitude.</dd>
-<dt><strong><code>constant_lons</code></strong> :&ensp;<code>float, int, Sequence</code></dt>
-<dd>Geomagnetic longitude(s) at which to add contours(s) of constant longitude.</dd>
-<dt><strong><code>color</code></strong> :&ensp;<code>str</code></dt>
-<dd>The matplotlib color used for the contour(s).</dd>
-<dt><strong><code>linewidth</code></strong> :&ensp;<code>float</code> or <code>int</code></dt>
-<dd>The contour thickness.</dd>
-<dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
-<dd>The matplotlib linestyle used for the contour(s).</dd>
-<dt><strong><code>marker</code></strong> :&ensp;<code>str</code></dt>
-<dd>The matplotlib marker used for the contour(s).</dd>
-<dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
-<dd>Plots the contour on top of all other currently plotted objects.</dd>
+<dt><strong><code>color</code></strong> :&ensp;<code>str</code> or <code>tuple</code></dt>
+<dd>The matplotlib color used for the contour(s). Colours can be supplied as a
+word, hexcode, or RGB/RGBA tuple.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The object's contour_data parameter is populated appropriately.</p>
-<h2 id="raises">Raises</h2>
+<p>linewidth (float or int):
+The contour thickness.</p>
+<p>linestyle (str):
+The matplotlib linestyle used for the contour(s).</p>
+<p>marker (str):
+The matplotlib marker used for the contour(s).</p>
+<p>bring_to_front (bool):
+Plots the contour on top of all other currently plotted objects.</p>
+<p>Returns
+-----=
+The object's contour_data parameter is populated appropriately.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -1479,8 +1492,9 @@ is scaled to in the mosaic, if any is present.</dd>
 <div class="desc"><p>Generate a plot of the mosaic data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
@@ -1543,8 +1557,9 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<p>Returns
+-----=
+The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
@@ -1651,8 +1666,9 @@ class MosaicData:
         print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
 </details>
 <div class="desc"><p>Prepared image data for use by mosaic routines.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>timestamps</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -1669,23 +1685,23 @@ ndarray is the prepared data.</dd>
 <dl>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicData.data_types"><code class="name">var <span class="ident">data_types</span> : List[str]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicData.images"><code class="name">var <span class="ident">images</span> : Dict[str, numpy.ndarray]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicData.images_dimensions"><code class="name">var <span class="ident">images_dimensions</span> : Dict[str, Tuple]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicData.site_uid_list"><code class="name">var <span class="ident">site_uid_list</span> : List[str]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicData.timestamps"><code class="name">var <span class="ident">timestamps</span> : List[datetime.datetime]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1805,8 +1821,9 @@ class MosaicSkymap:
         print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
 </details>
 <div class="desc"><p>Prepared skymap data for use by mosaic routines.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>elevation</code></strong> :&ensp;<code>List[numpy.ndarray]</code></dt>
@@ -1823,19 +1840,19 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
 <dl>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.elevation"><code class="name">var <span class="ident">elevation</span> : List[numpy.ndarray]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lat"><code class="name">var <span class="ident">polyfill_lat</span> : List[numpy.ndarray]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.polyfill_lon"><code class="name">var <span class="ident">polyfill_lon</span> : List[numpy.ndarray]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.tools.classes.mosaic.MosaicSkymap.site_uid_list"><code class="name">var <span class="ident">site_uid_list</span> : List[str]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>

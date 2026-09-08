@@ -444,8 +444,9 @@ def ucalgary(self):
         return dataset</code></pre>
 </details>
 <div class="desc"><p>Get a specific dataset</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The dataset name to get. Case is insensitive.</dd>
 <dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
@@ -453,11 +454,13 @@ def ucalgary(self):
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The found <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
+<p>Returns
+-----=
+The found <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
 object. Raises an exception if not found.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -512,8 +515,9 @@ object. Raises an exception if not found.</p>
     return datasets</code></pre>
 </details>
 <div class="desc"><p>List available datasets from all providers</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Supply a name used for filtering. If that name is found in the available dataset
 names received from the API, it will be included in the results. This parameter is
@@ -526,11 +530,13 @@ is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
+<p>Returns
+-----=
+A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Dataset"><code>Dataset</code></a>
 objects.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -618,8 +624,9 @@ objects.</p>
     print(table.draw())</code></pre>
 </details>
 <div class="desc"><p>Print available datasets from all providers in a table</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Supply a name used for filtering. If that name is found in the available dataset
 names received from the API, it will be included in the results. This parameter is
@@ -634,10 +641,12 @@ is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Printed table.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+Printed table.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -695,8 +704,9 @@ object. This parameter is optional.</dd>
     return observatories</code></pre>
 </details>
 <div class="desc"><p>List information about observatories utilized by all providers.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
 <dd>The instrument array to list observatories for. Valid values are: themis_asi, rego,
 trex_rgb, trex_nir, trex_blue, and trex_spectrograph.</dd>
@@ -709,11 +719,13 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory"><code>Observatory</code></a>
+<p>Returns
+-----=
+A list of <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/data/classes.html#pyucalgarysrs.data.classes.Observatory"><code>Observatory</code></a>
 objects.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>
@@ -801,8 +813,9 @@ objects.</p>
     print(table.draw())</code></pre>
 </details>
 <div class="desc"><p>Print available observatories for a given instrument array in a table</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>instrument_array</code></strong> :&ensp;<code>str</code></dt>
 <dd>The instrument array to list observatories for. Valid values are: themis_asi, rego,
 trex_rgb, trex_nir, trex_blue, and trex_spectrograph.</dd>
@@ -817,10 +830,12 @@ parameter is optional.</dd>
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Printed table.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+Printed table.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered.</dd>
 </dl></div>

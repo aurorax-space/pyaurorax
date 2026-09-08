@@ -661,8 +661,9 @@ will override any other spectral specification.</p>
 <p><strong>NOTE</strong>: Proton precipitation is presently only for ionization rate and density calculations. Proton auroras are
 not nominal TREx characteristics and currently not computed in this version of the model.</p>
 <p><strong>NOTE</strong>: When using the d_region flag, enabling proton parameters is not permitted.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the
 end of the previous day. Any timezone data will be ignored. This parameter is required.</dd>
@@ -759,11 +760,13 @@ parameter to <code>True</code>. Default is <code>False</code>. This parameter is
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>An <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_forward.html#pyucalgarysrs.models.atm.classes_forward.ATMForwardResult"><code>ATMForwardResult</code></a>
+<p>Returns
+-----=
+An <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_forward.html#pyucalgarysrs.models.atm.classes_forward.ATMForwardResult"><code>ATMForwardResult</code></a>
 object containing the requested output data, among other values.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -898,8 +901,9 @@ parameters. Note that this function utilizes the UCalgary Space Remote Sensing A
 the calculation.</p>
 <p><strong>NOTE</strong>: As of PyAuroraX version 1.22.0, support for model version '1.0' was removed. To
 use this version of the model, please use a prior release of PyAuroraX.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Timestamp for the calculation. This value is expected to be in UTC, and is valid for a pre-defined
 timeframe. An error will be raised if outside of the valid timeframe. Any timezone data will be
@@ -954,11 +958,13 @@ parameter to <code>True</code>. Default is <code>False</code>. This parameter is
 default is 10 seconds, or the <code>api_timeout</code> value in the super class' <code><a title="pyaurorax.PyAuroraX" href="../../index.html#pyaurorax.PyAuroraX">PyAuroraX</a></code>
 object. This parameter is optional.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>An <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_inverse.html#pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult"><code>ATMInverseResult</code></a>
+<p>Returns
+-----=
+An <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/models/atm/classes_inverse.html#pyucalgarysrs.models.atm.classes_inverse.ATMInverseResult"><code>ATMInverseResult</code></a>
 object containing the requested output data, among other values.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>

@@ -133,8 +133,9 @@ the submodules and carry over configuration information in the super class.</p><
     return func_create(images, timestamp)</code></pre>
 </details>
 <div class="desc"><p>Create a montage from a set of images.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -143,8 +144,9 @@ accordingly.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
 <dd>A list of timestamps corresponding to each image.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax.tools.Montage" href="../index.html#pyaurorax.tools.Montage">Montage</a></code> object.</p></div>
+<p>Returns
+-----=
+A <code><a title="pyaurorax.tools.Montage" href="../index.html#pyaurorax.tools.Montage">Montage</a></code> object.</p></div>
 </dd>
 </dl>
 </dd>

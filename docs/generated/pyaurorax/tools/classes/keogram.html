@@ -192,7 +192,7 @@ class Keogram:
         if (altitude_km is not None):
             # Obtain lat/lon arrays from skymap
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
-                altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
+                altitude_idx = np.where(skymap.full_map_altitude == altitude_km * 1000.0)
 
                 if skymap.full_map_latitude.shape[-1] == 1:
                     self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
@@ -267,7 +267,7 @@ class Keogram:
         if (altitude_km is not None):
             # Obtain lat/lon arrays from skymap
             if (altitude_km * 1000.0 in skymap.full_map_altitude):
-                altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
+                altitude_idx = np.where(skymap.full_map_altitude == altitude_km * 1000.0)
 
                 lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
                 lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
@@ -701,8 +701,9 @@ class Keogram:
         self.timestamp = desired_timestamp</code></pre>
 </details>
 <div class="desc"><p>Class representation for a keogram</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The derived keogram data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -867,14 +868,16 @@ class Keogram:
     self.timestamp = desired_timestamp</code></pre>
 </details>
 <div class="desc"><p>Fill keogram columns that do not have data with NaNs.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>cadence</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The cadence, in seconds, of the data for the keogram. Default is to automatically
 determine the cadence based on the keogram's timestamp data</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>None. If there is missing data, the Keogram object's data and timestamp attributes
+<p>Returns
+-----=
+None. If there is missing data, the Keogram object's data and timestamp attributes
 will be updated accordingly.</p>
 <h1 id="raises">Raises:</h1>
 <pre><code>ValueError if called on a keogram with improper / corrupted data format / shape.
@@ -1126,8 +1129,9 @@ will be updated accordingly.</p>
 <div class="desc"><p>Generate a plot of the keogram data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>y_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>Type of y-axis to use when plotting. Options are <code>ccd</code>, <code>mag</code>, or <code>geo</code>. The
 default is <code>ccd</code>. This parameter is required.</dd>
@@ -1179,11 +1183,13 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The displayed keogram, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<p>Returns
+-----=
+The displayed keogram, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with the y-axis choice</dd>
 </dl></div>
@@ -1268,7 +1274,7 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
     if (altitude_km is not None):
         # Obtain lat/lon arrays from skymap
         if (altitude_km * 1000.0 in skymap.full_map_altitude):
-            altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
+            altitude_idx = np.where(skymap.full_map_altitude == altitude_km * 1000.0)
 
             if skymap.full_map_latitude.shape[-1] == 1:
                 self.geo_y = np.squeeze(skymap.full_map_latitude[altitude_idx, :, 0]).copy()
@@ -1299,18 +1305,21 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <div class="desc"><p>Set the geographic latitude values for this keogram, using the specified skymap
 data. The data will be set to the geo_y attribute of this Keogram object, which
 can then be used for plotting and/or further analysis.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap object to use. This parameter is required.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code></dt>
 <dd>The altitude to use, in kilometers. If not specified, it will use the default in the
 skymap object. If the specified altitude is not valid, a ValueError will be raised.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>None. The Keogram object's <code>geo_y</code> attribute will be updated.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+None. The Keogram object's <code>geo_y</code> attribute will be updated.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>Issues with specified altitude.</dd>
 </dl></div>
@@ -1370,7 +1379,7 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
     if (altitude_km is not None):
         # Obtain lat/lon arrays from skymap
         if (altitude_km * 1000.0 in skymap.full_map_altitude):
-            altitude_idx = np.where(altitude_km * 1000.0 == skymap.full_map_altitude)
+            altitude_idx = np.where(skymap.full_map_altitude == altitude_km * 1000.0)
 
             lats = np.squeeze(skymap.full_map_latitude[altitude_idx, :, :])
             lons = np.squeeze(skymap.full_map_longitude[altitude_idx, :, :])
@@ -1432,8 +1441,9 @@ skymap object. If the specified altitude is not valid, a ValueError will be rais
 data. AACGMv2 will be utilized to perform the calculations. The resulting data
 will be set to the mag_y attribute of this Keogram object, which can then be
 used for plotting and/or further analysis.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap object to use. This parameter is required.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -1443,10 +1453,12 @@ AACGMv2 to do the conversion.</dd>
 <dd>The altitude to use. If not specified, it will use the default in the skymap
 object. If the specified altitude is not valid, a ValueError will be raised.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>None. The Keogram object's <code>mag_y</code> attribute will be updated.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+None. The Keogram object's <code>mag_y</code> attribute will be updated.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>Issues with specified altitude.</dd>
 </dl></div>

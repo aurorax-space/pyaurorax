@@ -223,8 +223,9 @@ the submodules and carry over configuration information in the super class.</p><
                             linestyle=linestyle)</code></pre>
 </details>
 <div class="desc"><p>Prepare FOV data for use.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>sites</code></strong> :&ensp;<code>list</code> of <code>str</code> or <code>tuples</code></dt>
 <dd>The sites to be included in the FOVData object. Can be passed as a list of either one of or both of site_uid strings and/or
 ('uid', lat, lon) tuples. If passing lone site_uid strings, the instrument_array argument must be provided.</dd>
@@ -242,10 +243,12 @@ altitude defaults to 230.</dd>
 <dt><strong><code>linestyle</code></strong> :&ensp;<code>str</code></dt>
 <dd>Matplotlib formatting string specifying the linestyle for plotting FOVData. Default is '-' (solid line).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The 'prepared data, as a <code><a title="pyaurorax.tools.FOVData" href="../index.html#pyaurorax.tools.FOVData">FOVData</a></code> object.'</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The 'prepared data, as a <code><a title="pyaurorax.tools.FOVData" href="../index.html#pyaurorax.tools.FOVData">FOVData</a></code> object.'</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -282,8 +285,9 @@ altitude defaults to 230.</dd>
     return func_create_map(cartopy_projection, fov_data)</code></pre>
 </details>
 <div class="desc"><p>Create a FOV object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
 <dd>The cartopy projection to use when creating the FoV map.</dd>
 <dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="../index.html#pyaurorax.tools.FOVData">FOVData</a></code></dt>
@@ -291,10 +295,12 @@ altitude defaults to 230.</dd>
 FOV object map upon initialization. Otherwise the object will be
 created without any associated data (an empty map).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The generated <code><a title="pyaurorax.tools.FOV" href="../index.html#pyaurorax.tools.FOV">FOV</a></code> object.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The generated <code><a title="pyaurorax.tools.FOV" href="../index.html#pyaurorax.tools.FOV">FOV</a></code> object.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>

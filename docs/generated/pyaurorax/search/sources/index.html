@@ -207,8 +207,9 @@ border-left: 1px solid #ddd;
         print(&#34;  %-30s: %s&#34; % (&#34;format&#34;, self.format))</code></pre>
 </details>
 <div class="desc"><p>AuroraX data source record</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>The unique AuroraX data source identifier</dd>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
@@ -358,8 +359,9 @@ the pyaurorax.search.FORMAT_* variables.</dd>
         print(&#34;  %-30s: %s&#34; % (&#34;latest_data_product_loaded&#34;, self.latest_data_product_loaded))</code></pre>
 </details>
 <div class="desc"><p>Data source statistics information</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>ephemeris_count</code></strong> :&ensp;<code>int</code></dt>
 <dd>Total number of ephemeris records for this data source</dd>
 <dt><strong><code>data_product_count</code></strong> :&ensp;<code>int</code></dt>
@@ -920,16 +922,19 @@ the submodules and carry over configuration information in the super class.</p><
     return func_add(self.__aurorax_obj, data_source)</code></pre>
 </details>
 <div class="desc"><p>Add a new data source to the AuroraX search engine</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code></dt>
 <dd>The data source to add. THe data source record must have at least the following
 values specified: program, platform, instrument_type, display_name, and source_type.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The newly created <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code>.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The newly created <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code>.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>Invalid values for DataSource supplied</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
@@ -968,15 +973,18 @@ values specified: program, platform, instrument_type, display_name, and source_t
     return func_delete(self.__aurorax_obj, identifier)</code></pre>
 </details>
 <div class="desc"><p>Delete a data source from the AuroraX search engine</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>The data source unique identifier to delete</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>0 on success, raises error if an issue was encountered</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+0 on success, raises error if an issue was encountered</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
@@ -1039,8 +1047,9 @@ values specified: program, platform, instrument_type, display_name, and source_t
     )</code></pre>
 </details>
 <div class="desc"><p>Retrieve a specific data source record</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
 <dd>The program name</dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
@@ -1054,10 +1063,12 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> matching the requested parameters</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> matching the requested parameters</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXNotFoundError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXNotFoundError">AuroraXNotFoundError</a></code></dt>
@@ -1133,8 +1144,9 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     )</code></pre>
 </details>
 <div class="desc"><p>Retrieve all data sources matching a filter</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
 <dd>The program to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
@@ -1157,10 +1169,12 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Include additional stats information about the data source, defaults to <code>False</code>.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 </dl></div>
@@ -1198,8 +1212,9 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
     return func_get_using_identifier(self.__aurorax_obj, identifier, format, include_stats)</code></pre>
 </details>
 <div class="desc"><p>Retrieve data source for a specific identifier</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>The AuroraX unique data source identifier number</dd>
 <dt><strong><code>format</code></strong> :&ensp;<code>str</code></dt>
@@ -1209,10 +1224,12 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> for the specified identifier</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> for the specified identifier</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 </dl></div>
@@ -1286,8 +1303,9 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     )</code></pre>
 </details>
 <div class="desc"><p>Retrieve all data source records. Parameters can be used to filter as desired.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
 <dd>The program to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
@@ -1310,10 +1328,12 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 </dl></div>
@@ -1439,8 +1459,9 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
     print(table.draw())</code></pre>
 </details>
 <div class="desc"><p>Display all data source records in a table. Parameters can be used to filter as desired.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
 <dd>The program to filter for, defaults to <code>None</code></dd>
 <dt><strong><code>platform</code></strong> :&ensp;<code>str</code></dt>
@@ -1466,10 +1487,12 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <dd>Limit the table rows to a certain value, regardless of how many sources it found
 to display</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>No return, only prints a table</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+No return, only prints a table</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 </dl></div>
@@ -1538,8 +1561,9 @@ to display</dd>
 <p>This function is very similar to the <code>list()</code> function, however multiple programs,
 platforms, and/or instrument types can be supplied here. The <code>list()</code> function only
 supports single values for the parameters.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>programs</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>The programs to search for, defaults to <code>[]</code></dd>
 <dt><strong><code>platforms</code></strong> :&ensp;<code>List[str]</code></dt>
@@ -1556,10 +1580,12 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 <dt><strong><code>include_stats</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Include additional stats information about the data source, defaults to <code>False</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A list of <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> records matching the requested parameters</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 </dl></div>
@@ -1656,8 +1682,9 @@ instrument_type, display_name, or owner. Defaults to <code>identifier</code></dd
 update. </p>
 <p>Note that the identifier cannot be updated. If you need to update the data source's identifier,
 we recommend deletion of the original data source and recreation using the desired identifier.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>The AuroraX unique identifier for the data source, required and cannot be updated</dd>
 <dt><strong><code>program</code></strong> :&ensp;<code>str</code></dt>
@@ -1685,10 +1712,12 @@ appear in ephemeris records associated with the data source, defaults to <code>N
 <dd>A list of dictionaries capturing the metadata keys and values that can appear
 in data product records associated with the data source, defaults to <code>None</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The updated <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> record</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The updated <code><a title="pyaurorax.search.sources.DataSource" href="#pyaurorax.search.sources.DataSource">DataSource</a></code> record</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>Error during API call</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>

@@ -154,8 +154,9 @@ border-left: 1px solid #ddd;
 </details>
 <div class="desc"><p>Representation for an AuroraX search engine metadata filter. These are used
 as part of conjunction, ephemeris, and data product searching.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>expressions</code></strong> :&ensp;<code>List[<a title="pyaurorax.search.metadata_filters.MetadataFilterExpression" href="#pyaurorax.search.metadata_filters.MetadataFilterExpression">MetadataFilterExpression</a>]</code></dt>
 <dd>The list of metadata filter expressions for use with conjunction, ephemeris, and
 data product searches.</dd>
@@ -163,9 +164,8 @@ data product searches.</dd>
 <dd>The logical operator to use when the search engine will evaluate multiple expressions. If
 not supplied, the search engine will perform a logical 'AND' between each expression. Possible
 choices are 'and' or 'or'.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>if invalid operator was specified.</dd>
 </dl></div>
@@ -328,8 +328,9 @@ def operator(self):
 </details>
 <div class="desc"><p>Representation for an AuroraX search engine metadata filter expression. These are used
 as part of conjunction, ephemeris, and data product searching.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
 <dd>The special key for the metadata filter. For example, 'nbtrace_region'.</dd>
 <dt><strong><code>values</code></strong> :&ensp;<code>Any</code> or <code>List[Any]</code></dt>
@@ -342,9 +343,8 @@ are: "=", "!=", "&gt;", "&lt;", "&gt;=", "&lt;=", "between", "in", "not in".</p>
 <p>The "in" and "not in" operators are meant exclusively for expressions where there
 are multiple values (ie. the values parameter is a list of strings).</p>
 </dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>if invalid operator was specified.</dd>
 </dl></div>

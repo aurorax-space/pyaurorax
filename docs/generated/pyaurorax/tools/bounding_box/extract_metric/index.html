@@ -357,8 +357,9 @@ access the submodules and carry over configuration information in the super clas
     return func_azimuth(self.__aurorax_obj, images, skymap, azimuth_bounds, metric, n_channels, show_preview)</code></pre>
 </details>
 <div class="desc"><p>Compute a metric of image data within an azimuthal boundary.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -377,10 +378,12 @@ to manually specify the number of channels contained in image data.</dd>
 <dt><strong><code>show_preview</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plot a preview of the bounded area.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A numpy.ndarray containing the metrics computed within azimuth range, for all image frames.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A numpy.ndarray containing the metrics computed within azimuth range, for all image frames.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
@@ -432,8 +435,9 @@ to manually specify the number of channels contained in image data.</dd>
     return func_ccd(self.__aurorax_obj, images, ccd_bounds, metric, n_channels, show_preview)</code></pre>
 </details>
 <div class="desc"><p>Compute a metric of image data within a CCD boundary.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -450,10 +454,12 @@ to manually specify the number of channels contained in image data.</dd>
 <dt><strong><code>show_preview</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plot a preview of the bounded area.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A numpy.ndarray containing the metrics computed within CCD bounds, for all image frames.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A numpy.ndarray containing the metrics computed within CCD bounds, for all image frames.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
@@ -510,8 +516,9 @@ to manually specify the number of channels contained in image data.</dd>
     return func_elevation(self.__aurorax_obj, images, skymap, elevation_bounds, metric, n_channels, show_preview)</code></pre>
 </details>
 <div class="desc"><p>Compute a metric of image data within an elevation boundary.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -530,10 +537,12 @@ to manually specify the number of channels contained in image data.</dd>
 <dt><strong><code>show_preview</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plot a preview of the bounded area.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A numpy.ndarray containing the metrics computed within elevation range, for all image frames.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A numpy.ndarray containing the metrics computed within elevation range, for all image frames.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
@@ -593,8 +602,9 @@ to manually specify the number of channels contained in image data.</dd>
     return func_geo(self.__aurorax_obj, images, skymap, altitude_km, lonlat_bounds, metric, n_channels, show_preview)</code></pre>
 </details>
 <div class="desc"><p>Compute a metric of image data within a geographic lat/lon boundary.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -615,10 +625,12 @@ to manually specify the number of channels contained in image data.</dd>
 <dt><strong><code>show_preview</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plot a preview of the bounded area.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A numpy.ndarray containing the metrics computed within elevation range, for all image frames.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A numpy.ndarray containing the metrics computed within elevation range, for all image frames.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>
@@ -682,8 +694,9 @@ to manually specify the number of channels contained in image data.</dd>
     return func_mag(self.__aurorax_obj, images, timestamp, skymap, altitude_km, lonlat_bounds, metric, n_channels, show_preview)</code></pre>
 </details>
 <div class="desc"><p>Compute a metric of image data within a magnetic lat/lon boundary.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>images</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>A set of images. Normally this would come directly from a data <code>read</code> call, but can also
 be any arbitrary set of images. It is anticipated that the order of axes is [rows, cols, num_images]
@@ -706,10 +719,12 @@ to manually specify the number of channels contained in image data.</dd>
 <dt><strong><code>show_preview</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plot a preview of the bounded area.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A numpy.ndarray containing the metrics computed within elevation range, for all image frames.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A numpy.ndarray containing the metrics computed within elevation range, for all image frames.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issue encountered with value supplied in parameter</dd>
 </dl></div>

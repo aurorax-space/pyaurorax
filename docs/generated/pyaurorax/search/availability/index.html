@@ -262,8 +262,9 @@ the submodules and carry over configuration information in the super class.</p><
     return func_data_products(self.__aurorax_obj, start, end, program, platform, instrument_type, source_type, owner, format, slow)</code></pre>
 </details>
 <div class="desc"><p>Retrieve information about the number of existing data product records</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.date</code></dt>
 <dd>Start date to retrieve availability info for (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.date</code></dt>
@@ -287,10 +288,12 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>slow</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Query the data using a slower, but more accurate method, defaults to <code>False</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Data product availability information matching the requested parameters</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+Data product availability information matching the requested parameters</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -357,8 +360,9 @@ the pyaurorax.search.FORMAT_* variables.</dd>
     return func_ephemeris(self.__aurorax_obj, start, end, program, platform, instrument_type, source_type, owner, format, slow)</code></pre>
 </details>
 <div class="desc"><p>Retrieve information about the number of existing ephemeris records</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.date</code></dt>
 <dd>Start date to retrieve availability info for (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.date</code></dt>
@@ -382,10 +386,12 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>slow</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Query the data using a slower, but more accurate method, defaults to <code>False</code></dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Ephemeris availability information matching the requested parameters</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+Ephemeris availability information matching the requested parameters</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -421,8 +427,9 @@ class AvailabilityResult:
     available_ephemeris: Optional[Dict] = None</code></pre>
 </details>
 <div class="desc"><p>Class definition for data availability information</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>data_source</code></strong> :&ensp;<code><a title="pyaurorax.search.DataSource" href="../index.html#pyaurorax.search.DataSource">DataSource</a></code></dt>
 <dd>The data source that the records are associated with</dd>
 <dt><strong><code>available_ephemeris</code></strong> :&ensp;<code>Dict</code></dt>
@@ -434,15 +441,15 @@ class AvailabilityResult:
 <dl>
 <dt id="pyaurorax.search.availability.AvailabilityResult.available_data_products"><code class="name">var <span class="ident">available_data_products</span> : Dict | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.search.availability.AvailabilityResult.available_ephemeris"><code class="name">var <span class="ident">available_ephemeris</span> : Dict | None</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyaurorax.search.availability.AvailabilityResult.data_source"><code class="name">var <span class="ident">data_source</span> : <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="../sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 </dd>

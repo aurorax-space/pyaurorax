@@ -397,14 +397,16 @@ the submodules and carry over configuration information in the super class.</p><
 </details>
 <div class="desc"><p>Generate a template dictionary that can be used as the response_format parameter
 in an ephemeris search.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>default</code></strong> :&ensp;<code>bool</code></dt>
 <dd>The default value to set for every parameter that can be returned, defaults
 to True.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A template dictionary for the response format</p></div>
+<p>Returns
+-----=
+A template dictionary for the response format</p></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.delete"><code class="name flex">
 <span>def <span class="ident">delete</span></span>(<span>self,<br>data_source: <a title="pyaurorax.search.sources.classes.data_source.DataSource" href="../sources/classes/data_source.html#pyaurorax.search.sources.classes.data_source.DataSource">DataSource</a>,<br>start: datetime.datetime,<br>end: datetime.datetime) ‑> int</span>
@@ -445,8 +447,9 @@ to True.</dd>
 <div class="desc"><p>Delete ephemeris records between a timeframe.</p>
 <p>The API processes this request asynchronously, so this method will return
 immediately whether or not the data has already been deleted.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>data_source</code></strong> :&ensp;<code>DataSource</code></dt>
 <dd>Data source associated with the data product records (note that
 identifier, program, platform, and instrument_type are required)</dd>
@@ -455,10 +458,12 @@ identifier, program, platform, and instrument_type are required)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Timestamp marking end of range to delete records for, inclusive</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>0 on success</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+0 on success</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXNotFoundError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXNotFoundError">AuroraXNotFoundError</a></code></dt>
 <dd>Source not found</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUnauthorizedError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUnauthorizedError">AuroraXUnauthorizedError</a></code></dt>
@@ -494,15 +499,17 @@ identifier, program, platform, and instrument_type are required)</dd>
 </details>
 <div class="desc"><p>Describe an ephemeris search as an "SQL-like" string. Either a EphemerisSearch
 object can be supplied, or a dictionary of the raw JSON query.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>EphemerisSearch</code></dt>
 <dd>The ephemeris search to describe, optional</dd>
 <dt><strong><code>query_dict</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>The ephemeris search query represented as a raw dictionary, optional</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The "SQL-like" string describing the ephemeris search object</p></div>
+<p>Returns
+-----=
+The "SQL-like" string describing the ephemeris search object</p></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.get_request_url"><code class="name flex">
 <span>def <span class="ident">get_request_url</span></span>(<span>self, request_id: str) ‑> str</span>
@@ -532,13 +539,15 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 used for subsequent pyaurorax.requests function calls. Primarily this method
 facilitates delving into details about a set of already-submitted ephemeris
 searches.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>The request identifier</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The request URL</p></div>
+<p>Returns
+-----=
+The request URL</p></div>
 </dd>
 <dt id="pyaurorax.search.ephemeris.EphemerisManager.search"><code class="name flex">
 <span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>programs: List[str] | None = None,<br>platforms: List[str] | None = None,<br>instrument_types: List[str] | None = None,<br>metadata_filters: <a title="pyaurorax.search.metadata_filters.MetadataFilter" href="../metadata_filters.html#pyaurorax.search.metadata_filters.MetadataFilter">MetadataFilter</a> | List[Dict] | None = None,<br>metadata_filters_logical_operator: Literal['and', 'or', 'AND', 'OR'] | None = None,<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.ephemeris.classes.search.EphemerisSearch" href="classes/search.html#pyaurorax.search.ephemeris.classes.search.EphemerisSearch">EphemerisSearch</a></span>
@@ -638,8 +647,9 @@ started, and you can use the helper functions as part of that object to get the
 data when it's done.</p>
 <p>Note: At least one search criteria from programs, platforms, or
 instrument_types, must be specified.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Start timestamp of the search (inclusive)</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -665,10 +675,12 @@ MetadataFilter object into the metadata_filters parameter. </dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Output poll times and other progress messages, defaults to False</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax" href="../../index.html">pyaurorax</a>..search.EphemerisSearch</code> object</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A <code><a title="pyaurorax" href="../../index.html">pyaurorax</a>..search.EphemerisSearch</code> object</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>
 <dd>An API error was encountered</dd>
 </dl></div>
@@ -708,8 +720,9 @@ MetadataFilter object into the metadata_filters parameter. </dd>
     return func_upload(self.__aurorax_obj, identifier, records, validate_source, chunk_size)</code></pre>
 </details>
 <div class="desc"><p>Upload ephemeris records to AuroraX</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>AuroraX data source ID</dd>
 <dt><strong><code>records</code></strong> :&ensp;<code>List[EphemerisData]</code></dt>
@@ -719,10 +732,12 @@ MetadataFilter object into the metadata_filters parameter. </dd>
 <dt><strong><code>chunk_size</code></strong> :&ensp;<code>int</code></dt>
 <dd>Number of records to upload in a single call, defaults to 500</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>0 for success, raises exception on error</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+0 for success, raises exception on error</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXUploadError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXUploadError">AuroraXUploadError</a></code></dt>
 <dd>Upload error</dd>
 <dt><code><a title="pyaurorax.exceptions.AuroraXAPIError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXAPIError">AuroraXAPIError</a></code></dt>

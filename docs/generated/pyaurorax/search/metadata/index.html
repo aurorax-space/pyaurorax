@@ -158,13 +158,15 @@ the submodules and carry over configuration information in the super class.</p><
     return func_get_data_products_schema(self.__aurorax_obj, identifier)</code></pre>
 </details>
 <div class="desc"><p>Retrieve the data products metadata schema for a data source</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>The AuroraX data source ID</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The data products metadata schema for the data source</p></div>
+<p>Returns
+-----=
+The data products metadata schema for the data source</p></div>
 </dd>
 <dt id="pyaurorax.search.metadata.MetadataManager.get_ephemeris_schema"><code class="name flex">
 <span>def <span class="ident">get_ephemeris_schema</span></span>(<span>self, identifier: int) ‑> List[Dict]</span>
@@ -188,13 +190,15 @@ the submodules and carry over configuration information in the super class.</p><
     return func_get_ephemeris_schema(self.__aurorax_obj, identifier)</code></pre>
 </details>
 <div class="desc"><p>Retrieve the ephemeris metadata schema for a data source</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>identifier</code></strong> :&ensp;<code>int</code></dt>
 <dd>The AuroraX data source ID</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The ephemeris metadata schema for the data source</p></div>
+<p>Returns
+-----=
+The ephemeris metadata schema for the data source</p></div>
 </dd>
 <dt id="pyaurorax.search.metadata.MetadataManager.validate"><code class="name flex">
 <span>def <span class="ident">validate</span></span>(<span>self, schema: List[Dict], record: Dict, quiet: bool | None = False) ‑> bool</span>
@@ -226,8 +230,9 @@ the submodules and carry over configuration information in the super class.</p><
 </details>
 <div class="desc"><p>Validate a metadata record against a schema. This checks that the
 key names match and there aren't fewer or more keys than expected.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>schema</code></strong> :&ensp;<code>List[Dict]</code></dt>
 <dd>The metadata schema to validate against</dd>
 <dt><strong><code>record</code></strong> :&ensp;<code>Dict</code></dt>
@@ -235,8 +240,9 @@ key names match and there aren't fewer or more keys than expected.</p>
 <dt><strong><code>quiet</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Suppress any stdout output</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if the metadata record is valid, False if it is not</p></div>
+<p>Returns
+-----=
+True if the metadata record is valid, False if it is not</p></div>
 </dd>
 </dl>
 </dd>

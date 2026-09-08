@@ -620,8 +620,9 @@ as the destination directory for downloaded data, or API special settings
 (e.g., timeout, HTTP headers, API key). These parameters can be set when
 instantiating the object, or after instantiating using the self-contained
 accessible variables.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>download_output_root_path</code></strong> :&ensp;<code>str</code></dt>
 <dd>Destination directory for downloaded data. The default for this path is a
 subfolder in the user's home directory, such
@@ -650,9 +651,8 @@ Default is 'auto'. This parameter is optional.</dd>
 <dd>A <a href="https://docs-pyucalgarysrs.phys.ucalgary.ca/#pyucalgarysrs.PyUCalgarySRS">PyUCalgarySRS</a> object.
 If not supplied, it will create the object with some settings carried over from the PyAuroraX
 object. Note that specifying this is for advanced users and only necessary a few special use-cases.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXInitializationError" href="exceptions.html#pyaurorax.exceptions.AuroraXInitializationError">AuroraXInitializationError</a></code></dt>
 <dd>an error was encountered during initialization
 of the paths</dd>
@@ -869,8 +869,9 @@ def tools(self):
         raise AuroraXInitializationError(&#34;Error during output path creation: %s&#34; % str(e)) from e</code></pre>
 </details>
 <div class="desc"><p>Initialize the <code>download_output_root_path</code> and <code>read_tar_temp_path</code> directories.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXInitializationError" href="exceptions.html#pyaurorax.exceptions.AuroraXInitializationError">AuroraXInitializationError</a></code></dt>
 <dd>an error was encountered during
 initialization of the paths</dd>
@@ -950,13 +951,13 @@ with easily clearing out this directory.</p>
 <p>Note that it also deletes all files in the PyUCalgarySRS object's
 download_output_root_path path as well. Normally, these two paths are the
 same, but it can be different if the user specifically changes it. </p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Delete only files for a specific dataset name. This parameter is optional.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>
 <dd>an error was encountered during the purge operation</dd>
 </dl></div>
@@ -1008,8 +1009,9 @@ directory.</p>
 <p>Note that it also deletes all files in the PyUCalgarySRS object's
 read_tar_temp_path path as well. Normally, these two paths are the
 same, but it can be different if the user specifically changes it. </p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXPurgeError" href="exceptions.html#pyaurorax.exceptions.AuroraXPurgeError">AuroraXPurgeError</a></code></dt>
 <dd>an error was encountered during the purge operation</dd>
 </dl></div>
@@ -1130,18 +1132,21 @@ same, but it can be different if the user specifically changes it. </p>
 <div class="desc"><p>Print the volume of data existing in the download_output_root_path, broken down
 by dataset. Alternatively return the information in a dictionary.</p>
 <p>This can be a helpful tool for managing your disk space.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>order</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Order results by either <code>size</code> or <code>name</code>. Default is <code>size</code>.</dd>
 <dt><strong><code>return_dict</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Instead of printing the data usage information, return the information as a dictionary.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Printed output. If <code>return_dict</code> is True, then it will instead return a dictionary with the
+<p>Returns
+-----=
+Printed output. If <code>return_dict</code> is True, then it will instead return a dictionary with the
 disk usage information.</p>
-<h2 id="notes">Notes</h2>
-<p>Note that size on disk may differ slightly from the values determined by this
+<p>Notes
+-----=
+Note that size on disk may differ slightly from the values determined by this
 routine. For example, the results here will be slightly different than the output
 of a 'du' command on *nix systems.</p></div>
 </dd>

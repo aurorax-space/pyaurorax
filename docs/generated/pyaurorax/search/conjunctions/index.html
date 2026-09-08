@@ -512,8 +512,9 @@ def swarmaurora(self):
     return func_create_advanced_distance_combos(distance, ground, space, events, custom)</code></pre>
 </details>
 <div class="desc"><p>Get the advanced distances combinations for the specified parameters</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>distance</code></strong> :&ensp;<code>int</code></dt>
 <dd>The default distance to use, defaults to None</dd>
 <dt><strong><code>ground</code></strong> :&ensp;<code>int</code></dt>
@@ -525,8 +526,9 @@ def swarmaurora(self):
 <dt><strong><code>custom</code></strong> :&ensp;<code>int</code></dt>
 <dd>The number of custom location criteria blocks, defaults to 0</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The advanced distances combinations</p></div>
+<p>Returns
+-----=
+The advanced distances combinations</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.create_response_format_template"><code class="name flex">
 <span>def <span class="ident">create_response_format_template</span></span>(<span>self, default: bool = True) ‑> Dict</span>
@@ -679,14 +681,16 @@ def swarmaurora(self):
 </details>
 <div class="desc"><p>Generate a template dictionary that can be used as the response_format parameter
 in a conjunction search.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>default</code></strong> :&ensp;<code>bool</code></dt>
 <dd>The default value to set for every parameter that can be returned, defaults
 to True.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A template dictionary for the response format</p></div>
+<p>Returns
+-----=
+A template dictionary for the response format</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.describe"><code class="name flex">
 <span>def <span class="ident">describe</span></span>(<span>self,<br>search_obj: <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a> | None = None,<br>query_dict: Dict | None = None) ‑> str</span>
@@ -718,17 +722,20 @@ to True.</dd>
 </details>
 <div class="desc"><p>Describe a conjunction search as an "SQL-like" string. Either a ConjunctionSearch
 object can be supplied, or a dictionary of the raw JSON query.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>search_obj</code></strong> :&ensp;<code>ConjunctionSearch</code></dt>
 <dd>The conjunction search to describe, optional</dd>
 <dt><strong><code>query_dict</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>The conjunction search query represented as a raw dictionary, optional</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The "SQL-like" string describing the conjunction search object</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The "SQL-like" string describing the conjunction search object</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXError">AuroraXError</a></code></dt>
 <dd>Invalid arguments</dd>
 </dl></div>
@@ -761,13 +768,15 @@ object can be supplied, or a dictionary of the raw JSON query.</p>
 can be used for subsequent pyaurorax.requests function calls. Primarily
 this method facilitates delving into details about a set of already-submitted
 conjunction searches.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>The request identifier</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The request URL</p></div>
+<p>Returns
+-----=
+The request URL</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.search"><code class="name flex">
 <span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock">GroundCriteriaBlock</a> | Dict] = [],<br>space: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock">SpaceCriteriaBlock</a> | Dict] = [],<br>events: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a> | Dict] = [],<br>custom_locations: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock">CustomLocationsCriteriaBlock</a> | Dict] = [],<br>conjunction_types: Sequence[str | Literal['nbtrace', 'sbtrace', 'geographic']] = [],<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
@@ -868,8 +877,9 @@ all data is downloaded. If you don't want to wait, set the 'return_immediately`
 value to True. The Search object will be returned right after the search has been
 started, and you can use the helper functions as part of that object to get the
 data when it's done.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Start timestamp of the search (inclusive).</dd>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -899,10 +909,12 @@ to <code>False</code>.</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Show the progress of the request using the request log, defaults to <code>False</code>.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <code><a title="pyaurorax.search.ConjunctionSearch" href="../index.html#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code> object</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A <code><a title="pyaurorax.search.ConjunctionSearch" href="../index.html#pyaurorax.search.ConjunctionSearch">ConjunctionSearch</a></code> object</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXSearchError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXSearchError">AuroraXSearchError</a></code></dt>
 <dd>The API experienced a search error</dd>
 </dl></div>
@@ -962,8 +974,9 @@ to <code>False</code>.</dd>
 <div class="desc"><p>Search for conjunctions, using a query dictionary as the input. </p>
 <p>This is especially useful if you're working in the AuroraX Conjunction Search webpage
 to create a search and you'd like to port it over to this Python library with ease.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>query</code></strong> :&ensp;<code>Dict</code> or <code>str</code></dt>
 <dd>
 <p>A query in dictionary or string format. If it's in string format, it should valid
@@ -985,10 +998,12 @@ to <code>False</code>.</dd>
 <dt><strong><code>verbose</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Show the progress of the request using the request log, defaults to <code>False</code>.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A <code>ConjunctionSearch</code> object.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A <code>ConjunctionSearch</code> object.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="pyaurorax.exceptions.AuroraXSearchError" href="../../exceptions.html#pyaurorax.exceptions.AuroraXSearchError">AuroraXSearchError</a></code></dt>
 <dd>An error was encountered during the search process</dd>
 </dl></div>

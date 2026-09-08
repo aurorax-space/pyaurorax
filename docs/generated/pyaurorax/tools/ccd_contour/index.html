@@ -324,8 +324,9 @@ access the submodules and carry over configuration information in the super clas
     return func_azimuth(skymap, constant_azimuth, min_elevation, max_elevation, n_points, remove_edge_cases)</code></pre>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant latitude.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>constant_azimuth</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
@@ -344,11 +345,13 @@ is flattened contours along the edge of CCD boundaries. This is completely expec
 and these points are removed by default, completely for aesthetic choices. Set this
 keyword to False to keep all points in the contour.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+<p>Returns
+-----=
+A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the azimuth contour.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>invalid azimuth supplied.</dd>
 </dl></div>
@@ -397,8 +400,9 @@ the azimuth contour.</p>
     return func_elevation(skymap, constant_elevation, n_points, remove_edge_cases)</code></pre>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant elevation.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>constant_elevation</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
@@ -413,11 +417,13 @@ is flattened contours along the edge of CCD boundaries. This is completely expec
 and these points are removed by default, completely for aesthetic choices. Set this
 keyword to False to keep all points in the contour.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+<p>Returns
+-----=
+A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the elevation contour.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>invalid elevation supplied.</dd>
 </dl></div>
@@ -484,8 +490,9 @@ the elevation contour.</p>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant geographic latitude, constant geographic longitude, or a custom contour
 defined in geographic coordinates.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
@@ -510,11 +517,13 @@ is flattened contours along the edge of CCD boundaries. This is completely expec
 and these points are removed by default, completely for aesthetic choices. Set this
 keyword to False to keep all points in the contour.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+<p>Returns
+-----=
+A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the elevation contour.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>invalid elevation supplied.</dd>
 </dl></div>
@@ -585,8 +594,9 @@ the elevation contour.</p>
 </details>
 <div class="desc"><p>Obtain CCD Coordinates of a line of constant magnetic latitude, constant magnetic longitude, or a custom contour
 defined in magnetic coordinates.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap corresponding to the CCD image data to generate contours for.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -613,11 +623,13 @@ is flattened contours along the edge of CCD boundaries. This is completely expec
 and these points are removed by default, completely for aesthetic choices. Set this
 keyword to False to keep all points in the contour.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
+<p>Returns
+-----=
+A tuple (x_pix, y_pix) of numpy arrays containing the coordinates, in pixel units, of
 the elevation contour.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>invalid elevation supplied.</dd>
 </dl></div>
