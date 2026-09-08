@@ -1,7 +1,7 @@
 Version 1.23.0 (2026-09-08)
 -------------------
 - added `--api-timeout` option to the CLI for setting the API request timeout
-- multiprocessing in `tools.movie()` and `tools.mosaic.prep_skymaps()` now uses the `forkserver` start method where available, avoiding the Python 3.12+ fork deprecation warning and adopting the Python 3.14 default
+- multiprocessing in `tools.movie()` and `tools.mosaic.prep_skymaps()` now uses the `forkserver` start method where available, adopting the Python 3.14 default
 - test suite updates
 
 
