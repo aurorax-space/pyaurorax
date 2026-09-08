@@ -54,8 +54,8 @@ def test_reversed(cli_runner, api_key):
 
 @pytest.mark.cli
 def test_limit(cli_runner, api_key):
-    result = cli_runner.invoke(cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s search util list_search_requests --limit=10") %
-                               (api_key))
+    result = cli_runner.invoke(cli, ("--api-base-url=https://api.staging.aurorax.space --api-key=%s --api-timeout=60 " +
+                                     "search util list_search_requests --limit=10") % (api_key))
     assert result.exit_code == 0
 
 

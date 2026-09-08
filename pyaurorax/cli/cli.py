@@ -24,13 +24,15 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 class Config(object):
 
-    def __init__(self, verbose=False, api_key=None, api_base_url=None):
+    def __init__(self, verbose=False, api_key=None, api_base_url=None, api_timeout=None):
         self.verbose = verbose
         self.aurorax = pyaurorax.PyAuroraX()
         if (api_key is not None):
             self.aurorax.api_key = api_key
         if (api_base_url is not None):
             self.aurorax.api_base_url = api_base_url
+        if (api_timeout is not None):
+            self.aurorax.api_timeout = api_timeout
 
 
 def __test_connectivity(aurorax):
@@ -54,10 +56,11 @@ def __test_connectivity(aurorax):
 @click.version_option(version="1.22.2")
 @click.option("--api-key", type=str, help="Specify an API key")
 @click.option("--api-base-url", type=str, help="Set the AuroraX API base URL")
+@click.option("--api-timeout", type=int, help="Set the AuroraX API request timeout, in seconds")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
 @click.option("--test-connectivity", is_flag=True, help="Test connectivity to AuroraX API")
 @click.pass_context
-def cli(ctx, api_key, api_base_url, verbose, test_connectivity):
+def cli(ctx, api_key, api_base_url, api_timeout, verbose, test_connectivity):
     """
     Welcome to the PyAuroraX CLI program!
 
@@ -65,7 +68,7 @@ def cli(ctx, api_key, api_base_url, verbose, test_connectivity):
     from the command line. It uses the PyAuroraX library behind the scenes.
     """
     # set config
-    ctx.obj = Config(verbose=verbose, api_key=api_key, api_base_url=api_base_url)
+    ctx.obj = Config(verbose=verbose, api_key=api_key, api_base_url=api_base_url, api_timeout=api_timeout)
 
     # evaluate options
     if (ctx.invoked_subcommand is None):

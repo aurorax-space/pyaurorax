@@ -238,9 +238,9 @@ def test_async_with_metadata_filters(aurorax):
         "ephemeris_metadata_filters": {
             "logical_operator": "AND",
             "expressions": [{
-                "key": "ml_cloud_v1",
+                "key": "calgary_cloud_ml_v1",
                 "operator": "=",
-                "values": ["not classified as cloud"]
+                "values": ["classified as not cloudy"]
             }]
         }
     }]
