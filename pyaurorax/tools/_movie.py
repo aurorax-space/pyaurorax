@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import cv2
-from tqdm.contrib.concurrent import process_map as tqdm_process_map
 from concurrent.futures import ProcessPoolExecutor
+from ._util import get_mp_context
 
 
 def __process_frame(fname):  # pragma: nocover-ok
@@ -46,20 +46,13 @@ def movie(aurorax_obj, input_filenames, output_filename, n_parallel, fps, progre
                 frame_list.append(img)
     else:
         # multiple workers, do it in a multiprocessing loop
-        if (progress_bar_disable is True):
-            with ProcessPoolExecutor(max_workers=n_parallel) as executor:
-                for result in executor.map(__process_frame, input_filenames):
-                    frame_list.append(result["img"])
-        else:
-            results = tqdm_process_map(
-                __process_frame,
-                input_filenames,
-                max_workers=n_parallel,
-                chunksize=1,
-                desc="Reading files: ",
-                unit="files",
-                tqdm_class=aurorax_obj._tqdm,
-            )
+        #
+        # NOTE: executor.map() yields results in input order, so the
+        # frame order is preserved.
+        with ProcessPoolExecutor(max_workers=n_parallel, mp_context=get_mp_context()) as executor:
+            results = executor.map(__process_frame, input_filenames)
+            if (progress_bar_disable is False):
+                results = aurorax_obj._tqdm(results, total=len(input_filenames), desc="Reading files: ", unit="files")
             for result in results:
                 frame_list.append(result["img"])
 

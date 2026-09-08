@@ -14,9 +14,9 @@
 
 import scipy
 import numpy as np
-from tqdm.contrib.concurrent import process_map as tqdm_process_map
 from concurrent.futures import ProcessPoolExecutor
 from ..classes.mosaic import MosaicSkymap
+from .._util import get_mp_context
 
 # globals
 SPECT_WIDTH_DEG = 1.0
@@ -234,22 +234,10 @@ def prep_skymaps(aurorax_obj, skymaps, height_km, site_uid_order, progress_bar_d
                 polyfill_lat[results_dict["i"]] = results_dict["polyfill_lat"]
     else:
         # multiple workers, do it in a multiprocessing loop
-        if (progress_bar_disable is True):
-            with ProcessPoolExecutor(max_workers=n_parallel) as executor:
-                for results_dict in executor.map(__flatten_skymap, processing_dicts):
-                    elevation[results_dict["i"]] = results_dict["elevation"]
-                    polyfill_lon[results_dict["i"]] = results_dict["polyfill_lon"]
-                    polyfill_lat[results_dict["i"]] = results_dict["polyfill_lat"]
-        else:
-            results_dicts = tqdm_process_map(
-                __flatten_skymap,
-                processing_dicts,
-                max_workers=n_parallel,
-                chunksize=1,
-                desc="Preparing skymaps: ",
-                unit="skymap",
-                tqdm_class=aurorax_obj._tqdm,
-            )
+        with ProcessPoolExecutor(max_workers=n_parallel, mp_context=get_mp_context()) as executor:
+            results_dicts = executor.map(__flatten_skymap, processing_dicts)
+            if (progress_bar_disable is False):
+                results_dicts = aurorax_obj._tqdm(results_dicts, total=len(processing_dicts), desc="Preparing skymaps: ", unit="skymap")
             for results_dict in results_dicts:
                 elevation[results_dict["i"]] = results_dict["elevation"]
                 polyfill_lon[results_dict["i"]] = results_dict["polyfill_lon"]
