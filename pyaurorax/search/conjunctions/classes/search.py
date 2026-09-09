@@ -75,6 +75,11 @@ class ConjunctionSearch:
         response_format (Dict): 
             JSON representation of desired data response format
 
+        subminute_precision (bool): 
+            Search for conjunctions using sub-minute precision, instead of the default
+            one-minute precision. Defaults to None, meaning that the API default of
+            one-minute precision is used.
+
         request (AuroraXResponse): 
             AuroraXResponse object returned when the search is executed
 
@@ -119,7 +124,8 @@ class ConjunctionSearch:
                  events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
                  custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                  conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace", "geographic"]]] = ["nbtrace"],
-                 response_format: Optional[Dict] = None):
+                 response_format: Optional[Dict] = None,
+                 subminute_precision: Optional[bool] = None):
 
         # some verification
         for item in ground:
@@ -153,6 +159,7 @@ class ConjunctionSearch:
         self.distance = distance
         self.conjunction_types = conjunction_types
         self.response_format = response_format
+        self.subminute_precision = subminute_precision
 
         # initialize additional variables
         self.request = None
@@ -386,8 +393,15 @@ class ConjunctionSearch:
             "adhoc": custom_param,
             "conjunction_types": self.conjunction_types,
             "max_distances": self.distance,
-            "epoch_search_precision": 60,
         }
+
+        # set the epoch precision
+        #
+        # NOTE: the 'subminute_precision' field is only included in the query when it has been
+        # explicitly set, leaving the API to apply its default of one-minute precision otherwise.
+        if (self.subminute_precision is not None):
+            self.__query["subminute_precision"] = self.subminute_precision
+
         return self.__query
 
     def execute(self) -> None:

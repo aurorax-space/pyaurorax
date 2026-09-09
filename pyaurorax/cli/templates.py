@@ -60,6 +60,7 @@ CONJUNCTION_SEARCH_TEMPLATE = {
         }
     }],
     "conjunction_types": ["nbtrace"],
+    "subminute_precision": False,
     "max_distances": {
         "ground1-space1": 300,
         "ground2-space1": 400,

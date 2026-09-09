@@ -72,7 +72,8 @@ class ConjunctionsManager:
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
-               verbose: bool = False) -> ConjunctionSearch:
+               verbose: bool = False,
+               subminute_precision: Optional[bool] = None) -> ConjunctionSearch:
         """
         Search for conjunctions
 
@@ -123,6 +124,11 @@ class ConjunctionsManager:
             verbose (bool): 
                 Show the progress of the request using the request log, defaults to `False`.
 
+            subminute_precision (bool): 
+                Search for conjunctions using sub-minute precision, instead of the default
+                one-minute precision. Defaults to None, meaning that the API default of
+                one-minute precision is used.
+
         Returns:
             A `pyaurorax.search.ConjunctionSearch` object
 
@@ -143,6 +149,7 @@ class ConjunctionsManager:
             poll_interval,
             return_immediately,
             verbose,
+            subminute_precision,
         )
 
     def search_from_raw_query(self,

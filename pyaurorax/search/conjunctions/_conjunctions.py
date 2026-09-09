@@ -26,7 +26,7 @@ from ..api import AuroraXAPIRequest
 
 
 def search(aurorax_obj, start, end, distance, ground, space, events, custom_locations, conjunction_types, response_format, poll_interval,
-           return_immediately, verbose):
+           return_immediately, verbose, subminute_precision):
     # create a Search object
     s = ConjunctionSearch(aurorax_obj,
                           start,
@@ -37,7 +37,8 @@ def search(aurorax_obj, start, end, distance, ground, space, events, custom_loca
                           events=events,
                           custom_locations=custom_locations,
                           conjunction_types=conjunction_types,
-                          response_format=response_format)
+                          response_format=response_format,
+                          subminute_precision=subminute_precision)
     if (verbose is True):
         print(f"[{datetime.datetime.now()}] Search object created")
 
@@ -97,6 +98,22 @@ def search_from_raw_query(aurorax_obj, query, poll_interval, return_immediately,
     query["end"] = datetime.datetime.fromisoformat(query["end"][0:-1])
     if ("max_distances" not in query):
         raise AuroraXError("The 'max_distances' parameter is missing from the query. This parameter is required.")
+
+    # translate the deprecated epoch search precision field
+    #
+    # NOTE: older queries specify the epoch precision using the deprecated 'epoch_search_precision'
+    # field, a value in seconds between 1 and 60. Any value below 60 seconds is the equivalent of
+    # enabling sub-minute precision.
+    if ("epoch_search_precision" in query):
+        epoch_search_precision = query["epoch_search_precision"]
+        del query["epoch_search_precision"]
+        if (epoch_search_precision is not None):
+            if (isinstance(epoch_search_precision, bool) is True or isinstance(epoch_search_precision, int) is False
+                    or epoch_search_precision < 1 or epoch_search_precision > 60):
+                raise AuroraXError(("The 'epoch_search_precision' parameter must be an integer between 1 and 60. Note that this "
+                                    "parameter is deprecated, please use the 'subminute_precision' parameter instead."))
+            if ("subminute_precision" not in query):
+                query["subminute_precision"] = True if epoch_search_precision < 60 else False
 
     # change name of distance
     query["distance"] = deepcopy(query["max_distances"])

@@ -67,6 +67,16 @@ def __create_search_object_from_query(aurorax_obj, q):
     events = [] if "events" not in q else q["events"]
     custom = [] if "adhoc" not in q else q["adhoc"]
     conjunction_types = [] if "conjunction_types" not in q else q["conjunction_types"]
+
+    # set the epoch precision
+    #
+    # NOTE: older queries specify the epoch precision using the deprecated 'epoch_search_precision'
+    # field, a value in seconds between 1 and 60. Any value below 60 seconds is the equivalent of
+    # enabling sub-minute precision.
+    subminute_precision = None if "subminute_precision" not in q else q["subminute_precision"]
+    if (subminute_precision is None and "epoch_search_precision" in q and q["epoch_search_precision"] is not None):
+        subminute_precision = True if q["epoch_search_precision"] < 60 else False
+
     s = pyaurorax.search.ConjunctionSearch(aurorax_obj,
                                            start,
                                            end,
@@ -75,7 +85,8 @@ def __create_search_object_from_query(aurorax_obj, q):
                                            space=space,
                                            events=events,
                                            custom_locations=custom,
-                                           conjunction_types=conjunction_types)
+                                           conjunction_types=conjunction_types,
+                                           subminute_precision=subminute_precision)
     return s
 
 
@@ -317,6 +328,15 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
     conjunction_types = [] if "conjunction_types" not in q else q["conjunction_types"]
     verbose_search = True if quiet is False else False
 
+    # set the epoch precision
+    #
+    # NOTE: older query files specify the epoch precision using the deprecated
+    # 'epoch_search_precision' field, a value in seconds between 1 and 60. Any value below 60
+    # seconds is the equivalent of enabling sub-minute precision.
+    subminute_precision = None if "subminute_precision" not in q else q["subminute_precision"]
+    if (subminute_precision is None and "epoch_search_precision" in q and q["epoch_search_precision"] is not None):
+        subminute_precision = True if q["epoch_search_precision"] < 60 else False
+
     # start search
     s = config.aurorax.search.conjunctions.search(start,
                                                   end,
@@ -328,7 +348,8 @@ def search(config, infile, poll_interval, outfile, output_to_terminal, indent, m
                                                   conjunction_types=conjunction_types,
                                                   poll_interval=poll_interval,
                                                   verbose=verbose_search,
-                                                  return_immediately=True)
+                                                  return_immediately=True,
+                                                  subminute_precision=subminute_precision)
 
     # wait for data
     s.wait(poll_interval=poll_interval, verbose=verbose_search)

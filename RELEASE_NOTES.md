@@ -1,3 +1,13 @@
+Version 1.24.0 (2026-09-09)
+-------------------
+- added `subminute_precision` parameter to conjunction searching, for finding conjunctions at sub-minute precision instead of the default one-minute precision
+  - added the parameter to the `aurorax.search.conjunctions.search()` function and the `ConjunctionSearch` class
+  - added the field to the CLI conjunction search template
+  - the deprecated `epoch_search_precision` field is now translated into `subminute_precision` when found in a raw query, a CLI query file, or a resubmitted search request
+- updated conjunction searching examples notebook
+- test suite updates
+
+
 Version 1.23.0 (2026-09-08)
 -------------------
 - added `--api-timeout` option to the CLI for setting the API request timeout

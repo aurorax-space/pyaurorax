@@ -53,7 +53,7 @@ def __test_connectivity(aurorax):
 
 
 @click.group(invoke_without_command=True)
-@click.version_option(version="1.23.0")
+@click.version_option(version="1.24.0")
 @click.option("--api-key", type=str, help="Specify an API key")
 @click.option("--api-base-url", type=str, help="Set the AuroraX API base URL")
 @click.option("--api-timeout", type=int, help="Set the AuroraX API request timeout, in seconds")
