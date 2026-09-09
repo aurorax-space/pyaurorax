@@ -120,6 +120,7 @@ here instead of digging in deeper to the submodules.</p>
                events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
                custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [],
+               subminute_precision: Optional[bool] = None,
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
@@ -161,6 +162,11 @@ here instead of digging in deeper to the submodules.</p>
                 List of conjunction types, defaults to [] (meaning all conjunction types). Valid
                 options are &#39;nbtrace&#39;, &#39;sbtrace&#39;, and &#39;geographic&#39;. Defaults to &#39;nbtrace&#39;.
 
+            subminute_precision (bool): 
+                Search for conjunctions using sub-minute precision, instead of the default
+                one-minute precision. Defaults to None, meaning that the API default of
+                one-minute precision is used.
+
             response_format (Dict): 
                 JSON representation of desired data response format.
 
@@ -194,6 +200,7 @@ here instead of digging in deeper to the submodules.</p>
             poll_interval,
             return_immediately,
             verbose,
+            subminute_precision,
         )
 
     def search_from_raw_query(self,
@@ -779,7 +786,7 @@ conjunction searches.</p>
 The request URL</p></div>
 </dd>
 <dt id="pyaurorax.search.conjunctions.ConjunctionsManager.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock">GroundCriteriaBlock</a> | Dict] = [],<br>space: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock">SpaceCriteriaBlock</a> | Dict] = [],<br>events: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a> | Dict] = [],<br>custom_locations: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock">CustomLocationsCriteriaBlock</a> | Dict] = [],<br>conjunction_types: Sequence[str | Literal['nbtrace', 'sbtrace', 'geographic']] = [],<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
+<span>def <span class="ident">search</span></span>(<span>self,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: int | float | Dict,<br>ground: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.GroundCriteriaBlock">GroundCriteriaBlock</a> | Dict] = [],<br>space: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.SpaceCriteriaBlock">SpaceCriteriaBlock</a> | Dict] = [],<br>events: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.EventsCriteriaBlock">EventsCriteriaBlock</a> | Dict] = [],<br>custom_locations: Sequence[<a title="pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock" href="classes/criteria_block.html#pyaurorax.search.conjunctions.classes.criteria_block.CustomLocationsCriteriaBlock">CustomLocationsCriteriaBlock</a> | Dict] = [],<br>conjunction_types: Sequence[str | Literal['nbtrace', 'sbtrace', 'geographic']] = [],<br>subminute_precision: bool | None = None,<br>response_format: Dict | None = None,<br>poll_interval: float = 1.0,<br>return_immediately: bool = False,<br>verbose: bool = False) ‑> <a title="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch" href="classes/search.html#pyaurorax.search.conjunctions.classes.search.ConjunctionSearch">ConjunctionSearch</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -795,6 +802,7 @@ The request URL</p></div>
            events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
            custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
            conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [],
+           subminute_precision: Optional[bool] = None,
            response_format: Optional[Dict] = None,
            poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
            return_immediately: bool = False,
@@ -836,6 +844,11 @@ The request URL</p></div>
             List of conjunction types, defaults to [] (meaning all conjunction types). Valid
             options are &#39;nbtrace&#39;, &#39;sbtrace&#39;, and &#39;geographic&#39;. Defaults to &#39;nbtrace&#39;.
 
+        subminute_precision (bool): 
+            Search for conjunctions using sub-minute precision, instead of the default
+            one-minute precision. Defaults to None, meaning that the API default of
+            one-minute precision is used.
+
         response_format (Dict): 
             JSON representation of desired data response format.
 
@@ -869,6 +882,7 @@ The request URL</p></div>
         poll_interval,
         return_immediately,
         verbose,
+        subminute_precision,
     )</code></pre>
 </details>
 <div class="desc"><p>Search for conjunctions</p>
@@ -899,6 +913,10 @@ modified from the output of the "get_advanced_distances_combos()" function.</dd>
 <dt><strong><code>conjunction_types</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of conjunction types, defaults to [] (meaning all conjunction types). Valid
 options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.</dd>
+<dt><strong><code>subminute_precision</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Search for conjunctions using sub-minute precision, instead of the default
+one-minute precision. Defaults to None, meaning that the API default of
+one-minute precision is used.</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format.</dd>
 <dt><strong><code>poll_interval</code></strong> :&ensp;<code>bool</code></dt>

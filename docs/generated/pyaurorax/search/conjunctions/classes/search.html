@@ -67,7 +67,7 @@ border-left: 1px solid #ddd;
 <dl>
 <dt id="pyaurorax.search.conjunctions.classes.search.ConjunctionSearch"><code class="flex name class">
 <span>class <span class="ident">ConjunctionSearch</span></span>
-<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],<br>space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],<br>events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],<br>custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],<br>conjunction_types: "Sequence[Union[str, Literal['nbtrace', 'sbtrace', 'geographic']]]" = ['nbtrace'],<br>response_format: Optional[Dict] = None)</span>
+<span>(</span><span>aurorax_obj: PyAuroraX,<br>start: datetime.datetime,<br>end: datetime.datetime,<br>distance: Union[int, float, Dict],<br>ground: Sequence[Union[GroundCriteriaBlock, Dict]] = [],<br>space: Sequence[Union[SpaceCriteriaBlock, Dict]] = [],<br>events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],<br>custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],<br>conjunction_types: "Sequence[Union[str, Literal['nbtrace', 'sbtrace', 'geographic']]]" = ['nbtrace'],<br>response_format: Optional[Dict] = None,<br>subminute_precision: Optional[bool] = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -108,6 +108,11 @@ border-left: 1px solid #ddd;
 
         response_format (Dict): 
             JSON representation of desired data response format
+
+        subminute_precision (bool): 
+            Search for conjunctions using sub-minute precision, instead of the default
+            one-minute precision. Defaults to None, meaning that the API default of
+            one-minute precision is used.
 
         request (AuroraXResponse): 
             AuroraXResponse object returned when the search is executed
@@ -153,7 +158,8 @@ border-left: 1px solid #ddd;
                  events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
                  custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                  conjunction_types: Sequence[Union[str, Literal[&#34;nbtrace&#34;, &#34;sbtrace&#34;, &#34;geographic&#34;]]] = [&#34;nbtrace&#34;],
-                 response_format: Optional[Dict] = None):
+                 response_format: Optional[Dict] = None,
+                 subminute_precision: Optional[bool] = None):
 
         # some verification
         for item in ground:
@@ -187,6 +193,7 @@ border-left: 1px solid #ddd;
         self.distance = distance
         self.conjunction_types = conjunction_types
         self.response_format = response_format
+        self.subminute_precision = subminute_precision
 
         # initialize additional variables
         self.request = None
@@ -420,8 +427,15 @@ border-left: 1px solid #ddd;
             &#34;adhoc&#34;: custom_param,
             &#34;conjunction_types&#34;: self.conjunction_types,
             &#34;max_distances&#34;: self.distance,
-            &#34;epoch_search_precision&#34;: 60,
         }
+
+        # set the epoch precision
+        #
+        # NOTE: the &#39;subminute_precision&#39; field is only included in the query when it has been
+        # explicitly set, leaving the API to apply its default of one-minute precision otherwise.
+        if (self.subminute_precision is not None):
+            self.__query[&#34;subminute_precision&#34;] = self.subminute_precision
+
         return self.__query
 
     def execute(self) -&gt; None:
@@ -607,6 +621,10 @@ modified from the output of the "get_advanced_distances_combos()" function.</dd>
 options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.</dd>
 <dt><strong><code>response_format</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>JSON representation of desired data response format</dd>
+<dt><strong><code>subminute_precision</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Search for conjunctions using sub-minute precision, instead of the default
+one-minute precision. Defaults to None, meaning that the API default of
+one-minute precision is used.</dd>
 <dt><strong><code>request</code></strong> :&ensp;<code>AuroraXResponse</code></dt>
 <dd>AuroraXResponse object returned when the search is executed</dd>
 <dt><strong><code>request_id</code></strong> :&ensp;<code>str</code></dt>
@@ -729,8 +747,15 @@ def query(self) -&gt; Dict:
         &#34;adhoc&#34;: custom_param,
         &#34;conjunction_types&#34;: self.conjunction_types,
         &#34;max_distances&#34;: self.distance,
-        &#34;epoch_search_precision&#34;: 60,
     }
+
+    # set the epoch precision
+    #
+    # NOTE: the &#39;subminute_precision&#39; field is only included in the query when it has been
+    # explicitly set, leaving the API to apply its default of one-minute precision otherwise.
+    if (self.subminute_precision is not None):
+        self.__query[&#34;subminute_precision&#34;] = self.subminute_precision
+
     return self.__query</code></pre>
 </details>
 <div class="desc"><p>Property for the query value</p>
