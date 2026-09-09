@@ -69,11 +69,11 @@ class ConjunctionsManager:
                events: Sequence[Union[EventsCriteriaBlock, Dict]] = [],
                custom_locations: Sequence[Union[CustomLocationsCriteriaBlock, Dict]] = [],
                conjunction_types: Sequence[Union[str, Literal["nbtrace", "sbtrace", "geographic"]]] = [],
+               subminute_precision: Optional[bool] = None,
                response_format: Optional[Dict] = None,
                poll_interval: float = __STANDARD_POLLING_SLEEP_TIME,
                return_immediately: bool = False,
-               verbose: bool = False,
-               subminute_precision: Optional[bool] = None) -> ConjunctionSearch:
+               verbose: bool = False) -> ConjunctionSearch:
         """
         Search for conjunctions
 
@@ -111,6 +111,11 @@ class ConjunctionsManager:
                 List of conjunction types, defaults to [] (meaning all conjunction types). Valid
                 options are 'nbtrace', 'sbtrace', and 'geographic'. Defaults to 'nbtrace'.
 
+            subminute_precision (bool): 
+                Search for conjunctions using sub-minute precision, instead of the default
+                one-minute precision. Defaults to None, meaning that the API default of
+                one-minute precision is used.
+
             response_format (Dict): 
                 JSON representation of desired data response format.
 
@@ -123,11 +128,6 @@ class ConjunctionsManager:
 
             verbose (bool): 
                 Show the progress of the request using the request log, defaults to `False`.
-
-            subminute_precision (bool): 
-                Search for conjunctions using sub-minute precision, instead of the default
-                one-minute precision. Defaults to None, meaning that the API default of
-                one-minute precision is used.
 
         Returns:
             A `pyaurorax.search.ConjunctionSearch` object
