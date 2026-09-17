@@ -16,8 +16,8 @@ def main():
     distance = 500
 
     # set up metadata filters
-    expression_1 = aurorax.search.MetadataFilterExpression("calgary_apa_ml_v1", "classified as APA", operator="=")
-    expression_2 = aurorax.search.MetadataFilterExpression("calgary_apa_ml_v1_confidence", 95, operator=">=")
+    expression_1 = aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v1", "classified as APA", operator="=")
+    expression_2 = aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v1_confidence", 95, operator=">=")
     metadata_filters = aurorax.search.MetadataFilter([expression_1, expression_2], operator="and")
 
     # set up criteria blocks

@@ -24,11 +24,11 @@ def test_metadata_filters(aurorax):
     programs = ["themis-asi"]
     metadata_filters_logical_operator = "AND"
     metadata_filters = [{
-        "key": "calgary_apa_ml_v1",
+        "key": "ucalgary_themis_apa_ml_v1",
         "operator": "in",
         "values": ["classified as APA"]
     }, {
-        "key": "calgary_apa_ml_v1_confidence",
+        "key": "ucalgary_themis_apa_ml_v1_confidence",
         "operator": ">=",
         "values": ["95"]
     }]
