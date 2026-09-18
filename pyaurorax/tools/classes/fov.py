@@ -341,7 +341,7 @@ class FOV:
 
         # Initialize figure
         fig = plt.figure(figsize=figsize)
-        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)  # type: ignore
         ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
         # Add ocean
