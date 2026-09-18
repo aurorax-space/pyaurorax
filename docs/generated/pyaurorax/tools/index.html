@@ -61,9 +61,8 @@ AuroraX platform.</p>
 for ASI data, and common manipulations. These include things like displaying single
 images, making keograms, projecting ASI data onto maps, and extracting metrics for
 a given lat/lon bounding box.</p>
-<p>Example
------=
-For shorter function calls, you can initialize the tools submodule using like so:</p>
+<h2 id="example">Example</h2>
+<p>For shorter function calls, you can initialize the tools submodule using like so:</p>
 <pre><code>import pyaurorax
 aurorax = pyaurorax.PyAuroraX()
 at = aurorax.tools
@@ -785,9 +784,8 @@ class FOV:
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Class representation for a FoV map.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
 <dd>Cartopy projection to utilize.</dd>
 <dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a></code> or <code>list</code> of <code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a> objects</code></dt>
@@ -849,19 +847,16 @@ class FOV:
             self.fov_data.append(data)</code></pre>
 </details>
 <div class="desc"><p>Add one or more FOVData objects to the FOV object.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>fov_data</code></strong> :&ensp;<code><a title="pyaurorax.tools.FOVData" href="#pyaurorax.tools.FOVData">FOVData</a></code> or <code>list</code></dt>
 <dd>A single or list of FOVData objects, that will be added to the
 FOV object map upon initialization.</dd>
 </dl>
-<p>Returns
------=
-The object's fov_data parameter is updated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's fov_data parameter is updated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
@@ -1032,9 +1027,8 @@ The object's fov_data parameter is updated appropriately.</p>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geographic contours to a FoV map.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of geographic latitudes defining a contour.</dd>
 <dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -1055,12 +1049,10 @@ word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<p>Returns
------=
-The object's contour_data parameter is populated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
@@ -1239,9 +1231,8 @@ The object's contour_data parameter is populated appropriately.</p>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a FoV map.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>The timestamp used in computing AACGM coordinates.</dd>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -1264,12 +1255,10 @@ word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<p>Returns
------=
-The object's contour_data parameter is populated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -1508,9 +1497,8 @@ The object's contour_data parameter is populated appropriately.</p>
 <div class="desc"><p>Generate a plot of the FoV data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
@@ -1555,9 +1543,8 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<p>Returns
------=
-The displayed fov map, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<h2 id="returns">Returns</h2>
+<p>The displayed fov map, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
@@ -1736,9 +1723,8 @@ Raises:</p></div>
         self.data_availability = availability_dict</code></pre>
 </details>
 <div class="desc"><p>Prepared ASI FoV data for use by FOV routines or manual plotting.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>fovs</code></strong> :&ensp;<code>Dict[str, numpy.ndarray]</code></dt>
@@ -1824,9 +1810,8 @@ method.</dd>
 will be added to the object regarding whether or not each site included in the FOVData object
 took data in that time range. This is useful for plotting FOVs for only those sites that took
 data in a given time interval.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>dataset_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the dataset to check for data availability (e.g. "REGO_RAW")</dd>
 <dt><strong><code>start</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -1834,9 +1819,8 @@ data in a given time interval.</p>
 <dt><strong><code>end</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Defines the end time of the interval to check for data availability.</dd>
 </dl>
-<p>Returns
------=
-The FOVData object is updated to hold data availability information, that can be used when
+<h2 id="returns">Returns</h2>
+<p>The FOVData object is updated to hold data availability information, that can be used when
 plotting to omit sites that did not take data during the time interval defined by start and end.
 Raises:</p></div>
 </dd>
@@ -2502,9 +2486,8 @@ class Keogram:
         self.timestamp = desired_timestamp</code></pre>
 </details>
 <div class="desc"><p>Class representation for a keogram</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The derived keogram data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -2669,16 +2652,14 @@ class Keogram:
     self.timestamp = desired_timestamp</code></pre>
 </details>
 <div class="desc"><p>Fill keogram columns that do not have data with NaNs.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>cadence</code></strong> :&ensp;<code>int</code> or <code>float</code></dt>
 <dd>The cadence, in seconds, of the data for the keogram. Default is to automatically
 determine the cadence based on the keogram's timestamp data</dd>
 </dl>
-<p>Returns
------=
-None. If there is missing data, the Keogram object's data and timestamp attributes
+<h2 id="returns">Returns</h2>
+<p>None. If there is missing data, the Keogram object's data and timestamp attributes
 will be updated accordingly.</p>
 <h1 id="raises">Raises:</h1>
 <pre><code>ValueError if called on a keogram with improper / corrupted data format / shape.
@@ -2930,9 +2911,8 @@ will be updated accordingly.</p>
 <div class="desc"><p>Generate a plot of the keogram data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>y_type</code></strong> :&ensp;<code>str</code></dt>
 <dd>Type of y-axis to use when plotting. Options are <code>ccd</code>, <code>mag</code>, or <code>geo</code>. The
 default is <code>ccd</code>. This parameter is required.</dd>
@@ -2984,13 +2964,11 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<p>Returns
------=
-The displayed keogram, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<h2 id="returns">Returns</h2>
+<p>The displayed keogram, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with the y-axis choice</dd>
 </dl></div>
@@ -3106,21 +3084,18 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <div class="desc"><p>Set the geographic latitude values for this keogram, using the specified skymap
 data. The data will be set to the geo_y attribute of this Keogram object, which
 can then be used for plotting and/or further analysis.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap object to use. This parameter is required.</dd>
 <dt><strong><code>altitude_km</code></strong> :&ensp;<code>int</code></dt>
 <dd>The altitude to use, in kilometers. If not specified, it will use the default in the
 skymap object. If the specified altitude is not valid, a ValueError will be raised.</dd>
 </dl>
-<p>Returns
------=
-None. The Keogram object's <code>geo_y</code> attribute will be updated.</p>
+<h2 id="returns">Returns</h2>
+<p>None. The Keogram object's <code>geo_y</code> attribute will be updated.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>Issues with specified altitude.</dd>
 </dl></div>
@@ -3242,9 +3217,8 @@ None. The Keogram object's <code>geo_y</code> attribute will be updated.</p>
 data. AACGMv2 will be utilized to perform the calculations. The resulting data
 will be set to the mag_y attribute of this Keogram object, which can then be
 used for plotting and/or further analysis.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>skymap</code></strong> :&ensp;<code><a title="pyaurorax.data.ucalgary.Skymap" href="../data/ucalgary/index.html#pyaurorax.data.ucalgary.Skymap">Skymap</a></code></dt>
 <dd>The skymap object to use. This parameter is required.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>
@@ -3254,12 +3228,10 @@ AACGMv2 to do the conversion.</dd>
 <dd>The altitude to use. If not specified, it will use the default in the skymap
 object. If the specified altitude is not valid, a ValueError will be raised.</dd>
 </dl>
-<p>Returns
------=
-None. The Keogram object's <code>mag_y</code> attribute will be updated.</p>
+<h2 id="returns">Returns</h2>
+<p>None. The Keogram object's <code>mag_y</code> attribute will be updated.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>Issues with specified altitude.</dd>
 </dl></div>
@@ -3504,9 +3476,8 @@ class Montage:
         return None</code></pre>
 </details>
 <div class="desc"><p>Class representation for a montage</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The derived montage data.</dd>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -3710,9 +3681,8 @@ class Montage:
 <div class="desc"><p>Generate a plot of the montage data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>rows</code></strong> :&ensp;<code>int</code></dt>
 <dd>The number of rows to use when displaying the images as a montage. The product of
 the <code>rows</code> and <code>cols</code> parameters must match the number of images supplied when creating
@@ -3768,13 +3738,11 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<p>Returns
------=
-The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<h2 id="returns">Returns</h2>
+<p>The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues with the y-axis choice, or rows/cols choice.</dd>
 </dl></div>
@@ -4488,9 +4456,8 @@ class Mosaic:
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Class representation for a generated mosaic.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>polygon_data</code></strong> :&ensp;<code>matplotlib.collections.PolyCollection</code></dt>
 <dd>Generated polygons containing rendered data.</dd>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
@@ -4694,9 +4661,8 @@ is scaled to in the mosaic, if any is present.</dd>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geographic contours to a mosaic.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of geographic latitudes defining a contour.</dd>
 <dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -4717,12 +4683,10 @@ word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<p>Returns
------=
-The object's contour_data parameter is populated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
@@ -4901,9 +4865,8 @@ The object's contour_data parameter is populated appropriately.</p>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
-<p>Args
------=
-timestamp (datetime.datetime):
+<h2 id="args">Args</h2>
+<p>timestamp (datetime.datetime):
 The timestamp used in computing AACGM coordinates.</p>
 <p>lats (ndarray or list):
 Sequence of geomagnetic latitudes defining a contour.</p>
@@ -4926,12 +4889,10 @@ The matplotlib linestyle used for the contour(s).</p>
 The matplotlib marker used for the contour(s).</p>
 <p>bring_to_front (bool):
 Plots the contour on top of all other currently plotted objects.</p>
-<p>Returns
------=
-The object's contour_data parameter is populated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -5231,9 +5192,8 @@ The object's contour_data parameter is populated appropriately.</p>
 <div class="desc"><p>Generate a plot of the mosaic data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
@@ -5296,9 +5256,8 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<p>Returns
------=
-The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<h2 id="returns">Returns</h2>
+<p>The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
@@ -5405,9 +5364,8 @@ class MosaicData:
         print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
 </details>
 <div class="desc"><p>Prepared image data for use by mosaic routines.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>timestamps</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -5560,9 +5518,8 @@ class MosaicSkymap:
         print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
 </details>
 <div class="desc"><p>Prepared skymap data for use by mosaic routines.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>elevation</code></strong> :&ensp;<code>List[numpy.ndarray]</code></dt>
@@ -6127,9 +6084,8 @@ def spectra(self):
 <div class="desc"><p>Render a visualization of a single image.</p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>image</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>The image to display, represented as a numpy array.</dd>
 <dt><strong><code>cmap</code></strong> :&ensp;<code>str</code></dt>
@@ -6172,13 +6128,11 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<p>Returns
------=
-The displayed image, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<h2 id="returns">Returns</h2>
+<p>The displayed image, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
@@ -6226,9 +6180,8 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
     return func_movie(self.__aurorax_obj, input_filenames, output_filename, n_parallel, fps, progress_bar_disable)</code></pre>
 </details>
 <div class="desc"><p>Generate a movie file from a list of filenames. Note that the codec used is "mp4v".</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>input_filenames</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>Filenames of frames to use for movie generation. No sorting is applied, so it is
 assumed the list is in the desired order. This parameter is required.</dd>
@@ -6242,8 +6195,9 @@ multiprocessing.</dd>
 <dt><strong><code>progress_bar_disable</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Toggle the progress bars off. Default is <code>False</code>.
 </dd>
-<dt>Raises</dt>
-<dt>-----=</dt>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
 <dt><code>IOError</code></dt>
 <dd>I/O related issue while generating movie</dd>
 </dl></div>
@@ -6300,9 +6254,8 @@ multiprocessing.</dd>
 </details>
 <div class="desc"><p>Scale all values of an array that lie in the range min&lt;=x&lt;=max in to
 the range 0&lt;=x&lt;=top.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>numpy.ndarray</code></dt>
 <dd>Data array, can be 2, 3, or 4-dimensional. Assumed to be an image, or array of
 images. Also assumed that the first 2 dimensions are the image's x and y
@@ -6319,13 +6272,11 @@ of the data array's dtype is used.</dd>
 <dd>Utilize less RAM when scaling a set of images. Defaults to <code>True</code>. If set to <code>False</code> then
 the scaling routine will be faster, but will utilize significantly more RAM.</dd>
 </dl>
-<p>Returns
------=
-A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
+<h2 id="returns">Returns</h2>
+<p>A new <code>numpy.ndarray</code> that is the same dimensions as the inputted data array,
 with the scaling applied.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied min, max, or top value(s)</dd>
 </dl></div>
@@ -6355,9 +6306,8 @@ with the scaling applied.</p>
 </details>
 <div class="desc"><p>A handy wrapper for setting the matplotlib global theme. Common choices are <code>light</code>,
 <code>dark</code>, or <code>default</code>.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>theme</code></strong> :&ensp;<code>str</code></dt>
 <dd>
 <p>Theme name. Common choices are <code>light</code>, <code>dark</code>, or <code>default</code>. If default, then
