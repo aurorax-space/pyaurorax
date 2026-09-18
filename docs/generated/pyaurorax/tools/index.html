@@ -310,7 +310,7 @@ class FOV:
 
         # Initialize figure
         fig = plt.figure(figsize=figsize)
-        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)  # type: ignore
         ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
         # Add ocean
@@ -1371,7 +1371,7 @@ word, hexcode, or RGB/RGBA tuple.</dd>
 
     # Initialize figure
     fig = plt.figure(figsize=figsize)
-    ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+    ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)  # type: ignore
     ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
     # Add ocean
@@ -3982,7 +3982,7 @@ class Mosaic:
 
         # initialize figure
         fig = plt.figure(figsize=figsize)
-        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+        ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)  # type: ignore
         ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
         # add ocean
@@ -5038,7 +5038,7 @@ Plots the contour on top of all other currently plotted objects.</p>
 
     # initialize figure
     fig = plt.figure(figsize=figsize)
-    ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)
+    ax = fig.add_axes((0, 0, 1, 1), projection=self.cartopy_projection)  # type: ignore
     ax.set_extent(map_extent, crs=cartopy.crs.Geodetic())  # type: ignore
 
     # add ocean
