@@ -749,9 +749,8 @@ class Mosaic:
                 self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Class representation for a generated mosaic.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>polygon_data</code></strong> :&ensp;<code>matplotlib.collections.PolyCollection</code></dt>
 <dd>Generated polygons containing rendered data.</dd>
 <dt><strong><code>cartopy_projection</code></strong> :&ensp;<code>cartopy.crs.Projection</code></dt>
@@ -955,9 +954,8 @@ is scaled to in the mosaic, if any is present.</dd>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geographic contours to a mosaic.</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>lats</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
 <dd>Sequence of geographic latitudes defining a contour.</dd>
 <dt><strong><code>lons</code></strong> :&ensp;<code>ndarray</code> or <code>list</code></dt>
@@ -978,12 +976,10 @@ word, hexcode, or RGB/RGBA tuple.</dd>
 <dt><strong><code>bring_to_front</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Plots the contour on top of all other currently plotted objects.</dd>
 </dl>
-<p>Returns
------=
-The object's contour_data parameter is populated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
 </dl></div>
@@ -1162,9 +1158,8 @@ The object's contour_data parameter is populated appropriately.</p>
             self.contour_data[&#34;zorder&#34;].append(int(bring_to_front))</code></pre>
 </details>
 <div class="desc"><p>Add geomagnetic contours to a mosaic.</p>
-<p>Args
------=
-timestamp (datetime.datetime):
+<h2 id="args">Args</h2>
+<p>timestamp (datetime.datetime):
 The timestamp used in computing AACGM coordinates.</p>
 <p>lats (ndarray or list):
 Sequence of geomagnetic latitudes defining a contour.</p>
@@ -1187,12 +1182,10 @@ The matplotlib linestyle used for the contour(s).</p>
 The matplotlib marker used for the contour(s).</p>
 <p>bring_to_front (bool):
 Plots the contour on top of all other currently plotted objects.</p>
-<p>Returns
------=
-The object's contour_data parameter is populated appropriately.</p>
+<h2 id="returns">Returns</h2>
+<p>The object's contour_data parameter is populated appropriately.</p>
+<h2 id="raises">Raises</h2>
 <dl>
-<dt>Raises</dt>
-<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters</dd>
 </dl></div>
@@ -1492,9 +1485,8 @@ The object's contour_data parameter is populated appropriately.</p>
 <div class="desc"><p>Generate a plot of the mosaic data. </p>
 <p>Either display it (default behaviour), save it to disk (using the <code>savefig</code> parameter), or
 return the matplotlib plot object for further usage (using the <code>returnfig</code> parameter).</p>
+<h2 id="args">Args</h2>
 <dl>
-<dt>Args</dt>
-<dt>-----=</dt>
 <dt><strong><code>map_extent</code></strong> :&ensp;<code>List[int]</code></dt>
 <dd>Latitude/longitude range to be visible on the rendered map. This is a list of 4 integers
 and/or floats, in the order of [min_lon, max_lon, min_lat, max_lat].</dd>
@@ -1557,9 +1549,8 @@ this parameter is set to True. Defaults to <code>False</code>.</dd>
 <dd>Quality level of the saved image. This can be specified if the savefig_filename is a JPG image. If it
 is a PNG, quality is ignored. Default quality level for JPGs is matplotlib/Pillow's default of 75%.</dd>
 </dl>
-<p>Returns
------=
-The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
+<h2 id="returns">Returns</h2>
+<p>The displayed montage, by default. If <code>savefig</code> is set to True, nothing will be returned. If <code>returnfig</code> is
 set to True, the plotting variables <code>(fig, ax)</code> will be returned.
 Raises:</p></div>
 </dd>
@@ -1666,9 +1657,8 @@ class MosaicData:
         print(&#34;  %-19s: %s&#34; % (&#34;data_types&#34;, self.data_types))</code></pre>
 </details>
 <div class="desc"><p>Prepared image data for use by mosaic routines.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>timestamps</code></strong> :&ensp;<code>List[datetime.datetime]</code></dt>
@@ -1821,9 +1811,8 @@ class MosaicSkymap:
         print(&#34;  %-15s: %s&#34; % (&#34;site_uid_list&#34;, self.site_uid_list))</code></pre>
 </details>
 <div class="desc"><p>Prepared skymap data for use by mosaic routines.</p>
+<h2 id="attributes">Attributes</h2>
 <dl>
-<dt>Attributes</dt>
-<dt>-----=</dt>
 <dt><strong><code>site_uid_list</code></strong> :&ensp;<code>List[str]</code></dt>
 <dd>List of site unique identifiers contained within this object.</dd>
 <dt><strong><code>elevation</code></strong> :&ensp;<code>List[numpy.ndarray]</code></dt>

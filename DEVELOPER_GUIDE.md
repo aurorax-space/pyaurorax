@@ -27,6 +27,18 @@ Documentation for the PyAuroraX project is managed by a separate repository [her
 $ make docs
 ```
 
+This runs the documentation rendering checks and writes the HTML to `docs/generated`.
+Run `make test-docs` to check rendering without rebuilding the documentation.
+
+The development dependencies pin Python-Markdown to 3.10.2 for compatibility with
+pdoc3 0.11.6. pdoc3 converts Google-style sections (`Args:`, `Returns:`, etc.) into
+headings with a mixed `-----=` underline. Markdown 3.10.3
+[stopped accepting mixed heading underlines](https://python-markdown.github.io/changelog/#3103-2026-07-30),
+causing the marker to appear as text and breaking section formatting. Keep this pin
+until pdoc3 supports the newer parser and the rendering checks pass. After updating
+dependencies, run `poetry install` before rebuilding. The separate documentation
+repository must use the same compatible dependency versions when generating this API reference.
+
 ## Testing
 
 PyAuroraX includes several test evaluations bundled into two groups: linting and functionality tests. The linting includes looking through the codebase using tools such as Flake8, PyLint, Pycodestyle, Bandit, and MyPy. The functionality tests use PyTest to test modules in the library.

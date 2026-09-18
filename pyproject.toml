@@ -84,6 +84,7 @@ pytest-cov = "7.1.0"
 bandit = "1.9.4"
 pyright = "1.1.411"
 pdoc3 = "0.11.6"
+markdown = "3.10.2"  # Locked to this version. Markdown >=3.10.3 exposes pdoc3's "-----=" heading markers; unpin once pdoc3 fixes this and make test-docs passes.
 python-dotenv = "1.2.3"
 tabulate = "0.10.0"
 jupyter = "1.1.1"
