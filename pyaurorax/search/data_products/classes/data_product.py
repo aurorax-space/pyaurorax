@@ -26,7 +26,7 @@ Data product type for keograms. Keograms are a 2-D
 representation of a series of images, and are one of
 the most popular data products that auroral science
 uses. More information can be found at
-https://docs.aurorax.space/about_the_data/standards/#keograms.
+https://aurorax.space/docs/data/standards#keograms.
 """
 
 # montage data product type

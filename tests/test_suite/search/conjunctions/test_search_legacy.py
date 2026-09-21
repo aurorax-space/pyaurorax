@@ -238,7 +238,7 @@ def test_async_with_metadata_filters(aurorax):
         "ephemeris_metadata_filters": {
             "logical_operator": "AND",
             "expressions": [{
-                "key": "ucalgary_themis_cloud_ml_v1",
+                "key": "ucalgary_themis_cloud_ml_v2",
                 "operator": "=",
                 "values": ["classified as not cloudy"]
             }]

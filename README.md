@@ -11,7 +11,7 @@ PyAuroraX officially supports Python 3.10+.
 
 Some links to help:
 - [Example Gallery](https://data.phys.ucalgary.ca/working_with_data/index.html#python)
-- [PyAuroraX API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax)
+- [PyAuroraX API Reference](https://aurorax.space/docs/developer/pyaurorax)
 - [AuroraX main website](https://aurorax.space)
 - [Additional examples](https://github.com/aurorax-space/pyaurorax/tree/main/examples)
 
@@ -57,7 +57,7 @@ $ aurorax-cli --help
 A significant upgrade was released for PyAuroraX for version 1.0.0. A major code reorganization and addition of many new features is part of version 1.x, and therefore includes breaking changes. The existing codebase from v0.13.3 and earlier has remained mostly unchanged, but, has been reorganized and some classes
 were renamed. Simply changing the names of imports, function calls, and/or class instantiations should suffice in most cases. 
 
-Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was changed, and the [API Reference](https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax) to help adjust your code.
+Please refer to the `RELEASE_NOTES.md` file for a full breakdown of what was changed, and the [API Reference](https://aurorax.space/docs/developer/pyaurorax) to help adjust your code.
 
 ## Contributing
 

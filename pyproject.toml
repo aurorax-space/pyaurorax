@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "pyaurorax"
-version = "1.24.0"
+version = "1.25.0"
 description = "Python library for interacting with the AuroraX platform"
 readme = "README.md"
 homepage = "https://github.com/aurorax-space/pyaurorax"
@@ -41,7 +41,7 @@ keywords = [
 ]
 
 [tool.poetry.urls]
-"API Reference" = "https://docs.aurorax.space/code/pyaurorax_api_reference/pyaurorax"
+"API Reference" = "https://aurorax.space/docs/developer/pyaurorax"
 "AuroraX Platform" = "https://aurorax.space"
 "UCalgary SRS Open Data Platform" = "https://data.phys.ucalgary.ca"
 

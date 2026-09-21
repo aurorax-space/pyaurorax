@@ -1,3 +1,12 @@
+Version 1.25.0 (2026-09-21)
+-------------------
+- updated machine learning metadata filter examples and tests to use the new v2 THEMIS ASI model keys (`ucalgary_themis_apa_ml_v2` and `ucalgary_themis_cloud_ml_v2`, and their `_confidence` counterparts)
+- updated all documentation links to the new AuroraX documentation site, as docs.aurorax.space has been retired in favour of https://aurorax.space/docs
+- moved the `subminute_precision` parameter ahead of `response_format` in the `aurorax.search.conjunctions.search()` signature, grouping it with the other search criteria parameters
+- removed the legacy example scripts for conjunction, ephemeris, and data product searching
+- test suite updates
+
+
 Version 1.24.0 (2026-09-09)
 -------------------
 - added `subminute_precision` parameter to conjunction searching, enabling conjunctions at sub-minute precision instead of the default one-minute precision

@@ -8,8 +8,8 @@ def main():
     aurorax = pyaurorax.PyAuroraX()
 
     # set metadata filter
-    expression1 = aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v1", "classified as APA", operator="=")
-    expression2 = aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v1_confidence", 95, operator=">=")
+    expression1 = aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v2", "classified as APA", operator="=")
+    expression2 = aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v2_confidence", 95, operator=">=")
     metadata_filter = aurorax.search.MetadataFilter(expressions=[expression1, expression2], operator="and")
 
     # do search

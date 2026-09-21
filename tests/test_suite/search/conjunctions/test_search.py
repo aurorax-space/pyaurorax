@@ -194,10 +194,10 @@ def test_with_ground_metadata_filters(aurorax):
             programs=["themis-asi"],
             metadata_filters=aurorax.search.MetadataFilter(expressions=[
                 # only find records that were classified as APA
-                aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v1", "classified as APA", operator="="),
+                aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v2", "classified as APA", operator="="),
 
                 # with a confidence of at least 95%
-                aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v1_confidence", 95, operator=">="),
+                aurorax.search.MetadataFilterExpression("ucalgary_themis_apa_ml_v2_confidence", 95, operator=">="),
             ]))
     ]
 

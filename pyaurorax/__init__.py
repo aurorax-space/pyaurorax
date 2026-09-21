@@ -16,7 +16,7 @@ The PyAuroraX package provides a way to interact with the [AuroraX Data Platform
 facilitating programmatic usage of AuroraX's search engine and data analysis tools.
 
 For an overview of usage and examples, visit the
-[AuroraX Developer Zone website](https://docs.aurorax.space/code/overview), or explore the examples contained
+[AuroraX Developer Zone website](https://aurorax.space/docs/developer/overview), or explore the examples contained
 in the Github repository [here](https://github.com/aurorax-space/pyaurorax/tree/main/examples).
 
 Installation:
@@ -32,7 +32,7 @@ aurorax = pyaurorax.PyAuroraX()
 """
 
 # versioning info
-__version__ = "1.24.0"
+__version__ = "1.25.0"
 
 # documentation excludes
 __pdoc__ = {"cli": False, "pyaurorax": False}
