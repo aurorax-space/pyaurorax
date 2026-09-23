@@ -39,6 +39,15 @@ until pdoc3 supports the newer parser and the rendering checks pass. After updat
 dependencies, run `poetry install` before rebuilding. The separate documentation
 repository must use the same compatible dependency versions when generating this API reference.
 
+## Test data
+
+The data reading tests read data files from `tests/test_data/data/ucalgary/read`. That data is downloaded from the open data platform by `tools/build_test_data.py`, which `make install` runs for you. You can also run it directly:
+
+- `make get-test-data` Download any test data that isn't there yet
+- `make rebuild-test-data` Remove the existing test data and download it again from scratch
+
+Files that are already in place are left alone, meaning an interrupted build only fetches what it missed. If you need a tarball of the whole tree (to host it somewhere, or hand it to someone), pass `--tarball`.
+
 ## Testing
 
 PyAuroraX includes several test evaluations bundled into two groups: linting and functionality tests. The linting includes looking through the codebase using tools such as Flake8, PyLint, Pycodestyle, Bandit, and MyPy. The functionality tests use PyTest to test modules in the library.
