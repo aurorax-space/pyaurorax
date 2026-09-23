@@ -15,6 +15,7 @@
 import pytest
 import datetime
 from pyaurorax.models import ATMInverseOutputFlags, ATMInverseResult
+from pyaurorax.exceptions import AuroraXError
 
 
 @pytest.mark.models
@@ -36,8 +37,30 @@ def test_inverse(aurorax):
     intensity_6300 = 528.3
     intensity_8446 = 427.4
 
-    # perform the calculation
-    result = aurorax.models.atm.inverse(timestamp, latitude, longitude, intensity_4278, intensity_5577, intensity_6300, intensity_8446, output)
+    # ATM calculations go through the UCalgary SRS API; test against staging server
+    aurorax.srs_obj.api_base_url = "https://api-staging.phys.ucalgary.ca"
 
+    # perform the calculation
+    result = aurorax.models.atm.inverse(timestamp,
+                                        latitude,
+                                        longitude,
+                                        intensity_4278,
+                                        intensity_5577,
+                                        intensity_6300,
+                                        intensity_8446,
+                                        output,
+                                        precipitation_flux_spectral_type="maxwellian")
     # check
     assert isinstance(result, ATMInverseResult) is True
+
+
+@pytest.mark.models
+def test_inverse_spectral_type_required(aurorax):
+    aurorax.srs_obj.api_base_url = "https://api-staging.phys.ucalgary.ca"
+    output = ATMInverseOutputFlags()
+    output.mean_energy = True
+    args = (datetime.datetime(2025, 3, 20, 9, 0, 0), 60.0, -105.0, 499.27, 3036.96, 643.31, 287.61, output)
+    with pytest.raises(TypeError):
+        aurorax.models.atm.inverse(*args)  # type: ignore
+    with pytest.raises(AuroraXError, match="required"):
+        aurorax.models.atm.inverse(*args, precipitation_flux_spectral_type=None)  # type: ignore

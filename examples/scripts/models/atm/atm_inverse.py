@@ -14,8 +14,15 @@ intensity_5577 = 11339.5
 intensity_6300 = 528.3
 intensity_8446 = 427.4
 
-result = aurorax.models.atm.inverse(timestamp, lat, lon, intensity_4278, intensity_5577, intensity_6300, intensity_8446, output)
-
+result = aurorax.models.atm.inverse(timestamp,
+                                    lat,
+                                    lon,
+                                    intensity_4278,
+                                    intensity_5577,
+                                    intensity_6300,
+                                    intensity_8446,
+                                    output,
+                                    precipitation_flux_spectral_type="maxwellian")
 print()
 print(result)
 print()

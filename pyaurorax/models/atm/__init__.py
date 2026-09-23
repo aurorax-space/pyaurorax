@@ -15,7 +15,7 @@
 import datetime
 from numpy import ndarray
 from typing import TYPE_CHECKING, Optional, Literal
-from pyucalgarysrs.exceptions import SRSAPIError
+from pyucalgarysrs.exceptions import SRSAPIError, SRSError
 from pyucalgarysrs.models.atm import (
     ATMForwardOutputFlags,
     ATMForwardResult,
@@ -40,10 +40,9 @@ from pyucalgarysrs.models.atm import (
     ATM_DEFAULT_TIMESCALE_AURORAL,
     ATM_DEFAULT_TIMESCALE_TRANSPORT,
     ATM_DEFAULT_MODEL_VERSION,
-    ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
     ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
 )
-from ...exceptions import AuroraXAPIError
+from ...exceptions import AuroraXAPIError, AuroraXError
 if TYPE_CHECKING:
     from ...pyaurorax import PyAuroraX  # pragma: nocover-ok
 
@@ -67,7 +66,8 @@ class ATMManager:
                 geodetic_longitude: float,
                 output: ATMForwardOutputFlags,
                 maxwellian_energy_flux: float = ATM_DEFAULT_MAXWELLIAN_ENERGY_FLUX,
-                maxwellian_characteristic_energy: float = ATM_DEFAULT_MAXWELLIAN_CHARACTERISTIC_ENERGY,
+                maxwellian_characteristic_energy: Optional[float] = ATM_DEFAULT_MAXWELLIAN_CHARACTERISTIC_ENERGY,
+                maxwellian_mean_energy: Optional[float] = None,
                 gaussian_energy_flux: float = ATM_DEFAULT_GAUSSIAN_ENERGY_FLUX,
                 gaussian_peak_energy: float = ATM_DEFAULT_GAUSSIAN_PEAK_ENERGY,
                 gaussian_spectral_width: float = ATM_DEFAULT_GAUSSIAN_SPECTRAL_WIDTH,
@@ -106,13 +106,16 @@ class ATMManager:
         use this version of the model, please use a prior release of PyAuroraX.
 
         **NOTE**: All spectral shapes are super-imposable except exponential (maxwellian, gaussian, kappa). The 
-        exponential spectrum should be only be used for high-energy tail and, starting from E0 (proton_starting_energy), 
+        exponential spectrum should be only be used for high-energy tail and, starting from `exponential_starting_energy`, 
         will override any other spectral specification.
 
         **NOTE**: Proton precipitation is presently only for ionization rate and density calculations. Proton auroras are 
         not nominal TREx characteristics and currently not computed in this version of the model.
 
         **NOTE**: When using the d_region flag, enabling proton parameters is not permitted.
+
+        **NOTE**: As of PyAuroraX version 1.26.0, `maxwellian_energy_flux` defaults to 0. At least one energy flux must
+        be nonzero, or a `custom_spectrum` supplied, otherwise the API returns an error.
 
         Args:
             timestamp (datetime.datetime): 
@@ -131,12 +134,18 @@ class ATMManager:
                 for more details. This parameter is required.
 
             maxwellian_energy_flux (float): 
-                Maxwellian energy flux in erg/cm2/s. Default is 10. This parameter is optional.
+                Maxwellian energy flux in erg/cm2/s. Default is 0, meaning the Maxwellian component is disabled.
+                This parameter is optional.
 
             maxwellian_characteristic_energy (float): 
-                Maxwellian characteristic energy in eV. Default is 5000. Note that `maxwellian_characteristic_energy` 
-                should be specified if the `maxwellian_energy_flux` is not 0. If it is not, then the default will be used. This 
-                parameter is optional.
+                Maxwellian characteristic energy E0 in eV. Specify at most one of `maxwellian_characteristic_energy` or
+                `maxwellian_mean_energy`. If `maxwellian_energy_flux` is nonzero and neither is given, the API uses
+                5000 eV. This parameter is optional.
+
+            maxwellian_mean_energy (float):
+                Maxwellian mean energy in eV, equal to 2x the characteristic energy. This is the quantity returned
+                as `mean_energy` by a Maxwellian inversion, so inversions can be passed here directly. Cannot be combined
+                with `maxwellian_characteristic_energy`. This parameter is optional.
 
             gaussian_energy_flux (float): 
                 Gaussian energy flux in erg/cm2/s. Default is 0, meaning all gaussian parameters will be disabled. 
@@ -200,8 +209,8 @@ class ATMManager:
 
             custom_spectrum (ndarray): 
                 A 2-dimensional numpy array (dtype is any float type) containing values representing the
-                energy in eV, and flux in 1/cm2/s/eV. The shape is expected to be [N, 2], with energy in
-                [:, 0] and flux in [:, 1]. Note that this array cannot contain negative values (SRSAPIError 
+                energy in eV, and flux in 1/cm2/s/eV. The shape is expected to be [2, N], with energy in
+                [0, :] and flux in [1, :]. Note that this array cannot contain negative values (SRSAPIError 
                 will be raised if so). This parameter is optional.
 
             custom_neutral_profile (ndarray): 
@@ -209,7 +218,7 @@ class ATMManager:
                 and NO, and lastly temperature. Altitude is expected to be in kilometers, all densities in cm^-3, and 
                 temperature in Kelvin. This parameter is optional.
 
-                The shape of the array is expected to be [N, 7], with the order matching the above mentioned values. Note that
+                The shape of the array is expected to be [7, N], with the order matching the above mentioned values. Note that
                 this array cannot contain and negative values (SRSAPIError will be raised if so).
                 
                 Users are responsible for fully covering the altitude range of interest in the provided profile (80-800 km if 
@@ -243,6 +252,7 @@ class ATMManager:
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+            pyaurorax.exceptions.AuroraXError: both `maxwellian_characteristic_energy` and `maxwellian_mean_energy` were given
         """
         try:
             return self.__aurorax_obj.srs_obj.models.atm.forward(
@@ -251,6 +261,7 @@ class ATMManager:
                 geodetic_longitude,
                 output,
                 maxwellian_energy_flux=maxwellian_energy_flux,
+                maxwellian_mean_energy=maxwellian_mean_energy,
                 maxwellian_characteristic_energy=maxwellian_characteristic_energy,
                 gaussian_energy_flux=gaussian_energy_flux,
                 gaussian_peak_energy=gaussian_peak_energy,
@@ -276,6 +287,8 @@ class ATMManager:
             )
         except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
+        except SRSError as e:
+            raise AuroraXError(e) from e
 
     def inverse(self,
                 timestamp: datetime.datetime,
@@ -286,7 +299,7 @@ class ATMManager:
                 intensity_6300: float,
                 intensity_8446: float,
                 output: ATMInverseOutputFlags,
-                precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"] = ATM_DEFAULT_PRECIPITATION_SPECTRAL_FLUX_TYPE,
+                precipitation_flux_spectral_type: Literal["gaussian", "maxwellian"],
                 nrlmsis_model_version: Literal["00", "2.0"] = ATM_DEFAULT_NRLMSIS_MODEL_VERSION,
                 special_logic_keyword: str = ATM_DEFAULT_SPECIAL_LOGIC_KEYWORD,
                 atm_model_version: Literal["2.0"] = ATM_DEFAULT_MODEL_VERSION,
@@ -299,6 +312,8 @@ class ATMManager:
 
         **NOTE**: As of PyAuroraX version 1.22.0, support for model version '1.0' was removed. To
         use this version of the model, please use a prior release of PyAuroraX.
+
+        **NOTE**: As of PyAuroraX version 1.26.0, `precipitation_flux_spectral_type` is required.
 
         Args:
             timestamp (datetime.datetime): 
@@ -338,8 +353,8 @@ class ATMManager:
                 for more details. This parameter is required.
 
             precipitation_flux_spectral_type (str): 
-                The precipitation flux spectral type to use. Possible values are `gaussian` or `maxwellian`. The
-                default is `gaussian`. This parameter is optional.
+                The assumed precipitation spectrum, `gaussian` or `maxwellian`. For `gaussian`, `mean_energy` is the peak
+                energy. For `maxwellian`, `mean_energy` is 2x the characteristic energy. This parameter is required.
 
             nrlmsis_model_version (str): 
                 NRLMSIS version number. Possible values are `00` or `2.0`. Default is `2.0`. This parameter is
@@ -373,6 +388,7 @@ class ATMManager:
 
         Raises:
             pyaurorax.exceptions.AuroraXAPIError: An API error was encountered
+            pyaurorax.exceptions.AuroraXError: `precipitation_flux_spectral_type` was missing or invalid
         """
         try:
             return self.__aurorax_obj.srs_obj.models.atm.inverse(
@@ -393,3 +409,5 @@ class ATMManager:
             )
         except SRSAPIError as e:  # pragma: nocover
             raise AuroraXAPIError(e) from e
+        except SRSError as e:
+            raise AuroraXError(e) from e
