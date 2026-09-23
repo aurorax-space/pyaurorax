@@ -142,7 +142,7 @@ class ATMManager:
                 `maxwellian_mean_energy`. If `maxwellian_energy_flux` is nonzero and neither is given, the API uses
                 5000 eV. This parameter is optional.
 
-            maxwellian_mean_energy (float):
+            maxwellian_mean_energy (float): 
                 Maxwellian mean energy in eV, equal to 2x the characteristic energy. This is the quantity returned
                 as `mean_energy` by a Maxwellian inversion, so inversions can be passed here directly. Cannot be combined
                 with `maxwellian_characteristic_energy`. This parameter is optional.
