@@ -5,14 +5,14 @@ Name                                                           Stmts   Miss  Cov
 --------------------------------------------------------------------------------------------
 pyaurorax/__init__.py                                              9      0   100%
 pyaurorax/_util.py                                                 5      0   100%
-pyaurorax/cli/cli.py                                              37      0   100%
+pyaurorax/cli/cli.py                                              40      0   100%
 pyaurorax/cli/search/__init__.py                                  16      0   100%
 pyaurorax/cli/search/availability/commands.py                    127      0   100%
-pyaurorax/cli/search/conjunctions/commands.py                    166      0   100%
+pyaurorax/cli/search/conjunctions/commands.py                    172      0   100%
 pyaurorax/cli/search/data_products/commands.py                   162      0   100%
 pyaurorax/cli/search/ephemeris/commands.py                       160      0   100%
 pyaurorax/cli/search/helpers.py                                  120      0   100%
-pyaurorax/cli/search/sources/commands.py                         242      1    99%   95
+pyaurorax/cli/search/sources/commands.py                         242      0   100%
 pyaurorax/cli/search/util/commands.py                             92      0   100%
 pyaurorax/cli/templates.py                                         3      0   100%
 pyaurorax/data/__init__.py                                        81      0   100%
@@ -20,7 +20,7 @@ pyaurorax/data/ucalgary/__init__.py                               96      0   10
 pyaurorax/data/ucalgary/read/__init__.py                          37      0   100%
 pyaurorax/exceptions.py                                           28      0   100%
 pyaurorax/models/__init__.py                                      10      0   100%
-pyaurorax/models/atm/__init__.py                                  16      0   100%
+pyaurorax/models/atm/__init__.py                                  20      0   100%
 pyaurorax/pyaurorax.py                                           208      0   100%
 pyaurorax/search/__init__.py                                      93      0   100%
 pyaurorax/search/api/__init__.py                                  20      0   100%
@@ -30,10 +30,10 @@ pyaurorax/search/availability/__init__.py                         14      0   10
 pyaurorax/search/availability/_availability.py                    21      0   100%
 pyaurorax/search/availability/classes/availability_result.py       8      0   100%
 pyaurorax/search/conjunctions/__init__.py                         31      0   100%
-pyaurorax/search/conjunctions/_conjunctions.py                    91      0   100%
+pyaurorax/search/conjunctions/_conjunctions.py                    99      0   100%
 pyaurorax/search/conjunctions/classes/conjunction.py              39      0   100%
 pyaurorax/search/conjunctions/classes/criteria_block.py           67      0   100%
-pyaurorax/search/conjunctions/classes/search.py                  213      0   100%
+pyaurorax/search/conjunctions/classes/search.py                  216      0   100%
 pyaurorax/search/conjunctions/swarmaurora/__init__.py             15      0   100%
 pyaurorax/search/conjunctions/swarmaurora/_swarmaurora.py         24      0   100%
 pyaurorax/search/data_products/__init__.py                        32      0   100%
@@ -58,9 +58,9 @@ pyaurorax/search/util/__init__.py                                 11      0   10
 pyaurorax/search/util/_calculate_btrace.py                        18      0   100%
 pyaurorax/tools/__init__.py                                       67      0   100%
 pyaurorax/tools/_display.py                                       33      0   100%
-pyaurorax/tools/_movie.py                                         34      0   100%
+pyaurorax/tools/_movie.py                                         33      0   100%
 pyaurorax/tools/_scale_intensity.py                               44      0   100%
-pyaurorax/tools/_util.py                                          10      0   100%
+pyaurorax/tools/_util.py                                          15      1    93%   33
 pyaurorax/tools/bounding_box/__init__.py                           9      0   100%
 pyaurorax/tools/bounding_box/extract_metric/__init__.py           23      0   100%
 pyaurorax/tools/bounding_box/extract_metric/_azimuth.py           52      0   100%
@@ -77,10 +77,10 @@ pyaurorax/tools/ccd_contour/_azimuth.py                           47      0   10
 pyaurorax/tools/ccd_contour/_elevation.py                         39      0   100%
 pyaurorax/tools/ccd_contour/_geo.py                              108      1    99%   75
 pyaurorax/tools/ccd_contour/_mag.py                              114      1    99%   88
-pyaurorax/tools/classes/fov.py                                   293     10    97%   144, 158, 209, 224, 384-385, 403-404, 569, 572
+pyaurorax/tools/classes/fov.py                                   293      8    97%   144, 209, 224, 384-385, 403-404, 573
 pyaurorax/tools/classes/keogram.py                               232      1    99%   490
 pyaurorax/tools/classes/montage.py                                63      0   100%
-pyaurorax/tools/classes/mosaic.py                                299      2    99%   467, 781
+pyaurorax/tools/classes/mosaic.py                                299      2    99%   467, 783
 pyaurorax/tools/fov/__init__.py                                   13      0   100%
 pyaurorax/tools/fov/_create_data.py                              122      0   100%
 pyaurorax/tools/fov/_create_map.py                                 7      0   100%
@@ -88,18 +88,18 @@ pyaurorax/tools/grid_files/__init__.py                             9      0   10
 pyaurorax/tools/grid_files/_prep_grid_image.py                    36      0   100%
 pyaurorax/tools/keogram/__init__.py                               15      0   100%
 pyaurorax/tools/keogram/_create.py                                66      0   100%
-pyaurorax/tools/keogram/_create_custom.py                        191     13    93%   121, 134, 137, 157, 161, 167, 183, 199, 203, 226, 235, 238, 342
+pyaurorax/tools/keogram/_create_custom.py                        193      7    96%   121, 134, 137, 157, 161, 240, 347
 pyaurorax/tools/montage/__init__.py                               11      0   100%
 pyaurorax/tools/montage/_create.py                                 9      0   100%
 pyaurorax/tools/mosaic/__init__.py                                33      9    73%   122-123, 125-127, 134-144
 pyaurorax/tools/mosaic/_create.py                                189      4    98%   100, 188, 358, 366
-pyaurorax/tools/mosaic/_prep_images.py                           162      1    99%   247
-pyaurorax/tools/mosaic/_prep_skymaps.py                          119     22    82%   33-79
+pyaurorax/tools/mosaic/_prep_images.py                           164      1    99%   249
+pyaurorax/tools/mosaic/_prep_skymaps.py                          116     22    81%   33-79
 pyaurorax/tools/spectra/__init__.py                               13      0   100%
 pyaurorax/tools/spectra/_get_intensity.py                         46      1    98%   82
-pyaurorax/tools/spectra/_plot.py                                 116      4    97%   148, 150, 174, 195
+pyaurorax/tools/spectra/_plot.py                                 119      4    97%   152, 154, 178, 199
 --------------------------------------------------------------------------------------------
-TOTAL                                                           6383     70    99%
+TOTAL                                                           6415     62    99%
 
 13 empty files skipped.
 ```
