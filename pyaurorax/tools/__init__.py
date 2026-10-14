@@ -50,6 +50,7 @@ from ._display import display as func_display
 from ._movie import movie as func_movie
 from ._scale_intensity import scale_intensity as func_scale_intensity
 from ._util import set_theme as func_set_theme
+from ._geocentric_to_geodetic import geocentric_to_geodetic as func_geocentric_to_geodetic
 
 # typing imports
 import numpy as np
@@ -314,3 +315,36 @@ class ToolsManager:
                 [matplotlib documentation](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)
         """
         return func_set_theme(theme)
+
+    def geocentric_to_geodetic(
+        self,
+        lats: Union[np.ndarray, list, float],
+        lons: Union[np.ndarray, list, float],
+        altitude_km: float = 100.0,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Convert geocentric latitudes and longitudes to geodetic (WGS84).
+
+        Spacecraft locations and B-trace footprints from the AuroraX search engine are NASA
+        SSCWeb values, which use a spherical Earth of radius 6371.2 km, so their latitudes
+        are geocentric; the footprints are traced to 100 km altitude. Skymaps, observatory
+        coordinates and map projections are geodetic, so convert before overlaying.
+
+        Args:
+            lats (ndarray, list, or float): 
+                Geocentric latitude(s), for example the `nbtrace.lat` values of ephemeris records
+
+            lons (ndarray, list, or float): 
+                Geocentric longitude(s), same shape as lats
+
+            altitude_km (float): 
+                Altitude of the points above the 6371.2 km sphere, in kilometers. Defaults
+                to 100.0, the SSCWeb footprint altitude.
+
+        Returns:
+            A tuple (lats, lons) of numpy arrays with the geodetic latitudes and longitudes
+
+        Raises:
+            ValueError: lats and lons have different shapes
+        """
+        return func_geocentric_to_geodetic(lats, lons, altitude_km)
