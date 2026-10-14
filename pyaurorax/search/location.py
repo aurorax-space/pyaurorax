@@ -20,8 +20,14 @@ from typing import Optional, Dict
 
 class Location:
     """
-    Representation for an AuroraX search engine location. This data can be in geodetic 
-    coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.
+    Representation for an AuroraX search engine location. This data can be geographic
+    coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints.
+
+    Spacecraft locations and footprints come from NASA SSCWeb unmodified, so their
+    latitudes are geocentric (SSCWeb GEO frame; footprints traced to 100 km altitude).
+    Ground instrument locations are the sites' geodetic coordinates. Use
+    `aurorax.tools.geocentric_to_geodetic()` before plotting spacecraft values
+    on skymaps or maps.
 
     Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
     for latitude and -180 to 180 for longitude.

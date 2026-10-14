@@ -75,7 +75,7 @@ def display(image, cmap, figsize, aspect, colorbar, title, returnfig, savefig, s
         return (fig, ax)
     else:
         # show the figure
-        plt.show(fig)
+        plt.show()
 
         # cleanup by closing the figure
         plt.close(fig)

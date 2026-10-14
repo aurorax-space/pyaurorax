@@ -33,17 +33,22 @@ class EphemerisData:
             Timestamp for the record (assumed it is in UTC)
 
         location_geo (Location): 
-            Location object containing geographic latitude and longitude
+            Location object containing geographic latitude and longitude. For spacecraft
+            this is the sub-satellite point in geocentric coordinates (SSCWeb GEO), not
+            the footprint.
 
         location_gsm (Location): 
             Location object containing GSM latitude and longitude (leave empty for data 
             sources with a type of 'ground')
 
         nbtrace (Location): 
-            Location object with north B-trace geographic latitude and longitude
+            Location object with the north B-trace footprint (geographic latitude and
+            longitude). For spacecraft this is SSCWeb's field-line trace to 100 km, in
+            geocentric coordinates; convert with
+            `aurorax.tools.geocentric_to_geodetic()` before plotting on skymaps or maps.
 
         sbtrace (Location): 
-            Location object with south B-trace geographic latitude and longitude
+            Location object with the south B-trace footprint, as for nbtrace
 
         metadata (Dict): 
             Metadata for this record (arbitrary keys and values)

@@ -1,3 +1,15 @@
+Version 1.27.0 (2026-10-14)
+-------------------
+- added `aurorax.tools.geocentric_to_geodetic()` to support converting geocentric spacecraft locations and footprints to geodetic
+- updated `Location` and `EphemerisData` docstrings to state
+  - spacecraft ephemeris location values are geocentric, retrieved from SSCWeb
+  - `nbtrace`/`sbtrace` are the field-line footprints traced to 100 km
+  - `location_geo` is the sub-satellite point
+- updated crib sheets that plot satellite footprints 
+  - `plot_satellite_footprint_on_ccd_image` and `mosaic_with_satellite_location_data` now plot the `nbtrace` footprint converted to geodetic instead of the `location_geo` sub-satellite point
+  - note that these updates change the plotted location of spacecrafts by ~20km
+
+
 Version 1.26.0 (2026-09-23)
 -------------------
 - ATM changes

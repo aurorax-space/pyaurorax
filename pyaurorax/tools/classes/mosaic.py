@@ -513,7 +513,7 @@ class Mosaic:
             return (fig, ax)
         else:
             # show the figure
-            plt.show(fig)
+            plt.show()
 
             # cleanup by closing the figure
             plt.close(fig)
