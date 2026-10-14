@@ -76,8 +76,14 @@ border-left: 1px solid #ddd;
 </summary>
 <pre><code class="python">class Location:
     &#34;&#34;&#34;
-    Representation for an AuroraX search engine location. This data can be in geodetic 
-    coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.
+    Representation for an AuroraX search engine location. This data can be geographic
+    coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints.
+
+    Spacecraft locations and footprints come from NASA SSCWeb unmodified, so their
+    latitudes are geocentric (SSCWeb GEO frame; footprints traced to 100 km altitude).
+    Ground instrument locations are the sites&#39; geodetic coordinates. Use
+    `aurorax.tools.geocentric_to_geodetic()` before plotting spacecraft values
+    on skymaps or maps.
 
     Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
     for latitude and -180 to 180 for longitude.
@@ -137,8 +143,13 @@ border-left: 1px solid #ddd;
     def __repr__(self) -&gt; str:
         return &#34;%s(lat=%s, lon=%s)&#34; % (self.__class__.__name__, str(self.lat), str(self.lon))</code></pre>
 </details>
-<div class="desc"><p>Representation for an AuroraX search engine location. This data can be in geodetic
-coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.</p>
+<div class="desc"><p>Representation for an AuroraX search engine location. This data can be geographic
+coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints.</p>
+<p>Spacecraft locations and footprints come from NASA SSCWeb unmodified, so their
+latitudes are geocentric (SSCWeb GEO frame; footprints traced to 100 km altitude).
+Ground instrument locations are the sites' geodetic coordinates. Use
+<code>aurorax.tools.geocentric_to_geodetic()</code> before plotting spacecraft values
+on skymaps or maps.</p>
 <p>Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
 for latitude and -180 to 180 for longitude.</p>
 <p>Note that latitude and longitude must both be numbers, or both be None.</p>

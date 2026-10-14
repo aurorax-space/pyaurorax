@@ -86,17 +86,22 @@ border-left: 1px solid #ddd;
             Timestamp for the record (assumed it is in UTC)
 
         location_geo (Location): 
-            Location object containing geographic latitude and longitude
+            Location object containing geographic latitude and longitude. For spacecraft
+            this is the sub-satellite point in geocentric coordinates (SSCWeb GEO), not
+            the footprint.
 
         location_gsm (Location): 
             Location object containing GSM latitude and longitude (leave empty for data 
             sources with a type of &#39;ground&#39;)
 
         nbtrace (Location): 
-            Location object with north B-trace geographic latitude and longitude
+            Location object with the north B-trace footprint (geographic latitude and
+            longitude). For spacecraft this is SSCWeb&#39;s field-line trace to 100 km, in
+            geocentric coordinates; convert with
+            `aurorax.tools.geocentric_to_geodetic()` before plotting on skymaps or maps.
 
         sbtrace (Location): 
-            Location object with south B-trace geographic latitude and longitude
+            Location object with the south B-trace footprint, as for nbtrace
 
         metadata (Dict): 
             Metadata for this record (arbitrary keys and values)
@@ -181,14 +186,19 @@ border-left: 1px solid #ddd;
 <dt><strong><code>epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Timestamp for the record (assumed it is in UTC)</dd>
 <dt><strong><code>location_geo</code></strong> :&ensp;<code>Location</code></dt>
-<dd>Location object containing geographic latitude and longitude</dd>
+<dd>Location object containing geographic latitude and longitude. For spacecraft
+this is the sub-satellite point in geocentric coordinates (SSCWeb GEO), not
+the footprint.</dd>
 <dt><strong><code>location_gsm</code></strong> :&ensp;<code>Location</code></dt>
 <dd>Location object containing GSM latitude and longitude (leave empty for data
 sources with a type of 'ground')</dd>
 <dt><strong><code>nbtrace</code></strong> :&ensp;<code>Location</code></dt>
-<dd>Location object with north B-trace geographic latitude and longitude</dd>
+<dd>Location object with the north B-trace footprint (geographic latitude and
+longitude). For spacecraft this is SSCWeb's field-line trace to 100 km, in
+geocentric coordinates; convert with
+<code>aurorax.tools.geocentric_to_geodetic()</code> before plotting on skymaps or maps.</dd>
 <dt><strong><code>sbtrace</code></strong> :&ensp;<code>Location</code></dt>
-<dd>Location object with south B-trace geographic latitude and longitude</dd>
+<dd>Location object with the south B-trace footprint, as for nbtrace</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Metadata for this record (arbitrary keys and values)</dd>
 </dl></div>

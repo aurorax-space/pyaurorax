@@ -2723,17 +2723,22 @@ the pyaurorax.search.FORMAT_* variables.</dd>
             Timestamp for the record (assumed it is in UTC)
 
         location_geo (Location): 
-            Location object containing geographic latitude and longitude
+            Location object containing geographic latitude and longitude. For spacecraft
+            this is the sub-satellite point in geocentric coordinates (SSCWeb GEO), not
+            the footprint.
 
         location_gsm (Location): 
             Location object containing GSM latitude and longitude (leave empty for data 
             sources with a type of &#39;ground&#39;)
 
         nbtrace (Location): 
-            Location object with north B-trace geographic latitude and longitude
+            Location object with the north B-trace footprint (geographic latitude and
+            longitude). For spacecraft this is SSCWeb&#39;s field-line trace to 100 km, in
+            geocentric coordinates; convert with
+            `aurorax.tools.geocentric_to_geodetic()` before plotting on skymaps or maps.
 
         sbtrace (Location): 
-            Location object with south B-trace geographic latitude and longitude
+            Location object with the south B-trace footprint, as for nbtrace
 
         metadata (Dict): 
             Metadata for this record (arbitrary keys and values)
@@ -2818,14 +2823,19 @@ the pyaurorax.search.FORMAT_* variables.</dd>
 <dt><strong><code>epoch</code></strong> :&ensp;<code>datetime.datetime</code></dt>
 <dd>Timestamp for the record (assumed it is in UTC)</dd>
 <dt><strong><code>location_geo</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
-<dd>Location object containing geographic latitude and longitude</dd>
+<dd>Location object containing geographic latitude and longitude. For spacecraft
+this is the sub-satellite point in geocentric coordinates (SSCWeb GEO), not
+the footprint.</dd>
 <dt><strong><code>location_gsm</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
 <dd>Location object containing GSM latitude and longitude (leave empty for data
 sources with a type of 'ground')</dd>
 <dt><strong><code>nbtrace</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
-<dd>Location object with north B-trace geographic latitude and longitude</dd>
+<dd>Location object with the north B-trace footprint (geographic latitude and
+longitude). For spacecraft this is SSCWeb's field-line trace to 100 km, in
+geocentric coordinates; convert with
+<code>aurorax.tools.geocentric_to_geodetic()</code> before plotting on skymaps or maps.</dd>
 <dt><strong><code>sbtrace</code></strong> :&ensp;<code><a title="pyaurorax.search.Location" href="#pyaurorax.search.Location">Location</a></code></dt>
-<dd>Location object with south B-trace geographic latitude and longitude</dd>
+<dd>Location object with the south B-trace footprint, as for nbtrace</dd>
 <dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Metadata for this record (arbitrary keys and values)</dd>
 </dl></div>
@@ -3835,8 +3845,14 @@ from the API again), defaults to None</dd>
 </summary>
 <pre><code class="python">class Location:
     &#34;&#34;&#34;
-    Representation for an AuroraX search engine location. This data can be in geodetic 
-    coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.
+    Representation for an AuroraX search engine location. This data can be geographic
+    coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints.
+
+    Spacecraft locations and footprints come from NASA SSCWeb unmodified, so their
+    latitudes are geocentric (SSCWeb GEO frame; footprints traced to 100 km altitude).
+    Ground instrument locations are the sites&#39; geodetic coordinates. Use
+    `aurorax.tools.geocentric_to_geodetic()` before plotting spacecraft values
+    on skymaps or maps.
 
     Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
     for latitude and -180 to 180 for longitude.
@@ -3896,8 +3912,13 @@ from the API again), defaults to None</dd>
     def __repr__(self) -&gt; str:
         return &#34;%s(lat=%s, lon=%s)&#34; % (self.__class__.__name__, str(self.lat), str(self.lon))</code></pre>
 </details>
-<div class="desc"><p>Representation for an AuroraX search engine location. This data can be in geodetic
-coordinates, GSM coordinates, or geodetic northern/southern B-trace magnetic footprints.</p>
+<div class="desc"><p>Representation for an AuroraX search engine location. This data can be geographic
+coordinates, GSM coordinates, or northern/southern B-trace magnetic footprints.</p>
+<p>Spacecraft locations and footprints come from NASA SSCWeb unmodified, so their
+latitudes are geocentric (SSCWeb GEO frame; footprints traced to 100 km altitude).
+Ground instrument locations are the sites' geodetic coordinates. Use
+<code>aurorax.tools.geocentric_to_geodetic()</code> before plotting spacecraft values
+on skymaps or maps.</p>
 <p>Latitude and longitude values are in decimal degrees format, ranging from -90 to 90
 for latitude and -180 to 180 for longitude.</p>
 <p>Note that latitude and longitude must both be numbers, or both be None.</p>

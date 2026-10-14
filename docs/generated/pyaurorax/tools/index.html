@@ -425,7 +425,7 @@ class FOV:
             return (fig, ax)
         else:
             # show the figure
-            plt.show(fig)
+            plt.show()
 
             # cleanup by closing the figure
             plt.close(fig)
@@ -1486,7 +1486,7 @@ word, hexcode, or RGB/RGBA tuple.</dd>
         return (fig, ax)
     else:
         # show the figure
-        plt.show(fig)
+        plt.show()
 
         # cleanup by closing the figure
         plt.close(fig)
@@ -2337,7 +2337,7 @@ class Keogram:
             return (fig, ax)
         else:
             # show the figure
-            plt.show(fig)
+            plt.show()
 
             # cleanup by closing the figure
             plt.close(fig)
@@ -2900,7 +2900,7 @@ will be updated accordingly.</p>
         return (fig, ax)
     else:
         # show the figure
-        plt.show(fig)
+        plt.show()
 
         # cleanup by closing the figure
         plt.close(fig)
@@ -3467,7 +3467,7 @@ class Montage:
             return (fig, axs)
         else:
             # show the figure
-            plt.show(fig)
+            plt.show()
 
             # cleanup by closing the figure
             plt.close(fig)
@@ -3670,7 +3670,7 @@ class Montage:
         return (fig, axs)
     else:
         # show the figure
-        plt.show(fig)
+        plt.show()
 
         # cleanup by closing the figure
         plt.close(fig)
@@ -4125,7 +4125,7 @@ class Mosaic:
             return (fig, ax)
         else:
             # show the figure
-            plt.show(fig)
+            plt.show()
 
             # cleanup by closing the figure
             plt.close(fig)
@@ -5181,7 +5181,7 @@ Plots the contour on top of all other currently plotted objects.</p>
         return (fig, ax)
     else:
         # show the figure
-        plt.show(fig)
+        plt.show()
 
         # cleanup by closing the figure
         plt.close(fig)
@@ -5852,7 +5852,40 @@ Order matches that of the <code>site_uid_list</code> attribute.</dd>
                 Additional themes can be found on the 
                 [matplotlib documentation](https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html)
         &#34;&#34;&#34;
-        return func_set_theme(theme)</code></pre>
+        return func_set_theme(theme)
+
+    def geocentric_to_geodetic(
+        self,
+        lats: Union[np.ndarray, list, float],
+        lons: Union[np.ndarray, list, float],
+        altitude_km: float = 100.0,
+    ) -&gt; Tuple[np.ndarray, np.ndarray]:
+        &#34;&#34;&#34;
+        Convert geocentric latitudes and longitudes to geodetic (WGS84).
+
+        Spacecraft locations and B-trace footprints from the AuroraX search engine are NASA
+        SSCWeb values, which use a spherical Earth of radius 6371.2 km, so their latitudes
+        are geocentric; the footprints are traced to 100 km altitude. Skymaps, observatory
+        coordinates and map projections are geodetic, so convert before overlaying.
+
+        Args:
+            lats (ndarray, list, or float): 
+                Geocentric latitude(s), for example the `nbtrace.lat` values of ephemeris records
+
+            lons (ndarray, list, or float): 
+                Geocentric longitude(s), same shape as lats
+
+            altitude_km (float): 
+                Altitude of the points above the 6371.2 km sphere, in kilometers. Defaults
+                to 100.0, the SSCWeb footprint altitude.
+
+        Returns:
+            A tuple (lats, lons) of numpy arrays with the geodetic latitudes and longitudes
+
+        Raises:
+            ValueError: lats and lons have different shapes
+        &#34;&#34;&#34;
+        return func_geocentric_to_geodetic(lats, lons, altitude_km)</code></pre>
 </details>
 <div class="desc"><p>The ToolsManager object is initialized within every PyAuroraX object. It acts as a way to access
 the submodules and carry over configuration information in the super class.</p></div>
@@ -6135,6 +6168,70 @@ set to True, the plotting variables <code>(fig, ax)</code> will be returned.</p>
 <dl>
 <dt><code>ValueError</code></dt>
 <dd>issues encountered with supplied parameters.</dd>
+</dl></div>
+</dd>
+<dt id="pyaurorax.tools.ToolsManager.geocentric_to_geodetic"><code class="name flex">
+<span>def <span class="ident">geocentric_to_geodetic</span></span>(<span>self,<br>lats: numpy.ndarray | list | float,<br>lons: numpy.ndarray | list | float,<br>altitude_km: float = 100.0) ‑> Tuple[numpy.ndarray, numpy.ndarray]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def geocentric_to_geodetic(
+    self,
+    lats: Union[np.ndarray, list, float],
+    lons: Union[np.ndarray, list, float],
+    altitude_km: float = 100.0,
+) -&gt; Tuple[np.ndarray, np.ndarray]:
+    &#34;&#34;&#34;
+    Convert geocentric latitudes and longitudes to geodetic (WGS84).
+
+    Spacecraft locations and B-trace footprints from the AuroraX search engine are NASA
+    SSCWeb values, which use a spherical Earth of radius 6371.2 km, so their latitudes
+    are geocentric; the footprints are traced to 100 km altitude. Skymaps, observatory
+    coordinates and map projections are geodetic, so convert before overlaying.
+
+    Args:
+        lats (ndarray, list, or float): 
+            Geocentric latitude(s), for example the `nbtrace.lat` values of ephemeris records
+
+        lons (ndarray, list, or float): 
+            Geocentric longitude(s), same shape as lats
+
+        altitude_km (float): 
+            Altitude of the points above the 6371.2 km sphere, in kilometers. Defaults
+            to 100.0, the SSCWeb footprint altitude.
+
+    Returns:
+        A tuple (lats, lons) of numpy arrays with the geodetic latitudes and longitudes
+
+    Raises:
+        ValueError: lats and lons have different shapes
+    &#34;&#34;&#34;
+    return func_geocentric_to_geodetic(lats, lons, altitude_km)</code></pre>
+</details>
+<div class="desc"><p>Convert geocentric latitudes and longitudes to geodetic (WGS84).</p>
+<p>Spacecraft locations and B-trace footprints from the AuroraX search engine are NASA
+SSCWeb values, which use a spherical Earth of radius 6371.2 km, so their latitudes
+are geocentric; the footprints are traced to 100 km altitude. Skymaps, observatory
+coordinates and map projections are geodetic, so convert before overlaying.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>lats</code></strong> :&ensp;<code>ndarray, list,</code> or <code>float</code></dt>
+<dd>Geocentric latitude(s), for example the <code>nbtrace.lat</code> values of ephemeris records</dd>
+<dt><strong><code>lons</code></strong> :&ensp;<code>ndarray, list,</code> or <code>float</code></dt>
+<dd>Geocentric longitude(s), same shape as lats</dd>
+<dt><strong><code>altitude_km</code></strong> :&ensp;<code>float</code></dt>
+<dd>Altitude of the points above the 6371.2 km sphere, in kilometers. Defaults
+to 100.0, the SSCWeb footprint altitude.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A tuple (lats, lons) of numpy arrays with the geodetic latitudes and longitudes</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>lats and lons have different shapes</dd>
 </dl></div>
 </dd>
 <dt id="pyaurorax.tools.ToolsManager.movie"><code class="name flex">
@@ -6468,12 +6565,13 @@ setTimeout(() => input.focus(), 100);
 </li>
 <li>
 <h4><code><a title="pyaurorax.tools.ToolsManager" href="#pyaurorax.tools.ToolsManager">ToolsManager</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="pyaurorax.tools.ToolsManager.bounding_box" href="#pyaurorax.tools.ToolsManager.bounding_box">bounding_box</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.calibration" href="#pyaurorax.tools.ToolsManager.calibration">calibration</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.ccd_contour" href="#pyaurorax.tools.ToolsManager.ccd_contour">ccd_contour</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.display" href="#pyaurorax.tools.ToolsManager.display">display</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.fov" href="#pyaurorax.tools.ToolsManager.fov">fov</a></code></li>
+<li><code><a title="pyaurorax.tools.ToolsManager.geocentric_to_geodetic" href="#pyaurorax.tools.ToolsManager.geocentric_to_geodetic">geocentric_to_geodetic</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.grid_files" href="#pyaurorax.tools.ToolsManager.grid_files">grid_files</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.keogram" href="#pyaurorax.tools.ToolsManager.keogram">keogram</a></code></li>
 <li><code><a title="pyaurorax.tools.ToolsManager.montage" href="#pyaurorax.tools.ToolsManager.montage">montage</a></code></li>
