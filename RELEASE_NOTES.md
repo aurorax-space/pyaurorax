@@ -1,3 +1,9 @@
+Version 1.27.0 (2026-10-14)
+-------------------
+- added `aurorax.tools.geocentric_to_geodetic()` to convert the geocentric spacecraft locations and footprints retrieved from NASA SSCWeb (GEO frame) to geodetic WGS84 before plotting on skymaps or maps
+- `Location` and `EphemerisData` docstrings now state that spacecraft values are SSCWeb geocentric, that `nbtrace`/`sbtrace` are the field-line footprints traced to 100 km, and that `location_geo` is the sub-satellite point
+- the satellite footprint examples (`plot_satellite_footprint_on_ccd_image` `mosaic_with_satellite_location_data`) now plot the `nbtrace` footprint converted to geodetic instead of the `location_geo` sub-satellite point
+
 Version 1.26.0 (2026-09-23)
 -------------------
 - ATM changes (requires PyUCalgarySRS >= 1.28.0 and UCalgary SRS API >= 1.78.0)
