@@ -139,6 +139,9 @@ border-left: 1px solid #ddd;
         **NOTE**: As of PyAuroraX version 1.26.0, `maxwellian_energy_flux` defaults to 0. At least one energy flux must
         be nonzero, or a `custom_spectrum` supplied, otherwise the API returns an error.
 
+        **NOTE**: As of 2026-11-19, the calculation of conductance adopts the renewed ion-neutral collision 
+        frequencies in Liang et al. (2026), https://doi.org/10.1029/2026GL123452.
+
         Args:
             timestamp (datetime.datetime): 
                 Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the 
@@ -503,6 +506,9 @@ the submodules and carry over configuration information in the super class.</p><
     **NOTE**: As of PyAuroraX version 1.26.0, `maxwellian_energy_flux` defaults to 0. At least one energy flux must
     be nonzero, or a `custom_spectrum` supplied, otherwise the API returns an error.
 
+    **NOTE**: As of 2026-11-19, the calculation of conductance adopts the renewed ion-neutral collision 
+    frequencies in Liang et al. (2026), https://doi.org/10.1029/2026GL123452.
+
     Args:
         timestamp (datetime.datetime): 
             Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the 
@@ -696,6 +702,8 @@ not nominal TREx characteristics and currently not computed in this version of t
 <p><strong>NOTE</strong>: When using the d_region flag, enabling proton parameters is not permitted.</p>
 <p><strong>NOTE</strong>: As of PyAuroraX version 1.26.0, <code>maxwellian_energy_flux</code> defaults to 0. At least one energy flux must
 be nonzero, or a <code>custom_spectrum</code> supplied, otherwise the API returns an error.</p>
+<p><strong>NOTE</strong>: As of 2026-11-19, the calculation of conductance adopts the renewed ion-neutral collision
+frequencies in Liang et al. (2026), <a href="https://doi.org/10.1029/2026GL123452.">https://doi.org/10.1029/2026GL123452.</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>timestamp</code></strong> :&ensp;<code>datetime.datetime</code></dt>

@@ -1,3 +1,8 @@
+Version 1.27.1 (2026-11-19)
+-------------------
+- ATM documentation update
+
+
 Version 1.27.0 (2026-10-14)
 -------------------
 - added `aurorax.tools.geocentric_to_geodetic()` to support converting geocentric spacecraft locations and footprints to geodetic

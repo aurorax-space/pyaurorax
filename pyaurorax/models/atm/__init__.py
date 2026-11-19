@@ -117,6 +117,9 @@ class ATMManager:
         **NOTE**: As of PyAuroraX version 1.26.0, `maxwellian_energy_flux` defaults to 0. At least one energy flux must
         be nonzero, or a `custom_spectrum` supplied, otherwise the API returns an error.
 
+        **NOTE**: As of 2026-11-19, the calculation of conductance adopts the renewed ion-neutral collision 
+        frequencies in Liang et al. (2026), https://doi.org/10.1029/2026GL123452.
+
         Args:
             timestamp (datetime.datetime): 
                 Timestamp for the calculation. This value is expected to be in UTC, and is valid for any value up to the 
